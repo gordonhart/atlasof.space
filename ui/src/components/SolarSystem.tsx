@@ -9,6 +9,7 @@ type Point = {
 type Body = {
   curr: Point;
   prev: Point;
+  // TODO: remove bigint? are these really necessary?
   mass: bigint; // kg
   radius: bigint; // m
   // TODO: more sophisticated orbital parameters
@@ -26,44 +27,75 @@ const SOL: Body = {
 };
 const MERCURY: Body = {
   curr: { x: 69820000000, y: 0 },
-  prev: { x: 69820000000, y: 2000000000 / 24 * 6},
+  prev: { x: 69820000000, y: 2000000000 / 24 * 12},
   mass: BigInt("330110000000000000000000"), // 3.3011e23 kg
   radius: BigInt("2439700"), // 2439.7 km
   orbitalRadius: BigInt("69820000000"), // 69.82 million km aphelion
   color: '#808080',
 }
+const VENUS: Body = {
+  curr: { x: 108940000000, y: 0 },
+  prev: { x: 108940000000, y: 2000000000 / 24 * 12},
+  mass: BigInt("34867500000000000000000000"), // 4.8675e24 kg
+  radius: BigInt("6051800"), // 6051.8 km
+  orbitalRadius: BigInt("108940000000"), // 108.94 million km aphelion
+  color: '#ffee8c',
+}
+const EARTH: Body = {
+  curr: { x: 152097597000, y: 0 },
+  prev: { x: 152097597000, y: 1800000000 / 24 * 12},
+  mass: BigInt("5972168000000000000000000"), // 5.972168e24 kg
+  radius: BigInt("6371000"), // 6371.0 km
+  orbitalRadius: BigInt("152097597000"), // 152,097,597 km aphelion
+  color: '#7df9ff',
+}
+const MARS: Body = {
+  curr: { x: 249261000000, y: 0 },
+  prev: { x: 249261000000, y: 1400000000 / 24 * 12},
+  mass: BigInt("641710000000000000000000"), // 6.4171e23
+  radius: BigInt("3389500"), // 3389.5 km
+  orbitalRadius: BigInt("249261000000"), // 249,261,000 km aphelion
+  color: '#ff5733',
+}
 
-const MIN_DIMENSION = (MERCURY.orbitalRadius + BigInt("10000000000")) * BigInt("2");
+const MIN_DIMENSION = (MARS.orbitalRadius + BigInt("10000000000")) * BigInt("2");
 const GRAVITATIONAL_CONSTANT = 6.6743e-11; // N⋅m2⋅kg−2
-const TIME_STEP_S = 60 * 60 * 6; // 6 hours // * 24; // 1 day
+const TIME_STEP_S = 60 * 60 * 12; // 12 hours // * 24; // 1 day
 
 function calculateDistance(a: Point, b: Point) : number {
   return (((a.x - b.x) ** 2) + ((a.y - b.y) ** 2)) ** 0.5;
 }
+
+function calculatePosition(p0: number, v: number, a: number, t: number) {
+  return p0 + (v * t) + (0.5 * a * (t ** 2));
+}
+
+// TODO: this assumes that the reference will not move, probably not entirely correct
+function incrementBody(target: Body, reference: Body, timeStep: number = TIME_STEP_S) {
+  const masses = reference.mass * target.mass;
+  const distance = calculateDistance(reference.curr, target.curr);
+  const force = GRAVITATIONAL_CONSTANT * Number(masses) / (distance ** 2);
+  const accelMagnitude = force / Number(target.mass);
+  const accel = { // multiply by unit vector
+    x: accelMagnitude * (reference.curr.x - target.curr.x) / distance,
+    y: accelMagnitude * (reference.curr.y - target.curr.y) / distance,
+  }
+  const velocity = {
+    x: (target.curr.x - target.prev.x) / timeStep,
+    y: (target.curr.y - target.prev.y) / timeStep,
+  }
+  target.prev = { ...target.curr };
+  target.curr = {
+    x: calculatePosition(target.curr.x, velocity.x, accel.x, timeStep),
+    y: calculatePosition(target.curr.y, velocity.y, accel.y, timeStep),
+  }
+}
+
 function incrementBodies() {
-  const masses = SOL.mass * MERCURY.mass;
-  const distance = calculateDistance(SOL.curr, MERCURY.curr);
-  const radius2 = distance ** 2;
-  const gravityForce = GRAVITATIONAL_CONSTANT * Number(masses) / radius2; // TODO: is this the right place to cast to number?
-  // const solAccel = gravityForce / Number(SOL.mass); // TODO: negligible?
-  const mercuryAccelMagnitude = gravityForce / Number(MERCURY.mass);
-  const mercuryAccelVector = {
-    x: (SOL.curr.x - MERCURY.curr.x) / distance,
-    y: (SOL.curr.y - MERCURY.curr.y) / distance,
-  }
-  const mercuryAccel = {
-    x: mercuryAccelMagnitude * mercuryAccelVector.x,
-    y: mercuryAccelMagnitude * mercuryAccelVector.y,
-  }
-  const mercuryVelocity = {
-    x: (MERCURY.curr.x - MERCURY.prev.x) / TIME_STEP_S,
-    y: (MERCURY.curr.y - MERCURY.prev.y) / TIME_STEP_S,
-  }
-  MERCURY.prev = { x: MERCURY.curr.x, y: MERCURY.curr.y };
-  MERCURY.curr = {
-    x: MERCURY.curr.x + (mercuryVelocity.x * TIME_STEP_S) + (0.5 * mercuryAccel.x * (TIME_STEP_S ** 2)),
-    y: MERCURY.curr.y + (mercuryVelocity.y * TIME_STEP_S) + (0.5 * mercuryAccel.y * (TIME_STEP_S ** 2)),
-  }
+  incrementBody(MERCURY, SOL);
+  incrementBody(VENUS, SOL);
+  incrementBody(EARTH, SOL);
+  incrementBody(MARS, SOL);
 }
 
 function drawBody(
@@ -114,6 +146,9 @@ export function SolarSystem() {
     const metersPerPx = MIN_DIMENSION / BigInt(minDimensionPx);
     drawBody(ctx, SOL, metersPerPx, canvasDimensions);
     drawBody(ctx, MERCURY, metersPerPx, canvasDimensions);
+    drawBody(ctx, VENUS, metersPerPx, canvasDimensions);
+    drawBody(ctx, EARTH, metersPerPx, canvasDimensions);
+    drawBody(ctx, MARS, metersPerPx, canvasDimensions);
     ctx.fillStyle = '#ffffff';
     ctx.font = '12px sans-serif';
     ctx.fillText(`t = ${(time.current / 60 / 60 / 24).toFixed(0)} days`, 50, 50);
