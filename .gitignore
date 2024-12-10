@@ -1,0 +1,9 @@
+*.swo
+*.swp
+*.swn
+
+.DS_Store/
+.idea/
+__pycache__/
+uv.lock
+.python-version
