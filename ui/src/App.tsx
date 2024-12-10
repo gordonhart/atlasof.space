@@ -1,12 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { MantineProvider, Box } from '@mantine/core';
+import { SolarSystem } from './components/SolarSystem';
+import { createTheme } from '@mantine/core';
 
-function App() {
+export const theme = createTheme({
+  /** Put your mantine theme override here */
+});
+
+export function App() {
   return (
-    <div><h1>Orbital Simulator</h1></div>
+    <MantineProvider theme={theme}>
+      <SolarSystem />
+    </MantineProvider>
   )
 }
-
-export default App
