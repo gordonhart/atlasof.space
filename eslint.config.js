@@ -20,6 +20,7 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-hooks/exhaustive-deps': 'off',
+      'indent': ['error', 2],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

@@ -1,113 +1,94 @@
-import {useCallback, useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {Group} from '@mantine/core';
-import {
-  BODIES,
-  Body, BODY_SCALE_FACTOR,
-  GRAVITATIONAL_CONSTANT,
-  MIN_DIMENSION, PLANETS,
-  Point,
-  SOL,
-  TIME_STEP_S,
-} from "./constants.ts";
-
-function calculateDistance(a: Point, b: Point) : number {
-  return (((a.x - b.x) ** 2) + ((a.y - b.y) ** 2)) ** 0.5;
-}
-
-function calculatePosition(p0: number, v: number, a: number, t: number) {
-  return p0 + (v * t) + (0.5 * a * (t ** 2));
-}
-
-// TODO: this assumes that the reference will not move, probably not entirely correct
-function incrementBody(target: Body, reference: Body, timeStep: number = TIME_STEP_S) {
-  const masses = reference.mass * target.mass;
-  const distance = calculateDistance(reference.curr, target.curr);
-  const force = GRAVITATIONAL_CONSTANT * Number(masses) / (distance ** 2);
-  const accelMagnitude = force / Number(target.mass);
-  const accel = { // multiply by unit vector
-    x: accelMagnitude * (reference.curr.x - target.curr.x) / distance,
-    y: accelMagnitude * (reference.curr.y - target.curr.y) / distance,
-  }
-  const velocity = {
-    x: (target.curr.x - target.prev.x) / timeStep,
-    y: (target.curr.y - target.prev.y) / timeStep,
-  }
-  target.prev = { ...target.curr };
-  target.curr = {
-    x: calculatePosition(target.curr.x, velocity.x, accel.x, timeStep),
-    y: calculatePosition(target.curr.y, velocity.y, accel.y, timeStep),
-  }
-}
-
-function incrementBodies() {
-  PLANETS.forEach(planet => incrementBody(planet, SOL));
-}
+import {BODY_SCALE_FACTOR, COLORS, MIN_DIMENSION, Point, RADII, TIME_STEP_S} from "./constants.ts";
+import {incrementBodiesKeplerian, jupiterElements, plutoElements, STATE} from "./keplerian.ts";
 
 function drawBody(
   ctx: CanvasRenderingContext2D,
-  body: Body,
-  metersPerPx: bigint,
+  position: Point,
+  radius: number,
+  color: string,
+  metersPerPx: number,
   canvasDimensions: Point
 ) {
   const canvasCenterPx = { x: canvasDimensions.x / 2, y: canvasDimensions.y / 2 };
   const bodyCenterPx = {
-    x: canvasCenterPx.x + (body.curr.x / Number(metersPerPx)),
-    y: canvasCenterPx.y + (body.curr.y / Number(metersPerPx)),
+    x: canvasCenterPx.x + (position.x / metersPerPx),
+    y: canvasCenterPx.y + (position.y / metersPerPx),
   }
-  const radius = Number(body.radius / metersPerPx) * BODY_SCALE_FACTOR;
-  const displayRadius = Math.max(radius, 3); // ensure always visible
+  // console.log(bodyCenterPx)
+  const r = radius / metersPerPx * BODY_SCALE_FACTOR;
+  const displayRadius = Math.max(r, 1); // ensure always visible
   ctx.beginPath();
   ctx.arc(bodyCenterPx.x, bodyCenterPx.y, displayRadius, 0, Math.PI * 2);
-  ctx.fillStyle = body.color;
+  ctx.fillStyle = color;
   ctx.fill();
 }
 
 function drawTimestamp(ctx: CanvasRenderingContext2D, timestamp: number) {
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '12px sans-serif';
   const nDays = (timestamp / 60 / 60 / 24).toFixed(0);
-  ctx.fillText(`t = ${nDays} days`, 50, 50);
+  ctx.font = '12px sans-serif';
+  ctx.save();
+  ctx.scale(1, -1); // Temporarily flip the canvas
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(45, -45, 100, -20)
+  ctx.fillStyle = '#ffffff';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText(`t = ${nDays} days`, 50, -50); // Position text correctly by negating y
+  ctx.restore(); // unflip canvas
 }
 
 export function SolarSystem() {
   const time = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const setupCanvas = useCallback(() => {
+  function setupCanvas() {
     if (canvasRef.current != null) {
       const dpr = window.devicePixelRatio || 1;
       canvasRef.current.width = window.innerWidth * dpr;
       canvasRef.current.height = window.innerHeight * dpr;
       const ctx = canvasRef.current.getContext('2d')!;
-      ctx.scale(dpr, dpr);
-      window.requestAnimationFrame(drawBodies);
+      ctx.scale(dpr, -dpr); // scale and flip Y axis to make (0, 0) bottom left corner, +x right +y up
+      ctx.translate(0, -canvasRef.current.height / dpr);
     }
-  }, [])
+  }
 
   function drawBodies() {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) {
       return;
     }
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     time.current += TIME_STEP_S;
-    incrementBodies();
+    // PLANETS.forEach(planet => incrementBody(planet, SOL));
+    // incrementBody(MOON, EARTH)
+    incrementBodiesKeplerian(TIME_STEP_S);
+
     const dpr = window.devicePixelRatio || 1;
     const canvasDimensions: Point = { x: ctx.canvas.width / dpr, y: ctx.canvas.height / dpr };
     const minDimensionPx = Math.min(canvasDimensions.x, canvasDimensions.y);
-    const metersPerPx = MIN_DIMENSION / BigInt(minDimensionPx);
-    BODIES.forEach(body => drawBody(ctx, body, metersPerPx, canvasDimensions))
+    const metersPerPx = jupiterElements.semiMajorAxis / minDimensionPx;
+    // BODIES.forEach(body => drawBody(ctx, body.curr, Number(body.radius), body.color, metersPerPx, canvasDimensions))
+
+    drawBody(ctx, {x: 0, y: 0}, RADII.sol, COLORS.sol, metersPerPx, canvasDimensions);
+    Object.entries(STATE).forEach(([name, body]) => {
+      const position: Point = {x: body.position[0], y: body.position[1]};
+      drawBody(ctx, position, RADII[name] ?? 1, COLORS[name] ?? '#ffffff', metersPerPx, canvasDimensions);
+    })
+
     drawTimestamp(ctx, time.current);
     window.requestAnimationFrame(drawBodies);
   }
 
   useEffect(() => {
     setupCanvas();
+    window.requestAnimationFrame(drawBodies);
     window.addEventListener('resize', setupCanvas);
     return () => {
       window.removeEventListener('resize', setupCanvas);
     };
-  }, [setupCanvas]);
+  }, []);
 
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
