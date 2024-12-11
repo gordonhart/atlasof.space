@@ -1,4 +1,4 @@
-import { MantineProvider, Box } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { SolarSystem } from './components/SolarSystem';
 import { createTheme } from '@mantine/core';
 
