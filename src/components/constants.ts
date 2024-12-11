@@ -55,7 +55,7 @@ export const MARS: Body = {
 export const PLANETS = [MERCURY, VENUS, EARTH, MARS];
 export const BODIES = [SOL, ...PLANETS];
 
-export const MIN_DIMENSION = (MARS.orbitalRadius + BigInt("10000000000")) * BigInt("2");
+export const MIN_DIMENSION = (PLANETS[PLANETS.length - 1].orbitalRadius + BigInt("10000000000")) * BigInt("2");
 export const GRAVITATIONAL_CONSTANT = 6.6743e-11; // N⋅m2⋅kg−2
 export const TIME_STEP_S = 60 * 60 * 12; // 12 hours // * 24; // 1 day
 export const BODY_SCALE_FACTOR = 10;

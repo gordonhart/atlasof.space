@@ -1,10 +1,6 @@
-import { MantineProvider } from '@mantine/core';
-import { SolarSystem } from './components/SolarSystem';
-import { createTheme } from '@mantine/core';
-
-export const theme = createTheme({
-  /** Put your mantine theme override here */
-});
+import {MantineProvider} from '@mantine/core';
+import {SolarSystem} from './components/SolarSystem';
+import {theme} from "./theme.tsx";
 
 export function App() {
   return (

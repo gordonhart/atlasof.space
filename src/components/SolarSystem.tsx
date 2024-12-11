@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {Group} from '@mantine/core';
 import {
   BODIES,
@@ -73,7 +73,7 @@ export function SolarSystem() {
   const time = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  function setupCanvas() {
+  const setupCanvas = useCallback(() => {
     if (canvasRef.current != null) {
       const dpr = window.devicePixelRatio || 1;
       canvasRef.current.width = window.innerWidth * dpr;
@@ -82,7 +82,7 @@ export function SolarSystem() {
       ctx.scale(dpr, dpr);
       window.requestAnimationFrame(drawBodies);
     }
-  }
+  }, [])
 
   function drawBodies() {
     const ctx = canvasRef.current?.getContext('2d');
@@ -107,7 +107,7 @@ export function SolarSystem() {
     return () => {
       window.removeEventListener('resize', setupCanvas);
     };
-  }, [canvasRef.current])
+  }, [setupCanvas]);
 
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
