@@ -1,4 +1,5 @@
 body {
   color: white;
-  background: black;
+  background-color: black;
+  overscroll-behavior-y: none;
 }
