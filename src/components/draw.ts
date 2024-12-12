@@ -21,16 +21,3 @@ export function drawBody(
   ctx.fillStyle = color;
   ctx.fill();
 }
-
-export function drawTimestamp(ctx: CanvasRenderingContext2D, timestamp: number) {
-  const nDays = (timestamp / 60 / 60 / 24).toFixed(0);
-  ctx.font = '12px sans-serif';
-  ctx.save();
-  ctx.scale(1, -1); // Temporarily flip the canvas
-  ctx.fillStyle = '#000000';
-  ctx.fillRect(45, -45, 100, -20)
-  ctx.fillStyle = '#ffffff';
-  ctx.textBaseline = 'bottom';
-  ctx.fillText(`t = ${nDays} days`, 50, -50); // Position text correctly by negating y
-  ctx.restore(); // unflip canvas
-}

@@ -1,27 +1,34 @@
 import {useEffect, useRef, useState} from 'react';
-import {Button, Group} from '@mantine/core';
-import {CelestialObject, COLORS, DT, Point, RADII} from "./constants.ts";
+import {Group} from '@mantine/core';
+import {CelestialObject, COLORS, Point, RADII} from "./constants.ts";
 import {incrementBodiesKeplerian, jupiterElements, STATE} from "./keplerian.ts";
-import {drawBody, drawTimestamp} from "./draw.ts";
-import {initialState} from "./state.ts";
-import {IconPlayerPlayFilled} from "@tabler/icons-react";
+import {drawBody, } from "./draw.ts";
+import {AppState, initialState} from "./state.ts";
+import {Controls} from "./Controls.tsx";
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
-  const time = useRef(0);
+  const appStateRef = useRef(appState);
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  console.log(appState.play)
 
+  // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (canvasRef.current != null && ctx != null) {
-      const dpr = window.devicePixelRatio ?? 1;
-      const width = canvasRef.current.width;
-      const height = canvasRef.current.height;
-      ctx.scale(appState.zoom, appState.zoom)
-      ctx.translate(-width / dpr / appState.zoom, height / dpr / appState.zoom);
+    appStateRef.current = appState;
+  }, [JSON.stringify(appState)])
+
+  // restart animation
+  useEffect(() => {
+    if (appState.play) {
+      const frameId = window.requestAnimationFrame(drawBodies)
+      return () => {
+        window.cancelAnimationFrame(frameId);
+      }
     }
-  }, [appState.zoom])
+  }, [appState.play]);
+
+  function updateState(newState: Partial<AppState>) {
+    setAppState(prev => ({...prev, ...newState}));
+  }
 
   function setupCanvas() {
     if (canvasRef.current != null) {
@@ -42,8 +49,8 @@ export function SolarSystem() {
     // ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // fade effect
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    time.current += DT;
-    incrementBodiesKeplerian(DT);
+    setAppState(prev => ({...prev, time: prev.time + appStateRef.current.dt}));
+    incrementBodiesKeplerian(appStateRef.current.dt);
 
     const dpr = window.devicePixelRatio ?? 1;
     const canvasDimensions: Point = { x: ctx.canvas.width / dpr, y: ctx.canvas.height / dpr };
@@ -57,17 +64,17 @@ export function SolarSystem() {
       drawBody(ctx, position, RADII[obj], COLORS[obj], metersPerPx, canvasDimensions);
     })
 
-    drawTimestamp(ctx, time.current);
-    if (appState.play) {
+    if (appStateRef.current.play) {
       window.requestAnimationFrame(drawBodies);
     }
   }
 
   useEffect(() => {
     setupCanvas();
-    window.requestAnimationFrame(drawBodies);
+    const frameId = window.requestAnimationFrame(drawBodies);
     window.addEventListener('resize', setupCanvas);
     return () => {
+      window.cancelAnimationFrame(frameId);
       window.removeEventListener('resize', setupCanvas);
     };
   }, []);
@@ -75,15 +82,7 @@ export function SolarSystem() {
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
       <canvas style={{ display: 'block', height: '100vh', width: '100vw' }} ref={canvasRef} />
-      <Button
-        pos="absolute"
-        top={10}
-        left={10}
-        onClick={() => setAppState(prev => ({...prev, play: !prev.play }))}
-        leftSection={<IconPlayerPlayFilled size={14} />}
-        variant="subtle"
-        color="gray"
-      />
+      <Controls state={appState} updateState={updateState} />
     </Group>
   );
 }
