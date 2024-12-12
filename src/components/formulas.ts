@@ -9,6 +9,6 @@ export function radialDistance() {
   // distance in meters from the center of the orbital ellipse
 }
 
-export function trueAnomaly(meanAnomaly: number, semiMajorAxis: number, eccentricity: number) {
-
-}
+/*
+export function trueAnomaly(meanAnomaly: number, semiMajorAxis: number, eccentricity: number) {}
+ */

@@ -1,16 +1,31 @@
-import {useEffect, useRef} from 'react';
-import {Group} from '@mantine/core';
+import {useEffect, useRef, useState} from 'react';
+import {Button, Group} from '@mantine/core';
 import {CelestialObject, COLORS, DT, Point, RADII} from "./constants.ts";
 import {incrementBodiesKeplerian, jupiterElements, STATE} from "./keplerian.ts";
 import {drawBody, drawTimestamp} from "./draw.ts";
+import {initialState} from "./state.ts";
+import {IconPlayerPlayFilled} from "@tabler/icons-react";
 
 export function SolarSystem() {
+  const [appState, setAppState] = useState(initialState);
   const time = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  console.log(appState.play)
+
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (canvasRef.current != null && ctx != null) {
+      const dpr = window.devicePixelRatio ?? 1;
+      const width = canvasRef.current.width;
+      const height = canvasRef.current.height;
+      ctx.scale(appState.zoom, appState.zoom)
+      ctx.translate(-width / dpr / appState.zoom, height / dpr / appState.zoom);
+    }
+  }, [appState.zoom])
 
   function setupCanvas() {
     if (canvasRef.current != null) {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = window.devicePixelRatio ?? 1;
       canvasRef.current.width = window.innerWidth * dpr;
       canvasRef.current.height = window.innerHeight * dpr;
       const ctx = canvasRef.current.getContext('2d')!;
@@ -24,12 +39,13 @@ export function SolarSystem() {
     if (ctx == null) {
       return;
     }
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    // ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // fade effect
+    ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     time.current += DT;
     incrementBodiesKeplerian(DT);
 
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = window.devicePixelRatio ?? 1;
     const canvasDimensions: Point = { x: ctx.canvas.width / dpr, y: ctx.canvas.height / dpr };
     const minDimensionPx = Math.min(canvasDimensions.x, canvasDimensions.y);
     const metersPerPx = jupiterElements.semiMajorAxis / minDimensionPx;
@@ -42,7 +58,9 @@ export function SolarSystem() {
     })
 
     drawTimestamp(ctx, time.current);
-    window.requestAnimationFrame(drawBodies);
+    if (appState.play) {
+      window.requestAnimationFrame(drawBodies);
+    }
   }
 
   useEffect(() => {
@@ -57,6 +75,15 @@ export function SolarSystem() {
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
       <canvas style={{ display: 'block', height: '100vh', width: '100vw' }} ref={canvasRef} />
+      <Button
+        pos="absolute"
+        top={10}
+        left={10}
+        onClick={() => setAppState(prev => ({...prev, play: !prev.play }))}
+        leftSection={<IconPlayerPlayFilled size={14} />}
+        variant="subtle"
+        color="gray"
+      />
     </Group>
   );
 }
