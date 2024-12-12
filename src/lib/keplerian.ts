@@ -197,6 +197,7 @@ export const plutoElements: KeplerianElements = {
 const muSun = MASSES['sol'] * G;
 // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
 
+// TODO: this is a pretty inelegant way to manage celestial state
 export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = {
   mercury: keplerianToCartesian(mercuryElements, muSun),
   venus: keplerianToCartesian(venusElements, muSun),
@@ -208,6 +209,19 @@ export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = {
   uranus: keplerianToCartesian(uranusElements, muSun),
   neptune: keplerianToCartesian(neptuneElements, muSun),
   pluto: keplerianToCartesian(plutoElements, muSun),
+}
+
+export function resetState() {
+  STATE.mercury = keplerianToCartesian(mercuryElements, muSun);
+  STATE.venus = keplerianToCartesian(venusElements, muSun);
+  STATE.earth = keplerianToCartesian(earthElements, muSun);
+  STATE.mars = keplerianToCartesian(marsElements, muSun);
+  STATE.ceres = keplerianToCartesian(ceresElements, muSun);
+  STATE.jupiter = keplerianToCartesian(jupiterElements, muSun);
+  STATE.saturn = keplerianToCartesian(saturnElements, muSun);
+  STATE.uranus = keplerianToCartesian(uranusElements, muSun);
+  STATE.neptune = keplerianToCartesian(neptuneElements, muSun);
+  STATE.pluto = keplerianToCartesian(plutoElements, muSun);
 }
 
 export function incrementBodiesKeplerian(dt: number = DT) {

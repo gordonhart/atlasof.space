@@ -1,14 +1,15 @@
-import {AppState} from "../lib/state.ts";
+import {AppState, initialState} from "../lib/state.ts";
 import {ActionIcon, Group, Stack, Text, Tooltip} from "@mantine/core";
 import {
   IconMeteorFilled, IconMinus,
   IconPlayerPlayFilled,
   IconPlayerStopFilled,
   IconPlayerTrackNextFilled,
-  IconPlayerTrackPrevFilled, IconPlus
+  IconPlayerTrackPrevFilled, IconPlus, IconRestore
 } from "@tabler/icons-react";
 import {useMemo} from "react";
 import {humanDistanceUnits, humanTimeUnits, pluralize} from "../lib/utils.ts";
+import {resetState} from "../lib/keplerian.ts";
 
 const actionIconProps = {variant: 'subtle', color: 'gray'};
 const iconProps = {size: 14};
@@ -83,6 +84,18 @@ export function Controls({ state, updateState }: Props) {
             onClick={() => updateState({ drawTail: !state.drawTail })}
           >
             <IconMeteorFilled {...iconProps} />
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip {...tooltipProps} label="Reset">
+          <ActionIcon
+            {...actionIconProps}
+            onClick={() => {
+              updateState(initialState)
+              resetState();
+            }}
+          >
+            <IconRestore {...iconProps} />
           </ActionIcon>
         </Tooltip>
       </Group>
