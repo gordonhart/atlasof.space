@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: "./yarn.lock"
       - name: Install dependencies
         run: yarn --frozen-lockfile
-      - name: Run linting
+      - name: Lint
         run: yarn lint
-      - name: Run build
+      - name: Build
         run: yarn build
