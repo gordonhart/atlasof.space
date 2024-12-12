@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {Group} from '@mantine/core';
-import {COLORS, RADII} from "../lib/constants.ts";
+import {ELEMENTS} from "../lib/constants.ts";
 import {incrementBodiesKeplerian, STATE} from "../lib/physics.ts";
 import {drawBody, } from "../lib/draw.ts";
 import {AppState, initialState} from "../lib/state.ts";
@@ -58,11 +58,11 @@ export function SolarSystem() {
     const dpr = window.devicePixelRatio ?? 1;
     const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
-    drawBody(ctx, [0, 0], RADII.sol, COLORS.sol, metersPerPx, canvasDimensions);
+    drawBody(ctx, [0, 0], ELEMENTS.sol.radius, ELEMENTS.sol.color, metersPerPx, canvasDimensions);
     Object.entries(STATE).forEach(([name, body]) => {
       const obj = name as CelestialObject; // TODO: way to do this without cast?
       const position: Point2 = [body.position[0], body.position[1]];
-      drawBody(ctx, position, RADII[obj], COLORS[obj], metersPerPx, canvasDimensions);
+      drawBody(ctx, position, ELEMENTS[obj].radius, ELEMENTS[obj].color, metersPerPx, canvasDimensions);
     })
 
     if (play) {

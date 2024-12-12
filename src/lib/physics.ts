@@ -1,5 +1,5 @@
 import {ELEMENTS, MU_SUN, ORBITAL_PERIODS,} from "./constants.ts";
-import {mapValues} from "./utils.ts";
+import {filterKeys, mapValues} from "./utils.ts";
 import {degreesToRadians} from "./formulas.ts";
 import {CartesianState, CelestialObject, KeplerianElements} from "./types.ts";
 
@@ -89,20 +89,12 @@ function updateState(
 }
 
 export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> =
-  mapValues(ELEMENTS, e => keplerianToCartesian(e, MU_SUN));
+  mapValues(filterKeys(ELEMENTS, (k: CelestialObject) => k !== 'sol'), (e: KeplerianElements) => keplerianToCartesian(e, MU_SUN));
 
-// TODO: this is a pretty inelegant way to manage celestial state
 export function resetState() {
-  STATE.mercury = keplerianToCartesian(ELEMENTS.mercury, MU_SUN);
-  STATE.venus = keplerianToCartesian(ELEMENTS.venus, MU_SUN);
-  STATE.earth = keplerianToCartesian(ELEMENTS.earth, MU_SUN);
-  STATE.mars = keplerianToCartesian(ELEMENTS.mars, MU_SUN);
-  STATE.ceres = keplerianToCartesian(ELEMENTS.ceres, MU_SUN);
-  STATE.jupiter = keplerianToCartesian(ELEMENTS.jupiter, MU_SUN);
-  STATE.saturn = keplerianToCartesian(ELEMENTS.saturn, MU_SUN);
-  STATE.uranus = keplerianToCartesian(ELEMENTS.uranus, MU_SUN);
-  STATE.neptune = keplerianToCartesian(ELEMENTS.neptune, MU_SUN);
-  STATE.pluto = keplerianToCartesian(ELEMENTS.pluto, MU_SUN);
+  Object.keys(STATE).forEach(name => {
+    STATE[name] = keplerianToCartesian(ELEMENTS[name], MU_SUN);
+  })
 }
 
 function incrementBody(name: Exclude<CelestialObject, 'sol'>, body: CartesianState, mu: number, dt: number) {
@@ -115,14 +107,7 @@ function incrementBody(name: Exclude<CelestialObject, 'sol'>, body: CartesianSta
 }
 
 export function incrementBodiesKeplerian(dt: number) {
-  STATE.mercury = incrementBody('mercury', STATE.mercury, MU_SUN, dt);
-  STATE.venus = incrementBody('venus', STATE.venus, MU_SUN, dt);
-  STATE.earth = incrementBody('earth', STATE.earth, MU_SUN, dt);
-  STATE.mars = incrementBody('mars', STATE.mars, MU_SUN, dt);
-  STATE.ceres = incrementBody('ceres', STATE.ceres, MU_SUN, dt);
-  STATE.jupiter = incrementBody('jupiter', STATE.jupiter, MU_SUN, dt);
-  STATE.saturn = incrementBody('saturn', STATE.saturn, MU_SUN, dt);
-  STATE.uranus = incrementBody('uranus', STATE.uranus, MU_SUN, dt);
-  STATE.neptune = incrementBody('neptune', STATE.neptune, MU_SUN, dt);
-  STATE.pluto = incrementBody('pluto', STATE.pluto, MU_SUN, dt);
+  Object.keys(STATE).forEach(name => {
+    STATE[name] = incrementBody(name, STATE[name], MU_SUN, dt);
+  })
 }

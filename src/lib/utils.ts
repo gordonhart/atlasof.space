@@ -28,6 +28,16 @@ export function humanDistanceUnits(d: number): [number, string] {
   }
 }
 
+export function filterKeys<T extends Record<string, unknown>>(obj: T, condition: (key: keyof T) => boolean ) {
+  const result: Partial<T> = {}
+  for (const key in obj) {
+    if (condition(key)) {
+      result[key] = obj[key];
+    }
+  }
+  return result;
+}
+
 export function mapValues<T extends Record<string, unknown>, U>(
   obj: T,
   mapper: (value: T[keyof T], key: string) => U,
