@@ -1,7 +1,7 @@
-import {ELEMENTS, MU_SUN, ORBITAL_PERIODS,} from "./constants.ts";
-import {filterKeys, mapValues} from "./utils.ts";
-import {degreesToRadians} from "./formulas.ts";
-import {CartesianState, CelestialObject, KeplerianElements} from "./types.ts";
+import { ELEMENTS, MU_SUN, ORBITAL_PERIODS } from './constants.ts';
+import { filterKeys, mapValues } from './utils.ts';
+import { degreesToRadians } from './formulas.ts';
+import { CartesianState, CelestialObject, KeplerianElements } from './types.ts';
 
 function keplerianToCartesian(
   elements: KeplerianElements,
@@ -30,9 +30,12 @@ function keplerianToCartesian(
   const velocityOrbital = [-Math.sqrt(mu / p) * Math.sin(nu), Math.sqrt(mu / p) * (e + Math.cos(nu))];
 
   // Rotation matrices
-  const cosO = Math.cos(Omega), sinO = Math.sin(Omega);
-  const cosI = Math.cos(i), sinI = Math.sin(i);
-  const cosW = Math.cos(omega), sinW = Math.sin(omega);
+  const cosO = Math.cos(Omega),
+    sinO = Math.sin(Omega);
+  const cosI = Math.cos(i),
+    sinI = Math.sin(i);
+  const cosW = Math.cos(omega),
+    sinW = Math.sin(omega);
 
   // Combined rotation matrix to transform from orbital plane to inertial frame
   const rotationMatrix = [
@@ -42,13 +45,17 @@ function keplerianToCartesian(
   ];
 
   // Transform position and velocity to inertial frame
-  const positionInertial = rotationMatrix.map((row) =>
-    row[0] * positionOrbital[0] + row[1] * positionOrbital[1]
-  ) as [number, number, number];
+  const positionInertial = rotationMatrix.map(row => row[0] * positionOrbital[0] + row[1] * positionOrbital[1]) as [
+    number,
+    number,
+    number,
+  ];
 
-  const velocityInertial = rotationMatrix.map((row) =>
-    row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]
-  ) as [number, number, number];
+  const velocityInertial = rotationMatrix.map(row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]) as [
+    number,
+    number,
+    number,
+  ];
 
   return {
     position: positionInertial,
@@ -56,20 +63,13 @@ function keplerianToCartesian(
   };
 }
 
-function computeAcceleration(
-  position: [number, number, number],
-  mu: number
-): [number, number, number] {
+function computeAcceleration(position: [number, number, number], mu: number): [number, number, number] {
   const r = Math.sqrt(position[0] ** 2 + position[1] ** 2 + position[2] ** 2);
-  const factor = -mu / (r ** 3);
+  const factor = -mu / r ** 3;
   return [factor * position[0], factor * position[1], factor * position[2]];
 }
 
-function updateState(
-  state: CartesianState,
-  acceleration: [number, number, number],
-  dt: number
-): CartesianState {
+function updateState(state: CartesianState, acceleration: [number, number, number], dt: number): CartesianState {
   const newVelocity: [number, number, number] = [
     state.velocity[0] + acceleration[0] * dt,
     state.velocity[1] + acceleration[1] * dt,
@@ -88,20 +88,25 @@ function updateState(
   };
 }
 
-export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> =
-  mapValues(filterKeys(ELEMENTS, (k: CelestialObject) => k !== 'sol'), (e: KeplerianElements) => keplerianToCartesian(e, MU_SUN));
+export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = mapValues(
+  filterKeys(ELEMENTS, (k: CelestialObject) => k !== 'sol'),
+  (e: KeplerianElements) => keplerianToCartesian(e, MU_SUN)
+);
 
 export function resetState() {
   Object.keys(STATE).forEach(name => {
     STATE[name] = keplerianToCartesian(ELEMENTS[name], MU_SUN);
-  })
+  });
 }
 
 function incrementBody(name: Exclude<CelestialObject, 'sol'>, body: CartesianState, mu: number, dt: number) {
   const maxSafeDt = ORBITAL_PERIODS[name] / 52;
-  if (dt > maxSafeDt) { // subdivide dt into at least 52 steps per orbit to ensure stability at fast simulation speeds
+  if (dt > maxSafeDt) {
+    // subdivide dt into at least 52 steps per orbit to ensure stability at fast simulation speeds
     const nIterations = Math.ceil(dt / maxSafeDt);
-    return Array(nIterations).fill(null).reduce(acc => incrementBody(name, acc, mu, dt / nIterations), body);
+    return Array(nIterations)
+      .fill(null)
+      .reduce(acc => incrementBody(name, acc, mu, dt / nIterations), body);
   }
   return updateState(body, computeAcceleration(body.position, mu), dt);
 }
@@ -109,5 +114,5 @@ function incrementBody(name: Exclude<CelestialObject, 'sol'>, body: CartesianSta
 export function incrementBodiesKeplerian(dt: number) {
   Object.keys(STATE).forEach(name => {
     STATE[name] = incrementBody(name, STATE[name], MU_SUN, dt);
-  })
+  });
 }

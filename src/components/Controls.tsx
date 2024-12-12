@@ -1,24 +1,27 @@
-import {AppState, initialState} from "../lib/state.ts";
-import {ActionIcon, Group, Stack, Text, Tooltip} from "@mantine/core";
+import { AppState, initialState } from '../lib/state.ts';
+import { ActionIcon, Group, Stack, Text, Tooltip } from '@mantine/core';
 import {
-  IconMeteorFilled, IconMinus,
+  IconMeteorFilled,
+  IconMinus,
   IconPlayerPlayFilled,
   IconPlayerStopFilled,
   IconPlayerTrackNextFilled,
-  IconPlayerTrackPrevFilled, IconPlus, IconRestore
-} from "@tabler/icons-react";
-import {useMemo} from "react";
-import {humanDistanceUnits, humanTimeUnits, pluralize} from "../lib/utils.ts";
-import {resetState} from "../lib/physics.ts";
+  IconPlayerTrackPrevFilled,
+  IconPlus,
+  IconRestore,
+} from '@tabler/icons-react';
+import { useMemo } from 'react';
+import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
+import { resetState } from '../lib/physics.ts';
 
-const actionIconProps = {variant: 'subtle', color: 'gray'};
-const iconProps = {size: 14};
-const tooltipProps = {openDelay: 400};
+const actionIconProps = { variant: 'subtle', color: 'gray' };
+const iconProps = { size: 14 };
+const tooltipProps = { openDelay: 400 };
 
 type Props = {
   state: AppState;
   updateState: (state: Partial<AppState>) => void;
-}
+};
 export function Controls({ state, updateState }: Props) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
@@ -34,55 +37,37 @@ export function Controls({ state, updateState }: Props) {
 
       <Group gap={0}>
         <Tooltip {...tooltipProps} label="Zoom Out">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}
-          >
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
             <IconMinus {...iconProps} />
           </ActionIcon>
         </Tooltip>
 
         <Tooltip {...tooltipProps} label="Zoom In">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}
-          >
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
             <IconPlus {...iconProps} />
           </ActionIcon>
         </Tooltip>
 
         <Tooltip {...tooltipProps} label="Slow Down">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ dt: state.dt / 2 })}
-          >
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt / 2 })}>
             <IconPlayerTrackPrevFilled {...iconProps} />
           </ActionIcon>
         </Tooltip>
 
         <Tooltip {...tooltipProps} label={state.play ? 'Stop' : 'Start'}>
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ play: !state.play })}
-          >
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ play: !state.play })}>
             {state.play ? <IconPlayerStopFilled {...iconProps} /> : <IconPlayerPlayFilled {...iconProps} />}
           </ActionIcon>
         </Tooltip>
 
         <Tooltip {...tooltipProps} label="Speed Up">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ dt: state.dt * 2 })}
-          >
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt * 2 })}>
             <IconPlayerTrackNextFilled {...iconProps} />
           </ActionIcon>
         </Tooltip>
 
         <Tooltip {...tooltipProps} label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ drawTail: !state.drawTail })}
-          >
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ drawTail: !state.drawTail })}>
             <IconMeteorFilled {...iconProps} />
           </ActionIcon>
         </Tooltip>
@@ -91,7 +76,7 @@ export function Controls({ state, updateState }: Props) {
           <ActionIcon
             {...actionIconProps}
             onClick={() => {
-              updateState(initialState)
+              updateState(initialState);
               resetState();
             }}
           >

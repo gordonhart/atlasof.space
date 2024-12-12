@@ -1,17 +1,20 @@
-import {orbitalPeriod} from "./formulas.ts";
-import {mapValues} from "./utils.ts";
-import {CelestialObject, KeplerianElements} from "./types.ts";
+import { orbitalPeriod } from './formulas.ts';
+import { mapValues } from './utils.ts';
+import { CelestialObject, KeplerianElements } from './types.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const DT = 60 * 60 * 6; // time step -- 6 hours
-export const AU = 1.496e+11; // meters
+export const AU = 1.496e11; // meters
 export const BODY_SCALE_FACTOR = 5;
 
-export const ELEMENTS: Record<CelestialObject, KeplerianElements & {
-  mass: number; // kg
-  radius: number; // m
-  color: `#${string}`; // hex
-}> = {
+export const ELEMENTS: Record<
+  CelestialObject,
+  KeplerianElements & {
+    mass: number; // kg
+    radius: number; // m
+    color: `#${string}`; // hex
+  }
+> = {
   sol: {
     eccentricity: 0,
     semiMajorAxis: 0,
@@ -59,7 +62,7 @@ export const ELEMENTS: Record<CelestialObject, KeplerianElements & {
   mars: {
     eccentricity: 0.0935,
     semiMajorAxis: 227939200e3,
-    inclination: 1.850,
+    inclination: 1.85,
     longitudeAscending: 49.558,
     argumentOfPeriapsis: 286.502,
     trueAnomaly: 0,
@@ -107,14 +110,14 @@ export const ELEMENTS: Record<CelestialObject, KeplerianElements & {
     longitudeAscending: 74.006,
     argumentOfPeriapsis: 170.964,
     trueAnomaly: 0,
-    mass: 8.6810e25,
+    mass: 8.681e25,
     radius: 25362e3,
     color: '#fec',
   },
   neptune: {
     eccentricity: 0.0086,
     semiMajorAxis: 4503443661e3,
-    inclination: 1.770,
+    inclination: 1.77,
     longitudeAscending: 131.784,
     argumentOfPeriapsis: 44.971,
     trueAnomaly: 0,
@@ -133,9 +136,10 @@ export const ELEMENTS: Record<CelestialObject, KeplerianElements & {
     radius: 1188.3e3,
     color: '#ddd',
   },
-}
+};
 
-export const ORBITAL_PERIODS: Record<CelestialObject, number> =
-  mapValues(ELEMENTS, (e: KeplerianElements) => orbitalPeriod(e.semiMajorAxis, ELEMENTS.sol.mass));
+export const ORBITAL_PERIODS: Record<CelestialObject, number> = mapValues(ELEMENTS, (e: KeplerianElements) =>
+  orbitalPeriod(e.semiMajorAxis, ELEMENTS.sol.mass)
+);
 
-export const MU_SUN = ELEMENTS.sol.mass * G;  // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
+export const MU_SUN = ELEMENTS.sol.mass * G; // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun

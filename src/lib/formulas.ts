@@ -1,4 +1,4 @@
-import {G} from "./constants.ts";
+import { G } from './constants.ts';
 
 export function degreesToRadians(degrees: number) {
   return (degrees * Math.PI) / 180;

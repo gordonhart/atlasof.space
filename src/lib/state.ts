@@ -1,4 +1,4 @@
-import {DT, ELEMENTS} from "./constants.ts";
+import { DT, ELEMENTS } from './constants.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -7,7 +7,7 @@ export type AppState = {
   play: boolean;
   drawTail: boolean;
   metersPerPx: number;
-}
+};
 
 export const initialState: AppState = {
   time: 0,
@@ -16,4 +16,4 @@ export const initialState: AppState = {
   play: true,
   drawTail: false,
   metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
-}
+};

@@ -1,34 +1,34 @@
-import {useEffect, useRef, useState} from 'react';
-import {Group} from '@mantine/core';
-import {ELEMENTS} from "../lib/constants.ts";
-import {incrementBodiesKeplerian, STATE} from "../lib/physics.ts";
-import {drawBody, } from "../lib/draw.ts";
-import {AppState, initialState} from "../lib/state.ts";
-import {Controls} from "./Controls.tsx";
-import {CelestialObject, Point2} from "../lib/types.ts";
+import { useEffect, useRef, useState } from 'react';
+import { Group } from '@mantine/core';
+import { ELEMENTS } from '../lib/constants.ts';
+import { incrementBodiesKeplerian, STATE } from '../lib/physics.ts';
+import { drawBody } from '../lib/draw.ts';
+import { AppState, initialState } from '../lib/state.ts';
+import { Controls } from './Controls.tsx';
+import { CelestialObject, Point2 } from '../lib/types.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {
     appStateRef.current = appState;
-  }, [JSON.stringify(appState)])
+  }, [JSON.stringify(appState)]);
 
   // restart animation
   useEffect(() => {
     if (appState.play) {
-      const frameId = window.requestAnimationFrame(drawBodies)
+      const frameId = window.requestAnimationFrame(drawBodies);
       return () => {
         window.cancelAnimationFrame(frameId);
-      }
+      };
     }
   }, [appState.play]);
 
   function updateState(newState: Partial<AppState>) {
-    setAppState(prev => ({...prev, ...newState}));
+    setAppState(prev => ({ ...prev, ...newState }));
   }
 
   function setupCanvas() {
@@ -47,12 +47,12 @@ export function SolarSystem() {
     if (ctx == null) {
       return;
     }
-    const {dt, drawTail, metersPerPx, play} = appStateRef.current;
+    const { dt, drawTail, metersPerPx, play } = appStateRef.current;
 
     // TODO: appears to be a bug with far-out planets and tails
     ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.05)' : '#000';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    setAppState(prev => ({...prev, time: prev.time + dt}));
+    setAppState(prev => ({ ...prev, time: prev.time + dt }));
     incrementBodiesKeplerian(dt);
 
     const dpr = window.devicePixelRatio ?? 1;
@@ -63,7 +63,7 @@ export function SolarSystem() {
       const obj = name as CelestialObject; // TODO: way to do this without cast?
       const position: Point2 = [body.position[0], body.position[1]];
       drawBody(ctx, position, ELEMENTS[obj].radius, ELEMENTS[obj].color, metersPerPx, canvasDimensions);
-    })
+    });
 
     if (play) {
       window.requestAnimationFrame(drawBodies);

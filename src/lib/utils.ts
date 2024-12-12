@@ -1,4 +1,4 @@
-import {AU} from "./constants.ts";
+import { AU } from './constants.ts';
 
 export function pluralize(n: number, unit: string) {
   return n > 1 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
@@ -24,12 +24,12 @@ export function humanDistanceUnits(d: number): [number, string] {
   } else if (d < 0.01 * AU) {
     return [d / 1_000, 'kilometer'];
   } else {
-    return [d / AU, 'AU']
+    return [d / AU, 'AU'];
   }
 }
 
-export function filterKeys<T extends Record<string, unknown>>(obj: T, condition: (key: keyof T) => boolean ) {
-  const result: Partial<T> = {}
+export function filterKeys<T extends Record<string, unknown>>(obj: T, condition: (key: keyof T) => boolean) {
+  const result: Partial<T> = {};
   for (const key in obj) {
     if (condition(key)) {
       result[key] = obj[key];
@@ -40,7 +40,7 @@ export function filterKeys<T extends Record<string, unknown>>(obj: T, condition:
 
 export function mapValues<T extends Record<string, unknown>, U>(
   obj: T,
-  mapper: (value: T[keyof T], key: string) => U,
+  mapper: (value: T[keyof T], key: string) => U
 ): { [K in keyof T]: U } {
   const result: Partial<{ [K in keyof T]: U }> = {};
   for (const key in obj) {
