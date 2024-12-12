@@ -1,13 +1,14 @@
-import {AppState} from "./state.ts";
+import {AppState} from "../lib/state.ts";
 import {ActionIcon, Group, Stack, Text, Tooltip} from "@mantine/core";
 import {
-  IconArrowLeftTail, IconMeteorFilled,
+  IconMeteorFilled, IconMinus,
   IconPlayerPlayFilled,
   IconPlayerStopFilled,
-  IconPlayerTrackNextFilled, IconPlayerTrackPrevFilled
+  IconPlayerTrackNextFilled,
+  IconPlayerTrackPrevFilled, IconPlus
 } from "@tabler/icons-react";
 import {useMemo} from "react";
-import {humanTimeUnits, pluralize} from "../lib/utils.ts";
+import {humanDistanceUnits, humanTimeUnits, pluralize} from "../lib/utils.ts";
 
 const actionIconProps = {variant: 'subtle', color: 'gray'};
 const iconProps = {size: 14};
@@ -20,15 +21,35 @@ type Props = {
 export function Controls({ state, updateState }: Props) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
+  const [mpp, mppUnits] = useMemo(() => humanDistanceUnits(state.metersPerPx), [state.metersPerPx]);
 
   return (
     <Group pos="absolute" bottom={10} left={10} right={10} justify="space-between" align="flex-end">
       <Stack gap={4} fz="xs" c="gray.4">
         <Text inherit>t: {pluralize(Number(t.toFixed(0)), tUnits)}</Text>
         <Text inherit>dt: {pluralize(dt, dtUnits)}</Text>
+        <Text inherit>m/px: {pluralize(mpp, mppUnits)}</Text>
       </Stack>
 
       <Group gap={0}>
+        <Tooltip {...tooltipProps} label="Zoom Out">
+          <ActionIcon
+            {...actionIconProps}
+            onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}
+          >
+            <IconMinus {...iconProps} />
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip {...tooltipProps} label="Zoom In">
+          <ActionIcon
+            {...actionIconProps}
+            onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}
+          >
+            <IconPlus {...iconProps} />
+          </ActionIcon>
+        </Tooltip>
+
         <Tooltip {...tooltipProps} label="Slow Down">
           <ActionIcon
             {...actionIconProps}

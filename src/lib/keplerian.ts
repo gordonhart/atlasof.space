@@ -210,7 +210,6 @@ export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = {
   pluto: keplerianToCartesian(plutoElements, muSun),
 }
 
-// TODO: simulation is only stable for a few years before closer planets start to go haywire
 export function incrementBodiesKeplerian(dt: number = DT) {
   STATE.mercury = updateState(STATE.mercury, computeAcceleration(STATE.mercury.position, muSun), dt);
   STATE.venus = updateState(STATE.venus, computeAcceleration(STATE.venus.position, muSun), dt);

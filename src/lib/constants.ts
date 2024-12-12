@@ -57,8 +57,6 @@ export const MASSES: Record<CelestialObject, number> = { // kg
 
 // gravitational constant
 export const G = 6.6743e-11; // N⋅m2⋅kg−2
-
-// time step
-export const DT = 60 * 60 * 6; // 6 hours
-
+export const DT = 60 * 60 * 6; // time step -- 6 hours
+export const AU = 1.496e+11; // meters
 export const BODY_SCALE_FACTOR = 5;

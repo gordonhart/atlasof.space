@@ -1,9 +1,9 @@
 import {useEffect, useRef, useState} from 'react';
 import {Group} from '@mantine/core';
-import {CelestialObject, COLORS, Point, RADII} from "./constants.ts";
-import {incrementBodiesKeplerian, jupiterElements, STATE} from "./keplerian.ts";
-import {drawBody, } from "./draw.ts";
-import {AppState, initialState} from "./state.ts";
+import {CelestialObject, COLORS, Point, RADII} from "../lib/constants.ts";
+import {incrementBodiesKeplerian, jupiterElements, STATE} from "../lib/keplerian.ts";
+import {drawBody, } from "../lib/draw.ts";
+import {AppState, initialState} from "../lib/state.ts";
 import {Controls} from "./Controls.tsx";
 
 export function SolarSystem() {
@@ -46,16 +46,15 @@ export function SolarSystem() {
     if (ctx == null) {
       return;
     }
-    // ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // fade effect
-    ctx.fillStyle = appStateRef.current.drawTail ? 'rgba(0,0,0,0.05)' : '#000';
+    const {dt, drawTail, metersPerPx, play} = appStateRef.current;
+
+    ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.05)' : '#000';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    setAppState(prev => ({...prev, time: prev.time + appStateRef.current.dt}));
-    incrementBodiesKeplerian(appStateRef.current.dt);
+    setAppState(prev => ({...prev, time: prev.time + dt}));
+    incrementBodiesKeplerian(dt);
 
     const dpr = window.devicePixelRatio ?? 1;
     const canvasDimensions: Point = { x: ctx.canvas.width / dpr, y: ctx.canvas.height / dpr };
-    const minDimensionPx = Math.min(canvasDimensions.x, canvasDimensions.y);
-    const metersPerPx = jupiterElements.semiMajorAxis / minDimensionPx;
 
     drawBody(ctx, {x: 0, y: 0}, RADII.sol, COLORS.sol, metersPerPx, canvasDimensions);
     Object.entries(STATE).forEach(([name, body]) => {
@@ -64,7 +63,7 @@ export function SolarSystem() {
       drawBody(ctx, position, RADII[obj], COLORS[obj], metersPerPx, canvasDimensions);
     })
 
-    if (appStateRef.current.play) {
+    if (play) {
       window.requestAnimationFrame(drawBodies);
     }
   }
