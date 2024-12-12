@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {Group} from '@mantine/core';
 import {CelestialObject, COLORS, Point, RADII} from "../lib/constants.ts";
-import {incrementBodiesKeplerian, jupiterElements, STATE} from "../lib/keplerian.ts";
+import {incrementBodiesKeplerian, STATE} from "../lib/keplerian.ts";
 import {drawBody, } from "../lib/draw.ts";
 import {AppState, initialState} from "../lib/state.ts";
 import {Controls} from "./Controls.tsx";
@@ -48,6 +48,7 @@ export function SolarSystem() {
     }
     const {dt, drawTail, metersPerPx, play} = appStateRef.current;
 
+    // TODO: appears to be a bug with far-out planets and tails
     ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.05)' : '#000';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     setAppState(prev => ({...prev, time: prev.time + dt}));
