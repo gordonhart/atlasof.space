@@ -1,4 +1,4 @@
-import {TIME_STEP_S} from "./constants.ts";
+import {CelestialObject, DT, G, MASSES} from "./constants.ts";
 
 export type KeplerianElements = {
   eccentricity: number; // ratio
@@ -194,11 +194,10 @@ export const plutoElements: KeplerianElements = {
   trueAnomaly: 0, // Degrees
 };
 
+const muSun = MASSES['sol'] * G;
+// 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
 
-
-const muSun = 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
-
-export const STATE = {
+export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = {
   mercury: keplerianToCartesian(mercuryElements, muSun),
   venus: keplerianToCartesian(venusElements, muSun),
   earth: keplerianToCartesian(earthElements, muSun),
@@ -211,7 +210,7 @@ export const STATE = {
   pluto: keplerianToCartesian(plutoElements, muSun),
 }
 
-export function incrementBodiesKeplerian(dt: number = TIME_STEP_S) {
+export function incrementBodiesKeplerian(dt: number = DT) {
   STATE.mercury = updateState(STATE.mercury, computeAcceleration(STATE.mercury.position, muSun), dt);
   STATE.venus = updateState(STATE.venus, computeAcceleration(STATE.venus.position, muSun), dt);
   STATE.earth = updateState(STATE.earth, computeAcceleration(STATE.earth.position, muSun), dt);

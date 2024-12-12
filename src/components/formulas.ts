@@ -1,8 +1,8 @@
-import {GRAVITATIONAL_CONSTANT} from "./constants.ts";
+import {G} from "./constants.ts";
 
 export function keplersThirdLaw(semiMajorAxis: number, centralMass: number) {
   // calculate the period of an orbit based on its Keplerian parameters
-  return Math.PI * 2 * Math.sqrt(Math.pow(semiMajorAxis, 3) / (GRAVITATIONAL_CONSTANT * centralMass));
+  return Math.PI * 2 * Math.sqrt(Math.pow(semiMajorAxis, 3) / (G * centralMass));
 }
 
 export function radialDistance() {

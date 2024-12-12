@@ -1,42 +1,8 @@
 import {useEffect, useRef} from 'react';
 import {Group} from '@mantine/core';
-import {BODY_SCALE_FACTOR, COLORS, MIN_DIMENSION, Point, RADII, TIME_STEP_S} from "./constants.ts";
-import {incrementBodiesKeplerian, jupiterElements, plutoElements, STATE} from "./keplerian.ts";
-
-function drawBody(
-  ctx: CanvasRenderingContext2D,
-  position: Point,
-  radius: number,
-  color: string,
-  metersPerPx: number,
-  canvasDimensions: Point
-) {
-  const canvasCenterPx = { x: canvasDimensions.x / 2, y: canvasDimensions.y / 2 };
-  const bodyCenterPx = {
-    x: canvasCenterPx.x + (position.x / metersPerPx),
-    y: canvasCenterPx.y + (position.y / metersPerPx),
-  }
-  // console.log(bodyCenterPx)
-  const r = radius / metersPerPx * BODY_SCALE_FACTOR;
-  const displayRadius = Math.max(r, 1); // ensure always visible
-  ctx.beginPath();
-  ctx.arc(bodyCenterPx.x, bodyCenterPx.y, displayRadius, 0, Math.PI * 2);
-  ctx.fillStyle = color;
-  ctx.fill();
-}
-
-function drawTimestamp(ctx: CanvasRenderingContext2D, timestamp: number) {
-  const nDays = (timestamp / 60 / 60 / 24).toFixed(0);
-  ctx.font = '12px sans-serif';
-  ctx.save();
-  ctx.scale(1, -1); // Temporarily flip the canvas
-  ctx.fillStyle = '#000000';
-  ctx.fillRect(45, -45, 100, -20)
-  ctx.fillStyle = '#ffffff';
-  ctx.textBaseline = 'bottom';
-  ctx.fillText(`t = ${nDays} days`, 50, -50); // Position text correctly by negating y
-  ctx.restore(); // unflip canvas
-}
+import {CelestialObject, COLORS, DT, Point, RADII} from "./constants.ts";
+import {incrementBodiesKeplerian, jupiterElements, STATE} from "./keplerian.ts";
+import {drawBody, drawTimestamp} from "./draw.ts";
 
 export function SolarSystem() {
   const time = useRef(0);
@@ -60,21 +26,19 @@ export function SolarSystem() {
     }
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    time.current += TIME_STEP_S;
-    // PLANETS.forEach(planet => incrementBody(planet, SOL));
-    // incrementBody(MOON, EARTH)
-    incrementBodiesKeplerian(TIME_STEP_S);
+    time.current += DT;
+    incrementBodiesKeplerian(DT);
 
     const dpr = window.devicePixelRatio || 1;
     const canvasDimensions: Point = { x: ctx.canvas.width / dpr, y: ctx.canvas.height / dpr };
     const minDimensionPx = Math.min(canvasDimensions.x, canvasDimensions.y);
     const metersPerPx = jupiterElements.semiMajorAxis / minDimensionPx;
-    // BODIES.forEach(body => drawBody(ctx, body.curr, Number(body.radius), body.color, metersPerPx, canvasDimensions))
 
     drawBody(ctx, {x: 0, y: 0}, RADII.sol, COLORS.sol, metersPerPx, canvasDimensions);
     Object.entries(STATE).forEach(([name, body]) => {
+      const obj = name as CelestialObject; // TODO: way to do this without cast?
       const position: Point = {x: body.position[0], y: body.position[1]};
-      drawBody(ctx, position, RADII[name] ?? 1, COLORS[name] ?? '#ffffff', metersPerPx, canvasDimensions);
+      drawBody(ctx, position, RADII[obj], COLORS[obj], metersPerPx, canvasDimensions);
     })
 
     drawTimestamp(ctx, time.current);
