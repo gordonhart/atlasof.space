@@ -1,6 +1,7 @@
 import { AppState, initialState } from '../lib/state.ts';
-import { ActionIcon, Group, Stack, Text, Tooltip } from '@mantine/core';
+import {ActionIcon, Button, Group, Menu, Stack, Text, Tooltip} from '@mantine/core';
 import {
+  IconCircle, IconCircleFilled,
   IconMeteorFilled,
   IconMinus,
   IconPlayerPlayFilled,
@@ -13,6 +14,7 @@ import {
 import { useMemo } from 'react';
 import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
 import { resetState } from '../lib/physics.ts';
+import {CELESTIAL_OBJECTS} from "../lib/constants.ts";
 
 const actionIconProps = { variant: 'subtle', color: 'gray' };
 const iconProps = { size: 14 };
@@ -36,6 +38,26 @@ export function Controls({ state, updateState }: Props) {
       </Stack>
 
       <Group gap={0}>
+        <Menu shadow="md" position="top-start" offset={0} width={120}>
+          <Menu.Target>
+            <Button size="xs" variant="subtle" color="gray">
+              <Group gap={4}>
+                <Text inherit c="dimmed">center:</Text><Text inherit>{state.center}</Text>
+              </Group>
+            </Button>
+          </Menu.Target>
+          <Menu.Dropdown>
+            {CELESTIAL_OBJECTS.map(obj =>
+              <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
+                <Group gap="xs" align="center">
+                  {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+                  {obj}
+                </Group>
+              </Menu.Item>
+            )}
+          </Menu.Dropdown>
+        </Menu>
+
         <Tooltip {...tooltipProps} label="Zoom Out">
           <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
             <IconMinus {...iconProps} />

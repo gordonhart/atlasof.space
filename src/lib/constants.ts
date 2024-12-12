@@ -138,6 +138,7 @@ export const ELEMENTS: Record<
   },
 };
 
+export const CELESTIAL_OBJECTS: Array<CelestialObject> = Object.keys(ELEMENTS) as Array<CelestialObject>;
 export const ORBITAL_PERIODS: Record<CelestialObject, number> = mapValues(ELEMENTS, (e: KeplerianElements) =>
   orbitalPeriod(e.semiMajorAxis, ELEMENTS.sol.mass)
 );

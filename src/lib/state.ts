@@ -1,12 +1,14 @@
 import { DT, ELEMENTS } from './constants.ts';
+import {CelestialObject} from "./types.ts";
 
 export type AppState = {
   time: number; // seconds
-  dt: number; // seconds -- NOTE: be careful with large dt as physics simulation breaks down
+  dt: number; // seconds
   zoom: number;
   play: boolean;
   drawTail: boolean;
   metersPerPx: number;
+  center: CelestialObject;
 };
 
 export const initialState: AppState = {
@@ -16,4 +18,5 @@ export const initialState: AppState = {
   play: true,
   drawTail: false,
   metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
+  center: 'sol',
 };

@@ -4,7 +4,7 @@ import { theme } from './theme.tsx';
 
 export function App() {
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider defaultColorScheme="dark" theme={theme}>
       <SolarSystem />
     </MantineProvider>
   );

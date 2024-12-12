@@ -47,7 +47,7 @@ export function SolarSystem() {
     if (ctx == null) {
       return;
     }
-    const { dt, drawTail, metersPerPx, play } = appStateRef.current;
+    const { dt, drawTail, metersPerPx, play, center } = appStateRef.current;
 
     // TODO: appears to be a bug with far-out planets and tails
     ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.05)' : '#000';
@@ -58,10 +58,11 @@ export function SolarSystem() {
     const dpr = window.devicePixelRatio ?? 1;
     const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
-    drawBody(ctx, [0, 0], ELEMENTS.sol.radius, ELEMENTS.sol.color, metersPerPx, canvasDimensions);
+    const [offsetX, offsetY] = STATE[center]?.position ?? [0, 0];
+    drawBody(ctx, [-offsetX, -offsetY], ELEMENTS.sol.radius, ELEMENTS.sol.color, metersPerPx, canvasDimensions);
     Object.entries(STATE).forEach(([name, body]) => {
       const obj = name as CelestialObject; // TODO: way to do this without cast?
-      const position: Point2 = [body.position[0], body.position[1]];
+      const position: Point2 = [body.position[0] - offsetX, body.position[1] - offsetY];
       drawBody(ctx, position, ELEMENTS[obj].radius, ELEMENTS[obj].color, metersPerPx, canvasDimensions);
     });
 
