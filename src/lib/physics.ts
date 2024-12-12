@@ -1,7 +1,7 @@
 import { ELEMENTS, MU_SUN, ORBITAL_PERIODS } from './constants.ts';
-import { filterKeys, mapValues } from './utils.ts';
 import { degreesToRadians } from './formulas.ts';
 import { CartesianState, CelestialObject, KeplerianElements } from './types.ts';
+import { keys, map, omit } from 'ramda';
 
 function keplerianToCartesian(
   elements: KeplerianElements,
@@ -88,13 +88,13 @@ function updateState(state: CartesianState, acceleration: [number, number, numbe
   };
 }
 
-export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = mapValues(
-  filterKeys(ELEMENTS, (k: CelestialObject) => k !== 'sol'),
-  (e: KeplerianElements) => keplerianToCartesian(e, MU_SUN)
+export const STATE: Record<Exclude<CelestialObject, 'sol'>, CartesianState> = map(
+  (e: KeplerianElements) => keplerianToCartesian(e, MU_SUN),
+  omit(['sol'], ELEMENTS)
 );
 
 export function resetState() {
-  Object.keys(STATE).forEach(name => {
+  keys(STATE).forEach(name => {
     STATE[name] = keplerianToCartesian(ELEMENTS[name], MU_SUN);
   });
 }
@@ -112,7 +112,7 @@ function incrementBody(name: Exclude<CelestialObject, 'sol'>, body: CartesianSta
 }
 
 export function incrementBodiesKeplerian(dt: number) {
-  Object.keys(STATE).forEach(name => {
+  keys(STATE).forEach(name => {
     STATE[name] = incrementBody(name, STATE[name], MU_SUN, dt);
   });
 }

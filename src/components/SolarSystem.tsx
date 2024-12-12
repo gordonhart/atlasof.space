@@ -58,7 +58,7 @@ export function SolarSystem() {
     const dpr = window.devicePixelRatio ?? 1;
     const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
-    const [offsetX, offsetY] = STATE[center]?.position ?? [0, 0];
+    const [offsetX, offsetY] = center === 'sol' ? [0, 0] : STATE[center].position;
     drawBody(ctx, [-offsetX, -offsetY], ELEMENTS.sol.radius, ELEMENTS.sol.color, metersPerPx, canvasDimensions);
     Object.entries(STATE).forEach(([name, body]) => {
       const obj = name as CelestialObject; // TODO: way to do this without cast?
