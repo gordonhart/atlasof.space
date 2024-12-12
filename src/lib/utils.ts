@@ -27,24 +27,3 @@ export function humanDistanceUnits(d: number): [number, string] {
     return [d / AU, 'AU'];
   }
 }
-
-export function filterKeys<T extends Record<string, unknown>>(obj: T, condition: (key: keyof T) => boolean) {
-  const result: Partial<T> = {};
-  for (const key in obj) {
-    if (condition(key)) {
-      result[key] = obj[key];
-    }
-  }
-  return result;
-}
-
-export function mapValues<T extends Record<string, unknown>, U>(
-  obj: T,
-  mapper: (value: T[keyof T], key: string) => U
-): { [K in keyof T]: U } {
-  const result: Partial<{ [K in keyof T]: U }> = {};
-  for (const key in obj) {
-    result[key] = mapper(obj[key], key);
-  }
-  return result as { [K in keyof T]: U };
-}
