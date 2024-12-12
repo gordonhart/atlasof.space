@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import {useMemo} from "react";
 import {humanDistanceUnits, humanTimeUnits, pluralize} from "../lib/utils.ts";
-import {resetState} from "../lib/keplerian.ts";
+import {resetState} from "../lib/physics.ts";
 
 const actionIconProps = {variant: 'subtle', color: 'gray'};
 const iconProps = {size: 14};

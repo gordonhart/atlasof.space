@@ -27,3 +27,14 @@ export function humanDistanceUnits(d: number): [number, string] {
     return [d / AU, 'AU']
   }
 }
+
+export function mapValues<T extends Record<string, unknown>, U>(
+  obj: T,
+  mapper: (value: T[keyof T], key: string) => U,
+): { [K in keyof T]: U } {
+  const result: Partial<{ [K in keyof T]: U }> = {};
+  for (const key in obj) {
+    result[key] = mapper(obj[key], key);
+  }
+  return result as { [K in keyof T]: U };
+}

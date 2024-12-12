@@ -1,5 +1,4 @@
-import {DT, Point} from "./constants.ts";
-import {jupiterElements} from "./keplerian.ts";
+import {DT, ELEMENTS, Point} from "./constants.ts";
 
 export type AppState = {
   time: number; // seconds
@@ -18,5 +17,5 @@ export const initialState: AppState = {
   center: { x: 0, y: 0 },
   play: true,
   drawTail: false,
-  metersPerPx: jupiterElements.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
+  metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
 }

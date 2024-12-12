@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {Group} from '@mantine/core';
 import {CelestialObject, COLORS, Point, RADII} from "../lib/constants.ts";
-import {incrementBodiesKeplerian, STATE} from "../lib/keplerian.ts";
+import {incrementBodiesKeplerian, STATE} from "../lib/physics.ts";
 import {drawBody, } from "../lib/draw.ts";
 import {AppState, initialState} from "../lib/state.ts";
 import {Controls} from "./Controls.tsx";
