@@ -1,7 +1,8 @@
 import { AppState, initialState } from '../lib/state.ts';
-import {ActionIcon, Button, Group, Menu, Stack, Text, Tooltip} from '@mantine/core';
+import { ActionIcon, Button, Group, Menu, Stack, Text, Tooltip } from '@mantine/core';
 import {
-  IconCircle, IconCircleFilled,
+  IconCircle,
+  IconCircleFilled,
   IconMeteorFilled,
   IconMinus,
   IconPlayerPlayFilled,
@@ -14,7 +15,7 @@ import {
 import { useMemo } from 'react';
 import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
 import { resetState } from '../lib/physics.ts';
-import {CELESTIAL_OBJECTS} from "../lib/constants.ts";
+import { CELESTIAL_OBJECTS } from '../lib/constants.ts';
 
 const actionIconProps = { variant: 'subtle', color: 'gray' };
 const iconProps = { size: 14 };
@@ -42,19 +43,22 @@ export function Controls({ state, updateState }: Props) {
           <Menu.Target>
             <Button size="xs" variant="subtle" color="gray">
               <Group gap={4}>
-                <Text inherit c="dimmed">center:</Text><Text inherit>{state.center}</Text>
+                <Text inherit c="dimmed">
+                  center:
+                </Text>
+                <Text inherit>{state.center}</Text>
               </Group>
             </Button>
           </Menu.Target>
           <Menu.Dropdown>
-            {CELESTIAL_OBJECTS.map(obj =>
+            {CELESTIAL_OBJECTS.map(obj => (
               <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
                 <Group gap="xs" align="center">
                   {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
                   {obj}
                 </Group>
               </Menu.Item>
-            )}
+            ))}
           </Menu.Dropdown>
         </Menu>
 

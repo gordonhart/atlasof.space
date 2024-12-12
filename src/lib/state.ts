@@ -1,5 +1,5 @@
 import { DT, ELEMENTS } from './constants.ts';
-import {CelestialObject} from "./types.ts";
+import { CelestialObject } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
