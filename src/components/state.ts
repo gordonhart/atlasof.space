@@ -6,6 +6,7 @@ export type AppState = {
   zoom: number;
   center: Point;
   play: boolean;
+  drawTail: boolean;
 }
 
 export const initialState: AppState = {
@@ -14,4 +15,5 @@ export const initialState: AppState = {
   zoom: 1,
   center: { x: 0, y: 0 },
   play: true,
+  drawTail: false,
 }

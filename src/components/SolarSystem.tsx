@@ -47,7 +47,7 @@ export function SolarSystem() {
       return;
     }
     // ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // fade effect
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = appStateRef.current.drawTail ? 'rgba(0,0,0,0.05)' : '#000';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     setAppState(prev => ({...prev, time: prev.time + appStateRef.current.dt}));
     incrementBodiesKeplerian(appStateRef.current.dt);
