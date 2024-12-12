@@ -3,6 +3,8 @@ import { ActionIcon, Button, Group, Menu, Stack, Text, Tooltip } from '@mantine/
 import {
   IconCircle,
   IconCircleFilled,
+  IconCircleMinus,
+  IconCirclePlus,
   IconMeteorFilled,
   IconMinus,
   IconPlayerPlayFilled,
@@ -38,7 +40,7 @@ export function Controls({ state, updateState }: Props) {
         <Text inherit>m/px: {pluralize(mpp, mppUnits)}</Text>
       </Stack>
 
-      <Group gap={0}>
+      <Group gap={0} align="flex-end">
         <Menu shadow="md" position="top-start" offset={0} width={120}>
           <Menu.Target>
             <Button size="xs" variant="subtle" color="gray">
@@ -62,17 +64,39 @@ export function Controls({ state, updateState }: Props) {
           </Menu.Dropdown>
         </Menu>
 
-        <Tooltip {...tooltipProps} label="Zoom Out">
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
-            <IconMinus {...iconProps} />
-          </ActionIcon>
-        </Tooltip>
+        <Stack gap={0}>
+          <Tooltip {...tooltipProps} label="Zoom In">
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
+              <IconPlus {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
 
-        <Tooltip {...tooltipProps} label="Zoom In">
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
-            <IconPlus {...iconProps} />
-          </ActionIcon>
-        </Tooltip>
+          <Tooltip {...tooltipProps} label="Zoom Out">
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
+              <IconMinus {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+        </Stack>
+
+        <Stack gap={0}>
+          <Tooltip {...tooltipProps} label="Enlarge Planets">
+            <ActionIcon
+              {...actionIconProps}
+              onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}
+            >
+              <IconCirclePlus {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+
+          <Tooltip {...tooltipProps} label="Shrink Planets">
+            <ActionIcon
+              {...actionIconProps}
+              onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor / 2 })}
+            >
+              <IconCircleMinus {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+        </Stack>
 
         <Tooltip {...tooltipProps} label="Slow Down">
           <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt / 2 })}>

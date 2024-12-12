@@ -9,6 +9,7 @@ export type AppState = {
   drawTail: boolean;
   metersPerPx: number;
   center: CelestialObject;
+  planetScaleFactor: number;
 };
 
 export const initialState: AppState = {
@@ -19,4 +20,5 @@ export const initialState: AppState = {
   drawTail: false,
   metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
   center: 'sol',
+  planetScaleFactor: 5,
 };

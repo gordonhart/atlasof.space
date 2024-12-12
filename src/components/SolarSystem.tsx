@@ -5,7 +5,8 @@ import { incrementBodiesKeplerian, STATE } from '../lib/physics.ts';
 import { drawBody } from '../lib/draw.ts';
 import { AppState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls.tsx';
-import { CelestialObject, Point2 } from '../lib/types.ts';
+import { Point2 } from '../lib/types.ts';
+import { toPairs } from 'ramda';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -47,7 +48,7 @@ export function SolarSystem() {
     if (ctx == null) {
       return;
     }
-    const { dt, drawTail, metersPerPx, play, center } = appStateRef.current;
+    const { dt, drawTail, metersPerPx, play, center, planetScaleFactor } = appStateRef.current;
 
     // TODO: appears to be a bug with far-out planets and tails
     ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.05)' : '#000';
@@ -59,11 +60,22 @@ export function SolarSystem() {
     const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
     const [offsetX, offsetY] = center === 'sol' ? [0, 0] : STATE[center].position;
-    drawBody(ctx, [-offsetX, -offsetY], ELEMENTS.sol.radius, ELEMENTS.sol.color, metersPerPx, canvasDimensions);
-    Object.entries(STATE).forEach(([name, body]) => {
-      const obj = name as CelestialObject; // TODO: way to do this without cast?
-      const position: Point2 = [body.position[0] - offsetX, body.position[1] - offsetY];
-      drawBody(ctx, position, ELEMENTS[obj].radius, ELEMENTS[obj].color, metersPerPx, canvasDimensions);
+    const sharedDrawParams = { ctx, metersPerPx, canvasDimensions };
+    drawBody({
+      ...sharedDrawParams,
+      position: [-offsetX, -offsetY],
+      radius: ELEMENTS.sol.radius,
+      color: ELEMENTS.sol.color,
+      bodyScaleFactor: initialState.planetScaleFactor,
+    });
+    toPairs(STATE).forEach(([name, body]) => {
+      drawBody({
+        ...sharedDrawParams,
+        position: [body.position[0] - offsetX, body.position[1] - offsetY],
+        radius: ELEMENTS[name].radius,
+        color: ELEMENTS[name].color,
+        bodyScaleFactor: planetScaleFactor,
+      });
     });
 
     if (play) {

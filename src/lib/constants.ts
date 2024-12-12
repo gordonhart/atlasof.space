@@ -5,7 +5,6 @@ import { keys, map } from 'ramda';
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const DT = 60 * 60 * 6; // time step -- 6 hours
 export const AU = 1.496e11; // meters
-export const BODY_SCALE_FACTOR = 5;
 
 export const ELEMENTS: Record<
   CelestialObject,
