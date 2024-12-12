@@ -1,5 +1,6 @@
 import {orbitalPeriod} from "./formulas.ts";
-import { mapValues } from "./utils.ts";
+import {mapValues} from "./utils.ts";
+import {CelestialObject, KeplerianElements} from "./types.ts";
 
 // gravitational constant
 export const G = 6.6743e-11; // N⋅m2⋅kg−2
@@ -7,31 +8,6 @@ export const DT = 60 * 60 * 6; // time step -- 6 hours
 export const AU = 1.496e+11; // meters
 export const BODY_SCALE_FACTOR = 5;
 
-export type Point = {
-  x: number;
-  y: number;
-}
-export type CelestialObject =
-  | 'sol'
-  | 'mercury'
-  | 'venus'
-  | 'mars'
-  | 'earth'
-  | 'ceres'
-  | 'jupiter'
-  | 'saturn'
-  | 'uranus'
-  | 'neptune'
-  | 'pluto';
-
-export type KeplerianElements = {
-  eccentricity: number; // ratio
-  semiMajorAxis: number; // meters
-  inclination: number; // degrees
-  longitudeAscending: number; // degrees
-  argumentOfPeriapsis: number; // degrees
-  trueAnomaly: number; // degrees
-};
 export const ELEMENTS: Record<Exclude<CelestialObject, 'sol'>, KeplerianElements> = {
   mercury: {
     eccentricity: 0.2056,

@@ -1,10 +1,11 @@
 import {useEffect, useRef, useState} from 'react';
 import {Group} from '@mantine/core';
-import {CelestialObject, COLORS, Point, RADII} from "../lib/constants.ts";
+import {COLORS, RADII} from "../lib/constants.ts";
 import {incrementBodiesKeplerian, STATE} from "../lib/physics.ts";
 import {drawBody, } from "../lib/draw.ts";
 import {AppState, initialState} from "../lib/state.ts";
 import {Controls} from "./Controls.tsx";
+import {CelestialObject, Point2} from "../lib/types.ts";
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -55,12 +56,12 @@ export function SolarSystem() {
     incrementBodiesKeplerian(dt);
 
     const dpr = window.devicePixelRatio ?? 1;
-    const canvasDimensions: Point = { x: ctx.canvas.width / dpr, y: ctx.canvas.height / dpr };
+    const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
-    drawBody(ctx, {x: 0, y: 0}, RADII.sol, COLORS.sol, metersPerPx, canvasDimensions);
+    drawBody(ctx, [0, 0], RADII.sol, COLORS.sol, metersPerPx, canvasDimensions);
     Object.entries(STATE).forEach(([name, body]) => {
       const obj = name as CelestialObject; // TODO: way to do this without cast?
-      const position: Point = {x: body.position[0], y: body.position[1]};
+      const position: Point2 = [body.position[0], body.position[1]];
       drawBody(ctx, position, RADII[obj], COLORS[obj], metersPerPx, canvasDimensions);
     })
 

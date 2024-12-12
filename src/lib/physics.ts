@@ -1,11 +1,7 @@
-import {CelestialObject, ELEMENTS, KeplerianElements, MU_SUN, ORBITAL_PERIODS,} from "./constants.ts";
+import {ELEMENTS, MU_SUN, ORBITAL_PERIODS,} from "./constants.ts";
 import {mapValues} from "./utils.ts";
 import {degreesToRadians} from "./formulas.ts";
-
-export type CartesianState = {
-  position: [number, number, number]; // meters
-  velocity: [number, number, number]; // meters per second
-};
+import {CartesianState, CelestialObject, KeplerianElements} from "./types.ts";
 
 function keplerianToCartesian(
   elements: KeplerianElements,

@@ -1,23 +1,20 @@
-import {BODY_SCALE_FACTOR, Point} from "./constants.ts";
+import {BODY_SCALE_FACTOR} from "./constants.ts";
+import {Point2} from "./types.ts";
 
 export function drawBody(
   ctx: CanvasRenderingContext2D,
-  position: Point,
+  [positionX, positionY]: Point2,
   radius: number,
   color: string,
   metersPerPx: number,
-  canvasDimensions: Point
+  [canvasWidth, canvasHeight]: Point2
 ) {
-  const canvasCenterPx = { x: canvasDimensions.x / 2, y: canvasDimensions.y / 2 };
-  const bodyCenterPx = {
-    x: canvasCenterPx.x + (position.x / metersPerPx),
-    y: canvasCenterPx.y + (position.y / metersPerPx),
-  }
-  // console.log(bodyCenterPx)
+  const bodyCenterX = (canvasWidth / 2) + (positionX / metersPerPx);
+  const bodyCenterY = (canvasHeight / 2) + (positionY / metersPerPx);
   const r = radius / metersPerPx * BODY_SCALE_FACTOR;
   const displayRadius = Math.max(r, 1); // ensure always visible
   ctx.beginPath();
-  ctx.arc(bodyCenterPx.x, bodyCenterPx.y, displayRadius, 0, Math.PI * 2);
+  ctx.arc(bodyCenterX, bodyCenterY, displayRadius, 0, Math.PI * 2);
   ctx.fillStyle = color;
   ctx.fill();
 }
