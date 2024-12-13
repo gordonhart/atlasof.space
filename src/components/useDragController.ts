@@ -18,8 +18,8 @@ export function useDragController(state: AppState, updateState: (state: Partial<
   }
 
   function updateZoom(event: MouseEvent<HTMLCanvasElement>) {
-    const zoomFactor = 1 + 0.05 * event.deltaY;
-    updateState({ metersPerPx: state.metersPerPx * zoomFactor });
+    const zoomFactor = 1 + 0.01 * event.deltaY;
+    updateState({ metersPerPx: Math.min(Math.max(state.metersPerPx * zoomFactor, 1000), 1e12) });
   }
 
   return {

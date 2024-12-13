@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
-import { ELEMENTS } from '../lib/constants.ts';
-import { incrementBodiesKeplerian, STATE } from '../lib/physics.ts';
-import { drawBody } from '../lib/draw.ts';
 import { AppState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls.tsx';
-import { Point2 } from '../lib/types.ts';
-import { toPairs } from 'ramda';
 import { useDragController } from './useDragController.ts';
+import { drawBodies } from '../lib/draw.ts';
+import { incrementBodies } from '../lib/physics.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -28,7 +25,7 @@ export function SolarSystem() {
   // restart animation
   useEffect(() => {
     if (appState.play) {
-      const frameId = window.requestAnimationFrame(drawBodies);
+      const frameId = window.requestAnimationFrame(animationFrame);
       return () => {
         window.cancelAnimationFrame(frameId);
       };
@@ -46,57 +43,23 @@ export function SolarSystem() {
     }
   }
 
-  function drawBodies() {
+  function animationFrame() {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) {
       return;
     }
-    const {
-      dt,
-      drawTail,
-      metersPerPx,
-      play,
-      center,
-      planetScaleFactor,
-      offset: [offsetX, offsetY],
-    } = appStateRef.current;
-
-    // TODO: appears to be a bug with far-out planets and tails
-    ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const { play, dt } = appStateRef.current;
     setAppState(prev => ({ ...prev, time: prev.time + dt }));
-    incrementBodiesKeplerian(dt);
-
-    const dpr = window.devicePixelRatio ?? 1;
-    const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
-
-    const [centerOffsetX, centerOffsetY] = center === 'sol' ? [0, 0] : STATE[center].position;
-    const sharedDrawParams = { ctx, metersPerPx, canvasDimensions };
-    drawBody({
-      ...sharedDrawParams,
-      position: [offsetX - centerOffsetX, offsetY - centerOffsetY],
-      radius: ELEMENTS.sol.radius,
-      color: ELEMENTS.sol.color,
-      bodyScaleFactor: initialState.planetScaleFactor,
-    });
-    toPairs(STATE).forEach(([name, body]) => {
-      drawBody({
-        ...sharedDrawParams,
-        position: [body.position[0] + offsetX - centerOffsetX, body.position[1] + offsetY - centerOffsetY],
-        radius: ELEMENTS[name].radius,
-        color: ELEMENTS[name].color,
-        bodyScaleFactor: planetScaleFactor,
-      });
-    });
-
+    incrementBodies(dt);
+    drawBodies(ctx, appStateRef.current);
     if (play) {
-      window.requestAnimationFrame(drawBodies);
+      window.requestAnimationFrame(animationFrame);
     }
   }
 
   useEffect(() => {
     setupCanvas();
-    const frameId = window.requestAnimationFrame(drawBodies);
+    const frameId = window.requestAnimationFrame(animationFrame);
     window.addEventListener('resize', setupCanvas);
     return () => {
       window.cancelAnimationFrame(frameId);
@@ -107,9 +70,9 @@ export function SolarSystem() {
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
       <canvas
-        {...dragController.canvasProps}
-        style={{ display: 'block', height: '100vh', width: '100vw' }}
         ref={canvasRef}
+        style={{ display: 'block', height: '100vh', width: '100vw' }}
+        {...dragController.canvasProps}
       />
       <Controls state={appState} updateState={updateState} />
     </Group>

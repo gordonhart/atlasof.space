@@ -1,7 +1,11 @@
 export type Point2 = [number, number];
 export type Point3 = [number, number, number];
+export type CartesianState = {
+  position: Point3; // meters
+  velocity: Point3; // meters per second
+};
 
-export type CelestialObject =
+export type CelestialBodyName =
   | 'sol'
   | 'mercury'
   | 'venus'
@@ -23,7 +27,10 @@ export type KeplerianElements = {
   trueAnomaly: number; // degrees
 };
 
-export type CartesianState = {
-  position: Point3; // meters
-  velocity: Point3; // meters per second
+export type CelestialBody = KeplerianElements & {
+  mass: number; // kg
+  radius: number; // m
+  color: `#${string}`; // hex
+  // TODO: union type for name?
+  moons?: Record<string, CelestialBody>; // keplerian elements in reference to main body
 };

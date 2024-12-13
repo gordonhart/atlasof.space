@@ -1,19 +1,12 @@
 import { orbitalPeriod } from './formulas.ts';
-import { CelestialObject, KeplerianElements } from './types.ts';
+import { CelestialBody, CelestialBodyName, KeplerianElements } from './types.ts';
 import { keys, map } from 'ramda';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const DT = 60 * 60 * 6; // time step -- 6 hours
 export const AU = 1.496e11; // meters
 
-export const ELEMENTS: Record<
-  CelestialObject,
-  KeplerianElements & {
-    mass: number; // kg
-    radius: number; // m
-    color: `#${string}`; // hex
-  }
-> = {
+export const ELEMENTS: Record<CelestialBodyName, CelestialBody> = {
   sol: {
     eccentricity: 0,
     semiMajorAxis: 0,
@@ -42,7 +35,7 @@ export const ELEMENTS: Record<
     inclination: 3.39458,
     longitudeAscending: 76.6799,
     argumentOfPeriapsis: 54.884,
-    trueAnomaly: 0,
+    trueAnomaly: 0, // starting at periapsis // TODO: set real values
     mass: 4.8675e24,
     radius: 6051.8e3,
     color: '#fe8',
@@ -57,6 +50,19 @@ export const ELEMENTS: Record<
     mass: 5.972168e24,
     radius: 6371e3,
     color: '#3fb',
+    moons: {
+      luna: {
+        eccentricity: 0.0549,
+        semiMajorAxis: 384400e3,
+        inclination: 5.145,
+        longitudeAscending: 125.08,
+        argumentOfPeriapsis: 318.15,
+        trueAnomaly: 0,
+        mass: 7.342e22,
+        radius: 1737.4e3,
+        color: '#bbb',
+      },
+    },
   },
   mars: {
     eccentricity: 0.0935,
@@ -90,6 +96,52 @@ export const ELEMENTS: Record<
     mass: 1.8982e27,
     radius: 69911e3,
     color: '#fa2',
+    moons: {
+      io: {
+        eccentricity: 0.0041,
+        semiMajorAxis: 421800e3,
+        inclination: 0.036,
+        longitudeAscending: 0, // approximate
+        argumentOfPeriapsis: 0, // approximated for circular orbits
+        trueAnomaly: 0,
+        mass: 8.931938e22,
+        radius: 1821.6e3,
+        color: '#bbb',
+      },
+      europa: {
+        eccentricity: 0.0094,
+        semiMajorAxis: 671100e3,
+        inclination: 0.466,
+        longitudeAscending: 0, // approximate
+        argumentOfPeriapsis: 0, // approximated for circular orbits
+        trueAnomaly: 0,
+        mass: 4.799844e22,
+        radius: 1560.8e3,
+        color: '#bbb',
+      },
+      ganymede: {
+        eccentricity: 0.0013,
+        semiMajorAxis: 1070400e3,
+        inclination: 0.177,
+        longitudeAscending: 0,
+        argumentOfPeriapsis: 0,
+        trueAnomaly: 0,
+        mass: 1.4819e23,
+        radius: 2634.1e3,
+        color: '#bbb',
+      },
+      callisto: {
+        eccentricity: 0.0074,
+        semiMajorAxis: 1882700e3,
+        inclination: 0.192,
+        longitudeAscending: 0,
+        argumentOfPeriapsis: 0,
+        trueAnomaly: 0,
+        mass: 1.075938e23,
+        radius: 2410.3e3,
+        color: '#bbb',
+      },
+    },
   },
   saturn: {
     eccentricity: 0.0565,
@@ -137,10 +189,15 @@ export const ELEMENTS: Record<
   },
 };
 
-export const CELESTIAL_OBJECTS: Array<CelestialObject> = keys(ELEMENTS);
-export const ORBITAL_PERIODS: Record<CelestialObject, number> = map(
+export const CELESTIAL_OBJECTS: Array<CelestialBodyName> = keys(ELEMENTS);
+export const ORBITAL_PERIODS: Record<CelestialBodyName, number> = map(
   (e: KeplerianElements) => orbitalPeriod(e.semiMajorAxis, ELEMENTS.sol.mass),
   ELEMENTS
 );
+export const ORBITAL_PERIOD_MOONS: Record<CelestialBodyName, Record<string, number>> = map(
+  body => map(moon => orbitalPeriod(moon.semiMajorAxis, body.mass), body.moons ?? {}),
+  ELEMENTS
+);
 
-export const MU_SUN = ELEMENTS.sol.mass * G; // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
+export const MU_SOL = ELEMENTS.sol.mass * G; // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
+export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
