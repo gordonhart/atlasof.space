@@ -1,5 +1,5 @@
 import { DT, SOL } from './constants.ts';
-import { CelestialBodyName, Point2 } from './types.ts';
+import { Point2 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -7,7 +7,7 @@ export type AppState = {
   play: boolean;
   drawTail: boolean;
   metersPerPx: number; // controls zoom
-  center: CelestialBodyName;
+  center: string;
   offset: Point2; // meters
   planetScaleFactor: number;
 };
@@ -17,8 +17,8 @@ export const initialState: AppState = {
   dt: DT / 16,
   play: true,
   drawTail: false,
-  metersPerPx: SOL.satellites[0].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight) / 10,
-  center: 'jupiter',
+  metersPerPx: SOL.satellites[5].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
+  center: 'Jupiter',
   offset: [0, 0],
   planetScaleFactor: 1,
 };

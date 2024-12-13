@@ -5,19 +5,6 @@ export type CartesianState = {
   velocity: Point3; // meters per second
 };
 
-export type CelestialBodyName =
-  | 'sol'
-  | 'mercury'
-  | 'venus'
-  | 'mars'
-  | 'earth'
-  | 'ceres'
-  | 'jupiter'
-  | 'saturn'
-  | 'uranus'
-  | 'neptune'
-  | 'pluto';
-
 export type KeplerianElements = {
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters

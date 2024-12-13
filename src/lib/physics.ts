@@ -1,7 +1,6 @@
-import { G, SOL } from './constants.ts';
-import { degreesToRadians, add3, mul3 } from './formulas.ts';
+import { G } from './constants.ts';
+import { degreesToRadians, add3, mul3, subtract3 } from './formulas.ts';
 import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
-import { pick } from 'ramda';
 
 function keplerianToCartesian(
   elements: KeplerianElements,
@@ -45,8 +44,12 @@ function keplerianToCartesian(
   ];
 
   // Transform position and velocity to inertial frame
-  const positionInertial: Point3 = rotationMatrix.map(row => row[0] * positionOrbital[0] + row[1] * positionOrbital[1]);
-  const velocityInertial: Point3 = rotationMatrix.map(row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]);
+  const positionInertial: Point3 = rotationMatrix.map(
+    row => row[0] * positionOrbital[0] + row[1] * positionOrbital[1]
+  ) as Point3;
+  const velocityInertial: Point3 = rotationMatrix.map(
+    row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]
+  ) as Point3;
 
   return {
     position: positionInertial,
@@ -69,7 +72,7 @@ function applyAcceleration(state: CartesianState, acceleration: Point3, dt: numb
 }
 
 export function getInitialState(parentState: CelestialBodyState | null, child: CelestialBody): CelestialBodyState {
-  let childCartesian = { position: [0, 0, 0], velocity: [0, 0, 0] };
+  let childCartesian: CartesianState = { position: [0, 0, 0], velocity: [0, 0, 0] };
   if (parentState != null) {
     const { position, velocity } = keplerianToCartesian(child, G * parentState.mass);
     childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
@@ -77,10 +80,6 @@ export function getInitialState(parentState: CelestialBodyState | null, child: C
   const childState: CelestialBodyState = { ...child, ...childCartesian, satellites: [] }; // satellites to be replaced
   const satellites = child.satellites.map(grandchild => getInitialState(childState, grandchild));
   return { ...childState, satellites };
-}
-
-export function resetState() {
-  STATE = getInitialState(null, SOL);
 }
 
 /*
@@ -139,18 +138,33 @@ function incrementMoon(
 }
  */
 
+function incrementStateByParents(
+  parents: Array<CelestialBodyState>,
+  child: CelestialBodyState,
+  dt: number
+): CelestialBodyState {
+  const satellites = child.satellites.map(grandchild => incrementStateByParents([child, ...parents], grandchild, dt));
+  const acceleration = parents.reduce<Point3>(
+    (acc, parent) => {
+      const positionWrtParent = subtract3(child.position, parent.position);
+      return add3(acc, computeAcceleration(positionWrtParent, G * parent.mass));
+    },
+    [0, 0, 0] as Point3
+  );
+  const newState = applyAcceleration(child, acceleration, dt);
+  return { ...child, ...newState, satellites };
+}
+
+// TODO: subdivide dt for short periods
 export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
   // compute acceleration for leaf nodes first, apply acceleration from all parents
   // compute acceleration for inner nodes, apply acceleration from all parent
   // return root with updated children
-  function incrementStateInner(parent: CelestialBodyState | null, child: CelestialBodyState): CelestialBodyState {
-    const satellites = child.satellites.map(grandchild => incrementStateInner(child, grandchild));
-    let newState = pick(['position', 'velocity'], child);
-    if (parent != null) {
-      newState = applyAcceleration(child, computeAcceleration(child.position, parent.mass * G), dt);
-    }
-    return { ...child, ...newState, satellites };
-  }
 
-  return incrementStateInner(null, state);
+  /*
+  return Array(100)
+    .fill(null)
+    .reduce(acc => incrementStateByParents([], acc, dt / 100), state);
+   */
+  return incrementStateByParents([], state, dt);
 }

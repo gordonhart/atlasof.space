@@ -1,11 +1,12 @@
 import { CelestialBody, CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
+import { findCelestialBody } from './constants.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
     drawTail,
     metersPerPx,
-    // center, // TODO: reenable
+    center,
     planetScaleFactor,
     offset: [panOffsetX, panOffsetY],
   } = appState;
@@ -17,8 +18,8 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   const dpr = window.devicePixelRatio ?? 1;
   const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
-  // const [centerOffsetX, centerOffsetY] = center === 'sol' ? [0, 0] : appState[center].position; // TODO
-  const [centerOffsetX, centerOffsetY] = [0, 0];
+  const centerState = findCelestialBody(systemState, center);
+  const [centerOffsetX, centerOffsetY] = centerState?.position ?? [0, 0];
   const [offsetX, offsetY] = [panOffsetX - centerOffsetX, panOffsetY - centerOffsetY];
   const sharedDrawParams = { ctx, metersPerPx, canvasDimensions, bodyScaleFactor: planetScaleFactor };
 

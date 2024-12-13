@@ -1,5 +1,5 @@
 import { orbitalPeriod } from './formulas.ts';
-import { CelestialBody } from './types.ts';
+import { CelestialBody, CelestialBodyState } from './types.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const DT = 60 * 60 * 6; // time step -- 6 hours
@@ -189,7 +189,7 @@ export const SOL: CelestialBody = {
       satellites: [], // TODO
     },
     {
-      name: 'Uranus',
+      name: 'Neptune',
       eccentricity: 0.0086,
       semiMajorAxis: 4503443661e3,
       inclination: 1.77,
@@ -235,3 +235,7 @@ export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPe
 
 export const MU_SOL = SOL.mass * G; // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
 export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
+
+export function findCelestialBody(state: CelestialBodyState, name: string) {
+  return name === state.name ? state : state.satellites.find(child => findCelestialBody(child, name));
+}

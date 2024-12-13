@@ -64,7 +64,7 @@ export function Controls({ state, updateState, reset }: Props) {
       </Paper>
 
       <Group gap={2} align="flex-end">
-        <Menu shadow="md" position="top-start" offset={0} width={120}>
+        <Menu shadow="md" position="top-start" offset={0} width={140}>
           <Menu.Target>
             <Button size="xs" variant="subtle" color="gray">
               <Group gap={4}>
