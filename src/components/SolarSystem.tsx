@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
-import { ELEMENTS } from '../lib/constants.ts';
-import { incrementBodiesKeplerian, STATE } from '../lib/physics.ts';
-import { drawBody } from '../lib/draw.ts';
 import { AppState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls.tsx';
-import { CelestialObject, Point2 } from '../lib/types.ts';
+import { useDragController } from './useDragController.ts';
+import { drawBodies } from '../lib/draw.ts';
+import { incrementBodies } from '../lib/physics.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
+
+  function updateState(newState: Partial<AppState>) {
+    setAppState(prev => ({ ...prev, ...newState }));
+  }
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const dragController = useDragController(appState, updateState);
 
   // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {
@@ -20,16 +25,12 @@ export function SolarSystem() {
   // restart animation
   useEffect(() => {
     if (appState.play) {
-      const frameId = window.requestAnimationFrame(drawBodies);
+      const frameId = window.requestAnimationFrame(animationFrame);
       return () => {
         window.cancelAnimationFrame(frameId);
       };
     }
   }, [appState.play]);
-
-  function updateState(newState: Partial<AppState>) {
-    setAppState(prev => ({ ...prev, ...newState }));
-  }
 
   function setupCanvas() {
     if (canvasRef.current != null) {
@@ -42,38 +43,23 @@ export function SolarSystem() {
     }
   }
 
-  function drawBodies() {
+  function animationFrame() {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) {
       return;
     }
-    const { dt, drawTail, metersPerPx, play, center } = appStateRef.current;
-
-    // TODO: appears to be a bug with far-out planets and tails
-    ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.05)' : '#000';
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const { play, dt } = appStateRef.current;
     setAppState(prev => ({ ...prev, time: prev.time + dt }));
-    incrementBodiesKeplerian(dt);
-
-    const dpr = window.devicePixelRatio ?? 1;
-    const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
-
-    const [offsetX, offsetY] = center === 'sol' ? [0, 0] : STATE[center].position;
-    drawBody(ctx, [-offsetX, -offsetY], ELEMENTS.sol.radius, ELEMENTS.sol.color, metersPerPx, canvasDimensions);
-    Object.entries(STATE).forEach(([name, body]) => {
-      const obj = name as CelestialObject; // TODO: way to do this without cast?
-      const position: Point2 = [body.position[0] - offsetX, body.position[1] - offsetY];
-      drawBody(ctx, position, ELEMENTS[obj].radius, ELEMENTS[obj].color, metersPerPx, canvasDimensions);
-    });
-
+    incrementBodies(dt);
+    drawBodies(ctx, appStateRef.current);
     if (play) {
-      window.requestAnimationFrame(drawBodies);
+      window.requestAnimationFrame(animationFrame);
     }
   }
 
   useEffect(() => {
     setupCanvas();
-    const frameId = window.requestAnimationFrame(drawBodies);
+    const frameId = window.requestAnimationFrame(animationFrame);
     window.addEventListener('resize', setupCanvas);
     return () => {
       window.cancelAnimationFrame(frameId);
@@ -83,7 +69,11 @@ export function SolarSystem() {
 
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
-      <canvas style={{ display: 'block', height: '100vh', width: '100vw' }} ref={canvasRef} />
+      <canvas
+        ref={canvasRef}
+        style={{ display: 'block', height: '100vh', width: '100vw' }}
+        {...dragController.canvasProps}
+      />
       <Controls state={appState} updateState={updateState} />
     </Group>
   );

@@ -20,9 +20,9 @@ export function humanTimeUnits(t: number): [number, string] {
 
 export function humanDistanceUnits(d: number): [number, string] {
   if (d < 1_000) {
-    return [d, 'meter'];
+    return [d, 'm'];
   } else if (d < 0.01 * AU) {
-    return [d / 1_000, 'kilometer'];
+    return [d / 1_000, 'km'];
   } else {
     return [d / AU, 'AU'];
   }
