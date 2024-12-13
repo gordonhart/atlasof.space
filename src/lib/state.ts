@@ -14,11 +14,11 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: DT / 16,
+  dt: DT,
   play: true,
   drawTail: false,
   metersPerPx: SOL.satellites[5].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
-  center: 'Jupiter',
+  center: 'Sol',
   offset: [0, 0],
   planetScaleFactor: 1,
 };

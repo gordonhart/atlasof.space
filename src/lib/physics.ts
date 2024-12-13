@@ -96,7 +96,14 @@ function incrementStateByParents(
   return { ...child, ...newState, satellites };
 }
 
-// TODO: subdivide dt for stability with short period bodies?
+// TODO: subdivide dt for stability with short period bodies? based on the previous implementation, seems likely that
+//  using a different dt for a satellite would require that entire branch of the tree to use that same dt -- otherwise
+//  slight errors will compound and the simulation will destabilize
 export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
-  return incrementStateByParents([], state, dt);
+  const maxSafeDt = 3_600; // 1 hour
+  const nIterations = Math.ceil(dt / maxSafeDt);
+  return Array(nIterations)
+    .fill(null)
+    .reduce(acc => incrementStateByParents([], acc, dt / nIterations), state);
+  // return incrementStateByParents([], state, dt);
 }

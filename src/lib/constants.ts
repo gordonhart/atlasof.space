@@ -235,7 +235,7 @@ export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPe
 export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
 
 // TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
-export function findCelestialBody(state: CelestialBodyState, name: string) {
+export function findCelestialBody(state: CelestialBodyState, name: string): CelestialBodyState | undefined {
   if (name === state.name) {
     return state;
   }

@@ -7,6 +7,7 @@ export function useDragController(state: AppState, updateState: (state: Partial<
 
   function updateOffset(event: MouseEvent<HTMLCanvasElement>) {
     if (prevPosition == null) {
+      console.log(event.clientX, event.clientY);
       return;
     }
     const newOffset: Point2 = [
