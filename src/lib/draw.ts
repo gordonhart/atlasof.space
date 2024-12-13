@@ -1,17 +1,14 @@
-import { CelestialBody, Point2 } from './types.ts';
-import { STATE, STATE_MOONS } from './physics.ts';
-import { ELEMENTS } from './constants.ts';
-import { AppState, initialState } from './state.ts';
-import { toPairs } from 'ramda';
+import { CelestialBody, CelestialBodyState, Point2 } from './types.ts';
+import { AppState } from './state.ts';
 
-export function drawBodies(ctx: CanvasRenderingContext2D, state: AppState) {
+export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
     drawTail,
     metersPerPx,
-    center,
+    // center, // TODO: reenable
     planetScaleFactor,
-    offset: [offsetX, offsetY],
-  } = state;
+    offset: [panOffsetX, panOffsetY],
+  } = appState;
 
   // TODO: appears to be a bug with far-out planets and tails
   ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
@@ -20,33 +17,21 @@ export function drawBodies(ctx: CanvasRenderingContext2D, state: AppState) {
   const dpr = window.devicePixelRatio ?? 1;
   const canvasDimensions: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 
-  const [centerOffsetX, centerOffsetY] = center === 'sol' ? [0, 0] : STATE[center].position;
+  // const [centerOffsetX, centerOffsetY] = center === 'sol' ? [0, 0] : appState[center].position; // TODO
+  const [centerOffsetX, centerOffsetY] = [0, 0];
+  const [offsetX, offsetY] = [panOffsetX - centerOffsetX, panOffsetY - centerOffsetY];
   const sharedDrawParams = { ctx, metersPerPx, canvasDimensions, bodyScaleFactor: planetScaleFactor };
-  drawBody({
-    ...sharedDrawParams,
-    position: [offsetX - centerOffsetX, offsetY - centerOffsetY],
-    celestialBody: ELEMENTS.sol,
-    bodyScaleFactor: initialState.planetScaleFactor,
-  });
-  toPairs(STATE).forEach(([name, body]) => {
-    Object.entries(STATE_MOONS[name] ?? {}).forEach(([moonName, moonBody]) => {
-      const moon = ELEMENTS[name].moons?.[moonName];
-      if (moon == null) {
-        return;
-      }
-      drawBody({
-        ...sharedDrawParams,
-        position: [moonBody.position[0] + offsetX - centerOffsetX, moonBody.position[1] + offsetY - centerOffsetY],
-        celestialBody: moon,
-      });
-    });
-    // draw moons first such that they are underneath planet at faraway zooms
+
+  function drawBodyRecursive(body: CelestialBodyState) {
+    body.satellites.forEach(drawBodyRecursive);
     drawBody({
       ...sharedDrawParams,
-      position: [body.position[0] + offsetX - centerOffsetX, body.position[1] + offsetY - centerOffsetY],
-      celestialBody: ELEMENTS[name],
+      position: [body.position[0] + offsetX, body.position[1] + offsetY],
+      celestialBody: body,
     });
-  });
+  }
+
+  drawBodyRecursive(systemState);
 }
 
 type Params = {

@@ -1,4 +1,4 @@
-import { DT, ELEMENTS } from './constants.ts';
+import { DT, SOL } from './constants.ts';
 import { CelestialBodyName, Point2 } from './types.ts';
 
 export type AppState = {
@@ -14,11 +14,11 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: DT,
+  dt: DT / 16,
   play: true,
   drawTail: false,
-  metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
-  center: 'sol',
+  metersPerPx: SOL.satellites[0].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight) / 10,
+  center: 'jupiter',
   offset: [0, 0],
   planetScaleFactor: 1,
 };

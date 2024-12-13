@@ -20,8 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
-import { resetState } from '../lib/physics.ts';
-import { CELESTIAL_OBJECTS } from '../lib/constants.ts';
+import { CELESTIAL_BODY_NAMES } from '../lib/constants.ts';
 import { useHotkeys } from '@mantine/hooks';
 
 const actionIconProps = { variant: 'subtle', color: 'gray' };
@@ -32,13 +31,13 @@ const movePx = 10;
 type Props = {
   state: AppState;
   updateState: (state: Partial<AppState>) => void;
+  reset: () => void;
 };
-export function Controls({ state, updateState }: Props) {
+export function Controls({ state, updateState, reset }: Props) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
   const [mpp, mppUnits] = useMemo(() => humanDistanceUnits(state.metersPerPx), [state.metersPerPx]);
 
-  console.log(state.planetScaleFactor);
   function applyOffset(rightPx: number, upPx: number) {
     const newOffsetX = state.offset[0] - rightPx * state.metersPerPx;
     const newOffsetY = state.offset[1] - upPx * state.metersPerPx;
@@ -77,7 +76,7 @@ export function Controls({ state, updateState }: Props) {
             </Button>
           </Menu.Target>
           <Menu.Dropdown>
-            {CELESTIAL_OBJECTS.map(obj => (
+            {CELESTIAL_BODY_NAMES.map(obj => (
               <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
                 <Group gap="xs" align="center">
                   {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
@@ -174,7 +173,7 @@ export function Controls({ state, updateState }: Props) {
             {...actionIconProps}
             onClick={() => {
               updateState(initialState);
-              resetState();
+              reset();
             }}
           >
             <IconRestore {...iconProps} />
