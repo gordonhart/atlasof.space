@@ -236,6 +236,15 @@ export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPe
 export const MU_SOL = SOL.mass * G; // 1.32712440018e20; // m^3/s^2, gravitational parameter for the Sun
 export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
 
+// TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
 export function findCelestialBody(state: CelestialBodyState, name: string) {
-  return name === state.name ? state : state.satellites.find(child => findCelestialBody(child, name));
+  if (name === state.name) {
+    return state;
+  }
+  for (const child of state.satellites) {
+    const found = findCelestialBody(child, name);
+    if (found != null) {
+      return found;
+    }
+  }
 }
