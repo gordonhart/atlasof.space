@@ -82,62 +82,6 @@ export function getInitialState(parentState: CelestialBodyState | null, child: C
   return { ...childState, satellites };
 }
 
-/*
-function incrementBody(
-  name: Exclude<CelestialBodyName, 'sol'>,
-  state: CartesianState,
-  mu: number,
-  dt: number
-): CartesianState {
-  const maxSafeDt = ORBITAL_PERIODS[name] / MIN_STEPS_PER_PERIOD;
-  if (dt > maxSafeDt) {
-    // subdivide dt into at least MIN_STEPS_PER_PERIOD steps per orbit to ensure stability at fast simulation speeds
-    const nIterations = Math.ceil(dt / maxSafeDt);
-    return Array(nIterations)
-      .fill(null)
-      .reduce<CartesianState>(acc => incrementBody(name, acc, mu, dt / nIterations), state);
-  }
-  return applyAcceleration(state, computeAcceleration(state.position, mu), dt);
-}
- */
-
-/*
-// TODO: this multi-step implementation doesn't really work for the tight orbits of many moons. basically unusable
-//  currently, need to debug.
-//    - Hypothesis: if the moon is broken into N steps, but the planet is not, then the two will diverge (!!!)
-function incrementMoon(
-  parentName: Exclude<CelestialBodyName, 'sol'>,
-  parentState: CartesianState,
-  moonName: string,
-  moonState: CartesianState,
-  dt: number
-): CartesianState {
-  const maxSafeDt = ORBITAL_PERIOD_MOONS[parentName][moonName] / MIN_STEPS_PER_PERIOD;
-  // console.log(`orbital period of ${moonName} is ${ORBITAL_PERIOD_MOONS[parentName][moonName]}`);
-  if (dt > maxSafeDt) {
-    const nIterations = Math.ceil(dt / maxSafeDt);
-    const safeDt = dt / nIterations;
-    // console.log(`modeling ${moonName} in ${nIterations}`);
-    return Array(nIterations)
-      .fill(null)
-      .reduce<{ parentState: CartesianState; moonState: CartesianState }>(
-        acc => {
-          const nextParentState = incrementBody(parentName, acc.parentState, MU_SOL, safeDt);
-          return {
-            parentState: nextParentState,
-            moonState: incrementMoon(parentName, nextParentState, moonName, acc.moonState, safeDt),
-          };
-        },
-        { parentState, moonState }
-      ).moonState;
-  }
-  const accelerationSun = computeAcceleration(moonState.position, G * ELEMENTS.sol.mass);
-  const positionWrtParent = subtract3(moonState.position, STATE[parentName].position);
-  const accelerationParent = computeAcceleration(positionWrtParent, G * ELEMENTS[parentName].mass);
-  return applyAcceleration(moonState, add3(accelerationParent, accelerationSun), dt);
-}
- */
-
 function incrementStateByParents(
   parents: Array<CelestialBodyState>,
   child: CelestialBodyState,
@@ -145,26 +89,14 @@ function incrementStateByParents(
 ): CelestialBodyState {
   const satellites = child.satellites.map(grandchild => incrementStateByParents([child, ...parents], grandchild, dt));
   const acceleration = parents.reduce<Point3>(
-    (acc, parent) => {
-      const positionWrtParent = subtract3(child.position, parent.position);
-      return add3(acc, computeAcceleration(positionWrtParent, G * parent.mass));
-    },
+    (acc, parent) => add3(acc, computeAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
     [0, 0, 0] as Point3
   );
   const newState = applyAcceleration(child, acceleration, dt);
   return { ...child, ...newState, satellites };
 }
 
-// TODO: subdivide dt for short periods
+// TODO: subdivide dt for stability with short period bodies?
 export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
-  // compute acceleration for leaf nodes first, apply acceleration from all parents
-  // compute acceleration for inner nodes, apply acceleration from all parent
-  // return root with updated children
-
-  /*
-  return Array(100)
-    .fill(null)
-    .reduce(acc => incrementStateByParents([], acc, dt / 100), state);
-   */
   return incrementStateByParents([], state, dt);
 }
