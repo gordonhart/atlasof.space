@@ -78,19 +78,19 @@ export const STATE: Record<Exclude<CelestialBodyName, 'sol'>, CartesianState> = 
 );
 
 function getInitialMoonsState() {
-  return mapObjIndexed(
-    (parentBody: CelestialBody, parentName: Omit<CelestialBodyName, 'sol'>) => {
-      const parentCartesian = keplerianToCartesian(parentBody, G * ELEMENTS.sol.mass);
-      return map((moonBody: CelestialBody) => {
+  return mapObjIndexed((parentBody: CelestialBody, parentName: CelestialBodyName) => {
+    const parentCartesian = keplerianToCartesian(parentBody, G * ELEMENTS.sol.mass);
+    return map(
+      (moonBody: CelestialBody) => {
         const moonCartesian = keplerianToCartesian(moonBody, G * ELEMENTS[parentName].mass);
         return {
           position: add3(moonCartesian.position, parentCartesian.position),
           velocity: add3(moonCartesian.velocity, parentCartesian.velocity),
         };
-      }, parentBody.moons ?? {});
-    },
-    omit(['sol'], ELEMENTS)
-  );
+      },
+      (parentBody.moons ?? {}) as Record<string, CelestialBody>
+    );
+  }, ELEMENTS);
 }
 
 export const STATE_MOONS: { [body: string]: { [moon: string]: CartesianState } } = getInitialMoonsState();
@@ -104,7 +104,12 @@ export function resetState() {
   });
 }
 
-function incrementBody(name: Exclude<CelestialBodyName, 'sol'>, state: CartesianState, mu: number, dt: number) {
+function incrementBody(
+  name: Exclude<CelestialBodyName, 'sol'>,
+  state: CartesianState,
+  mu: number,
+  dt: number
+): CartesianState {
   const maxSafeDt = ORBITAL_PERIODS[name] / MIN_STEPS_PER_PERIOD;
   if (dt > maxSafeDt) {
     // subdivide dt into at least MIN_STEPS_PER_PERIOD steps per orbit to ensure stability at fast simulation speeds
@@ -124,7 +129,7 @@ function incrementMoon(
   moonName: string,
   moonState: CartesianState,
   dt: number
-) {
+): CartesianState {
   const maxSafeDt = ORBITAL_PERIOD_MOONS[parentName][moonName] / MIN_STEPS_PER_PERIOD;
   if (dt > maxSafeDt) {
     const nIterations = Math.ceil(dt / maxSafeDt);

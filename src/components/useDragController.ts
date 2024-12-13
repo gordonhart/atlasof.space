@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
 import { Point2 } from '../lib/types.ts';
 
@@ -9,7 +9,7 @@ export function useDragController(state: AppState, updateState: (state: Partial<
     if (prevPosition == null) {
       return;
     }
-    const newOffset = [
+    const newOffset: Point2 = [
       state.offset[0] - (prevPosition[0] - event.clientX) * state.metersPerPx,
       state.offset[1] + (prevPosition[1] - event.clientY) * state.metersPerPx,
     ];
@@ -17,7 +17,7 @@ export function useDragController(state: AppState, updateState: (state: Partial<
     setPrevPosition([event.clientX, event.clientY]);
   }
 
-  function updateZoom(event: MouseEvent<HTMLCanvasElement>) {
+  function updateZoom(event: WheelEvent<HTMLCanvasElement>) {
     const zoomFactor = 1 + 0.01 * event.deltaY;
     updateState({ metersPerPx: Math.min(Math.max(state.metersPerPx * zoomFactor, 1000), 1e12) });
   }
