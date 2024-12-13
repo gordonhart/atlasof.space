@@ -38,6 +38,7 @@ export function Controls({ state, updateState }: Props) {
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
   const [mpp, mppUnits] = useMemo(() => humanDistanceUnits(state.metersPerPx), [state.metersPerPx]);
 
+  console.log(state.planetScaleFactor);
   function applyOffset(rightPx: number, upPx: number) {
     const newOffsetX = state.offset[0] - rightPx * state.metersPerPx;
     const newOffsetY = state.offset[1] - upPx * state.metersPerPx;
@@ -128,7 +129,7 @@ export function Controls({ state, updateState }: Props) {
           <Tooltip {...tooltipProps} label="Enlarge Planets">
             <ActionIcon
               {...actionIconProps}
-              onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}
+              onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}
             >
               <IconCirclePlus {...iconProps} />
             </ActionIcon>
@@ -137,7 +138,7 @@ export function Controls({ state, updateState }: Props) {
           <Tooltip {...tooltipProps} label="Shrink Planets">
             <ActionIcon
               {...actionIconProps}
-              onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor / 2 })}
+              onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}
             >
               <IconCircleMinus {...iconProps} />
             </ActionIcon>
