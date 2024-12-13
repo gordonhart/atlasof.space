@@ -5,10 +5,6 @@ import { Point2 } from '../lib/types.ts';
 export function useDragController(state: AppState, updateState: (state: Partial<AppState>) => void) {
   const [prevPosition, setPrevPosition] = useState<Point2 | undefined>();
 
-  function startDragging(event: MouseEvent<HTMLCanvasElement>) {
-    setPrevPosition([event.clientX, event.clientY]);
-  }
-
   function updateOffset(event: MouseEvent<HTMLCanvasElement>) {
     if (prevPosition == null) {
       return;
@@ -21,16 +17,18 @@ export function useDragController(state: AppState, updateState: (state: Partial<
     setPrevPosition([event.clientX, event.clientY]);
   }
 
-  function stopDragging() {
-    setPrevPosition(undefined);
+  function updateZoom(event: MouseEvent<HTMLCanvasElement>) {
+    const zoomFactor = 1 + 0.05 * event.deltaY;
+    updateState({ metersPerPx: state.metersPerPx * zoomFactor });
   }
 
   return {
     canvasProps: {
-      onMouseDown: startDragging,
+      onMouseDown: (e: MouseEvent<HTMLCanvasElement>) => setPrevPosition([e.clientX, e.clientY]),
       onMouseMove: updateOffset,
-      onMouseLeave: stopDragging,
-      onMouseUp: stopDragging,
+      onMouseLeave: () => setPrevPosition(undefined),
+      onMouseUp: () => setPrevPosition(undefined),
+      onWheel: updateZoom,
     },
   };
 }

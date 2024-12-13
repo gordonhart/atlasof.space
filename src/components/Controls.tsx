@@ -57,7 +57,9 @@ export function Controls({ state, updateState }: Props) {
         <Stack gap={4} p={4} fz="xs">
           <Text inherit>t: {pluralize(Number(t.toFixed(0)), tUnits)}</Text>
           <Text inherit>dt: {pluralize(dt, dtUnits)}</Text>
-          <Text inherit>m/px: {pluralize(mpp, mppUnits)}</Text>
+          <Text inherit>
+            m/px: {mpp.toLocaleString()} {mppUnits}
+          </Text>
         </Stack>
       </Paper>
 
