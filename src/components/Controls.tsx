@@ -1,6 +1,10 @@
 import { AppState, initialState } from '../lib/state.ts';
-import { ActionIcon, Button, Group, Menu, Stack, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, Group, Menu, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import {
+  IconCaretDownFilled,
+  IconCaretLeftFilled,
+  IconCaretRightFilled,
+  IconCaretUpFilled,
   IconCircle,
   IconCircleFilled,
   IconCircleMinus,
@@ -18,10 +22,12 @@ import { useMemo } from 'react';
 import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
 import { resetState } from '../lib/physics.ts';
 import { CELESTIAL_OBJECTS } from '../lib/constants.ts';
+import { useHotkeys } from '@mantine/hooks';
 
 const actionIconProps = { variant: 'subtle', color: 'gray' };
 const iconProps = { size: 14 };
 const tooltipProps = { openDelay: 400 };
+const movePx = 10;
 
 type Props = {
   state: AppState;
@@ -32,15 +38,30 @@ export function Controls({ state, updateState }: Props) {
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
   const [mpp, mppUnits] = useMemo(() => humanDistanceUnits(state.metersPerPx), [state.metersPerPx]);
 
+  function applyOffset(rightPx: number, upPx: number) {
+    const newOffsetX = state.offset[0] - rightPx * state.metersPerPx;
+    const newOffsetY = state.offset[1] - upPx * state.metersPerPx;
+    updateState({ offset: [newOffsetX, newOffsetY] });
+  }
+
+  useHotkeys([
+    ['ArrowLeft', () => applyOffset(-movePx, 0)],
+    ['ArrowUp', () => applyOffset(0, movePx)],
+    ['ArrowDown', () => applyOffset(0, -movePx)],
+    ['ArrowRight', () => applyOffset(movePx, 0)],
+  ]);
+
   return (
     <Group pos="absolute" bottom={10} left={10} right={10} justify="space-between" align="flex-end">
-      <Stack gap={4} fz="xs" c="gray.4">
-        <Text inherit>t: {pluralize(Number(t.toFixed(0)), tUnits)}</Text>
-        <Text inherit>dt: {pluralize(dt, dtUnits)}</Text>
-        <Text inherit>m/px: {pluralize(mpp, mppUnits)}</Text>
-      </Stack>
+      <Paper p={4} bg="transparent" radius="md" style={{ backdropFilter: 'blur(4px)' }}>
+        <Stack gap={4} p={4} fz="xs">
+          <Text inherit>t: {pluralize(Number(t.toFixed(0)), tUnits)}</Text>
+          <Text inherit>dt: {pluralize(dt, dtUnits)}</Text>
+          <Text inherit>m/px: {pluralize(mpp, mppUnits)}</Text>
+        </Stack>
+      </Paper>
 
-      <Group gap={0} align="flex-end">
+      <Group gap={2} align="flex-end">
         <Menu shadow="md" position="top-start" offset={0} width={120}>
           <Menu.Target>
             <Button size="xs" variant="subtle" color="gray">
@@ -64,7 +85,30 @@ export function Controls({ state, updateState }: Props) {
           </Menu.Dropdown>
         </Menu>
 
-        <Stack gap={0}>
+        <Tooltip {...tooltipProps} label="Pan Left">
+          <ActionIcon {...actionIconProps} onClick={() => applyOffset(-movePx, 0)}>
+            <IconCaretLeftFilled {...iconProps} />
+          </ActionIcon>
+        </Tooltip>
+        <Stack gap={2}>
+          <Tooltip {...tooltipProps} label="Pan Up">
+            <ActionIcon {...actionIconProps} onClick={() => applyOffset(0, movePx)}>
+              <IconCaretUpFilled {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip {...tooltipProps} label="Pan Down">
+            <ActionIcon {...actionIconProps} onClick={() => applyOffset(0, -movePx)}>
+              <IconCaretDownFilled {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+        </Stack>
+        <Tooltip {...tooltipProps} label="Pan Right">
+          <ActionIcon {...actionIconProps} onClick={() => applyOffset(movePx, 0)}>
+            <IconCaretRightFilled {...iconProps} />
+          </ActionIcon>
+        </Tooltip>
+
+        <Stack gap={2}>
           <Tooltip {...tooltipProps} label="Zoom In">
             <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
               <IconPlus {...iconProps} />
@@ -78,7 +122,7 @@ export function Controls({ state, updateState }: Props) {
           </Tooltip>
         </Stack>
 
-        <Stack gap={0}>
+        <Stack gap={2}>
           <Tooltip {...tooltipProps} label="Enlarge Planets">
             <ActionIcon
               {...actionIconProps}

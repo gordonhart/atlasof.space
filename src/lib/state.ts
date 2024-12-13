@@ -1,5 +1,5 @@
 import { DT, ELEMENTS } from './constants.ts';
-import { CelestialObject } from './types.ts';
+import { CelestialObject, Point2 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -9,6 +9,7 @@ export type AppState = {
   drawTail: boolean;
   metersPerPx: number;
   center: CelestialObject;
+  offset: Point2; // meters
   planetScaleFactor: number;
 };
 
@@ -20,5 +21,6 @@ export const initialState: AppState = {
   drawTail: false,
   metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
   center: 'sol',
+  offset: [0, 0],
   planetScaleFactor: 5,
 };
