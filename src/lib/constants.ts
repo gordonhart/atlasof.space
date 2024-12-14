@@ -1,5 +1,5 @@
-import { orbitalPeriod } from './formulas.ts';
 import { CelestialBody, CelestialBodyState } from './types.ts';
+import { meanDistance, orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const DT = 60 * 60 * 6; // time step -- 6 hours
@@ -233,6 +233,10 @@ function getCelestialBodyOrbitalPeriodsAboutParent(
 export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
 export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPeriodsAboutParent(null, SOL);
 export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
+
+export const MEAN_PLANET_DISTANCES: Record<string, number> = Object.fromEntries<number>(
+  SOL.satellites.map(({ name, semiMajorAxis, eccentricity }) => [name, meanDistance(semiMajorAxis, eccentricity)])
+);
 
 // TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
 export function findCelestialBody(state: CelestialBodyState, name: string): CelestialBodyState | undefined {

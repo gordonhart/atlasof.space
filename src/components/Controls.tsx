@@ -145,7 +145,7 @@ export function Controls({ state, updateState, reset }: Props) {
         </Stack>
 
         <Tooltip {...tooltipProps} label="Slow Down">
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt / 2 })}>
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
             <IconPlayerTrackPrevFilled {...iconProps} />
           </ActionIcon>
         </Tooltip>

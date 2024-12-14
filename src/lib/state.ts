@@ -7,7 +7,8 @@ export type AppState = {
   play: boolean;
   drawTail: boolean;
   metersPerPx: number; // controls zoom
-  center: string;
+  center: string; // name of body centering visualization
+  hover: string | null; // name of hovered body
   offset: Point2; // meters
   planetScaleFactor: number;
 };
@@ -19,6 +20,7 @@ export const initialState: AppState = {
   drawTail: false,
   metersPerPx: SOL.satellites[5].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
   center: 'Sol',
+  hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,
 };

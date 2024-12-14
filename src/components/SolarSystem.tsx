@@ -17,7 +17,7 @@ export function SolarSystem() {
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dragController = useDragController(appState, updateState);
+  const dragController = useDragController(appState, updateState, systemStateRef.current);
 
   // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {

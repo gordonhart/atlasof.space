@@ -1,6 +1,45 @@
 import { G } from './constants.ts';
-import { degreesToRadians, add3, mul3, subtract3 } from './formulas.ts';
 import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
+
+// TODO: use proper vector/matrix library?
+export function add3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
+  return [a1 + b1, a2 + b2, a3 + b3];
+}
+
+export function subtract3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
+  return [a1 - b1, a2 - b2, a3 - b3];
+}
+
+export function mul3(s: number, [a, b, c]: Point3): Point3 {
+  return [s * a, s * b, s * c];
+}
+
+export function degreesToRadians(degrees: number) {
+  return (degrees * Math.PI) / 180;
+}
+
+export function magnitude(v: Array<number>) {
+  return Math.sqrt(v.reduce((acc, x) => acc + x ** 2, 0));
+}
+
+// kepler's third law
+export function orbitalPeriod(semiMajorAxis: number, centralMass: number) {
+  return Math.PI * 2 * Math.sqrt(Math.pow(semiMajorAxis, 3) / (G * centralMass));
+}
+
+export function meanDistance(semiMajorAxis: number, eccentricity: number) {
+  return semiMajorAxis + (1 + eccentricity ** 2 / 2);
+}
+
+export function semiMinorAxis(semiMajorAxis: number, eccentricity: number) {
+  return semiMajorAxis * Math.sqrt(1 - eccentricity ** 2);
+}
+
+// position WRT center of mass of the object we are orbiting around
+function gravitationalAcceleration(position: Point3, mu: number): Point3 {
+  const r = magnitude(position);
+  return mul3(-mu / r ** 3, position);
+}
 
 function keplerianToCartesian(
   elements: KeplerianElements,
@@ -51,18 +90,7 @@ function keplerianToCartesian(
     row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]
   ) as Point3;
 
-  return {
-    position: positionInertial,
-    velocity: velocityInertial,
-  };
-}
-
-function computeAcceleration(
-  position: Point3, // WRT center of mass of the object we are orbiting around
-  mu: number
-): Point3 {
-  const r = Math.sqrt(position[0] ** 2 + position[1] ** 2 + position[2] ** 2);
-  return mul3(-mu / r ** 3, position);
+  return { position: positionInertial, velocity: velocityInertial };
 }
 
 function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
@@ -89,7 +117,7 @@ function incrementStateByParents(
 ): CelestialBodyState {
   const satellites = child.satellites.map(grandchild => incrementStateByParents([child, ...parents], grandchild, dt));
   const acceleration = parents.reduce<Point3>(
-    (acc, parent) => add3(acc, computeAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
+    (acc, parent) => add3(acc, gravitationalAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
     [0, 0, 0] as Point3
   );
   const newState = applyAcceleration(child, acceleration, dt);
