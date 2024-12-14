@@ -1,5 +1,6 @@
-import { CelestialBody, CelestialBodyState } from './types.ts';
-import { meanDistance, orbitalPeriod } from './physics.ts';
+import { CartesianState, CelestialBody, CelestialBodyState } from './types.ts';
+import { getInitialState, incrementState, orbitalPeriod } from './physics.ts';
+import { pick } from 'ramda';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const DT = 60 * 60 * 6; // time step -- 6 hours
@@ -220,6 +221,7 @@ export const SOL: CelestialBody = {
 function getCelestialBodyNames(body: CelestialBody): Array<string> {
   return [body.name, ...body.satellites.flatMap(b => getCelestialBodyNames(b))];
 }
+export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
 
 function getCelestialBodyOrbitalPeriodsAboutParent(
   parent: CelestialBody | null,
@@ -230,13 +232,7 @@ function getCelestialBodyOrbitalPeriodsAboutParent(
     { [child.name]: parent != null ? orbitalPeriod(child.semiMajorAxis, parent.mass) : 1 }
   );
 }
-export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
 export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPeriodsAboutParent(null, SOL);
-export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
-
-export const MEAN_PLANET_DISTANCES: Record<string, number> = Object.fromEntries<number>(
-  SOL.satellites.map(({ name, semiMajorAxis, eccentricity }) => [name, meanDistance(semiMajorAxis, eccentricity)])
-);
 
 // TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
 export function findCelestialBody(state: CelestialBodyState, name: string): CelestialBodyState | undefined {
@@ -250,3 +246,26 @@ export function findCelestialBody(state: CelestialBodyState, name: string): Cele
     }
   }
 }
+
+// TODO: compute this at build time and include in bundle?
+function computeFullOrbit(
+  parent: CelestialBodyState | null,
+  child: CelestialBodyState
+): Record<string, Array<CartesianState>> {
+  let orbit: Array<CartesianState> = [];
+  if (parent != null) {
+    const simplifiedSystem = { ...parent, satellites: [child] };
+    const period = orbitalPeriod(child.semiMajorAxis, parent.mass);
+    const targetSteps = 100;
+    const dt = period / targetSteps;
+    orbit = Array(targetSteps)
+      .fill(null)
+      .reduce<Array<CelestialBodyState>>(acc => [...acc, incrementState(acc[acc.length - 1], dt)], [simplifiedSystem])
+      .map(({ satellites }) => pick(['position', 'velocity'], satellites[0]));
+  }
+  return {
+    [child.name]: orbit,
+    ...child.satellites.reduce((acc, grandchild) => ({ ...acc, ...computeFullOrbit(child, grandchild) }), {}),
+  };
+}
+export const ORBITS: Record<string, Array<CartesianState>> = computeFullOrbit(null, getInitialState(null, SOL));

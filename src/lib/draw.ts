@@ -1,9 +1,7 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
-import { findCelestialBody } from './constants.ts';
-import { incrementState, orbitalPeriod } from './physics.ts';
-
-const ORBIT_CACHE: Record<string, Array<CelestialBodyState>> = {};
+import { findCelestialBody, ORBITS } from './constants.ts';
+import { degreesToRadians, semiMinorAxis } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
@@ -39,17 +37,31 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
 
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
-    if (ORBIT_CACHE[hoverBody.name] == null) {
-      const simplifiedSystem = { ...systemState, satellites: [{ ...hoverBody, name: 'foobar', satellites: [] }] };
-      const period = orbitalPeriod(hoverBody.semiMajorAxis, systemState.mass);
-      const targetSteps = 1000;
-      const dt = period / targetSteps;
-      ORBIT_CACHE[hoverBody.name] = Array(targetSteps)
-        .fill(null)
-        .reduce(acc => [...acc, incrementState(acc[acc.length - 1], dt)], [simplifiedSystem]);
-    }
-    ORBIT_CACHE[hoverBody.name].forEach(drawBody);
+    ORBITS[hoverBody.name].forEach(cartesian => drawBody({ ...hoverBody, ...cartesian, name: '', satellites: [] }));
   }
+
+  const mercury = systemState.satellites[3];
+  ctx.beginPath();
+  const orbitCenter = mercury.semiMajorAxis * mercury.eccentricity;
+  const omega = degreesToRadians(-90 - mercury.argumentOfPeriapsis);
+  // const orbitCenterXm = orbitCenter * Math.cos(degreesToRadians(mercury.argumentOfPeriapsis));
+  // const orbitCenterYm = orbitCenter * Math.sin(degreesToRadians(mercury.argumentOfPeriapsis));
+  const orbitCenterXm = orbitCenter * Math.cos(omega);
+  const orbitCenterYm = orbitCenter * Math.sin(omega);
+  // console.log(orbitCenter / metersPerPx, orbitCenterXm / metersPerPx, orbitCenterYm / metersPerPx);
+  // const [actualCenterXpx, actualCenterYpx] = [-3, -14];
+  ctx.ellipse(
+    canvasWidthPx / 2 + (offsetXm + orbitCenterXm) / metersPerPx,
+    canvasHeightPx / 2 + (offsetYm + orbitCenterYm) / metersPerPx,
+    mercury.semiMajorAxis / metersPerPx,
+    semiMinorAxis(mercury.semiMajorAxis, mercury.eccentricity) / metersPerPx,
+    degreesToRadians(mercury.argumentOfPeriapsis),
+    0,
+    2 * Math.PI
+  );
+  ctx.strokeStyle = 'green';
+  ctx.lineWidth = 1;
+  ctx.stroke();
 
   drawBody(systemState);
 }

@@ -40,11 +40,13 @@ export function SolarSystem() {
       canvasRef.current.width = window.innerWidth * dpr;
       canvasRef.current.height = window.innerHeight * dpr;
       const ctx = canvasRef.current.getContext('2d')!;
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       ctx.scale(dpr, -dpr); // scale and flip Y axis to make (0, 0) bottom left corner, +x right +y up
       ctx.translate(0, -canvasRef.current.height / dpr);
     }
   }
 
+  // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) {

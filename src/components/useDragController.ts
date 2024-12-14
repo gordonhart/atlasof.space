@@ -1,8 +1,8 @@
 import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
-import { CelestialBodyState, Point2 } from '../lib/types.ts';
-import { findCelestialBody, MEAN_PLANET_DISTANCES } from '../lib/constants.ts';
-import { magnitude } from '../lib/physics.ts';
+import { CelestialBody, CelestialBodyState, Point2 } from '../lib/types.ts';
+import { findCelestialBody, SOL } from '../lib/constants.ts';
+import { degreesToRadians, magnitude } from '../lib/physics.ts';
 
 export function useDragController(
   { offset, metersPerPx, center }: AppState,
@@ -18,9 +18,8 @@ export function useDragController(
     const [offsetXm, offsetYm] = [panOffsetXm - focusOffsetXm, panOffsetYm - focusOffsetYm];
     const [centerXm, centerYm] = [(metersPerPx * window.innerWidth) / 2, (metersPerPx * window.innerHeight) / 2];
     const [cursorXm, cursorYm] = [eventXm - offsetXm - centerXm, eventYm - offsetYm - centerYm];
-    const distanceFromSun = magnitude([cursorXm, cursorYm]);
-    const closestPlanet = findClosestPlanet(distanceFromSun);
-    updateAppState({ hover: closestPlanet });
+    const closestPlanet = findClosestPlanet(cursorXm, cursorYm, metersPerPx * 10);
+    updateAppState({ hover: closestPlanet != null ? closestPlanet.name : null });
   }
 
   function updateOffset(event: MouseEvent<HTMLCanvasElement>) {
@@ -52,21 +51,33 @@ export function useDragController(
   };
 }
 
-// TODO: this uses circularized orbits by only measuring distance from sun -- bad UX for elliptical orbits (like pluto)
-function findClosestPlanet(distanceFromSun: number) {
-  const threshold = 1e10;
-  if (distanceFromSun < threshold) {
-    return 'Sol';
+function findClosestPlanet(positionXm: number, positionYm: number, threshold: number): CelestialBody | null {
+  if (magnitude([positionXm, positionYm]) < threshold) {
+    return SOL;
   }
-  const [closestPlanet] = Object.entries(MEAN_PLANET_DISTANCES).reduce(
-    ([closestP, closestD], [p, d]) => {
-      const distanceFromPlanet = Math.abs(d - distanceFromSun);
-      if (distanceFromPlanet - threshold / 2 > threshold) {
-        return [closestP, closestD];
-      }
-      return closestD == null || distanceFromPlanet < closestD ? [p, distanceFromPlanet] : [closestP, closestD];
-    },
-    [null, null] as [null | string, null | number]
-  );
-  return closestPlanet;
+  return SOL.satellites.reduce((closest, body) => {
+    const { semiMajorAxis, eccentricity, argumentOfPeriapsis } = body;
+    const argumentOfPeriapsisRad = degreesToRadians(argumentOfPeriapsis);
+    return isPointOnEllipse(positionXm, positionYm, semiMajorAxis, eccentricity, argumentOfPeriapsisRad, threshold)
+      ? body
+      : closest;
+  }, null);
+}
+
+function isPointOnEllipse(x: number, y: number, a: number, e: number, omega: number, tolerance: number) {
+  // Step 1: Rotate the point by -omega
+  const cosOmega = Math.cos(-omega);
+  const sinOmega = Math.sin(-omega);
+  const xPrime = x * cosOmega - y * sinOmega;
+  const yPrime = x * sinOmega + y * cosOmega;
+
+  // Step 2: Convert to polar coordinates
+  const rPrime = magnitude([xPrime, yPrime]);
+  const thetaPrime = Math.atan2(yPrime, xPrime);
+
+  // Step 3: Calculate expected r
+  const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(thetaPrime));
+
+  // Step 4: Check if the point lies on the ellipse
+  return Math.abs(rPrime - r) < tolerance;
 }
