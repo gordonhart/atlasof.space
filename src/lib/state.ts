@@ -1,5 +1,5 @@
-import { DT, ELEMENTS } from './constants.ts';
-import { CelestialBodyName, Point2 } from './types.ts';
+import { DT, SOL } from './constants.ts';
+import { Point2 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -7,7 +7,8 @@ export type AppState = {
   play: boolean;
   drawTail: boolean;
   metersPerPx: number; // controls zoom
-  center: CelestialBodyName;
+  center: string; // name of body centering visualization
+  hover: string | null; // name of hovered body
   offset: Point2; // meters
   planetScaleFactor: number;
 };
@@ -17,8 +18,9 @@ export const initialState: AppState = {
   dt: DT,
   play: true,
   drawTail: false,
-  metersPerPx: ELEMENTS.saturn.semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
-  center: 'sol',
+  metersPerPx: SOL.satellites[5].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
+  center: 'Sol',
+  hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,
 };

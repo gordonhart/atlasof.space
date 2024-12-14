@@ -5,10 +5,10 @@ yarn install
 yarn dev
 ```
 
-- [ ] Add moons
+- [x] Add moons
 - [x] Canvas controls (pause, zoom, reset)
-  - [ ] Pan controls
-  - [ ] Control with cursor in addition to buttons
+  - [x] Pan controls
+  - [x] Control with cursor in addition to buttons
 - [x] Set visualization center to other planets
 - [ ] Hover interactions (display information about body on hover)
 - [ ] Model spacecraft (e.g. Parker, Juno, Cassini, Voyager)

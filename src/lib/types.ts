@@ -5,19 +5,6 @@ export type CartesianState = {
   velocity: Point3; // meters per second
 };
 
-export type CelestialBodyName =
-  | 'sol'
-  | 'mercury'
-  | 'venus'
-  | 'mars'
-  | 'earth'
-  | 'ceres'
-  | 'jupiter'
-  | 'saturn'
-  | 'uranus'
-  | 'neptune'
-  | 'pluto';
-
 export type KeplerianElements = {
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters
@@ -28,9 +15,12 @@ export type KeplerianElements = {
 };
 
 export type CelestialBody = KeplerianElements & {
+  name: string;
   mass: number; // kg
   radius: number; // m
   color: `#${string}`; // hex
-  // TODO: union type for name?
-  moons?: Record<string, CelestialBody>; // keplerian elements in reference to main body
+  satellites: Array<CelestialBody>; // keplerian elements in reference to parent body
 };
+
+export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
+  CartesianState & { satellites: Array<CelestialBodyState> };

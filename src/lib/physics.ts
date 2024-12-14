@@ -1,7 +1,45 @@
-import { ELEMENTS, G, MIN_STEPS_PER_PERIOD, MU_SOL, ORBITAL_PERIOD_MOONS, ORBITAL_PERIODS } from './constants.ts';
-import { subtract3, degreesToRadians, add3, mul3 } from './formulas.ts';
-import { CartesianState, CelestialBody, CelestialBodyName, KeplerianElements, Point3 } from './types.ts';
-import { keys, map, mapObjIndexed, omit, toPairs } from 'ramda';
+import { G } from './constants.ts';
+import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
+
+// TODO: use proper vector/matrix library?
+export function add3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
+  return [a1 + b1, a2 + b2, a3 + b3];
+}
+
+export function subtract3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
+  return [a1 - b1, a2 - b2, a3 - b3];
+}
+
+export function mul3(s: number, [a, b, c]: Point3): Point3 {
+  return [s * a, s * b, s * c];
+}
+
+export function degreesToRadians(degrees: number) {
+  return (degrees * Math.PI) / 180;
+}
+
+export function magnitude(v: Array<number>) {
+  return Math.sqrt(v.reduce((acc, x) => acc + x ** 2, 0));
+}
+
+// kepler's third law
+export function orbitalPeriod(semiMajorAxis: number, centralMass: number) {
+  return Math.PI * 2 * Math.sqrt(Math.pow(semiMajorAxis, 3) / (G * centralMass));
+}
+
+export function meanDistance(semiMajorAxis: number, eccentricity: number) {
+  return semiMajorAxis + (1 + eccentricity ** 2 / 2);
+}
+
+export function semiMinorAxis(semiMajorAxis: number, eccentricity: number) {
+  return semiMajorAxis * Math.sqrt(1 - eccentricity ** 2);
+}
+
+// position WRT center of mass of the object we are orbiting around
+function gravitationalAcceleration(position: Point3, mu: number): Point3 {
+  const r = magnitude(position);
+  return mul3(-mu / r ** 3, position);
+}
 
 function keplerianToCartesian(
   elements: KeplerianElements,
@@ -38,32 +76,21 @@ function keplerianToCartesian(
   const sinW = Math.sin(omega);
 
   // Combined rotation matrix to transform from orbital plane to inertial frame
-  const rotationMatrix = [
+  const rotationMatrix: [Point3, Point3, Point3] = [
     [cosO * cosW - sinO * sinW * cosI, -cosO * sinW - sinO * cosW * cosI, sinO * sinI],
     [sinO * cosW + cosO * sinW * cosI, -sinO * sinW + cosO * cosW * cosI, -cosO * sinI],
     [sinW * sinI, cosW * sinI, cosI],
   ];
 
   // Transform position and velocity to inertial frame
-  const positionInertial = rotationMatrix.map(
+  const positionInertial: Point3 = rotationMatrix.map(
     row => row[0] * positionOrbital[0] + row[1] * positionOrbital[1]
   ) as Point3;
-  const velocityInertial = rotationMatrix.map(
+  const velocityInertial: Point3 = rotationMatrix.map(
     row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]
   ) as Point3;
 
-  return {
-    position: positionInertial,
-    velocity: velocityInertial,
-  };
-}
-
-function computeAcceleration(
-  position: Point3, // WRT center of mass of the object we are orbiting around
-  mu: number
-): Point3 {
-  const r = Math.sqrt(position[0] ** 2 + position[1] ** 2 + position[2] ** 2);
-  return mul3(-mu / r ** 3, position);
+  return { position: positionInertial, velocity: velocityInertial };
 }
 
 function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
@@ -72,89 +99,39 @@ function applyAcceleration(state: CartesianState, acceleration: Point3, dt: numb
   return { position: newPosition, velocity: newVelocity };
 }
 
-export const STATE: Record<Exclude<CelestialBodyName, 'sol'>, CartesianState> = map(
-  (e: KeplerianElements) => keplerianToCartesian(e, MU_SOL),
-  omit(['sol'], ELEMENTS)
-);
-
-function getInitialMoonsState() {
-  return mapObjIndexed((parentBody: CelestialBody, parentName: CelestialBodyName) => {
-    const parentCartesian = keplerianToCartesian(parentBody, G * ELEMENTS.sol.mass);
-    return map(
-      (moonBody: CelestialBody) => {
-        const moonCartesian = keplerianToCartesian(moonBody, G * ELEMENTS[parentName].mass);
-        return {
-          position: add3(moonCartesian.position, parentCartesian.position),
-          velocity: add3(moonCartesian.velocity, parentCartesian.velocity),
-        };
-      },
-      (parentBody.moons ?? {}) as Record<string, CelestialBody>
-    );
-  }, ELEMENTS);
-}
-
-export const STATE_MOONS: { [body: string]: { [moon: string]: CartesianState } } = getInitialMoonsState();
-
-export function resetState() {
-  keys(STATE).forEach(name => {
-    STATE[name] = keplerianToCartesian(ELEMENTS[name], MU_SOL);
-  });
-  toPairs(getInitialMoonsState()).forEach(([name, moonState]) => {
-    STATE_MOONS[name] = moonState;
-  });
-}
-
-function incrementBody(
-  name: Exclude<CelestialBodyName, 'sol'>,
-  state: CartesianState,
-  mu: number,
-  dt: number
-): CartesianState {
-  const maxSafeDt = ORBITAL_PERIODS[name] / MIN_STEPS_PER_PERIOD;
-  if (dt > maxSafeDt) {
-    // subdivide dt into at least MIN_STEPS_PER_PERIOD steps per orbit to ensure stability at fast simulation speeds
-    const nIterations = Math.ceil(dt / maxSafeDt);
-    return Array(nIterations)
-      .fill(null)
-      .reduce<CartesianState>(acc => incrementBody(name, acc, mu, dt / nIterations), state);
+export function getInitialState(parentState: CelestialBodyState | null, child: CelestialBody): CelestialBodyState {
+  let childCartesian: CartesianState = { position: [0, 0, 0], velocity: [0, 0, 0] };
+  if (parentState != null) {
+    const { position, velocity } = keplerianToCartesian(child, G * parentState.mass);
+    childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
   }
-  return applyAcceleration(state, computeAcceleration(state.position, mu), dt);
+  const childState: CelestialBodyState = { ...child, ...childCartesian, satellites: [] }; // satellites to be replaced
+  const satellites = child.satellites.map(grandchild => getInitialState(childState, grandchild));
+  return { ...childState, satellites };
 }
 
-// TODO: this multi-step implementation doesn't really work for the tight orbits of many moons. basically unusable
-//  currently, need to debug
-function incrementMoon(
-  parentName: Exclude<CelestialBodyName, 'sol'>,
-  parentState: CartesianState,
-  moonName: string,
-  moonState: CartesianState,
+function incrementStateByParents(
+  parents: Array<CelestialBodyState>,
+  child: CelestialBodyState,
   dt: number
-): CartesianState {
-  const maxSafeDt = ORBITAL_PERIOD_MOONS[parentName][moonName] / MIN_STEPS_PER_PERIOD;
-  if (dt > maxSafeDt) {
-    const nIterations = Math.ceil(dt / maxSafeDt);
-    return Array(nIterations)
-      .fill(null)
-      .reduce<{ parentState: CartesianState; moonState: CartesianState }>(
-        acc => ({
-          parentState: incrementBody(parentName, acc.parentState, MU_SOL, dt / nIterations),
-          moonState: incrementMoon(parentName, acc.parentState, moonName, acc.moonState, dt / nIterations),
-        }),
-        { parentState, moonState }
-      ).moonState;
-  }
-  const accelerationSun = computeAcceleration(moonState.position, G * ELEMENTS.sol.mass);
-  const positionWrtParent = subtract3(moonState.position, STATE[parentName].position);
-  const accelerationParent = computeAcceleration(positionWrtParent, G * ELEMENTS[parentName].mass);
-  return applyAcceleration(moonState, add3(accelerationParent, accelerationSun), dt);
+): CelestialBodyState {
+  const satellites = child.satellites.map(grandchild => incrementStateByParents([child, ...parents], grandchild, dt));
+  const acceleration = parents.reduce<Point3>(
+    (acc, parent) => add3(acc, gravitationalAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
+    [0, 0, 0] as Point3
+  );
+  const newState = applyAcceleration(child, acceleration, dt);
+  return { ...child, ...newState, satellites };
 }
 
-export function incrementBodies(dt: number) {
-  keys(STATE).forEach(name => {
-    // important that the moons come first as they depend on the position of the parent planet
-    Object.entries(STATE_MOONS[name] ?? {}).forEach(([moonName, moonState]) => {
-      STATE_MOONS[name][moonName] = incrementMoon(name, STATE[name], moonName, moonState, dt);
-    });
-    STATE[name] = incrementBody(name, STATE[name], MU_SOL, dt);
-  });
+// TODO: subdivide dt for stability with short period bodies? based on the previous implementation, seems likely that
+//  using a different dt for a satellite would require that entire branch of the tree to use that same dt -- otherwise
+//  slight errors will compound and the simulation will destabilize
+export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
+  const maxSafeDt = 3_600; // 1 hour
+  const nIterations = Math.ceil(dt / maxSafeDt);
+  return Array(nIterations)
+    .fill(null)
+    .reduce(acc => incrementStateByParents([], acc, dt / nIterations), state);
+  // return incrementStateByParents([], state, dt);
 }

@@ -20,8 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
-import { resetState } from '../lib/physics.ts';
-import { CELESTIAL_OBJECTS } from '../lib/constants.ts';
+import { CELESTIAL_BODY_NAMES } from '../lib/constants.ts';
 import { useHotkeys } from '@mantine/hooks';
 
 const actionIconProps = { variant: 'subtle', color: 'gray' };
@@ -32,8 +31,9 @@ const movePx = 10;
 type Props = {
   state: AppState;
   updateState: (state: Partial<AppState>) => void;
+  reset: () => void;
 };
-export function Controls({ state, updateState }: Props) {
+export function Controls({ state, updateState, reset }: Props) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
   const [mpp, mppUnits] = useMemo(() => humanDistanceUnits(state.metersPerPx), [state.metersPerPx]);
@@ -64,7 +64,7 @@ export function Controls({ state, updateState }: Props) {
       </Paper>
 
       <Group gap={2} align="flex-end">
-        <Menu shadow="md" position="top-start" offset={0} width={120}>
+        <Menu shadow="md" position="top-start" offset={0} width={140}>
           <Menu.Target>
             <Button size="xs" variant="subtle" color="gray">
               <Group gap={4}>
@@ -76,7 +76,7 @@ export function Controls({ state, updateState }: Props) {
             </Button>
           </Menu.Target>
           <Menu.Dropdown>
-            {CELESTIAL_OBJECTS.map(obj => (
+            {CELESTIAL_BODY_NAMES.map(obj => (
               <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
                 <Group gap="xs" align="center">
                   {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
@@ -128,7 +128,7 @@ export function Controls({ state, updateState }: Props) {
           <Tooltip {...tooltipProps} label="Enlarge Planets">
             <ActionIcon
               {...actionIconProps}
-              onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}
+              onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}
             >
               <IconCirclePlus {...iconProps} />
             </ActionIcon>
@@ -137,7 +137,7 @@ export function Controls({ state, updateState }: Props) {
           <Tooltip {...tooltipProps} label="Shrink Planets">
             <ActionIcon
               {...actionIconProps}
-              onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor / 2 })}
+              onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}
             >
               <IconCircleMinus {...iconProps} />
             </ActionIcon>
@@ -145,7 +145,7 @@ export function Controls({ state, updateState }: Props) {
         </Stack>
 
         <Tooltip {...tooltipProps} label="Slow Down">
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt / 2 })}>
+          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
             <IconPlayerTrackPrevFilled {...iconProps} />
           </ActionIcon>
         </Tooltip>
@@ -173,7 +173,7 @@ export function Controls({ state, updateState }: Props) {
             {...actionIconProps}
             onClick={() => {
               updateState(initialState);
-              resetState();
+              reset();
             }}
           >
             <IconRestore {...iconProps} />

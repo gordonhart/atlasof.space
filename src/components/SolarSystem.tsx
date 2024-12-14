@@ -4,18 +4,20 @@ import { AppState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls.tsx';
 import { useDragController } from './useDragController.ts';
 import { drawBodies } from '../lib/draw.ts';
-import { incrementBodies } from '../lib/physics.ts';
+import { getInitialState, incrementState } from '../lib/physics.ts';
+import { SOL } from '../lib/constants.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
+  const systemStateRef = useRef(getInitialState(null, SOL));
 
   function updateState(newState: Partial<AppState>) {
     setAppState(prev => ({ ...prev, ...newState }));
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dragController = useDragController(appState, updateState);
+  const dragController = useDragController(appState, updateState, systemStateRef.current);
 
   // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {
@@ -50,8 +52,8 @@ export function SolarSystem() {
     }
     const { play, dt } = appStateRef.current;
     setAppState(prev => ({ ...prev, time: prev.time + dt }));
-    incrementBodies(dt);
-    drawBodies(ctx, appStateRef.current);
+    systemStateRef.current = incrementState(systemStateRef.current, dt);
+    drawBodies(ctx, appStateRef.current, systemStateRef.current);
     if (play) {
       window.requestAnimationFrame(animationFrame);
     }
@@ -74,7 +76,13 @@ export function SolarSystem() {
         style={{ display: 'block', height: '100vh', width: '100vw' }}
         {...dragController.canvasProps}
       />
-      <Controls state={appState} updateState={updateState} />
+      <Controls
+        state={appState}
+        updateState={updateState}
+        reset={() => {
+          systemStateRef.current = getInitialState(null, SOL);
+        }}
+      />
     </Group>
   );
 }
