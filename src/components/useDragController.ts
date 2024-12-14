@@ -55,7 +55,7 @@ function findClosestPlanet(positionXm: number, positionYm: number, threshold: nu
   if (magnitude([positionXm, positionYm]) < threshold) {
     return SOL;
   }
-  return SOL.satellites.reduce((closest, body) => {
+  return SOL.satellites.reduce<CelestialBody | null>((closest, body) => {
     const { semiMajorAxis, eccentricity, argumentOfPeriapsis } = body;
     const argumentOfPeriapsisRad = degreesToRadians(argumentOfPeriapsis);
     return isPointOnEllipse(positionXm, positionYm, semiMajorAxis, eccentricity, argumentOfPeriapsisRad, threshold)

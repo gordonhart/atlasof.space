@@ -1,7 +1,6 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
 import { findCelestialBody, ORBITS } from './constants.ts';
-import { degreesToRadians, semiMinorAxis } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
@@ -40,6 +39,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     ORBITS[hoverBody.name].forEach(cartesian => drawBody({ ...hoverBody, ...cartesian, name: '', satellites: [] }));
   }
 
+  /* TODO: debugging calculated orbital ellipse versus simulated ellipse; the two don't line up perfectly
   const mercury = systemState.satellites[3];
   ctx.beginPath();
   const orbitCenter = mercury.semiMajorAxis * mercury.eccentricity;
@@ -62,6 +62,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   ctx.strokeStyle = 'green';
   ctx.lineWidth = 1;
   ctx.stroke();
+   */
 
   drawBody(systemState);
 }

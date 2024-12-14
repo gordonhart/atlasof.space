@@ -1,4 +1,4 @@
-import { DT, SOL } from './constants.ts';
+import { SOL } from './constants.ts';
 import { Point2 } from './types.ts';
 
 export type AppState = {
@@ -15,11 +15,11 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: DT,
+  dt: 60,
   play: true,
   drawTail: false,
   metersPerPx: SOL.satellites[5].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
-  center: 'Sol',
+  center: 'Mars',
   hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,

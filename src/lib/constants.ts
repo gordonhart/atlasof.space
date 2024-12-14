@@ -3,9 +3,9 @@ import { getInitialState, incrementState, orbitalPeriod } from './physics.ts';
 import { pick } from 'ramda';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
-export const DT = 60 * 60 * 6; // time step -- 6 hours
 export const AU = 1.496e11; // meters
 
+const DEFAULT_MOON_COLOR = '#aaa';
 export const SOL: CelestialBody = {
   name: 'Sol',
   eccentricity: 0,
@@ -66,9 +66,22 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 7.342e22,
           radius: 1737.4e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
+        /* {
+          name: 'ISS',
+          eccentricity: 0.000767, // Orbital eccentricity (nearly circular)
+          semiMajorAxis: 6787.4e3, // Semi-major axis in meters (~6787 km)
+          inclination: 51.64, // Inclination in degrees (relative to the equatorial plane)
+          longitudeAscending: 0, // Longitude of ascending node (changes due to precession)
+          argumentOfPeriapsis: 0, // Argument of periapsis (nearly circular, not significant)
+          trueAnomaly: 0, // Starting at periapsis
+          mass: 419725,
+          radius: 50, // roughly
+          color: '#fff',
+          satellites: [],
+        }, */
       ],
     },
     {
@@ -82,7 +95,34 @@ export const SOL: CelestialBody = {
       mass: 6.4171e23,
       radius: 3389.5e3,
       color: '#f53',
-      satellites: [], // TODO: phobos, deimos
+      satellites: [
+        {
+          name: 'Phobos',
+          eccentricity: 0.0151,
+          semiMajorAxis: 9376e3,
+          inclination: 1.093,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.0659e16,
+          radius: 11.2667e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Deimos',
+          eccentricity: 0.00033,
+          semiMajorAxis: 23458e3,
+          inclination: 1.788,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.4762e15,
+          radius: 6.2e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+      ],
     },
     {
       name: 'Ceres',
@@ -94,7 +134,7 @@ export const SOL: CelestialBody = {
       trueAnomaly: 0,
       mass: 9.3839e20,
       radius: 966.2e3,
-      color: '#bbb',
+      color: DEFAULT_MOON_COLOR,
       satellites: [],
     },
     {
@@ -119,7 +159,7 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 8.931938e22,
           radius: 1821.6e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
         {
@@ -132,7 +172,7 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 4.799844e22,
           radius: 1560.8e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
         {
@@ -145,7 +185,7 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 1.4819e23,
           radius: 2634.1e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
         {
@@ -158,7 +198,7 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 1.075938e23,
           radius: 2410.3e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
       ],
@@ -174,7 +214,99 @@ export const SOL: CelestialBody = {
       mass: 5.6834e26,
       radius: 58232e3,
       color: '#faa',
-      satellites: [], // TODO
+      satellites: [
+        {
+          name: 'Mimas',
+          eccentricity: 0.0196,
+          semiMajorAxis: 185540e3,
+          inclination: 1.574,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 3.7493e19,
+          radius: 198.2e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Enceladus',
+          eccentricity: 0.0047,
+          semiMajorAxis: 238040e3,
+          inclination: 0.009,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.08022e20,
+          radius: 252.1e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Tethys',
+          eccentricity: 0.0001,
+          semiMajorAxis: 294670e3,
+          inclination: 1.091,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 6.17449e20,
+          radius: 531.1e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Dione',
+          eccentricity: 0.0022,
+          semiMajorAxis: 377420e3,
+          inclination: 0.028,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.095452e21,
+          radius: 561.4e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Rhea',
+          eccentricity: 0.001,
+          semiMajorAxis: 527070e3,
+          inclination: 0.345,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 2.306518e21,
+          radius: 763.8e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Titan',
+          eccentricity: 0.0288,
+          semiMajorAxis: 1221870e3,
+          inclination: 0.348,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.3452e23,
+          radius: 2574.7e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Iapetus',
+          eccentricity: 0.0286,
+          semiMajorAxis: 3560820e3,
+          inclination: 15.47,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.805635e21,
+          radius: 734.5e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+      ],
     },
     {
       name: 'Uranus',

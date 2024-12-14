@@ -19,14 +19,16 @@ import {
   IconRestore,
 } from '@tabler/icons-react';
 import { useMemo } from 'react';
-import { humanDistanceUnits, humanTimeUnits, pluralize } from '../lib/utils.ts';
+import { humanTimeUnits, pluralize } from '../lib/utils.ts';
 import { CELESTIAL_BODY_NAMES } from '../lib/constants.ts';
 import { useHotkeys } from '@mantine/hooks';
+import { ScaleIndicator } from './ScaleIndicator.tsx';
 
 const actionIconProps = { variant: 'subtle', color: 'gray' };
 const iconProps = { size: 14 };
 const tooltipProps = { openDelay: 400 };
 const movePx = 10;
+const pad = 10;
 
 type Props = {
   state: AppState;
@@ -36,7 +38,6 @@ type Props = {
 export function Controls({ state, updateState, reset }: Props) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
-  const [mpp, mppUnits] = useMemo(() => humanDistanceUnits(state.metersPerPx), [state.metersPerPx]);
 
   function applyOffset(rightPx: number, upPx: number) {
     const newOffsetX = state.offset[0] - rightPx * state.metersPerPx;
@@ -52,41 +53,51 @@ export function Controls({ state, updateState, reset }: Props) {
   ]);
 
   return (
-    <Group pos="absolute" bottom={10} left={10} right={10} justify="space-between" align="flex-end">
-      <Paper p={4} bg="transparent" radius="md" style={{ backdropFilter: 'blur(4px)' }}>
-        <Stack gap={4} p={4} fz="xs">
-          <Text inherit>t: {pluralize(Number(t.toFixed(0)), tUnits)}</Text>
-          <Text inherit>dt: {pluralize(dt, dtUnits)}</Text>
-          <Text inherit>
-            m/px: {mpp.toLocaleString()} {mppUnits}
-          </Text>
-        </Stack>
-      </Paper>
-
-      <Group gap={2} align="flex-end">
-        <Menu shadow="md" position="top-start" offset={0} width={140}>
-          <Menu.Target>
-            <Button size="xs" variant="subtle" color="gray">
-              <Group gap={4}>
-                <Text inherit c="dimmed">
-                  center:
-                </Text>
-                <Text inherit>{state.center}</Text>
+    <>
+      <Menu shadow="md" position="top-start" offset={0} width={140}>
+        <Menu.Target>
+          <Button pos="absolute" top={pad} left={pad} size="xs" variant="subtle" color="gray">
+            {state.center}
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown>
+          {CELESTIAL_BODY_NAMES.map(obj => (
+            <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
+              <Group gap="xs" align="center">
+                {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+                {obj}
               </Group>
-            </Button>
-          </Menu.Target>
-          <Menu.Dropdown>
-            {CELESTIAL_BODY_NAMES.map(obj => (
-              <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
-                <Group gap="xs" align="center">
-                  {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                  {obj}
-                </Group>
-              </Menu.Item>
-            ))}
-          </Menu.Dropdown>
-        </Menu>
+            </Menu.Item>
+          ))}
+        </Menu.Dropdown>
+      </Menu>
 
+      <Stack pos="absolute" top={pad} right={pad} gap={2} align="flex-end">
+        <ScaleIndicator metersPerPx={state.metersPerPx} />
+
+        <Stack gap={2}>
+          <Tooltip {...tooltipProps} position="left" label="Zoom In">
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
+              <IconPlus {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip {...tooltipProps} position="left" label="Zoom Out">
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
+              <IconMinus {...iconProps} />
+            </ActionIcon>
+          </Tooltip>
+        </Stack>
+      </Stack>
+
+      <Group
+        pos="absolute"
+        bottom={pad}
+        left="50%"
+        gap={2}
+        wrap="nowrap"
+        align="flex-end"
+        style={{ transform: 'translate(-50%, 0)' }}
+      >
         <Tooltip {...tooltipProps} label="Pan Left">
           <ActionIcon {...actionIconProps} onClick={() => applyOffset(-movePx, 0)}>
             <IconCaretLeftFilled {...iconProps} />
@@ -109,56 +120,65 @@ export function Controls({ state, updateState, reset }: Props) {
             <IconCaretRightFilled {...iconProps} />
           </ActionIcon>
         </Tooltip>
+      </Group>
 
-        <Stack gap={2}>
-          <Tooltip {...tooltipProps} label="Zoom In">
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
-              <IconPlus {...iconProps} />
+      <Stack pos="absolute" bottom={pad} left={pad} gap={4}>
+        <Paper bg="transparent" radius="md" style={{ backdropFilter: 'blur(4px)' }}>
+          <Stack gap={2} fz="xs">
+            <Group gap={8}>
+              <Group justify="flex-end" w={20}>
+                <Text inherit c="dimmed">
+                  t
+                </Text>
+              </Group>
+              <Text inherit>{pluralize(Number(t.toFixed(0)), tUnits)}</Text>
+            </Group>
+            <Group gap={8}>
+              <Group justify="flex-end" w={20}>
+                <Text inherit c="dimmed">
+                  ∆t
+                </Text>
+              </Group>
+              <Text inherit>{pluralize(dt, dtUnits)}</Text>
+            </Group>
+          </Stack>
+        </Paper>
+
+        <Group gap={2} align="flex-end">
+          <Tooltip {...tooltipProps} label="Slow Down">
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
+              <IconPlayerTrackPrevFilled {...iconProps} />
             </ActionIcon>
           </Tooltip>
-
-          <Tooltip {...tooltipProps} label="Zoom Out">
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
-              <IconMinus {...iconProps} />
+          <Tooltip {...tooltipProps} label={state.play ? 'Stop' : 'Start'}>
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ play: !state.play })}>
+              {state.play ? <IconPlayerStopFilled {...iconProps} /> : <IconPlayerPlayFilled {...iconProps} />}
             </ActionIcon>
           </Tooltip>
-        </Stack>
-
-        <Stack gap={2}>
-          <Tooltip {...tooltipProps} label="Enlarge Planets">
-            <ActionIcon
-              {...actionIconProps}
-              onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}
-            >
-              <IconCirclePlus {...iconProps} />
+          <Tooltip {...tooltipProps} label="Speed Up">
+            <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt * 2 })}>
+              <IconPlayerTrackNextFilled {...iconProps} />
             </ActionIcon>
           </Tooltip>
+        </Group>
+      </Stack>
 
-          <Tooltip {...tooltipProps} label="Shrink Planets">
-            <ActionIcon
-              {...actionIconProps}
-              onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}
-            >
-              <IconCircleMinus {...iconProps} />
-            </ActionIcon>
-          </Tooltip>
-        </Stack>
-
-        <Tooltip {...tooltipProps} label="Slow Down">
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
-            <IconPlayerTrackPrevFilled {...iconProps} />
+      <Stack pos="absolute" bottom={pad} right={pad} gap={2}>
+        <Tooltip {...tooltipProps} label="Enlarge Planets">
+          <ActionIcon
+            {...actionIconProps}
+            onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}
+          >
+            <IconCirclePlus {...iconProps} />
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip {...tooltipProps} label={state.play ? 'Stop' : 'Start'}>
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ play: !state.play })}>
-            {state.play ? <IconPlayerStopFilled {...iconProps} /> : <IconPlayerPlayFilled {...iconProps} />}
-          </ActionIcon>
-        </Tooltip>
-
-        <Tooltip {...tooltipProps} label="Speed Up">
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt * 2 })}>
-            <IconPlayerTrackNextFilled {...iconProps} />
+        <Tooltip {...tooltipProps} label="Shrink Planets">
+          <ActionIcon
+            {...actionIconProps}
+            onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}
+          >
+            <IconCircleMinus {...iconProps} />
           </ActionIcon>
         </Tooltip>
 
@@ -179,7 +199,7 @@ export function Controls({ state, updateState, reset }: Props) {
             <IconRestore {...iconProps} />
           </ActionIcon>
         </Tooltip>
-      </Group>
-    </Group>
+      </Stack>
+    </>
   );
 }
