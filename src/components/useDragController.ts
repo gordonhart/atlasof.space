@@ -66,7 +66,7 @@ function findClosestPlanet(distanceFromSun: number) {
       }
       return closestD == null || distanceFromPlanet < closestD ? [p, distanceFromPlanet] : [closestP, closestD];
     },
-    [null, null] as [null | string, number | string]
+    [null, null] as [null | string, null | number]
   );
   return closestPlanet;
 }
