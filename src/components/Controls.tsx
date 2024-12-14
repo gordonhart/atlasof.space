@@ -1,12 +1,10 @@
-import { AppState, initialState } from '../lib/state.ts';
-import { ActionIcon, Button, Group, Menu, Paper, Stack, Text, Tooltip } from '@mantine/core';
+import { AppState } from '../lib/state.ts';
+import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import {
   IconCaretDownFilled,
   IconCaretLeftFilled,
   IconCaretRightFilled,
   IconCaretUpFilled,
-  IconCircle,
-  IconCircleFilled,
   IconCircleMinus,
   IconCirclePlus,
   IconMeteorFilled,
@@ -20,13 +18,11 @@ import {
 } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { humanTimeUnits, pluralize } from '../lib/utils.ts';
-import { CELESTIAL_BODY_NAMES } from '../lib/constants.ts';
 import { useHotkeys } from '@mantine/hooks';
 import { ScaleIndicator } from './ScaleIndicator.tsx';
+import { FocusControls } from './FocusControls.tsx';
 
-const actionIconProps = { variant: 'subtle', color: 'gray' };
-const iconProps = { size: 14 };
-const tooltipProps = { openDelay: 400 };
+const iconSize = 14;
 const movePx = 10;
 const pad = 10;
 
@@ -54,36 +50,22 @@ export function Controls({ state, updateState, reset }: Props) {
 
   return (
     <>
-      <Menu shadow="md" position="top-start" offset={0} width={140}>
-        <Menu.Target>
-          <Button pos="absolute" top={pad} left={pad} size="xs" variant="subtle" color="gray">
-            {state.center}
-          </Button>
-        </Menu.Target>
-        <Menu.Dropdown>
-          {CELESTIAL_BODY_NAMES.map(obj => (
-            <Menu.Item key={obj} onClick={() => updateState({ center: obj })}>
-              <Group gap="xs" align="center">
-                {state.center === obj ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                {obj}
-              </Group>
-            </Menu.Item>
-          ))}
-        </Menu.Dropdown>
-      </Menu>
+      <Group pos="absolute" top={pad} left={pad} gap={2}>
+        <FocusControls state={state} updateState={updateState} />
+      </Group>
 
       <Stack pos="absolute" top={pad} right={pad} gap={2} align="flex-end">
         <ScaleIndicator metersPerPx={state.metersPerPx} />
 
         <Stack gap={2}>
-          <Tooltip {...tooltipProps} position="left" label="Zoom In">
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
-              <IconPlus {...iconProps} />
+          <Tooltip position="left" label="Zoom In">
+            <ActionIcon onClick={() => updateState({ metersPerPx: state.metersPerPx / 2 })}>
+              <IconPlus size={iconSize} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip {...tooltipProps} position="left" label="Zoom Out">
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
-              <IconMinus {...iconProps} />
+          <Tooltip position="left" label="Zoom Out">
+            <ActionIcon onClick={() => updateState({ metersPerPx: state.metersPerPx * 2 })}>
+              <IconMinus size={iconSize} />
             </ActionIcon>
           </Tooltip>
         </Stack>
@@ -98,26 +80,26 @@ export function Controls({ state, updateState, reset }: Props) {
         align="flex-end"
         style={{ transform: 'translate(-50%, 0)' }}
       >
-        <Tooltip {...tooltipProps} label="Pan Left">
-          <ActionIcon {...actionIconProps} onClick={() => applyOffset(-movePx, 0)}>
-            <IconCaretLeftFilled {...iconProps} />
+        <Tooltip label="Pan Left">
+          <ActionIcon onClick={() => applyOffset(-movePx, 0)}>
+            <IconCaretLeftFilled size={iconSize} />
           </ActionIcon>
         </Tooltip>
         <Stack gap={2}>
-          <Tooltip {...tooltipProps} label="Pan Up">
-            <ActionIcon {...actionIconProps} onClick={() => applyOffset(0, movePx)}>
-              <IconCaretUpFilled {...iconProps} />
+          <Tooltip label="Pan Up">
+            <ActionIcon onClick={() => applyOffset(0, movePx)}>
+              <IconCaretUpFilled size={iconSize} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip {...tooltipProps} label="Pan Down">
-            <ActionIcon {...actionIconProps} onClick={() => applyOffset(0, -movePx)}>
-              <IconCaretDownFilled {...iconProps} />
+          <Tooltip label="Pan Down">
+            <ActionIcon onClick={() => applyOffset(0, -movePx)}>
+              <IconCaretDownFilled size={iconSize} />
             </ActionIcon>
           </Tooltip>
         </Stack>
-        <Tooltip {...tooltipProps} label="Pan Right">
-          <ActionIcon {...actionIconProps} onClick={() => applyOffset(movePx, 0)}>
-            <IconCaretRightFilled {...iconProps} />
+        <Tooltip label="Pan Right">
+          <ActionIcon onClick={() => applyOffset(movePx, 0)}>
+            <IconCaretRightFilled size={iconSize} />
           </ActionIcon>
         </Tooltip>
       </Group>
@@ -145,58 +127,46 @@ export function Controls({ state, updateState, reset }: Props) {
         </Paper>
 
         <Group gap={2} align="flex-end">
-          <Tooltip {...tooltipProps} label="Slow Down">
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
-              <IconPlayerTrackPrevFilled {...iconProps} />
+          <Tooltip label="Slow Down">
+            <ActionIcon onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
+              <IconPlayerTrackPrevFilled size={iconSize} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip {...tooltipProps} label={state.play ? 'Stop' : 'Start'}>
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ play: !state.play })}>
-              {state.play ? <IconPlayerStopFilled {...iconProps} /> : <IconPlayerPlayFilled {...iconProps} />}
+          <Tooltip label={state.play ? 'Stop' : 'Start'}>
+            <ActionIcon onClick={() => updateState({ play: !state.play })}>
+              {state.play ? <IconPlayerStopFilled size={iconSize} /> : <IconPlayerPlayFilled size={iconSize} />}
             </ActionIcon>
           </Tooltip>
-          <Tooltip {...tooltipProps} label="Speed Up">
-            <ActionIcon {...actionIconProps} onClick={() => updateState({ dt: state.dt * 2 })}>
-              <IconPlayerTrackNextFilled {...iconProps} />
+          <Tooltip position="right" label="Speed Up">
+            <ActionIcon onClick={() => updateState({ dt: state.dt * 2 })}>
+              <IconPlayerTrackNextFilled size={iconSize} />
             </ActionIcon>
           </Tooltip>
         </Group>
       </Stack>
 
       <Stack pos="absolute" bottom={pad} right={pad} gap={2}>
-        <Tooltip {...tooltipProps} label="Enlarge Planets">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}
-          >
-            <IconCirclePlus {...iconProps} />
+        <Tooltip position="left" label="Enlarge Planets">
+          <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}>
+            <IconCirclePlus size={iconSize} />
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip {...tooltipProps} label="Shrink Planets">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}
-          >
-            <IconCircleMinus {...iconProps} />
+        <Tooltip position="left" label="Shrink Planets">
+          <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}>
+            <IconCircleMinus size={iconSize} />
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip {...tooltipProps} label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
-          <ActionIcon {...actionIconProps} onClick={() => updateState({ drawTail: !state.drawTail })}>
-            <IconMeteorFilled {...iconProps} />
+        <Tooltip position="left" label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
+          <ActionIcon onClick={() => updateState({ drawTail: !state.drawTail })}>
+            <IconMeteorFilled size={iconSize} />
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip {...tooltipProps} label="Reset">
-          <ActionIcon
-            {...actionIconProps}
-            onClick={() => {
-              updateState(initialState);
-              reset();
-            }}
-          >
-            <IconRestore {...iconProps} />
+        <Tooltip position="left" label="Reset">
+          <ActionIcon onClick={reset}>
+            <IconRestore size={iconSize} />
           </ActionIcon>
         </Tooltip>
       </Stack>

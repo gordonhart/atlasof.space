@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
 import { AppState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls.tsx';
-import { useDragController } from './useDragController.ts';
+import { useDragController } from '../hooks/useDragController.ts';
 import { drawBodies } from '../lib/draw.ts';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/constants.ts';
@@ -82,6 +82,7 @@ export function SolarSystem() {
         state={appState}
         updateState={updateState}
         reset={() => {
+          updateState(initialState);
           systemStateRef.current = getInitialState(null, SOL);
         }}
       />

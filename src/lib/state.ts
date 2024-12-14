@@ -1,5 +1,6 @@
-import { SOL } from './constants.ts';
-import { Point2 } from './types.ts';
+import { AU, findCelestialBody, SOL } from './constants.ts';
+import { CelestialBodyType, Point2 } from './types.ts';
+import { getInitialState } from './physics.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -11,16 +12,20 @@ export type AppState = {
   hover: string | null; // name of hovered body
   offset: Point2; // meters
   planetScaleFactor: number;
+  visibleTypes: Set<CelestialBodyType>;
 };
 
 export const initialState: AppState = {
   time: 0,
-  dt: 60,
+  dt: 60 * 60,
   play: true,
   drawTail: false,
-  metersPerPx: SOL.satellites[5].semiMajorAxis / Math.max(window.innerWidth, window.innerHeight),
-  center: 'Mars',
+  metersPerPx:
+    (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU) /
+    Math.max(window.innerWidth, window.innerHeight),
+  center: 'Sol',
   hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,
+  visibleTypes: new Set(['sun', 'planet', 'moon']),
 };

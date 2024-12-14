@@ -10,6 +10,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     planetScaleFactor,
     offset: [panOffsetXm, panOffsetYm],
     hover,
+    visibleTypes,
   } = appState;
 
   ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
@@ -21,8 +22,11 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
   const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 
-  function drawBody({ name, position, radius, color, satellites }: CelestialBodyState) {
+  function drawBody({ name, position, radius, color, satellites, type }: CelestialBodyState) {
     satellites.forEach(drawBody);
+    if (!visibleTypes.has(type)) {
+      return;
+    }
     const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
     const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
     const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
