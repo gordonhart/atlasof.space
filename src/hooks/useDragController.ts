@@ -2,7 +2,7 @@ import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyState, KeplerianElements, Point2 } from '../lib/types.ts';
 import { findCelestialBody, SOL } from '../lib/constants.ts';
-import { degreesToRadians, magnitude } from '../lib/physics.ts';
+import { degreesToRadians, ellipseAtTheta, magnitude } from '../lib/physics.ts';
 
 export function useDragController(
   { offset, metersPerPx, center }: AppState,
@@ -18,6 +18,7 @@ export function useDragController(
     const [offsetXm, offsetYm] = [panOffsetXm - focusOffsetXm, panOffsetYm - focusOffsetYm];
     const [centerXm, centerYm] = [(metersPerPx * window.innerWidth) / 2, (metersPerPx * window.innerHeight) / 2];
     const [cursorXm, cursorYm] = [eventXm - offsetXm - centerXm, eventYm - offsetYm - centerYm];
+    console.log(cursorXm, cursorYm);
     const closestPlanet = findClosestPlanet(cursorXm, cursorYm, metersPerPx * 10);
     updateAppState({ hover: closestPlanet != null ? closestPlanet.name : null });
   }
@@ -61,26 +62,11 @@ function findClosestPlanet(positionXm: number, positionYm: number, threshold: nu
 }
 
 function isPointOnEllipse(x: number, y: number, ellipse: KeplerianElements, tolerance: number) {
-  const {
-    semiMajorAxis: a,
-    eccentricity: e,
-    inclination: i,
-    argumentOfPeriapsis: omega,
-    longitudeAscending: Omega,
-  } = ellipse;
-  // Step 1: Rotate the point by -omega
-  const cosOmega = Math.cos(-omega);
-  const sinOmega = Math.sin(-omega);
-  const xPrime = x * cosOmega - y * sinOmega;
-  const yPrime = x * sinOmega + y * cosOmega;
-
-  // Step 2: Convert to polar coordinates
-  const rPrime = magnitude([xPrime, yPrime]);
-  const thetaPrime = Math.atan2(yPrime, xPrime);
-
-  // Step 3: Calculate expected r
-  const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(thetaPrime));
-
-  // Step 4: Check if the point lies on the ellipse
+  const { longitudeAscending: Omega, argumentOfPeriapsis: omega } = ellipse;
+  // TODO: this math isn't 100% correct, likely need to take into account inclination
+  const theta = Math.atan2(y, x) - degreesToRadians(omega) - degreesToRadians(Omega);
+  const [xExpected, yExpected] = ellipseAtTheta(ellipse, theta);
+  const r = magnitude([x, y]);
+  const rPrime = magnitude([xExpected, yExpected]);
   return Math.abs(rPrime - r) < tolerance;
 }

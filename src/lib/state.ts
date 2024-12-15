@@ -18,7 +18,7 @@ export type AppState = {
 export const initialState: AppState = {
   time: 0,
   dt: 60 * 60,
-  play: false,
+  play: true,
   drawTail: false,
   metersPerPx:
     (2 * (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU)) /

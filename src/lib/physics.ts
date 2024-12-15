@@ -44,10 +44,8 @@ export function ellipseAtTheta(ellipse: KeplerianElements, theta: number): Point
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = ellipse;
 
   const i = degreesToRadians(inclination);
-  // TODO: why are rotations being applied clockwise? is it due to flipping the Y axis? to debug later -- for now,
-  //  inverting these values flips things back in the correct (counterclockwise) direction
-  const omega = -degreesToRadians(argumentOfPeriapsis);
-  const Omega = -degreesToRadians(longitudeAscending);
+  const omega = degreesToRadians(argumentOfPeriapsis);
+  const Omega = degreesToRadians(longitudeAscending);
 
   // Parametric form in orbital plane before rotation:
   // Periapsis initially along x'-axis

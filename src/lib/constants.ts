@@ -1,6 +1,5 @@
-import { CartesianState, CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
-import { getInitialState, incrementState, orbitalPeriod } from './physics.ts';
-import { pick } from 'ramda';
+import { CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
+import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -493,7 +492,8 @@ export const SOL2: CelestialBody = {
 };
 export const SOL = {
   ...SOL2,
-  satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
+  // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
+  // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
 };
 
 function getCelestialBodyNames(body: CelestialBody): Array<string> {
