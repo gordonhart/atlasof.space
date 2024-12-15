@@ -1,12 +1,13 @@
-import { CelestialBody, CelestialBodyState } from './types.ts';
-import { meanDistance, orbitalPeriod } from './physics.ts';
+import { CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
+import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
-export const DT = 60 * 60 * 6; // time step -- 6 hours
 export const AU = 1.496e11; // meters
 
-export const SOL: CelestialBody = {
+const DEFAULT_MOON_COLOR = '#aaa';
+export const SOL2: CelestialBody = {
   name: 'Sol',
+  type: 'sun',
   eccentricity: 0,
   semiMajorAxis: 0,
   inclination: 0,
@@ -19,6 +20,7 @@ export const SOL: CelestialBody = {
   satellites: [
     {
       name: 'Mercury',
+      type: 'planet',
       eccentricity: 0.2056,
       semiMajorAxis: 57909050e3, // meters
       inclination: 7.005, // degrees
@@ -32,6 +34,7 @@ export const SOL: CelestialBody = {
     },
     {
       name: 'Venus',
+      type: 'planet',
       eccentricity: 0.006772,
       semiMajorAxis: 108208000e3,
       inclination: 3.39458,
@@ -45,6 +48,7 @@ export const SOL: CelestialBody = {
     },
     {
       name: 'Earth',
+      type: 'planet',
       eccentricity: 0.0167086,
       semiMajorAxis: 149597870.7e3, // 1 AU
       inclination: 0.00005,
@@ -57,6 +61,7 @@ export const SOL: CelestialBody = {
       satellites: [
         {
           name: 'Luna',
+          type: 'moon',
           eccentricity: 0.0549,
           semiMajorAxis: 384400e3,
           inclination: 5.145,
@@ -65,13 +70,28 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 7.342e22,
           radius: 1737.4e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
+        /* {
+          name: 'ISS',
+          type: 'moon',
+          eccentricity: 0.000767, // Orbital eccentricity (nearly circular)
+          semiMajorAxis: 6787.4e3, // Semi-major axis in meters (~6787 km)
+          inclination: 51.64, // Inclination in degrees (relative to the equatorial plane)
+          longitudeAscending: 0, // Longitude of ascending node (changes due to precession)
+          argumentOfPeriapsis: 0, // Argument of periapsis (nearly circular, not significant)
+          trueAnomaly: 0, // Starting at periapsis
+          mass: 419725,
+          radius: 50, // roughly
+          color: '#fff',
+          satellites: [],
+        }, */
       ],
     },
     {
       name: 'Mars',
+      type: 'planet',
       eccentricity: 0.0935,
       semiMajorAxis: 227939200e3,
       inclination: 1.85,
@@ -81,10 +101,42 @@ export const SOL: CelestialBody = {
       mass: 6.4171e23,
       radius: 3389.5e3,
       color: '#f53',
-      satellites: [], // TODO: phobos, deimos
+      satellites: [
+        {
+          name: 'Phobos',
+          type: 'moon',
+          eccentricity: 0.0151,
+          semiMajorAxis: 9376e3,
+          inclination: 1.093,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.0659e16,
+          radius: 11.2667e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Deimos',
+          type: 'moon',
+          eccentricity: 0.00033,
+          semiMajorAxis: 23458e3,
+          inclination: 1.788,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.4762e15,
+          radius: 6.2e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+      ],
     },
+    // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
+    //  collected over time. Switch?
     {
       name: 'Ceres',
+      type: 'asteroid',
       eccentricity: 0.075823,
       semiMajorAxis: 413690250e3,
       inclination: 10.594,
@@ -93,11 +145,68 @@ export const SOL: CelestialBody = {
       trueAnomaly: 0,
       mass: 9.3839e20,
       radius: 966.2e3,
-      color: '#bbb',
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Vesta',
+      type: 'asteroid',
+      eccentricity: 0.0894,
+      semiMajorAxis: 2.36 * AU,
+      inclination: 7.1422,
+      longitudeAscending: 103.71,
+      argumentOfPeriapsis: 151.66,
+      trueAnomaly: 0,
+      mass: 2.590271e20,
+      radius: 278.6e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Pallas',
+      type: 'asteroid',
+      eccentricity: 0.2302,
+      semiMajorAxis: 4.14e11,
+      inclination: 34.93,
+      longitudeAscending: 172.9,
+      argumentOfPeriapsis: 310.9,
+      trueAnomaly: 0,
+      mass: 2.04e20,
+      radius: 256e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Hygiea',
+      type: 'asteroid',
+      eccentricity: 0.1125,
+      semiMajorAxis: 3.1415 * AU,
+      inclination: 3.8316,
+      longitudeAscending: 283.2,
+      argumentOfPeriapsis: 312.32,
+      trueAnomaly: 0,
+      mass: 8.74e19,
+      radius: 215e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Ryugu',
+      type: 'asteroid',
+      eccentricity: 0.1902,
+      semiMajorAxis: 1.1896 * AU,
+      inclination: 5.8837,
+      longitudeAscending: 251.62,
+      argumentOfPeriapsis: 211.43,
+      trueAnomaly: 0,
+      mass: 4.5e11,
+      radius: 448,
+      color: DEFAULT_MOON_COLOR,
       satellites: [],
     },
     {
       name: 'Jupiter',
+      type: 'planet',
       eccentricity: 0.0489,
       semiMajorAxis: 778340821e3,
       inclination: 1.305,
@@ -110,6 +219,7 @@ export const SOL: CelestialBody = {
       satellites: [
         {
           name: 'Io',
+          type: 'moon',
           eccentricity: 0.0041,
           semiMajorAxis: 421800e3,
           inclination: 0.036,
@@ -118,11 +228,12 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 8.931938e22,
           radius: 1821.6e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
         {
           name: 'Europa',
+          type: 'moon',
           eccentricity: 0.0094,
           semiMajorAxis: 671100e3,
           inclination: 0.466,
@@ -131,11 +242,12 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 4.799844e22,
           radius: 1560.8e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
         {
           name: 'Ganymede',
+          type: 'moon',
           eccentricity: 0.0013,
           semiMajorAxis: 1070400e3,
           inclination: 0.177,
@@ -144,11 +256,12 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 1.4819e23,
           radius: 2634.1e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
         {
           name: 'Callisto',
+          type: 'moon',
           eccentricity: 0.0074,
           semiMajorAxis: 1882700e3,
           inclination: 0.192,
@@ -157,13 +270,14 @@ export const SOL: CelestialBody = {
           trueAnomaly: 0,
           mass: 1.075938e23,
           radius: 2410.3e3,
-          color: '#bbb',
+          color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
       ],
     },
     {
       name: 'Saturn',
+      type: 'planet',
       eccentricity: 0.0565,
       semiMajorAxis: 1433449370e3,
       inclination: 2.485,
@@ -173,10 +287,110 @@ export const SOL: CelestialBody = {
       mass: 5.6834e26,
       radius: 58232e3,
       color: '#faa',
-      satellites: [], // TODO
+      satellites: [
+        {
+          name: 'Mimas',
+          type: 'moon',
+          eccentricity: 0.0196,
+          semiMajorAxis: 185540e3,
+          inclination: 1.574,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 3.7493e19,
+          radius: 198.2e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Enceladus',
+          type: 'moon',
+          eccentricity: 0.0047,
+          semiMajorAxis: 238040e3,
+          inclination: 0.009,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.08022e20,
+          radius: 252.1e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Tethys',
+          type: 'moon',
+          eccentricity: 0.0001,
+          semiMajorAxis: 294670e3,
+          inclination: 1.091,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 6.17449e20,
+          radius: 531.1e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Dione',
+          type: 'moon',
+          eccentricity: 0.0022,
+          semiMajorAxis: 377420e3,
+          inclination: 0.028,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.095452e21,
+          radius: 561.4e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Rhea',
+          type: 'moon',
+          eccentricity: 0.001,
+          semiMajorAxis: 527070e3,
+          inclination: 0.345,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 2.306518e21,
+          radius: 763.8e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Titan',
+          type: 'moon',
+          eccentricity: 0.0288,
+          semiMajorAxis: 1221870e3,
+          inclination: 0.348,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.3452e23,
+          radius: 2574.7e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+        {
+          name: 'Iapetus',
+          type: 'moon',
+          eccentricity: 0.0286,
+          semiMajorAxis: 3560820e3,
+          inclination: 15.47,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.805635e21,
+          radius: 734.5e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+      ],
     },
     {
       name: 'Uranus',
+      type: 'planet',
       eccentricity: 0.0457,
       semiMajorAxis: 2876679082e3,
       inclination: 0.772,
@@ -190,6 +404,7 @@ export const SOL: CelestialBody = {
     },
     {
       name: 'Neptune',
+      type: 'planet',
       eccentricity: 0.0086,
       semiMajorAxis: 4503443661e3,
       inclination: 1.77,
@@ -203,6 +418,7 @@ export const SOL: CelestialBody = {
     },
     {
       name: 'Pluto',
+      type: 'trans-neptunian-object',
       eccentricity: 0.2488,
       semiMajorAxis: 5906440628e3,
       inclination: 17.16,
@@ -212,14 +428,82 @@ export const SOL: CelestialBody = {
       mass: 1.3025e22,
       radius: 1188.3e3,
       color: '#ddd',
+      satellites: [
+        {
+          name: 'Charon',
+          type: 'moon',
+          eccentricity: 0.00005,
+          semiMajorAxis: 19596e3,
+          inclination: 0.0,
+          longitudeAscending: 0,
+          argumentOfPeriapsis: 0,
+          trueAnomaly: 0,
+          mass: 1.586e21,
+          radius: 606e3,
+          color: DEFAULT_MOON_COLOR,
+          satellites: [],
+        },
+      ],
+    },
+    {
+      name: 'Eris',
+      type: 'trans-neptunian-object',
+      eccentricity: 0.43607,
+      semiMajorAxis: 67.864 * AU,
+      inclination: 44.04,
+      longitudeAscending: 35.951,
+      argumentOfPeriapsis: 151.639,
+      trueAnomaly: 0,
+      mass: 1.6466e22,
+      radius: 1163e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Haumea',
+      type: 'trans-neptunian-object',
+      eccentricity: 0.19642,
+      semiMajorAxis: 43.116 * AU,
+      inclination: 28.2137,
+      longitudeAscending: 122.167,
+      argumentOfPeriapsis: 239.041,
+      trueAnomaly: 0,
+      mass: 4.006e21,
+      radius: 780e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Makemake',
+      type: 'trans-neptunian-object',
+      eccentricity: 0.16126,
+      semiMajorAxis: 45.43 * AU,
+      inclination: 28.9835,
+      longitudeAscending: 79.62,
+      argumentOfPeriapsis: 294.834,
+      trueAnomaly: 0,
+      mass: 3.1e21,
+      radius: 715e3,
+      color: DEFAULT_MOON_COLOR,
       satellites: [],
     },
   ],
+};
+export const SOL = {
+  ...SOL2,
+  // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
+  // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
 };
 
 function getCelestialBodyNames(body: CelestialBody): Array<string> {
   return [body.name, ...body.satellites.flatMap(b => getCelestialBodyNames(b))];
 }
+export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
+
+function getCelestialBodyClasses(body: CelestialBody): Array<CelestialBodyType> {
+  return [body.type, ...body.satellites.flatMap(b => getCelestialBodyClasses(b))];
+}
+export const CELESTIAL_BODY_CLASSES: Array<CelestialBodyType> = getCelestialBodyClasses(SOL);
 
 function getCelestialBodyOrbitalPeriodsAboutParent(
   parent: CelestialBody | null,
@@ -230,13 +514,7 @@ function getCelestialBodyOrbitalPeriodsAboutParent(
     { [child.name]: parent != null ? orbitalPeriod(child.semiMajorAxis, parent.mass) : 1 }
   );
 }
-export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
 export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPeriodsAboutParent(null, SOL);
-export const MIN_STEPS_PER_PERIOD = 64; // ensure stability of simulation by requiring N frames per period
-
-export const MEAN_PLANET_DISTANCES: Record<string, number> = Object.fromEntries<number>(
-  SOL.satellites.map(({ name, semiMajorAxis, eccentricity }) => [name, meanDistance(semiMajorAxis, eccentricity)])
-);
 
 // TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
 export function findCelestialBody(state: CelestialBodyState, name: string): CelestialBodyState | undefined {

@@ -1,7 +1,8 @@
 import { AU } from './constants.ts';
+import { CelestialBodyType } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
-  return n > 1 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
+  return n > 1 || n === 0 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
 }
 
 export function humanTimeUnits(t: number): [number, string] {
@@ -25,5 +26,20 @@ export function humanDistanceUnits(d: number): [number, string] {
     return [d / 1_000, 'km'];
   } else {
     return [d / AU, 'AU'];
+  }
+}
+
+export function celestialBodyTypeName(type: CelestialBodyType) {
+  switch (type) {
+    case 'sun':
+      return 'Sun';
+    case 'planet':
+      return 'Planet';
+    case 'moon':
+      return 'Moon';
+    case 'asteroid':
+      return 'Asteroid';
+    case 'trans-neptunian-object':
+      return 'TNO';
   }
 }

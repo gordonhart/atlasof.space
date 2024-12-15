@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
 import { AppState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls.tsx';
-import { useDragController } from './useDragController.ts';
+import { useDragController } from '../hooks/useDragController.ts';
 import { drawBodies } from '../lib/draw.ts';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/constants.ts';
@@ -40,11 +40,13 @@ export function SolarSystem() {
       canvasRef.current.width = window.innerWidth * dpr;
       canvasRef.current.height = window.innerHeight * dpr;
       const ctx = canvasRef.current.getContext('2d')!;
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       ctx.scale(dpr, -dpr); // scale and flip Y axis to make (0, 0) bottom left corner, +x right +y up
       ctx.translate(0, -canvasRef.current.height / dpr);
     }
   }
 
+  // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) {
@@ -79,7 +81,9 @@ export function SolarSystem() {
       <Controls
         state={appState}
         updateState={updateState}
+        systemState={systemStateRef.current}
         reset={() => {
+          updateState(initialState);
           systemStateRef.current = getInitialState(null, SOL);
         }}
       />

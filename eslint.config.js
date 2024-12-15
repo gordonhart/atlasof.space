@@ -22,7 +22,7 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-hooks/exhaustive-deps': 'off',
-      indent: ['error', 2],
+      indent: ['error', 2, { SwitchCase: 1 }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'prettier/prettier': ['error'],
     },

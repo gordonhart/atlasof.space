@@ -14,12 +14,14 @@ export type KeplerianElements = {
   trueAnomaly: number; // degrees
 };
 
+export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object';
 export type CelestialBody = KeplerianElements & {
   name: string;
   mass: number; // kg
   radius: number; // m
   color: `#${string}`; // hex
   satellites: Array<CelestialBody>; // keplerian elements in reference to parent body
+  type: CelestialBodyType;
 };
 
 export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
