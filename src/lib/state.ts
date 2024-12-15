@@ -18,10 +18,10 @@ export type AppState = {
 export const initialState: AppState = {
   time: 0,
   dt: 60 * 60,
-  play: true,
+  play: false,
   drawTail: false,
   metersPerPx:
-    (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU) /
+    (2 * (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU)) /
     Math.max(window.innerWidth, window.innerHeight),
   center: 'Sol',
   hover: null,

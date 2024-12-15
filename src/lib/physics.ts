@@ -1,3 +1,4 @@
+import * as math from 'mathjs';
 import { G } from './constants.ts';
 import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
 
@@ -35,6 +36,47 @@ export function semiMinorAxis(semiMajorAxis: number, eccentricity: number) {
   return semiMajorAxis * Math.sqrt(1 - eccentricity ** 2);
 }
 
+export function semiLatusRectum(semiMajorAxis: number, eccentricity: number) {
+  return semiMajorAxis * (1 - eccentricity ** 2);
+}
+
+export function ellipseAtTheta(ellipse: KeplerianElements, theta: number): Point3 {
+  const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = ellipse;
+
+  const i = degreesToRadians(inclination);
+  // TODO: why are rotations being applied clockwise? is it due to flipping the Y axis? to debug later -- for now,
+  //  inverting these values flips things back in the correct (counterclockwise) direction
+  const omega = -degreesToRadians(argumentOfPeriapsis);
+  const Omega = -degreesToRadians(longitudeAscending);
+
+  // Parametric form in orbital plane before rotation:
+  // Periapsis initially along x'-axis
+  const x_o = a * (Math.cos(theta) - e);
+  const y_o = semiMinorAxis(a, e) * Math.sin(theta);
+  const z_o = 0;
+
+  // 1) Rotate by ω around z-axis (argument of periapsis):
+  const X = x_o * Math.cos(omega) - y_o * Math.sin(omega);
+  let Y = x_o * Math.sin(omega) + y_o * Math.cos(omega);
+  let Z = z_o; // still zero
+
+  // 2) Rotate by i around x-axis (inclination):
+  // Rotation around x:
+  // Y' = Y*cos(i) - Z*sin(i)
+  // Z' = Y*sin(i) + Z*cos(i)
+  // Since Z=0 initially:
+  Y = Y * Math.cos(i);
+  Z = Y * Math.sin(i);
+
+  // 3) Rotate by Ω around z-axis (longitude of ascending node):
+  // X'' = X*cos(Ω) - Y*sin(Ω)
+  // Y'' = X*sin(Ω) + Y*cos(Ω)
+  const X_f = X * Math.cos(Omega) - Y * Math.sin(Omega);
+  const Y_f = X * Math.sin(Omega) + Y * Math.cos(Omega);
+  const Z_f = Z; // Not used for drawing top-down, but kept for completeness
+  return [X_f, Y_f, Z_f];
+}
+
 // position WRT center of mass of the object we are orbiting around
 function gravitationalAcceleration(position: Point3, mu: number): Point3 {
   const r = magnitude(position);
@@ -42,55 +84,44 @@ function gravitationalAcceleration(position: Point3, mu: number): Point3 {
 }
 
 function keplerianToCartesian(
-  elements: KeplerianElements,
-  mu: number // Gravitational parameter (m^3/s^2)
-): CartesianState {
-  const {
+  {
     eccentricity: e,
     semiMajorAxis: a,
     inclination,
     longitudeAscending,
     argumentOfPeriapsis,
     trueAnomaly,
-  } = elements;
-
+  }: KeplerianElements,
+  mu: number // Gravitational parameter (m^3/s^2)
+): CartesianState {
   const i = degreesToRadians(inclination);
   const Omega = degreesToRadians(longitudeAscending);
   const omega = degreesToRadians(argumentOfPeriapsis);
   const nu = degreesToRadians(trueAnomaly);
 
-  // Semi-latus rectum (p)
-  const p = a * (1 - e * e);
-
   // Orbital plane position (r) and velocity (v)
+  const p = semiLatusRectum(a, e);
   const rOrbital = p / (1 + e * Math.cos(nu));
-  const positionOrbital = [rOrbital * Math.cos(nu), rOrbital * Math.sin(nu)];
-  const velocityOrbital = [-Math.sqrt(mu / p) * Math.sin(nu), Math.sqrt(mu / p) * (e + Math.cos(nu))];
+  const positionOrbital = math.matrix([rOrbital * Math.cos(nu), rOrbital * Math.sin(nu), 0]);
+  const velocityOrbital = math.matrix([-Math.sqrt(mu / p) * Math.sin(nu), Math.sqrt(mu / p) * (e + Math.cos(nu)), 0]);
 
-  // Rotation matrices
-  const cosO = Math.cos(Omega);
-  const sinO = Math.sin(Omega);
-  const cosI = Math.cos(i);
-  const sinI = Math.sin(i);
-  const cosW = Math.cos(omega);
-  const sinW = Math.sin(omega);
+  // Rotations
+  const [cosO, sinO] = [Math.cos(Omega), Math.sin(Omega)];
+  const [cosI, sinI] = [Math.cos(i), Math.sin(i)];
+  const [cosW, sinW] = [Math.cos(omega), Math.sin(omega)];
 
   // Combined rotation matrix to transform from orbital plane to inertial frame
-  const rotationMatrix: [Point3, Point3, Point3] = [
+  const rotationMatrix = math.matrix([
     [cosO * cosW - sinO * sinW * cosI, -cosO * sinW - sinO * cosW * cosI, sinO * sinI],
     [sinO * cosW + cosO * sinW * cosI, -sinO * sinW + cosO * cosW * cosI, -cosO * sinI],
     [sinW * sinI, cosW * sinI, cosI],
-  ];
+  ]);
 
   // Transform position and velocity to inertial frame
-  const positionInertial: Point3 = rotationMatrix.map(
-    row => row[0] * positionOrbital[0] + row[1] * positionOrbital[1]
-  ) as Point3;
-  const velocityInertial: Point3 = rotationMatrix.map(
-    row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]
-  ) as Point3;
+  const positionInertial = math.multiply(rotationMatrix, positionOrbital);
+  const velocityInertial = math.multiply(rotationMatrix, velocityOrbital);
 
-  return { position: positionInertial, velocity: velocityInertial };
+  return { position: positionInertial.toArray(), velocity: velocityInertial.toArray() };
 }
 
 function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
@@ -125,7 +156,8 @@ function incrementStateByParents(
 }
 
 export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
-  // TODO: subdividing dt down to 1 hour increments slows down simulation significantly at faster playback speeds
+  // TODO: subdividing dt down to 1 hour increments slows down simulation significantly at faster playback speeds.
+  //  Potential fix: identify fast-period bodies and subdivide those as necessary, but leave others at the requested dt?
   const maxSafeDt = 3_600; // 1 hour
   const nIterations = Math.ceil(dt / maxSafeDt);
   return Array(nIterations)

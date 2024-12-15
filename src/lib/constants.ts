@@ -6,7 +6,7 @@ export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
 
 const DEFAULT_MOON_COLOR = '#aaa';
-export const SOL: CelestialBody = {
+export const SOL2: CelestialBody = {
   name: 'Sol',
   type: 'sun',
   eccentricity: 0,
@@ -26,6 +26,7 @@ export const SOL: CelestialBody = {
       semiMajorAxis: 57909050e3, // meters
       inclination: 7.005, // degrees
       longitudeAscending: 48.331, // degrees
+      // longitudeAscending: 0, // degrees
       argumentOfPeriapsis: 29.124, // degrees
       trueAnomaly: 0, // degrees (choose initial position as desired)
       mass: 3.3011e23,
@@ -76,7 +77,7 @@ export const SOL: CelestialBody = {
         },
         /* {
           name: 'ISS',
-          class: 'moon',
+          type: 'moon',
           eccentricity: 0.000767, // Orbital eccentricity (nearly circular)
           semiMajorAxis: 6787.4e3, // Semi-major axis in meters (~6787 km)
           inclination: 51.64, // Inclination in degrees (relative to the equatorial plane)
@@ -188,6 +189,20 @@ export const SOL: CelestialBody = {
       trueAnomaly: 0,
       mass: 8.74e19,
       radius: 215e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Ryugu',
+      type: 'asteroid',
+      eccentricity: 0.1902,
+      semiMajorAxis: 1.1896 * AU,
+      inclination: 5.8837,
+      longitudeAscending: 251.62,
+      argumentOfPeriapsis: 211.43,
+      trueAnomaly: 0,
+      mass: 4.5e11,
+      radius: 448,
       color: DEFAULT_MOON_COLOR,
       satellites: [],
     },
@@ -460,7 +475,25 @@ export const SOL: CelestialBody = {
       color: DEFAULT_MOON_COLOR,
       satellites: [],
     },
+    {
+      name: 'Makemake',
+      type: 'trans-neptunian-object',
+      eccentricity: 0.16126,
+      semiMajorAxis: 45.43 * AU,
+      inclination: 28.9835,
+      longitudeAscending: 79.62,
+      argumentOfPeriapsis: 294.834,
+      trueAnomaly: 0,
+      mass: 3.1e21,
+      radius: 715e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
   ],
+};
+export const SOL = {
+  ...SOL2,
+  satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
 };
 
 function getCelestialBodyNames(body: CelestialBody): Array<string> {
@@ -496,26 +529,3 @@ export function findCelestialBody(state: CelestialBodyState, name: string): Cele
     }
   }
 }
-
-// TODO: compute this at build time and include in bundle?
-function computeFullOrbit(
-  parent: CelestialBodyState | null,
-  child: CelestialBodyState
-): Record<string, Array<CartesianState>> {
-  let orbit: Array<CartesianState> = [];
-  if (parent != null) {
-    const simplifiedSystem = { ...parent, satellites: [child] };
-    const period = orbitalPeriod(child.semiMajorAxis, parent.mass);
-    const targetSteps = 100;
-    const dt = period / targetSteps;
-    orbit = Array(targetSteps)
-      .fill(null)
-      .reduce<Array<CelestialBodyState>>(acc => [...acc, incrementState(acc[acc.length - 1], dt)], [simplifiedSystem])
-      .map(({ satellites }) => pick(['position', 'velocity'], satellites[0]));
-  }
-  return {
-    [child.name]: orbit,
-    ...child.satellites.reduce((acc, grandchild) => ({ ...acc, ...computeFullOrbit(child, grandchild) }), {}),
-  };
-}
-export const ORBITS: Record<string, Array<CartesianState>> = computeFullOrbit(null, getInitialState(null, SOL));

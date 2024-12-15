@@ -1,6 +1,7 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
-import { findCelestialBody, ORBITS } from './constants.ts';
+import { findCelestialBody } from './constants.ts';
+import { degreesToRadians, ellipseAtTheta, semiMinorAxis } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
@@ -40,33 +41,69 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
 
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
-    ORBITS[hoverBody.name].forEach(cartesian => drawBody({ ...hoverBody, ...cartesian, name: '', satellites: [] }));
+    drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], metersPerPx);
   }
 
-  /* TODO: debugging calculated orbital ellipse versus simulated ellipse; the two don't line up perfectly
-  const mercury = systemState.satellites[3];
-  ctx.beginPath();
-  const orbitCenter = mercury.semiMajorAxis * mercury.eccentricity;
-  const omega = degreesToRadians(-90 - mercury.argumentOfPeriapsis);
-  // const orbitCenterXm = orbitCenter * Math.cos(degreesToRadians(mercury.argumentOfPeriapsis));
-  // const orbitCenterYm = orbitCenter * Math.sin(degreesToRadians(mercury.argumentOfPeriapsis));
-  const orbitCenterXm = orbitCenter * Math.cos(omega);
-  const orbitCenterYm = orbitCenter * Math.sin(omega);
-  // console.log(orbitCenter / metersPerPx, orbitCenterXm / metersPerPx, orbitCenterYm / metersPerPx);
-  // const [actualCenterXpx, actualCenterYpx] = [-3, -14];
-  ctx.ellipse(
-    canvasWidthPx / 2 + (offsetXm + orbitCenterXm) / metersPerPx,
-    canvasHeightPx / 2 + (offsetYm + orbitCenterYm) / metersPerPx,
-    mercury.semiMajorAxis / metersPerPx,
-    semiMinorAxis(mercury.semiMajorAxis, mercury.eccentricity) / metersPerPx,
-    degreesToRadians(mercury.argumentOfPeriapsis),
-    0,
-    2 * Math.PI
-  );
-  ctx.strokeStyle = 'green';
+  drawBody(systemState);
+}
+
+function drawOrbitalEllipse(
+  ctx: CanvasRenderingContext2D,
+  body: CelestialBodyState,
+  canvasDimensions: [number, number],
+  metersPerPx: number
+) {
+  const [canvasWidthPx, canvasHeightPx] = canvasDimensions;
+  const a = body.semiMajorAxis;
+  const e = body.eccentricity;
+  const b = semiMinorAxis(a, e);
+  const omega = -degreesToRadians(body.argumentOfPeriapsis);
+  const Omega = -degreesToRadians(body.longitudeAscending);
+  const i = degreesToRadians(body.inclination);
+  const steps = 360; // number of segments to approximate the ellipse
+  for (let step = 0; step <= steps; step++) {
+    const theta = (step / steps) * 2 * Math.PI;
+    // const [x, y] = ellipseAtTheta(body, theta);
+
+    // Parametric form in orbital plane before rotation:
+    // Periapsis initially along x'-axis
+    const x_o = a * (Math.cos(theta) - e);
+    const y_o = b * Math.sin(theta);
+    const z_o = 0;
+
+    // 1) Rotate by ω around z-axis (argument of periapsis):
+    const X = x_o * Math.cos(omega) - y_o * Math.sin(omega);
+    let Y = x_o * Math.sin(omega) + y_o * Math.cos(omega);
+    let Z = z_o; // still zero
+
+    // 2) Rotate by i around x-axis (inclination):
+    // Rotation around x:
+    // Y' = Y*cos(i) - Z*sin(i)
+    // Z' = Y*sin(i) + Z*cos(i)
+    // Since Z=0 initially:
+    Y = Y * Math.cos(i);
+    Z = Y * Math.sin(i);
+
+    // 3) Rotate by Ω around z-axis (longitude of ascending node):
+    // X'' = X*cos(Ω) - Y*sin(Ω)
+    // Y'' = X*sin(Ω) + Y*cos(Ω)
+    const X_f = X * Math.cos(Omega) - Y * Math.sin(Omega);
+    const Y_f = X * Math.sin(Omega) + Y * Math.cos(Omega);
+    const Z_f = Z; // Not used for drawing top-down, but kept for completeness
+
+    // Map to canvas coordinates:
+    // Y_f is inverted because canvas Y grows down while our math Y grows up
+    const x_canvas = canvasWidthPx / 2 + X_f / metersPerPx;
+    const y_canvas = canvasHeightPx / 2 - Y_f / metersPerPx;
+
+    if (step === 0) {
+      ctx.moveTo(x_canvas, y_canvas);
+    } else {
+      ctx.lineTo(x_canvas, y_canvas);
+    }
+  }
+
+  ctx.strokeStyle = body.color;
   ctx.lineWidth = 1;
   ctx.stroke();
-   */
-
-  drawBody(systemState);
 }

@@ -1,6 +1,6 @@
 import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
-import { CelestialBody, CelestialBodyState, Point2 } from '../lib/types.ts';
+import { CelestialBody, CelestialBodyState, KeplerianElements, Point2 } from '../lib/types.ts';
 import { findCelestialBody, SOL } from '../lib/constants.ts';
 import { degreesToRadians, magnitude } from '../lib/physics.ts';
 
@@ -56,15 +56,18 @@ function findClosestPlanet(positionXm: number, positionYm: number, threshold: nu
     return SOL;
   }
   return SOL.satellites.reduce<CelestialBody | null>((closest, body) => {
-    const { semiMajorAxis, eccentricity, argumentOfPeriapsis } = body;
-    const argumentOfPeriapsisRad = degreesToRadians(argumentOfPeriapsis);
-    return isPointOnEllipse(positionXm, positionYm, semiMajorAxis, eccentricity, argumentOfPeriapsisRad, threshold)
-      ? body
-      : closest;
+    return isPointOnEllipse(positionXm, positionYm, body, threshold) ? body : closest;
   }, null);
 }
 
-function isPointOnEllipse(x: number, y: number, a: number, e: number, omega: number, tolerance: number) {
+function isPointOnEllipse(x: number, y: number, ellipse: KeplerianElements, tolerance: number) {
+  const {
+    semiMajorAxis: a,
+    eccentricity: e,
+    inclination: i,
+    argumentOfPeriapsis: omega,
+    longitudeAscending: Omega,
+  } = ellipse;
   // Step 1: Rotate the point by -omega
   const cosOmega = Math.cos(-omega);
   const sinOmega = Math.sin(-omega);
