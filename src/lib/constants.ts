@@ -23,7 +23,8 @@ export const SOL2: CelestialBody = {
       type: 'planet',
       eccentricity: 0.2056,
       semiMajorAxis: 57909050e3, // meters
-      inclination: 7.005, // degrees
+      // inclination: 7.005, // degrees
+      inclination: 75, // degrees
       longitudeAscending: 48.331, // degrees
       argumentOfPeriapsis: 29.124, // degrees
       trueAnomaly: 0, // degrees (choose initial position as desired)
@@ -492,7 +493,7 @@ export const SOL2: CelestialBody = {
 export const SOL = {
   ...SOL2,
   // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
-  // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
+  satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
 };
 
 function getCelestialBodyNames(body: CelestialBody): Array<string> {

@@ -19,7 +19,7 @@ export function FactCard({ body }: Props) {
     { label: 'semi-major axis', value: `${(body.semiMajorAxis / 1e3).toLocaleString()} km` },
     { label: 'eccentricity', value: body.eccentricity.toLocaleString() },
     { label: 'inclination', value: `${body.inclination.toLocaleString()}º` },
-    { label: 'longitude of the ascending node', value: `${body.longitudeAscending.toLocaleString()}º` },
+    { label: 'longitude of ☊', value: `${body.longitudeAscending.toLocaleString()}º` },
     { label: 'argument of periapsis', value: `${body.argumentOfPeriapsis.toLocaleString()}º` },
     { label: 'orbital period', value: pluralize(periodTime, periodUnits) },
     // TODO: this doesn't update live due to the passed-in body being a ref -- should fix
@@ -44,15 +44,15 @@ export function FactCard({ body }: Props) {
             {celestialBodyTypeName(body.type)}
           </Text>
         </Group>
-        <Grid gutter={2} w={330}>
+        <Grid gutter={2} w={260}>
           {facts.map(({ label, value }, i) => (
             <Fragment key={i}>
-              <Grid.Col span={7}>
+              <Grid.Col span={6}>
                 <Text inherit c="dimmed">
                   {label}
                 </Text>
               </Grid.Col>
-              <Grid.Col span={5}>{value}</Grid.Col>
+              <Grid.Col span={6}>{value}</Grid.Col>
             </Fragment>
           ))}
         </Grid>

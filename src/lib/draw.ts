@@ -56,7 +56,7 @@ function drawOrbitalEllipse(
 ) {
   const steps = 360; // number of segments to approximate the ellipse
   for (let step = 0; step <= steps; step++) {
-    const theta = (step / steps) * 2 * Math.PI;
+    const theta = (step / steps) * /* 2 */ Math.PI;
     const [xM, yM] = orbitalEllipseAtTheta(body, theta);
     const xPx = canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx;
     const yPx = canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx;
