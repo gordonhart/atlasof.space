@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - trunk
+      - gh/publish  # TODO: remove
 
 env:
   NODE_VERSION: 20.11.1
