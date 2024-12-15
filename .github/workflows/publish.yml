@@ -9,10 +9,8 @@ env:
   NODE_VERSION: 20.11.1
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,7 +22,26 @@ jobs:
         run: yarn --frozen-lockfile
       - name: Build
         run: yarn build
-      - name: Publish
-        run: yarn publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload build files
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
