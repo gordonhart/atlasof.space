@@ -2,7 +2,7 @@ import { AU } from './constants.ts';
 import { CelestialBodyType } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
-  return n > 1 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
+  return n > 1 || n === 0 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
 }
 
 export function humanTimeUnits(t: number): [number, string] {
