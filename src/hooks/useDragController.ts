@@ -1,11 +1,11 @@
 import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
-import { CelestialBody, CelestialBodyState, KeplerianElements, Point2 } from '../lib/types.ts';
-import { findCelestialBody, SOL } from '../lib/constants.ts';
-import { degreesToRadians, ellipseAtTheta, magnitude } from '../lib/physics.ts';
+import { CelestialBody, CelestialBodyState, CelestialBodyType, KeplerianElements, Point2 } from '../lib/types.ts';
+import { findCelestialBody } from '../lib/constants.ts';
+import { degreesToRadians, orbitalEllipseAtTheta, magnitude, subtract3 } from '../lib/physics.ts';
 
 export function useDragController(
-  { offset, metersPerPx, center }: AppState,
+  { offset, metersPerPx, center, visibleTypes }: AppState,
   updateAppState: (state: Partial<AppState>) => void,
   systemState: CelestialBodyState
 ) {
@@ -18,8 +18,7 @@ export function useDragController(
     const [offsetXm, offsetYm] = [panOffsetXm - focusOffsetXm, panOffsetYm - focusOffsetYm];
     const [centerXm, centerYm] = [(metersPerPx * window.innerWidth) / 2, (metersPerPx * window.innerHeight) / 2];
     const [cursorXm, cursorYm] = [eventXm - offsetXm - centerXm, eventYm - offsetYm - centerYm];
-    console.log(cursorXm, cursorYm);
-    const closestPlanet = findClosestPlanet(cursorXm, cursorYm, metersPerPx * 10);
+    const closestPlanet = findClosestBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 10);
     updateAppState({ hover: closestPlanet != null ? closestPlanet.name : null });
   }
 
@@ -52,12 +51,18 @@ export function useDragController(
   };
 }
 
-function findClosestPlanet(positionXm: number, positionYm: number, threshold: number): CelestialBody | null {
-  if (magnitude([positionXm, positionYm]) < threshold) {
-    return SOL;
+// TODO: how should moons function?
+function findClosestBody(
+  body: CelestialBodyState,
+  visibleTypes: Set<CelestialBodyType>,
+  [positionXm, positionYm]: [number, number],
+  threshold: number
+): CelestialBody | null {
+  if (magnitude(subtract3([positionXm, positionYm, 0], body.position)) < threshold) {
+    return body;
   }
-  return SOL.satellites.reduce<CelestialBody | null>((closest, body) => {
-    return isPointOnEllipse(positionXm, positionYm, body, threshold) ? body : closest;
+  return body.satellites.reduce<CelestialBody | null>((closest, child) => {
+    return visibleTypes.has(child.type) && isPointOnEllipse(positionXm, positionYm, child, threshold) ? child : closest;
   }, null);
 }
 
@@ -65,7 +70,7 @@ function isPointOnEllipse(x: number, y: number, ellipse: KeplerianElements, tole
   const { longitudeAscending: Omega, argumentOfPeriapsis: omega } = ellipse;
   // TODO: this math isn't 100% correct, likely need to take into account inclination
   const theta = Math.atan2(y, x) - degreesToRadians(omega) - degreesToRadians(Omega);
-  const [xExpected, yExpected] = ellipseAtTheta(ellipse, theta);
+  const [xExpected, yExpected] = orbitalEllipseAtTheta(ellipse, theta);
   const r = magnitude([x, y]);
   const rPrime = magnitude([xExpected, yExpected]);
   return Math.abs(rPrime - r) < tolerance;

@@ -1,4 +1,3 @@
-import * as math from 'mathjs';
 import { G } from './constants.ts';
 import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
 
@@ -40,7 +39,7 @@ export function semiLatusRectum(semiMajorAxis: number, eccentricity: number) {
   return semiMajorAxis * (1 - eccentricity ** 2);
 }
 
-export function ellipseAtTheta(ellipse: KeplerianElements, theta: number): Point3 {
+export function orbitalEllipseAtTheta(ellipse: KeplerianElements, theta: number): Point3 {
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = ellipse;
 
   const i = degreesToRadians(inclination);
@@ -100,8 +99,8 @@ function keplerianToCartesian(
   // Orbital plane position (r) and velocity (v)
   const p = semiLatusRectum(a, e);
   const rOrbital = p / (1 + e * Math.cos(nu));
-  const positionOrbital = math.matrix([rOrbital * Math.cos(nu), rOrbital * Math.sin(nu), 0]);
-  const velocityOrbital = math.matrix([-Math.sqrt(mu / p) * Math.sin(nu), Math.sqrt(mu / p) * (e + Math.cos(nu)), 0]);
+  const positionOrbital = [rOrbital * Math.cos(nu), rOrbital * Math.sin(nu)];
+  const velocityOrbital = [-Math.sqrt(mu / p) * Math.sin(nu), Math.sqrt(mu / p) * (e + Math.cos(nu))];
 
   // Rotations
   const [cosO, sinO] = [Math.cos(Omega), Math.sin(Omega)];
@@ -109,17 +108,21 @@ function keplerianToCartesian(
   const [cosW, sinW] = [Math.cos(omega), Math.sin(omega)];
 
   // Combined rotation matrix to transform from orbital plane to inertial frame
-  const rotationMatrix = math.matrix([
+  const rotationMatrix: [Point3, Point3, Point3] = [
     [cosO * cosW - sinO * sinW * cosI, -cosO * sinW - sinO * cosW * cosI, sinO * sinI],
     [sinO * cosW + cosO * sinW * cosI, -sinO * sinW + cosO * cosW * cosI, -cosO * sinI],
     [sinW * sinI, cosW * sinI, cosI],
-  ]);
+  ];
 
   // Transform position and velocity to inertial frame
-  const positionInertial = math.multiply(rotationMatrix, positionOrbital);
-  const velocityInertial = math.multiply(rotationMatrix, velocityOrbital);
+  const positionInertial: Point3 = rotationMatrix.map(
+    row => row[0] * positionOrbital[0] + row[1] * positionOrbital[1]
+  ) as Point3;
+  const velocityInertial: Point3 = rotationMatrix.map(
+    row => row[0] * velocityOrbital[0] + row[1] * velocityOrbital[1]
+  ) as Point3;
 
-  return { position: positionInertial.toArray(), velocity: velocityInertial.toArray() };
+  return { position: positionInertial, velocity: velocityInertial };
 }
 
 function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {

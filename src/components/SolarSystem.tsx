@@ -81,6 +81,7 @@ export function SolarSystem() {
       <Controls
         state={appState}
         updateState={updateState}
+        systemState={systemStateRef.current}
         reset={() => {
           updateState(initialState);
           systemStateRef.current = getInitialState(null, SOL);

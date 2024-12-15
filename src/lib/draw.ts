@@ -1,7 +1,7 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
 import { findCelestialBody } from './constants.ts';
-import { ellipseAtTheta } from './physics.ts';
+import { orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
@@ -57,7 +57,7 @@ function drawOrbitalEllipse(
   const steps = 360; // number of segments to approximate the ellipse
   for (let step = 0; step <= steps; step++) {
     const theta = (step / steps) * 2 * Math.PI;
-    const [xM, yM] = ellipseAtTheta(body, theta);
+    const [xM, yM] = orbitalEllipseAtTheta(body, theta);
     const xPx = canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx;
     const yPx = canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx;
     if (step === 0) {

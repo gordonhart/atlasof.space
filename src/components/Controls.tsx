@@ -21,6 +21,7 @@ import { humanTimeUnits, pluralize } from '../lib/utils.ts';
 import { useHotkeys } from '@mantine/hooks';
 import { ScaleIndicator } from './ScaleIndicator.tsx';
 import { FocusControls } from './FocusControls.tsx';
+import { CelestialBodyState } from '../lib/types.ts';
 
 const iconSize = 14;
 const movePx = 10;
@@ -29,9 +30,10 @@ const pad = 10;
 type Props = {
   state: AppState;
   updateState: (state: Partial<AppState>) => void;
+  systemState: CelestialBodyState;
   reset: () => void;
 };
-export function Controls({ state, updateState, reset }: Props) {
+export function Controls({ state, updateState, systemState, reset }: Props) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
 
@@ -51,7 +53,7 @@ export function Controls({ state, updateState, reset }: Props) {
   return (
     <>
       <Group pos="absolute" top={pad} left={pad} gap={2}>
-        <FocusControls state={state} updateState={updateState} />
+        <FocusControls state={state} updateState={updateState} systemState={systemState} />
       </Group>
 
       <Stack pos="absolute" top={pad} right={pad} gap={2} align="flex-end">
@@ -105,7 +107,7 @@ export function Controls({ state, updateState, reset }: Props) {
       </Group>
 
       <Stack pos="absolute" bottom={pad} left={pad} gap={4}>
-        <Paper bg="transparent" radius="md" style={{ backdropFilter: 'blur(4px)' }}>
+        <Paper radius="md">
           <Stack gap={2} fz="xs">
             <Group gap={8}>
               <Group justify="flex-end" w={20}>

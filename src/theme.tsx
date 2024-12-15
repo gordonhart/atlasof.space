@@ -1,4 +1,4 @@
-import { ActionIcon, Button, createTheme, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, createTheme, Paper, Tooltip } from '@mantine/core';
 
 export const theme = createTheme({
   primaryColor: 'orange',
@@ -12,5 +12,6 @@ export const theme = createTheme({
       },
     }),
     Tooltip: Tooltip.extend({ defaultProps: { hoverOpenDelay: 400 } }),
+    Paper: Paper.extend({ defaultProps: { bg: 'transparent', style: { backdropFilter: 'blur(4px)' } } }),
   },
 });
