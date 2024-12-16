@@ -1,7 +1,8 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
 import { findCelestialBody } from './constants.ts';
-import { orbitalEllipseAtTheta } from './physics.ts';
+import { degreesToRadians, orbitalEllipseAtTheta, semiMinorAxis } from './physics.ts';
+import { projectOrbitalEllipseOntoEcliptic } from '../hooks/useDragController.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
@@ -44,6 +45,28 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
   }
 
+  const mercury = systemState.satellites[0];
+  ctx.beginPath();
+  ctx.strokeStyle = 'blue';
+  const { semiMajorAxis: a, semiMinorAxis: b, tilt: tiltDeg } = projectOrbitalEllipseOntoEcliptic(mercury);
+  const tilt = degreesToRadians(tiltDeg);
+  // use the 3D ellipse's center as the 2D ellipse won't have the same foci
+  const mercurySemiMinorAxis = semiMinorAxis(mercury.semiMajorAxis, mercury.eccentricity);
+  const focusOffsetM = Math.sqrt(mercury.semiMajorAxis ** 2 - mercurySemiMinorAxis ** 2);
+  // const focusOffsetM = Math.sqrt(a ** 2 - b ** 2);
+  const focusOffsetXm = -focusOffsetM * Math.cos(tilt);
+  const focusOffsetYm = -focusOffsetM * Math.sin(tilt);
+  // console.log(focusOffsetM / metersPerPx);
+  ctx.ellipse(
+    canvasWidthPx / 2 + offsetXm / metersPerPx + focusOffsetXm / metersPerPx,
+    canvasHeightPx / 2 + offsetYm / metersPerPx + focusOffsetYm / metersPerPx,
+    a / metersPerPx,
+    b / metersPerPx,
+    tilt,
+    0,
+    2 * Math.PI
+  );
+  ctx.stroke();
   drawBody(systemState);
 }
 

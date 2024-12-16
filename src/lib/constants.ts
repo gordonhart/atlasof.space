@@ -25,8 +25,10 @@ export const SOL2: CelestialBody = {
       semiMajorAxis: 57909050e3, // meters
       // inclination: 7.005, // degrees
       inclination: 75, // degrees
-      longitudeAscending: 48.331, // degrees
-      argumentOfPeriapsis: 29.124, // degrees
+      // longitudeAscending: 48.331, // degrees
+      longitudeAscending: 40, // degrees
+      // argumentOfPeriapsis: 29.124, // degrees
+      argumentOfPeriapsis: 0, // degrees
       trueAnomaly: 0, // degrees (choose initial position as desired)
       mass: 3.3011e23,
       radius: 2439.7e3,

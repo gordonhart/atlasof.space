@@ -17,6 +17,9 @@ export function mul3(s: number, [a, b, c]: Point3): Point3 {
 export function degreesToRadians(degrees: number) {
   return (degrees * Math.PI) / 180;
 }
+export function radiansToDegrees(radians: number) {
+  return (radians * 180) / Math.PI;
+}
 
 export function magnitude(v: Array<number>) {
   return Math.sqrt(v.reduce((acc, x) => acc + x ** 2, 0));
