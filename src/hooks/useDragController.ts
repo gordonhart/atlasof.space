@@ -84,108 +84,6 @@ function findClosestBody(
   }, null);
 }
 
-// TODO: this numerical solution is quite lazy; would be better to solve analytically
-function isPointCloseToEllipseNumericalSimple(
-  [pointXm, pointYm]: [number, number], // in plane of ecliptic (viewport plane)
-  ellipse: KeplerianElements,
-  tolerance: number
-) {
-  const steps = 36;
-  for (let step = 0; step < steps; step++) {
-    const theta = (step / steps) * 2 * Math.PI;
-    const [x, y] = orbitalEllipseAtTheta(ellipse, theta);
-    const distance = magnitude([pointXm - x, pointYm - y]);
-    if (distance < tolerance) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function findMinTheta(
-  [pointXm, pointYm]: [number, number], // in plane of ecliptic (viewport plane)
-  ellipse: KeplerianElements
-) {
-  const steps = 360;
-  let minTheta = Infinity;
-  let minDistance = Infinity;
-  for (let step = 0; step < steps; step++) {
-    const theta = (step / steps) * 2 * Math.PI;
-    const [x, y] = orbitalEllipseAtTheta(ellipse, theta);
-    const distance = magnitude([pointXm - x, pointYm - y]);
-    if (distance < minDistance) {
-      minTheta = theta;
-      minDistance = distance;
-    }
-  }
-  return minTheta;
-}
-
-function findIntersectionPoint(
-  [pointXm, pointYm]: [number, number], // in plane of ecliptic (viewport plane)
-  ellipse: KeplerianElements
-) {
-  const { inclination, longitudeAscending } = ellipse;
-  // define z line through (x,y)
-  const pointZm = 0;
-  const [directionX, directionY, directionZ] = [0, 0, 1];
-
-  const ellipseNormal = orbitalEllipseNormalVector(inclination, longitudeAscending);
-  const [a, b, c, d] = [...ellipseNormal, 0]; // plane defining orbital ellipse
-
-  const numerator = -(a * pointXm + b * pointYm + c * pointZm + d);
-  const denominator = a * directionX + b * directionY + c * directionZ;
-  const t = numerator / denominator;
-
-  const intersectionXm = pointXm + t * directionX;
-  const intersectionYm = pointYm + t * directionY;
-  const intersectionZm = pointZm + t * directionZ;
-  // console.log(intersectionXm, intersectionYm, intersectionZm);
-  return [intersectionXm, intersectionYm, intersectionZm];
-}
-
-function isPointCloseToEllipseNumerical(
-  [pointXm, pointYm]: [number, number], // in plane of ecliptic (viewport plane)
-  ellipse: KeplerianElements,
-  tolerance: number
-) {
-  const point = findIntersectionPoint([pointXm, pointYm], ellipse);
-  console.log(point);
-  function computeDistanceAtTheta(theta: number) {
-    const pointTheta = orbitalEllipseAtTheta(ellipse, theta);
-    console.log(`theta: ${theta.toFixed(3)}, point: ${pointTheta}`);
-    return magnitude(subtract3(point, pointTheta));
-  }
-
-  const maxTries = 12; // down to <0.1º of true closest
-  const distanceA = computeDistanceAtTheta(Math.PI / 2);
-  const distanceB = computeDistanceAtTheta((3 * Math.PI) / 2);
-  let [low, high] = distanceA < distanceB ? [0, Math.PI] : [Math.PI, 2 * Math.PI];
-  let distance = Math.min(distanceA, distanceB);
-
-  console.log('start', low, high);
-  for (let i = 0; i < maxTries; i++) {
-    const half = (high - low) / 2;
-    const distanceLow = computeDistanceAtTheta(low);
-    const distanceHigh = computeDistanceAtTheta(high);
-    console.log(
-      [low.toFixed(3), high.toFixed(3)],
-      (distanceLow / tolerance).toFixed(1),
-      (distanceHigh / tolerance).toFixed(1),
-      half.toFixed(3)
-    );
-    if (distanceLow < distanceHigh) {
-      high -= half;
-    } else {
-      low += half;
-    }
-    distance = Math.min(distanceLow, distanceHigh);
-  }
-
-  console.log(findMinTheta([pointXm, pointYm], ellipse));
-  return distance < tolerance;
-}
-
 function isPointCloseToEllipseAnalytical(
   [pointXm, pointYm]: [number, number], // in plane of ecliptic (viewport plane)
   ellipse: KeplerianElements,
@@ -202,72 +100,6 @@ function isPointCloseToEllipseAnalytical(
   return Math.abs(rActual - rTheta) < tolerance;
 }
 
-// objective: determine if the point (x,y) in the ecliptic is within tolerance meters of the orbital ellipse when the
-//  orbital ellipse is projected into the ecliptic
-//
-// steps:
-// 1.
-function isPointCloseToEllipse2(
-  [pointXm, pointYm]: [number, number], // in plane of ecliptic (viewport plane)
-  ellipse: KeplerianElements,
-  tolerance: number
-) {
-  const { inclination, longitudeAscending } = ellipse;
-  // define z line through (x,y)
-  const pointZm = 0;
-  const [directionX, directionY, directionZ] = [0, 0, 1];
-
-  const ellipseNormal = orbitalEllipseNormalVector(inclination, longitudeAscending);
-  const [a, b, c, d] = [...ellipseNormal, 0]; // plane defining orbital ellipse
-
-  const numerator = -(a * pointXm + b * pointYm + c * pointZm + d);
-  const denominator = a * directionX + b * directionY + c * directionZ;
-  const t = numerator / denominator;
-
-  const intersectionXm = pointXm + t * directionX;
-  const intersectionYm = pointYm + t * directionY;
-  const intersectionZm = pointZm + t * directionZ;
-  // console.log(intersectionXm, intersectionYm, intersectionZm);
-  const intersection = [intersectionXm, intersectionYm, intersectionZm];
-
-  const theta = computeTrueAnomalyFromEclipticPosition(intersection, ellipse);
-  // computeDistanceInOrbital(x, y, ellipse);
-  // console.log('true anomaly', theta, theta2);
-  const [xOrbit, yOrbit, zOrbit] = orbitalEllipseAtTheta(ellipse, theta);
-  const rCursor = magnitude([intersectionXm, intersectionYm, intersectionZm]);
-  const rOrbit = magnitude([xOrbit, yOrbit, zOrbit]); // in plane of ecliptic (no Z)
-  return Math.abs(rOrbit - rCursor) < tolerance;
-}
-
-function computeTrueAnomalyFromEclipticPosition([x, y, z]: Point3, ellipse: KeplerianElements) {
-  const { longitudeAscending, argumentOfPeriapsis, inclination } = ellipse;
-  const Omega = degreesToRadians(longitudeAscending);
-  const omega = degreesToRadians(argumentOfPeriapsis);
-  const i = degreesToRadians(inclination);
-  const rOmega = matrix([
-    [Math.cos(-Omega), Math.sin(-Omega), 0],
-    [-Math.sin(-Omega), Math.cos(-Omega), 0],
-    [0, 0, 1],
-  ]);
-  const ri = matrix([
-    [1, 0, 0],
-    [0, Math.cos(-i), Math.sin(-i)],
-    [0, -Math.sin(-i), Math.cos(-i)],
-  ]);
-  const romega = matrix([
-    [Math.cos(-omega), Math.sin(-omega), 0],
-    [-Math.sin(-omega), Math.cos(-omega), 0],
-    [0, 0, 1],
-  ]);
-  const r = multiply(romega, multiply(ri, rOmega));
-  const pOrbital = multiply(r, matrix([x, y, z]));
-  const [xOrbital, yOrbital, zOrbital] = [pOrbital.get([0]), pOrbital.get([1]), pOrbital.get([2])];
-  const theta = Math.atan2(yOrbital, xOrbital);
-  console.log(xOrbital, yOrbital, zOrbital);
-  // console.log('true anomaly', theta, pOrbital._data);
-  return theta;
-}
-
 type EclipticEllipse = {
   semiMajorAxis: number; // meters
   semiMinorAxis: number; // meters
@@ -278,8 +110,9 @@ export function projectOrbitalEllipseOntoEcliptic(ellipse: KeplerianElements): E
   const b = semiMinorAxis(a, eccentricity);
 
   const i = degreesToRadians(inclination);
-  const Omega = degreesToRadians(longitudeAscending);
-  const omega = degreesToRadians(argumentOfPeriapsis);
+  // TODO: these are backwards???
+  const omega = degreesToRadians(longitudeAscending);
+  const Omega = degreesToRadians(argumentOfPeriapsis);
 
   const [cosw, sinw] = [Math.cos(omega), Math.sin(omega)];
   const [cosO, sinO] = [Math.cos(Omega), Math.sin(Omega)];
@@ -310,6 +143,6 @@ export function projectOrbitalEllipseOntoEcliptic(ellipse: KeplerianElements): E
   return {
     semiMajorAxis: Math.sqrt(lambda0), // singular value is sqrt(eigenvalue)
     semiMinorAxis: Math.sqrt(lambda1),
-    tilt: radiansToDegrees(tiltRad),
+    tilt: -radiansToDegrees(tiltRad), // TODO: negative??
   };
 }

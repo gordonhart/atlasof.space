@@ -27,5 +27,5 @@ export const initialState: AppState = {
   hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,
-  visibleTypes: new Set(['sun', 'planet', 'moon', 'asteroid', 'trans-neptunian-object']),
+  visibleTypes: new Set(['star', 'planet', 'moon', 'asteroid', 'trans-neptunian-object']),
 };

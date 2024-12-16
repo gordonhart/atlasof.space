@@ -31,8 +31,8 @@ export function humanDistanceUnits(d: number): [number, string] {
 
 export function celestialBodyTypeName(type: CelestialBodyType) {
   switch (type) {
-    case 'sun':
-      return 'Sun';
+    case 'star':
+      return 'Star';
     case 'planet':
       return 'Planet';
     case 'moon':

@@ -56,6 +56,8 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   // const focusOffsetM = Math.sqrt(a ** 2 - b ** 2);
   const focusOffsetXm = -focusOffsetM * Math.cos(tilt);
   const focusOffsetYm = -focusOffsetM * Math.sin(tilt);
+  // const focusOffsetXm = 0;
+  // const focusOffsetYm = 0;
   // console.log(focusOffsetM / metersPerPx);
   ctx.ellipse(
     canvasWidthPx / 2 + offsetXm / metersPerPx + focusOffsetXm / metersPerPx,

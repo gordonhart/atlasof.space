@@ -7,7 +7,7 @@ export const AU = 1.496e11; // meters
 const DEFAULT_MOON_COLOR = '#aaa';
 export const SOL2: CelestialBody = {
   name: 'Sol',
-  type: 'sun',
+  type: 'star',
   eccentricity: 0,
   semiMajorAxis: 0,
   inclination: 0,
@@ -26,9 +26,9 @@ export const SOL2: CelestialBody = {
       // inclination: 7.005, // degrees
       inclination: 75, // degrees
       // longitudeAscending: 48.331, // degrees
-      longitudeAscending: 40, // degrees
+      longitudeAscending: 60, // degrees
       // argumentOfPeriapsis: 29.124, // degrees
-      argumentOfPeriapsis: 0, // degrees
+      argumentOfPeriapsis: 40, // degrees
       trueAnomaly: 0, // degrees (choose initial position as desired)
       mass: 3.3011e23,
       radius: 2439.7e3,

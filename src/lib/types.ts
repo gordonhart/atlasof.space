@@ -14,7 +14,7 @@ export type KeplerianElements = {
   trueAnomaly: number; // degrees
 };
 
-export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object';
+export type CelestialBodyType = 'star' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object';
 export type CelestialBody = KeplerianElements & {
   name: string;
   mass: number; // kg

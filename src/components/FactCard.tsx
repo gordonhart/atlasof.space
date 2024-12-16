@@ -1,6 +1,6 @@
-import { Grid, Group, Paper, Stack, Text } from '@mantine/core';
+import { Code, Grid, Group, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBodyState } from '../lib/types.ts';
-import { Fragment } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { celestialBodyTypeName, humanTimeUnits, pluralize } from '../lib/utils.ts';
 import { magnitude, orbitalPeriod } from '../lib/physics.ts';
 import { SOL } from '../lib/constants.ts';
@@ -13,17 +13,17 @@ export function FactCard({ body }: Props) {
   const period = orbitalPeriod(body.semiMajorAxis, SOL.mass);
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const satellites = body.satellites.map(({ name }) => name);
-  const facts: Array<{ label: string; value: string }> = [
-    { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
-    { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
-    { label: 'semi-major axis', value: `${(body.semiMajorAxis / 1e3).toLocaleString()} km` },
-    { label: 'eccentricity', value: body.eccentricity.toLocaleString() },
-    { label: 'inclination', value: `${body.inclination.toLocaleString()}º` },
-    { label: 'longitude of ☊', value: `${body.longitudeAscending.toLocaleString()}º` },
-    { label: 'argument of periapsis', value: `${body.argumentOfPeriapsis.toLocaleString()}º` },
-    { label: 'orbital period', value: pluralize(periodTime, periodUnits) },
+  const facts: Array<{ label: string; variable?: string; value: string }> = [
+    { label: 'mass', variable: 'm', value: `${body.mass.toExponential(4)} kg` },
+    { label: 'radius', variable: 'r', value: `${(body.radius / 1e3).toLocaleString()} km` },
+    { label: 'semi-major axis', variable: 'a', value: `${(body.semiMajorAxis / 1e3).toLocaleString()} km` },
+    { label: 'eccentricity', variable: 'e', value: body.eccentricity.toLocaleString() },
+    { label: 'inclination', variable: 'i', value: `${body.inclination.toLocaleString()}º` },
+    { label: 'longitude of ☊', variable: 'Ω', value: `${body.longitudeAscending.toLocaleString()}º` },
+    { label: 'argument of periapsis', variable: 'ω', value: `${body.argumentOfPeriapsis.toLocaleString()}º` },
+    { label: 'orbital period', variable: 'T', value: pluralize(periodTime, periodUnits) },
     // TODO: this doesn't update live due to the passed-in body being a ref -- should fix
-    { label: 'velocity', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
+    { label: 'velocity', variable: 'v', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
     ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
   ];
 
@@ -45,14 +45,24 @@ export function FactCard({ body }: Props) {
           </Text>
         </Group>
         <Grid gutter={2} w={260}>
-          {facts.map(({ label, value }, i) => (
+          {facts.map(({ label, variable, value }, i) => (
             <Fragment key={i}>
-              <Grid.Col span={6}>
+              <Grid.Col span={7}>
                 <Text inherit c="dimmed">
                   {label}
+                  {variable != null && (
+                    <>
+                      {' '}
+                      (
+                      <Code p={0} c="dimmed" bg="transparent">
+                        {variable}
+                      </Code>
+                      )
+                    </>
+                  )}
                 </Text>
               </Grid.Col>
-              <Grid.Col span={6}>{value}</Grid.Col>
+              <Grid.Col span={5}>{value}</Grid.Col>
             </Fragment>
           ))}
         </Grid>
