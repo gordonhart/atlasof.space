@@ -1,6 +1,7 @@
 import { ActionIcon, Group, Menu, Stack, Tooltip } from '@mantine/core';
 import {
   IconCircle,
+  IconCircleDot,
   IconCircleFilled,
   IconCircleMinus,
   IconCirclePlus,
@@ -39,7 +40,7 @@ export function GeneralControls({ state, updateState, reset }: Props) {
 
       <Tooltip position="left" label={`${state.drawOrbit ? 'Hide' : 'Show'} Orbits`}>
         <ActionIcon onClick={() => updateState({ drawOrbit: !state.drawOrbit })}>
-          <IconCircle size={iconSize} />
+          {state.drawOrbit ? <IconCircleDot size={iconSize} /> : <IconCircle size={iconSize} />}
         </ActionIcon>
       </Tooltip>
 
