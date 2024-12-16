@@ -1,11 +1,12 @@
-import { CelestialBodyState } from './types.ts';
+import { CelestialBodyState, Point3 } from './types.ts';
 import { AppState } from './state.ts';
 import { findCelestialBody } from './constants.ts';
-import { orbitalEllipseAtTheta } from './physics.ts';
+import { add3, orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
     drawTail,
+    drawOrbit,
     metersPerPx,
     center,
     planetScaleFactor,
@@ -44,6 +45,19 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
   }
 
+  function drawOrbitEllipse(parent: CelestialBodyState | null, body: CelestialBodyState) {
+    body.satellites.forEach(child => drawOrbitEllipse(body, child));
+    if (!visibleTypes.has(body.type)) {
+      return;
+    }
+    const parentPosition: Point3 = parent?.position ?? [0, 0, 0];
+    const offset3 = add3(parentPosition, [offsetXm, offsetYm, 0]);
+    drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset3.slice(0, 2), metersPerPx, 0.5);
+  }
+  if (drawOrbit) {
+    drawOrbitEllipse(null, systemState);
+  }
+
   drawBody(systemState);
 }
 
@@ -52,8 +66,10 @@ function drawOrbitalEllipse(
   body: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: [number, number],
   [offsetXm, offsetYm]: [number, number],
-  metersPerPx: number
+  metersPerPx: number,
+  lineWidth = 1
 ) {
+  ctx.beginPath();
   const steps = 360; // number of segments to approximate the ellipse
   for (let step = 0; step <= steps; step++) {
     const theta = (step / steps) * 2 * Math.PI;
@@ -67,6 +83,6 @@ function drawOrbitalEllipse(
     }
   }
   ctx.strokeStyle = body.color;
-  ctx.lineWidth = 1;
+  ctx.lineWidth = lineWidth;
   ctx.stroke();
 }

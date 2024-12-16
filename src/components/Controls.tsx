@@ -5,16 +5,12 @@ import {
   IconCaretLeftFilled,
   IconCaretRightFilled,
   IconCaretUpFilled,
-  IconCircleMinus,
-  IconCirclePlus,
-  IconMeteorFilled,
   IconMinus,
   IconPlayerPlayFilled,
   IconPlayerStopFilled,
   IconPlayerTrackNextFilled,
   IconPlayerTrackPrevFilled,
   IconPlus,
-  IconRestore,
 } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { humanTimeUnits, pluralize } from '../lib/utils.ts';
@@ -22,6 +18,7 @@ import { useHotkeys } from '@mantine/hooks';
 import { ScaleIndicator } from './ScaleIndicator.tsx';
 import { FocusControls } from './FocusControls.tsx';
 import { CelestialBodyState } from '../lib/types.ts';
+import { GeneralControls } from './GeneralControls.tsx';
 
 const iconSize = 14;
 const movePx = 10;
@@ -148,29 +145,7 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
       </Stack>
 
       <Stack pos="absolute" bottom={pad} right={pad} gap={2}>
-        <Tooltip position="left" label="Enlarge Planets">
-          <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}>
-            <IconCirclePlus size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
-
-        <Tooltip position="left" label="Shrink Planets">
-          <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}>
-            <IconCircleMinus size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
-
-        <Tooltip position="left" label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
-          <ActionIcon onClick={() => updateState({ drawTail: !state.drawTail })}>
-            <IconMeteorFilled size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
-
-        <Tooltip position="left" label="Reset">
-          <ActionIcon onClick={reset}>
-            <IconRestore size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
+        <GeneralControls state={state} updateState={updateState} reset={reset} />
       </Stack>
     </>
   );
