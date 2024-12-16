@@ -39,8 +39,15 @@ export function semiLatusRectum(semiMajorAxis: number, eccentricity: number) {
   return semiMajorAxis * (1 - eccentricity ** 2);
 }
 
-// NOTE: theta is in orbital plane
-export function orbitalEllipseAtTheta(ellipse: KeplerianElements, theta: number): Point3 {
+export function orbitalEllipseNormalVector(inclination: number, longitudeAscending: number): Point3 {
+  const i = degreesToRadians(inclination);
+  const Omega = degreesToRadians(longitudeAscending);
+  const sinI = Math.sin(i);
+  return [sinI * Math.sin(Omega), -sinI * Math.cos(Omega), Math.cos(i)];
+}
+
+// NOTE: theta is in orbital plane, output is in ecliptic plane cartesian
+export function orbitalEllipseAtTheta(ellipse: KeplerianElements, thetaRad: number): Point3 {
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = ellipse;
 
   const i = degreesToRadians(inclination);
@@ -49,8 +56,8 @@ export function orbitalEllipseAtTheta(ellipse: KeplerianElements, theta: number)
 
   // Parametric form in orbital plane before rotation:
   // Periapsis initially along x'-axis
-  const x_o = a * (Math.cos(theta) - e);
-  const y_o = semiMinorAxis(a, e) * Math.sin(theta);
+  const x_o = a * (Math.cos(thetaRad) - e);
+  const y_o = semiMinorAxis(a, e) * Math.sin(thetaRad);
   const z_o = 0;
 
   // 1) Rotate by ω around z-axis (argument of periapsis):
