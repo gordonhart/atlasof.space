@@ -1,18 +1,13 @@
 import { Box, Button, Group, Menu, Stack, Text, Transition } from '@mantine/core';
 import { IconCircle, IconCircleDot, IconCircleFilled } from '@tabler/icons-react';
-import { CELESTIAL_BODY_CLASSES, CELESTIAL_BODY_NAMES, findCelestialBody } from '../lib/constants.ts';
-import { celestialBodyTypeName } from '../lib/utils.ts';
-import { AppState } from '../lib/state.ts';
-import { CelestialBodyState } from '../lib/types.ts';
+import { CELESTIAL_BODY_CLASSES, CELESTIAL_BODY_NAMES, findCelestialBody } from '../../lib/constants.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { CelestialBodyState } from '../../lib/types.ts';
 import { FactCard } from './FactCard.tsx';
 import { useMemo } from 'react';
+import { buttonGap, iconSize, menuDropdownProps, AppStateControlProps } from './constants.ts';
 
-const iconSize = 14;
-const menuDropdownProps = { mah: window.innerHeight - 150, style: { overflow: 'auto' } };
-
-type Props = {
-  state: AppState;
-  updateState: (state: Partial<AppState>) => void;
+type Props = AppStateControlProps & {
   systemState: CelestialBodyState;
 };
 export function FocusControls({ state, updateState, systemState }: Props) {
@@ -23,7 +18,7 @@ export function FocusControls({ state, updateState, systemState }: Props) {
 
   return (
     <Stack gap="xs">
-      <Group gap={2}>
+      <Group gap={buttonGap}>
         <Menu position="top-start" offset={0} width={200}>
           <Menu.Target>
             <Button leftSection={<IconCircleDot size={iconSize} />} size="xs" variant="subtle" color="gray">

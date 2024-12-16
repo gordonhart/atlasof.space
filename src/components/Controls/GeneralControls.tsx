@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
+import { ActionIcon, Group, Menu, Stack, Tooltip } from '@mantine/core';
 import {
   IconCircle,
   IconCircleFilled,
@@ -8,16 +8,11 @@ import {
   IconMeteorFilled,
   IconRestore,
 } from '@tabler/icons-react';
-import { CelestialBodyType } from '../lib/types.ts';
-import { celestialBodyTypeName } from '../lib/utils.ts';
-import { AppState } from '../lib/state.ts';
+import { CelestialBodyType } from '../../lib/types.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { AppStateControlProps, buttonGap, iconSize, menuDropdownProps } from './constants.ts';
 
-const menuDropdownProps = { mah: window.innerHeight - 150, style: { overflow: 'auto' } };
-const iconSize = 14;
-
-type Props = {
-  state: AppState;
-  updateState: (state: Partial<AppState>) => void;
+type Props = AppStateControlProps & {
   reset: () => void;
 };
 export function GeneralControls({ state, updateState, reset }: Props) {
@@ -29,7 +24,7 @@ export function GeneralControls({ state, updateState, reset }: Props) {
   }
 
   return (
-    <>
+    <Stack gap={buttonGap}>
       <Tooltip position="left" label="Enlarge Planets">
         <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}>
           <IconCirclePlus size={iconSize} />
@@ -79,6 +74,6 @@ export function GeneralControls({ state, updateState, reset }: Props) {
           <IconRestore size={iconSize} />
         </ActionIcon>
       </Tooltip>
-    </>
+    </Stack>
   );
 }
