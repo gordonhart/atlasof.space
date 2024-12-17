@@ -45,7 +45,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
       return;
     }
     body.satellites.forEach(child => drawOrbit(body, child));
-    const offset = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
+    const offset: [number, number] = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
     drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
   }
 
@@ -69,16 +69,17 @@ function drawOrbitalEllipse(
   metersPerPx: number,
   lineWidth = 1
 ) {
-  function toPx(xM: number, yM: number) {
+  function toPx(xM: number, yM: number): [number, number] {
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
   ctx.beginPath();
-  ctx.moveTo(...toPx(...orbitalEllipseAtTheta(body, 0)));
+  const [initX, initY] = orbitalEllipseAtTheta(body, 0);
+  ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    const p0 = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
-    const p1 = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
-    ctx.quadraticCurveTo(...toPx(...p0), ...toPx(...p1));
+    const [p0x, p0y] = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
+    const [p1x, p1y] = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    ctx.quadraticCurveTo(...toPx(p0x, p0y), ...toPx(p1x, p1y));
   }
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
