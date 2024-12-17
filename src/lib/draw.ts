@@ -24,16 +24,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
   const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 
-  function drawBody({
-    name,
-    position,
-    radius,
-    color,
-    satellites,
-    type,
-    rotation,
-    siderealRotationPeriod,
-  }: CelestialBodyState) {
+  function drawBody({ name, position, radius, color, satellites, type, ...body }: CelestialBodyState) {
     if (!visibleTypes.has(type)) {
       return;
     }
@@ -48,8 +39,8 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     ctx.fillStyle = color;
     ctx.fill();
     ctx.beginPath();
-    if (siderealRotationPeriod != null) {
-      const rotationOffset = degreesToRadians(rotation);
+    if (body.siderealRotationPeriod != null) {
+      const rotationOffset = degreesToRadians(body.rotation);
       ctx.arc(positionXpx, positionYpx, radiusScaledPx, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
       ctx.lineTo(positionXpx, positionYpx);
       ctx.fillStyle = 'black';
@@ -66,9 +57,11 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
   }
 
-  [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
-    drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
-  });
+  if (visibleTypes.has('belt')) {
+    [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
+      drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+    });
+  }
 
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
