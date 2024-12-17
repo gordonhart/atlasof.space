@@ -506,6 +506,10 @@ export const SOL = {
   // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
   // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
 };
+export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
+export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
+// TODO: not quite spherical; really should be modeled as an ellipse, teardrop, comet tail, something of the sort
+export const HELIOSPHERE_TERMINATION_SHOCK = { min: 75 * AU, max: 90 * AU };
 
 function getCelestialBodyNames(body: CelestialBody): Array<string> {
   return [body.name, ...body.satellites.flatMap(b => getCelestialBodyNames(b))];

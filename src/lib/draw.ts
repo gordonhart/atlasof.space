@@ -1,6 +1,6 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
-import { findCelestialBody } from './constants.ts';
+import { ASTEROID_BELT, findCelestialBody, HELIOSPHERE_TERMINATION_SHOCK, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
@@ -66,6 +66,10 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
   }
 
+  [ASTEROID_BELT, KUIPER_BELT, HELIOSPHERE_TERMINATION_SHOCK].forEach(({ min, max }) => {
+    drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+  });
+
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
     drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
@@ -76,6 +80,35 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   }
 
   drawBody(systemState);
+}
+
+function drawBelt(
+  ctx: CanvasRenderingContext2D,
+  [min, max]: [number, number],
+  [canvasWidthPx, canvasHeightPx]: [number, number],
+  [offsetXm, offsetYm]: [number, number],
+  metersPerPx: number
+) {
+  const fadePx = (max - min) / 8 / metersPerPx;
+  const centerPx: [number, number] = [
+    canvasWidthPx / 2 + offsetXm / metersPerPx,
+    canvasHeightPx / 2 + offsetYm / metersPerPx,
+  ];
+  const minRad = min / metersPerPx - fadePx;
+  const maxRad = max / metersPerPx + fadePx;
+  const gradient = ctx.createRadialGradient(...centerPx, minRad, ...centerPx, maxRad);
+
+  // Define color stops for the gradient
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 0)'); // Inner edge (slightly visible)
+  gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.1)'); // Near outer edge (fading)
+  gradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.1)'); // Near outer edge (fading)
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Fully transparent at the edge
+
+  ctx.beginPath();
+  ctx.arc(...centerPx, minRad, 0, Math.PI * 2, true);
+  ctx.arc(...centerPx, maxRad, 0, Math.PI * 2);
+  ctx.fillStyle = gradient;
+  ctx.fill();
 }
 
 function drawOrbitalEllipse(
