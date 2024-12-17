@@ -141,7 +141,6 @@ export function getInitialState(parentState: CelestialBodyState | null, child: C
     const { position, velocity } = keplerianToCartesian(child, G * parentState.mass);
     childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
   }
-  // TODO: initial rotation?
   const childState: CelestialBodyState = { ...child, ...childCartesian, rotation: 0, satellites: [] }; // satellites to be replaced
   const satellites = child.satellites.map(grandchild => getInitialState(childState, grandchild));
   return { ...childState, satellites };
