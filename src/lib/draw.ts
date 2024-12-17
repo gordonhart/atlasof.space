@@ -1,4 +1,4 @@
-import { CelestialBodyState } from './types.ts';
+import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
 import { ASTEROID_BELT, findCelestialBody, HELIOSPHERE_TERMINATION_SHOCK, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
@@ -62,7 +62,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
       return;
     }
     body.satellites.forEach(child => drawOrbit(body, child));
-    const offset: [number, number] = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
+    const offset: Point2 = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
     drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
   }
 
@@ -84,26 +84,20 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
 
 function drawBelt(
   ctx: CanvasRenderingContext2D,
-  [min, max]: [number, number],
-  [canvasWidthPx, canvasHeightPx]: [number, number],
-  [offsetXm, offsetYm]: [number, number],
+  [min, max]: Point2,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
   metersPerPx: number
 ) {
   const fadePx = (max - min) / 8 / metersPerPx;
-  const centerPx: [number, number] = [
-    canvasWidthPx / 2 + offsetXm / metersPerPx,
-    canvasHeightPx / 2 + offsetYm / metersPerPx,
-  ];
+  const centerPx: Point2 = [canvasWidthPx / 2 + offsetXm / metersPerPx, canvasHeightPx / 2 + offsetYm / metersPerPx];
   const minRad = min / metersPerPx - fadePx;
   const maxRad = max / metersPerPx + fadePx;
   const gradient = ctx.createRadialGradient(...centerPx, minRad, ...centerPx, maxRad);
-
-  // Define color stops for the gradient
-  gradient.addColorStop(0, 'rgba(255, 255, 255, 0)'); // Inner edge (slightly visible)
-  gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.1)'); // Near outer edge (fading)
-  gradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.1)'); // Near outer edge (fading)
-  gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Fully transparent at the edge
-
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
+  gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.1)');
+  gradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.1)');
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
   ctx.beginPath();
   ctx.arc(...centerPx, minRad, 0, Math.PI * 2, true);
   ctx.arc(...centerPx, maxRad, 0, Math.PI * 2);
@@ -114,12 +108,12 @@ function drawBelt(
 function drawOrbitalEllipse(
   ctx: CanvasRenderingContext2D,
   body: CelestialBodyState,
-  [canvasWidthPx, canvasHeightPx]: [number, number],
-  [offsetXm, offsetYm]: [number, number],
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
   metersPerPx: number,
   lineWidth = 1
 ) {
-  function toPx(xM: number, yM: number): [number, number] {
+  function toPx(xM: number, yM: number): Point2 {
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
