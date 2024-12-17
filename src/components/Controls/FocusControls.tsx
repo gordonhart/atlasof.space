@@ -5,7 +5,7 @@ import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { CelestialBodyState } from '../../lib/types.ts';
 import { FactCard } from './FactCard.tsx';
 import { useMemo } from 'react';
-import { buttonGap, iconSize, menuDropdownProps, AppStateControlProps } from './constants.ts';
+import { buttonGap, iconSize, AppStateControlProps } from './constants.ts';
 
 type Props = AppStateControlProps & {
   systemState: CelestialBodyState;
@@ -25,7 +25,7 @@ export function FocusControls({ state, updateState, systemState }: Props) {
               {state.center}
             </Button>
           </Menu.Target>
-          <Menu.Dropdown {...menuDropdownProps}>
+          <Menu.Dropdown mah={window.innerHeight - 150} style={{ overflow: 'auto' }}>
             {CELESTIAL_BODY_NAMES.map((name, i) => (
               <Menu.Item key={name} onClick={() => updateState({ center: name })}>
                 <Group gap="xs" justify="space-between">

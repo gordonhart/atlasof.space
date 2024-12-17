@@ -11,7 +11,7 @@ import {
 } from '@tabler/icons-react';
 import { CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
-import { AppStateControlProps, buttonGap, iconSize, menuDropdownProps } from './constants.ts';
+import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 
 type Props = AppStateControlProps & {
   reset: () => void;
@@ -52,7 +52,7 @@ export function GeneralControls({ state, updateState, reset }: Props) {
             </ActionIcon>
           </Tooltip>
         </Menu.Target>
-        <Menu.Dropdown {...menuDropdownProps}>
+        <Menu.Dropdown>
           {(['sun', 'planet', 'moon', 'asteroid', 'trans-neptunian-object'] as Array<CelestialBodyType>).map(type => (
             <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
               <Group gap="xs" align="center">
