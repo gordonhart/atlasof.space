@@ -16,6 +16,7 @@ export const SOL2: CelestialBody = {
   trueAnomaly: 0,
   mass: 1.9885e30,
   radius: 6.957e8,
+  siderealRotationPeriod: 609.12 * 60 * 60, // 609 hours at 16º latitude; true period varies by latitude
   color: '#fa0',
   satellites: [
     {
@@ -29,6 +30,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0, // degrees (choose initial position as desired)
       mass: 3.3011e23,
       radius: 2439.7e3,
+      siderealRotationPeriod: 58.6467 * 24 * 60 * 60, // 58 days
       color: '#888',
       satellites: [],
     },
@@ -43,6 +45,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0, // starting at periapsis // TODO: set real values
       mass: 4.8675e24,
       radius: 6051.8e3,
+      siderealRotationPeriod: -243.02 * 24 * 60 * 60, // 243 days; negative for retrograde rotation
       color: '#fe8',
       satellites: [],
     },
@@ -57,6 +60,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 5.972168e24,
       radius: 6371e3,
+      siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
       color: '#3fb',
       satellites: [
         {
@@ -70,6 +74,7 @@ export const SOL2: CelestialBody = {
           trueAnomaly: 0,
           mass: 7.342e22,
           radius: 1737.4e3,
+          siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
           color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
@@ -100,6 +105,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 6.4171e23,
       radius: 3389.5e3,
+      siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
       color: '#f53',
       satellites: [
         {
@@ -215,6 +221,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 1.8982e27,
       radius: 69911e3,
+      siderealRotationPeriod: 9 * 60 * 60 + 55 * 60 + 30, // 9 hr 55 min 30 sec
       color: '#fa2',
       satellites: [
         {
@@ -286,6 +293,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 5.6834e26,
       radius: 58232e3,
+      siderealRotationPeriod: 10 * 60 * 60 + 32 * 60 + 35, // 10 hr 32 min 35 sec
       color: '#faa',
       satellites: [
         {
@@ -399,6 +407,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 8.681e25,
       radius: 25362e3,
+      siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
       color: '#fec',
       satellites: [], // TODO
     },
@@ -413,6 +422,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 1.02409e26,
       radius: 24622e3,
+      siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
       color: '#2bc',
       satellites: [], // TODO
     },
@@ -427,6 +437,7 @@ export const SOL2: CelestialBody = {
       trueAnomaly: 0,
       mass: 1.3025e22,
       radius: 1188.3e3,
+      siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
       color: '#ddd',
       satellites: [
         {
@@ -440,6 +451,7 @@ export const SOL2: CelestialBody = {
           trueAnomaly: 0,
           mass: 1.586e21,
           radius: 606e3,
+          siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
           color: DEFAULT_MOON_COLOR,
           satellites: [],
         },

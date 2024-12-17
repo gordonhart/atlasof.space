@@ -131,13 +131,18 @@ function applyAcceleration(state: CartesianState, acceleration: Point3, dt: numb
   return { position: newPosition, velocity: newVelocity };
 }
 
+function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState, dt: number): number {
+  return siderealRotationPeriod == null ? rotation : (rotation + (360 * dt) / siderealRotationPeriod) % 360;
+}
+
 export function getInitialState(parentState: CelestialBodyState | null, child: CelestialBody): CelestialBodyState {
   let childCartesian: CartesianState = { position: [0, 0, 0], velocity: [0, 0, 0] };
   if (parentState != null) {
     const { position, velocity } = keplerianToCartesian(child, G * parentState.mass);
     childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
   }
-  const childState: CelestialBodyState = { ...child, ...childCartesian, satellites: [] }; // satellites to be replaced
+  // TODO: initial rotation?
+  const childState: CelestialBodyState = { ...child, ...childCartesian, rotation: 0, satellites: [] }; // satellites to be replaced
   const satellites = child.satellites.map(grandchild => getInitialState(childState, grandchild));
   return { ...childState, satellites };
 }
@@ -153,7 +158,8 @@ function incrementStateByParents(
     [0, 0, 0] as Point3
   );
   const newState = applyAcceleration(child, acceleration, dt);
-  return { ...child, ...newState, satellites };
+  const rotation = applyRotation(child, dt);
+  return { ...child, ...newState, rotation, satellites };
 }
 
 export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {

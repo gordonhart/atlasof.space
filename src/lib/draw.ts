@@ -1,7 +1,7 @@
 import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
 import { findCelestialBody } from './constants.ts';
-import { orbitalEllipseAtTheta } from './physics.ts';
+import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
@@ -24,7 +24,16 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
   const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 
-  function drawBody({ name, position, radius, color, satellites, type }: CelestialBodyState) {
+  function drawBody({
+    name,
+    position,
+    radius,
+    color,
+    satellites,
+    type,
+    rotation,
+    siderealRotationPeriod,
+  }: CelestialBodyState) {
     if (!visibleTypes.has(type)) {
       return;
     }
@@ -38,6 +47,14 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     ctx.arc(positionXpx, positionYpx, radiusScaledPx, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
+    ctx.beginPath();
+    if (siderealRotationPeriod != null) {
+      const rotationOffset = degreesToRadians(rotation);
+      ctx.arc(positionXpx, positionYpx, radiusScaledPx, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
+      ctx.lineTo(positionXpx, positionYpx);
+      ctx.fillStyle = 'black';
+      ctx.fill();
+    }
   }
 
   function drawOrbit(parent: CelestialBodyState | null, body: CelestialBodyState) {

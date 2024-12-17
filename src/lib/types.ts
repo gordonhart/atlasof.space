@@ -19,10 +19,16 @@ export type CelestialBody = KeplerianElements & {
   name: string;
   mass: number; // kg
   radius: number; // m
+  // TODO: initial rotation?
+  // TODO: axis of rotation?
+  siderealRotationPeriod?: number; // seconds // TODO: required?
   color: `#${string}`; // hex
   satellites: Array<CelestialBody>; // keplerian elements in reference to parent body
   type: CelestialBodyType;
 };
 
 export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
-  CartesianState & { satellites: Array<CelestialBodyState> };
+  CartesianState & {
+    rotation: number; // degrees
+    satellites: Array<CelestialBodyState>;
+  };
