@@ -49,7 +49,7 @@ export function useDragController(
 
   function updateZoom(event: WheelEvent<HTMLCanvasElement>) {
     const zoomFactor = 1 + 0.01 * event.deltaY;
-    updateAppState({ metersPerPx: Math.min(Math.max(metersPerPx * zoomFactor, 1000), 1e12) });
+    updateAppState({ metersPerPx: metersPerPx * zoomFactor });
   }
 
   return {

@@ -29,13 +29,13 @@ export function GeneralControls({ state, updateState, reset }: Props) {
   return (
     <Stack gap={buttonGap}>
       <Tooltip position="left" label="Enlarge Planets">
-        <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.min(state.planetScaleFactor * 2, 8192) })}>
+        <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}>
           <IconCirclePlus size={iconSize} />
         </ActionIcon>
       </Tooltip>
 
       <Tooltip position="left" label="Shrink Planets">
-        <ActionIcon onClick={() => updateState({ planetScaleFactor: Math.max(state.planetScaleFactor / 2, 1) })}>
+        <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor / 2 })}>
           <IconCircleMinus size={iconSize} />
         </ActionIcon>
       </Tooltip>

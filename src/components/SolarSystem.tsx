@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
-import { AppState, initialState } from '../lib/state.ts';
+import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { useDragController } from '../hooks/useDragController.ts';
 import { drawBodies } from '../lib/draw.ts';
@@ -13,7 +13,7 @@ export function SolarSystem() {
   const systemStateRef = useRef(getInitialState(null, SOL));
 
   function updateState(newState: Partial<AppState>) {
-    setAppState(prev => ({ ...prev, ...newState }));
+    setAppState(prev => clampState({ ...prev, ...newState }));
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
