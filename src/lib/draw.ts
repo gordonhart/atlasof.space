@@ -20,73 +20,88 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   const dpr = window.devicePixelRatio ?? 1;
-  const [canvasWidthPx, canvasHeightPx] = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
+  const canvasPx: Point2 = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
   const centerBody = findCelestialBody(systemState, center);
   const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
   const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 
-  function drawBody({ name, position, radius, color, satellites, type, ...body }: CelestialBodyState) {
-    if (!visibleTypes.has(type)) {
-      return;
-    }
-    satellites.forEach(drawBody);
-    const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
-    const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
-    const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
-    const radiusPx = Math.max((radius / metersPerPx) * planetScaleFactor, 1);
-    const radiusScaledPx = name === hover ? radiusPx * 5 : radiusPx;
-    ctx.beginPath();
-    ctx.arc(positionXpx, positionYpx, radiusScaledPx, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.beginPath();
-    if (body.siderealRotationPeriod != null) {
-      const rotationOffset = degreesToRadians(body.rotation);
-      ctx.arc(positionXpx, positionYpx, radiusScaledPx, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
-      ctx.lineTo(positionXpx, positionYpx);
-      ctx.fillStyle = 'black';
-      ctx.fill();
-    }
-  }
-
-  function drawOrbit(parent: CelestialBodyState | null, body: CelestialBodyState) {
+  function drawBodyRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) {
       return;
     }
-    body.satellites.forEach(child => drawOrbit(body, child));
+    body.satellites.forEach(drawBodyRecursive);
+    const radiusScaled = body.radius * planetScaleFactor;
+    const radiusHovered = body.name === hover ? radiusScaled * 5 : radiusScaled;
+    const bodyToDraw = { ...body, radius: radiusHovered };
+    drawBody(ctx, bodyToDraw, canvasPx, [offsetXm, offsetYm], metersPerPx);
+  }
+
+  function drawOrbitRecursive(parent: CelestialBodyState | null, body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) {
+      return;
+    }
+    body.satellites.forEach(child => drawOrbitRecursive(body, child));
     const offset: Point2 = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
-    drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
+    drawOrbit(ctx, body, canvasPx, offset, metersPerPx, 0.5);
   }
 
-  function drawLabel(parent: CelestialBodyState | null, body: CelestialBodyState) {
+  function drawLabelRecursive(parent: CelestialBodyState | null, body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) {
       return;
     }
-    body.satellites.forEach(child => drawLabel(body, child));
-    // TODO: why doesn't this need to be offset by the parent...?
-    drawBodyLabel(ctx, body, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+    body.satellites.forEach(child => drawLabelRecursive(body, child));
+    // TODO: why doesn't this position need to be offset by the parent...?
+    const radiusScaled = body.radius * planetScaleFactor;
+    const radiusHovered = body.name === hover ? radiusScaled * 5 : radiusScaled;
+    const labelBody = { ...body, radius: radiusHovered };
+    drawLabel(ctx, labelBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
 
   if (visibleTypes.has('belt')) {
     [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
-      drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+      drawBelt(ctx, [min, max], canvasPx, [offsetXm, offsetYm], metersPerPx);
     });
   }
 
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
-    drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+    drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
 
   if (shouldDrawOrbits) {
-    drawOrbit(null, systemState);
+    drawOrbitRecursive(null, systemState);
   }
+
+  drawBodyRecursive(systemState);
 
   if (shouldDrawLabels) {
-    drawLabel(null, systemState);
+    drawLabelRecursive(null, systemState);
   }
+}
 
-  drawBody(systemState);
+function drawBody(
+  ctx: CanvasRenderingContext2D,
+  { position, radius, color, rotation, siderealRotationPeriod }: CelestialBodyState,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
+  metersPerPx: number
+) {
+  const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
+  const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
+  const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
+  const radiusPx = Math.max(radius / metersPerPx, 1);
+  ctx.beginPath();
+  ctx.arc(positionXpx, positionYpx, radiusPx, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.beginPath();
+  if (siderealRotationPeriod != null) {
+    const rotationOffset = degreesToRadians(rotation);
+    ctx.arc(positionXpx, positionYpx, radiusPx, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
+    ctx.lineTo(positionXpx, positionYpx);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+  }
 }
 
 function drawBelt(
@@ -112,7 +127,7 @@ function drawBelt(
   ctx.fill();
 }
 
-function drawOrbitalEllipse(
+function drawOrbit(
   ctx: CanvasRenderingContext2D,
   body: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: Point2,
@@ -138,41 +153,36 @@ function drawOrbitalEllipse(
 }
 
 // TODO: show edge indicator for off-screen bodies?
-function drawBodyLabel(
+function drawLabel(
   ctx: CanvasRenderingContext2D,
-  body: CelestialBodyState,
+  { color, radius, name, position }: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [offsetXm, offsetYm]: Point2,
   metersPerPx: number
 ) {
   ctx.save();
   ctx.font = '12px Arial';
-  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(body.name);
-  const offsetXpx = textWidthPx / 2;
-  const offsetYpx = Math.max(body.radius / metersPerPx, 1) + 10;
-  ctx.scale(1, -1);
+  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(name);
+  const [offsetXpx, offsetYpx]: Point2 = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];
+  ctx.scale(1, -1); // flip and translate to get text right-side-up
   ctx.translate(0, -window.innerHeight);
-  const [bodyXm, bodyYm] = body.position;
+  const [bodyXm, bodyYm] = position;
   const bodyXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx;
   const bodyYpx = window.innerHeight - (canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx);
-  const boxPadPx = 4;
 
   // draw background
   ctx.beginPath();
   ctx.fillStyle = 'black';
-  ctx.strokeStyle = body.color;
-  ctx.roundRect(
-    bodyXpx - offsetXpx - boxPadPx,
-    bodyYpx - offsetYpx - textHeightPx - boxPadPx,
-    textWidthPx + boxPadPx * 2,
-    textHeightPx + boxPadPx * 2,
-    5
-  );
+  ctx.strokeStyle = color;
+  const boxPadPx = 4;
+  const boxLocationPx: Point2 = [bodyXpx - offsetXpx - boxPadPx, bodyYpx - offsetYpx - textHeightPx - boxPadPx];
+  const boxDimensionPx: Point2 = [textWidthPx + boxPadPx * 2, textHeightPx + boxPadPx * 2];
+  ctx.roundRect(...boxLocationPx, ...boxDimensionPx, 5);
   ctx.fill();
   ctx.stroke();
 
   // draw text
-  ctx.fillStyle = body.color;
-  ctx.fillText(body.name, bodyXpx - offsetXpx, bodyYpx - offsetYpx);
+  ctx.fillStyle = color;
+  ctx.fillText(name, bodyXpx - offsetXpx, bodyYpx - offsetYpx);
   ctx.restore();
 }
