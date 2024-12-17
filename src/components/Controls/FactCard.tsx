@@ -1,7 +1,7 @@
 import { Grid, Group, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBodyState } from '../../lib/types.ts';
 import { Fragment } from 'react';
-import { celestialBodyTypeName, humanTimeUnits, pluralize } from '../../lib/utils.ts';
+import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { magnitude, orbitalPeriod } from '../../lib/physics.ts';
 import { SOL } from '../../lib/constants.ts';
 
@@ -12,11 +12,12 @@ export function FactCard({ body }: Props) {
   // TODO: period for non-sun-orbiting bodies? requires knowing the parent's mass
   const period = orbitalPeriod(body.semiMajorAxis, SOL.mass);
   const [periodTime, periodUnits] = humanTimeUnits(period);
+  const [axisValue, axisUnits] = humanDistanceUnits(body.semiMajorAxis);
   const satellites = body.satellites.map(({ name }) => name);
   const facts: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
-    { label: 'semi-major axis', value: `${(body.semiMajorAxis / 1e3).toLocaleString()} km` },
+    { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
     { label: 'eccentricity', value: body.eccentricity.toLocaleString() },
     { label: 'inclination', value: `${body.inclination.toLocaleString()}º` },
     { label: 'longitude of the ascending node', value: `${body.longitudeAscending.toLocaleString()}º` },

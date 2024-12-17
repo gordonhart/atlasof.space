@@ -41,5 +41,7 @@ export function celestialBodyTypeName(type: CelestialBodyType) {
       return 'Asteroid';
     case 'trans-neptunian-object':
       return 'TNO';
+    case 'belt':
+      return 'Belt';
   }
 }

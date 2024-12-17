@@ -14,15 +14,21 @@ export type KeplerianElements = {
   trueAnomaly: number; // degrees
 };
 
-export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object';
+export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object' | 'belt';
 export type CelestialBody = KeplerianElements & {
   name: string;
   mass: number; // kg
   radius: number; // m
+  // TODO: initial rotation?
+  // TODO: axis of rotation?
+  siderealRotationPeriod?: number; // seconds, leave empty to omit spin indicator
   color: `#${string}`; // hex
   satellites: Array<CelestialBody>; // keplerian elements in reference to parent body
   type: CelestialBodyType;
 };
 
 export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
-  CartesianState & { satellites: Array<CelestialBodyState> };
+  CartesianState & {
+    rotation: number; // degrees
+    satellites: Array<CelestialBodyState>;
+  };

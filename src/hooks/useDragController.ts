@@ -22,7 +22,7 @@ export function useDragController(
 
   function updateCenter(event: MouseEvent<HTMLCanvasElement>) {
     const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
-    const closestBody = findClosestBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 25);
+    const closestBody = findCloseBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 25);
     if (closestBody != null) {
       updateAppState({ center: closestBody.name });
     }
@@ -30,7 +30,7 @@ export function useDragController(
 
   function updateHover(event: MouseEvent<HTMLCanvasElement>) {
     const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
-    const closestOrbit = findClosestOrbit(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 10);
+    const closestOrbit = findCloseOrbit(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 10);
     updateAppState({ hover: closestOrbit != null ? closestOrbit.name : null });
   }
 
@@ -64,17 +64,20 @@ export function useDragController(
   };
 }
 
-function findClosestBody(
+function findCloseBody(
   body: CelestialBodyState,
   visibleTypes: Set<CelestialBodyType>,
   [positionXm, positionYm]: [number, number],
   threshold: number
 ): CelestialBody | null {
+  if (!visibleTypes.has(body.type)) {
+    return null;
+  }
   if (magnitude([positionXm - body.position[0], positionYm - body.position[1]]) < threshold) {
     return body; // returning early means that at all but very tight zooms, the parent will get selected over any moons
   }
   for (const child of body.satellites) {
-    const childClosest = findClosestBody(child, visibleTypes, [positionXm, positionYm], threshold);
+    const childClosest = findCloseBody(child, visibleTypes, [positionXm, positionYm], threshold);
     if (childClosest != null) {
       return childClosest;
     }
@@ -83,26 +86,31 @@ function findClosestBody(
 }
 
 // TODO: how should moons function?
-function findClosestOrbit(
+function findCloseOrbit(
   body: CelestialBodyState,
   visibleTypes: Set<CelestialBodyType>,
   [positionXm, positionYm]: [number, number],
   threshold: number
 ): CelestialBody | null {
+  if (!visibleTypes.has(body.type)) {
+    return null;
+  }
   if (magnitude([positionXm - body.position[0], positionYm - body.position[1]]) < threshold) {
     return body;
   }
   return body.satellites.reduce<CelestialBody | null>((closest, child) => {
-    return visibleTypes.has(child.type) && isPointOnEllipse(positionXm, positionYm, child, threshold) ? child : closest;
+    return visibleTypes.has(child.type) && distanceToOrbitalEllipse(positionXm, positionYm, child) < threshold
+      ? child
+      : closest;
   }, null);
 }
 
-function isPointOnEllipse(x: number, y: number, ellipse: KeplerianElements, tolerance: number) {
+function distanceToOrbitalEllipse(x: number, y: number, ellipse: KeplerianElements) {
   const { longitudeAscending: Omega, argumentOfPeriapsis: omega } = ellipse;
   // TODO: this math isn't 100% correct, likely need to take into account inclination
   const theta = Math.atan2(y, x) - degreesToRadians(omega) - degreesToRadians(Omega);
   const [xExpected, yExpected] = orbitalEllipseAtTheta(ellipse, theta);
   const r = magnitude([x, y]);
   const rPrime = magnitude([xExpected, yExpected]);
-  return Math.abs(rPrime - r) < tolerance;
+  return Math.abs(rPrime - r);
 }

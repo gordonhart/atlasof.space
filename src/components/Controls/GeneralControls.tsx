@@ -53,14 +53,16 @@ export function GeneralControls({ state, updateState, reset }: Props) {
           </Tooltip>
         </Menu.Target>
         <Menu.Dropdown>
-          {(['sun', 'planet', 'moon', 'asteroid', 'trans-neptunian-object'] as Array<CelestialBodyType>).map(type => (
-            <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
-              <Group gap="xs" align="center">
-                {state.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                {celestialBodyTypeName(type)}
-              </Group>
-            </Menu.Item>
-          ))}
+          {(['sun', 'planet', 'moon', 'asteroid', 'trans-neptunian-object', 'belt'] as Array<CelestialBodyType>).map(
+            type => (
+              <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
+                <Group gap="xs" align="center">
+                  {state.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+                  {celestialBodyTypeName(type)}
+                </Group>
+              </Menu.Item>
+            )
+          )}
         </Menu.Dropdown>
       </Menu>
 
