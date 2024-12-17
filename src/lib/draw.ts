@@ -69,18 +69,16 @@ function drawOrbitalEllipse(
   metersPerPx: number,
   lineWidth = 1
 ) {
-  ctx.beginPath();
+  function toPx(xM: number, yM: number) {
+    return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
+  }
   const steps = 360; // number of segments to approximate the ellipse
-  for (let step = 0; step <= steps; step++) {
-    const theta = (step / steps) * 2 * Math.PI;
-    const [xM, yM] = orbitalEllipseAtTheta(body, theta);
-    const xPx = canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx;
-    const yPx = canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx;
-    if (step === 0) {
-      ctx.moveTo(xPx, yPx);
-    } else {
-      ctx.lineTo(xPx, yPx);
-    }
+  ctx.beginPath();
+  ctx.moveTo(...toPx(...orbitalEllipseAtTheta(body, 0)));
+  for (let step = 1; step <= steps; step += 2) {
+    const p0 = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
+    const p1 = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    ctx.quadraticCurveTo(...toPx(...p0), ...toPx(...p1));
   }
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
