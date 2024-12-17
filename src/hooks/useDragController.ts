@@ -2,7 +2,7 @@ import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyState, CelestialBodyType, KeplerianElements, Point2 } from '../lib/types.ts';
 import { findCelestialBody } from '../lib/constants.ts';
-import { degreesToRadians, orbitalEllipseAtTheta, magnitude, subtract3 } from '../lib/physics.ts';
+import { degreesToRadians, orbitalEllipseAtTheta, magnitude } from '../lib/physics.ts';
 
 export function useDragController(
   { offset, metersPerPx, center, visibleTypes }: AppState,
@@ -11,20 +11,32 @@ export function useDragController(
 ) {
   const [prevPosition, setPrevPosition] = useState<Point2 | undefined>();
 
-  function updateFocusPlanet(event: MouseEvent<HTMLCanvasElement>) {
-    const [eventXm, eventYm] = [event.clientX * metersPerPx, (window.innerHeight - event.clientY) * metersPerPx];
+  function getCursorCoordinates(cursorXpx: number, cursorYpx: number) {
+    const [eventXm, eventYm] = [cursorXpx * metersPerPx, (window.innerHeight - cursorYpx) * metersPerPx];
     const [panOffsetXm, panOffsetYm] = offset;
     const [focusOffsetXm, focusOffsetYm] = findCelestialBody(systemState, center)?.position ?? [0, 0];
     const [offsetXm, offsetYm] = [panOffsetXm - focusOffsetXm, panOffsetYm - focusOffsetYm];
     const [centerXm, centerYm] = [(metersPerPx * window.innerWidth) / 2, (metersPerPx * window.innerHeight) / 2];
-    const [cursorXm, cursorYm] = [eventXm - offsetXm - centerXm, eventYm - offsetYm - centerYm];
-    const closestPlanet = findClosestBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 10);
-    updateAppState({ hover: closestPlanet != null ? closestPlanet.name : null });
+    return [eventXm - offsetXm - centerXm, eventYm - offsetYm - centerYm];
+  }
+
+  function updateCenter(event: MouseEvent<HTMLCanvasElement>) {
+    const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
+    const closestBody = findClosestBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 25);
+    if (closestBody != null) {
+      updateAppState({ center: closestBody.name });
+    }
+  }
+
+  function updateHover(event: MouseEvent<HTMLCanvasElement>) {
+    const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
+    const closestOrbit = findClosestOrbit(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 10);
+    updateAppState({ hover: closestOrbit != null ? closestOrbit.name : null });
   }
 
   function updateOffset(event: MouseEvent<HTMLCanvasElement>) {
     if (prevPosition == null) {
-      updateFocusPlanet(event);
+      updateHover(event);
       return;
     }
     const newOffset: Point2 = [
@@ -42,6 +54,7 @@ export function useDragController(
 
   return {
     canvasProps: {
+      onClick: updateCenter,
       onMouseDown: (e: MouseEvent<HTMLCanvasElement>) => setPrevPosition([e.clientX, e.clientY]),
       onMouseMove: updateOffset,
       onMouseLeave: () => setPrevPosition(undefined),
@@ -51,14 +64,32 @@ export function useDragController(
   };
 }
 
-// TODO: how should moons function?
 function findClosestBody(
   body: CelestialBodyState,
   visibleTypes: Set<CelestialBodyType>,
   [positionXm, positionYm]: [number, number],
   threshold: number
 ): CelestialBody | null {
-  if (magnitude(subtract3([positionXm, positionYm, 0], body.position)) < threshold) {
+  if (magnitude([positionXm - body.position[0], positionYm - body.position[1]]) < threshold) {
+    return body; // returning early means that at all but very tight zooms, the parent will get selected over any moons
+  }
+  for (const child of body.satellites) {
+    const childClosest = findClosestBody(child, visibleTypes, [positionXm, positionYm], threshold);
+    if (childClosest != null) {
+      return childClosest;
+    }
+  }
+  return null;
+}
+
+// TODO: how should moons function?
+function findClosestOrbit(
+  body: CelestialBodyState,
+  visibleTypes: Set<CelestialBodyType>,
+  [positionXm, positionYm]: [number, number],
+  threshold: number
+): CelestialBody | null {
+  if (magnitude([positionXm - body.position[0], positionYm - body.position[1]]) < threshold) {
     return body;
   }
   return body.satellites.reduce<CelestialBody | null>((closest, child) => {
