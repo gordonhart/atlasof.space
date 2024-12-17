@@ -1,9 +1,9 @@
 import { Grid, Group, Paper, Stack, Text } from '@mantine/core';
-import { CelestialBodyState } from '../lib/types.ts';
+import { CelestialBodyState } from '../../lib/types.ts';
 import { Fragment } from 'react';
-import { celestialBodyTypeName, humanTimeUnits, pluralize } from '../lib/utils.ts';
-import { magnitude, orbitalPeriod } from '../lib/physics.ts';
-import { SOL } from '../lib/constants.ts';
+import { celestialBodyTypeName, humanTimeUnits, pluralize } from '../../lib/utils.ts';
+import { magnitude, orbitalPeriod } from '../../lib/physics.ts';
+import { SOL } from '../../lib/constants.ts';
 
 type Props = {
   body: CelestialBodyState;

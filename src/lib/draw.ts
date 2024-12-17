@@ -6,6 +6,7 @@ import { orbitalEllipseAtTheta } from './physics.ts';
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
     drawTail,
+    drawOrbit: shouldDrawOrbits,
     metersPerPx,
     center,
     planetScaleFactor,
@@ -24,10 +25,10 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 
   function drawBody({ name, position, radius, color, satellites, type }: CelestialBodyState) {
-    satellites.forEach(drawBody);
     if (!visibleTypes.has(type)) {
       return;
     }
+    satellites.forEach(drawBody);
     const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
     const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
     const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
@@ -39,9 +40,22 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     ctx.fill();
   }
 
+  function drawOrbit(parent: CelestialBodyState | null, body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) {
+      return;
+    }
+    body.satellites.forEach(child => drawOrbit(body, child));
+    const offset: [number, number] = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
+    drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
+  }
+
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
     drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+  }
+
+  if (shouldDrawOrbits) {
+    drawOrbit(null, systemState);
   }
 
   drawBody(systemState);
@@ -52,21 +66,22 @@ function drawOrbitalEllipse(
   body: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: [number, number],
   [offsetXm, offsetYm]: [number, number],
-  metersPerPx: number
+  metersPerPx: number,
+  lineWidth = 1
 ) {
+  function toPx(xM: number, yM: number): [number, number] {
+    return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
+  }
   const steps = 360; // number of segments to approximate the ellipse
-  for (let step = 0; step <= steps; step++) {
-    const theta = (step / steps) * 2 * Math.PI;
-    const [xM, yM] = orbitalEllipseAtTheta(body, theta);
-    const xPx = canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx;
-    const yPx = canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx;
-    if (step === 0) {
-      ctx.moveTo(xPx, yPx);
-    } else {
-      ctx.lineTo(xPx, yPx);
-    }
+  ctx.beginPath();
+  const [initX, initY] = orbitalEllipseAtTheta(body, 0);
+  ctx.moveTo(...toPx(initX, initY));
+  for (let step = 1; step <= steps; step += 2) {
+    const [p0x, p0y] = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
+    const [p1x, p1y] = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    ctx.quadraticCurveTo(...toPx(p0x, p0y), ...toPx(p1x, p1y));
   }
   ctx.strokeStyle = body.color;
-  ctx.lineWidth = 1;
+  ctx.lineWidth = lineWidth;
   ctx.stroke();
 }
