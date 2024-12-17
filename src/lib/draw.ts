@@ -137,6 +137,7 @@ function drawOrbitalEllipse(
   ctx.stroke();
 }
 
+// TODO: show edge indicator for off-screen bodies?
 function drawBodyLabel(
   ctx: CanvasRenderingContext2D,
   body: CelestialBodyState,
@@ -146,14 +147,32 @@ function drawBodyLabel(
 ) {
   ctx.save();
   ctx.font = '12px Arial';
-  ctx.fillStyle = body.color;
-  const offsetXpx = ctx.measureText(body.name).width / 2;
+  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(body.name);
+  const offsetXpx = textWidthPx / 2;
   const offsetYpx = Math.max(body.radius / metersPerPx, 1) + 10;
   ctx.scale(1, -1);
   ctx.translate(0, -window.innerHeight);
   const [bodyXm, bodyYm] = body.position;
-  const labelXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx - offsetXpx;
-  const labelYpx = window.innerHeight - (canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx) - offsetYpx;
-  ctx.fillText(body.name, labelXpx, labelYpx);
+  const bodyXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx;
+  const bodyYpx = window.innerHeight - (canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx);
+  const boxPadPx = 4;
+
+  // draw background
+  ctx.beginPath();
+  ctx.fillStyle = 'black';
+  ctx.strokeStyle = body.color;
+  ctx.roundRect(
+    bodyXpx - offsetXpx - boxPadPx,
+    bodyYpx - offsetYpx - textHeightPx - boxPadPx,
+    textWidthPx + boxPadPx * 2,
+    textHeightPx + boxPadPx * 2,
+    5
+  );
+  ctx.fill();
+  ctx.stroke();
+
+  // draw text
+  ctx.fillStyle = body.color;
+  ctx.fillText(body.name, bodyXpx - offsetXpx, bodyYpx - offsetYpx);
   ctx.restore();
 }
