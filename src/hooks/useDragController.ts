@@ -71,12 +71,9 @@ function findClosestBody(
   threshold: number
 ): CelestialBody | null {
   if (magnitude([positionXm - body.position[0], positionYm - body.position[1]]) < threshold) {
-    return body;
+    return body; // returning early means that at all but very tight zooms, the parent will get selected over any moons
   }
   for (const child of body.satellites) {
-    if (magnitude([positionXm - child.position[0], positionYm - child.position[1]]) < threshold) {
-      return child;
-    }
     const childClosest = findClosestBody(child, visibleTypes, [positionXm, positionYm], threshold);
     if (childClosest != null) {
       return childClosest;
