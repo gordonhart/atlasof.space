@@ -1,12 +1,12 @@
-import { CelestialBodyState, Point3 } from './types.ts';
+import { CelestialBodyState } from './types.ts';
 import { AppState } from './state.ts';
 import { findCelestialBody } from './constants.ts';
-import { add3, orbitalEllipseAtTheta } from './physics.ts';
+import { orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
     drawTail,
-    drawOrbit,
+    drawOrbit: shouldDrawOrbits,
     metersPerPx,
     center,
     planetScaleFactor,
@@ -25,10 +25,10 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
   const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 
   function drawBody({ name, position, radius, color, satellites, type }: CelestialBodyState) {
-    satellites.forEach(drawBody);
     if (!visibleTypes.has(type)) {
       return;
     }
+    satellites.forEach(drawBody);
     const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
     const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
     const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
@@ -40,22 +40,22 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     ctx.fill();
   }
 
+  function drawOrbit(parent: CelestialBodyState | null, body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) {
+      return;
+    }
+    body.satellites.forEach(child => drawOrbit(body, child));
+    const offset = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
+    drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
+  }
+
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
     drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
   }
 
-  function drawOrbitEllipse(parent: CelestialBodyState | null, body: CelestialBodyState) {
-    body.satellites.forEach(child => drawOrbitEllipse(body, child));
-    if (!visibleTypes.has(body.type)) {
-      return;
-    }
-    const parentPosition: Point3 = parent?.position ?? [0, 0, 0];
-    const offset3 = add3(parentPosition, [offsetXm, offsetYm, 0]);
-    drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset3.slice(0, 2), metersPerPx, 0.5);
-  }
-  if (drawOrbit) {
-    drawOrbitEllipse(null, systemState);
+  if (shouldDrawOrbits) {
+    drawOrbit(null, systemState);
   }
 
   drawBody(systemState);
