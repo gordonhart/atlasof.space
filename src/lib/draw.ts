@@ -1,6 +1,6 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
-import { ASTEROID_BELT, findCelestialBody, HELIOSPHERE_TERMINATION_SHOCK, KUIPER_BELT } from './constants.ts';
+import { ASTEROID_BELT, findCelestialBody, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
@@ -66,7 +66,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
   }
 
-  [ASTEROID_BELT, KUIPER_BELT, HELIOSPHERE_TERMINATION_SHOCK].forEach(({ min, max }) => {
+  [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
     drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
   });
 
@@ -95,8 +95,8 @@ function drawBelt(
   const maxRad = max / metersPerPx + fadePx;
   const gradient = ctx.createRadialGradient(...centerPx, minRad, ...centerPx, maxRad);
   gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
-  gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.1)');
-  gradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.1)');
+  gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.05)');
+  gradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.05)');
   gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
   ctx.beginPath();
   ctx.arc(...centerPx, minRad, 0, Math.PI * 2, true);
