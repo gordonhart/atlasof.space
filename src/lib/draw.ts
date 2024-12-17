@@ -30,9 +30,8 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
       return;
     }
     body.satellites.forEach(drawBodyRecursive);
-    const radiusScaled = body.radius * planetScaleFactor;
-    const radiusHovered = body.name === hover ? radiusScaled * 5 : radiusScaled;
-    const bodyToDraw = { ...body, radius: radiusHovered };
+    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const bodyToDraw = { ...body, radius: radiusScaled };
     drawBody(ctx, bodyToDraw, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
 
@@ -45,15 +44,14 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbit(ctx, body, canvasPx, offset, metersPerPx, 0.5);
   }
 
-  function drawLabelRecursive(parent: CelestialBodyState | null, body: CelestialBodyState) {
+  // TODO: why doesn't this position need to be offset by the parent...?
+  function drawLabelRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) {
       return;
     }
-    body.satellites.forEach(child => drawLabelRecursive(body, child));
-    // TODO: why doesn't this position need to be offset by the parent...?
-    const radiusScaled = body.radius * planetScaleFactor;
-    const radiusHovered = body.name === hover ? radiusScaled * 5 : radiusScaled;
-    const labelBody = { ...body, radius: radiusHovered };
+    body.satellites.forEach(child => drawLabelRecursive(child));
+    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const labelBody = { ...body, radius: radiusScaled };
     drawLabel(ctx, labelBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
 
@@ -63,20 +61,12 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     });
   }
 
+  // order here is important; ensure higher-priority information is drawn on top (later)
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
-  if (hoverBody != null) {
-    drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
-  }
-
-  if (shouldDrawOrbits) {
-    drawOrbitRecursive(null, systemState);
-  }
-
+  if (hoverBody != null) drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
+  if (shouldDrawOrbits) drawOrbitRecursive(null, systemState);
   drawBodyRecursive(systemState);
-
-  if (shouldDrawLabels) {
-    drawLabelRecursive(null, systemState);
-  }
+  if (shouldDrawLabels) drawLabelRecursive(systemState);
 }
 
 function drawBody(
@@ -94,12 +84,18 @@ function drawBody(
   ctx.arc(positionXpx, positionYpx, radiusPx, 0, Math.PI * 2);
   ctx.fillStyle = color;
   ctx.fill();
-  ctx.beginPath();
+
+  // draw rotation indicator
   if (siderealRotationPeriod != null) {
     const rotationOffset = degreesToRadians(rotation);
-    ctx.arc(positionXpx, positionYpx, radiusPx, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
+    ctx.beginPath();
+    ctx.arc(positionXpx, positionYpx, radiusPx + 1, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
     ctx.lineTo(positionXpx, positionYpx);
     ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(positionXpx, positionYpx, 0.8 * radiusPx, 0, Math.PI * 2);
+    ctx.fillStyle = color;
     ctx.fill();
   }
 }
