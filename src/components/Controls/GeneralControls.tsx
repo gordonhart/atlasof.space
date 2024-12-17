@@ -8,6 +8,8 @@ import {
   IconEyeCog,
   IconMeteorFilled,
   IconRestore,
+  IconTagMinus,
+  IconTagPlus,
 } from '@tabler/icons-react';
 import { CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
@@ -65,6 +67,12 @@ export function GeneralControls({ state, updateState, reset }: Props) {
           )}
         </Menu.Dropdown>
       </Menu>
+
+      <Tooltip position="left" label={`${state.drawLabel ? 'Hide' : 'Show'} Labels`}>
+        <ActionIcon onClick={() => updateState({ drawLabel: !state.drawLabel })}>
+          {state.drawLabel ? <IconTagMinus size={iconSize} /> : <IconTagPlus size={iconSize} />}
+        </ActionIcon>
+      </Tooltip>
 
       <Tooltip position="left" label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
         <ActionIcon onClick={() => updateState({ drawTail: !state.drawTail })}>

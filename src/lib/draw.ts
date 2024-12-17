@@ -5,8 +5,9 @@ import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
-    drawTail,
+    drawTail: shouldDrawTails,
     drawOrbit: shouldDrawOrbits,
+    drawLabel: shouldDrawLabels,
     metersPerPx,
     center,
     planetScaleFactor,
@@ -15,7 +16,7 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     visibleTypes,
   } = appState;
 
-  ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
+  ctx.fillStyle = shouldDrawTails ? 'rgba(0, 0, 0, 0.0)' : '#000';
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   const dpr = window.devicePixelRatio ?? 1;
@@ -57,6 +58,15 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
     drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
   }
 
+  function drawLabel(parent: CelestialBodyState | null, body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) {
+      return;
+    }
+    body.satellites.forEach(child => drawLabel(body, child));
+    // TODO: why doesn't this need to be offset by the parent...?
+    drawBodyLabel(ctx, body, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+  }
+
   if (visibleTypes.has('belt')) {
     [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
       drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
@@ -70,6 +80,10 @@ export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, sy
 
   if (shouldDrawOrbits) {
     drawOrbit(null, systemState);
+  }
+
+  if (shouldDrawLabels) {
+    drawLabel(null, systemState);
   }
 
   drawBody(systemState);
@@ -121,4 +135,25 @@ function drawOrbitalEllipse(
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
+}
+
+function drawBodyLabel(
+  ctx: CanvasRenderingContext2D,
+  body: CelestialBodyState,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
+  metersPerPx: number
+) {
+  ctx.save();
+  ctx.font = '12px Arial';
+  ctx.fillStyle = body.color;
+  const offsetXpx = ctx.measureText(body.name).width / 2;
+  const offsetYpx = Math.max(body.radius / metersPerPx, 1) + 10;
+  ctx.scale(1, -1);
+  ctx.translate(0, -window.innerHeight);
+  const [bodyXm, bodyYm] = body.position;
+  const labelXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx - offsetXpx;
+  const labelYpx = window.innerHeight - (canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx) - offsetYpx;
+  ctx.fillText(body.name, labelXpx, labelYpx);
+  ctx.restore();
 }
