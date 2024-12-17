@@ -7,6 +7,7 @@ export type AppState = {
   dt: number; // seconds
   play: boolean;
   drawTail: boolean;
+  drawOrbit: boolean;
   metersPerPx: number; // controls zoom
   center: string; // name of body centering visualization
   hover: string | null; // name of hovered body
@@ -20,6 +21,7 @@ export const initialState: AppState = {
   dt: 60 * 60,
   play: true,
   drawTail: false,
+  drawOrbit: false,
   metersPerPx:
     (2 * (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU)) /
     Math.max(window.innerWidth, window.innerHeight),

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
 import { AppState, initialState } from '../lib/state.ts';
-import { Controls } from './Controls.tsx';
+import { Controls } from './Controls/Controls.tsx';
 import { useDragController } from '../hooks/useDragController.ts';
 import { drawBodies } from '../lib/draw.ts';
 import { getInitialState, incrementState } from '../lib/physics.ts';
