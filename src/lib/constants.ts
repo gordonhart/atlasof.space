@@ -10,8 +10,13 @@ import saturnSrc from '../../assets/saturn-thumb.jpg';
 import uranusSrc from '../../assets/uranus-thumb.jpg';
 import neptuneSrc from '../../assets/neptune-thumb.jpg';
 import plutoSrc from '../../assets/pluto-thumb.jpg';
+import ceresSrc from '../../assets/ceres-thumb.jpg';
+import pallasSrc from '../../assets/pallas-thumb.jpg';
+import vestaSrc from '../../assets/vesta-thumb.jpg';
 import cg57pSrc from '../../assets/cg67p-thumb.jpg';
 import ryuguSrc from '../../assets/ryugu-thumb.jpg';
+import erosSrc from '../../assets/eros-thumb.jpg';
+import mathildeSrc from '../../assets/mathilde-thumb.jpg';
 import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
@@ -26,6 +31,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '1 Ceres',
     shortName: 'Ceres',
+    thumbnail: ceresSrc,
     type: 'asteroid',
     eccentricity: 0.075823,
     semiMajorAxis: 413690250e3,
@@ -41,6 +47,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '4 Vesta',
     shortName: 'Vesta',
+    thumbnail: vestaSrc,
     type: 'asteroid',
     eccentricity: 0.0894,
     semiMajorAxis: 2.36 * AU,
@@ -56,6 +63,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '2 Pallas',
     shortName: 'Pallas',
+    thumbnail: pallasSrc,
     type: 'asteroid',
     eccentricity: 0.2302,
     semiMajorAxis: 4.14e11,
@@ -150,6 +158,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '433 Eros',
     shortName: 'Eros',
+    thumbnail: erosSrc,
     mass: 6.687e15, // kg
     radius: 8420, // m, average (highly irregular)
     eccentricity: 0.2226,
@@ -165,6 +174,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '253 Mathilde',
     shortName: 'Mathilde',
+    thumbnail: mathildeSrc,
     mass: 1.033e17, // kg
     radius: 26.4e3, // m
     eccentricity: 0.26492652,
@@ -276,6 +286,23 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   },
 ];
 
+export const MERCURY: CelestialBody = {
+  name: 'Mercury',
+  type: 'planet',
+  thumbnail: mercurySrc as string,
+  eccentricity: 0.2056,
+  semiMajorAxis: 57909050e3, // meters
+  inclination: 7.005, // degrees
+  longitudeAscending: 48.331, // degrees
+  argumentOfPeriapsis: 29.124, // degrees
+  trueAnomaly: 0, // degrees (choose initial position as desired)
+  mass: 3.3011e23,
+  radius: 2439.7e3,
+  siderealRotationPeriod: 58.6467 * 24 * 60 * 60, // 58 days
+  color: '#b3aeae',
+  satellites: [],
+};
+
 export const VENUS: CelestialBody = {
   name: 'Venus',
   type: 'planet',
@@ -309,6 +336,99 @@ export const VENUS: CelestialBody = {
       satellites: [],
     },
      */
+  ],
+};
+
+export const EARTH: CelestialBody = {
+  name: 'Earth',
+  type: 'planet',
+  thumbnail: earthSrc as string,
+  eccentricity: 0.0167086,
+  semiMajorAxis: 149597870.7e3, // 1 AU
+  inclination: 0.00005,
+  longitudeAscending: -11.26064,
+  argumentOfPeriapsis: 114.20783,
+  trueAnomaly: 0,
+  mass: 5.972168e24,
+  radius: 6371e3,
+  siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
+  color: '#7e87dd',
+  satellites: [
+    {
+      name: 'Luna',
+      type: 'moon',
+      eccentricity: 0.0549,
+      semiMajorAxis: 384400e3,
+      inclination: 5.145,
+      longitudeAscending: 125.08,
+      argumentOfPeriapsis: 318.15,
+      trueAnomaly: 0,
+      mass: 7.342e22,
+      radius: 1737.4e3,
+      siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    /* {
+      name: 'ISS',
+      type: 'moon',
+      eccentricity: 0.000767, // Orbital eccentricity (nearly circular)
+      semiMajorAxis: 6787.4e3, // Semi-major axis in meters (~6787 km)
+      inclination: 51.64, // Inclination in degrees (relative to the equatorial plane)
+      longitudeAscending: 0, // Longitude of ascending node (changes due to precession)
+      argumentOfPeriapsis: 0, // Argument of periapsis (nearly circular, not significant)
+      trueAnomaly: 0, // Starting at periapsis
+      mass: 419725,
+      radius: 50, // roughly
+      color: '#fff',
+      satellites: [],
+    }, */
+  ],
+};
+
+export const MARS: CelestialBody = {
+  name: 'Mars',
+  type: 'planet',
+  thumbnail: marsSrc as string,
+  eccentricity: 0.0935,
+  semiMajorAxis: 227939200e3,
+  inclination: 1.85,
+  longitudeAscending: 49.558,
+  argumentOfPeriapsis: 286.502,
+  trueAnomaly: 0,
+  mass: 6.4171e23,
+  radius: 3389.5e3,
+  siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
+  color: '#c96c3c',
+  satellites: [
+    {
+      name: 'Phobos',
+      type: 'moon',
+      eccentricity: 0.0151,
+      semiMajorAxis: 9376e3,
+      inclination: 1.093,
+      longitudeAscending: 0,
+      argumentOfPeriapsis: 0,
+      trueAnomaly: 0,
+      mass: 1.0659e16,
+      radius: 11.2667e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    {
+      name: 'Deimos',
+      type: 'moon',
+      eccentricity: 0.00033,
+      semiMajorAxis: 23458e3,
+      inclination: 1.788,
+      longitudeAscending: 0,
+      argumentOfPeriapsis: 0,
+      trueAnomaly: 0,
+      mass: 1.4762e15,
+      radius: 6.2e3,
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
   ],
 };
 
@@ -502,6 +622,60 @@ export const SATURN: CelestialBody = {
   ],
 };
 
+export const URANUS: CelestialBody = {
+  name: 'Uranus',
+  type: 'planet',
+  thumbnail: uranusSrc as string,
+  eccentricity: 0.0457,
+  semiMajorAxis: 2876679082e3,
+  inclination: 0.772,
+  longitudeAscending: 74.006,
+  argumentOfPeriapsis: 170.964,
+  trueAnomaly: 0,
+  mass: 8.681e25,
+  radius: 25362e3,
+  siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
+  color: '#9bcee6',
+  satellites: [
+    // TODO: add the main moons: Miranda, Ariel, Umbriel, Titania, Oberon
+    //  there are more but we can ignore those for now
+  ],
+};
+
+export const NEPTUNE: CelestialBody = {
+  name: 'Neptune',
+  type: 'planet',
+  thumbnail: neptuneSrc as string,
+  eccentricity: 0.0086,
+  semiMajorAxis: 4503443661e3,
+  inclination: 1.77,
+  longitudeAscending: 131.784,
+  argumentOfPeriapsis: 44.971,
+  trueAnomaly: 0,
+  mass: 1.02409e26,
+  radius: 24622e3,
+  siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
+  color: '#5a7cf6',
+  satellites: [
+    {
+      name: 'Triton',
+      type: 'moon',
+      eccentricity: 0.000016,
+      semiMajorAxis: 354759e3,
+      inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
+      longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
+      argumentOfPeriapsis: 260.64357,
+      trueAnomaly: 0,
+      mass: 2.1389e22,
+      radius: 1353.4e3,
+      siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+    // TODO: there are many more
+  ],
+};
+
 export const SOL2: CelestialBody = {
   name: 'Sol',
   type: 'sun',
@@ -516,172 +690,7 @@ export const SOL2: CelestialBody = {
   radius: 6.957e8,
   siderealRotationPeriod: 609.12 * 60 * 60, // 609 hours at 16º latitude; true period varies by latitude
   color: '#fa0',
-  satellites: [
-    {
-      name: 'Mercury',
-      type: 'planet',
-      thumbnail: mercurySrc as string,
-      eccentricity: 0.2056,
-      semiMajorAxis: 57909050e3, // meters
-      inclination: 7.005, // degrees
-      longitudeAscending: 48.331, // degrees
-      argumentOfPeriapsis: 29.124, // degrees
-      trueAnomaly: 0, // degrees (choose initial position as desired)
-      mass: 3.3011e23,
-      radius: 2439.7e3,
-      siderealRotationPeriod: 58.6467 * 24 * 60 * 60, // 58 days
-      color: '#b3aeae',
-      satellites: [],
-    },
-    VENUS,
-    {
-      name: 'Earth',
-      type: 'planet',
-      thumbnail: earthSrc as string,
-      eccentricity: 0.0167086,
-      semiMajorAxis: 149597870.7e3, // 1 AU
-      inclination: 0.00005,
-      longitudeAscending: -11.26064,
-      argumentOfPeriapsis: 114.20783,
-      trueAnomaly: 0,
-      mass: 5.972168e24,
-      radius: 6371e3,
-      siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
-      color: '#7e87dd',
-      satellites: [
-        {
-          name: 'Luna',
-          type: 'moon',
-          eccentricity: 0.0549,
-          semiMajorAxis: 384400e3,
-          inclination: 5.145,
-          longitudeAscending: 125.08,
-          argumentOfPeriapsis: 318.15,
-          trueAnomaly: 0,
-          mass: 7.342e22,
-          radius: 1737.4e3,
-          siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
-          color: DEFAULT_MOON_COLOR,
-          satellites: [],
-        },
-        /* {
-          name: 'ISS',
-          type: 'moon',
-          eccentricity: 0.000767, // Orbital eccentricity (nearly circular)
-          semiMajorAxis: 6787.4e3, // Semi-major axis in meters (~6787 km)
-          inclination: 51.64, // Inclination in degrees (relative to the equatorial plane)
-          longitudeAscending: 0, // Longitude of ascending node (changes due to precession)
-          argumentOfPeriapsis: 0, // Argument of periapsis (nearly circular, not significant)
-          trueAnomaly: 0, // Starting at periapsis
-          mass: 419725,
-          radius: 50, // roughly
-          color: '#fff',
-          satellites: [],
-        }, */
-      ],
-    },
-    {
-      name: 'Mars',
-      type: 'planet',
-      thumbnail: marsSrc as string,
-      eccentricity: 0.0935,
-      semiMajorAxis: 227939200e3,
-      inclination: 1.85,
-      longitudeAscending: 49.558,
-      argumentOfPeriapsis: 286.502,
-      trueAnomaly: 0,
-      mass: 6.4171e23,
-      radius: 3389.5e3,
-      siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
-      color: '#c96c3c',
-      satellites: [
-        {
-          name: 'Phobos',
-          type: 'moon',
-          eccentricity: 0.0151,
-          semiMajorAxis: 9376e3,
-          inclination: 1.093,
-          longitudeAscending: 0,
-          argumentOfPeriapsis: 0,
-          trueAnomaly: 0,
-          mass: 1.0659e16,
-          radius: 11.2667e3,
-          color: DEFAULT_MOON_COLOR,
-          satellites: [],
-        },
-        {
-          name: 'Deimos',
-          type: 'moon',
-          eccentricity: 0.00033,
-          semiMajorAxis: 23458e3,
-          inclination: 1.788,
-          longitudeAscending: 0,
-          argumentOfPeriapsis: 0,
-          trueAnomaly: 0,
-          mass: 1.4762e15,
-          radius: 6.2e3,
-          color: DEFAULT_MOON_COLOR,
-          satellites: [],
-        },
-      ],
-    },
-    ...ASTEROIDS,
-    JUPITER,
-    SATURN,
-    {
-      name: 'Uranus',
-      type: 'planet',
-      thumbnail: uranusSrc as string,
-      eccentricity: 0.0457,
-      semiMajorAxis: 2876679082e3,
-      inclination: 0.772,
-      longitudeAscending: 74.006,
-      argumentOfPeriapsis: 170.964,
-      trueAnomaly: 0,
-      mass: 8.681e25,
-      radius: 25362e3,
-      siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
-      color: '#9bcee6',
-      satellites: [
-        // TODO: add the main moons: Miranda, Ariel, Umbriel, Titania, Oberon
-        //  there are more but we can ignore those for now
-      ],
-    },
-    {
-      name: 'Neptune',
-      type: 'planet',
-      thumbnail: neptuneSrc as string,
-      eccentricity: 0.0086,
-      semiMajorAxis: 4503443661e3,
-      inclination: 1.77,
-      longitudeAscending: 131.784,
-      argumentOfPeriapsis: 44.971,
-      trueAnomaly: 0,
-      mass: 1.02409e26,
-      radius: 24622e3,
-      siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
-      color: '#5a7cf6',
-      satellites: [
-        {
-          name: 'Triton',
-          type: 'moon',
-          eccentricity: 0.000016,
-          semiMajorAxis: 354759e3,
-          inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
-          longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
-          argumentOfPeriapsis: 260.64357,
-          trueAnomaly: 0,
-          mass: 2.1389e22,
-          radius: 1353.4e3,
-          siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
-          color: DEFAULT_MOON_COLOR,
-          satellites: [],
-        },
-        // TODO: there are many more
-      ],
-    },
-    ...TRANS_NEPTUNIAN_OBJECTS,
-  ],
+  satellites: [MERCURY, VENUS, EARTH, MARS, ...ASTEROIDS, JUPITER, SATURN, URANUS, NEPTUNE, ...TRANS_NEPTUNIAN_OBJECTS],
 };
 export const SOL = {
   ...SOL2,
