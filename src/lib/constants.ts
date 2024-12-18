@@ -1,27 +1,6 @@
-import { CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
+import { CelestialBody, CelestialBodyState, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
-import sunSrc from '../../assets/sun-thumb.jpg';
-import mercurySrc from '../../assets/mercury-thumb.jpg';
-import venusSrc from '../../assets/venus-thumb.jpg';
-import earthSrc from '../../assets/earth-thumb.jpg';
-import marsSrc from '../../assets/mars-thumb.jpg';
-import jupiterSrc from '../../assets/jupiter-thumb.jpg';
-import saturnSrc from '../../assets/saturn-thumb.jpg';
-import uranusSrc from '../../assets/uranus-thumb.jpg';
-import neptuneSrc from '../../assets/neptune-thumb.jpg';
-import plutoSrc from '../../assets/pluto-thumb.jpg';
-import ceresSrc from '../../assets/ceres-thumb.jpg';
-import pallasSrc from '../../assets/pallas-thumb.jpg';
-import vestaSrc from '../../assets/vesta-thumb.jpg';
-import hygieaSrc from '../../assets/hygiea-thumb.jpg';
-import junoSrc from '../../assets/juno-thumb.jpg';
-import cg57pSrc from '../../assets/cg67p-thumb.jpg';
-import ryuguSrc from '../../assets/ryugu-thumb.jpg';
-import lutetiaSrc from '../../assets/lutetia-thumb.jpg';
-import makemakeSrc from '../../assets/makemake-thumb.jpg';
-import erosSrc from '../../assets/eros-thumb.jpg';
-import mathildeSrc from '../../assets/mathilde-thumb.jpg';
-import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
+import { Thumbnail } from './images.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -35,7 +14,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '1 Ceres',
     shortName: 'Ceres',
-    thumbnail: ceresSrc as string,
+    thumbnail: Thumbnail.CERES,
     type: 'asteroid',
     eccentricity: 0.075823,
     semiMajorAxis: 413690250e3,
@@ -51,7 +30,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '4 Vesta',
     shortName: 'Vesta',
-    thumbnail: vestaSrc as string,
+    thumbnail: Thumbnail.VESTA,
     type: 'asteroid',
     eccentricity: 0.0894,
     semiMajorAxis: 2.36 * AU,
@@ -67,7 +46,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '2 Pallas',
     shortName: 'Pallas',
-    thumbnail: pallasSrc as string,
+    thumbnail: Thumbnail.PALLAS,
     type: 'asteroid',
     eccentricity: 0.2302,
     semiMajorAxis: 4.14e11,
@@ -83,7 +62,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '10 Hygiea',
     shortName: 'Hygiea',
-    thumbnail: hygieaSrc as string,
+    thumbnail: Thumbnail.HYGIEA,
     type: 'asteroid',
     eccentricity: 0.1125,
     semiMajorAxis: 3.1415 * AU,
@@ -99,7 +78,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '3 Juno',
     shortName: 'Juno',
-    thumbnail: junoSrc as string,
+    thumbnail: Thumbnail.JUNO,
     mass: 2.67e19, // kg
     radius: 127e3, // m
     eccentricity: 0.2562,
@@ -115,7 +94,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '162173 Ryugu',
     shortName: 'Ryugu',
-    thumbnail: ryuguSrc as string,
+    thumbnail: Thumbnail.RYUGU,
     type: 'asteroid',
     eccentricity: 0.1902,
     semiMajorAxis: 1.1896 * AU,
@@ -131,7 +110,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '21 Lutetia',
     shortName: 'Lutetia',
-    thumbnail: lutetiaSrc as string,
+    thumbnail: Thumbnail.LUTETIA,
     mass: 1.7e18, // kg
     radius: 49e3, // m
     eccentricity: 0.16339,
@@ -148,7 +127,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '67P/Churyumov–Gerasimenko',
     shortName: '67P/C–G',
-    thumbnail: cg57pSrc as string,
+    thumbnail: Thumbnail.CG67P,
     mass: 1e13, // kg
     radius: 2000, // m (average radius based on dimensions)
     eccentricity: 0.64,
@@ -165,7 +144,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '433 Eros',
     shortName: 'Eros',
-    thumbnail: erosSrc as string,
+    thumbnail: Thumbnail.EROS,
     mass: 6.687e15, // kg
     radius: 8420, // m, average (highly irregular)
     eccentricity: 0.2226,
@@ -181,7 +160,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '253 Mathilde',
     shortName: 'Mathilde',
-    thumbnail: mathildeSrc as string,
+    thumbnail: Thumbnail.MATHILDE,
     mass: 1.033e17, // kg
     radius: 26.4e3, // m
     eccentricity: 0.26492652,
@@ -200,7 +179,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   {
     name: '134340 Pluto',
     shortName: 'Pluto',
-    thumbnail: plutoSrc,
+    thumbnail: Thumbnail.PLUTO,
     type: 'trans-neptunian-object',
     eccentricity: 0.2488,
     semiMajorAxis: 5906440628e3,
@@ -263,7 +242,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   {
     name: '136472 Makemake',
     shortName: 'Makemake',
-    thumbnail: makemakeSrc,
+    thumbnail: Thumbnail.MAKEMAKE,
     type: 'trans-neptunian-object',
     eccentricity: 0.16126,
     semiMajorAxis: 45.43 * AU,
@@ -279,7 +258,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   {
     name: '486958 Arrokoth', // also known as Ultima Thule
     shortName: 'Arrokoth',
-    thumbnail: arrokothSrc,
+    thumbnail: Thumbnail.ARROKOTH,
     mass: 7.485e14, // kg
     radius: 18e3, // m (average radius based on length of 36 km)
     eccentricity: 0.04172,
@@ -297,7 +276,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
 export const MERCURY: CelestialBody = {
   name: 'Mercury',
   type: 'planet',
-  thumbnail: mercurySrc as string,
+  thumbnail: Thumbnail.MERCURY,
   eccentricity: 0.2056,
   semiMajorAxis: 57909050e3, // meters
   inclination: 7.005, // degrees
@@ -314,7 +293,7 @@ export const MERCURY: CelestialBody = {
 export const VENUS: CelestialBody = {
   name: 'Venus',
   type: 'planet',
-  thumbnail: venusSrc as string,
+  thumbnail: Thumbnail.VENUS,
   eccentricity: 0.006772,
   semiMajorAxis: 108208000e3,
   inclination: 3.39458,
@@ -350,7 +329,7 @@ export const VENUS: CelestialBody = {
 export const EARTH: CelestialBody = {
   name: 'Earth',
   type: 'planet',
-  thumbnail: earthSrc as string,
+  thumbnail: Thumbnail.EARTH,
   eccentricity: 0.0167086,
   semiMajorAxis: 149597870.7e3, // 1 AU
   inclination: 0.00005,
@@ -397,7 +376,7 @@ export const EARTH: CelestialBody = {
 export const MARS: CelestialBody = {
   name: 'Mars',
   type: 'planet',
-  thumbnail: marsSrc as string,
+  thumbnail: Thumbnail.MARS,
   eccentricity: 0.0935,
   semiMajorAxis: 227939200e3,
   inclination: 1.85,
@@ -443,7 +422,7 @@ export const MARS: CelestialBody = {
 export const JUPITER: CelestialBody = {
   name: 'Jupiter',
   type: 'planet',
-  thumbnail: jupiterSrc as string,
+  thumbnail: Thumbnail.JUPITER,
   eccentricity: 0.0489,
   semiMajorAxis: 778340821e3,
   inclination: 1.305,
@@ -517,7 +496,7 @@ export const JUPITER: CelestialBody = {
 export const SATURN: CelestialBody = {
   name: 'Saturn',
   type: 'planet',
-  thumbnail: saturnSrc as string,
+  thumbnail: Thumbnail.SATURN,
   eccentricity: 0.0565,
   semiMajorAxis: 1433449370e3,
   inclination: 2.485,
@@ -633,7 +612,7 @@ export const SATURN: CelestialBody = {
 export const URANUS: CelestialBody = {
   name: 'Uranus',
   type: 'planet',
-  thumbnail: uranusSrc as string,
+  thumbnail: Thumbnail.URANUS,
   eccentricity: 0.0457,
   semiMajorAxis: 2876679082e3,
   inclination: 0.772,
@@ -653,7 +632,7 @@ export const URANUS: CelestialBody = {
 export const NEPTUNE: CelestialBody = {
   name: 'Neptune',
   type: 'planet',
-  thumbnail: neptuneSrc as string,
+  thumbnail: Thumbnail.NEPTUNE,
   eccentricity: 0.0086,
   semiMajorAxis: 4503443661e3,
   inclination: 1.77,
@@ -687,7 +666,7 @@ export const NEPTUNE: CelestialBody = {
 export const SOL2: CelestialBody = {
   name: 'Sol',
   type: 'sun',
-  thumbnail: sunSrc as string, // TODO: cast shouldn't be necessary
+  thumbnail: Thumbnail.SUN,
   eccentricity: 0,
   semiMajorAxis: 0,
   inclination: 0,

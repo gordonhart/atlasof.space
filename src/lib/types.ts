@@ -1,3 +1,5 @@
+import { Thumbnail } from './images.ts';
+
 export type Point2 = [number, number];
 export type Point3 = [number, number, number];
 export type CartesianState = {
@@ -18,7 +20,7 @@ export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-
 export type CelestialBody = KeplerianElements & {
   name: string;
   shortName?: string;
-  thumbnail?: string;
+  thumbnail?: Thumbnail;
   mass: number; // kg
   radius: number; // m
   // TODO: initial rotation?
