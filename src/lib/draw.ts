@@ -197,34 +197,26 @@ function drawOffscreenLabel(
   const [xMin, xMax, yMin, yMax] = [-halfX, halfX, -halfY, halfY];
   const [targetXpx, targetYpx] = [xPx - halfX, yPx - halfY];
   const slope = targetYpx / targetXpx;
-  const leftEdgeY = slope * xMin;
-  const rightEdgeY = slope * xMax;
-  const bottomEdgeX = yMin / slope;
-  const topEdgeX = yMax / slope;
+  const [leftEdgeY, rightEdgeY, bottomEdgeX, topEdgeX] = [slope * xMin, slope * xMax, yMin / slope, yMax / slope];
   let drawPx: Point2 = [-Infinity, -Infinity];
-  let caretOffsetPx: Point2 = [0, 0];
-  let caretType: CaretType = 'left';
+  let caret: { type: CaretType; offsetPx: Point2 } = { type: 'left', offsetPx: [0, 0] };
   if (yMin <= leftEdgeY && leftEdgeY <= yMax && targetXpx < 0) {
     drawPx = [xMin + edgePad, leftEdgeY];
-    caretOffsetPx = [-edgePad / 2, textHeightPx / 2];
-    caretType = 'left';
+    caret = { type: 'left', offsetPx: [-edgePad / 2, textHeightPx / 2] };
   } else if (yMin <= rightEdgeY && rightEdgeY <= yMax) {
     drawPx = [xMax - edgePad - textWidthPx, rightEdgeY];
-    caretOffsetPx = [textWidthPx + edgePad / 2, textHeightPx / 2];
-    caretType = 'right';
+    caret = { type: 'right', offsetPx: [textWidthPx + edgePad / 2, textHeightPx / 2] };
   } else if (xMin <= bottomEdgeX && bottomEdgeX <= xMax && targetYpx < 0) {
     drawPx = [bottomEdgeX, yMin + edgePad];
-    caretOffsetPx = [textWidthPx / 2, -edgePad / 2];
-    caretType = 'down';
+    caret = { type: 'down', offsetPx: [textWidthPx / 2, -edgePad / 2] };
   } else if (xMin <= topEdgeX && topEdgeX <= xMax) {
     drawPx = [topEdgeX, yMax - edgePad - textHeightPx];
-    caretOffsetPx = [textWidthPx / 2, textHeightPx + edgePad / 2];
-    caretType = 'up';
+    caret = { type: 'up', offsetPx: [textWidthPx / 2, textHeightPx + edgePad / 2] };
   }
   const [drawXpx, drawYpx]: Point2 = [drawPx[0] + halfX, drawPx[1] + halfY];
   drawLabelAtLocation(ctx, label, color, [drawXpx, drawYpx], [textWidthPx, textHeightPx]);
-  const trianglePx: Point2 = [drawXpx + caretOffsetPx[0], drawYpx + caretOffsetPx[1]];
-  drawCaretAtLocation(ctx, color, trianglePx, caretType);
+  const trianglePx: Point2 = [drawXpx + caret.offsetPx[0], drawYpx + caret.offsetPx[1]];
+  drawCaretAtLocation(ctx, color, trianglePx, caret.type);
 }
 
 function drawLabelAtLocation(
