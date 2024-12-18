@@ -1,16 +1,23 @@
 import { CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
+import sunSrc from '../../assets/sun-thumb.jpg';
+import uranusSrc from '../../assets/uranus-thumb.jpg';
+import neptuneSrc from '../../assets/neptune-thumb.jpg';
+import plutoSrc from '../../assets/pluto-thumb.jpg';
+import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
 
 const DEFAULT_MOON_COLOR = '#aaa';
 const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
+
 // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
 //  collected over time. Switch?
 export const ASTEROIDS: Array<CelestialBody> = [
   {
-    name: 'Ceres',
+    name: '1 Ceres',
+    shortName: 'Ceres',
     type: 'asteroid',
     eccentricity: 0.075823,
     semiMajorAxis: 413690250e3,
@@ -24,7 +31,8 @@ export const ASTEROIDS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Vesta',
+    name: '4 Vesta',
+    shortName: 'Vesta',
     type: 'asteroid',
     eccentricity: 0.0894,
     semiMajorAxis: 2.36 * AU,
@@ -38,7 +46,8 @@ export const ASTEROIDS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Pallas',
+    name: '2 Pallas',
+    shortName: 'Pallas',
     type: 'asteroid',
     eccentricity: 0.2302,
     semiMajorAxis: 4.14e11,
@@ -52,7 +61,8 @@ export const ASTEROIDS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Hygiea',
+    name: '10 Hygiea',
+    shortName: 'Hygiea',
     type: 'asteroid',
     eccentricity: 0.1125,
     semiMajorAxis: 3.1415 * AU,
@@ -66,7 +76,23 @@ export const ASTEROIDS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Ryugu',
+    name: '3 Juno',
+    shortName: 'Juno',
+    mass: 2.67e19, // kg
+    radius: 127e3, // m
+    eccentricity: 0.2562,
+    semiMajorAxis: 3.35 * AU, // meters
+    inclination: 12.991, // degrees
+    longitudeAscending: 169.84, // degrees
+    argumentOfPeriapsis: 247.74, // degrees
+    trueAnomaly: 0, // degrees (value at epoch)
+    color: DEFAULT_ASTEROID_COLOR,
+    type: 'asteroid',
+    satellites: [],
+  },
+  {
+    name: '162173 Ryugu',
+    shortName: 'Ryugu',
     type: 'asteroid',
     eccentricity: 0.1902,
     semiMajorAxis: 1.1896 * AU,
@@ -81,6 +107,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   },
   {
     name: '21 Lutetia',
+    shortName: 'Lutetia',
     mass: 1.7e18, // kg
     radius: 49e3, // m
     eccentricity: 0.16339,
@@ -95,7 +122,8 @@ export const ASTEROIDS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: '67P/C–G', // '67P/Churyumov–Gerasimenko',
+    name: '67P/Churyumov–Gerasimenko',
+    shortName: '67P/C–G',
     mass: 1e13, // kg
     radius: 2000, // m (average radius based on dimensions)
     eccentricity: 0.64,
@@ -110,7 +138,8 @@ export const ASTEROIDS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Eros', // 433 Eros
+    name: '433 Eros',
+    shortName: 'Eros',
     mass: 6.687e15, // kg
     radius: 8420, // m, average (highly irregular)
     eccentricity: 0.2226,
@@ -125,6 +154,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   },
   {
     name: '253 Mathilde',
+    shortName: 'Mathilde',
     mass: 1.033e17, // kg
     radius: 26.4e3, // m
     eccentricity: 0.26492652,
@@ -141,7 +171,9 @@ export const ASTEROIDS: Array<CelestialBody> = [
 
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   {
-    name: 'Pluto',
+    name: '134340 Pluto',
+    shortName: 'Pluto',
+    thumbnail: plutoSrc,
     type: 'trans-neptunian-object',
     eccentricity: 0.2488,
     semiMajorAxis: 5906440628e3,
@@ -152,7 +184,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
     mass: 1.3025e22,
     radius: 1188.3e3,
     siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
-    color: DEFAULT_MOON_COLOR,
+    color: '#E7C7A4',
     satellites: [
       {
         name: 'Charon',
@@ -172,7 +204,8 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
     ],
   },
   {
-    name: 'Eris',
+    name: '136199 Eris',
+    shortName: 'Eris',
     type: 'trans-neptunian-object',
     eccentricity: 0.43607,
     semiMajorAxis: 67.864 * AU,
@@ -186,7 +219,8 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Haumea',
+    name: '136108 Haumea',
+    shortName: 'Haumea',
     type: 'trans-neptunian-object',
     eccentricity: 0.19642,
     semiMajorAxis: 43.116 * AU,
@@ -200,7 +234,8 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Makemake',
+    name: '136472 Makemake',
+    shortName: 'Makemake',
     type: 'trans-neptunian-object',
     eccentricity: 0.16126,
     semiMajorAxis: 45.43 * AU,
@@ -214,7 +249,9 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
     satellites: [],
   },
   {
-    name: 'Arrokoth', // 486958 Arrokoth, also known as Ultima Thule
+    name: '486958 Arrokoth', // also known as Ultima Thule
+    shortName: 'Arrokoth',
+    thumbnail: arrokothSrc,
     mass: 7.485e14, // kg
     radius: 18e3, // m (average radius based on length of 36 km)
     eccentricity: 0.04172,
@@ -232,6 +269,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
 export const SOL2: CelestialBody = {
   name: 'Sol',
   type: 'sun',
+  thumbnail: sunSrc as string, // TODO: cast shouldn't be necessary
   eccentricity: 0,
   semiMajorAxis: 0,
   inclination: 0,
@@ -255,7 +293,7 @@ export const SOL2: CelestialBody = {
       mass: 3.3011e23,
       radius: 2439.7e3,
       siderealRotationPeriod: 58.6467 * 24 * 60 * 60, // 58 days
-      color: '#888',
+      color: '#b3aeae',
       satellites: [],
     },
     {
@@ -270,7 +308,7 @@ export const SOL2: CelestialBody = {
       mass: 4.8675e24,
       radius: 6051.8e3,
       siderealRotationPeriod: -243.02 * 24 * 60 * 60, // 243 days; negative for retrograde rotation
-      color: '#fe8',
+      color: '#e6b667',
       satellites: [],
     },
     {
@@ -285,7 +323,7 @@ export const SOL2: CelestialBody = {
       mass: 5.972168e24,
       radius: 6371e3,
       siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
-      color: '#3fb',
+      color: '#7e87dd',
       satellites: [
         {
           name: 'Luna',
@@ -330,7 +368,7 @@ export const SOL2: CelestialBody = {
       mass: 6.4171e23,
       radius: 3389.5e3,
       siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
-      color: '#f53',
+      color: '#c96c3c',
       satellites: [
         {
           name: 'Phobos',
@@ -375,7 +413,7 @@ export const SOL2: CelestialBody = {
       mass: 1.8982e27,
       radius: 69911e3,
       siderealRotationPeriod: 9 * 60 * 60 + 55 * 60 + 30, // 9 hr 55 min 30 sec
-      color: '#fa2',
+      color: '#e9be76',
       satellites: [
         {
           name: 'Io',
@@ -447,7 +485,7 @@ export const SOL2: CelestialBody = {
       mass: 5.6834e26,
       radius: 58232e3,
       siderealRotationPeriod: 10 * 60 * 60 + 32 * 60 + 35, // 10 hr 32 min 35 sec
-      color: '#faa',
+      color: '#d7be87',
       satellites: [
         {
           name: 'Mimas',
@@ -552,6 +590,7 @@ export const SOL2: CelestialBody = {
     {
       name: 'Uranus',
       type: 'planet',
+      thumbnail: uranusSrc,
       eccentricity: 0.0457,
       semiMajorAxis: 2876679082e3,
       inclination: 0.772,
@@ -561,7 +600,7 @@ export const SOL2: CelestialBody = {
       mass: 8.681e25,
       radius: 25362e3,
       siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
-      color: '#fec',
+      color: '#9bcee6',
       satellites: [
         // TODO: add the main moons: Miranda, Ariel, Umbriel, Titania, Oberon
         //  there are more but we can ignore those for now
@@ -570,6 +609,7 @@ export const SOL2: CelestialBody = {
     {
       name: 'Neptune',
       type: 'planet',
+      thumbnail: neptuneSrc,
       eccentricity: 0.0086,
       semiMajorAxis: 4503443661e3,
       inclination: 1.77,
@@ -579,7 +619,7 @@ export const SOL2: CelestialBody = {
       mass: 1.02409e26,
       radius: 24622e3,
       siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
-      color: '#2bc',
+      color: '#5a7cf6',
       satellites: [
         {
           name: 'Triton',

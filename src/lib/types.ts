@@ -17,6 +17,8 @@ export type KeplerianElements = {
 export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object' | 'belt';
 export type CelestialBody = KeplerianElements & {
   name: string;
+  shortName?: string;
+  thumbnail?: string;
   mass: number; // kg
   radius: number; // m
   // TODO: initial rotation?

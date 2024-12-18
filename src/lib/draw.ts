@@ -162,7 +162,7 @@ function drawOrbit(
 
 function drawLabel(
   ctx: CanvasRenderingContext2D,
-  { color, radius, name, position }: CelestialBodyState,
+  { color, radius, name, shortName, position }: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [offsetXm, offsetYm]: Point2,
   metersPerPx: number
@@ -171,16 +171,17 @@ function drawLabel(
   const bodyXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx;
   const bodyYpx = canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx;
 
+  const label = shortName ?? name;
   ctx.font = '12px Arial';
-  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(name);
+  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
   const textPx: Point2 = [textWidthPx, textHeightPx];
 
   // body is off-screen; draw a pointer
   if (bodyXpx < 0 || bodyXpx > window.innerWidth || bodyYpx < 0 || bodyYpx > window.innerHeight) {
-    drawOffscreenLabel(ctx, name, color, [canvasWidthPx, canvasHeightPx], [bodyXpx, bodyYpx], textPx);
+    drawOffscreenLabel(ctx, label, color, [canvasWidthPx, canvasHeightPx], [bodyXpx, bodyYpx], textPx);
   } else {
     const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];
-    drawLabelAtLocation(ctx, name, color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
+    drawLabelAtLocation(ctx, label, color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
   }
 }
 

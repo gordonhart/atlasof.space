@@ -1,4 +1,4 @@
-import { Grid, Group, Paper, Stack, Text } from '@mantine/core';
+import { Grid, Group, Image, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBodyState } from '../../lib/types.ts';
 import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
@@ -13,7 +13,7 @@ export function FactCard({ body }: Props) {
   const period = orbitalPeriod(body.semiMajorAxis, SOL.mass);
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(body.semiMajorAxis);
-  const satellites = body.satellites.map(({ name }) => name);
+  const satellites = body.satellites.map(({ shortName, name }) => shortName ?? name);
   const facts: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
@@ -28,6 +28,7 @@ export function FactCard({ body }: Props) {
     ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
   ];
 
+  const thumbnailSize = 180;
   return (
     <Paper
       fz="xs"
@@ -37,6 +38,7 @@ export function FactCard({ body }: Props) {
       style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
     >
       <Stack gap="xs">
+        {body.thumbnail != null && <Image radius="xl" src={body.thumbnail} maw={thumbnailSize} mah={thumbnailSize} />}
         <Group gap="xs">
           <Text inherit fw="bold">
             {body.name}

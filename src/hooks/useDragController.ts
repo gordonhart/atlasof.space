@@ -11,7 +11,7 @@ export function useDragController(
 ) {
   const [prevPosition, setPrevPosition] = useState<Point2 | undefined>();
 
-  function getCursorCoordinates(cursorXpx: number, cursorYpx: number) {
+  function getCursorCoordinates(cursorXpx: number, cursorYpx: number): Point2 {
     const [eventXm, eventYm] = [cursorXpx * metersPerPx, (window.innerHeight - cursorYpx) * metersPerPx];
     const [panOffsetXm, panOffsetYm] = offset;
     const [focusOffsetXm, focusOffsetYm] = findCelestialBody(systemState, center)?.position ?? [0, 0];
@@ -21,17 +21,22 @@ export function useDragController(
   }
 
   function updateCenter(event: MouseEvent<HTMLCanvasElement>) {
-    const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
-    const closestBody = findCloseBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 25);
-    if (closestBody != null) {
-      updateAppState({ center: closestBody.name, offset: [0, 0] });
+    const cursorMeters = getCursorCoordinates(event.clientX, event.clientY);
+    const closeBody = findCloseBody(systemState, visibleTypes, cursorMeters, metersPerPx * 25);
+    if (closeBody != null) {
+      updateAppState({ center: closeBody.name, offset: [0, 0] });
     }
   }
 
   function updateHover(event: MouseEvent<HTMLCanvasElement>) {
-    const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
-    const closestOrbit = findCloseOrbit(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 10);
-    updateAppState({ hover: closestOrbit != null ? closestOrbit.name : null });
+    const cursorMeters = getCursorCoordinates(event.clientX, event.clientY);
+    const closeBody = findCloseBody(systemState, visibleTypes, cursorMeters, metersPerPx * 25);
+    if (closeBody != null) {
+      updateAppState({ hover: closeBody.name });
+    } else {
+      const closeOrbit = findCloseOrbit(systemState, visibleTypes, cursorMeters, metersPerPx * 10);
+      updateAppState({ hover: closeOrbit != null ? closeOrbit.name : null });
+    }
   }
 
   function updateOffset(event: MouseEvent<HTMLCanvasElement>) {
@@ -110,7 +115,5 @@ function distanceToOrbitalEllipse(x: number, y: number, ellipse: KeplerianElemen
   // TODO: this math isn't 100% correct, likely need to take into account inclination
   const theta = Math.atan2(y, x) - degreesToRadians(omega) - degreesToRadians(Omega);
   const [xExpected, yExpected] = orbitalEllipseAtTheta(ellipse, theta);
-  const r = magnitude([x, y]);
-  const rPrime = magnitude([xExpected, yExpected]);
-  return Math.abs(rPrime - r);
+  return magnitude([x - xExpected, y - yExpected]);
 }
