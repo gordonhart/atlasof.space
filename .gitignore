@@ -2,7 +2,7 @@
 *.swp
 *.swn
 
-.DS_Store/
+.DS_Store
 .idea/
 __pycache__/
 uv.lock
