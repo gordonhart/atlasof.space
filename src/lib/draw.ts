@@ -227,7 +227,6 @@ function drawLabelAtLocation(
   [textWidthPx, textHeightPx]: Point2
 ) {
   ctx.save();
-  // TODO: applying the scale inversion here complicates the label math somewhat; defer until the text is drawn?
   ctx.scale(1, -1); // flip and translate to get text right-side-up
   ctx.translate(0, -window.innerHeight);
   const yPxInverted = window.innerHeight - yPx;
