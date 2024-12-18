@@ -38,7 +38,7 @@ export function TimeControls({ state, updateState }: AppStateControlProps) {
 
       <Group gap={buttonGap} align="flex-end">
         <Tooltip label="Slow Down">
-          <ActionIcon onClick={() => updateState({ dt: Math.max(state.dt / 2, 1) })}>
+          <ActionIcon onClick={() => updateState({ dt: state.dt / 2 })}>
             <IconPlayerTrackPrevFilled size={iconSize} />
           </ActionIcon>
         </Tooltip>

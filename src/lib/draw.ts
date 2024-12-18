@@ -3,76 +3,113 @@ import { AppState } from './state.ts';
 import { ASTEROID_BELT, findCelestialBody, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 
-export function drawBodies(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
+export function drawSystem(
+  ctx: CanvasRenderingContext2D,
+  { drawTail, metersPerPx, center, planetScaleFactor, offset, hover, visibleTypes }: AppState,
+  systemState: CelestialBodyState
+) {
+  ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  const canvasPx = getCanvasPixels(ctx);
+  const offsetMeters = getOffsetMeters(systemState, offset, center);
+
+  function drawBodyRecursive(body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) return;
+    body.satellites.forEach(drawBodyRecursive);
+    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const bodyToDraw = { ...body, radius: radiusScaled };
+    drawBody(ctx, bodyToDraw, canvasPx, offsetMeters, metersPerPx);
+  }
+
+  drawBodyRecursive(systemState);
+}
+
+export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
-    drawTail,
     drawOrbit: shouldDrawOrbits,
+    drawLabel: shouldDrawLabels,
     metersPerPx,
     center,
     planetScaleFactor,
-    offset: [panOffsetXm, panOffsetYm],
+    offset,
     hover,
     visibleTypes,
   } = appState;
 
-  ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  const dpr = window.devicePixelRatio ?? 1;
-  const [canvasWidthPx, canvasHeightPx] = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
-  const centerBody = findCelestialBody(systemState, center);
-  const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
-  const [offsetXm, offsetYm] = [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
+  const canvasPx = getCanvasPixels(ctx);
+  const [offsetXm, offsetYm] = getOffsetMeters(systemState, offset, center);
 
-  function drawBody({ name, position, radius, color, satellites, type, ...body }: CelestialBodyState) {
-    if (!visibleTypes.has(type)) {
-      return;
-    }
-    satellites.forEach(drawBody);
-    const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
-    const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
-    const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
-    const radiusPx = Math.max((radius / metersPerPx) * planetScaleFactor, 1);
-    const radiusScaledPx = name === hover ? radiusPx * 5 : radiusPx;
-    ctx.beginPath();
-    ctx.arc(positionXpx, positionYpx, radiusScaledPx, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.beginPath();
-    if (body.siderealRotationPeriod != null) {
-      const rotationOffset = degreesToRadians(body.rotation);
-      ctx.arc(positionXpx, positionYpx, radiusScaledPx, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
-      ctx.lineTo(positionXpx, positionYpx);
-      ctx.fillStyle = 'black';
-      ctx.fill();
-    }
+  function drawOrbitRecursive(parent: CelestialBodyState | null, body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) return;
+    body.satellites.forEach(child => drawOrbitRecursive(body, child));
+    const offset: Point2 = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
+    drawOrbit(ctx, body, canvasPx, offset, metersPerPx, 0.5);
   }
 
-  function drawOrbit(parent: CelestialBodyState | null, body: CelestialBodyState) {
-    if (!visibleTypes.has(body.type)) {
-      return;
-    }
-    body.satellites.forEach(child => drawOrbit(body, child));
-    const offset: Point2 = [(parent?.position?.[0] ?? 0) + offsetXm, (parent?.position?.[1] ?? 0) + offsetYm];
-    drawOrbitalEllipse(ctx, body, [canvasWidthPx, canvasHeightPx], offset, metersPerPx, 0.5);
+  // TODO: why doesn't this position need to be offset by the parent...?
+  function drawLabelRecursive(body: CelestialBodyState) {
+    if (!visibleTypes.has(body.type)) return;
+    body.satellites.forEach(child => drawLabelRecursive(child));
+    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const labelBody = { ...body, radius: radiusScaled };
+    drawLabel(ctx, labelBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
 
   if (visibleTypes.has('belt')) {
     [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
-      drawBelt(ctx, [min, max], [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
+      drawBelt(ctx, [min, max], canvasPx, [offsetXm, offsetYm], metersPerPx);
     });
   }
 
+  // order here is important; ensure higher-priority information is drawn on top (later)
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
-  if (hoverBody != null) {
-    drawOrbitalEllipse(ctx, hoverBody, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
-  }
+  if (hoverBody != null) drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
+  if (shouldDrawOrbits) drawOrbitRecursive(null, systemState);
+  if (shouldDrawLabels) drawLabelRecursive(systemState);
+}
 
-  if (shouldDrawOrbits) {
-    drawOrbit(null, systemState);
-  }
+function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
+  const dpr = window.devicePixelRatio ?? 1;
+  return [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
+}
 
-  drawBody(systemState);
+function getOffsetMeters(body: CelestialBodyState, [panOffsetXm, panOffsetYm]: Point2, center: string): Point2 {
+  const centerBody = findCelestialBody(body, center);
+  const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
+  return [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
+}
+
+function drawBody(
+  ctx: CanvasRenderingContext2D,
+  { position, radius, color, rotation, siderealRotationPeriod }: CelestialBodyState,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
+  metersPerPx: number
+) {
+  const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
+  const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
+  const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
+  const radiusPx = Math.max(radius / metersPerPx, 1);
+  ctx.beginPath();
+  ctx.arc(positionXpx, positionYpx, radiusPx, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  // draw rotation indicator
+  if (siderealRotationPeriod != null) {
+    const rotationOffset = degreesToRadians(rotation);
+    ctx.beginPath();
+    ctx.arc(positionXpx, positionYpx, radiusPx + 1, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
+    ctx.lineTo(positionXpx, positionYpx);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(positionXpx, positionYpx, 0.8 * radiusPx, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
 }
 
 function drawBelt(
@@ -98,7 +135,7 @@ function drawBelt(
   ctx.fill();
 }
 
-function drawOrbitalEllipse(
+function drawOrbit(
   ctx: CanvasRenderingContext2D,
   body: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: Point2,
@@ -121,4 +158,118 @@ function drawOrbitalEllipse(
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
+}
+
+function drawLabel(
+  ctx: CanvasRenderingContext2D,
+  { color, radius, name, position }: CelestialBodyState,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
+  metersPerPx: number
+) {
+  const [bodyXm, bodyYm] = position;
+  const bodyXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx;
+  const bodyYpx = canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx;
+
+  ctx.font = '12px Arial';
+  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(name);
+  const textPx: Point2 = [textWidthPx, textHeightPx];
+
+  // body is off-screen; draw a pointer
+  if (bodyXpx < 0 || bodyXpx > window.innerWidth || bodyYpx < 0 || bodyYpx > window.innerHeight) {
+    drawOffscreenLabel(ctx, name, color, [canvasWidthPx, canvasHeightPx], [bodyXpx, bodyYpx], textPx);
+  } else {
+    const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];
+    drawLabelAtLocation(ctx, name, color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
+  }
+}
+
+function drawOffscreenLabel(
+  ctx: CanvasRenderingContext2D,
+  label: string,
+  color: string,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [xPx, yPx]: Point2,
+  [textWidthPx, textHeightPx]: Point2
+) {
+  const edgePad = 24;
+  const [halfX, halfY] = [canvasWidthPx / 2, canvasHeightPx / 2];
+  const [xMin, xMax, yMin, yMax] = [-halfX, halfX, -halfY, halfY];
+  const [targetXpx, targetYpx] = [xPx - halfX, yPx - halfY];
+  const slope = targetYpx / targetXpx;
+  const [leftEdgeY, rightEdgeY, bottomEdgeX, topEdgeX] = [slope * xMin, slope * xMax, yMin / slope, yMax / slope];
+  let drawPx: Point2 = [-Infinity, -Infinity];
+  let caret: { type: CaretType; offsetPx: Point2 } = { type: 'left', offsetPx: [0, 0] };
+  if (yMin <= leftEdgeY && leftEdgeY <= yMax && targetXpx < 0) {
+    drawPx = [xMin + edgePad, leftEdgeY];
+    caret = { type: 'left', offsetPx: [-edgePad / 2, textHeightPx / 2] };
+  } else if (yMin <= rightEdgeY && rightEdgeY <= yMax) {
+    drawPx = [xMax - edgePad - textWidthPx, rightEdgeY];
+    caret = { type: 'right', offsetPx: [textWidthPx + edgePad / 2, textHeightPx / 2] };
+  } else if (xMin <= bottomEdgeX && bottomEdgeX <= xMax && targetYpx < 0) {
+    drawPx = [bottomEdgeX, yMin + edgePad];
+    caret = { type: 'down', offsetPx: [textWidthPx / 2, -edgePad / 2] };
+  } else if (xMin <= topEdgeX && topEdgeX <= xMax) {
+    drawPx = [topEdgeX, yMax - edgePad - textHeightPx];
+    caret = { type: 'up', offsetPx: [textWidthPx / 2, textHeightPx + edgePad / 2] };
+  }
+  const [drawXpx, drawYpx]: Point2 = [drawPx[0] + halfX, drawPx[1] + halfY];
+  drawLabelAtLocation(ctx, label, color, [drawXpx, drawYpx], [textWidthPx, textHeightPx]);
+  const trianglePx: Point2 = [drawXpx + caret.offsetPx[0], drawYpx + caret.offsetPx[1]];
+  drawCaretAtLocation(ctx, color, trianglePx, caret.type);
+}
+
+function drawLabelAtLocation(
+  ctx: CanvasRenderingContext2D,
+  label: string,
+  color: string,
+  [xPx, yPx]: Point2,
+  [textWidthPx, textHeightPx]: Point2
+) {
+  ctx.save();
+  ctx.scale(1, -1); // flip and translate to get text right-side-up
+  ctx.translate(0, -window.innerHeight);
+  const yPxInverted = window.innerHeight - yPx;
+
+  // draw background
+  ctx.beginPath();
+  ctx.fillStyle = 'black';
+  ctx.strokeStyle = color;
+  const boxPadPx = 4;
+  const boxLocationPx: Point2 = [xPx - boxPadPx, yPxInverted - textHeightPx - boxPadPx];
+  const boxDimensionPx: Point2 = [textWidthPx + boxPadPx * 2, textHeightPx + boxPadPx * 2];
+  ctx.roundRect(...boxLocationPx, ...boxDimensionPx, 5);
+  ctx.fill();
+  ctx.stroke();
+
+  // draw text
+  ctx.fillStyle = color;
+  ctx.fillText(label, xPx, yPxInverted);
+  ctx.restore();
+}
+
+type CaretType = 'right' | 'left' | 'up' | 'down';
+function drawCaretAtLocation(
+  ctx: CanvasRenderingContext2D,
+  color: string,
+  [xPx, yPx]: Point2, // centered on this value
+  type: CaretType
+) {
+  const size = 3;
+  // prettier-ignore
+  const vertices: Array<Point2> = type === 'right'
+    ? [[xPx + size, yPx], [xPx - size, yPx - size], [xPx - size, yPx + size]]
+    : type === 'left'
+      ? [[xPx - size, yPx], [xPx + size, yPx - size], [xPx + size, yPx + size]]
+      : type === 'up'
+        ? [[xPx, yPx + size], [xPx + size, yPx - size], [xPx - size, yPx - size]]
+        : [[xPx, yPx - size], [xPx + size, yPx + size], [xPx - size, yPx + size]];
+  ctx.beginPath();
+  ctx.moveTo(...vertices[0]);
+  vertices.reverse().forEach(vertex => {
+    ctx.lineTo(...vertex);
+  });
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
 }
