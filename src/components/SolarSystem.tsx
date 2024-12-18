@@ -38,14 +38,14 @@ export function SolarSystem() {
 
   function setupCanvases() {
     if (systemCanvasRef.current != null && annotationCanvasRef.current != null) {
-      [systemCanvasRef, annotationCanvasRef].forEach(canvasRef => {
+      [systemCanvasRef.current, annotationCanvasRef.current].forEach(canvas => {
         const dpr = window.devicePixelRatio ?? 1;
-        canvasRef.current.width = window.innerWidth * dpr;
-        canvasRef.current.height = window.innerHeight * dpr;
-        const ctx = canvasRef.current.getContext('2d')!;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        const ctx = canvas.getContext('2d')!;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.scale(dpr, -dpr); // scale and flip Y axis to make (0, 0) bottom left corner, +x right +y up
-        ctx.translate(0, -canvasRef.current.height / dpr);
+        ctx.translate(0, -canvas.height / dpr);
       });
     }
   }
