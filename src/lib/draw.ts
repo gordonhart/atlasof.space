@@ -160,7 +160,6 @@ function drawOrbit(
   ctx.stroke();
 }
 
-// TODO: show edge indicator for off-screen bodies?
 function drawLabel(
   ctx: CanvasRenderingContext2D,
   { color, radius, name, position }: CelestialBodyState,
@@ -168,14 +167,11 @@ function drawLabel(
   [offsetXm, offsetYm]: Point2,
   metersPerPx: number
 ) {
-  ctx.save();
-  ctx.font = '12px Arial';
-  // TODO: applying the scale inversion here complicates the label math somewhat; defer until the text is drawn?
-  ctx.scale(1, -1); // flip and translate to get text right-side-up
-  ctx.translate(0, -window.innerHeight);
   const [bodyXm, bodyYm] = position;
   const bodyXpx = canvasWidthPx / 2 + (bodyXm + offsetXm) / metersPerPx;
-  const bodyYpx = window.innerHeight - (canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx);
+  const bodyYpx = canvasHeightPx / 2 + (bodyYm + offsetYm) / metersPerPx;
+
+  ctx.font = '12px Arial';
   const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(name);
   const textPx: Point2 = [textWidthPx, textHeightPx];
 
@@ -184,10 +180,8 @@ function drawLabel(
     drawOffscreenLabel(ctx, name, color, [canvasWidthPx, canvasHeightPx], [bodyXpx, bodyYpx], textPx);
   } else {
     const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];
-    drawLabelAtLocation(ctx, name, color, [bodyXpx - offsetXpx, bodyYpx - offsetYpx], textPx);
+    drawLabelAtLocation(ctx, name, color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
   }
-
-  ctx.restore();
 }
 
 function drawOffscreenLabel(
@@ -208,29 +202,29 @@ function drawOffscreenLabel(
   const bottomEdgeX = yMin / slope;
   const topEdgeX = yMax / slope;
   let drawPx: Point2 = [-Infinity, -Infinity];
-  let triangleOffsetPx: Point2 = [0, 0];
-  let triangleType: 'left' | 'right' | 'up' | 'down' = 'left';
+  let caretOffsetPx: Point2 = [0, 0];
+  let caretType: CaretType = 'left';
   if (yMin <= leftEdgeY && leftEdgeY <= yMax && targetXpx < 0) {
     drawPx = [xMin + edgePad, leftEdgeY];
-    triangleOffsetPx = [-edgePad / 2, -textHeightPx / 2];
-    triangleType = 'left';
+    caretOffsetPx = [-edgePad / 2, textHeightPx / 2];
+    caretType = 'left';
   } else if (yMin <= rightEdgeY && rightEdgeY <= yMax) {
     drawPx = [xMax - edgePad - textWidthPx, rightEdgeY];
-    triangleOffsetPx = [textWidthPx + edgePad / 2, -textHeightPx / 2];
-    triangleType = 'right';
+    caretOffsetPx = [textWidthPx + edgePad / 2, textHeightPx / 2];
+    caretType = 'right';
   } else if (xMin <= bottomEdgeX && bottomEdgeX <= xMax && targetYpx < 0) {
-    drawPx = [bottomEdgeX, yMin + edgePad + textHeightPx];
-    triangleOffsetPx = [textWidthPx / 2, -textHeightPx - edgePad / 2];
-    triangleType = 'down';
+    drawPx = [bottomEdgeX, yMin + edgePad];
+    caretOffsetPx = [textWidthPx / 2, -edgePad / 2];
+    caretType = 'down';
   } else if (xMin <= topEdgeX && topEdgeX <= xMax) {
-    drawPx = [topEdgeX, yMax - edgePad];
-    triangleOffsetPx = [textWidthPx / 2, edgePad / 2];
-    triangleType = 'up';
+    drawPx = [topEdgeX, yMax - edgePad - textHeightPx];
+    caretOffsetPx = [textWidthPx / 2, textHeightPx + edgePad / 2];
+    caretType = 'up';
   }
   const [drawXpx, drawYpx]: Point2 = [drawPx[0] + halfX, drawPx[1] + halfY];
   drawLabelAtLocation(ctx, label, color, [drawXpx, drawYpx], [textWidthPx, textHeightPx]);
-  const trianglePx: Point2 = [drawXpx + triangleOffsetPx[0], drawYpx + triangleOffsetPx[1]];
-  drawTriangleAtLocation(ctx, color, trianglePx, triangleType);
+  const trianglePx: Point2 = [drawXpx + caretOffsetPx[0], drawYpx + caretOffsetPx[1]];
+  drawCaretAtLocation(ctx, color, trianglePx, caretType);
 }
 
 function drawLabelAtLocation(
@@ -240,12 +234,18 @@ function drawLabelAtLocation(
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2
 ) {
+  ctx.save();
+  // TODO: applying the scale inversion here complicates the label math somewhat; defer until the text is drawn?
+  ctx.scale(1, -1); // flip and translate to get text right-side-up
+  ctx.translate(0, -window.innerHeight);
+  const yPxInverted = window.innerHeight - yPx;
+
   // draw background
   ctx.beginPath();
   ctx.fillStyle = 'black';
   ctx.strokeStyle = color;
   const boxPadPx = 4;
-  const boxLocationPx: Point2 = [xPx - boxPadPx, yPx - textHeightPx - boxPadPx];
+  const boxLocationPx: Point2 = [xPx - boxPadPx, yPxInverted - textHeightPx - boxPadPx];
   const boxDimensionPx: Point2 = [textWidthPx + boxPadPx * 2, textHeightPx + boxPadPx * 2];
   ctx.roundRect(...boxLocationPx, ...boxDimensionPx, 5);
   ctx.fill();
@@ -253,22 +253,24 @@ function drawLabelAtLocation(
 
   // draw text
   ctx.fillStyle = color;
-  ctx.fillText(label, xPx, yPx);
+  ctx.fillText(label, xPx, yPxInverted);
+  ctx.restore();
 }
 
-function drawTriangleAtLocation(
+type CaretType = 'right' | 'left' | 'up' | 'down';
+function drawCaretAtLocation(
   ctx: CanvasRenderingContext2D,
   color: string,
-  [xPx, yPx]: Point2,
-  direction: 'right' | 'left' | 'up' | 'down'
+  [xPx, yPx]: Point2, // centered on this value
+  type: CaretType
 ) {
   const size = 3;
   // prettier-ignore
-  const vertices: Array<Point2> = direction === 'right'
+  const vertices: Array<Point2> = type === 'right'
     ? [[xPx + size, yPx], [xPx - size, yPx - size], [xPx - size, yPx + size]]
-    : direction === 'left'
+    : type === 'left'
       ? [[xPx - size, yPx], [xPx + size, yPx - size], [xPx + size, yPx + size]]
-      : direction === 'up'
+      : type === 'up'
         ? [[xPx, yPx + size], [xPx + size, yPx - size], [xPx - size, yPx - size]]
         : [[xPx, yPx - size], [xPx + size, yPx + size], [xPx - size, yPx + size]];
   ctx.beginPath();
