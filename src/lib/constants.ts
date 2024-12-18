@@ -4,6 +4,7 @@ import sunSrc from '../../assets/sun-thumb.jpg';
 import uranusSrc from '../../assets/uranus-thumb.jpg';
 import neptuneSrc from '../../assets/neptune-thumb.jpg';
 import plutoSrc from '../../assets/pluto-thumb.jpg';
+import ryuguSrc from '../../assets/ryugu-thumb.jpg';
 import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
@@ -93,6 +94,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '162173 Ryugu',
     shortName: 'Ryugu',
+    thumbnail: ryuguSrc,
     type: 'asteroid',
     eccentricity: 0.1902,
     semiMajorAxis: 1.1896 * AU,
