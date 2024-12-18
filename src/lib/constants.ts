@@ -13,8 +13,12 @@ import plutoSrc from '../../assets/pluto-thumb.jpg';
 import ceresSrc from '../../assets/ceres-thumb.jpg';
 import pallasSrc from '../../assets/pallas-thumb.jpg';
 import vestaSrc from '../../assets/vesta-thumb.jpg';
+import hygieaSrc from '../../assets/hygiea-thumb.jpg';
+import junoSrc from '../../assets/juno-thumb.jpg';
 import cg57pSrc from '../../assets/cg67p-thumb.jpg';
 import ryuguSrc from '../../assets/ryugu-thumb.jpg';
+import lutetiaSrc from '../../assets/lutetia-thumb.jpg';
+import makemakeSrc from '../../assets/makemake-thumb.jpg';
 import erosSrc from '../../assets/eros-thumb.jpg';
 import mathildeSrc from '../../assets/mathilde-thumb.jpg';
 import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
@@ -31,7 +35,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '1 Ceres',
     shortName: 'Ceres',
-    thumbnail: ceresSrc,
+    thumbnail: ceresSrc as string,
     type: 'asteroid',
     eccentricity: 0.075823,
     semiMajorAxis: 413690250e3,
@@ -47,7 +51,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '4 Vesta',
     shortName: 'Vesta',
-    thumbnail: vestaSrc,
+    thumbnail: vestaSrc as string,
     type: 'asteroid',
     eccentricity: 0.0894,
     semiMajorAxis: 2.36 * AU,
@@ -63,7 +67,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '2 Pallas',
     shortName: 'Pallas',
-    thumbnail: pallasSrc,
+    thumbnail: pallasSrc as string,
     type: 'asteroid',
     eccentricity: 0.2302,
     semiMajorAxis: 4.14e11,
@@ -79,6 +83,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '10 Hygiea',
     shortName: 'Hygiea',
+    thumbnail: hygieaSrc as string,
     type: 'asteroid',
     eccentricity: 0.1125,
     semiMajorAxis: 3.1415 * AU,
@@ -94,6 +99,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '3 Juno',
     shortName: 'Juno',
+    thumbnail: junoSrc as string,
     mass: 2.67e19, // kg
     radius: 127e3, // m
     eccentricity: 0.2562,
@@ -109,7 +115,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '162173 Ryugu',
     shortName: 'Ryugu',
-    thumbnail: ryuguSrc,
+    thumbnail: ryuguSrc as string,
     type: 'asteroid',
     eccentricity: 0.1902,
     semiMajorAxis: 1.1896 * AU,
@@ -125,6 +131,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '21 Lutetia',
     shortName: 'Lutetia',
+    thumbnail: lutetiaSrc as string,
     mass: 1.7e18, // kg
     radius: 49e3, // m
     eccentricity: 0.16339,
@@ -141,7 +148,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '67P/Churyumov–Gerasimenko',
     shortName: '67P/C–G',
-    thumbnail: cg57pSrc,
+    thumbnail: cg57pSrc as string,
     mass: 1e13, // kg
     radius: 2000, // m (average radius based on dimensions)
     eccentricity: 0.64,
@@ -158,7 +165,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '433 Eros',
     shortName: 'Eros',
-    thumbnail: erosSrc,
+    thumbnail: erosSrc as string,
     mass: 6.687e15, // kg
     radius: 8420, // m, average (highly irregular)
     eccentricity: 0.2226,
@@ -174,7 +181,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '253 Mathilde',
     shortName: 'Mathilde',
-    thumbnail: mathildeSrc,
+    thumbnail: mathildeSrc as string,
     mass: 1.033e17, // kg
     radius: 26.4e3, // m
     eccentricity: 0.26492652,
@@ -256,6 +263,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   {
     name: '136472 Makemake',
     shortName: 'Makemake',
+    thumbnail: makemakeSrc,
     type: 'trans-neptunian-object',
     eccentricity: 0.16126,
     semiMajorAxis: 45.43 * AU,
