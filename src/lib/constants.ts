@@ -1,9 +1,13 @@
 import { CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
 import sunSrc from '../../assets/sun-thumb.jpg';
+import mercurySrc from '../../assets/mercury-thumb.jpg';
+import venusSrc from '../../assets/venus-thumb.jpg';
+import earthSrc from '../../assets/earth-thumb.jpg';
 import uranusSrc from '../../assets/uranus-thumb.jpg';
 import neptuneSrc from '../../assets/neptune-thumb.jpg';
 import plutoSrc from '../../assets/pluto-thumb.jpg';
+import cg57pSrc from '../../assets/cg67p-thumb.jpg';
 import ryuguSrc from '../../assets/ryugu-thumb.jpg';
 import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
 
@@ -126,6 +130,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   {
     name: '67P/Churyumov–Gerasimenko',
     shortName: '67P/C–G',
+    thumbnail: cg57pSrc,
     mass: 1e13, // kg
     radius: 2000, // m (average radius based on dimensions)
     eccentricity: 0.64,
@@ -136,7 +141,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
     trueAnomaly: 0, // degrees (value at perihelion)
     siderealRotationPeriod: 12.4 * 3600, // hours to seconds
     color: DEFAULT_ASTEROID_COLOR,
-    type: 'asteroid',
+    type: 'asteroid', // TODO: technically a comet
     satellites: [],
   },
   {
@@ -268,6 +273,42 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   },
 ];
 
+export const VENUS: CelestialBody = {
+  name: 'Venus',
+  type: 'planet',
+  thumbnail: venusSrc as string,
+  eccentricity: 0.006772,
+  semiMajorAxis: 108208000e3,
+  inclination: 3.39458,
+  longitudeAscending: 76.6799,
+  argumentOfPeriapsis: 54.884,
+  trueAnomaly: 0, // starting at periapsis // TODO: set real values
+  mass: 4.8675e24,
+  radius: 6051.8e3,
+  siderealRotationPeriod: -243.02 * 24 * 60 * 60, // 243 days; negative for retrograde rotation
+  color: '#e6b667',
+  satellites: [
+    // TODO: this is not exactly a moon of Venus, how to model?
+    /*
+    {
+      name: '524522 Zoozve',
+      shortName: 'Zoozve',
+      type: 'moon',
+      eccentricity: 0.4103,
+      semiMajorAxis: 0.7237 * AU,
+      inclination: 9.006,
+      longitudeAscending: 231.58,
+      argumentOfPeriapsis: 355.45,
+      trueAnomaly: 0,
+      mass: 20.6e9, // estimated
+      radius: 118, // tiny!
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+     */
+  ],
+};
+
 export const SOL2: CelestialBody = {
   name: 'Sol',
   type: 'sun',
@@ -286,6 +327,7 @@ export const SOL2: CelestialBody = {
     {
       name: 'Mercury',
       type: 'planet',
+      thumbnail: mercurySrc,
       eccentricity: 0.2056,
       semiMajorAxis: 57909050e3, // meters
       inclination: 7.005, // degrees
@@ -298,24 +340,11 @@ export const SOL2: CelestialBody = {
       color: '#b3aeae',
       satellites: [],
     },
-    {
-      name: 'Venus',
-      type: 'planet',
-      eccentricity: 0.006772,
-      semiMajorAxis: 108208000e3,
-      inclination: 3.39458,
-      longitudeAscending: 76.6799,
-      argumentOfPeriapsis: 54.884,
-      trueAnomaly: 0, // starting at periapsis // TODO: set real values
-      mass: 4.8675e24,
-      radius: 6051.8e3,
-      siderealRotationPeriod: -243.02 * 24 * 60 * 60, // 243 days; negative for retrograde rotation
-      color: '#e6b667',
-      satellites: [],
-    },
+    VENUS,
     {
       name: 'Earth',
       type: 'planet',
+      thumbnail: earthSrc,
       eccentricity: 0.0167086,
       semiMajorAxis: 149597870.7e3, // 1 AU
       inclination: 0.00005,
