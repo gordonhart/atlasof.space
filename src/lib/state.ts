@@ -22,8 +22,8 @@ export const initialState: AppState = {
   dt: 60 * 60,
   play: true,
   drawTail: false,
-  drawOrbit: false,
-  drawLabel: true, // TODO: false
+  drawOrbit: true,
+  drawLabel: true,
   metersPerPx:
     (2 * (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU)) /
     Math.max(window.innerWidth, window.innerHeight),
@@ -31,7 +31,7 @@ export const initialState: AppState = {
   hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,
-  visibleTypes: new Set(['sun', 'planet', 'moon', 'asteroid', 'belt']),
+  visibleTypes: new Set(['sun', 'planet', 'moon', 'asteroid', 'belt', 'trans-neptunian-object']),
 };
 
 export function clampState({ dt, metersPerPx, planetScaleFactor, ...rest }: AppState): AppState {
