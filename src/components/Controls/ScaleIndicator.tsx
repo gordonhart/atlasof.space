@@ -1,12 +1,16 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
-import { AU } from '../../lib/constants.ts';
+import { AU, LIGHT_YEAR } from '../../lib/constants.ts';
 
 type Props = {
   metersPerPx: number;
 };
 export function ScaleIndicator({ metersPerPx }: Props) {
   let scaleWidthM, scaleDisplay, scaleUnits;
-  if (metersPerPx > 0.005 * AU) {
+  if (metersPerPx > 0.005 * LIGHT_YEAR) {
+    scaleDisplay = getScaleMeters(metersPerPx / LIGHT_YEAR) * 50;
+    scaleWidthM = scaleDisplay * LIGHT_YEAR;
+    scaleUnits = 'ly';
+  } else if (metersPerPx > 0.005 * AU) {
     scaleDisplay = getScaleMeters(metersPerPx / AU) * 50;
     scaleWidthM = scaleDisplay * AU;
     scaleUnits = 'AU';

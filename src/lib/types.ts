@@ -32,3 +32,18 @@ export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
     rotation: number; // degrees
     satellites: Array<CelestialBodyState>;
   };
+
+export type Belt = {
+  max: number; // meters from center of solar system
+  min: number;
+};
+
+export type Star = {
+  name: string;
+  radius: number; // meters
+  distance: number; // meters
+  mass: number;
+  rightAscension: { hours: number; minutes: number; seconds: number };
+  declination: { degrees: number; arcminutes: number; arcseconds: number };
+  color: `#${string}`;
+};

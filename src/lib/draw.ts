@@ -1,6 +1,6 @@
-import { CelestialBodyState, Point2 } from './types.ts';
+import { Belt, CelestialBodyState, Point2, Star } from './types.ts';
 import { AppState } from './state.ts';
-import { ASTEROID_BELT, findCelestialBody, KUIPER_BELT } from './constants.ts';
+import { ASTEROID_BELT, findCelestialBody, KUIPER_BELT, STARS } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 
 export function drawSystem(
@@ -22,6 +22,9 @@ export function drawSystem(
   }
 
   drawBodyRecursive(systemState);
+
+  // TODO: where to draw this? also want labels
+  STARS.forEach(star => drawStar(ctx, star, canvasPx, offsetMeters, metersPerPx));
 }
 
 export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
@@ -58,8 +61,8 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   }
 
   if (visibleTypes.has('belt')) {
-    [ASTEROID_BELT, KUIPER_BELT].forEach(({ min, max }) => {
-      drawBelt(ctx, [min, max], canvasPx, [offsetXm, offsetYm], metersPerPx);
+    [ASTEROID_BELT, KUIPER_BELT].forEach(belt => {
+      drawBelt(ctx, belt, canvasPx, [offsetXm, offsetYm], metersPerPx);
     });
   }
 
@@ -114,7 +117,7 @@ function drawBody(
 
 function drawBelt(
   ctx: CanvasRenderingContext2D,
-  [min, max]: Point2,
+  { min, max }: Belt,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [offsetXm, offsetYm]: Point2,
   metersPerPx: number
@@ -162,7 +165,7 @@ function drawOrbit(
 
 function drawLabel(
   ctx: CanvasRenderingContext2D,
-  { color, radius, name, position }: CelestialBodyState,
+  { color, radius, name, position }: Pick<CelestialBodyState, 'color' | 'radius' | 'name' | 'position'>,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [offsetXm, offsetYm]: Point2,
   metersPerPx: number
@@ -272,4 +275,30 @@ function drawCaretAtLocation(
   ctx.closePath();
   ctx.fillStyle = color;
   ctx.fill();
+}
+
+function drawStar(
+  ctx: CanvasRenderingContext2D,
+  { name, radius, distance, rightAscension, color }: Star,
+  [canvasWidthPx, canvasHeightPx]: Point2,
+  [offsetXm, offsetYm]: Point2,
+  metersPerPx: number
+) {
+  const { hours, minutes, seconds } = rightAscension;
+  const rightAscensionDegrees = 15 * hours + 0.25 * minutes + (1 / 240) * seconds;
+  const rightAscensionRadians = degreesToRadians(rightAscensionDegrees);
+  const positionXm = Math.cos(rightAscensionRadians) * distance;
+  const positionYm = Math.sin(rightAscensionRadians) * distance;
+  const positionXpx = canvasWidthPx / 2 + (positionXm + offsetXm) / metersPerPx;
+  const positionYpx = canvasHeightPx / 2 + (positionYm + offsetYm) / metersPerPx;
+  const radiusPx = Math.max(radius / metersPerPx, 1);
+  ctx.beginPath();
+  ctx.arc(positionXpx, positionYpx, radiusPx, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  const position = [positionXm, positionYm, 0];
+  const body: Pick<CelestialBodyState, 'color' | 'radius' | 'name' | 'position'> = { color, radius, name, position };
+  drawLabel(ctx, body, [canvasWidthPx, canvasHeightPx], [offsetXm, offsetYm], metersPerPx);
 }

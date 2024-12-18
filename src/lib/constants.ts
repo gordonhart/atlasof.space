@@ -1,8 +1,11 @@
-import { CelestialBody, CelestialBodyType, CelestialBodyState } from './types.ts';
+import { CelestialBody, CelestialBodyType, CelestialBodyState, Belt, Star } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
+export const LIGHT_YEAR = 63241.077088 * AU;
+export const SOLAR_RADIUS = 6.957e8; // R☉
+export const SOLAR_MASS = 1.988475e30; // M☉
 
 const DEFAULT_MOON_COLOR = '#aaa';
 export const SOL2: CelestialBody = {
@@ -14,8 +17,8 @@ export const SOL2: CelestialBody = {
   longitudeAscending: 0,
   argumentOfPeriapsis: 0,
   trueAnomaly: 0,
-  mass: 1.9885e30,
-  radius: 6.957e8,
+  mass: SOLAR_MASS,
+  radius: SOLAR_RADIUS,
   siderealRotationPeriod: 609.12 * 60 * 60, // 609 hours at 16º latitude; true period varies by latitude
   color: '#fa0',
   satellites: [
@@ -506,8 +509,85 @@ export const SOL = {
   // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
   // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
 };
-export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
-export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
+export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
+export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };
+
+const DEFAULT_STAR_COLOR = '#f8f8fa';
+export const STARS: Array<Star> = [
+  {
+    name: 'Proxima Centauri',
+    radius: 0.1542 * SOLAR_RADIUS,
+    mass: 0.1221 * SOLAR_MASS,
+    distance: 4.265 * LIGHT_YEAR,
+    rightAscension: { hours: 14, minutes: 29, seconds: 43.0 },
+    declination: { degrees: -62, arcminutes: 40, arcseconds: 46 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    name: 'α Centauri A', // Rigil Kentaurus
+    radius: 1.2175 * SOLAR_RADIUS,
+    mass: 1.0788 * SOLAR_MASS,
+    distance: 4.344 * LIGHT_YEAR,
+    rightAscension: { hours: 14, minutes: 39, seconds: 36.494 },
+    declination: { degrees: -60, arcminutes: 50, arcseconds: 2.3737 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    // these are a binary system, more or less completely overlapping at relevant scales
+    name: 'α Centauri B', // Toliman
+    radius: 0.8591 * SOLAR_RADIUS,
+    mass: 0.9092 * SOLAR_MASS,
+    distance: 4.344 * LIGHT_YEAR,
+    rightAscension: { hours: 14, minutes: 39, seconds: 35.06311 },
+    declination: { degrees: -60, arcminutes: 50, arcseconds: 15.0992 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    name: "Barnard's Star",
+    radius: 0.187 * SOLAR_RADIUS,
+    mass: 0.162 * SOLAR_MASS,
+    distance: 5.9629 * LIGHT_YEAR,
+    rightAscension: { hours: 17, minutes: 57, seconds: 48.49847 },
+    declination: { degrees: 4, arcminutes: 41, arcseconds: 36.1139 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    name: 'Luhman 16', // brown dwarf binary system
+    radius: 0.85 * 7.1492e7, // defined as a fraction of Jupiter's mass, Rjup
+    mass: 0.034 * SOLAR_MASS, // note that this is a binary system, these values are from 16A
+    distance: 6.5102 * LIGHT_YEAR,
+    rightAscension: { hours: 10, minutes: 49, seconds: 18.771 },
+    declination: { degrees: -53, arcminutes: 19, arcseconds: 9.8779 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    name: 'Wolf 359',
+    radius: 0.144 * SOLAR_RADIUS,
+    mass: 0.11 * SOLAR_MASS,
+    distance: 7.856 * LIGHT_YEAR,
+    rightAscension: { hours: 10, minutes: 56, seconds: 28.92087 },
+    declination: { degrees: 7, arcminutes: 0, arcseconds: 53.0033 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    name: 'Sirius A',
+    radius: 1.713 * SOLAR_RADIUS,
+    mass: 2.063 * SOLAR_MASS,
+    distance: 8.6 * LIGHT_YEAR,
+    rightAscension: { hours: 6, minutes: 45, seconds: 8.917 },
+    declination: { degrees: -16, arcminutes: 42, arcseconds: 58.02 },
+    color: DEFAULT_STAR_COLOR,
+  },
+  {
+    name: 'Epsilon Eridani',
+    radius: 0.144 * SOLAR_RADIUS,
+    mass: 0.11 * SOLAR_MASS,
+    distance: 7.856 * LIGHT_YEAR,
+    rightAscension: { hours: 10, minutes: 56, seconds: 28.92087 },
+    declination: { degrees: 7, arcminutes: 0, arcseconds: 53.0033 },
+    color: DEFAULT_STAR_COLOR,
+  },
+];
 
 function getCelestialBodyNames(body: CelestialBody): Array<string> {
   return [body.name, ...body.satellites.flatMap(b => getCelestialBodyNames(b))];
