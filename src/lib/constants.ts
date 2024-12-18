@@ -5,6 +5,230 @@ export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
 
 const DEFAULT_MOON_COLOR = '#aaa';
+const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
+// TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
+//  collected over time. Switch?
+export const ASTEROIDS: Array<CelestialBody> = [
+  {
+    name: 'Ceres',
+    type: 'asteroid',
+    eccentricity: 0.075823,
+    semiMajorAxis: 413690250e3,
+    inclination: 10.594,
+    longitudeAscending: 80.305,
+    argumentOfPeriapsis: 73.597,
+    trueAnomaly: 0,
+    mass: 9.3839e20,
+    radius: 966.2e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Vesta',
+    type: 'asteroid',
+    eccentricity: 0.0894,
+    semiMajorAxis: 2.36 * AU,
+    inclination: 7.1422,
+    longitudeAscending: 103.71,
+    argumentOfPeriapsis: 151.66,
+    trueAnomaly: 0,
+    mass: 2.590271e20,
+    radius: 278.6e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Pallas',
+    type: 'asteroid',
+    eccentricity: 0.2302,
+    semiMajorAxis: 4.14e11,
+    inclination: 34.93,
+    longitudeAscending: 172.9,
+    argumentOfPeriapsis: 310.9,
+    trueAnomaly: 0,
+    mass: 2.04e20,
+    radius: 256e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Hygiea',
+    type: 'asteroid',
+    eccentricity: 0.1125,
+    semiMajorAxis: 3.1415 * AU,
+    inclination: 3.8316,
+    longitudeAscending: 283.2,
+    argumentOfPeriapsis: 312.32,
+    trueAnomaly: 0,
+    mass: 8.74e19,
+    radius: 215e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Ryugu',
+    type: 'asteroid',
+    eccentricity: 0.1902,
+    semiMajorAxis: 1.1896 * AU,
+    inclination: 5.8837,
+    longitudeAscending: 251.62,
+    argumentOfPeriapsis: 211.43,
+    trueAnomaly: 0,
+    mass: 4.5e11,
+    radius: 448,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: '21 Lutetia',
+    mass: 1.7e18, // kg
+    radius: 49e3, // m
+    eccentricity: 0.16339,
+    semiMajorAxis: 2.435 * 1.496e11, // AU to meters
+    inclination: 3.064, // degrees
+    longitudeAscending: 80.867, // degrees
+    argumentOfPeriapsis: 249.997, // degrees
+    trueAnomaly: 87.976, // degrees
+    siderealRotationPeriod: 8.1655 * 3600, // hours to seconds
+    color: DEFAULT_ASTEROID_COLOR,
+    type: 'asteroid',
+    satellites: [],
+  },
+  {
+    name: '67P/C–G', // '67P/Churyumov–Gerasimenko',
+    mass: 1e13, // kg
+    radius: 2000, // m (average radius based on dimensions)
+    eccentricity: 0.64,
+    semiMajorAxis: 3.463 * 1.496e11, // AU to meters
+    inclination: 7.04, // degrees
+    longitudeAscending: 50.19, // degrees
+    argumentOfPeriapsis: 12.78, // degrees
+    trueAnomaly: 0, // degrees (value at perihelion)
+    siderealRotationPeriod: 12.4 * 3600, // hours to seconds
+    color: DEFAULT_ASTEROID_COLOR,
+    type: 'asteroid',
+    satellites: [],
+  },
+  {
+    name: 'Eros', // 433 Eros
+    mass: 6.687e15, // kg
+    radius: 8420, // m, average (highly irregular)
+    eccentricity: 0.2226,
+    semiMajorAxis: 1.4579 * AU, // meters
+    inclination: 10.828, // degrees
+    longitudeAscending: 304.32, // degrees
+    argumentOfPeriapsis: 178.82, // degrees
+    trueAnomaly: 0, // degrees (value at epoch)
+    color: DEFAULT_ASTEROID_COLOR,
+    type: 'asteroid',
+    satellites: [],
+  },
+  {
+    name: '253 Mathilde',
+    mass: 1.033e17, // kg
+    radius: 26.4e3, // m
+    eccentricity: 0.26492652,
+    semiMajorAxis: 2.648402147 * AU, // meters
+    inclination: 6.7427122, // degrees
+    longitudeAscending: 179.58936, // degrees
+    argumentOfPeriapsis: 157.39642, // degrees
+    trueAnomaly: 0, // degrees (value at epoch)
+    color: DEFAULT_ASTEROID_COLOR,
+    type: 'asteroid',
+    satellites: [],
+  },
+];
+
+export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
+  {
+    name: 'Pluto',
+    type: 'trans-neptunian-object',
+    eccentricity: 0.2488,
+    semiMajorAxis: 5906440628e3,
+    inclination: 17.16,
+    longitudeAscending: 110.299,
+    argumentOfPeriapsis: 113.834,
+    trueAnomaly: 0,
+    mass: 1.3025e22,
+    radius: 1188.3e3,
+    siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
+    color: DEFAULT_MOON_COLOR,
+    satellites: [
+      {
+        name: 'Charon',
+        type: 'moon',
+        eccentricity: 0.00005,
+        semiMajorAxis: 19596e3,
+        inclination: 0.0,
+        longitudeAscending: 0,
+        argumentOfPeriapsis: 0,
+        trueAnomaly: 0,
+        mass: 1.586e21,
+        radius: 606e3,
+        siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
+        color: DEFAULT_MOON_COLOR,
+        satellites: [],
+      },
+    ],
+  },
+  {
+    name: 'Eris',
+    type: 'trans-neptunian-object',
+    eccentricity: 0.43607,
+    semiMajorAxis: 67.864 * AU,
+    inclination: 44.04,
+    longitudeAscending: 35.951,
+    argumentOfPeriapsis: 151.639,
+    trueAnomaly: 0,
+    mass: 1.6466e22,
+    radius: 1163e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Haumea',
+    type: 'trans-neptunian-object',
+    eccentricity: 0.19642,
+    semiMajorAxis: 43.116 * AU,
+    inclination: 28.2137,
+    longitudeAscending: 122.167,
+    argumentOfPeriapsis: 239.041,
+    trueAnomaly: 0,
+    mass: 4.006e21,
+    radius: 780e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Makemake',
+    type: 'trans-neptunian-object',
+    eccentricity: 0.16126,
+    semiMajorAxis: 45.43 * AU,
+    inclination: 28.9835,
+    longitudeAscending: 79.62,
+    argumentOfPeriapsis: 294.834,
+    trueAnomaly: 0,
+    mass: 3.1e21,
+    radius: 715e3,
+    color: DEFAULT_ASTEROID_COLOR,
+    satellites: [],
+  },
+  {
+    name: 'Arrokoth', // 486958 Arrokoth, also known as Ultima Thule
+    mass: 7.485e14, // kg
+    radius: 18e3, // m (average radius based on length of 36 km)
+    eccentricity: 0.04172,
+    semiMajorAxis: 44.581 * AU,
+    inclination: 2.4512, // degrees
+    longitudeAscending: 158.998, // degrees
+    argumentOfPeriapsis: 174.418, // degrees
+    trueAnomaly: 0, // degrees (value at perihelion)
+    color: DEFAULT_ASTEROID_COLOR,
+    type: 'trans-neptunian-object',
+    satellites: [],
+  },
+];
+
 export const SOL2: CelestialBody = {
   name: 'Sol',
   type: 'sun',
@@ -138,78 +362,7 @@ export const SOL2: CelestialBody = {
         },
       ],
     },
-    // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
-    //  collected over time. Switch?
-    {
-      name: 'Ceres',
-      type: 'asteroid',
-      eccentricity: 0.075823,
-      semiMajorAxis: 413690250e3,
-      inclination: 10.594,
-      longitudeAscending: 80.305,
-      argumentOfPeriapsis: 73.597,
-      trueAnomaly: 0,
-      mass: 9.3839e20,
-      radius: 966.2e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Vesta',
-      type: 'asteroid',
-      eccentricity: 0.0894,
-      semiMajorAxis: 2.36 * AU,
-      inclination: 7.1422,
-      longitudeAscending: 103.71,
-      argumentOfPeriapsis: 151.66,
-      trueAnomaly: 0,
-      mass: 2.590271e20,
-      radius: 278.6e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Pallas',
-      type: 'asteroid',
-      eccentricity: 0.2302,
-      semiMajorAxis: 4.14e11,
-      inclination: 34.93,
-      longitudeAscending: 172.9,
-      argumentOfPeriapsis: 310.9,
-      trueAnomaly: 0,
-      mass: 2.04e20,
-      radius: 256e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Hygiea',
-      type: 'asteroid',
-      eccentricity: 0.1125,
-      semiMajorAxis: 3.1415 * AU,
-      inclination: 3.8316,
-      longitudeAscending: 283.2,
-      argumentOfPeriapsis: 312.32,
-      trueAnomaly: 0,
-      mass: 8.74e19,
-      radius: 215e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Ryugu',
-      type: 'asteroid',
-      eccentricity: 0.1902,
-      semiMajorAxis: 1.1896 * AU,
-      inclination: 5.8837,
-      longitudeAscending: 251.62,
-      argumentOfPeriapsis: 211.43,
-      trueAnomaly: 0,
-      mass: 4.5e11,
-      radius: 448,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
+    ...ASTEROIDS,
     {
       name: 'Jupiter',
       type: 'planet',
@@ -409,7 +562,10 @@ export const SOL2: CelestialBody = {
       radius: 25362e3,
       siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
       color: '#fec',
-      satellites: [], // TODO
+      satellites: [
+        // TODO: add the main moons: Miranda, Ariel, Umbriel, Titania, Oberon
+        //  there are more but we can ignore those for now
+      ],
     },
     {
       name: 'Neptune',
@@ -424,81 +580,26 @@ export const SOL2: CelestialBody = {
       radius: 24622e3,
       siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
       color: '#2bc',
-      satellites: [], // TODO
-    },
-    {
-      name: 'Pluto',
-      type: 'trans-neptunian-object',
-      eccentricity: 0.2488,
-      semiMajorAxis: 5906440628e3,
-      inclination: 17.16,
-      longitudeAscending: 110.299,
-      argumentOfPeriapsis: 113.834,
-      trueAnomaly: 0,
-      mass: 1.3025e22,
-      radius: 1188.3e3,
-      siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
-      color: '#ddd',
       satellites: [
         {
-          name: 'Charon',
+          name: 'Triton',
           type: 'moon',
-          eccentricity: 0.00005,
-          semiMajorAxis: 19596e3,
-          inclination: 0.0,
-          longitudeAscending: 0,
-          argumentOfPeriapsis: 0,
+          eccentricity: 0.000016,
+          semiMajorAxis: 354759e3,
+          inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
+          longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
+          argumentOfPeriapsis: 260.64357,
           trueAnomaly: 0,
-          mass: 1.586e21,
-          radius: 606e3,
-          siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
+          mass: 2.1389e22,
+          radius: 1353.4e3,
+          siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
           color: DEFAULT_MOON_COLOR,
           satellites: [],
         },
+        // TODO: there are many more
       ],
     },
-    {
-      name: 'Eris',
-      type: 'trans-neptunian-object',
-      eccentricity: 0.43607,
-      semiMajorAxis: 67.864 * AU,
-      inclination: 44.04,
-      longitudeAscending: 35.951,
-      argumentOfPeriapsis: 151.639,
-      trueAnomaly: 0,
-      mass: 1.6466e22,
-      radius: 1163e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Haumea',
-      type: 'trans-neptunian-object',
-      eccentricity: 0.19642,
-      semiMajorAxis: 43.116 * AU,
-      inclination: 28.2137,
-      longitudeAscending: 122.167,
-      argumentOfPeriapsis: 239.041,
-      trueAnomaly: 0,
-      mass: 4.006e21,
-      radius: 780e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Makemake',
-      type: 'trans-neptunian-object',
-      eccentricity: 0.16126,
-      semiMajorAxis: 45.43 * AU,
-      inclination: 28.9835,
-      longitudeAscending: 79.62,
-      argumentOfPeriapsis: 294.834,
-      trueAnomaly: 0,
-      mass: 3.1e21,
-      radius: 715e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
+    ...TRANS_NEPTUNIAN_OBJECTS,
   ],
 };
 export const SOL = {
@@ -506,6 +607,7 @@ export const SOL = {
   // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
   // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
 };
+
 export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
 export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
 

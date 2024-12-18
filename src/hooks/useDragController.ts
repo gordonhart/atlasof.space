@@ -24,7 +24,7 @@ export function useDragController(
     const [cursorXm, cursorYm] = getCursorCoordinates(event.clientX, event.clientY);
     const closestBody = findCloseBody(systemState, visibleTypes, [cursorXm, cursorYm], metersPerPx * 25);
     if (closestBody != null) {
-      updateAppState({ center: closestBody.name });
+      updateAppState({ center: closestBody.name, offset: [0, 0] });
     }
   }
 
