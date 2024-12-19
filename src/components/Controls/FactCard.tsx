@@ -4,6 +4,7 @@ import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { magnitude, orbitalPeriod } from '../../lib/physics.ts';
 import { SOL } from '../../lib/constants.ts';
+import { GalleryImage } from '../../lib/images.ts';
 
 type Props = {
   body: CelestialBodyState;
@@ -14,6 +15,7 @@ export function FactCard({ body }: Props) {
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(body.semiMajorAxis);
   const satellites = body.satellites.map(({ shortName, name }) => shortName ?? name);
+  const gallery = body.gallery ?? [];
   const facts: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
@@ -39,8 +41,8 @@ export function FactCard({ body }: Props) {
     >
       <Stack gap="xs">
         {body.thumbnail != null && <Image radius="xl" src={body.thumbnail} maw={thumbnailSize} mah={thumbnailSize} />}
-        <Group gap="xs">
-          <Text inherit fw="bold">
+        <Group gap="xs" align="baseline">
+          <Text fw="bold" size="md">
             {body.name}
           </Text>
           <Text inherit c="dimmed">
@@ -59,7 +61,27 @@ export function FactCard({ body }: Props) {
             </Fragment>
           ))}
         </Grid>
+        {gallery.length > 0 && <GalleryImages gallery={gallery} />}
       </Stack>
     </Paper>
+  );
+}
+
+function GalleryImages({ gallery }: { gallery: Array<GalleryImage> }) {
+  const nPerRow = 3;
+  const galleryGap = 4;
+  const galleryImageWidth = 120;
+  // TODO: click 'g' to view in detail
+  return (
+    <Stack gap="xs" pt="xs">
+      <Text fw="bold" size="xs">
+        Gallery
+      </Text>
+      <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
+        {gallery.map((image, i) => (
+          <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
+        ))}
+      </Group>
+    </Stack>
   );
 }

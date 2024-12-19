@@ -1,6 +1,6 @@
 import { CelestialBody, CelestialBodyState, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
-import { Thumbnail } from './images.ts';
+import { GalleryImage, Thumbnail } from './images.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -128,6 +128,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
     name: '67P/Churyumov–Gerasimenko',
     shortName: '67P/C–G',
     thumbnail: Thumbnail.CG67P,
+    gallery: [GalleryImage.CG67P_ANIMATION, GalleryImage.CG67P_THUMB2, GalleryImage.CG67P_THUMB3],
     mass: 1e13, // kg
     radius: 2000, // m (average radius based on dimensions)
     eccentricity: 0.64,
@@ -294,6 +295,7 @@ export const VENUS: CelestialBody = {
   name: 'Venus',
   type: 'planet',
   thumbnail: Thumbnail.VENUS,
+  gallery: [GalleryImage.VENUS_VENERA, GalleryImage.VENUS_VENERA2, GalleryImage.VENUS_MAGELLAN],
   eccentricity: 0.006772,
   semiMajorAxis: 108208000e3,
   inclination: 3.39458,
@@ -663,7 +665,7 @@ export const NEPTUNE: CelestialBody = {
   ],
 };
 
-export const SOL2: CelestialBody = {
+const SOL_FULL: CelestialBody = {
   name: 'Sol',
   type: 'sun',
   thumbnail: Thumbnail.SUN,
@@ -679,10 +681,11 @@ export const SOL2: CelestialBody = {
   color: '#fa0',
   satellites: [MERCURY, VENUS, EARTH, MARS, ...ASTEROIDS, JUPITER, SATURN, URANUS, NEPTUNE, ...TRANS_NEPTUNIAN_OBJECTS],
 };
+// keep this for convenience to make it easier to filter certain objects during dev
 export const SOL = {
-  ...SOL2,
-  // satellites: SOL2.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
-  // satellites: SOL2.satellites.filter(({ name }) => name === 'Mercury'),
+  ...SOL_FULL,
+  // satellites: SOL_FULL.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
+  // satellites: SOL_FULL.satellites.filter(({ name }) => name === 'Mercury'),
 };
 
 export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };

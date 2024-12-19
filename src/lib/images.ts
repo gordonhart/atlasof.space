@@ -20,6 +20,12 @@ import makemakeSrc from '../../assets/makemake-thumb.jpg';
 import erosSrc from '../../assets/eros-thumb.jpg';
 import mathildeSrc from '../../assets/mathilde-thumb.jpg';
 import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
+import cg67pAnimationSrc from '../../assets/cg67p-animation.gif';
+import cg67pThumb2Src from '../../assets/cg67p-thumb2.jpg';
+import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
+import venusVeneraSrc from '../../assets/venus-venera.jpg';
+import venusVenera2Src from '../../assets/venus-venera2.jpg';
+import venusMagellanSrc from '../../assets/venus-magellan.jpg';
 
 export enum Thumbnail {
   SUN = sunSrc,
@@ -44,4 +50,13 @@ export enum Thumbnail {
   EROS = erosSrc,
   MATHILDE = mathildeSrc,
   ARROKOTH = arrokothSrc,
+}
+
+export enum GalleryImage {
+  CG67P_ANIMATION = cg67pAnimationSrc,
+  CG67P_THUMB2 = cg67pThumb2Src,
+  CG67P_THUMB3 = cg67pThumb3Src,
+  VENUS_VENERA = venusVeneraSrc,
+  VENUS_VENERA2 = venusVenera2Src,
+  VENUS_MAGELLAN = venusMagellanSrc,
 }
