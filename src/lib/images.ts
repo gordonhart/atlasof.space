@@ -26,37 +26,34 @@ import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
 import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
+import * as Objects from './constants.ts';
 
-export enum Thumbnail {
-  SUN = sunSrc,
-  MERCURY = mercurySrc,
-  VENUS = venusSrc,
-  EARTH = earthSrc,
-  MARS = marsSrc,
-  JUPITER = jupiterSrc,
-  SATURN = saturnSrc,
-  URANUS = uranusSrc,
-  NEPTUNE = neptuneSrc,
-  PLUTO = plutoSrc,
-  CERES = ceresSrc,
-  PALLAS = pallasSrc,
-  VESTA = vestaSrc,
-  HYGIEA = hygieaSrc,
-  JUNO = junoSrc,
-  CG67P = cg57pSrc,
-  RYUGU = ryuguSrc,
-  LUTETIA = lutetiaSrc,
-  MAKEMAKE = makemakeSrc,
-  EROS = erosSrc,
-  MATHILDE = mathildeSrc,
-  ARROKOTH = arrokothSrc,
-}
+export const Thumbnails: Record<string, string> = {
+  [Objects.SOL.name]: sunSrc as string,
+  [Objects.MERCURY.name]: mercurySrc as string,
+  [Objects.VENUS.name]: venusSrc as string,
+  [Objects.EARTH.name]: earthSrc as string,
+  [Objects.MARS.name]: marsSrc as string,
+  [Objects.JUPITER.name]: jupiterSrc as string,
+  [Objects.SATURN.name]: saturnSrc as string,
+  [Objects.URANUS.name]: uranusSrc as string,
+  [Objects.NEPTUNE.name]: neptuneSrc as string,
+  [Objects.PLUTO.name]: plutoSrc as string,
+  [Objects.CERES.name]: ceresSrc as string,
+  [Objects.PALLAS.name]: pallasSrc as string,
+  [Objects.VESTA.name]: vestaSrc as string,
+  [Objects.HYGIEA.name]: hygieaSrc as string,
+  [Objects.JUNO.name]: junoSrc as string,
+  [Objects.CG67P.name]: cg57pSrc as string,
+  [Objects.RYUGU.name]: ryuguSrc as string,
+  [Objects.LUTETIA.name]: lutetiaSrc as string,
+  [Objects.MAKEMAKE.name]: makemakeSrc as string,
+  [Objects.EROS.name]: erosSrc as string,
+  [Objects.MATHILDE.name]: mathildeSrc as string,
+  [Objects.ARROKOTH.name]: arrokothSrc as string,
+} as const;
 
-export enum GalleryImage {
-  CG67P_ANIMATION = cg67pAnimationSrc,
-  CG67P_THUMB2 = cg67pThumb2Src,
-  CG67P_THUMB3 = cg67pThumb3Src,
-  VENUS_VENERA = venusVeneraSrc,
-  VENUS_VENERA2 = venusVenera2Src,
-  VENUS_MAGELLAN = venusMagellanSrc,
-}
+export const GalleryImages: Record<string, Array<string>> = {
+  [Objects.CG67P.name]: [cg67pAnimationSrc, cg67pThumb2Src, cg67pThumb3Src] as Array<string>,
+  [Objects.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
+} as const;

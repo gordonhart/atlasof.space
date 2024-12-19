@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { magnitude, orbitalPeriod } from '../../lib/physics.ts';
 import { SOL } from '../../lib/constants.ts';
-import { GalleryImage } from '../../lib/images.ts';
+import { GalleryImages, Thumbnails } from '../../lib/images.ts';
 
 type Props = {
   body: CelestialBodyState;
@@ -15,7 +15,6 @@ export function FactCard({ body }: Props) {
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(body.semiMajorAxis);
   const satellites = body.satellites.map(({ shortName, name }) => shortName ?? name);
-  const gallery = body.gallery ?? [];
   const facts: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
@@ -29,8 +28,10 @@ export function FactCard({ body }: Props) {
     { label: 'velocity', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
     ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
   ];
-
   const thumbnailSize = 180;
+  const thumbnailUrl = Thumbnails[body.name];
+  const galleryUrls = GalleryImages[body.name] ?? [];
+
   return (
     <Paper
       fz="xs"
@@ -40,7 +41,7 @@ export function FactCard({ body }: Props) {
       style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
     >
       <Stack gap="xs">
-        {body.thumbnail != null && <Image radius="xl" src={body.thumbnail} maw={thumbnailSize} mah={thumbnailSize} />}
+        {thumbnailUrl != null && <Image radius="xl" src={thumbnailUrl} maw={thumbnailSize} mah={thumbnailSize} />}
         <Group gap="xs" align="baseline">
           <Text fw="bold" size="md">
             {body.name}
@@ -61,13 +62,13 @@ export function FactCard({ body }: Props) {
             </Fragment>
           ))}
         </Grid>
-        {gallery.length > 0 && <GalleryImages gallery={gallery} />}
+        {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
       </Stack>
     </Paper>
   );
 }
 
-function GalleryImages({ gallery }: { gallery: Array<GalleryImage> }) {
+function Gallery({ urls }: { urls: Array<string> }) {
   const nPerRow = 3;
   const galleryGap = 4;
   const galleryImageWidth = 120;
@@ -78,7 +79,7 @@ function GalleryImages({ gallery }: { gallery: Array<GalleryImage> }) {
         Gallery
       </Text>
       <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
-        {gallery.map((image, i) => (
+        {urls.map((image, i) => (
           <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
         ))}
       </Group>

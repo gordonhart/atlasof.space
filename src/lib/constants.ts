@@ -1,6 +1,5 @@
 import { CelestialBody, CelestialBodyState, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
-import { GalleryImage, Thumbnail } from './images.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -10,274 +9,280 @@ const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type aster
 
 // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
 //  collected over time. Switch?
+export const CERES: CelestialBody = {
+  name: '1 Ceres',
+  shortName: 'Ceres',
+  type: 'asteroid',
+  eccentricity: 0.075823,
+  semiMajorAxis: 413690250e3,
+  inclination: 10.594,
+  longitudeAscending: 80.305,
+  argumentOfPeriapsis: 73.597,
+  trueAnomaly: 0,
+  mass: 9.3839e20,
+  radius: 966.2e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+export const VESTA: CelestialBody = {
+  name: '4 Vesta',
+  shortName: 'Vesta',
+  type: 'asteroid',
+  eccentricity: 0.0894,
+  semiMajorAxis: 2.36 * AU,
+  inclination: 7.1422,
+  longitudeAscending: 103.71,
+  argumentOfPeriapsis: 151.66,
+  trueAnomaly: 0,
+  mass: 2.590271e20,
+  radius: 278.6e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const PALLAS: CelestialBody = {
+  name: '2 Pallas',
+  shortName: 'Pallas',
+  type: 'asteroid',
+  eccentricity: 0.2302,
+  semiMajorAxis: 4.14e11,
+  inclination: 34.93,
+  longitudeAscending: 172.9,
+  argumentOfPeriapsis: 310.9,
+  trueAnomaly: 0,
+  mass: 2.04e20,
+  radius: 256e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+export const HYGIEA: CelestialBody = {
+  name: '10 Hygiea',
+  shortName: 'Hygiea',
+  type: 'asteroid',
+  eccentricity: 0.1125,
+  semiMajorAxis: 3.1415 * AU,
+  inclination: 3.8316,
+  longitudeAscending: 283.2,
+  argumentOfPeriapsis: 312.32,
+  trueAnomaly: 0,
+  mass: 8.74e19,
+  radius: 215e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const JUNO: CelestialBody = {
+  name: '3 Juno',
+  shortName: 'Juno',
+  mass: 2.67e19, // kg
+  radius: 127e3, // m
+  eccentricity: 0.2562,
+  semiMajorAxis: 3.35 * AU, // meters
+  inclination: 12.991, // degrees
+  longitudeAscending: 169.84, // degrees
+  argumentOfPeriapsis: 247.74, // degrees
+  trueAnomaly: 0, // degrees (value at epoch)
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'asteroid',
+  satellites: [],
+};
+
+export const RYUGU: CelestialBody = {
+  name: '162173 Ryugu',
+  shortName: 'Ryugu',
+  type: 'asteroid',
+  eccentricity: 0.1902,
+  semiMajorAxis: 1.1896 * AU,
+  inclination: 5.8837,
+  longitudeAscending: 251.62,
+  argumentOfPeriapsis: 211.43,
+  trueAnomaly: 0,
+  mass: 4.5e11,
+  radius: 448,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+export const LUTETIA: CelestialBody = {
+  name: '21 Lutetia',
+  shortName: 'Lutetia',
+  mass: 1.7e18, // kg
+  radius: 49e3, // m
+  eccentricity: 0.16339,
+  semiMajorAxis: 2.435 * 1.496e11, // AU to meters
+  inclination: 3.064, // degrees
+  longitudeAscending: 80.867, // degrees
+  argumentOfPeriapsis: 249.997, // degrees
+  trueAnomaly: 87.976, // degrees
+  siderealRotationPeriod: 8.1655 * 3600, // hours to seconds
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'asteroid',
+  satellites: [],
+};
+
+export const CG67P: CelestialBody = {
+  name: '67P/Churyumov–Gerasimenko',
+  shortName: '67P/C–G',
+  mass: 1e13, // kg
+  radius: 2000, // m (average radius based on dimensions)
+  eccentricity: 0.64,
+  semiMajorAxis: 3.463 * 1.496e11, // AU to meters
+  inclination: 7.04, // degrees
+  longitudeAscending: 50.19, // degrees
+  argumentOfPeriapsis: 12.78, // degrees
+  trueAnomaly: 0, // degrees (value at perihelion)
+  siderealRotationPeriod: 12.4 * 3600, // hours to seconds
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'asteroid', // TODO: technically a comet
+  satellites: [],
+};
+
+export const EROS: CelestialBody = {
+  name: '433 Eros',
+  shortName: 'Eros',
+  mass: 6.687e15, // kg
+  radius: 8420, // m, average (highly irregular)
+  eccentricity: 0.2226,
+  semiMajorAxis: 1.4579 * AU, // meters
+  inclination: 10.828, // degrees
+  longitudeAscending: 304.32, // degrees
+  argumentOfPeriapsis: 178.82, // degrees
+  trueAnomaly: 0, // degrees (value at epoch)
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'asteroid',
+  satellites: [],
+};
+
+export const MATHILDE: CelestialBody = {
+  name: '253 Mathilde',
+  shortName: 'Mathilde',
+  mass: 1.033e17, // kg
+  radius: 26.4e3, // m
+  eccentricity: 0.26492652,
+  semiMajorAxis: 2.648402147 * AU, // meters
+  inclination: 6.7427122, // degrees
+  longitudeAscending: 179.58936, // degrees
+  argumentOfPeriapsis: 157.39642, // degrees
+  trueAnomaly: 0, // degrees (value at epoch)
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'asteroid',
+  satellites: [],
+};
+
 export const ASTEROIDS: Array<CelestialBody> = [
-  {
-    name: '1 Ceres',
-    shortName: 'Ceres',
-    thumbnail: Thumbnail.CERES,
-    type: 'asteroid',
-    eccentricity: 0.075823,
-    semiMajorAxis: 413690250e3,
-    inclination: 10.594,
-    longitudeAscending: 80.305,
-    argumentOfPeriapsis: 73.597,
-    trueAnomaly: 0,
-    mass: 9.3839e20,
-    radius: 966.2e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '4 Vesta',
-    shortName: 'Vesta',
-    thumbnail: Thumbnail.VESTA,
-    type: 'asteroid',
-    eccentricity: 0.0894,
-    semiMajorAxis: 2.36 * AU,
-    inclination: 7.1422,
-    longitudeAscending: 103.71,
-    argumentOfPeriapsis: 151.66,
-    trueAnomaly: 0,
-    mass: 2.590271e20,
-    radius: 278.6e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '2 Pallas',
-    shortName: 'Pallas',
-    thumbnail: Thumbnail.PALLAS,
-    type: 'asteroid',
-    eccentricity: 0.2302,
-    semiMajorAxis: 4.14e11,
-    inclination: 34.93,
-    longitudeAscending: 172.9,
-    argumentOfPeriapsis: 310.9,
-    trueAnomaly: 0,
-    mass: 2.04e20,
-    radius: 256e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '10 Hygiea',
-    shortName: 'Hygiea',
-    thumbnail: Thumbnail.HYGIEA,
-    type: 'asteroid',
-    eccentricity: 0.1125,
-    semiMajorAxis: 3.1415 * AU,
-    inclination: 3.8316,
-    longitudeAscending: 283.2,
-    argumentOfPeriapsis: 312.32,
-    trueAnomaly: 0,
-    mass: 8.74e19,
-    radius: 215e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '3 Juno',
-    shortName: 'Juno',
-    thumbnail: Thumbnail.JUNO,
-    mass: 2.67e19, // kg
-    radius: 127e3, // m
-    eccentricity: 0.2562,
-    semiMajorAxis: 3.35 * AU, // meters
-    inclination: 12.991, // degrees
-    longitudeAscending: 169.84, // degrees
-    argumentOfPeriapsis: 247.74, // degrees
-    trueAnomaly: 0, // degrees (value at epoch)
-    color: DEFAULT_ASTEROID_COLOR,
-    type: 'asteroid',
-    satellites: [],
-  },
-  {
-    name: '162173 Ryugu',
-    shortName: 'Ryugu',
-    thumbnail: Thumbnail.RYUGU,
-    type: 'asteroid',
-    eccentricity: 0.1902,
-    semiMajorAxis: 1.1896 * AU,
-    inclination: 5.8837,
-    longitudeAscending: 251.62,
-    argumentOfPeriapsis: 211.43,
-    trueAnomaly: 0,
-    mass: 4.5e11,
-    radius: 448,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '21 Lutetia',
-    shortName: 'Lutetia',
-    thumbnail: Thumbnail.LUTETIA,
-    mass: 1.7e18, // kg
-    radius: 49e3, // m
-    eccentricity: 0.16339,
-    semiMajorAxis: 2.435 * 1.496e11, // AU to meters
-    inclination: 3.064, // degrees
-    longitudeAscending: 80.867, // degrees
-    argumentOfPeriapsis: 249.997, // degrees
-    trueAnomaly: 87.976, // degrees
-    siderealRotationPeriod: 8.1655 * 3600, // hours to seconds
-    color: DEFAULT_ASTEROID_COLOR,
-    type: 'asteroid',
-    satellites: [],
-  },
-  {
-    name: '67P/Churyumov–Gerasimenko',
-    shortName: '67P/C–G',
-    thumbnail: Thumbnail.CG67P,
-    gallery: [GalleryImage.CG67P_ANIMATION, GalleryImage.CG67P_THUMB2, GalleryImage.CG67P_THUMB3],
-    mass: 1e13, // kg
-    radius: 2000, // m (average radius based on dimensions)
-    eccentricity: 0.64,
-    semiMajorAxis: 3.463 * 1.496e11, // AU to meters
-    inclination: 7.04, // degrees
-    longitudeAscending: 50.19, // degrees
-    argumentOfPeriapsis: 12.78, // degrees
-    trueAnomaly: 0, // degrees (value at perihelion)
-    siderealRotationPeriod: 12.4 * 3600, // hours to seconds
-    color: DEFAULT_ASTEROID_COLOR,
-    type: 'asteroid', // TODO: technically a comet
-    satellites: [],
-  },
-  {
-    name: '433 Eros',
-    shortName: 'Eros',
-    thumbnail: Thumbnail.EROS,
-    mass: 6.687e15, // kg
-    radius: 8420, // m, average (highly irregular)
-    eccentricity: 0.2226,
-    semiMajorAxis: 1.4579 * AU, // meters
-    inclination: 10.828, // degrees
-    longitudeAscending: 304.32, // degrees
-    argumentOfPeriapsis: 178.82, // degrees
-    trueAnomaly: 0, // degrees (value at epoch)
-    color: DEFAULT_ASTEROID_COLOR,
-    type: 'asteroid',
-    satellites: [],
-  },
-  {
-    name: '253 Mathilde',
-    shortName: 'Mathilde',
-    thumbnail: Thumbnail.MATHILDE,
-    mass: 1.033e17, // kg
-    radius: 26.4e3, // m
-    eccentricity: 0.26492652,
-    semiMajorAxis: 2.648402147 * AU, // meters
-    inclination: 6.7427122, // degrees
-    longitudeAscending: 179.58936, // degrees
-    argumentOfPeriapsis: 157.39642, // degrees
-    trueAnomaly: 0, // degrees (value at epoch)
-    color: DEFAULT_ASTEROID_COLOR,
-    type: 'asteroid',
-    satellites: [],
-  },
+  CERES,
+  VESTA,
+  PALLAS,
+  HYGIEA,
+  JUNO,
+  RYUGU,
+  LUTETIA,
+  CG67P,
+  EROS,
+  MATHILDE,
 ];
 
-export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
-  {
-    name: '134340 Pluto',
-    shortName: 'Pluto',
-    thumbnail: Thumbnail.PLUTO,
-    type: 'trans-neptunian-object',
-    eccentricity: 0.2488,
-    semiMajorAxis: 5906440628e3,
-    inclination: 17.16,
-    longitudeAscending: 110.299,
-    argumentOfPeriapsis: 113.834,
-    trueAnomaly: 0,
-    mass: 1.3025e22,
-    radius: 1188.3e3,
-    siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
-    color: '#E7C7A4',
-    satellites: [
-      {
-        name: 'Charon',
-        type: 'moon',
-        eccentricity: 0.00005,
-        semiMajorAxis: 19596e3,
-        inclination: 0.0,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        trueAnomaly: 0,
-        mass: 1.586e21,
-        radius: 606e3,
-        siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
-        color: DEFAULT_MOON_COLOR,
-        satellites: [],
-      },
-    ],
-  },
-  {
-    name: '136199 Eris',
-    shortName: 'Eris',
-    type: 'trans-neptunian-object',
-    eccentricity: 0.43607,
-    semiMajorAxis: 67.864 * AU,
-    inclination: 44.04,
-    longitudeAscending: 35.951,
-    argumentOfPeriapsis: 151.639,
-    trueAnomaly: 0,
-    mass: 1.6466e22,
-    radius: 1163e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '136108 Haumea',
-    shortName: 'Haumea',
-    type: 'trans-neptunian-object',
-    eccentricity: 0.19642,
-    semiMajorAxis: 43.116 * AU,
-    inclination: 28.2137,
-    longitudeAscending: 122.167,
-    argumentOfPeriapsis: 239.041,
-    trueAnomaly: 0,
-    mass: 4.006e21,
-    radius: 780e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '136472 Makemake',
-    shortName: 'Makemake',
-    thumbnail: Thumbnail.MAKEMAKE,
-    type: 'trans-neptunian-object',
-    eccentricity: 0.16126,
-    semiMajorAxis: 45.43 * AU,
-    inclination: 28.9835,
-    longitudeAscending: 79.62,
-    argumentOfPeriapsis: 294.834,
-    trueAnomaly: 0,
-    mass: 3.1e21,
-    radius: 715e3,
-    color: DEFAULT_ASTEROID_COLOR,
-    satellites: [],
-  },
-  {
-    name: '486958 Arrokoth', // also known as Ultima Thule
-    shortName: 'Arrokoth',
-    thumbnail: Thumbnail.ARROKOTH,
-    mass: 7.485e14, // kg
-    radius: 18e3, // m (average radius based on length of 36 km)
-    eccentricity: 0.04172,
-    semiMajorAxis: 44.581 * AU,
-    inclination: 2.4512, // degrees
-    longitudeAscending: 158.998, // degrees
-    argumentOfPeriapsis: 174.418, // degrees
-    trueAnomaly: 0, // degrees (value at perihelion)
-    color: DEFAULT_ASTEROID_COLOR,
-    type: 'trans-neptunian-object',
-    satellites: [],
-  },
-];
+export const PLUTO: CelestialBody = {
+  name: '134340 Pluto',
+  shortName: 'Pluto',
+  type: 'trans-neptunian-object',
+  eccentricity: 0.2488,
+  semiMajorAxis: 5906440628e3,
+  inclination: 17.16,
+  longitudeAscending: 110.299,
+  argumentOfPeriapsis: 113.834,
+  trueAnomaly: 0,
+  mass: 1.3025e22,
+  radius: 1188.3e3,
+  siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
+  color: '#E7C7A4',
+  satellites: [
+    {
+      name: 'Charon',
+      type: 'moon',
+      eccentricity: 0.00005,
+      semiMajorAxis: 19596e3,
+      inclination: 0.0,
+      longitudeAscending: 0,
+      argumentOfPeriapsis: 0,
+      trueAnomaly: 0,
+      mass: 1.586e21,
+      radius: 606e3,
+      siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
+      color: DEFAULT_MOON_COLOR,
+      satellites: [],
+    },
+  ],
+};
+
+export const ERIS: CelestialBody = {
+  name: '136199 Eris',
+  shortName: 'Eris',
+  type: 'trans-neptunian-object',
+  eccentricity: 0.43607,
+  semiMajorAxis: 67.864 * AU,
+  inclination: 44.04,
+  longitudeAscending: 35.951,
+  argumentOfPeriapsis: 151.639,
+  trueAnomaly: 0,
+  mass: 1.6466e22,
+  radius: 1163e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const HAUMEA: CelestialBody = {
+  name: '136108 Haumea',
+  shortName: 'Haumea',
+  type: 'trans-neptunian-object',
+  eccentricity: 0.19642,
+  semiMajorAxis: 43.116 * AU,
+  inclination: 28.2137,
+  longitudeAscending: 122.167,
+  argumentOfPeriapsis: 239.041,
+  trueAnomaly: 0,
+  mass: 4.006e21,
+  radius: 780e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const MAKEMAKE: CelestialBody = {
+  name: '136472 Makemake',
+  shortName: 'Makemake',
+  type: 'trans-neptunian-object',
+  eccentricity: 0.16126,
+  semiMajorAxis: 45.43 * AU,
+  inclination: 28.9835,
+  longitudeAscending: 79.62,
+  argumentOfPeriapsis: 294.834,
+  trueAnomaly: 0,
+  mass: 3.1e21,
+  radius: 715e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const ARROKOTH: CelestialBody = {
+  name: '486958 Arrokoth', // also known as Ultima Thule
+  shortName: 'Arrokoth',
+  mass: 7.485e14, // kg
+  radius: 18e3, // m (average radius based on length of 36 km)
+  eccentricity: 0.04172,
+  semiMajorAxis: 44.581 * AU,
+  inclination: 2.4512, // degrees
+  longitudeAscending: 158.998, // degrees
+  argumentOfPeriapsis: 174.418, // degrees
+  trueAnomaly: 0, // degrees (value at perihelion)
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'trans-neptunian-object',
+  satellites: [],
+};
+
+export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [PLUTO, ERIS, HAUMEA, MAKEMAKE, ARROKOTH];
 
 export const MERCURY: CelestialBody = {
   name: 'Mercury',
   type: 'planet',
-  thumbnail: Thumbnail.MERCURY,
   eccentricity: 0.2056,
   semiMajorAxis: 57909050e3, // meters
   inclination: 7.005, // degrees
@@ -294,8 +299,6 @@ export const MERCURY: CelestialBody = {
 export const VENUS: CelestialBody = {
   name: 'Venus',
   type: 'planet',
-  thumbnail: Thumbnail.VENUS,
-  gallery: [GalleryImage.VENUS_VENERA, GalleryImage.VENUS_VENERA2, GalleryImage.VENUS_MAGELLAN],
   eccentricity: 0.006772,
   semiMajorAxis: 108208000e3,
   inclination: 3.39458,
@@ -331,7 +334,6 @@ export const VENUS: CelestialBody = {
 export const EARTH: CelestialBody = {
   name: 'Earth',
   type: 'planet',
-  thumbnail: Thumbnail.EARTH,
   eccentricity: 0.0167086,
   semiMajorAxis: 149597870.7e3, // 1 AU
   inclination: 0.00005,
@@ -378,7 +380,6 @@ export const EARTH: CelestialBody = {
 export const MARS: CelestialBody = {
   name: 'Mars',
   type: 'planet',
-  thumbnail: Thumbnail.MARS,
   eccentricity: 0.0935,
   semiMajorAxis: 227939200e3,
   inclination: 1.85,
@@ -424,7 +425,6 @@ export const MARS: CelestialBody = {
 export const JUPITER: CelestialBody = {
   name: 'Jupiter',
   type: 'planet',
-  thumbnail: Thumbnail.JUPITER,
   eccentricity: 0.0489,
   semiMajorAxis: 778340821e3,
   inclination: 1.305,
@@ -498,7 +498,6 @@ export const JUPITER: CelestialBody = {
 export const SATURN: CelestialBody = {
   name: 'Saturn',
   type: 'planet',
-  thumbnail: Thumbnail.SATURN,
   eccentricity: 0.0565,
   semiMajorAxis: 1433449370e3,
   inclination: 2.485,
@@ -614,7 +613,6 @@ export const SATURN: CelestialBody = {
 export const URANUS: CelestialBody = {
   name: 'Uranus',
   type: 'planet',
-  thumbnail: Thumbnail.URANUS,
   eccentricity: 0.0457,
   semiMajorAxis: 2876679082e3,
   inclination: 0.772,
@@ -634,7 +632,6 @@ export const URANUS: CelestialBody = {
 export const NEPTUNE: CelestialBody = {
   name: 'Neptune',
   type: 'planet',
-  thumbnail: Thumbnail.NEPTUNE,
   eccentricity: 0.0086,
   semiMajorAxis: 4503443661e3,
   inclination: 1.77,
@@ -668,7 +665,6 @@ export const NEPTUNE: CelestialBody = {
 const SOL_FULL: CelestialBody = {
   name: 'Sol',
   type: 'sun',
-  thumbnail: Thumbnail.SUN,
   eccentricity: 0,
   semiMajorAxis: 0,
   inclination: 0,
