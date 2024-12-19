@@ -1,6 +1,7 @@
-import { AU, findCelestialBody, SOL } from './constants.ts';
+import { AU, SOL } from './constants.ts';
 import { CelestialBodyType, Point2 } from './types.ts';
 import { getInitialState } from './physics.ts';
+import { findCelestialBody } from './utils.ts';
 
 export type AppState = {
   time: number; // seconds
