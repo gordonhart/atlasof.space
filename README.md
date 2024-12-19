@@ -11,7 +11,8 @@ yarn dev
   - [x] Control with cursor in addition to buttons
 - [x] Set visualization center to other planets
 - [x] Hover interactions (display information about body on hover)
-- [ ] Add planetary spin
+- [x] Add planetary spin
+- [ ] Add co-orbitals
 - [ ] Model spacecraft (e.g. Parker, Juno, Cassini, Voyager)
   - [ ] Choose mission from list to simulate
 - [ ] Set correct positions for time (consistent epoch and anomaly for bodies, tie time to real world)
