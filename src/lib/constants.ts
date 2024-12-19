@@ -1,4 +1,4 @@
-import { CelestialBody, CelestialBodyState, CelestialBodyType } from './types.ts';
+import { CelestialBody, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
@@ -331,6 +331,22 @@ export const VENUS: CelestialBody = {
   ],
 };
 
+export const LUNA: CelestialBody = {
+  name: 'Luna',
+  type: 'moon',
+  eccentricity: 0.0549,
+  semiMajorAxis: 384400e3,
+  inclination: 5.145,
+  longitudeAscending: 125.08,
+  argumentOfPeriapsis: 318.15,
+  trueAnomaly: 0,
+  mass: 7.342e22,
+  radius: 1737.4e3,
+  siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const EARTH: CelestialBody = {
   name: 'Earth',
   type: 'planet',
@@ -345,21 +361,7 @@ export const EARTH: CelestialBody = {
   siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
   color: '#7e87dd',
   satellites: [
-    {
-      name: 'Luna',
-      type: 'moon',
-      eccentricity: 0.0549,
-      semiMajorAxis: 384400e3,
-      inclination: 5.145,
-      longitudeAscending: 125.08,
-      argumentOfPeriapsis: 318.15,
-      trueAnomaly: 0,
-      mass: 7.342e22,
-      radius: 1737.4e3,
-      siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
+    LUNA,
     /* {
       name: 'ISS',
       type: 'moon',
@@ -687,15 +689,15 @@ export const SOL = {
 export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
 export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
 
-function getCelestialBodyNames(body: CelestialBody): Array<string> {
-  return [body.name, ...body.satellites.flatMap(b => getCelestialBodyNames(b))];
+function getValueRecursive<T extends CelestialBody[keyof CelestialBody]>(
+  body: CelestialBody,
+  key: keyof CelestialBody & keyof { [K in keyof CelestialBody]: CelestialBody[K] extends T ? K : never }
+): Array<T> {
+  return [body[key] as T, ...body.satellites.flatMap(child => getValueRecursive<T>(child, key))];
 }
-export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
-
-function getCelestialBodyClasses(body: CelestialBody): Array<CelestialBodyType> {
-  return [body.type, ...body.satellites.flatMap(b => getCelestialBodyClasses(b))];
-}
-export const CELESTIAL_BODY_CLASSES: Array<CelestialBodyType> = getCelestialBodyClasses(SOL);
+export const CELESTIAL_BODY_NAMES: Array<string> = getValueRecursive<string>(SOL, 'name');
+export const CELESTIAL_BODY_SHORT_NAMES: Array<string> = getValueRecursive<string>(SOL, 'shortName');
+export const CELESTIAL_BODY_CLASSES: Array<CelestialBodyType> = getValueRecursive<CelestialBodyType>(SOL, 'type');
 
 function getCelestialBodyOrbitalPeriodsAboutParent(
   parent: CelestialBody | null,
@@ -707,16 +709,3 @@ function getCelestialBodyOrbitalPeriodsAboutParent(
   );
 }
 export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPeriodsAboutParent(null, SOL);
-
-// TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
-export function findCelestialBody(state: CelestialBodyState, name: string): CelestialBodyState | undefined {
-  if (name === state.name) {
-    return state;
-  }
-  for (const child of state.satellites) {
-    const found = findCelestialBody(child, name);
-    if (found != null) {
-      return found;
-    }
-  }
-}

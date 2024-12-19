@@ -1,7 +1,8 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
-import { ASTEROID_BELT, findCelestialBody, KUIPER_BELT } from './constants.ts';
+import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
+import {findCelestialBody} from "./utils.ts";
 
 export function drawSystem(
   ctx: CanvasRenderingContext2D,

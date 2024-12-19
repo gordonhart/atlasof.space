@@ -1,8 +1,8 @@
 import { useState, MouseEvent, WheelEvent } from 'react';
 import { AppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyState, CelestialBodyType, KeplerianElements, Point2 } from '../lib/types.ts';
-import { findCelestialBody } from '../lib/constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta, magnitude } from '../lib/physics.ts';
+import {findCelestialBody} from "../lib/utils.ts";
 
 export function useDragController(
   { offset, metersPerPx, center, visibleTypes }: AppState,

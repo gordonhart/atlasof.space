@@ -2,6 +2,7 @@ import sunSrc from '../../assets/sun-thumb.jpg';
 import mercurySrc from '../../assets/mercury-thumb.jpg';
 import venusSrc from '../../assets/venus-thumb.jpg';
 import earthSrc from '../../assets/earth-thumb.jpg';
+import lunaSrc from '../../assets/luna-thumb.jpg';
 import marsSrc from '../../assets/mars-thumb.jpg';
 import jupiterSrc from '../../assets/jupiter-thumb.jpg';
 import saturnSrc from '../../assets/saturn-thumb.jpg';
@@ -33,6 +34,7 @@ export const Thumbnails: Record<string, string> = {
   [Objects.MERCURY.name]: mercurySrc as string,
   [Objects.VENUS.name]: venusSrc as string,
   [Objects.EARTH.name]: earthSrc as string,
+  [Objects.LUNA.name]: lunaSrc as string,
   [Objects.MARS.name]: marsSrc as string,
   [Objects.JUPITER.name]: jupiterSrc as string,
   [Objects.SATURN.name]: saturnSrc as string,
