@@ -1,4 +1,4 @@
-import { CelestialBody, CelestialBodyState, CelestialBodyType } from './types.ts';
+import { CelestialBody, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
@@ -168,6 +168,23 @@ export const MATHILDE: CelestialBody = {
   satellites: [],
 };
 
+export const NEREUS: CelestialBody = {
+  name: '4660 Nereus',
+  shortName: 'Nereus',
+  mass: 1, // TODO: not known
+  radius: 165, // m
+  eccentricity: 0.36004,
+  semiMajorAxis: 1.4889 * AU, // meters
+  inclination: 1.4316, // degrees
+  longitudeAscending: 314.41, // degrees
+  argumentOfPeriapsis: 158.12, // degrees
+  trueAnomaly: 0, // degrees (value at epoch)
+  siderealRotationPeriod: 15.16 * 60 * 60,
+  color: DEFAULT_ASTEROID_COLOR,
+  type: 'asteroid',
+  satellites: [],
+};
+
 export const ASTEROIDS: Array<CelestialBody> = [
   CERES,
   VESTA,
@@ -179,6 +196,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   CG67P,
   EROS,
   MATHILDE,
+  NEREUS,
 ];
 
 export const PLUTO: CelestialBody = {
@@ -331,6 +349,22 @@ export const VENUS: CelestialBody = {
   ],
 };
 
+export const LUNA: CelestialBody = {
+  name: 'Luna',
+  type: 'moon',
+  eccentricity: 0.0549,
+  semiMajorAxis: 384400e3,
+  inclination: 5.145,
+  longitudeAscending: 125.08,
+  argumentOfPeriapsis: 318.15,
+  trueAnomaly: 0,
+  mass: 7.342e22,
+  radius: 1737.4e3,
+  siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const EARTH: CelestialBody = {
   name: 'Earth',
   type: 'planet',
@@ -345,21 +379,7 @@ export const EARTH: CelestialBody = {
   siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
   color: '#7e87dd',
   satellites: [
-    {
-      name: 'Luna',
-      type: 'moon',
-      eccentricity: 0.0549,
-      semiMajorAxis: 384400e3,
-      inclination: 5.145,
-      longitudeAscending: 125.08,
-      argumentOfPeriapsis: 318.15,
-      trueAnomaly: 0,
-      mass: 7.342e22,
-      radius: 1737.4e3,
-      siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
+    LUNA,
     /* {
       name: 'ISS',
       type: 'moon',
@@ -377,6 +397,36 @@ export const EARTH: CelestialBody = {
   ],
 };
 
+export const PHOBOS: CelestialBody = {
+  name: 'Phobos',
+  type: 'moon',
+  eccentricity: 0.0151,
+  semiMajorAxis: 9376e3,
+  inclination: 1.093,
+  longitudeAscending: 0,
+  argumentOfPeriapsis: 0,
+  trueAnomaly: 0,
+  mass: 1.0659e16,
+  radius: 11.2667e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const DEIMOS: CelestialBody = {
+  name: 'Deimos',
+  type: 'moon',
+  eccentricity: 0.00033,
+  semiMajorAxis: 23458e3,
+  inclination: 1.788,
+  longitudeAscending: 0,
+  argumentOfPeriapsis: 0,
+  trueAnomaly: 0,
+  mass: 1.4762e15,
+  radius: 6.2e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const MARS: CelestialBody = {
   name: 'Mars',
   type: 'planet',
@@ -390,36 +440,67 @@ export const MARS: CelestialBody = {
   radius: 3389.5e3,
   siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
   color: '#c96c3c',
-  satellites: [
-    {
-      name: 'Phobos',
-      type: 'moon',
-      eccentricity: 0.0151,
-      semiMajorAxis: 9376e3,
-      inclination: 1.093,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.0659e16,
-      radius: 11.2667e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Deimos',
-      type: 'moon',
-      eccentricity: 0.00033,
-      semiMajorAxis: 23458e3,
-      inclination: 1.788,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.4762e15,
-      radius: 6.2e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-  ],
+  satellites: [PHOBOS, DEIMOS],
+};
+
+export const IO: CelestialBody = {
+  name: 'Io',
+  type: 'moon',
+  eccentricity: 0.0041,
+  semiMajorAxis: 421800e3,
+  inclination: 0.036,
+  longitudeAscending: 0, // approximate
+  argumentOfPeriapsis: 0, // approximated for circular orbits
+  trueAnomaly: 0,
+  mass: 8.931938e22,
+  radius: 1821.6e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const EUROPA: CelestialBody = {
+  name: 'Europa',
+  type: 'moon',
+  eccentricity: 0.0094,
+  semiMajorAxis: 671100e3,
+  inclination: 0.466,
+  longitudeAscending: 0, // approximate
+  argumentOfPeriapsis: 0, // approximated for circular orbits
+  trueAnomaly: 0,
+  mass: 4.799844e22,
+  radius: 1560.8e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const GANYMEDE: CelestialBody = {
+  name: 'Ganymede',
+  type: 'moon',
+  eccentricity: 0.0013,
+  semiMajorAxis: 1070400e3,
+  inclination: 0.177,
+  longitudeAscending: 0,
+  argumentOfPeriapsis: 0,
+  trueAnomaly: 0,
+  mass: 1.4819e23,
+  radius: 2634.1e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const CALLISTO: CelestialBody = {
+  name: 'Callisto',
+  type: 'moon',
+  eccentricity: 0.0074,
+  semiMajorAxis: 1882700e3,
+  inclination: 0.192,
+  longitudeAscending: 0,
+  argumentOfPeriapsis: 0,
+  trueAnomaly: 0,
+  mass: 1.075938e23,
+  radius: 2410.3e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
 };
 
 export const JUPITER: CelestialBody = {
@@ -435,64 +516,22 @@ export const JUPITER: CelestialBody = {
   radius: 69911e3,
   siderealRotationPeriod: 9 * 60 * 60 + 55 * 60 + 30, // 9 hr 55 min 30 sec
   color: '#e9be76',
-  satellites: [
-    {
-      name: 'Io',
-      type: 'moon',
-      eccentricity: 0.0041,
-      semiMajorAxis: 421800e3,
-      inclination: 0.036,
-      longitudeAscending: 0, // approximate
-      argumentOfPeriapsis: 0, // approximated for circular orbits
-      trueAnomaly: 0,
-      mass: 8.931938e22,
-      radius: 1821.6e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Europa',
-      type: 'moon',
-      eccentricity: 0.0094,
-      semiMajorAxis: 671100e3,
-      inclination: 0.466,
-      longitudeAscending: 0, // approximate
-      argumentOfPeriapsis: 0, // approximated for circular orbits
-      trueAnomaly: 0,
-      mass: 4.799844e22,
-      radius: 1560.8e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Ganymede',
-      type: 'moon',
-      eccentricity: 0.0013,
-      semiMajorAxis: 1070400e3,
-      inclination: 0.177,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.4819e23,
-      radius: 2634.1e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Callisto',
-      type: 'moon',
-      eccentricity: 0.0074,
-      semiMajorAxis: 1882700e3,
-      inclination: 0.192,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.075938e23,
-      radius: 2410.3e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-  ],
+  satellites: [IO, EUROPA, GANYMEDE, CALLISTO],
+};
+
+export const MIMAS: CelestialBody = {
+  name: 'Mimas',
+  type: 'moon',
+  eccentricity: 0.0196,
+  semiMajorAxis: 185540e3,
+  inclination: 1.574,
+  longitudeAscending: 0,
+  argumentOfPeriapsis: 0,
+  trueAnomaly: 0,
+  mass: 3.7493e19,
+  radius: 198.2e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
 };
 
 export const SATURN: CelestialBody = {
@@ -509,20 +548,7 @@ export const SATURN: CelestialBody = {
   siderealRotationPeriod: 10 * 60 * 60 + 32 * 60 + 35, // 10 hr 32 min 35 sec
   color: '#d7be87',
   satellites: [
-    {
-      name: 'Mimas',
-      type: 'moon',
-      eccentricity: 0.0196,
-      semiMajorAxis: 185540e3,
-      inclination: 1.574,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 3.7493e19,
-      radius: 198.2e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
+    MIMAS,
     {
       name: 'Enceladus',
       type: 'moon',
@@ -675,7 +701,8 @@ const SOL_FULL: CelestialBody = {
   radius: 6.957e8,
   siderealRotationPeriod: 609.12 * 60 * 60, // 609 hours at 16º latitude; true period varies by latitude
   color: '#fa0',
-  satellites: [MERCURY, VENUS, EARTH, MARS, ...ASTEROIDS, JUPITER, SATURN, URANUS, NEPTUNE, ...TRANS_NEPTUNIAN_OBJECTS],
+  // draw asteroids and TNOs first so that they are "underneath" more prominent planets
+  satellites: [...ASTEROIDS, ...TRANS_NEPTUNIAN_OBJECTS, MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE],
 };
 // keep this for convenience to make it easier to filter certain objects during dev
 export const SOL = {
@@ -687,15 +714,15 @@ export const SOL = {
 export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
 export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
 
-function getCelestialBodyNames(body: CelestialBody): Array<string> {
-  return [body.name, ...body.satellites.flatMap(b => getCelestialBodyNames(b))];
+function getValueRecursive<T extends CelestialBody[keyof CelestialBody]>(
+  body: CelestialBody,
+  key: keyof CelestialBody & keyof { [K in keyof CelestialBody]: CelestialBody[K] extends T ? K : never }
+): Array<T> {
+  return [body[key] as T, ...body.satellites.flatMap(child => getValueRecursive<T>(child, key))];
 }
-export const CELESTIAL_BODY_NAMES: Array<string> = getCelestialBodyNames(SOL);
-
-function getCelestialBodyClasses(body: CelestialBody): Array<CelestialBodyType> {
-  return [body.type, ...body.satellites.flatMap(b => getCelestialBodyClasses(b))];
-}
-export const CELESTIAL_BODY_CLASSES: Array<CelestialBodyType> = getCelestialBodyClasses(SOL);
+export const CELESTIAL_BODY_NAMES: Array<string> = getValueRecursive<string>(SOL, 'name');
+export const CELESTIAL_BODY_SHORT_NAMES: Array<string> = getValueRecursive<string>(SOL, 'shortName');
+export const CELESTIAL_BODY_CLASSES: Array<CelestialBodyType> = getValueRecursive<CelestialBodyType>(SOL, 'type');
 
 function getCelestialBodyOrbitalPeriodsAboutParent(
   parent: CelestialBody | null,
@@ -707,16 +734,3 @@ function getCelestialBodyOrbitalPeriodsAboutParent(
   );
 }
 export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPeriodsAboutParent(null, SOL);
-
-// TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
-export function findCelestialBody(state: CelestialBodyState, name: string): CelestialBodyState | undefined {
-  if (name === state.name) {
-    return state;
-  }
-  for (const child of state.satellites) {
-    const found = findCelestialBody(child, name);
-    if (found != null) {
-      return found;
-    }
-  }
-}

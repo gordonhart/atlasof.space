@@ -1,6 +1,7 @@
-import { AU, findCelestialBody, SOL } from './constants.ts';
+import { AU, SOL } from './constants.ts';
 import { CelestialBodyType, Point2 } from './types.ts';
 import { getInitialState } from './physics.ts';
+import { findCelestialBody } from './utils.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -19,7 +20,7 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: 60 * 60,
+  dt: 60,
   play: true,
   drawTail: false,
   drawOrbit: true,

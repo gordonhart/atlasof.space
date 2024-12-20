@@ -1,7 +1,8 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
-import { ASTEROID_BELT, findCelestialBody, KUIPER_BELT } from './constants.ts';
+import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
+import { findCelestialBody } from './utils.ts';
 
 export function drawSystem(
   ctx: CanvasRenderingContext2D,
@@ -147,6 +148,7 @@ function drawOrbit(
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
+  ctx.save();
   ctx.beginPath();
   const [initX, initY] = orbitalEllipseAtTheta(body, 0);
   ctx.moveTo(...toPx(initX, initY));
@@ -158,6 +160,7 @@ function drawOrbit(
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
+  ctx.restore();
 }
 
 function drawLabel(
