@@ -18,3 +18,10 @@ yarn dev
 - [ ] Set correct positions for time (consistent epoch and anomaly for bodies, tie time to real world)
 - [ ] Update visualization to be 3D
 - [ ] Move previously drawn paths on pan, zoom, and while paused
+
+## Resources
+
+- Small-body database lookup ([ssd.jpl.nasa.gov](https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html))
+  - [API docs](https://ssd-api.jpl.nasa.gov/doc/sbdb.html)
+- Trajectory browser ([trajbrowser.arc.nasa.gov](https://trajbrowser.arc.nasa.gov/traj_browser.php))
+- Ephemeris generator ([ssd.jpl.nasa.gov](https://ssd.jpl.nasa.gov/horizons/app.html#/))

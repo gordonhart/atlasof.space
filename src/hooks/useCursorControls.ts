@@ -4,7 +4,7 @@ import { CelestialBody, CelestialBodyState, CelestialBodyType, KeplerianElements
 import { degreesToRadians, orbitalEllipseAtTheta, magnitude } from '../lib/physics.ts';
 import { findCelestialBody } from '../lib/utils.ts';
 
-export function useDragController(
+export function useCursorControls(
   { offset, metersPerPx, center, visibleTypes }: AppState,
   updateAppState: (state: Partial<AppState>) => void,
   systemState: CelestialBodyState

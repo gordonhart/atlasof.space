@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
-import { useDragController } from '../hooks/useDragController.ts';
+import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { drawAnnotations, drawSystem } from '../lib/draw.ts';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/constants.ts';
@@ -19,7 +19,7 @@ export function SolarSystem() {
   // use two canvases to prevent "draw tails" from drawing labels and other annotations
   const systemCanvasRef = useRef<HTMLCanvasElement>(null);
   const annotationCanvasRef = useRef<HTMLCanvasElement>(null);
-  const dragController = useDragController(appState, updateState, systemStateRef.current);
+  const cursorControls = useCursorControls(appState, updateState, systemStateRef.current);
 
   // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {
@@ -80,7 +80,7 @@ export function SolarSystem() {
   const canvasStyle = { display: 'block', height: '100vh', width: '100vw' };
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
-      <canvas ref={systemCanvasRef} style={canvasStyle} {...dragController.canvasProps} />
+      <canvas ref={systemCanvasRef} style={canvasStyle} {...cursorControls.canvasProps} />
       <canvas
         ref={annotationCanvasRef}
         style={{ ...canvasStyle, position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}

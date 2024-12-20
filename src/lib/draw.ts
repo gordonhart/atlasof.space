@@ -148,6 +148,7 @@ function drawOrbit(
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
+  ctx.save();
   ctx.beginPath();
   const [initX, initY] = orbitalEllipseAtTheta(body, 0);
   ctx.moveTo(...toPx(initX, initY));
@@ -159,6 +160,7 @@ function drawOrbit(
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
+  ctx.restore();
 }
 
 function drawLabel(
