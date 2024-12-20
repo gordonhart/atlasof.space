@@ -1,0 +1,12 @@
+# example netlify.toml
+[build]
+  command = "yarn build"
+  functions = "functions"
+  publish = "dist"
+
+  [[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+
+  ## more info on configuring this file: https://ntl.fyi/file-based-build-config

@@ -15,6 +15,7 @@
   "dependencies": {
     "@mantine/core": "^7.14.3",
     "@mantine/hooks": "^7.14.3",
+    "@netlify/functions": "^3.0.0",
     "@tabler/icons-react": "^3.24.0",
     "@types/ramda": "^0.30.2",
     "eslint-plugin-stylelint": "^0.1.1",
@@ -41,6 +42,7 @@
     "eslint-plugin-unused-imports": "^3.2.0",
     "globals": "^15.13.0",
     "husky": "^9.1.7",
+    "netlify-cli": "^17.38.1",
     "postcss": "^8.4.49",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
