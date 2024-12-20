@@ -21,3 +21,6 @@ dist
 dist-ssr
 *.local
 .vite/
+
+# Local Netlify folder
+.netlify
