@@ -1,8 +1,11 @@
 # orbital-simulator
 
-```
+```sh
 yarn install
+
 yarn dev
+# -- or --
+yarn netlify dev
 ```
 
 - [x] Add moons
