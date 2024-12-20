@@ -80,8 +80,11 @@ export function isNotFound(obj: unknown): obj is SmallBodyNotFound {
   return (
     typeof obj === 'object' &&
     obj !== null &&
+    'code' in obj &&
     typeof obj.code === 'string' &&
+    'moreInfo' in obj &&
     typeof obj.moreInfo === 'string' &&
+    'message' in obj &&
     typeof obj.message === 'string'
   );
 }
