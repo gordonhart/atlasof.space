@@ -15,6 +15,7 @@
   "dependencies": {
     "@mantine/core": "^7.14.3",
     "@mantine/hooks": "^7.14.3",
+    "@netlify/functions": "^3.0.0",
     "@tabler/icons-react": "^3.24.0",
     "@types/ramda": "^0.30.2",
     "eslint-plugin-stylelint": "^0.1.1",
