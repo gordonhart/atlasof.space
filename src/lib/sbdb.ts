@@ -69,10 +69,23 @@ type SmallBodyPhysicalParameter = {
   units: string | null;
 };
 
+type SmallBodyDiscovery = {
+  location: string; // e.g. 'Socorro'
+  cref: string; // e.g. 'MPC batch dated 2013-04-25'
+  name: string; // e.g. 'Bennu'
+  who: string; // e.g. 'LINEAR'
+  discovery: string; // e.g. 'Discovered 1999 Sept. 11 by the Lincoln Laboratory Near-Earth Asteroid Research Team at Socorro.'
+  site: string | null; // TODO
+  ref: string; // e.g. '20051019/Numbers.arc'
+  citation: string; // e.g. "Bennu was an Egyptian mythological figure associated with Osiris, Atum and Ra.  This minor planet is the target of the OSIRIS-REx sample return mission.  OSIRIS-REx's Touch-and-Go Sampler evokes Bennu's image as a heron. Name suggested by Michael Toler Puzio (b. 2004) via a naming contest for students."
+  date: string; // e.g. '1999-Sep-11'
+};
+
 export type SmallBodyResponse = {
   orbit: SmallBodyOrbit;
   object: SmallBodyObject;
   phys_par: Array<SmallBodyPhysicalParameter>;
+  discovery: SmallBodyDiscovery;
   signature: { source: string; version: string };
 };
 

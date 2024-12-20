@@ -1,5 +1,5 @@
-import { Box, Button, Group, Menu, Stack, Text, Transition } from '@mantine/core';
-import { IconCircle, IconCircleDot, IconCircleFilled } from '@tabler/icons-react';
+import { ActionIcon, Box, Button, Group, Menu, Stack, Text, Transition } from '@mantine/core';
+import { IconCircle, IconCircleDot, IconCircleFilled, IconSpherePlus } from '@tabler/icons-react';
 import { CELESTIAL_BODY_CLASSES, CELESTIAL_BODY_NAMES, CELESTIAL_BODY_SHORT_NAMES } from '../../lib/constants.ts';
 import { celestialBodyTypeName, findCelestialBody } from '../../lib/utils.ts';
 import { CelestialBodyState } from '../../lib/types.ts';
@@ -41,6 +41,10 @@ export function FocusControls({ state, updateState, systemState }: Props) {
             ))}
           </Menu.Dropdown>
         </Menu>
+
+        <ActionIcon>
+          <IconSpherePlus size={iconSize} />
+        </ActionIcon>
       </Group>
 
       <Transition mounted={focusBody != null} transition="fade" duration={400} timingFunction="ease">

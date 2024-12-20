@@ -2,8 +2,8 @@ import { Grid, Group, Image, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBodyState } from '../../lib/types.ts';
 import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
-import { magnitude, orbitalPeriod } from '../../lib/physics.ts';
-import { SOL } from '../../lib/constants.ts';
+import { magnitude, orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
+import { g, SOL } from '../../lib/constants.ts';
 import { GalleryImages, Thumbnails } from '../../lib/images.ts';
 
 type Props = {
@@ -26,6 +26,7 @@ export function FactCard({ body }: Props) {
     { label: 'orbital period', value: pluralize(periodTime, periodUnits) },
     // TODO: this doesn't update live due to the passed-in body being a ref -- should fix
     { label: 'velocity', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
+    { label: 'surface gravity', value: `${(surfaceGravity(body.mass, body.radius) / g).toLocaleString()} g` },
     ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
   ];
   const thumbnailSize = 180;

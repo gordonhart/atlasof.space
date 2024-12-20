@@ -39,6 +39,10 @@ export function semiLatusRectum(semiMajorAxis: number, eccentricity: number) {
   return semiMajorAxis * (1 - eccentricity ** 2);
 }
 
+export function surfaceGravity(mass: number, radius: number) {
+  return (G * mass) / radius ** 2; // m/s^2
+}
+
 export function orbitalEllipseAtTheta(ellipse: KeplerianElements, theta: number): Point3 {
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = ellipse;
 

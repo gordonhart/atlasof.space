@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CelestialBody } from '../lib/types.ts';
-import { AU } from '../lib/constants.ts';
+import { AU, DEFAULT_ASTEROID_COLOR } from '../lib/constants.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
 
 export function useSmallBody(name: string | null) {
@@ -24,11 +24,9 @@ export async function fetchSmallBodyData(name: string): Promise<CelestialBody | 
   if (isNotFound(obj)) {
     return null;
   }
-  const {
-    object,
-    orbit: { elements },
-    phys_par,
-  } = obj;
+  const { object, orbit, phys_par } = obj;
+  const { elements } = orbit;
+  const radius = Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2;
   return {
     name: object.fullname,
     shortName: object.shortname,
@@ -39,9 +37,9 @@ export async function fetchSmallBodyData(name: string): Promise<CelestialBody | 
     longitudeAscending: Number(elements.find(({ name }) => name === 'om')?.value),
     argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
     trueAnomaly: 0,
-    mass: 1, // TODO: possible to get mass from the API?
-    radius: Number(phys_par.find(({ name }) => name === 'diameter')?.value) / 2, // unknown
-    color: '#00ff00',
+    mass: 2500 * (4 / 3) * Math.PI * radius ** 3, // best-effort guess using 2500kg/m3 density and a spherical shape
+    radius,
+    color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?
     satellites: [],
   };
 }
