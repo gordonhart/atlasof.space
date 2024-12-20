@@ -18,15 +18,8 @@ export function useSmallBody(name: string | null) {
 }
 
 export async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com';
-  const baseUrl = 'https://ssd-api.jpl.nasa.gov/sbdb.api';
-  const urlParams = new URLSearchParams({
-    sstr: name,
-    'full-prec': '1',
-    'phys-par': '1',
-    // discovery: '1',
-  });
-  const response = await fetch(`${proxyUrl}/${baseUrl}?${urlParams}`);
+  const urlParams = new URLSearchParams({ sstr: name });
+  const response = await fetch(`/api/sbdb?${urlParams}`);
   const obj: SmallBodyResponse | SmallBodyNotFound = await response.json();
   if (isNotFound(obj)) {
     return null;
@@ -40,14 +33,14 @@ export async function fetchSmallBodyData(name: string): Promise<CelestialBody | 
     name: object.fullname,
     shortName: object.shortname,
     type: 'asteroid',
-    eccentricity: Number(elements.find(({ name }) => name === 'e').value),
-    semiMajorAxis: Number(elements.find(({ name }) => name === 'a').value) * AU,
-    inclination: Number(elements.find(({ name }) => name === 'i').value),
-    longitudeAscending: Number(elements.find(({ name }) => name === 'om').value),
-    argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w').value),
+    eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
+    semiMajorAxis: Number(elements.find(({ name }) => name === 'a')?.value) * AU,
+    inclination: Number(elements.find(({ name }) => name === 'i')?.value),
+    longitudeAscending: Number(elements.find(({ name }) => name === 'om')?.value),
+    argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
     trueAnomaly: 0,
     mass: 1, // TODO: possible to get mass from the API?
-    radius: Number(phys_par.find(({ name }) => name === 'diameter').value) / 2, // unknown
+    radius: Number(phys_par.find(({ name }) => name === 'diameter')?.value) / 2, // unknown
     color: '#00ff00',
     satellites: [],
   };

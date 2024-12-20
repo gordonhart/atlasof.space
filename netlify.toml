@@ -1,12 +1,13 @@
-# example netlify.toml
 [build]
-  command = "yarn build"
-  functions = "functions"
-  publish = "dist"
+command = "yarn build"
+functions = "functions"
+publish = "dist"
 
-  [[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
+[[redirects]]
+force = true
+from = '/api/*'
+status = 200
+to = '/.netlify/functions/:splat'
 
-  ## more info on configuring this file: https://ntl.fyi/file-based-build-config
+[dev]
+port = 1972
