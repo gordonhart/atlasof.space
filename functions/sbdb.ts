@@ -7,7 +7,7 @@ const DEFAULT_PARAMS = {
 };
 
 // simple proxy to circumvent CORS restrictions
-export default async function proxyRequest(req: Request): Promise<Response> {
+export default async function handle(req: Request): Promise<Response> {
   const params = new URL(req.url).searchParams;
   const sstr = params.get('sstr');
   const baseUrl = 'https://ssd-api.jpl.nasa.gov/sbdb.api'; // docs: https://ssd-api.jpl.nasa.gov/doc/sbdb.html

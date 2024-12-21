@@ -4,7 +4,8 @@ import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { magnitude, orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g, SOL } from '../../lib/constants.ts';
-import { GalleryImages, Thumbnails } from '../../lib/images.ts';
+import { GalleryImages } from '../../lib/images.ts';
+import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
   body: CelestialBodyState;
@@ -29,8 +30,6 @@ export function FactCard({ body }: Props) {
     { label: 'surface gravity', value: `${(surfaceGravity(body.mass, body.radius) / g).toLocaleString()} g` },
     ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
   ];
-  const thumbnailSize = 180;
-  const thumbnailUrl = Thumbnails[body.name];
   const galleryUrls = GalleryImages[body.name] ?? [];
 
   return (
@@ -42,7 +41,7 @@ export function FactCard({ body }: Props) {
       style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
     >
       <Stack gap="xs">
-        {thumbnailUrl != null && <Image radius="xl" src={thumbnailUrl} maw={thumbnailSize} mah={thumbnailSize} />}
+        <Thumbnail body={body} />
         <Group gap="xs" align="baseline">
           <Text fw="bold" size="md">
             {body.name}

@@ -10,4 +10,4 @@ status = 200
 to = '/.netlify/functions/:splat'
 
 [dev]
-port = 1972
+port = 19720
