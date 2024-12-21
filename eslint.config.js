@@ -26,7 +26,7 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'off',
       indent: ['error', 2, { SwitchCase: 1 }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-imports': 'error',
       'prettier/prettier': ['error'],
     },
   }

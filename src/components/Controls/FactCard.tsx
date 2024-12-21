@@ -41,7 +41,9 @@ export function FactCard({ body }: Props) {
       style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
     >
       <Stack gap="xs">
+        {/* TODO: having thumbnail up top leads to layout shift */}
         <Thumbnail body={body} />
+
         <Group gap="xs" align="baseline">
           <Text fw="bold" size="md">
             {body.name}
@@ -62,6 +64,7 @@ export function FactCard({ body }: Props) {
             </Fragment>
           ))}
         </Grid>
+
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
       </Stack>
     </Paper>

@@ -15,9 +15,11 @@ export default async function handle(req: Request) {
   const body = await response.text();
   const images = findImgElements(body);
   const mainImage = findMainImage(images);
-  return mainImage != null
-    ? new Response(null, { status: 302, headers: { Location: mainImage.src } })
-    : new Response(null, { status: 404 });
+  const responseInit =
+    mainImage != null
+      ? { status: 302, headers: { Location: mainImage.src, 'Cache-Control': 'public, max-age=3600' } }
+      : { status: 404 };
+  return new Response(null, responseInit);
 }
 
 const IGNORED_IMAGE_PARTS = ['Sound-icon.svg', 'Wiktionary-logo', 'Vector_search_icon'];
