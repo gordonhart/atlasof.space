@@ -40,7 +40,7 @@ export function FocusControls({ hover, center, updateState, systemState }: Props
         </Menu.Dropdown>
       </Menu>
 
-      <Transition mounted={focusBody != null} transition="slide-right" duration={400} timingFunction="ease">
+      <Transition mounted={focusBody != null} transition="slide-right" duration={200} timingFunction="ease">
         {styles => <Box style={styles}>{focusBody != null && <FactCard body={focusBody} />}</Box>}
       </Transition>
     </Stack>

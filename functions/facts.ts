@@ -1,4 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { getStore, Store } from '@netlify/blobs';
+import { AnthropicModel } from '../src/lib/llm';
 
 async function getWikidataId(search: string): Promise<string | undefined> {
   const baseUrl = 'https://www.wikidata.org/w/api.php';
@@ -150,10 +152,8 @@ I've collected this data from Wikidata to help you provide this information:
 ${wikidataInfoAsCsv(wikidataInfo)}
 \`\`\``;
 
-  console.log(prompt);
-  const model = 'claude-3-5-haiku-20241022'; // 'claude-3-5-haiku-20241022';
   const stream = await client.messages.stream({
-    model,
+    model: AnthropicModel.CLAUDE_3_5_SONNET,
     system,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
@@ -179,18 +179,63 @@ ${wikidataInfoAsCsv(wikidataInfo)}
   });
 }
 
-// TODO: write facts to blob store, try fetching, regenerate only if missing
+async function storeResponse(store: Store, key: string, stream: ReadableStream) {
+  const reader = stream.getReader();
+  let finalResult = '';
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      finalResult += new TextDecoder().decode(value);
+    }
+    await store.set(key, finalResult);
+  } catch (error) {
+    console.error('Error processing stream:', error);
+  }
+}
+
+function simulateTokenGeneration(eventStream: string) {
+  const stream = new TransformStream();
+  const writer = stream.writable.getWriter();
+
+  // Process in the background
+  (async () => {
+    const chunks = eventStream.split(' ');
+    const encoder = new TextEncoder();
+    for (const chunk of chunks) {
+      // Random delay between 10-25ms per "token"
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 15 + 10));
+      await writer.write(encoder.encode(chunk + ' '));
+    }
+    await writer.close();
+  })();
+
+  return stream.readable;
+}
+
 export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
+  const responseHeaders = {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+  };
+
+  const store = getStore('facts');
+  const stored = await store.get(search);
+  if (stored != null) {
+    return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
+  }
+
   const id = await getWikidataId(search);
   const info = await getWikidataInfo(id);
   const stream = await formatWithClaude(search, info);
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    },
-  });
+  const [streamForResponse, streamForStore] = stream.tee();
+
+  // Process the cache stream in the background
+  storeResponse(store, search, streamForStore);
+
+  return new Response(streamForResponse, { headers: responseHeaders });
 }
