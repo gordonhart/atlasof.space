@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { getStore, Store } from '@netlify/blobs';
+import { AnthropicModel } from '../src/lib/llm';
 
 async function getWikidataId(search: string): Promise<string | undefined> {
   const baseUrl = 'https://www.wikidata.org/w/api.php';
@@ -151,9 +152,8 @@ I've collected this data from Wikidata to help you provide this information:
 ${wikidataInfoAsCsv(wikidataInfo)}
 \`\`\``;
 
-  const model = 'claude-3-5-haiku-20241022'; // 'claude-3-haiku-20240307';
   const stream = await client.messages.stream({
-    model,
+    model: AnthropicModel.CLAUDE_3_5_SONNET,
     system,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
