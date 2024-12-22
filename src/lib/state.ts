@@ -23,7 +23,7 @@ export const initialState: AppState = {
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  metersPerPx: (2 * SATURN.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
+  metersPerPx: (2 * SATURN.elements.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
   center: 'Sol',
   hover: null,
   offset: [0, 0],

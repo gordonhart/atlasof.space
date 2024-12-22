@@ -100,16 +100,16 @@ export function findCloseOrbit(
     return body;
   }
   return body.satellites.reduce<CelestialBody | null>((closest, child) => {
-    return visibleTypes.has(child.type) && distanceToOrbitalEllipse(positionXm, positionYm, child) < threshold
+    return visibleTypes.has(child.type) && distanceToOrbitalEllipse(positionXm, positionYm, child.elements) < threshold
       ? child
       : closest;
   }, null);
 }
 
-function distanceToOrbitalEllipse(x: number, y: number, ellipse: KeplerianElements) {
-  const { longitudeAscending: Omega, argumentOfPeriapsis: omega } = ellipse;
+function distanceToOrbitalEllipse(x: number, y: number, elements: KeplerianElements) {
+  const { longitudeAscending: Omega, argumentOfPeriapsis: omega } = elements;
   // TODO: this math isn't 100% correct, likely need to take into account inclination
   const theta = Math.atan2(y, x) - degreesToRadians(omega) - degreesToRadians(Omega);
-  const [xExpected, yExpected] = orbitalEllipseAtTheta(ellipse, theta);
+  const [xExpected, yExpected] = orbitalEllipseAtTheta(elements, theta);
   return magnitude([x - xExpected, y - yExpected]);
 }

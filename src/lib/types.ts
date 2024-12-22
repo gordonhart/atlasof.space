@@ -6,20 +6,23 @@ export type CartesianState = {
 };
 
 export type KeplerianElements = {
+  epoch: string; // e.g. 'J2000'
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters
   inclination: number; // degrees
   longitudeAscending: number; // degrees
   argumentOfPeriapsis: number; // degrees
-  trueAnomaly: number; // degrees
+  // true anomaly is almost never provided; derive from mean anomaly + eccentricity
+  meanAnomaly: number; // degrees
 };
 
 export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object' | 'belt';
-export type CelestialBody = KeplerianElements & {
+export type CelestialBody = {
   name: string;
   shortName?: string;
   mass: number; // kg
   radius: number; // m
+  elements: KeplerianElements;
   // TODO: initial rotation?
   // TODO: axis of rotation?
   siderealRotationPeriod?: number; // seconds, leave empty to omit spin indicator
