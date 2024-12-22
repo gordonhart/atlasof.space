@@ -1,6 +1,5 @@
-import { Grid, Group, Image, Paper, Stack, Text } from '@mantine/core';
+import { Group, Image, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBodyState } from '../../lib/types.ts';
-import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { magnitude, orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g, SOL } from '../../lib/constants.ts';

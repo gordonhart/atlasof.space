@@ -1,7 +1,5 @@
-import { AU, SOL } from './constants.ts';
+import { SATURN } from './constants.ts';
 import { CelestialBodyType, Point2 } from './types.ts';
-import { getInitialState } from './physics.ts';
-import { findCelestialBody } from './utils.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -25,9 +23,7 @@ export const initialState: AppState = {
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  metersPerPx:
-    (2 * (findCelestialBody(getInitialState(null, SOL), 'Saturn')?.semiMajorAxis ?? AU)) /
-    Math.max(window.innerWidth, window.innerHeight),
+  metersPerPx: (2 * SATURN.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
   center: 'Sol',
   hover: null,
   offset: [0, 0],

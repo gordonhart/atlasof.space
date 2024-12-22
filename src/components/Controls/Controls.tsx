@@ -6,7 +6,6 @@ import { PanControls } from './PanControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
 import { AppStateControlProps } from './constants.ts';
-import { SearchControls } from './SearchControls.tsx';
 
 const pad = 10;
 
@@ -19,10 +18,6 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
     <>
       <Box pos="absolute" top={pad} left={pad}>
         <FocusControls state={state} updateState={updateState} systemState={systemState} />
-      </Box>
-
-      <Box pos="absolute" top={pad} left="50%">
-        <SearchControls systemState={systemState} />
       </Box>
 
       <Box pos="absolute" top={pad} right={pad}>

@@ -1,20 +1,16 @@
-import { useEffect, useState } from 'react';
 import { CelestialBody } from '../lib/types.ts';
 import { AU, DEFAULT_ASTEROID_COLOR } from '../lib/constants.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
+import { useQueries } from '@tanstack/react-query';
 
-export function useSmallBody(name: string | null) {
-  const [body, setBody] = useState<CelestialBody | null>(null);
-
-  useEffect(() => {
-    if (name != null && name.trim().length > 0) {
-      fetchSmallBodyData(name).then(b => setBody(b));
-    } else {
-      setBody(null);
-    }
-  }, [name]);
-
-  return body;
+export function useSmallBodies(names: Array<string>) {
+  return useQueries<Array<string>, Array<CelestialBody | null>>({
+    queries: names.map(name => ({
+      queryKey: ['GET', 'sbdb', name],
+      queryFn: () => fetchSmallBodyData(name),
+      staleTime: Infinity,
+    })),
+  });
 }
 
 export async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {

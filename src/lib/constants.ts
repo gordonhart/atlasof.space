@@ -187,9 +187,9 @@ export const NEREUS: CelestialBody = {
 };
 
 export const ASTEROIDS: Array<CelestialBody> = [
-  CERES,
+  // CERES,
+  // PALLAS,
   VESTA,
-  PALLAS,
   HYGIEA,
   JUNO,
   RYUGU,
