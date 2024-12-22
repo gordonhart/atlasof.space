@@ -442,6 +442,25 @@ export const VP113: CelestialBody = {
   satellites: [],
 };
 
+export const LELEAKUHONUA: CelestialBody = {
+  name: '541132 Leleākūhonua',
+  shortName: 'Leleākūhonua',
+  type: 'trans-neptunian-object',
+  mass: 1e20, // unknown, extremely rough guess
+  radius: 110e3 / 2,
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.93997,
+    semiMajorAxis: 1085 * AU,
+    inclination: 11.654, // degrees
+    longitudeAscending: 300.78, // degrees
+    argumentOfPeriapsis: 117.778, // degrees
+    meanAnomaly: 359.418, // degrees
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   PLUTO,
   QUAOAR,
@@ -453,6 +472,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   ARROKOTH,
   GONGGONG,
   VP113,
+  LELEAKUHONUA,
 ];
 
 export const MERCURY: CelestialBody = {

@@ -91,45 +91,6 @@ export function trueAnomalyFromPosition(position: Point3, semiMajorAxis: number,
   return Math.acos(cosV);
 }
 
-/*
-def true_anomaly_from_mean(M, e, tolerance=1e-8, max_iterations=100):
-    """
-    Calculate true anomaly from mean anomaly using Newton-Raphson iteration.
-
-    Parameters:
-    M (float): Mean anomaly in radians
-    e (float): Eccentricity (0 <= e < 1)
-    tolerance (float): Convergence tolerance
-    max_iterations (int): Maximum number of iterations
-
-    Returns:
-    float: True anomaly in radians
-    """
-    # Normalize mean anomaly to be between 0 and 2π
-    M = M % (2 * np.pi)
-
-    # Initial guess (use M as starting value)
-    E = M
-
-    # Newton-Raphson iteration to solve Kepler's equation
-    for i in range(max_iterations):
-        delta = (E - e * np.sin(E) - M) / (1 - e * np.cos(E))
-        E = E - delta
-
-        if abs(delta) < tolerance:
-            break
-
-    # Calculate true anomaly from eccentric anomaly
-    numerator = np.sqrt(1 - e**2) * np.sin(E)
-    denominator = 1 - e * np.cos(E)
-    true_anomaly = np.arctan2(numerator, cos_E - e)
-
-    # Ensure true anomaly is in the correct quadrant
-    if true_anomaly < 0:
-        true_anomaly += 2 * np.pi
-
-    return true_anomaly
- */
 export function trueAnomalyFromMean(meanAnomaly: number, eccentricity: number, tolerance = 1e-8, maxIterations = 100) {
   const meanAnomalyNormalized = meanAnomaly % (2 * Math.PI);
 
