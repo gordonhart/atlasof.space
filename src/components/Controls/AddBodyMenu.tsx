@@ -46,7 +46,8 @@ export function AddBodyMenu({ systemState }: Pick<AppStateControlProps, 'systemS
   useEffect(() => {
     smallBodies.forEach(body => {
       if (findCelestialBody(systemState, body.name) == null) {
-        // TODO: directly adding to
+        // TODO: directly adding to systemState is buggy and bad practice
+        // TODO: initial state needs to take anomaly into account
         systemState.satellites.push(getInitialState(systemState, body));
       }
     });

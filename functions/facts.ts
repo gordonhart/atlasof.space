@@ -179,6 +179,7 @@ ${wikidataInfoAsCsv(wikidataInfo)}
   });
 }
 
+// TODO: write facts to blob store, try fetching, regenerate only if missing
 export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
