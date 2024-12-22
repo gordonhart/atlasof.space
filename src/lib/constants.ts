@@ -15,13 +15,13 @@ export const CERES: CelestialBody = {
   shortName: 'Ceres',
   type: 'asteroid',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2459600.5', // TODO: find J2000
     eccentricity: 0.075823,
     semiMajorAxis: 413690250e3,
     inclination: 10.594,
     longitudeAscending: 80.305,
     argumentOfPeriapsis: 73.597,
-    meanAnomaly: 0,
+    meanAnomaly: 291.4,
   },
   mass: 9.3839e20,
   radius: 966.2e3 / 2,
@@ -33,13 +33,13 @@ export const VESTA: CelestialBody = {
   shortName: 'Vesta',
   type: 'asteroid',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2453300.5', // TODO: find J2000
     eccentricity: 0.0894,
     semiMajorAxis: 2.36 * AU,
     inclination: 7.1422,
     longitudeAscending: 103.71,
     argumentOfPeriapsis: 151.66,
-    meanAnomaly: 0,
+    meanAnomaly: 169.4,
   },
   mass: 2.590271e20,
   radius: 278.6e3,
@@ -52,13 +52,13 @@ export const PALLAS: CelestialBody = {
   shortName: 'Pallas',
   type: 'asteroid',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2453300.5', // TODO: find J2000
     eccentricity: 0.2302,
     semiMajorAxis: 4.14e11,
     inclination: 34.93,
     longitudeAscending: 172.9,
     argumentOfPeriapsis: 310.9,
-    meanAnomaly: 0,
+    meanAnomaly: 40.6,
   },
   mass: 2.04e20,
   radius: 256e3,
@@ -238,13 +238,13 @@ export const PLUTO: CelestialBody = {
   shortName: 'Pluto',
   type: 'trans-neptunian-object',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'J2000',
     eccentricity: 0.2488,
     semiMajorAxis: 5906440628e3,
     inclination: 17.16,
     longitudeAscending: 110.299,
     argumentOfPeriapsis: 113.834,
-    meanAnomaly: 0,
+    meanAnomaly: 14.53,
   },
   mass: 1.3025e22,
   radius: 1188.3e3,
@@ -255,13 +255,13 @@ export const PLUTO: CelestialBody = {
       name: 'Charon',
       type: 'moon',
       elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.00005,
-        semiMajorAxis: 19596e3,
-        inclination: 0.0,
-        longitudeAscending: 0,
+        epoch: 'JD2452600.5', // TODO: find J2000
+        eccentricity: 0.000161,
+        semiMajorAxis: 19595.764e3,
+        inclination: 0.08,
+        longitudeAscending: 223.046,
         argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
+        meanAnomaly: 0, // TODO: find
       },
       mass: 1.586e21,
       radius: 606e3,
@@ -354,13 +354,13 @@ export const MERCURY: CelestialBody = {
   name: 'Mercury',
   type: 'planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
-    eccentricity: 0.2056,
+    epoch: 'J2000',
+    eccentricity: 0.20563,
     semiMajorAxis: 57909050e3, // meters
     inclination: 7.005, // degrees
     longitudeAscending: 48.331, // degrees
     argumentOfPeriapsis: 29.124, // degrees
-    meanAnomaly: 0, // degrees (choose initial position as desired)
+    meanAnomaly: 174.796, // degrees
   },
   mass: 3.3011e23,
   radius: 2439.7e3,
@@ -373,13 +373,13 @@ export const VENUS: CelestialBody = {
   name: 'Venus',
   type: 'planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'J2000',
     eccentricity: 0.006772,
     semiMajorAxis: 108208000e3,
     inclination: 3.39458,
     longitudeAscending: 76.6799,
     argumentOfPeriapsis: 54.884,
-    meanAnomaly: 0, // starting at periapsis // TODO: set real values
+    meanAnomaly: 50.115,
   },
   mass: 4.8675e24,
   radius: 6051.8e3,
@@ -411,13 +411,13 @@ export const LUNA: CelestialBody = {
   name: 'Luna',
   type: 'moon',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'J2000',
     eccentricity: 0.0549,
     semiMajorAxis: 384400e3,
     inclination: 5.145,
     longitudeAscending: 125.08,
     argumentOfPeriapsis: 318.15,
-    meanAnomaly: 0,
+    meanAnomaly: 0, // TODO: find
   },
   mass: 7.342e22,
   radius: 1737.4e3,
@@ -430,7 +430,7 @@ export const EARTH: CelestialBody = {
   name: 'Earth',
   type: 'planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'J2000',
     eccentricity: 0.0167086,
     semiMajorAxis: 149597870.7e3, // 1 AU
     inclination: 0.00005,
@@ -592,13 +592,13 @@ export const JUPITER: CelestialBody = {
   name: 'Jupiter',
   type: 'planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'J2000',
     eccentricity: 0.0489,
     semiMajorAxis: 778340821e3,
-    inclination: 1.305,
-    longitudeAscending: 100.556,
-    argumentOfPeriapsis: 14.753,
-    meanAnomaly: 0,
+    inclination: 1.303,
+    longitudeAscending: 100.464,
+    argumentOfPeriapsis: 273.867,
+    meanAnomaly: 20.02,
   },
   mass: 1.8982e27,
   radius: 69911e3,
@@ -625,140 +625,144 @@ export const MIMAS: CelestialBody = {
   satellites: [],
 };
 
+export const ENCELADUS: CelestialBody = {
+  name: 'Enceladus',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0047,
+    semiMajorAxis: 238040e3,
+    inclination: 0.009,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.08022e20,
+  radius: 252.1e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const TETHYS: CelestialBody = {
+  name: 'Tethys',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0001,
+    semiMajorAxis: 294670e3,
+    inclination: 1.091,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 6.17449e20,
+  radius: 531.1e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const DIONE: CelestialBody = {
+  name: 'Dione',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0022,
+    semiMajorAxis: 377420e3,
+    inclination: 0.028,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.095452e21,
+  radius: 561.4e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const RHEA: CelestialBody = {
+  name: 'Rhea',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.001,
+    semiMajorAxis: 527070e3,
+    inclination: 0.345,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 2.306518e21,
+  radius: 763.8e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const TITAN: CelestialBody = {
+  name: 'Titan',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0288,
+    semiMajorAxis: 1221870e3,
+    inclination: 0.348,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.3452e23,
+  radius: 2574.7e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const IAPETUS: CelestialBody = {
+  name: 'Iapetus',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0286,
+    semiMajorAxis: 3560820e3,
+    inclination: 15.47,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.805635e21,
+  radius: 734.5e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const SATURN: CelestialBody = {
   name: 'Saturn',
   type: 'planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'J2000',
     eccentricity: 0.0565,
-    semiMajorAxis: 1433449370e3,
+    semiMajorAxis: 1433.53e9,
     inclination: 2.485,
-    longitudeAscending: 113.715,
-    argumentOfPeriapsis: 92.431,
-    meanAnomaly: 0,
+    longitudeAscending: 113.665,
+    argumentOfPeriapsis: 339.392,
+    meanAnomaly: 317.02,
   },
   mass: 5.6834e26,
   radius: 58232e3,
   siderealRotationPeriod: 10 * 60 * 60 + 32 * 60 + 35, // 10 hr 32 min 35 sec
   color: '#d7be87',
-  satellites: [
-    MIMAS,
-    {
-      name: 'Enceladus',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.0047,
-        semiMajorAxis: 238040e3,
-        inclination: 0.009,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
-      },
-      mass: 1.08022e20,
-      radius: 252.1e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Tethys',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.0001,
-        semiMajorAxis: 294670e3,
-        inclination: 1.091,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
-      },
-      mass: 6.17449e20,
-      radius: 531.1e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Dione',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.0022,
-        semiMajorAxis: 377420e3,
-        inclination: 0.028,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
-      },
-      mass: 1.095452e21,
-      radius: 561.4e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Rhea',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.001,
-        semiMajorAxis: 527070e3,
-        inclination: 0.345,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
-      },
-      mass: 2.306518e21,
-      radius: 763.8e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Titan',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.0288,
-        semiMajorAxis: 1221870e3,
-        inclination: 0.348,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
-      },
-      mass: 1.3452e23,
-      radius: 2574.7e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Iapetus',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.0286,
-        semiMajorAxis: 3560820e3,
-        inclination: 15.47,
-        longitudeAscending: 0,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0,
-      },
-      mass: 1.805635e21,
-      radius: 734.5e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-  ],
+  satellites: [MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS],
 };
 
 export const URANUS: CelestialBody = {
   name: 'Uranus',
   type: 'planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
-    eccentricity: 0.0457,
-    semiMajorAxis: 2876679082e3,
-    inclination: 0.772,
+    epoch: 'J2000',
+    eccentricity: 0.04717,
+    semiMajorAxis: 19.19126 * AU,
+    inclination: 0.773,
     longitudeAscending: 74.006,
-    argumentOfPeriapsis: 170.964,
-    meanAnomaly: 0,
+    argumentOfPeriapsis: 96.998857,
+    meanAnomaly: 142.2386,
   },
   mass: 8.681e25,
   radius: 25362e3,
@@ -770,43 +774,43 @@ export const URANUS: CelestialBody = {
   ],
 };
 
+export const TRITON: CelestialBody = {
+  name: 'Triton',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.000016,
+    semiMajorAxis: 354759e3,
+    inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
+    longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
+    argumentOfPeriapsis: 260.64357,
+    meanAnomaly: 0,
+  },
+  mass: 2.1389e22,
+  radius: 1353.4e3,
+  siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const NEPTUNE: CelestialBody = {
   name: 'Neptune',
   type: 'planet',
   elements: {
     epoch: 'J2000', // TODO: verify
-    eccentricity: 0.0086,
+    eccentricity: 0.008678,
     semiMajorAxis: 4503443661e3,
     inclination: 1.77,
-    longitudeAscending: 131.784,
-    argumentOfPeriapsis: 44.971,
-    meanAnomaly: 0,
+    longitudeAscending: 131.783,
+    argumentOfPeriapsis: 273.187,
+    meanAnomaly: 259.883,
   },
   mass: 1.02409e26,
   radius: 24622e3,
   siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
   color: '#5a7cf6',
-  satellites: [
-    {
-      name: 'Triton',
-      type: 'moon',
-      elements: {
-        epoch: 'J2000', // TODO: verify
-        eccentricity: 0.000016,
-        semiMajorAxis: 354759e3,
-        inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
-        longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
-        argumentOfPeriapsis: 260.64357,
-        meanAnomaly: 0,
-      },
-      mass: 2.1389e22,
-      radius: 1353.4e3,
-      siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    // TODO: there are many more
-  ],
+  // TODO: there are many more
+  satellites: [TRITON],
 };
 
 const SOL_FULL: CelestialBody = {
