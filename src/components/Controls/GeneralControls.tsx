@@ -11,14 +11,16 @@ import {
   IconTagMinus,
   IconTagPlus,
 } from '@tabler/icons-react';
-import { CelestialBodyType } from '../../lib/types.ts';
+import { CelestialBodyState, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
+import { AddBodyMenu } from './AddBodyMenu.tsx';
 
 type Props = AppStateControlProps & {
+  systemState: CelestialBodyState;
   reset: () => void;
 };
-export function GeneralControls({ state, updateState, reset }: Props) {
+export function GeneralControls({ state, updateState, systemState, reset }: Props) {
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
       ? new Set([...state.visibleTypes].filter(t => t !== type))
@@ -28,6 +30,8 @@ export function GeneralControls({ state, updateState, reset }: Props) {
 
   return (
     <Stack gap={buttonGap}>
+      <AddBodyMenu systemState={systemState} />
+
       <Tooltip position="left" label="Enlarge Planets">
         <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}>
           <IconCirclePlus size={iconSize} />

@@ -91,16 +91,11 @@ function Gallery({ urls }: { urls: Array<string> }) {
   const galleryImageWidth = 120;
   // TODO: click 'g' to view in detail
   return (
-    <Stack gap="xs" pt="xs">
-      <Text fw="bold" size="xs">
-        Gallery
-      </Text>
-      <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
-        {urls.map((image, i) => (
-          <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
-        ))}
-      </Group>
-    </Stack>
+    <Group py="xs" gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
+      {urls.map((image, i) => (
+        <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
+      ))}
+    </Group>
   );
 }
 

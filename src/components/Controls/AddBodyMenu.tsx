@@ -45,9 +45,8 @@ export function AddBodyMenu({ systemState }: Pick<AppStateControlProps, 'systemS
 
   useEffect(() => {
     smallBodies.forEach(body => {
-      console.log(body);
-      if (findCelestialBody(systemState, body.shortName ?? body.name) == null) {
-        console.log('pushing', body.shortName ?? body.name);
+      if (findCelestialBody(systemState, body.name) == null) {
+        // TODO: directly adding to
         systemState.satellites.push(getInitialState(systemState, body));
       }
     });
@@ -64,14 +63,14 @@ export function AddBodyMenu({ systemState }: Pick<AppStateControlProps, 'systemS
    */
 
   return (
-    <Popover position="bottom-start" offset={0}>
+    <Popover position="left-end" offset={0}>
       <Popover.Target>
         <ActionIcon>
           <IconSpherePlus size={iconSize} />
         </ActionIcon>
       </Popover.Target>
 
-      <Popover.Dropdown p={8}>
+      <Popover.Dropdown p={8} miw={200}>
         <Tree tree={tree} data={treeData} levelOffset={23} expandOnClick={false} renderNode={renderTreeNode} />
       </Popover.Dropdown>
     </Popover>

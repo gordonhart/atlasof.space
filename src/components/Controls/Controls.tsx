@@ -33,7 +33,7 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
       </Box>
 
       <Box pos="absolute" bottom={pad} right={pad}>
-        <GeneralControls state={state} updateState={updateState} reset={reset} />
+        <GeneralControls state={state} updateState={updateState} systemState={systemState} reset={reset} />
       </Box>
     </>
   );
