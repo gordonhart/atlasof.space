@@ -23,31 +23,29 @@ type WikidataDatum = {
 };
 async function getWikidataInfo(id: string): Promise<Array<WikidataDatum>> {
   const endpointUrl = 'https://query.wikidata.org/sparql';
+  const sparqlQuery = `\
+SELECT ?property ?propertyLabel ?value ?valueLabel ?unit ?unitLabel
+WHERE {
+  wd:${id} ?p ?statement .
+  ?property wikibase:claim ?p ;
+            wikibase:statementProperty ?ps .
 
-  const sparqlQuery = `
-    SELECT ?property ?propertyLabel ?value ?valueLabel ?unit ?unitLabel
-    WHERE {
-      wd:${id} ?p ?statement .
-      ?property wikibase:claim ?p ;
-                wikibase:statementProperty ?ps .
+  # Retrieve the main value
+  ?statement ?ps ?value .
+  
+  # Handle quantities and their units
+  OPTIONAL {
+    ?statement ?ps ?quantity.
+    FILTER(DATATYPE(?quantity) = xsd:decimal || DATATYPE(?quantity) = wikibase:quantityAmount)
+    ?statement ?psv ?valueNode .
+    ?valueNode wikibase:quantityAmount ?value ;
+              wikibase:quantityUnit ?unit .
+  }
 
-      # Retrieve the main value
-      ?statement ?ps ?value .
-      
-      # Handle quantities and their units
-      OPTIONAL {
-        ?statement ?ps ?quantity.
-        FILTER(DATATYPE(?quantity) = xsd:decimal || DATATYPE(?quantity) = wikibase:quantityAmount)
-        ?statement ?psv ?valueNode .
-        ?valueNode wikibase:quantityAmount ?value ;
-                  wikibase:quantityUnit ?unit .
-      }
-
-      SERVICE wikibase:label { 
-        bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". 
-      }
-    }
-  `;
+  SERVICE wikibase:label { 
+    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". 
+  }
+}`;
 
   const params = new URLSearchParams({
     query: sparqlQuery,
@@ -63,25 +61,18 @@ async function getWikidataInfo(id: string): Promise<Array<WikidataDatum>> {
   }
   const body = await response.json();
 
+  const bindings: Array<object> = body.results.bindings;
   /*
-    {
-    value: {
-      datatype: 'http://www.w3.org/2001/XMLSchema#decimal',
-      type: 'literal',
-      value: '1.702'
-    },
+  example "bindings" object: {
+    value: { datatype: 'http://www.w3.org/2001/XMLSchema#decimal', type: 'literal', value: '1.702' },
     unit: { type: 'uri', value: 'http://www.wikidata.org/entity/Q13147228' },
     property: { type: 'uri', value: 'http://www.wikidata.org/entity/P2054' },
     propertyLabel: { 'xml:lang': 'en', type: 'literal', value: 'density' },
     valueLabel: { type: 'literal', value: '1.702' },
-    unitLabel: {
-      'xml:lang': 'en',
-      type: 'literal',
-      value: 'gram per cubic centimetre'
-    }
+    unitLabel: { 'xml:lang': 'en', type: 'literal', value: 'gram per cubic centimetre' }
   },
    */
-  const bindings: Array<object> = body.results.bindings;
+
   return bindings.map(({ valueLabel, propertyLabel, unitLabel }) => ({
     label: propertyLabel.value,
     value: valueLabel.value,
@@ -168,7 +159,6 @@ ${wikidataInfoAsCsv(wikidataInfo)}
     max_tokens: 1024,
   });
 
-  // return message.content[0].text;
   return new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
@@ -195,7 +185,6 @@ export default async function handle(request: Request) {
   const id = await getWikidataId(search);
   const info = await getWikidataInfo(id);
   const stream = await formatWithClaude(search, info);
-
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',
@@ -203,5 +192,4 @@ export default async function handle(request: Request) {
       Connection: 'keep-alive',
     },
   });
-  // return Response.json({ response: output });
 }
