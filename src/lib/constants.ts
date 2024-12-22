@@ -3,9 +3,10 @@ import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
+export const g = 9.807; // earth gravity
 
 const DEFAULT_MOON_COLOR = '#aaa';
-const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
 
 // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
 //  collected over time. Switch?
@@ -20,7 +21,7 @@ export const CERES: CelestialBody = {
   argumentOfPeriapsis: 73.597,
   trueAnomaly: 0,
   mass: 9.3839e20,
-  radius: 966.2e3,
+  radius: 966.2e3 / 2,
   color: DEFAULT_ASTEROID_COLOR,
   satellites: [],
 };
@@ -187,8 +188,8 @@ export const NEREUS: CelestialBody = {
 
 export const ASTEROIDS: Array<CelestialBody> = [
   CERES,
-  VESTA,
   PALLAS,
+  VESTA,
   HYGIEA,
   JUNO,
   RYUGU,

@@ -31,12 +31,7 @@ export function useCursorControls(
   function updateHover(event: MouseEvent<HTMLCanvasElement>) {
     const cursorMeters = getCursorCoordinates(event.clientX, event.clientY);
     const closeBody = findCloseBody(systemState, visibleTypes, cursorMeters, metersPerPx * 25);
-    if (closeBody != null) {
-      updateAppState({ hover: closeBody.name });
-    } else {
-      const closeOrbit = findCloseOrbit(systemState, visibleTypes, cursorMeters, metersPerPx * 10);
-      updateAppState({ hover: closeOrbit != null ? closeOrbit.name : null });
-    }
+    updateAppState({ hover: closeBody?.name ?? null });
   }
 
   function updateOffset(event: MouseEvent<HTMLCanvasElement>) {
@@ -91,7 +86,8 @@ function findCloseBody(
 }
 
 // TODO: how should moons function?
-function findCloseOrbit(
+// TODO: not used for now; orbits are too cluttered for a good UX
+export function findCloseOrbit(
   body: CelestialBodyState,
   visibleTypes: Set<CelestialBodyType>,
   [positionXm, positionYm]: [number, number],

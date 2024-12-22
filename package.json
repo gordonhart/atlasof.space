@@ -13,11 +13,15 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.33.1",
     "@mantine/core": "^7.14.3",
     "@mantine/hooks": "^7.14.3",
+    "@netlify/functions": "^3.0.0",
     "@tabler/icons-react": "^3.24.0",
+    "@tanstack/react-query": "^5.62.8",
     "@types/ramda": "^0.30.2",
     "eslint-plugin-stylelint": "^0.1.1",
+    "linkedom": "^0.18.6",
     "prettier": "^3.4.2",
     "ramda": "^0.30.1",
     "react": "^18.3.1",
@@ -41,6 +45,7 @@
     "eslint-plugin-unused-imports": "^3.2.0",
     "globals": "^15.13.0",
     "husky": "^9.1.7",
+    "netlify-cli": "^17.38.1",
     "postcss": "^8.4.49",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",

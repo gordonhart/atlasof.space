@@ -5,7 +5,7 @@ import { celestialBodyTypeName, findCelestialBody } from '../../lib/utils.ts';
 import { CelestialBodyState } from '../../lib/types.ts';
 import { FactCard } from './FactCard.tsx';
 import { useMemo } from 'react';
-import { buttonGap, iconSize, AppStateControlProps } from './constants.ts';
+import { iconSize, AppStateControlProps } from './constants.ts';
 
 type Props = AppStateControlProps & {
   systemState: CelestialBodyState;
@@ -17,31 +17,29 @@ export function FocusControls({ state, updateState, systemState }: Props) {
   );
 
   return (
-    <Stack gap="xs">
-      <Group gap={buttonGap}>
-        <Menu position="top-start" offset={0} width={200}>
-          <Menu.Target>
-            <Button leftSection={<IconCircleDot size={iconSize} />} size="xs" variant="subtle" color="gray">
-              {state.center}
-            </Button>
-          </Menu.Target>
-          <Menu.Dropdown mah={window.innerHeight - 150} style={{ overflow: 'auto' }}>
-            {CELESTIAL_BODY_NAMES.map((name, i) => (
-              <Menu.Item key={name} onClick={() => updateState({ center: name })}>
-                <Group gap="xs" justify="space-between" wrap="nowrap">
-                  <Group gap="xs" align="center" wrap="nowrap">
-                    {state.center === name ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                    {CELESTIAL_BODY_SHORT_NAMES[i] ?? name}
-                  </Group>
-                  <Text size="xs" c="dimmed">
-                    {celestialBodyTypeName(CELESTIAL_BODY_CLASSES[i])}
-                  </Text>
+    <Stack gap="xs" align="flex-start">
+      <Menu position="top-start" offset={0} width={200}>
+        <Menu.Target>
+          <Button leftSection={<IconCircleDot size={iconSize} />} size="xs" variant="subtle" color="gray">
+            {state.center}
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown mah={window.innerHeight - 150} style={{ overflow: 'auto' }}>
+          {CELESTIAL_BODY_NAMES.map((name, i) => (
+            <Menu.Item key={name} onClick={() => updateState({ center: name })}>
+              <Group gap="xs" justify="space-between" wrap="nowrap">
+                <Group gap="xs" align="center" wrap="nowrap">
+                  {state.center === name ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+                  {CELESTIAL_BODY_SHORT_NAMES[i] ?? name}
                 </Group>
-              </Menu.Item>
-            ))}
-          </Menu.Dropdown>
-        </Menu>
-      </Group>
+                <Text size="xs" c="dimmed">
+                  {celestialBodyTypeName(CELESTIAL_BODY_CLASSES[i])}
+                </Text>
+              </Group>
+            </Menu.Item>
+          ))}
+        </Menu.Dropdown>
+      </Menu>
 
       <Transition mounted={focusBody != null} transition="fade" duration={400} timingFunction="ease">
         {styles => <Box style={styles}>{focusBody != null && <FactCard body={focusBody} />}</Box>}
