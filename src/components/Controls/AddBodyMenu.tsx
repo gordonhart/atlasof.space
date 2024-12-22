@@ -15,7 +15,8 @@ import {
 import { IconChevronDown, IconSpherePlus } from '@tabler/icons-react';
 import { iconSize } from './constants.ts';
 import { CelestialBody, CelestialBodyState } from '../../lib/types.ts';
-import { findCelestialBody } from '../../lib/utils.ts';
+import { findCelestialBody, notNullish } from '../../lib/utils.ts';
+import { UseQueryResult } from '@tanstack/react-query';
 
 // TODO: load from data; full list is ~1.5M, should at least include a few thousand
 const bodies = [
@@ -44,9 +45,8 @@ type Props = {
 export function AddBodyMenu({ systemState }: Props) {
   const tree = useTree();
   const selectedBodies = tree.checkedState.map(key => key.split('/')[1]);
-  const smallBodyQueries = useSmallBodies(selectedBodies);
-  const smallBodies: Array<CelestialBody> = smallBodyQueries.map(q => q.data).filter(d => d != null);
-  // smallBodyQueries.map(({ data }) => data).filter(v => v != null);
+  const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
+  const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
 
   useEffect(() => {
     smallBodies.forEach(body => {
