@@ -160,20 +160,17 @@ function drawOrbit(
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
-  const vTrue = trueAnomaly(body.position, body.semiMajorAxis, body.eccentricity);
-  const thetaStart = vTrue - Math.PI / 8;
-  const thetaSpan = Math.PI / 4;
+  const vTrueRaw = trueAnomaly(body.position, body.semiMajorAxis, body.eccentricity);
+  const vTrue = isNaN(vTrueRaw) ? 0 : vTrueRaw;
+  const thetaSpan = 2 * Math.PI;
   ctx.save();
   ctx.beginPath();
-  const [initX, initY] = orbitalEllipseAtTheta(body, thetaStart);
+  const [initX, initY] = orbitalEllipseAtTheta(body, vTrue);
   ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    // const p0m = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
-    // const p1m = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
-    const p0m = orbitalEllipseAtTheta(body, thetaStart + (step / steps) * thetaSpan);
-    const p1m = orbitalEllipseAtTheta(body, thetaStart + ((step + 1) / steps) * thetaSpan);
-    const [p0px, p1px] = [toPx(...p0m), toPx(...p1m)];
-    ctx.quadraticCurveTo(...p0px, ...p1px);
+    const p0m = orbitalEllipseAtTheta(body, vTrue + (step / steps) * thetaSpan);
+    const p1m = orbitalEllipseAtTheta(body, vTrue + ((step + 1) / steps) * thetaSpan);
+    ctx.quadraticCurveTo(...toPx(...p0m), ...toPx(...p1m));
   }
   // ctx.setLineDash([4, 2, 2, 2]);
   ctx.strokeStyle = body.color;
