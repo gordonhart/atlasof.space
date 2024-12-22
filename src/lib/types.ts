@@ -16,7 +16,26 @@ export type KeplerianElements = {
   meanAnomaly: number; // degrees
 };
 
-export type CelestialBodyType = 'sun' | 'planet' | 'moon' | 'asteroid' | 'trans-neptunian-object' | 'belt';
+export type CelestialBodyType =
+  | 'sun'
+  | 'planet'
+  | 'moon'
+  | 'dwarf-planet'
+  | 'asteroid'
+  | 'comet'
+  | 'trans-neptunian-object'
+  | 'belt';
+export const CelestialBodyTypes: Array<CelestialBodyType> = [
+  'sun',
+  'planet',
+  'moon',
+  'dwarf-planet',
+  'asteroid',
+  'trans-neptunian-object',
+  'comet',
+  'belt',
+];
+
 export type CelestialBody = {
   name: string;
   shortName?: string;

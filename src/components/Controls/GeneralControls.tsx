@@ -11,7 +11,7 @@ import {
   IconTagMinus,
   IconTagPlus,
 } from '@tabler/icons-react';
-import { CelestialBodyState, CelestialBodyType } from '../../lib/types.ts';
+import { CelestialBodyState, CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { AddBodyMenu } from './AddBodyMenu.tsx';
@@ -50,7 +50,7 @@ export function GeneralControls({ state, updateState, systemState, reset }: Prop
         </ActionIcon>
       </Tooltip>
 
-      <Menu position="left" offset={0} width={120} closeOnItemClick={false}>
+      <Menu position="left" offset={0} closeOnItemClick={false}>
         <Menu.Target>
           <Tooltip position="right" label="Toggle Visibility">
             <ActionIcon>
@@ -59,16 +59,14 @@ export function GeneralControls({ state, updateState, systemState, reset }: Prop
           </Tooltip>
         </Menu.Target>
         <Menu.Dropdown>
-          {(['sun', 'planet', 'moon', 'asteroid', 'trans-neptunian-object', 'belt'] as Array<CelestialBodyType>).map(
-            type => (
-              <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
-                <Group gap="xs" align="center">
-                  {state.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                  {celestialBodyTypeName(type)}
-                </Group>
-              </Menu.Item>
-            )
-          )}
+          {CelestialBodyTypes.map(type => (
+            <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
+              <Group gap="xs" align="center">
+                {state.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+                {celestialBodyTypeName(type)}
+              </Group>
+            </Menu.Item>
+          ))}
         </Menu.Dropdown>
       </Menu>
 

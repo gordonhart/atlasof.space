@@ -144,6 +144,7 @@ export const LUTETIA: CelestialBody = {
 export const CG67P: CelestialBody = {
   name: '67P/Churyumov–Gerasimenko',
   shortName: '67P/C–G',
+  type: 'comet',
   mass: 1e13, // kg
   radius: 2000, // m (average radius based on dimensions)
   elements: {
@@ -157,7 +158,6 @@ export const CG67P: CelestialBody = {
   },
   siderealRotationPeriod: 12.4 * 3600, // hours to seconds
   color: DEFAULT_ASTEROID_COLOR,
-  type: 'asteroid', // TODO: technically a comet
   satellites: [],
 };
 
@@ -227,7 +227,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   JUNO,
   RYUGU,
   LUTETIA,
-  CG67P,
+  CG67P, // technically a comet
   EROS,
   MATHILDE,
   NEREUS,
@@ -236,7 +236,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
   shortName: 'Pluto',
-  type: 'trans-neptunian-object',
+  type: 'dwarf-planet',
   elements: {
     epoch: 'J2000',
     eccentricity: 0.2488,
