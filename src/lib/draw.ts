@@ -168,9 +168,9 @@ function drawOrbit(
   const [initX, initY] = orbitalEllipseAtTheta(body, vTrue);
   ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    const p0m = orbitalEllipseAtTheta(body, vTrue + (step / steps) * thetaSpan);
-    const p1m = orbitalEllipseAtTheta(body, vTrue + ((step + 1) / steps) * thetaSpan);
-    ctx.quadraticCurveTo(...toPx(...p0m), ...toPx(...p1m));
+    const [p0x, p0y] = orbitalEllipseAtTheta(body, vTrue + (step / steps) * thetaSpan);
+    const [p1x, p1y] = orbitalEllipseAtTheta(body, vTrue + ((step + 1) / steps) * thetaSpan);
+    ctx.quadraticCurveTo(...toPx(p0x, p0y), ...toPx(p1x, p1y));
   }
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
