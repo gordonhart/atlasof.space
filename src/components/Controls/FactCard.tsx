@@ -40,33 +40,34 @@ export function FactCard({ body }: Props) {
       withBorder
       style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
     >
-      <Stack gap="xs">
-        {/* TODO: having thumbnail up top leads to layout shift */}
+      <Group gap="xs" align="flex-start">
+        <Stack gap="xs">
+          <Group gap="xs" align="baseline">
+            <Text fw="bold" size="md">
+              {body.name}
+            </Text>
+            <Text inherit c="dimmed">
+              {celestialBodyTypeName(body.type)}
+            </Text>
+          </Group>
+          <Grid gutter={2} w={330}>
+            {facts.map(({ label, value }, i) => (
+              <Fragment key={i}>
+                <Grid.Col span={7}>
+                  <Text inherit c="dimmed">
+                    {label}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={5}>{value}</Grid.Col>
+              </Fragment>
+            ))}
+          </Grid>
+
+          {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+        </Stack>
+
         <Thumbnail body={body} />
-
-        <Group gap="xs" align="baseline">
-          <Text fw="bold" size="md">
-            {body.name}
-          </Text>
-          <Text inherit c="dimmed">
-            {celestialBodyTypeName(body.type)}
-          </Text>
-        </Group>
-        <Grid gutter={2} w={330}>
-          {facts.map(({ label, value }, i) => (
-            <Fragment key={i}>
-              <Grid.Col span={7}>
-                <Text inherit c="dimmed">
-                  {label}
-                </Text>
-              </Grid.Col>
-              <Grid.Col span={5}>{value}</Grid.Col>
-            </Fragment>
-          ))}
-        </Grid>
-
-        {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-      </Stack>
+      </Group>
     </Paper>
   );
 }
