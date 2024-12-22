@@ -189,11 +189,29 @@ async function storeResponse(store: Store, key: string, stream: ReadableStream) 
       if (done) break;
       finalResult += new TextDecoder().decode(value);
     }
-
     await store.set(key, finalResult);
   } catch (error) {
     console.error('Error processing stream:', error);
   }
+}
+
+function simulateTokenGeneration(eventStream: string) {
+  const stream = new TransformStream();
+  const writer = stream.writable.getWriter();
+
+  // Process in the background
+  (async () => {
+    const chunks = eventStream.split(' ');
+    const encoder = new TextEncoder();
+    for (const chunk of chunks) {
+      // Random delay between 10-25ms per "token"
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 15 + 10));
+      await writer.write(encoder.encode(chunk + ' '));
+    }
+    await writer.close();
+  })();
+
+  return stream.readable;
 }
 
 export default async function handle(request: Request) {
@@ -208,8 +226,7 @@ export default async function handle(request: Request) {
   const store = getStore('facts');
   const stored = await store.get(search);
   if (stored != null) {
-    // TODO: fake token generation on the way out?
-    return new Response(stored, { headers: responseHeaders });
+    return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
   }
 
   const id = await getWikidataId(search);
