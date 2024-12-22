@@ -65,9 +65,12 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   }
 
   // order here is important; ensure higher-priority information is drawn on top (later)
-  const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
-  if (hoverBody != null) drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   if (shouldDrawOrbits) drawOrbitRecursive(null, systemState);
+  const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
+  if (hoverBody != null) {
+    drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
+    drawLabel(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
+  }
   if (shouldDrawLabels) drawLabelRecursive(systemState);
 }
 
@@ -80,6 +83,10 @@ function getOffsetMeters(body: CelestialBodyState, [panOffsetXm, panOffsetYm]: P
   const centerBody = findCelestialBody(body, center);
   const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
   return [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
+}
+
+function isOffScreen(xPx: number, yPx: number) {
+  return xPx < 0 || xPx > window.innerWidth || yPx < 0 || yPx > window.innerHeight;
 }
 
 function drawBody(
@@ -153,10 +160,16 @@ function drawOrbit(
   const [initX, initY] = orbitalEllipseAtTheta(body, 0);
   ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    const [p0x, p0y] = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
-    const [p1x, p1y] = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
-    ctx.quadraticCurveTo(...toPx(p0x, p0y), ...toPx(p1x, p1y));
+    const p0m = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
+    const p1m = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    const [p0px, p1px] = [toPx(...p0m), toPx(...p1m)];
+    if (isOffScreen(...p1px)) {
+      ctx.moveTo(...p1px);
+    } else {
+      ctx.quadraticCurveTo(...p0px, ...p1px);
+    }
   }
+  ctx.setLineDash([4, 2, 2, 2]);
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
@@ -180,7 +193,7 @@ function drawLabel(
   const textPx: Point2 = [textWidthPx, textHeightPx];
 
   // body is off-screen; draw a pointer
-  if (bodyXpx < 0 || bodyXpx > window.innerWidth || bodyYpx < 0 || bodyYpx > window.innerHeight) {
+  if (isOffScreen(bodyXpx, bodyYpx)) {
     drawOffscreenLabel(ctx, label, color, [canvasWidthPx, canvasHeightPx], [bodyXpx, bodyYpx], textPx);
   } else {
     const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];

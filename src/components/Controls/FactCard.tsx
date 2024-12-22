@@ -17,7 +17,6 @@ export function FactCard({ body }: Props) {
   const period = orbitalPeriod(body.semiMajorAxis, SOL.mass);
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(body.semiMajorAxis);
-  const satellites = body.satellites.map(({ shortName, name }) => shortName ?? name);
   const bullets: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
@@ -30,7 +29,6 @@ export function FactCard({ body }: Props) {
     // TODO: this doesn't update live due to the passed-in body being a ref -- should fix
     { label: 'velocity', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
     { label: 'surface gravity', value: `${(surfaceGravity(body.mass, body.radius) / g).toLocaleString()} g` },
-    ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
   ];
   const factBullets = factsAsBullets(facts);
   const galleryUrls = GalleryImages[body.name] ?? [];
@@ -55,12 +53,12 @@ export function FactCard({ body }: Props) {
               </Text>
             </Group>
             <FactGrid facts={bullets} valueWidth={120} />
-
-            {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
           </Stack>
 
           <Thumbnail body={body} />
         </Group>
+
+        {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
 
         <FactGrid facts={factBullets} valueWidth={300} />
       </Stack>
