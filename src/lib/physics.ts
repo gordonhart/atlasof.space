@@ -84,6 +84,12 @@ function gravitationalAcceleration(position: Point3, mu: number): Point3 {
   return mul3(-mu / r ** 3, position);
 }
 
+export function trueAnomaly(position: Point3, semiMajorAxis: number, eccentricity: number) {
+  const rMag = magnitude(position);
+  const cosV = (semiMajorAxis * (1 - eccentricity ** 2)) / (rMag * eccentricity) - 1 / eccentricity;
+  return Math.acos(cosV);
+}
+
 function keplerianToCartesian(
   {
     eccentricity: e,

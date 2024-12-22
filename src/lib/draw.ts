@@ -1,7 +1,7 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
 import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
-import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
+import { degreesToRadians, orbitalEllipseAtTheta, trueAnomaly } from './physics.ts';
 import { findCelestialBody } from './utils.ts';
 
 const hoverScaleFactor = 5;
@@ -160,19 +160,20 @@ function drawOrbit(
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
+  const vTrue = trueAnomaly(body.position, body.semiMajorAxis, body.eccentricity);
+  const thetaStart = vTrue - Math.PI / 8;
+  const thetaSpan = Math.PI / 4;
   ctx.save();
   ctx.beginPath();
-  const [initX, initY] = orbitalEllipseAtTheta(body, 0);
+  const [initX, initY] = orbitalEllipseAtTheta(body, thetaStart);
   ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    const p0m = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
-    const p1m = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    // const p0m = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
+    // const p1m = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    const p0m = orbitalEllipseAtTheta(body, thetaStart + (step / steps) * thetaSpan);
+    const p1m = orbitalEllipseAtTheta(body, thetaStart + ((step + 1) / steps) * thetaSpan);
     const [p0px, p1px] = [toPx(...p0m), toPx(...p1m)];
-    if (isOffScreen(...p1px, 25)) {
-      ctx.moveTo(...p1px);
-    } else {
-      ctx.quadraticCurveTo(...p0px, ...p1px);
-    }
+    ctx.quadraticCurveTo(...p0px, ...p1px);
   }
   // ctx.setLineDash([4, 2, 2, 2]);
   ctx.strokeStyle = body.color;
