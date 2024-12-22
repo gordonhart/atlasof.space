@@ -1,6 +1,6 @@
-import { Code, Grid, Group, Image, Paper, Stack, Text } from '@mantine/core';
+import { Grid, Group, Image, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBodyState } from '../../lib/types.ts';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { magnitude, orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g, SOL } from '../../lib/constants.ts';
@@ -32,8 +32,8 @@ export function FactCard({ body }: Props) {
     { label: 'velocity', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
     { label: 'surface gravity', value: `${(surfaceGravity(body.mass, body.radius) / g).toLocaleString()} g` },
     ...(satellites.length > 0 ? [{ label: 'satellites', value: satellites.join(', ') }] : []),
-    ...factsAsBullets(facts),
   ];
+  const factBullets = factsAsBullets(facts);
   const galleryUrls = GalleryImages[body.name] ?? [];
 
   return (
@@ -44,35 +44,45 @@ export function FactCard({ body }: Props) {
       withBorder
       style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
     >
-      <Group gap="xs" align="flex-start">
-        <Stack gap="xs">
-          <Group gap="xs" align="baseline">
-            <Text fw="bold" size="md">
-              {body.name}
-            </Text>
-            <Text inherit c="dimmed">
-              {celestialBodyTypeName(body.type)}
-            </Text>
-          </Group>
-          <Grid gutter={2} w={330}>
-            {bullets.map(({ label, value }, i) => (
-              <Fragment key={i}>
-                <Grid.Col span={7}>
-                  <Text inherit c="dimmed">
-                    {label}
-                  </Text>
-                </Grid.Col>
-                <Grid.Col span={5}>{value}</Grid.Col>
-              </Fragment>
-            ))}
-          </Grid>
+      <Stack gap={2}>
+        <Group gap="xs" align="flex-start">
+          <Stack gap="xs">
+            <Group gap="xs" align="baseline">
+              <Text fw="bold" size="md">
+                {body.name}
+              </Text>
+              <Text inherit c="dimmed">
+                {celestialBodyTypeName(body.type)}
+              </Text>
+            </Group>
+            <FactGrid facts={bullets} valueWidth={120} />
 
-          {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-        </Stack>
+            {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+          </Stack>
 
-        <Thumbnail body={body} />
-      </Group>
+          <Thumbnail body={body} />
+        </Group>
+
+        <FactGrid facts={factBullets} valueWidth={300} />
+      </Stack>
     </Paper>
+  );
+}
+
+function FactGrid({ facts, valueWidth }: { facts: Array<{ value: string; label: string }>; valueWidth: number }) {
+  return (
+    <Stack gap={2}>
+      {facts.map(({ label, value }, i) => (
+        <Group key={i} gap={2} align="flex-start" wrap="nowrap">
+          <Text inherit w={190} c="dimmed">
+            {label}
+          </Text>
+          <Text inherit maw={valueWidth}>
+            {value}
+          </Text>
+        </Group>
+      ))}
+    </Stack>
   );
 }
 
@@ -112,11 +122,6 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
   let currentValues: string[] = [];
 
   for (const line of lines) {
-    // Skip comment markers and empty lines
-    if (line.startsWith('/*') || line.startsWith('*/')) {
-      continue;
-    }
-
     // Handle main bullet points
     if (line.startsWith('- **')) {
       // If we have a previous label/values, add them to result
@@ -125,6 +130,7 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
           label: currentLabel.toLowerCase(),
           value: currentValues.filter(v => v !== '').join(', '),
         });
+        currentLabel = null;
       }
 
       // Parse new label and value
@@ -142,10 +148,10 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
   }
 
   // Add the last item
-  if (currentLabel) {
+  if (currentLabel != null) {
     result.push({
       label: currentLabel.toLowerCase(),
-      value: currentValues.join(', '),
+      value: currentValues.filter(v => v !== '').join(', '),
     });
   }
 
