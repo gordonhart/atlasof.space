@@ -13,7 +13,7 @@ export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-typ
 export const CERES: CelestialBody = {
   name: '1 Ceres',
   shortName: 'Ceres',
-  type: 'asteroid',
+  type: 'dwarf-planet',
   elements: {
     epoch: 'JD2459600.5', // TODO: find J2000
     eccentricity: 0.075823,
@@ -272,18 +272,75 @@ export const PLUTO: CelestialBody = {
   ],
 };
 
+export const QUAOAR: CelestialBody = {
+  name: '50000 Quaoar',
+  shortName: 'Quaoar',
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.04106,
+    semiMajorAxis: 43.694 * AU,
+    inclination: 7.9895,
+    longitudeAscending: 188.927,
+    argumentOfPeriapsis: 147.48,
+    meanAnomaly: 301.104,
+  },
+  mass: 1.2e21,
+  radius: 545e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const SEDNA: CelestialBody = {
+  name: '90377 Sedna',
+  shortName: 'Sedna',
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2458900.5', // TODO: find J2000
+    eccentricity: 0.8496,
+    semiMajorAxis: 506 * AU,
+    inclination: 11.9307,
+    longitudeAscending: 144.248,
+    argumentOfPeriapsis: 311.352,
+    meanAnomaly: 358.117,
+  },
+  mass: 2.5e21, // very rough estimate
+  radius: 906e3 / 2,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const ORCUS: CelestialBody = {
+  name: '90482 Orcus',
+  shortName: 'Orcus',
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.22701,
+    semiMajorAxis: 39.174 * AU,
+    inclination: 20.592,
+    longitudeAscending: 268.799,
+    argumentOfPeriapsis: 72.31,
+    meanAnomaly: 181.735,
+  },
+  mass: 6.348e20, // very rough estimate
+  radius: 910e3 / 2,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
 export const ERIS: CelestialBody = {
   name: '136199 Eris',
   shortName: 'Eris',
-  type: 'trans-neptunian-object',
+  type: 'dwarf-planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2459000.5', // TODO: find J2000
     eccentricity: 0.43607,
     semiMajorAxis: 67.864 * AU,
     inclination: 44.04,
     longitudeAscending: 35.951,
     argumentOfPeriapsis: 151.639,
-    meanAnomaly: 0,
+    meanAnomaly: 205.989,
   },
   mass: 1.6466e22,
   radius: 1163e3,
@@ -294,15 +351,15 @@ export const ERIS: CelestialBody = {
 export const HAUMEA: CelestialBody = {
   name: '136108 Haumea',
   shortName: 'Haumea',
-  type: 'trans-neptunian-object',
+  type: 'dwarf-planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2459200.5', // TODO: find J2000
     eccentricity: 0.19642,
     semiMajorAxis: 43.116 * AU,
     inclination: 28.2137,
     longitudeAscending: 122.167,
     argumentOfPeriapsis: 239.041,
-    meanAnomaly: 0,
+    meanAnomaly: 218.205,
   },
   mass: 4.006e21,
   radius: 780e3,
@@ -313,15 +370,15 @@ export const HAUMEA: CelestialBody = {
 export const MAKEMAKE: CelestialBody = {
   name: '136472 Makemake',
   shortName: 'Makemake',
-  type: 'trans-neptunian-object',
+  type: 'dwarf-planet',
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2458900.5', // TODO: find J2000
     eccentricity: 0.16126,
     semiMajorAxis: 45.43 * AU,
     inclination: 28.9835,
     longitudeAscending: 79.62,
     argumentOfPeriapsis: 294.834,
-    meanAnomaly: 0,
+    meanAnomaly: 165.514,
   },
   mass: 3.1e21,
   radius: 715e3,
@@ -332,23 +389,52 @@ export const MAKEMAKE: CelestialBody = {
 export const ARROKOTH: CelestialBody = {
   name: '486958 Arrokoth', // also known as Ultima Thule
   shortName: 'Arrokoth',
+  type: 'trans-neptunian-object',
   mass: 7.485e14, // kg
   radius: 18e3, // m (average radius based on length of 36 km)
   elements: {
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2458600.5', // TODO: find J2000
     eccentricity: 0.04172,
     semiMajorAxis: 44.581 * AU,
     inclination: 2.4512, // degrees
     longitudeAscending: 158.998, // degrees
     argumentOfPeriapsis: 174.418, // degrees
-    meanAnomaly: 0, // degrees (value at perihelion)
+    meanAnomaly: 316.551, // degrees
   },
   color: DEFAULT_ASTEROID_COLOR,
-  type: 'trans-neptunian-object',
   satellites: [],
 };
 
-export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [PLUTO, ERIS, HAUMEA, MAKEMAKE, ARROKOTH];
+export const GONGGONG: CelestialBody = {
+  name: '225088 Gonggong',
+  shortName: 'Gonggong',
+  type: 'dwarf-planet',
+  mass: 1.75e21, // kg
+  radius: 615e3, // m
+  elements: {
+    epoch: 'JD2459200.5', // TODO: find J2000
+    eccentricity: 0.49943,
+    semiMajorAxis: 67.485 * AU,
+    inclination: 30.6273, // degrees
+    longitudeAscending: 336.8573, // degrees
+    argumentOfPeriapsis: 207.6675, // degrees
+    meanAnomaly: 106.496, // degrees
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
+  PLUTO,
+  QUAOAR,
+  SEDNA,
+  ORCUS,
+  ERIS,
+  HAUMEA,
+  MAKEMAKE,
+  ARROKOTH,
+  GONGGONG,
+];
 
 export const MERCURY: CelestialBody = {
   name: 'Mercury',
