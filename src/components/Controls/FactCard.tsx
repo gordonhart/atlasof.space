@@ -99,6 +99,7 @@ function Gallery({ urls }: { urls: Array<string> }) {
   );
 }
 
+// TODO: better to have Claude generate facts as structured data
 function factsAsBullets(facts: string | undefined): Array<{ label: string; value: string }> {
   if (facts == null) {
     return [];

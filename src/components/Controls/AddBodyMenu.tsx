@@ -13,10 +13,11 @@ import {
   useTree,
 } from '@mantine/core';
 import { IconChevronDown, IconSpherePlus } from '@tabler/icons-react';
-import { AppStateControlProps, iconSize } from './constants.ts';
-import { CelestialBody } from '../../lib/types.ts';
+import { iconSize } from './constants.ts';
+import { CelestialBody, CelestialBodyState } from '../../lib/types.ts';
 import { findCelestialBody } from '../../lib/utils.ts';
 
+// TODO: load from data; full list is ~1.5M, should at least include a few thousand
 const bodies = [
   '1 Ceres',
   '2 Pallas',
@@ -37,11 +38,15 @@ const treeData: TreeNodeData[] = [
   },
 ];
 
-export function AddBodyMenu({ systemState }: Pick<AppStateControlProps, 'systemState'>) {
+type Props = {
+  systemState: CelestialBodyState;
+};
+export function AddBodyMenu({ systemState }: Props) {
   const tree = useTree();
   const selectedBodies = tree.checkedState.map(key => key.split('/')[1]);
   const smallBodyQueries = useSmallBodies(selectedBodies);
-  const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(v => v != null);
+  const smallBodies: Array<CelestialBody> = smallBodyQueries.map(q => q.data).filter(d => d != null);
+  // smallBodyQueries.map(({ data }) => data).filter(v => v != null);
 
   useEffect(() => {
     smallBodies.forEach(body => {
@@ -53,18 +58,9 @@ export function AddBodyMenu({ systemState }: Pick<AppStateControlProps, 'systemS
     });
   }, [JSON.stringify(smallBodies)]);
 
-  /*
-  const [search, setSearch] = useState('');
-
-  const options = ['233 Mak', '111 Bennu'];
-  const shouldFilterOptions = options.every(item => item !== search);
-  const filteredOptions = shouldFilterOptions
-    ? options.filter(item => item.toLowerCase().includes(search.toLowerCase().trim()))
-    : options;
-   */
-
+  // TODO: add search/filter box
   return (
-    <Popover position="left-end" offset={0}>
+    <Popover position="left-start" offset={0}>
       <Popover.Target>
         <ActionIcon>
           <IconSpherePlus size={iconSize} />
@@ -96,7 +92,7 @@ function renderTreeNode({ node, expanded, hasChildren, elementProps, tree }: Ren
 
   return (
     <Group gap="xs" py={2} {...elementProps}>
-      <Checkbox.Indicator checked={checked} indeterminate={indeterminate} size={14} onClick={toggle} />
+      <Checkbox.Indicator checked={checked} indeterminate={indeterminate} size="xs" onClick={toggle} />
 
       <Group gap={4} onClick={hasChildren ? expand : toggle}>
         <Text size="xs">{node.label}</Text>

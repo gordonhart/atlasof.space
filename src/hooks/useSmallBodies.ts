@@ -1,10 +1,10 @@
 import { CelestialBody } from '../lib/types.ts';
 import { AU, DEFAULT_ASTEROID_COLOR } from '../lib/constants.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
-import { useQueries } from '@tanstack/react-query';
+import { useQueries, UseQueryOptions } from '@tanstack/react-query';
 
 export function useSmallBodies(names: Array<string>) {
-  return useQueries<Array<string>, Array<CelestialBody | null>>({
+  return useQueries<UseQueryOptions<CelestialBody | null, Error>[]>({
     queries: names.map(name => ({
       queryKey: ['GET', 'sbdb', name],
       queryFn: () => fetchSmallBodyData(name),
@@ -13,7 +13,7 @@ export function useSmallBodies(names: Array<string>) {
   });
 }
 
-export async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
+async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
   const urlParams = new URLSearchParams({ sstr: name });
   const response = await fetch(`/api/sbdb?${urlParams}`);
   const obj: SmallBodyResponse | SmallBodyNotFound = await response.json();
@@ -22,6 +22,7 @@ export async function fetchSmallBodyData(name: string): Promise<CelestialBody | 
   }
   const { object, orbit, phys_par } = obj;
   const { elements } = orbit;
+  // TODO: units are often km, need to account for reported units
   const radius = Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2;
   return {
     name: object.fullname,

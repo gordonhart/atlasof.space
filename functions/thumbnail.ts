@@ -5,6 +5,7 @@ type Image = {
   alt: string;
 };
 
+// TODO: use the `image` property from Wikidata?
 // proxy request to wikipedia and extract the main image
 export default async function handle(req: Request) {
   const params = new URL(req.url).searchParams;

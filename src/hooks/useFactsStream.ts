@@ -16,7 +16,10 @@ async function getFacts(search: string) {
   }
   FACTS_CACHE[search] = '';
   const response = await fetch(`/api/facts?search=${encodeURIComponent(search)}`);
-  const reader = response.body.getReader();
+  const reader = response.body?.getReader();
+  if (reader == null) {
+    return;
+  }
   const decoder = new TextDecoder();
   let buffer = '';
 
