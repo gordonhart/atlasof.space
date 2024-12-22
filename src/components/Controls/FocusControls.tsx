@@ -6,22 +6,21 @@ import { CelestialBodyState } from '../../lib/types.ts';
 import { FactCard } from './FactCard.tsx';
 import { useMemo } from 'react';
 import { iconSize, AppStateControlProps } from './constants.ts';
+import { AppState } from '../../lib/state.ts';
 
-type Props = AppStateControlProps & {
-  systemState: CelestialBodyState;
-};
-export function FocusControls({ state, updateState, systemState }: Props) {
-  const focusBody = useMemo(
-    () => (state.hover != null ? findCelestialBody(systemState, state.hover) : null),
-    [state.hover]
-  );
+type Props = Pick<AppStateControlProps, 'updateState'> &
+  Pick<AppState, 'hover' | 'center'> & {
+    systemState: CelestialBodyState;
+  };
+export function FocusControls({ hover, center, updateState, systemState }: Props) {
+  const focusBody = useMemo(() => (hover != null ? findCelestialBody(systemState, hover) : null), [hover]);
 
   return (
     <Stack gap="xs" align="flex-start">
       <Menu position="top-start" offset={0} width={200}>
         <Menu.Target>
           <Button leftSection={<IconCircleDot size={iconSize} />} size="xs" variant="subtle" color="gray">
-            {state.center}
+            {center}
           </Button>
         </Menu.Target>
         <Menu.Dropdown mah={window.innerHeight - 150} style={{ overflow: 'auto' }}>
@@ -29,7 +28,7 @@ export function FocusControls({ state, updateState, systemState }: Props) {
             <Menu.Item key={name} onClick={() => updateState({ center: name })}>
               <Group gap="xs" justify="space-between" wrap="nowrap">
                 <Group gap="xs" align="center" wrap="nowrap">
-                  {state.center === name ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+                  {center === name ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
                   {CELESTIAL_BODY_SHORT_NAMES[i] ?? name}
                 </Group>
                 <Text size="xs" c="dimmed">
@@ -41,7 +40,7 @@ export function FocusControls({ state, updateState, systemState }: Props) {
         </Menu.Dropdown>
       </Menu>
 
-      <Transition mounted={focusBody != null} transition="fade" duration={400} timingFunction="ease">
+      <Transition mounted={focusBody != null} transition="slide-right" duration={400} timingFunction="ease">
         {styles => <Box style={styles}>{focusBody != null && <FactCard body={focusBody} />}</Box>}
       </Transition>
     </Stack>

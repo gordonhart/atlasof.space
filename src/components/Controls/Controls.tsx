@@ -17,11 +17,11 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
   return (
     <>
       <Box pos="absolute" top={pad} left={pad}>
-        <FocusControls state={state} updateState={updateState} systemState={systemState} />
+        <FocusControls center={state.center} hover={state.hover} updateState={updateState} systemState={systemState} />
       </Box>
 
       <Box pos="absolute" top={pad} right={pad}>
-        <ScaleControls state={state} updateState={updateState} />
+        <ScaleControls metersPerPx={state.metersPerPx} updateState={updateState} />
       </Box>
 
       <Box pos="absolute" bottom={pad} left={pad}>
@@ -29,7 +29,7 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
       </Box>
 
       <Box pos="absolute" bottom={pad} left="50%">
-        <PanControls state={state} updateState={updateState} />
+        <PanControls offset={state.offset} metersPerPx={state.metersPerPx} updateState={updateState} />
       </Box>
 
       <Box pos="absolute" bottom={pad} right={pad}>

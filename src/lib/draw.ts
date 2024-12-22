@@ -1,8 +1,10 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
 import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
-import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
+import { degreesToRadians, orbitalEllipseAtTheta, trueAnomaly } from './physics.ts';
 import { findCelestialBody } from './utils.ts';
+
+const hoverScaleFactor = 5;
 
 export function drawSystem(
   ctx: CanvasRenderingContext2D,
@@ -17,7 +19,7 @@ export function drawSystem(
   function drawBodyRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) return;
     body.satellites.forEach(drawBodyRecursive);
-    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const radiusScaled = (body.name === hover ? body.radius * hoverScaleFactor : body.radius) * planetScaleFactor;
     const bodyToDraw = { ...body, radius: radiusScaled };
     drawBody(ctx, bodyToDraw, canvasPx, offsetMeters, metersPerPx);
   }
@@ -53,7 +55,7 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   function drawLabelRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) return;
     body.satellites.forEach(child => drawLabelRecursive(child));
-    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const radiusScaled = (body.name === hover ? body.radius * hoverScaleFactor : body.radius) * planetScaleFactor;
     const labelBody = { ...body, radius: radiusScaled };
     drawLabel(ctx, labelBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
@@ -65,9 +67,13 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   }
 
   // order here is important; ensure higher-priority information is drawn on top (later)
-  const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
-  if (hoverBody != null) drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   if (shouldDrawOrbits) drawOrbitRecursive(null, systemState);
+  const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
+  if (hoverBody != null) {
+    drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
+    const hoverBodyScaled = { ...hoverBody, radius: hoverBody.radius * hoverScaleFactor * planetScaleFactor };
+    drawLabel(ctx, hoverBodyScaled, canvasPx, [offsetXm, offsetYm], metersPerPx);
+  }
   if (shouldDrawLabels) drawLabelRecursive(systemState);
 }
 
@@ -80,6 +86,12 @@ function getOffsetMeters(body: CelestialBodyState, [panOffsetXm, panOffsetYm]: P
   const centerBody = findCelestialBody(body, center);
   const [centerOffsetXm, centerOffsetYm] = centerBody?.position ?? [0, 0];
   return [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
+}
+
+function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
+  return (
+    xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
+  );
 }
 
 function drawBody(
@@ -148,13 +160,16 @@ function drawOrbit(
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
+  const vTrueRaw = trueAnomaly(body.position, body.semiMajorAxis, body.eccentricity);
+  const vTrue = isNaN(vTrueRaw) ? 0 : vTrueRaw;
+  const thetaSpan = 2 * Math.PI;
   ctx.save();
   ctx.beginPath();
-  const [initX, initY] = orbitalEllipseAtTheta(body, 0);
+  const [initX, initY] = orbitalEllipseAtTheta(body, vTrue);
   ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    const [p0x, p0y] = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
-    const [p1x, p1y] = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
+    const [p0x, p0y] = orbitalEllipseAtTheta(body, vTrue + (step / steps) * thetaSpan);
+    const [p1x, p1y] = orbitalEllipseAtTheta(body, vTrue + ((step + 1) / steps) * thetaSpan);
     ctx.quadraticCurveTo(...toPx(p0x, p0y), ...toPx(p1x, p1y));
   }
   ctx.strokeStyle = body.color;
@@ -180,7 +195,7 @@ function drawLabel(
   const textPx: Point2 = [textWidthPx, textHeightPx];
 
   // body is off-screen; draw a pointer
-  if (bodyXpx < 0 || bodyXpx > window.innerWidth || bodyYpx < 0 || bodyYpx > window.innerHeight) {
+  if (isOffScreen(bodyXpx, bodyYpx)) {
     drawOffscreenLabel(ctx, label, color, [canvasWidthPx, canvasHeightPx], [bodyXpx, bodyYpx], textPx);
   } else {
     const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];

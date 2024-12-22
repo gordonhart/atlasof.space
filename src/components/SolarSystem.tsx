@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
@@ -12,9 +12,17 @@ export function SolarSystem() {
   const appStateRef = useRef(appState);
   const systemStateRef = useRef(getInitialState(null, SOL));
 
-  function updateState(newState: Partial<AppState>) {
-    setAppState(prev => clampState({ ...prev, ...newState }));
-  }
+  const updateState = useCallback(
+    (newState: Partial<AppState>) => {
+      setAppState(prev => clampState({ ...prev, ...newState }));
+    },
+    [setAppState]
+  );
+
+  const resetState = useCallback(() => {
+    updateState(initialState);
+    systemStateRef.current = getInitialState(null, SOL);
+  }, [updateState]);
 
   // use two canvases to prevent "draw tails" from drawing labels and other annotations
   const systemCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -85,15 +93,7 @@ export function SolarSystem() {
         ref={annotationCanvasRef}
         style={{ ...canvasStyle, position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
       />
-      <Controls
-        state={appState}
-        updateState={updateState}
-        systemState={systemStateRef.current}
-        reset={() => {
-          updateState(initialState);
-          systemStateRef.current = getInitialState(null, SOL);
-        }}
-      />
+      <Controls state={appState} updateState={updateState} systemState={systemStateRef.current} reset={resetState} />
     </Group>
   );
 }

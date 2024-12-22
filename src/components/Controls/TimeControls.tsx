@@ -7,9 +7,9 @@ import {
   IconPlayerTrackNextFilled,
   IconPlayerTrackPrevFilled,
 } from '@tabler/icons-react';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
-export function TimeControls({ state, updateState }: AppStateControlProps) {
+export const TimeControls = memo(function TimeControlsComponent({ state, updateState }: AppStateControlProps) {
   const [t, tUnits] = humanTimeUnits(state.time);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
 
@@ -55,4 +55,4 @@ export function TimeControls({ state, updateState }: AppStateControlProps) {
       </Group>
     </Stack>
   );
-}
+});

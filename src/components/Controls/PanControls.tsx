@@ -2,13 +2,16 @@ import { ActionIcon, Group, Stack, Tooltip } from '@mantine/core';
 import { IconCaretDownFilled, IconCaretLeftFilled, IconCaretRightFilled, IconCaretUpFilled } from '@tabler/icons-react';
 import { buttonGap, iconSize, AppStateControlProps } from './constants.ts';
 import { useHotkeys } from '@mantine/hooks';
+import { memo } from 'react';
+import { AppState } from '../../lib/state.ts';
 
 const movePx = 10;
 
-export function PanControls({ state, updateState }: AppStateControlProps) {
+type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'offset' | 'metersPerPx'>;
+export const PanControls = memo(function PanControlsComponent({ offset, metersPerPx, updateState }: Props) {
   function applyOffset(rightPx: number, upPx: number) {
-    const newOffsetX = state.offset[0] - rightPx * state.metersPerPx;
-    const newOffsetY = state.offset[1] - upPx * state.metersPerPx;
+    const newOffsetX = offset[0] - rightPx * metersPerPx;
+    const newOffsetY = offset[1] - upPx * metersPerPx;
     updateState({ offset: [newOffsetX, newOffsetY] });
   }
 
@@ -45,4 +48,4 @@ export function PanControls({ state, updateState }: AppStateControlProps) {
       </Tooltip>
     </Group>
   );
-}
+});
