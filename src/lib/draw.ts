@@ -4,6 +4,8 @@ import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
 import { degreesToRadians, orbitalEllipseAtTheta } from './physics.ts';
 import { findCelestialBody } from './utils.ts';
 
+const hoverScaleFactor = 5;
+
 export function drawSystem(
   ctx: CanvasRenderingContext2D,
   { drawTail, metersPerPx, center, planetScaleFactor, offset, hover, visibleTypes }: AppState,
@@ -17,7 +19,7 @@ export function drawSystem(
   function drawBodyRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) return;
     body.satellites.forEach(drawBodyRecursive);
-    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const radiusScaled = (body.name === hover ? body.radius * hoverScaleFactor : body.radius) * planetScaleFactor;
     const bodyToDraw = { ...body, radius: radiusScaled };
     drawBody(ctx, bodyToDraw, canvasPx, offsetMeters, metersPerPx);
   }
@@ -53,7 +55,7 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   function drawLabelRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) return;
     body.satellites.forEach(child => drawLabelRecursive(child));
-    const radiusScaled = (body.name === hover ? body.radius * 5 : body.radius) * planetScaleFactor;
+    const radiusScaled = (body.name === hover ? body.radius * hoverScaleFactor : body.radius) * planetScaleFactor;
     const labelBody = { ...body, radius: radiusScaled };
     drawLabel(ctx, labelBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
@@ -69,7 +71,8 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   const hoverBody = hover != null ? findCelestialBody(systemState, hover) : undefined;
   if (hoverBody != null) {
     drawOrbit(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
-    drawLabel(ctx, hoverBody, canvasPx, [offsetXm, offsetYm], metersPerPx);
+    const hoverBodyScaled = { ...hoverBody, radius: hoverBody.radius * hoverScaleFactor * planetScaleFactor };
+    drawLabel(ctx, hoverBodyScaled, canvasPx, [offsetXm, offsetYm], metersPerPx);
   }
   if (shouldDrawLabels) drawLabelRecursive(systemState);
 }
@@ -85,8 +88,10 @@ function getOffsetMeters(body: CelestialBodyState, [panOffsetXm, panOffsetYm]: P
   return [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 }
 
-function isOffScreen(xPx: number, yPx: number) {
-  return xPx < 0 || xPx > window.innerWidth || yPx < 0 || yPx > window.innerHeight;
+function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
+  return (
+    xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
+  );
 }
 
 function drawBody(
@@ -163,13 +168,13 @@ function drawOrbit(
     const p0m = orbitalEllipseAtTheta(body, (step / steps) * 2 * Math.PI);
     const p1m = orbitalEllipseAtTheta(body, ((step + 1) / steps) * 2 * Math.PI);
     const [p0px, p1px] = [toPx(...p0m), toPx(...p1m)];
-    if (isOffScreen(...p1px)) {
+    if (isOffScreen(...p1px, 25)) {
       ctx.moveTo(...p1px);
     } else {
       ctx.quadraticCurveTo(...p0px, ...p1px);
     }
   }
-  ctx.setLineDash([4, 2, 2, 2]);
+  // ctx.setLineDash([4, 2, 2, 2]);
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();

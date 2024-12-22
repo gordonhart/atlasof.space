@@ -17,7 +17,7 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
   return (
     <>
       <Box pos="absolute" top={pad} left={pad}>
-        <FocusControls state={state} updateState={updateState} systemState={systemState} />
+        <FocusControls center={state.center} hover={state.hover} updateState={updateState} systemState={systemState} />
       </Box>
 
       <Box pos="absolute" top={pad} right={pad}>

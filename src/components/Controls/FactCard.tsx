@@ -39,7 +39,13 @@ export function FactCard({ body }: Props) {
       p="md"
       radius="md"
       withBorder
-      style={{ backdropFilter: 'blur(4px)', borderColor: 'transparent', borderLeftColor: body.color }}
+      bg="black"
+      style={{
+        // backdropFilter: 'blur(4px)',
+        // borderColor: 'transparent',
+        // borderLeftColor: body.color,
+        borderColor: body.color,
+      }}
     >
       <Stack gap={2}>
         <Group gap="xs" align="flex-start">
