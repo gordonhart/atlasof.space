@@ -34,19 +34,7 @@ export function FactCard({ body }: Props) {
   const galleryUrls = GalleryImages[body.name] ?? [];
 
   return (
-    <Paper
-      fz="xs"
-      p="md"
-      radius="md"
-      withBorder
-      bg="black"
-      style={{
-        // backdropFilter: 'blur(4px)',
-        // borderColor: 'transparent',
-        // borderLeftColor: body.color,
-        borderColor: body.color,
-      }}
-    >
+    <Paper fz="xs" p="md" radius="md" withBorder bg="black" style={{ borderColor: body.color }}>
       <Stack gap={2}>
         <Group gap="xs" align="flex-start">
           <Stack gap="xs">

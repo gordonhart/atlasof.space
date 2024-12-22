@@ -172,7 +172,6 @@ function drawOrbit(
     const p1m = orbitalEllipseAtTheta(body, vTrue + ((step + 1) / steps) * thetaSpan);
     ctx.quadraticCurveTo(...toPx(...p0m), ...toPx(...p1m));
   }
-  // ctx.setLineDash([4, 2, 2, 2]);
   ctx.strokeStyle = body.color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
