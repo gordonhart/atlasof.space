@@ -424,6 +424,24 @@ export const GONGGONG: CelestialBody = {
   satellites: [],
 };
 
+export const VP113: CelestialBody = {
+  name: '2012 VP133',
+  type: 'dwarf-planet',
+  mass: 1e21, // very very rough guess -- not known
+  radius: 574e3 / 2, // m
+  elements: {
+    epoch: 'JD2459800.5', // TODO: find J2000
+    eccentricity: 0.7036,
+    semiMajorAxis: 271.5 * AU,
+    inclination: 24.0563, // degrees
+    longitudeAscending: 90.787, // degrees
+    argumentOfPeriapsis: 293.8, // degrees
+    meanAnomaly: 3.5, // degrees
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   PLUTO,
   QUAOAR,
@@ -434,6 +452,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   MAKEMAKE,
   ARROKOTH,
   GONGGONG,
+  VP113,
 ];
 
 export const MERCURY: CelestialBody = {
