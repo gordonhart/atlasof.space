@@ -43,7 +43,7 @@ export type CelestialBody = {
   radius: number; // m
   elements: KeplerianElements;
   // TODO: initial rotation?
-  // TODO: axis of rotation?
+  // TODO: axial tilt?
   siderealRotationPeriod?: number; // seconds, leave empty to omit spin indicator
   color: `#${string}`; // hex
   satellites: Array<CelestialBody>; // keplerian elements in reference to parent body
