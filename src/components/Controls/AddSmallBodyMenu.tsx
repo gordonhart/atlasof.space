@@ -529,7 +529,7 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   if (i % 10 === 0) {
     acc.push({ label, value: label, children: [nodeData] });
   } else {
-    acc[acc.length - 1].children.push(nodeData);
+    acc[acc.length - 1]?.children?.push(nodeData);
   }
   return acc;
 }, []);
