@@ -1,10 +1,13 @@
 import { CelestialBodyState, Point2 } from '../types.ts';
 import { MIN_SIZE, SCALE_FACTOR } from './constants.ts';
-import { mul3 } from '../physics.ts';
+import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
   BufferAttribute,
   BufferGeometry,
   Color,
+  EllipseCurve,
+  Line,
+  LineBasicMaterial,
   Material,
   Mesh,
   MeshBasicMaterial,
@@ -21,6 +24,7 @@ export class CelestialBody3D {
   readonly mesh: Mesh;
   readonly dot: Points;
   readonly dotPosition: BufferAttribute;
+  readonly ellipse: Line;
   private scene: Scene;
   private screenPosition: Vector3;
 
@@ -28,12 +32,12 @@ export class CelestialBody3D {
     this.name = bodyState.name;
     this.scene = scene;
     this.screenPosition = new Vector3();
+    const color = new Color(bodyState.color);
 
     // Create the main sphere geometry for the celestial body
-    const geometry = new SphereGeometry(bodyState.radius / SCALE_FACTOR, 32, 32);
-    const color = new Color(bodyState.color);
-    const material = new MeshBasicMaterial({ color });
-    this.mesh = new Mesh(geometry, material);
+    const sphereGeometry = new SphereGeometry(bodyState.radius / SCALE_FACTOR, 32, 32);
+    const sphereMaterial = new MeshBasicMaterial({ color });
+    this.mesh = new Mesh(sphereGeometry, sphereMaterial);
     const position = mul3(1 / SCALE_FACTOR, bodyState.position);
     this.mesh.position.set(...position);
     this.mesh.userData = { name: this.name };
@@ -47,6 +51,38 @@ export class CelestialBody3D {
     const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color });
     this.dot = new Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
+
+    // add the orbital ellipse
+    const { elements } = bodyState;
+    const {
+      semiMajorAxis: a,
+      eccentricity: e,
+      longitudeAscending: OmegaDeg,
+      argumentOfPeriapsis: omegaDeg,
+      inclination: iDeg,
+    } = elements;
+    const b = semiMinorAxis(a, e);
+    const focusDistance = Math.sqrt(a ** 2 - b ** 2);
+    const omega = degreesToRadians(omegaDeg);
+    const ellipseCurve = new EllipseCurve(
+      // TODO: always negative...? or does it vary? how to find correct sign?
+      -(Math.cos(omega) * focusDistance) / SCALE_FACTOR,
+      -(Math.sin(omega) * focusDistance) / SCALE_FACTOR,
+      a / SCALE_FACTOR,
+      b / SCALE_FACTOR,
+      0,
+      Math.PI * 2,
+      false,
+      omega
+    );
+    // const ellipseMaterial = new MeshBasicMaterial({ color });
+    const ellipsePoints = ellipseCurve.getPoints(100); // Increase points for a smoother curve
+    const ellipseGeometry = new BufferGeometry().setFromPoints(ellipsePoints);
+    const ellipseMaterial = new LineBasicMaterial({ color });
+    this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
+    this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
+    this.ellipse.rotateX(degreesToRadians(iDeg));
+    scene.add(this.ellipse);
   }
 
   update(bodyState: CelestialBodyState) {
