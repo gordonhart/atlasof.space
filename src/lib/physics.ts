@@ -1,4 +1,4 @@
-import { G } from './constants.ts';
+import { G } from './bodies.ts';
 import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
 
 // TODO: use proper vector/matrix library?

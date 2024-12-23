@@ -1,4 +1,4 @@
-import { AU } from './constants.ts';
+import { AU } from './bodies.ts';
 import { CelestialBodyType } from './types.ts';
 
 export function pluralize(n: number, unit: string) {

@@ -35,7 +35,7 @@ import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
 import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
-import * as Objects from './constants.ts';
+import * as Objects from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
   [Objects.SOL.name]: sunSrc as string,

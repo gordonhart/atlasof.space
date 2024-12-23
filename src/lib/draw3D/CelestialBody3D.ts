@@ -1,40 +1,57 @@
-import * as THREE from 'three';
 import { CelestialBodyState } from '../types.ts';
-import { SCALE_FACTOR } from './constants.ts';
+import { MIN_SIZE, SCALE_FACTOR } from './constants.ts';
 import { mul3 } from '../physics.ts';
+import {
+  BufferAttribute,
+  BufferGeometry,
+  Color,
+  Material,
+  Mesh,
+  MeshBasicMaterial,
+  Points,
+  PointsMaterial,
+  Scene,
+  SphereGeometry,
+} from 'three';
 
 const hoverScaleFactor = 5;
 
 export class CelestialBody3D {
-  readonly mesh: THREE.Mesh;
-  readonly dot: THREE.Points;
-  private scene: THREE.Scene;
+  readonly mesh: Mesh;
+  readonly dot: Points;
+  readonly dotPosition: BufferAttribute;
+  private scene: Scene;
 
-  constructor(scene: THREE.Scene, bodyState: CelestialBodyState) {
+  constructor(scene: Scene, bodyState: CelestialBodyState) {
     this.scene = scene;
 
     // Create the main sphere geometry for the celestial body
-    const geometry = new THREE.SphereGeometry(bodyState.radius / SCALE_FACTOR, 32, 32);
-    const color = new THREE.Color(bodyState.color);
-    const material = new THREE.MeshBasicMaterial({ color });
-    this.mesh = new THREE.Mesh(geometry, material);
+    const geometry = new SphereGeometry(bodyState.radius / SCALE_FACTOR, 32, 32);
+    const color = new Color(bodyState.color);
+    const material = new MeshBasicMaterial({ color });
+    this.mesh = new Mesh(geometry, material);
     const position = mul3(1 / SCALE_FACTOR, bodyState.position);
     this.mesh.position.set(...position);
     scene.add(this.mesh);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
-    const dotGeometry = new THREE.BufferGeometry();
-    dotGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3));
+    const dotGeometry = new BufferGeometry();
+    this.dotPosition = new BufferAttribute(new Float32Array(position), 3);
+    dotGeometry.setAttribute('position', this.dotPosition);
     // TODO: smaller dot size
-    const dotMaterial = new THREE.PointsMaterial({ size: 3, color });
-    this.dot = new THREE.Points(dotGeometry, dotMaterial);
+    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color });
+    this.dot = new Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
   }
 
   update(bodyState: CelestialBodyState) {
     const position = mul3(1 / SCALE_FACTOR, bodyState.position);
     this.mesh.position.set(...position);
-    this.dot.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3));
+    this.dotPosition.array[0] = position[0];
+    this.dotPosition.array[1] = position[1];
+    this.dotPosition.array[2] = position[2];
+    this.dotPosition.needsUpdate = true;
+    // this.dot.geometry.setAttribute('position', this.position);
     // const scale = bodyState.name === hover ? hoverScaleFactor : 1;
     // const scaledRadius = bodyState.radius * scale;
     // this.mesh.scale.set(scale, scale, scale);
@@ -42,16 +59,16 @@ export class CelestialBody3D {
 
   dispose() {
     this.mesh.geometry.dispose();
-    (this.mesh.material as THREE.Material).dispose();
+    (this.mesh.material as Material).dispose();
     this.dot.geometry.dispose();
-    (this.dot.material as THREE.PointsMaterial).dispose();
+    (this.dot.material as Material).dispose();
     this.scene.remove(this.mesh);
   }
 }
 
 // Helper function to create and manage celestial bodies
 export function createCelestialSystem(
-  scene: THREE.Scene,
+  scene: Scene,
   systemState: CelestialBodyState,
   visibleTypes: Set<string>
 ): Map<string, CelestialBody3D> {

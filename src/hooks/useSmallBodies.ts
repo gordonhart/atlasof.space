@@ -1,5 +1,5 @@
 import { CelestialBody } from '../lib/types.ts';
-import { AU, DEFAULT_ASTEROID_COLOR } from '../lib/constants.ts';
+import { AU, DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
 

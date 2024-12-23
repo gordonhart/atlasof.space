@@ -1,4 +1,4 @@
-import { SATURN } from './constants.ts';
+import { SATURN } from './bodies.ts';
 import { CelestialBodyType, CelestialBodyTypes, Point2 } from './types.ts';
 
 export type AppState = {

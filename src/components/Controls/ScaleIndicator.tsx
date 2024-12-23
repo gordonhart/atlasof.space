@@ -1,5 +1,5 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
-import { AU } from '../../lib/constants.ts';
+import { AU } from '../../lib/bodies.ts';
 
 type Props = {
   metersPerPx: number;

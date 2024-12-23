@@ -3,7 +3,7 @@ import { Box, Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { getInitialState, incrementState } from '../lib/physics.ts';
-import { SOL } from '../lib/constants.ts';
+import { SOL } from '../lib/bodies.ts';
 import { useSolarSystemRenderer } from '../lib/draw3D/useSolarSystemRenderer.ts';
 
 export function SolarSystem() {

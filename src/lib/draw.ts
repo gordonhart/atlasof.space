@@ -1,6 +1,6 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
-import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
+import { ASTEROID_BELT, KUIPER_BELT } from './bodies.ts';
 import { degreesToRadians, orbitalEllipseAtTheta, trueAnomalyFromPosition } from './physics.ts';
 import { findCelestialBody } from './utils.ts';
 

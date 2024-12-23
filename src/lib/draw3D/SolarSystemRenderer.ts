@@ -1,28 +1,22 @@
-import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
-import { AU } from '../constants.ts';
+import { AU } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
+import { AxesHelper, Color, OrthographicCamera, Scene, WebGLRenderer } from 'three';
 
 export class SolarSystemRenderer {
-  private scene: THREE.Scene;
-  private camera: THREE.OrthographicCamera;
-  private renderer: THREE.WebGLRenderer;
+  readonly scene: Scene;
+  readonly camera: OrthographicCamera;
+  private renderer: WebGLRenderer;
   private controls: OrbitControls;
 
   constructor(container: HTMLElement) {
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene = new Scene();
+    this.scene.background = new Color(0x000000);
 
     // Create and position camera using container dimensions
-    this.camera = new THREE.OrthographicCamera(
-      -window.innerWidth,
-      window.innerWidth,
-      window.innerHeight,
-      -window.innerHeight,
-      1,
-      SCALE_FACTOR
-    );
+    const [w, h] = [window.innerWidth, window.innerHeight];
+    this.camera = new OrthographicCamera(-w, w, h, -h, 1, SCALE_FACTOR);
     this.camera.up.set(0, 0, 1);
     // this.camera.position.set(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
     this.camera.position.set(0, 0, 1e3);
@@ -31,11 +25,11 @@ export class SolarSystemRenderer {
     this.camera.updateProjectionMatrix();
 
     // Create renderer with container dimensions
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       antialias: true,
       logarithmicDepthBuffer: true,
     });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(w, h);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     // Clear existing content and append renderer
@@ -51,7 +45,7 @@ export class SolarSystemRenderer {
     this.controls.screenSpacePanning = true;
 
     // Add helpers
-    const axesHelper = new THREE.AxesHelper(AU / SCALE_FACTOR);
+    const axesHelper = new AxesHelper(AU / SCALE_FACTOR);
     axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
     this.scene.add(axesHelper);
 
@@ -60,15 +54,16 @@ export class SolarSystemRenderer {
   }
 
   private onWindowResize() {
-    this.camera.left = -window.innerWidth;
-    this.camera.right = window.innerWidth;
-    this.camera.top = window.innerHeight;
-    this.camera.bottom = -window.innerHeight;
+    const [w, h] = [window.innerWidth, window.innerHeight];
+    this.camera.left = -w;
+    this.camera.right = w;
+    this.camera.top = h;
+    this.camera.bottom = -h;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(w, h);
   }
 
-  getScene(): THREE.Scene {
+  getScene(): Scene {
     return this.scene;
   }
 
