@@ -22,8 +22,8 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
   }
   const { object, orbit, phys_par } = obj;
   const { elements } = orbit;
-  // TODO: units are often km, need to account for reported units
-  const radius = Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2;
+  // TODO: are units always km? should account for the reported unit type
+  const radius = (Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2) * 1e3;
   return {
     name: object.fullname,
     shortName: object.shortname,
@@ -35,7 +35,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
       inclination: Number(elements.find(({ name }) => name === 'i')?.value),
       longitudeAscending: Number(elements.find(({ name }) => name === 'om')?.value),
       argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
-      meanAnomaly: 0, // TODO: is this reported
+      meanAnomaly: Number(elements.find(({ name }) => name === 'ma')?.value),
     },
     mass: 2500 * (4 / 3) * Math.PI * radius ** 3, // best-effort guess using 2500kg/m3 density and a spherical shape
     radius,
