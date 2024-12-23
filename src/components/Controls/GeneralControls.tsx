@@ -14,7 +14,7 @@ import {
 import { CelestialBodyState, CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
-import { AddBodyMenu } from './AddBodyMenu.tsx';
+import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 
 type Props = AppStateControlProps & {
   systemState: CelestialBodyState;
@@ -30,7 +30,7 @@ export function GeneralControls({ state, updateState, systemState, reset }: Prop
 
   return (
     <Stack gap={buttonGap}>
-      <AddBodyMenu systemState={systemState} />
+      <AddSmallBodyMenu systemState={systemState} />
 
       <Tooltip position="left" label="Enlarge Planets">
         <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}>
