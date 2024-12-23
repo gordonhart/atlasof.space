@@ -11,7 +11,13 @@ export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
   const systemStateRef = useRef(getInitialState(null, SOL));
-  const { containerRef, rendererRef, initialize: initializeRender, update: updateRender } = useSolarSystemRenderer();
+  const {
+    containerRef,
+    rendererRef,
+    canvasRef,
+    initialize: initializeRender,
+    update: updateRender,
+  } = useSolarSystemRenderer();
 
   const updateState = useCallback(
     (newState: Partial<AppState>) => {
@@ -43,7 +49,10 @@ export function SolarSystem() {
     if (play) {
       systemStateRef.current = incrementState(systemStateRef.current, dt);
     }
-    updateRender(appStateRef.current, systemStateRef.current);
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx != null) {
+      updateRender(ctx, appStateRef.current, systemStateRef.current);
+    }
     window.requestAnimationFrame(animationFrame);
   }
 
@@ -58,6 +67,10 @@ export function SolarSystem() {
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
       <Box ref={containerRef} pos="absolute" top={0} right={0} {...cursorControls} />
+      <canvas
+        ref={canvasRef}
+        style={{ height: '100vh', width: '100vw', position: 'absolute', pointerEvents: 'none' }}
+      />
       <Controls state={appState} updateState={updateState} systemState={systemStateRef.current} reset={resetState} />
     </Group>
   );

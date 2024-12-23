@@ -77,7 +77,7 @@ export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppStat
   if (shouldDrawLabels) drawLabelRecursive(systemState);
 }
 
-function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
+export function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
   const dpr = window.devicePixelRatio ?? 1;
   return [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 }
@@ -88,7 +88,7 @@ function getOffsetMeters(body: CelestialBodyState, [panOffsetXm, panOffsetYm]: P
   return [panOffsetXm - centerOffsetXm, panOffsetYm - centerOffsetYm];
 }
 
-function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
+export function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
   return (
     xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
   );
@@ -203,7 +203,7 @@ function drawLabel(
   }
 }
 
-function drawOffscreenLabel(
+export function drawOffscreenLabel(
   ctx: CanvasRenderingContext2D,
   label: string,
   color: string,
@@ -238,7 +238,7 @@ function drawOffscreenLabel(
   drawCaretAtLocation(ctx, color, trianglePx, caret.type);
 }
 
-function drawLabelAtLocation(
+export function drawLabelAtLocation(
   ctx: CanvasRenderingContext2D,
   label: string,
   color: string,
