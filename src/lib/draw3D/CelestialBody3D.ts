@@ -4,6 +4,7 @@ import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
   BufferAttribute,
   BufferGeometry,
+  CanvasTexture,
   Color,
   EllipseCurve,
   Material,
@@ -22,6 +23,7 @@ import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels, isOffScreen } from '../draw.ts';
+import { getCircleTexture } from './utils.ts';
 
 export class CelestialBody3D {
   readonly body: CelestialBody;
@@ -37,6 +39,7 @@ export class CelestialBody3D {
   readonly dotPosition: BufferAttribute;
   readonly screenPosition: Vector3;
 
+  private visible: boolean = false;
   private hovered: boolean = false;
   readonly spherePoints: number = 32;
   readonly ellipsePoints: number = 360;
@@ -60,8 +63,8 @@ export class CelestialBody3D {
     const dotGeometry = new BufferGeometry();
     this.dotPosition = new BufferAttribute(new Float32Array(position), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
-    // TODO: smaller dot size
-    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color });
+    const map = getCircleTexture(body.color);
+    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color, map, transparent: true, sizeAttenuation: false });
     this.dot = new Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
 
@@ -106,15 +109,16 @@ export class CelestialBody3D {
   }
 
   update(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    const visible = appState.visibleTypes.has(this.body.type);
+    this.visible = appState.visibleTypes.has(this.body.type);
     const position = mul3(1 / SCALE_FACTOR, body.position);
     this.sphere.position.set(...position);
-    this.sphere.visible = visible;
+    this.sphere.visible = this.visible;
     this.dotPosition.array[0] = position[0];
     this.dotPosition.array[1] = position[1];
     this.dotPosition.array[2] = position[2];
     this.dotPosition.needsUpdate = true;
-    this.ellipse.visible = visible && appState.drawOrbit;
+    this.dot.visible = this.visible;
+    this.ellipse.visible = this.visible && appState.drawOrbit;
 
     // move ellipse based on position of parent
     if (parent != null) {
@@ -159,6 +163,8 @@ export class CelestialBody3D {
   }
 
   drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {
+    if (!this.visible) return;
+
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera);
     const bodyYpx = window.innerHeight - bodyYpxInverted;
 

@@ -61,7 +61,7 @@ export class SolarSystemRenderer {
      */
 
     // Add bodies
-    this.bodies = this.createBodiesRecursive(appState, null, systemState);
+    this.bodies = this.createBodiesRecursive(null, systemState);
 
     // Handle window resize
     window.addEventListener('resize', this.onWindowResize.bind(this));
@@ -85,15 +85,15 @@ export class SolarSystemRenderer {
   update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
     this.controls.update();
 
+    /* TODO: this doesn't work well, need to think through desired behavior
     if (appState.center != null) {
-      const mesh = this.scene.children.find(({ userData }) => userData?.name === appState.center);
-      const centerPoint: Vector3 | undefined = (mesh as Mesh | undefined)?.geometry?.boundingSphere?.center;
-      if (centerPoint != null) {
-        // this.camera.position.set(centerPoint.x, centerPoint.y, 1e3);
-        // this.camera.updateProjectionMatrix();
-        // console.log(`centering ${center}`, centerPoint);
+      const centerBody = this.bodies.find(({ body }) => body.name === appState.center);
+      if (centerBody != null) {
+        this.camera.position.x = centerBody.dotPosition.array[0];
+        this.camera.position.y = centerBody.dotPosition.array[1];
       }
     }
+     */
 
     // TODO: this method of looping is not very efficient
     this.bodies.forEach(body => {
@@ -124,15 +124,9 @@ export class SolarSystemRenderer {
     this.controls.dispose();
   }
 
-  private createBodiesRecursive(
-    appState: AppState,
-    parent: CelestialBodyState | null,
-    body: CelestialBodyState
-  ): Array<CelestialBody3D> {
+  private createBodiesRecursive(parent: CelestialBodyState | null, body: CelestialBodyState): Array<CelestialBody3D> {
     const thisBody = new CelestialBody3D(this.scene, parent, body);
-    return appState.visibleTypes.has(body.type)
-      ? [...body.satellites.flatMap(child => this.createBodiesRecursive(appState, body, child)), thisBody]
-      : [];
+    return [...body.satellites.flatMap(child => this.createBodiesRecursive(body, child)), thisBody];
   }
 
   // TODO: this greedily takes the first match; should find the closest within threshold, prioritizing a parent
