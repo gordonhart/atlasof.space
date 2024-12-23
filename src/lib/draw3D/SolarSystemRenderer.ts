@@ -20,10 +20,9 @@ export class SolarSystemRenderer {
 
     // Create and position camera using container dimensions
     const [w, h] = [window.innerWidth, window.innerHeight];
-    this.camera = new OrthographicCamera(-w, w, h, -h, 1, SCALE_FACTOR);
+    this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
     this.camera.up.set(0, 0, 1);
-    // this.camera.position.set(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
-    this.camera.position.set(0, 0, 1e3);
+    this.camera.position.set(0, 0, 1e9);
     this.camera.lookAt(0, 0, 0);
     this.camera.zoom = 1; // TODO: parameterize?
     this.camera.updateProjectionMatrix();
@@ -47,6 +46,8 @@ export class SolarSystemRenderer {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = true;
+    this.controls.minZoom = 0.001;
+    this.controls.maxZoom = 1000;
 
     // Add helpers
     const axesHelper = new AxesHelper(AU / SCALE_FACTOR);
@@ -72,6 +73,11 @@ export class SolarSystemRenderer {
   render() {
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+  }
+
+  getMetersPerPixel() {
+    const visibleWidth = (this.camera.right - this.camera.left) / this.camera.zoom;
+    return (SCALE_FACTOR * visibleWidth) / window.innerWidth;
   }
 
   update({ center, drawOrbit }: AppState, systemState: CelestialBodyState) {

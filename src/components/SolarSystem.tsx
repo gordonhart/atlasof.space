@@ -11,7 +11,7 @@ export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
   const systemStateRef = useRef(getInitialState(null, SOL));
-  const { ref: containerRef, renderer, initialize: initializeRender, update: updateRender } = useSolarSystemRenderer();
+  const { containerRef, rendererRef, initialize: initializeRender, update: updateRender } = useSolarSystemRenderer();
 
   const updateState = useCallback(
     (newState: Partial<AppState>) => {
@@ -20,7 +20,7 @@ export function SolarSystem() {
     [setAppState]
   );
 
-  const cursorControls = useCursorControls3D(renderer, updateState);
+  const cursorControls = useCursorControls3D(rendererRef.current, updateState);
 
   const resetState = useCallback(() => {
     updateState(initialState);
@@ -35,8 +35,12 @@ export function SolarSystem() {
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     const { play, dt } = appStateRef.current;
+    setAppState(prev => {
+      const time = play ? prev.time + dt : prev.time;
+      const metersPerPx = rendererRef.current?.getMetersPerPixel() ?? prev.metersPerPx;
+      return { ...prev, time, metersPerPx };
+    });
     if (play) {
-      setAppState(prev => ({ ...prev, time: prev.time + dt }));
       systemStateRef.current = incrementState(systemStateRef.current, dt);
     }
     updateRender(appStateRef.current, systemStateRef.current);

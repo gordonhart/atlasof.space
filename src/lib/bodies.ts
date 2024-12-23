@@ -6,7 +6,8 @@ export const AU = 1.496e11; // meters
 export const g = 9.807; // earth gravity
 
 export enum Time {
-  MINUTE = 60,
+  SECOND = 1,
+  MINUTE = 60 * SECOND,
   HOUR = 60 * MINUTE,
   DAY = 24 * HOUR,
 }

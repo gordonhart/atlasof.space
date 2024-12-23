@@ -34,7 +34,7 @@ export const initialState: AppState = {
 export function clampState({ dt, metersPerPx, planetScaleFactor, ...rest }: AppState): AppState {
   return {
     ...rest,
-    dt: Math.min(Math.max(dt, 1), 365 * 24 * 60 * 60),
+    dt: Math.min(Math.max(dt, Time.SECOND), 365 * Time.DAY),
     metersPerPx: Math.min(Math.max(metersPerPx, 10_000), 1e11),
     planetScaleFactor: Math.min(Math.max(planetScaleFactor, 1), 8192),
   };

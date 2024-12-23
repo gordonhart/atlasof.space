@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { SolarSystemRenderer } from './SolarSystemRenderer.ts';
 import { CelestialBodyState } from '../types.ts';
 import { AppState } from '../state.ts';
@@ -29,8 +29,8 @@ export function useSolarSystemRenderer() {
   }
 
   return {
-    ref: containerRef,
-    renderer: rendererRef.current,
+    containerRef,
+    rendererRef,
     initialize,
     update,
   };
