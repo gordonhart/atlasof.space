@@ -522,7 +522,6 @@ const bodies = [
   '500 Selinur',
 ];
 
-// const treeData: TreeNodeData[] = bodies.map(name => ({ label: name, value: `1-10/${name}` }));
 const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   const label = `${i + 1} - ${i + 10}`;
   const nodeData = { label: name, value: `${label}/${name}` };
