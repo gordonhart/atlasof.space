@@ -2,7 +2,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
 import { AU } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, OrthographicCamera, Scene, WebGLRenderer } from 'three';
+import { AxesHelper, Color, Mesh, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 
 export class SolarSystemRenderer {
   readonly scene: Scene;
@@ -63,10 +63,6 @@ export class SolarSystemRenderer {
     this.renderer.setSize(w, h);
   }
 
-  getScene(): Scene {
-    return this.scene;
-  }
-
   render() {
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
@@ -81,6 +77,15 @@ export class SolarSystemRenderer {
   }
 
   updateFromAppState(appState: AppState) {
+    const { center } = appState;
+    if (center != null) {
+      const mesh = this.scene.children.find(({ userData }) => userData?.name === center);
+      const centerPoint: Vector3 | undefined = (mesh as Mesh | undefined)?.geometry?.boundingSphere?.center;
+      if (centerPoint != null) {
+        this.camera.position.set(centerPoint.x, centerPoint.y, 1e3);
+        console.log(`centering ${center}`, centerPoint);
+      }
+    }
     // Temporarily disable this until basic rendering works
     // const zoom = appState.metersPerPx;
     // this.camera.position.setZ(zoom * 1000);

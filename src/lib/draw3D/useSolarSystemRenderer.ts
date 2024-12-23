@@ -31,7 +31,7 @@ export function useSolarSystemRenderer(appState: AppState) {
     if (rendererRef.current == null) {
       const renderer = new SolarSystemRenderer(containerRef.current);
       rendererRef.current = renderer;
-      bodiesRef.current = createCelestialSystem(renderer.getScene(), systemState, appState.visibleTypes);
+      bodiesRef.current = createCelestialSystem(renderer.scene, systemState, appState.visibleTypes);
     }
 
     // Cleanup

@@ -10,6 +10,15 @@ export function useCursorControls3D(
   bodies: Array<CelestialBody3D>,
   updateAppState: (state: Partial<AppState>) => void
 ) {
+  function onClick(event: MouseEvent<HTMLCanvasElement>) {
+    if (renderer == null) return;
+    const eventPx = [event.clientX, event.clientY];
+    const closeBody = findCloseBody(renderer, bodies, eventPx, 25);
+    if (closeBody != null) {
+      updateAppState({ center: closeBody.name, offset: [0, 0] });
+    }
+  }
+
   function onMouseMove(event: MouseEvent<HTMLCanvasElement>) {
     if (renderer == null) return;
     const eventPx = [event.clientX, event.clientY];
@@ -17,7 +26,7 @@ export function useCursorControls3D(
     updateAppState({ hover: closeBody?.name ?? null });
   }
 
-  return { onMouseMove };
+  return { onClick, onMouseMove };
 }
 
 function findCloseBody(

@@ -68,8 +68,8 @@ export function SolarSystem() {
   }, []);
 
   return (
-    <Group align="center" justify="center" w="100vw" h="100vh" onMouseMove={cursorControls.onMouseMove}>
-      <Box ref={containerRef} pos="absolute" top={0} right={0} />
+    <Group align="center" justify="center" w="100vw" h="100vh">
+      <Box ref={containerRef} pos="absolute" top={0} right={0} {...cursorControls} />
       <Controls state={appState} updateState={updateState} systemState={systemStateRef.current} reset={resetState} />
     </Group>
   );

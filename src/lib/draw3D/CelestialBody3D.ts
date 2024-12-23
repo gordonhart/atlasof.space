@@ -36,6 +36,7 @@ export class CelestialBody3D {
     this.mesh = new Mesh(geometry, material);
     const position = mul3(1 / SCALE_FACTOR, bodyState.position);
     this.mesh.position.set(...position);
+    this.mesh.userData = { name: this.name };
     scene.add(this.mesh);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
