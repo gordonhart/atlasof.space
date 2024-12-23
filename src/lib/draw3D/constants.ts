@@ -1,3 +1,1 @@
-import { AU } from '../constants.ts';
-
-export const SCALE_FACTOR = AU; // 1e9;
+export const SCALE_FACTOR = 1e9; // AU; // 1e9;

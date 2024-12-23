@@ -20,13 +20,14 @@ export class SolarSystemRenderer {
       window.innerWidth,
       window.innerHeight,
       -window.innerHeight,
-      0,
-      AU * SCALE_FACTOR
+      1,
+      SCALE_FACTOR
     );
     this.camera.up.set(0, 0, 1);
-    this.camera.position.set(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+    // this.camera.position.set(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+    this.camera.position.set(0, 0, 1e3);
     this.camera.lookAt(0, 0, 0);
-    this.camera.zoom = 1e-9; // TODO: parameterize?
+    this.camera.zoom = 1; // TODO: parameterize?
     this.camera.updateProjectionMatrix();
 
     // Create renderer with container dimensions
@@ -50,7 +51,7 @@ export class SolarSystemRenderer {
     this.controls.screenSpacePanning = true;
 
     // Add helpers
-    const axesHelper = new THREE.AxesHelper(AU);
+    const axesHelper = new THREE.AxesHelper(AU / SCALE_FACTOR);
     axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
     this.scene.add(axesHelper);
 

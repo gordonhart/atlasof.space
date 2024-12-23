@@ -18,23 +18,26 @@ export class CelestialBody3D {
     const color = new THREE.Color(bodyState.color);
     const material = new THREE.MeshBasicMaterial({ color });
     this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.position.set(...mul3(1 / SCALE_FACTOR, bodyState.position));
+    const position = mul3(1 / SCALE_FACTOR, bodyState.position);
+    this.mesh.position.set(...position);
+    scene.add(this.mesh);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
     const dotGeometry = new THREE.BufferGeometry();
-    dotGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(bodyState.position), 3));
+    dotGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3));
     // TODO: smaller dot size
-    const dotMaterial = new THREE.PointsMaterial({ size: 5, color });
+    const dotMaterial = new THREE.PointsMaterial({ size: 3, color });
     this.dot = new THREE.Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
-    scene.add(this.mesh);
   }
 
-  update(bodyState: CelestialBodyState, hover: string | null) {
-    this.mesh.position.set(...mul3(1 / SCALE_FACTOR, bodyState.position));
-    const scale = bodyState.name === hover ? hoverScaleFactor : 1;
+  update(bodyState: CelestialBodyState) {
+    const position = mul3(1 / SCALE_FACTOR, bodyState.position);
+    this.mesh.position.set(...position);
+    this.dot.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3));
+    // const scale = bodyState.name === hover ? hoverScaleFactor : 1;
     // const scaledRadius = bodyState.radius * scale;
-    this.mesh.scale.set(scale, scale, scale);
+    // this.mesh.scale.set(scale, scale, scale);
   }
 
   dispose() {
