@@ -1,4 +1,4 @@
-import { SATURN } from './bodies.ts';
+import { SATURN, Time } from './bodies.ts';
 import { CelestialBodyType, CelestialBodyTypes, Point2 } from './types.ts';
 
 export type AppState = {
@@ -18,7 +18,7 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: 60 * 60 * 6,
+  dt: 15 * Time.MINUTE,
   play: true,
   drawTail: false,
   drawOrbit: true,
