@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { SolarSystemRenderer } from '../lib/renderer2.ts';
-import { createCelestialSystem, CelestialBody3D } from '../lib/draw3';
+import { SolarSystemRenderer } from '../lib/draw3D/SolarSystemRenderer.ts';
 import { CelestialBodyState } from '../lib/types';
 import { AppState } from '../lib/state';
 import { findCelestialBody } from '../lib/utils.ts';
 import { Box } from '@mantine/core';
+import { CelestialBody3D, createCelestialSystem } from '../lib/draw3D/CelestialBody3D.ts';
 
 interface SolarSystemProps {
   systemState: CelestialBodyState;
@@ -67,19 +67,5 @@ export function SolarSystem3D({ systemState, appState }: SolarSystemProps) {
     };
   }, []); // Empty deps array since we handle updates in the animation loop
 
-  // Handle updates to visible types
-  useEffect(() => {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-
-    // Dispose old bodies
-    bodiesRef.current.forEach(body => body.dispose());
-    bodiesRef.current.clear();
-
-    // Create new bodies with updated visibility
-    bodiesRef.current = createCelestialSystem(renderer.getScene(), systemState, appState.visibleTypes);
-  }, [appState.visibleTypes]); // Only recreate bodies when visibility changes
-
-  console.log(bodiesRef.current);
   return <Box ref={containerRef} bg="blue" pos="absolute" top={0} left={0} />;
 }
