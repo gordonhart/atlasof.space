@@ -641,7 +641,7 @@ export const EARTH: CelestialBody = {
     epoch: 'J2000',
     eccentricity: 0.0167086,
     semiMajorAxis: 149597870.7e3, // 1 AU
-    inclination: 0.00005,
+    inclination: 0.00005, // shouldn't this be 0 (plane of the ecliptic)?
     longitudeAscending: -11.26064,
     argumentOfPeriapsis: 114.20783,
     meanAnomaly: 358.617,

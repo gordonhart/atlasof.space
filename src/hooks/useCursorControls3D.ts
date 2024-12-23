@@ -12,7 +12,7 @@ export function useCursorControls3D(
     const eventPx: Point2 = [event.clientX, event.clientY];
     const closeBody = renderer.findCloseBody(eventPx, 25);
     if (closeBody != null) {
-      updateAppState({ center: closeBody.name, offset: [0, 0] });
+      updateAppState({ center: closeBody.body.name, offset: [0, 0] });
     }
   }
 
@@ -20,7 +20,7 @@ export function useCursorControls3D(
     if (renderer == null) return;
     const eventPx: Point2 = [event.clientX, event.clientY];
     const closeBody = renderer.findCloseBody(eventPx, 25);
-    updateAppState({ hover: closeBody?.name ?? null });
+    updateAppState({ hover: closeBody?.body?.name ?? null });
   }
 
   return { onClick, onMouseMove };

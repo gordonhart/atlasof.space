@@ -1,5 +1,5 @@
-import { CelestialBodyState, Point2 } from '../types.ts';
-import { HOVER_SCALE_FACTOR, MeshType, MIN_SIZE, SCALE_FACTOR } from './constants.ts';
+import { CelestialBody, CelestialBodyState, Point2 } from '../types.ts';
+import { HOVER_SCALE_FACTOR, MIN_SIZE, SCALE_FACTOR } from './constants.ts';
 import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
   BufferAttribute,
@@ -24,13 +24,12 @@ import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels, isOffScreen } from '../draw.ts';
 
 export class CelestialBody3D {
-  readonly name: string;
+  readonly body: CelestialBody;
   readonly parentName: string | null;
   readonly scene: Scene;
-  readonly color: Color;
 
   // main objects
-  readonly body: Mesh;
+  readonly sphere: Mesh;
   readonly dot: Points;
   readonly ellipse: Line2;
 
@@ -43,27 +42,26 @@ export class CelestialBody3D {
   readonly ellipsePoints: number = 360;
 
   constructor(scene: Scene, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    this.name = body.name;
+    this.body = body;
     this.parentName = parent?.name ?? null;
     this.scene = scene;
-    this.color = new Color(body.color);
     this.screenPosition = new Vector3();
+    const color = new Color(body.color);
 
     // Create the main sphere geometry for the celestial body
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-    const sphereMaterial = new MeshBasicMaterial({ color: this.color });
-    this.body = new Mesh(sphereGeometry, sphereMaterial);
+    const sphereMaterial = new MeshBasicMaterial({ color });
+    this.sphere = new Mesh(sphereGeometry, sphereMaterial);
     const position = mul3(1 / SCALE_FACTOR, body.position);
-    this.body.position.set(...position);
-    this.body.userData = { name: this.name, type: MeshType.BODY };
-    scene.add(this.body);
+    this.sphere.position.set(...position);
+    scene.add(this.sphere);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
     const dotGeometry = new BufferGeometry();
     this.dotPosition = new BufferAttribute(new Float32Array(position), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
     // TODO: smaller dot size
-    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color: this.color });
+    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color });
     this.dot = new Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
 
@@ -95,7 +93,7 @@ export class CelestialBody3D {
     ellipseGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
     // const ellipseMaterial = new LineBasicMaterial({ color });
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const ellipseMaterial = new LineMaterial({ color: this.color, linewidth: 1, resolution });
+    const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution });
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
     if (parent != null) {
       this.ellipse.translateX(parent.position[0] / SCALE_FACTOR);
@@ -104,18 +102,19 @@ export class CelestialBody3D {
     }
     this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
     this.ellipse.rotateX(degreesToRadians(iDeg));
-    this.ellipse.userData = { name: this.name, type: MeshType.ELLIPSE };
     scene.add(this.ellipse);
   }
 
   update(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+    const visible = appState.visibleTypes.has(this.body.type);
     const position = mul3(1 / SCALE_FACTOR, body.position);
-    this.body.position.set(...position);
+    this.sphere.position.set(...position);
+    this.sphere.visible = visible;
     this.dotPosition.array[0] = position[0];
     this.dotPosition.array[1] = position[1];
     this.dotPosition.array[2] = position[2];
     this.dotPosition.needsUpdate = true;
-    this.ellipse.visible = appState.drawOrbit;
+    this.ellipse.visible = visible && appState.drawOrbit;
 
     // move ellipse based on position of parent
     if (parent != null) {
@@ -126,23 +125,23 @@ export class CelestialBody3D {
     }
 
     // scale body based on hover state
-    if (appState.hover === this.name && !this.hovered) {
-      this.body.geometry.dispose(); // toggle hover on
+    if (appState.hover === this.body.name && !this.hovered) {
+      this.sphere.geometry.dispose(); // toggle hover on
       const radius = (HOVER_SCALE_FACTOR * body.radius) / SCALE_FACTOR;
-      this.body.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
+      this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
       this.ellipse.material.linewidth = 3;
       this.hovered = true;
-    } else if (appState.hover !== this.name && this.hovered) {
-      this.body.geometry.dispose(); // toggle hover off
-      this.body.geometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
+    } else if (appState.hover !== this.body.name && this.hovered) {
+      this.sphere.geometry.dispose(); // toggle hover off
+      this.sphere.geometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
       this.ellipse.material.linewidth = 1;
       this.hovered = false;
     }
   }
 
   getScreenPosition(camera: OrthographicCamera): Point2 {
-    this.body.updateWorldMatrix(true, false);
-    this.screenPosition.setFromMatrixPosition(this.body.matrixWorld); // get world position
+    this.sphere.updateWorldMatrix(true, false);
+    this.screenPosition.setFromMatrixPosition(this.sphere.matrixWorld); // get world position
     this.screenPosition.project(camera); // project into screen space
     const pixelX = ((this.screenPosition.x + 1) * window.innerWidth) / 2;
     const pixelY = ((-this.screenPosition.y + 1) * window.innerHeight) / 2;
@@ -150,34 +149,33 @@ export class CelestialBody3D {
   }
 
   dispose() {
-    this.body.geometry.dispose();
-    (this.body.material as Material).dispose();
+    this.sphere.geometry.dispose();
+    (this.sphere.material as Material).dispose();
     this.dot.geometry.dispose();
     (this.dot.material as Material).dispose();
     this.ellipse.geometry.dispose();
     (this.ellipse.material as Material).dispose();
-    this.scene.remove(this.body);
+    this.scene.remove(this.sphere);
   }
 
-  drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera) {
+  drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera);
     const bodyYpx = window.innerHeight - bodyYpxInverted;
 
-    const label = this.name; // TODO: shortName?
+    const label = this.body.shortName ?? this.body.name;
     ctx.font = '12px Arial';
     const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
     const textPx: Point2 = [textWidthPx, textHeightPx];
     const canvasPx = getCanvasPixels(ctx);
-    const color = `#${this.color.getHexString()}`;
 
     // body is off-screen; draw a pointer
     if (isOffScreen(bodyXpx, bodyYpx)) {
-      drawOffscreenLabel(ctx, label, color, canvasPx, [bodyXpx, bodyYpx], textPx);
+      drawOffscreenLabel(ctx, label, this.body.color, canvasPx, [bodyXpx, bodyYpx], textPx);
     } else {
-      // TODO
-      // const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius / metersPerPx, 1) + 10];
-      const [offsetXpx, offsetYpx] = [textWidthPx / 2, 10];
-      drawLabelAtLocation(ctx, label, color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
+      const baseRadius = this.body.radius / metersPerPx;
+      const radius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
+      const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius, 1) + 10];
+      drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
     }
   }
 }

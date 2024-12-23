@@ -54,6 +54,11 @@ export class SolarSystemRenderer {
     const axesHelper = new AxesHelper(AU / SCALE_FACTOR);
     axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
     this.scene.add(axesHelper);
+    /* TODO: enable? pretty noisy
+    const gridHelper = new GridHelper((AU * 100) / SCALE_FACTOR, 10);
+    gridHelper.rotateX(Math.PI / 2);
+    this.scene.add(gridHelper);
+     */
 
     // Add bodies
     this.bodies = this.createBodiesRecursive(appState, null, systemState);
@@ -72,23 +77,14 @@ export class SolarSystemRenderer {
     this.renderer.setSize(w, h);
   }
 
-  render(ctx: CanvasRenderingContext2D) {
-    this.controls.update();
-    this.renderer.render(this.scene, this.camera);
-    if (ctx != null) {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      this.bodies.forEach(body => {
-        body.drawLabel(ctx, this.camera);
-      });
-    }
-  }
-
   getMetersPerPixel() {
     const visibleWidth = (this.camera.right - this.camera.left) / this.camera.zoom;
     return (SCALE_FACTOR * visibleWidth) / window.innerWidth;
   }
 
-  update(appState: AppState, systemState: CelestialBodyState) {
+  update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
+    this.controls.update();
+
     if (appState.center != null) {
       const mesh = this.scene.children.find(({ userData }) => userData?.name === appState.center);
       const centerPoint: Vector3 | undefined = (mesh as Mesh | undefined)?.geometry?.boundingSphere?.center;
@@ -101,12 +97,22 @@ export class SolarSystemRenderer {
 
     // TODO: this method of looping is not very efficient
     this.bodies.forEach(body => {
-      const bodyState = findCelestialBody(systemState, body.name);
+      const bodyState = findCelestialBody(systemState, body.body.name);
       if (bodyState != null) {
         const parentState = body.parentName != null ? findCelestialBody(systemState, body.parentName) : null;
         body.update(appState, parentState ?? null, bodyState);
       }
     });
+
+    this.renderer.render(this.scene, this.camera);
+
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    if (appState.drawLabel) {
+      const metersPerPx = this.getMetersPerPixel();
+      this.bodies.forEach(body => {
+        body.drawLabel(ctx, this.camera, metersPerPx);
+      });
+    }
   }
 
   dispose() {
