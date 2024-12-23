@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from './state';
+import { AU } from './constants.ts';
 
 export class SolarSystemRenderer {
   private scene: THREE.Scene;
@@ -20,24 +21,25 @@ export class SolarSystemRenderer {
       window.innerHeight,
       -window.innerHeight,
       0.1,
-      1e15
+      AU * 1e3
     );
-    this.camera.position.set(0, 5, 10);
+    this.camera.up.set(0, 0, 1);
+    this.camera.position.set(0, 1e6, 1e6);
     this.camera.lookAt(0, 0, 0);
 
     // Create renderer with container dimensions
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true, // Allow transparency if needed
+      logarithmicDepthBuffer: true,
+      // alpha: true, // Allow transparency if needed
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     // Clear existing content and append renderer
-    while (container.firstChild) {
+    while (container.firstChild != null) {
       container.removeChild(container.firstChild);
     }
-    // this.renderer.domElement.style = { position: 'absolute', top: 0, left: 0 };
     container.appendChild(this.renderer.domElement);
 
     // Add orbit controls
@@ -46,13 +48,34 @@ export class SolarSystemRenderer {
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = true;
 
-    // Add grid helper
-    const gridHelper = new THREE.GridHelper(10, 10);
-    this.scene.add(gridHelper);
+    // Ambient light for base illumination
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1000000.0);
+    this.scene.add(ambientLight);
 
-    // Add ambient light
-    // const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    // this.scene.add(ambientLight);
+    // Add hemisphere light
+    const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+    this.scene.add(hemisphereLight);
+
+    /*
+    // Add directional light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 5, 5);
+    directionalLight.castShadow = true;
+    this.scene.add(directionalLight);
+
+    // Add point light near camera
+    const pointLight = new THREE.PointLight(0xffffff, 1.0);
+    pointLight.position.copy(this.camera.position);
+    this.scene.add(pointLight);
+     */
+
+    // Add helpers
+    // this.scene.add(new THREE.GridHelper(AU, 100));
+    const axesHelper = new THREE.AxesHelper(AU);
+    axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
+    this.scene.add(axesHelper);
+    // this.scene.add(new THREE.DirectionalLightHelper(directionalLight));
+    // this.scene.add(new THREE.PointLightHelper(pointLight));
 
     // Handle window resize
     window.addEventListener('resize', this.onWindowResize.bind(this));

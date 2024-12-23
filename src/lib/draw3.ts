@@ -12,9 +12,19 @@ export class CelestialBody3D {
     this.scene = scene;
 
     // Create the main sphere geometry for the celestial body
-    const geometry = new THREE.SphereGeometry(bodyState.radius, 32, 32);
+    const geometry = new THREE.SphereGeometry(bodyState.radius / 1e6, 32, 32);
+    /*
+    const material = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(bodyState.color),
+      metalness: 0.1,
+      roughness: 0.7,
+      emmissive: new THREE.Color(bodyState.color).multiplyScalar(500),
+    });
+     */
     const material = new THREE.MeshBasicMaterial({
       color: new THREE.Color(bodyState.color),
+      transparent: true,
+      opacity: 1.0,
     });
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(...bodyState.position);
