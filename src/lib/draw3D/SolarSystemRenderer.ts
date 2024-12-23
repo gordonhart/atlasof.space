@@ -1,16 +1,20 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
 import { AU } from '../bodies.ts';
-import { SCALE_FACTOR } from './constants.ts';
+import { MeshType, SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, Mesh, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { findCelestialBody } from '../utils.ts';
+import { CelestialBodyState } from '../types.ts';
+import { CelestialBody3D, createCelestialSystem } from './CelestialBody3D.ts';
 
 export class SolarSystemRenderer {
   readonly scene: Scene;
   readonly camera: OrthographicCamera;
   private renderer: WebGLRenderer;
   private controls: OrbitControls;
+  readonly bodies: Array<CelestialBody3D>;
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, appState: AppState, systemState: CelestialBodyState) {
     this.scene = new Scene();
     this.scene.background = new Color(0x000000);
 
@@ -51,6 +55,8 @@ export class SolarSystemRenderer {
 
     // Handle window resize
     window.addEventListener('resize', this.onWindowResize.bind(this));
+
+    this.bodies = createCelestialSystem(this.scene, systemState, appState.visibleTypes);
   }
 
   private onWindowResize() {
@@ -68,16 +74,13 @@ export class SolarSystemRenderer {
     this.renderer.render(this.scene, this.camera);
   }
 
-  dispose() {
-    const boundResizeHandler = this.onWindowResize.bind(this);
-    window.removeEventListener('resize', boundResizeHandler);
-
-    this.renderer.dispose();
-    this.controls.dispose();
-  }
-
-  updateFromAppState(appState: AppState) {
-    const { center } = appState;
+  update({ center, drawOrbit }: AppState, systemState: CelestialBodyState) {
+    // TODO: avoid doing this if `drawOrbit` didn't change?
+    this.scene.children
+      .filter(({ userData }) => userData.type === MeshType.ELLIPSE)
+      .forEach(ellipse => {
+        ellipse.visible = drawOrbit;
+      });
     if (center != null) {
       const mesh = this.scene.children.find(({ userData }) => userData?.name === center);
       const centerPoint: Vector3 | undefined = (mesh as Mesh | undefined)?.geometry?.boundingSphere?.center;
@@ -91,5 +94,20 @@ export class SolarSystemRenderer {
     // const zoom = appState.metersPerPx;
     // this.camera.position.setZ(zoom * 1000);
     // this.camera.updateProjectionMatrix();
+
+    this.bodies.forEach(body => {
+      const bodyState = findCelestialBody(systemState, body.name);
+      if (bodyState != null) {
+        body.update(bodyState);
+      }
+    });
+  }
+
+  dispose() {
+    const boundResizeHandler = this.onWindowResize.bind(this);
+    window.removeEventListener('resize', boundResizeHandler);
+
+    this.renderer.dispose();
+    this.controls.dispose();
   }
 }

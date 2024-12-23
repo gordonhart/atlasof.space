@@ -11,13 +11,7 @@ export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
   const systemStateRef = useRef(getInitialState(null, SOL));
-  const {
-    ref: containerRef,
-    renderer,
-    bodies,
-    initialize: initializeRender,
-    update: updateRender,
-  } = useSolarSystemRenderer(appState);
+  const { ref: containerRef, renderer, initialize: initializeRender, update: updateRender } = useSolarSystemRenderer();
 
   const updateState = useCallback(
     (newState: Partial<AppState>) => {
@@ -26,7 +20,7 @@ export function SolarSystem() {
     [setAppState]
   );
 
-  const cursorControls = useCursorControls3D(renderer, bodies, updateState);
+  const cursorControls = useCursorControls3D(renderer, updateState);
 
   const resetState = useCallback(() => {
     updateState(initialState);
@@ -38,30 +32,20 @@ export function SolarSystem() {
     appStateRef.current = appState;
   }, [JSON.stringify(appState)]);
 
-  // restart animation
-  useEffect(() => {
-    if (appState.play) {
-      const frameId = window.requestAnimationFrame(animationFrame);
-      return () => {
-        window.cancelAnimationFrame(frameId);
-      };
-    }
-  }, [appState.play]);
-
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     const { play, dt } = appStateRef.current;
-    setAppState(prev => ({ ...prev, time: prev.time + dt }));
-    systemStateRef.current = incrementState(systemStateRef.current, dt);
-    updateRender(systemStateRef.current);
     if (play) {
-      window.requestAnimationFrame(animationFrame);
+      setAppState(prev => ({ ...prev, time: prev.time + dt }));
+      systemStateRef.current = incrementState(systemStateRef.current, dt);
     }
+    updateRender(appStateRef.current, systemStateRef.current);
+    window.requestAnimationFrame(animationFrame);
   }
 
   useEffect(() => {
     const frameId = window.requestAnimationFrame(animationFrame);
-    initializeRender(systemStateRef.current);
+    initializeRender(appStateRef.current, systemStateRef.current);
     return () => {
       window.cancelAnimationFrame(frameId);
     };

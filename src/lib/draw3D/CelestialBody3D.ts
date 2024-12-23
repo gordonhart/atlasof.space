@@ -1,5 +1,5 @@
 import { CelestialBodyState, Point2 } from '../types.ts';
-import { MIN_SIZE, SCALE_FACTOR } from './constants.ts';
+import { MeshType, MIN_SIZE, SCALE_FACTOR } from './constants.ts';
 import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
   BufferAttribute,
@@ -40,7 +40,7 @@ export class CelestialBody3D {
     this.mesh = new Mesh(sphereGeometry, sphereMaterial);
     const position = mul3(1 / SCALE_FACTOR, bodyState.position);
     this.mesh.position.set(...position);
-    this.mesh.userData = { name: this.name };
+    this.mesh.userData = { name: this.name, type: MeshType.BODY };
     scene.add(this.mesh);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
@@ -65,8 +65,7 @@ export class CelestialBody3D {
     const focusDistance = Math.sqrt(a ** 2 - b ** 2);
     const omega = degreesToRadians(omegaDeg);
     const ellipseCurve = new EllipseCurve(
-      // TODO: always negative...? or does it vary? how to find correct sign?
-      -(Math.cos(omega) * focusDistance) / SCALE_FACTOR,
+      -(Math.cos(omega) * focusDistance) / SCALE_FACTOR, // not sure why the sign is negative, seems consistent
       -(Math.sin(omega) * focusDistance) / SCALE_FACTOR,
       a / SCALE_FACTOR,
       b / SCALE_FACTOR,
@@ -82,6 +81,7 @@ export class CelestialBody3D {
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
     this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
     this.ellipse.rotateX(degreesToRadians(iDeg));
+    this.ellipse.userData = { name: this.name, type: MeshType.ELLIPSE };
     scene.add(this.ellipse);
   }
 
@@ -99,17 +99,12 @@ export class CelestialBody3D {
   }
 
   getScreenPosition(camera: OrthographicCamera): Point2 {
-    // Get world position
     this.mesh.updateWorldMatrix(true, false);
-    this.screenPosition.setFromMatrixPosition(this.mesh.matrixWorld);
-
-    // Project to screen space
-    this.screenPosition.project(camera);
-
-    // Convert to pixels
+    this.screenPosition.setFromMatrixPosition(this.mesh.matrixWorld); // get world position
+    this.screenPosition.project(camera); // project into screen space
     const pixelX = ((this.screenPosition.x + 1) * window.innerWidth) / 2;
     const pixelY = ((-this.screenPosition.y + 1) * window.innerHeight) / 2;
-    return [pixelX, pixelY];
+    return [pixelX, pixelY]; // return pixel values
   }
 
   dispose() {
@@ -117,6 +112,8 @@ export class CelestialBody3D {
     (this.mesh.material as Material).dispose();
     this.dot.geometry.dispose();
     (this.dot.material as Material).dispose();
+    this.ellipse.geometry.dispose();
+    (this.ellipse.material as Material).dispose();
     this.scene.remove(this.mesh);
   }
 }
