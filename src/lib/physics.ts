@@ -43,8 +43,8 @@ export function surfaceGravity(mass: number, radius: number) {
   return (G * mass) / radius ** 2; // m/s^2
 }
 
-export function orbitalEllipseAtTheta(ellipse: KeplerianElements, theta: number): Point3 {
-  const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = ellipse;
+export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number): Point3 {
+  const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = elements;
 
   const i = degreesToRadians(inclination);
   const omega = degreesToRadians(argumentOfPeriapsis);
@@ -85,10 +85,33 @@ function gravitationalAcceleration(position: Point3, mu: number): Point3 {
 }
 
 // TODO: this is a finicky implementation as the position must lie exactly on the ellipse
-export function trueAnomaly(position: Point3, semiMajorAxis: number, eccentricity: number) {
+export function trueAnomalyFromPosition(position: Point3, semiMajorAxis: number, eccentricity: number) {
   const rMag = magnitude(position);
   const cosV = (semiMajorAxis * (1 - eccentricity ** 2)) / (rMag * eccentricity) - 1 / eccentricity;
   return Math.acos(cosV);
+}
+
+export function trueAnomalyFromMean(meanAnomaly: number, eccentricity: number, tolerance = 1e-8, maxIterations = 100) {
+  const meanAnomalyNormalized = meanAnomaly % (2 * Math.PI);
+
+  // Newton-Raphson iteration to solve Kepler's equation
+  let eccentricAnomaly = meanAnomalyNormalized;
+  for (let i = 0; i < maxIterations; i++) {
+    const delta =
+      (eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly) - meanAnomalyNormalized) /
+      (1 - eccentricity * Math.cos(eccentricAnomaly));
+    eccentricAnomaly = eccentricAnomaly - delta;
+    if (Math.abs(delta) < tolerance) {
+      break;
+    }
+  }
+
+  // Calculate true anomaly from eccentric anomaly
+  const numerator = Math.sqrt(1 - eccentricity ** 2) * Math.sin(eccentricAnomaly);
+  const trueAnomaly = Math.atan2(numerator, Math.cos(eccentricAnomaly) - eccentricity);
+
+  // Ensure true anomaly is in the correct quadrant
+  return trueAnomaly < 0 ? trueAnomaly + 2 * Math.PI : trueAnomaly;
 }
 
 function keplerianToCartesian(
@@ -98,14 +121,14 @@ function keplerianToCartesian(
     inclination,
     longitudeAscending,
     argumentOfPeriapsis,
-    trueAnomaly,
+    meanAnomaly,
   }: KeplerianElements,
   mu: number // Gravitational parameter (m^3/s^2)
 ): CartesianState {
   const i = degreesToRadians(inclination);
   const Omega = degreesToRadians(longitudeAscending);
   const omega = degreesToRadians(argumentOfPeriapsis);
-  const nu = degreesToRadians(trueAnomaly);
+  const nu = trueAnomalyFromMean(degreesToRadians(meanAnomaly), e);
 
   // Orbital plane position (r) and velocity (v)
   const p = semiLatusRectum(a, e);
@@ -149,7 +172,7 @@ function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState,
 export function getInitialState(parentState: CelestialBodyState | null, child: CelestialBody): CelestialBodyState {
   let childCartesian: CartesianState = { position: [0, 0, 0], velocity: [0, 0, 0] };
   if (parentState != null) {
-    const { position, velocity } = keplerianToCartesian(child, G * parentState.mass);
+    const { position, velocity } = keplerianToCartesian(child.elements, G * parentState.mass);
     childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
   }
   const childState: CelestialBodyState = { ...child, ...childCartesian, rotation: 0, satellites: [] }; // satellites to be replaced

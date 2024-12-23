@@ -22,18 +22,21 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
   }
   const { object, orbit, phys_par } = obj;
   const { elements } = orbit;
-  // TODO: units are often km, need to account for reported units
-  const radius = Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2;
+  // TODO: are units always km? should account for the reported unit type
+  const radius = (Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2) * 1e3;
   return {
     name: object.fullname,
     shortName: object.shortname,
     type: 'asteroid',
-    eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
-    semiMajorAxis: Number(elements.find(({ name }) => name === 'a')?.value) * AU,
-    inclination: Number(elements.find(({ name }) => name === 'i')?.value),
-    longitudeAscending: Number(elements.find(({ name }) => name === 'om')?.value),
-    argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
-    trueAnomaly: 0,
+    elements: {
+      epoch: 'J2000', // TODO: should be in the response
+      eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
+      semiMajorAxis: Number(elements.find(({ name }) => name === 'a')?.value) * AU,
+      inclination: Number(elements.find(({ name }) => name === 'i')?.value),
+      longitudeAscending: Number(elements.find(({ name }) => name === 'om')?.value),
+      argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
+      meanAnomaly: Number(elements.find(({ name }) => name === 'ma')?.value),
+    },
     mass: 2500 * (4 / 3) * Math.PI * radius ** 3, // best-effort guess using 2500kg/m3 density and a spherical shape
     radius,
     color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?

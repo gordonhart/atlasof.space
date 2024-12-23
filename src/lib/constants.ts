@@ -13,13 +13,16 @@ export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-typ
 export const CERES: CelestialBody = {
   name: '1 Ceres',
   shortName: 'Ceres',
-  type: 'asteroid',
-  eccentricity: 0.075823,
-  semiMajorAxis: 413690250e3,
-  inclination: 10.594,
-  longitudeAscending: 80.305,
-  argumentOfPeriapsis: 73.597,
-  trueAnomaly: 0,
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459600.5', // TODO: find J2000
+    eccentricity: 0.075823,
+    semiMajorAxis: 413690250e3,
+    inclination: 10.594,
+    longitudeAscending: 80.305,
+    argumentOfPeriapsis: 73.597,
+    meanAnomaly: 291.4,
+  },
   mass: 9.3839e20,
   radius: 966.2e3 / 2,
   color: DEFAULT_ASTEROID_COLOR,
@@ -29,12 +32,15 @@ export const VESTA: CelestialBody = {
   name: '4 Vesta',
   shortName: 'Vesta',
   type: 'asteroid',
-  eccentricity: 0.0894,
-  semiMajorAxis: 2.36 * AU,
-  inclination: 7.1422,
-  longitudeAscending: 103.71,
-  argumentOfPeriapsis: 151.66,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'JD2453300.5', // TODO: find J2000
+    eccentricity: 0.0894,
+    semiMajorAxis: 2.36 * AU,
+    inclination: 7.1422,
+    longitudeAscending: 103.71,
+    argumentOfPeriapsis: 151.66,
+    meanAnomaly: 169.4,
+  },
   mass: 2.590271e20,
   radius: 278.6e3,
   color: DEFAULT_ASTEROID_COLOR,
@@ -45,12 +51,15 @@ export const PALLAS: CelestialBody = {
   name: '2 Pallas',
   shortName: 'Pallas',
   type: 'asteroid',
-  eccentricity: 0.2302,
-  semiMajorAxis: 4.14e11,
-  inclination: 34.93,
-  longitudeAscending: 172.9,
-  argumentOfPeriapsis: 310.9,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'JD2453300.5', // TODO: find J2000
+    eccentricity: 0.2302,
+    semiMajorAxis: 4.14e11,
+    inclination: 34.93,
+    longitudeAscending: 172.9,
+    argumentOfPeriapsis: 310.9,
+    meanAnomaly: 40.6,
+  },
   mass: 2.04e20,
   radius: 256e3,
   color: DEFAULT_ASTEROID_COLOR,
@@ -60,12 +69,15 @@ export const HYGIEA: CelestialBody = {
   name: '10 Hygiea',
   shortName: 'Hygiea',
   type: 'asteroid',
-  eccentricity: 0.1125,
-  semiMajorAxis: 3.1415 * AU,
-  inclination: 3.8316,
-  longitudeAscending: 283.2,
-  argumentOfPeriapsis: 312.32,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.1125,
+    semiMajorAxis: 3.1415 * AU,
+    inclination: 3.8316,
+    longitudeAscending: 283.2,
+    argumentOfPeriapsis: 312.32,
+    meanAnomaly: 0,
+  },
   mass: 8.74e19,
   radius: 215e3,
   color: DEFAULT_ASTEROID_COLOR,
@@ -77,12 +89,15 @@ export const JUNO: CelestialBody = {
   shortName: 'Juno',
   mass: 2.67e19, // kg
   radius: 127e3, // m
-  eccentricity: 0.2562,
-  semiMajorAxis: 3.35 * AU, // meters
-  inclination: 12.991, // degrees
-  longitudeAscending: 169.84, // degrees
-  argumentOfPeriapsis: 247.74, // degrees
-  trueAnomaly: 0, // degrees (value at epoch)
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.2562,
+    semiMajorAxis: 3.35 * AU, // meters
+    inclination: 12.991, // degrees
+    longitudeAscending: 169.84, // degrees
+    argumentOfPeriapsis: 247.74, // degrees
+    meanAnomaly: 0, // degrees (value at epoch)
+  },
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
   satellites: [],
@@ -92,12 +107,15 @@ export const RYUGU: CelestialBody = {
   name: '162173 Ryugu',
   shortName: 'Ryugu',
   type: 'asteroid',
-  eccentricity: 0.1902,
-  semiMajorAxis: 1.1896 * AU,
-  inclination: 5.8837,
-  longitudeAscending: 251.62,
-  argumentOfPeriapsis: 211.43,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.1902,
+    semiMajorAxis: 1.1896 * AU,
+    inclination: 5.8837,
+    longitudeAscending: 251.62,
+    argumentOfPeriapsis: 211.43,
+    meanAnomaly: 0,
+  },
   mass: 4.5e11,
   radius: 448,
   color: DEFAULT_ASTEROID_COLOR,
@@ -108,12 +126,15 @@ export const LUTETIA: CelestialBody = {
   shortName: 'Lutetia',
   mass: 1.7e18, // kg
   radius: 49e3, // m
-  eccentricity: 0.16339,
-  semiMajorAxis: 2.435 * 1.496e11, // AU to meters
-  inclination: 3.064, // degrees
-  longitudeAscending: 80.867, // degrees
-  argumentOfPeriapsis: 249.997, // degrees
-  trueAnomaly: 87.976, // degrees
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.16339,
+    semiMajorAxis: 2.435 * 1.496e11, // AU to meters
+    inclination: 3.064, // degrees
+    longitudeAscending: 80.867, // degrees
+    argumentOfPeriapsis: 249.997, // degrees
+    meanAnomaly: 87.976, // degrees
+  },
   siderealRotationPeriod: 8.1655 * 3600, // hours to seconds
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
@@ -123,17 +144,20 @@ export const LUTETIA: CelestialBody = {
 export const CG67P: CelestialBody = {
   name: '67P/Churyumov–Gerasimenko',
   shortName: '67P/C–G',
+  type: 'comet',
   mass: 1e13, // kg
   radius: 2000, // m (average radius based on dimensions)
-  eccentricity: 0.64,
-  semiMajorAxis: 3.463 * 1.496e11, // AU to meters
-  inclination: 7.04, // degrees
-  longitudeAscending: 50.19, // degrees
-  argumentOfPeriapsis: 12.78, // degrees
-  trueAnomaly: 0, // degrees (value at perihelion)
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.64,
+    semiMajorAxis: 3.463 * 1.496e11, // AU to meters
+    inclination: 7.04, // degrees
+    longitudeAscending: 50.19, // degrees
+    argumentOfPeriapsis: 12.78, // degrees
+    meanAnomaly: 0, // degrees (value at perihelion)
+  },
   siderealRotationPeriod: 12.4 * 3600, // hours to seconds
   color: DEFAULT_ASTEROID_COLOR,
-  type: 'asteroid', // TODO: technically a comet
   satellites: [],
 };
 
@@ -142,12 +166,15 @@ export const EROS: CelestialBody = {
   shortName: 'Eros',
   mass: 6.687e15, // kg
   radius: 8420, // m, average (highly irregular)
-  eccentricity: 0.2226,
-  semiMajorAxis: 1.4579 * AU, // meters
-  inclination: 10.828, // degrees
-  longitudeAscending: 304.32, // degrees
-  argumentOfPeriapsis: 178.82, // degrees
-  trueAnomaly: 0, // degrees (value at epoch)
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.2226,
+    semiMajorAxis: 1.4579 * AU, // meters
+    inclination: 10.828, // degrees
+    longitudeAscending: 304.32, // degrees
+    argumentOfPeriapsis: 178.82, // degrees
+    meanAnomaly: 0, // degrees (value at epoch)
+  },
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
   satellites: [],
@@ -158,12 +185,15 @@ export const MATHILDE: CelestialBody = {
   shortName: 'Mathilde',
   mass: 1.033e17, // kg
   radius: 26.4e3, // m
-  eccentricity: 0.26492652,
-  semiMajorAxis: 2.648402147 * AU, // meters
-  inclination: 6.7427122, // degrees
-  longitudeAscending: 179.58936, // degrees
-  argumentOfPeriapsis: 157.39642, // degrees
-  trueAnomaly: 0, // degrees (value at epoch)
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.26492652,
+    semiMajorAxis: 2.648402147 * AU, // meters
+    inclination: 6.7427122, // degrees
+    longitudeAscending: 179.58936, // degrees
+    argumentOfPeriapsis: 157.39642, // degrees
+    meanAnomaly: 0, // degrees (value at epoch)
+  },
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
   satellites: [],
@@ -174,12 +204,15 @@ export const NEREUS: CelestialBody = {
   shortName: 'Nereus',
   mass: 1, // TODO: not known
   radius: 165, // m
-  eccentricity: 0.36004,
-  semiMajorAxis: 1.4889 * AU, // meters
-  inclination: 1.4316, // degrees
-  longitudeAscending: 314.41, // degrees
-  argumentOfPeriapsis: 158.12, // degrees
-  trueAnomaly: 0, // degrees (value at epoch)
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.36004,
+    semiMajorAxis: 1.4889 * AU, // meters
+    inclination: 1.4316, // degrees
+    longitudeAscending: 314.41, // degrees
+    argumentOfPeriapsis: 158.12, // degrees
+    meanAnomaly: 0, // degrees (value at epoch)
+  },
   siderealRotationPeriod: 15.16 * 60 * 60,
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
@@ -194,7 +227,7 @@ export const ASTEROIDS: Array<CelestialBody> = [
   JUNO,
   RYUGU,
   LUTETIA,
-  CG67P,
+  CG67P, // technically a comet
   EROS,
   MATHILDE,
   NEREUS,
@@ -203,13 +236,16 @@ export const ASTEROIDS: Array<CelestialBody> = [
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
   shortName: 'Pluto',
-  type: 'trans-neptunian-object',
-  eccentricity: 0.2488,
-  semiMajorAxis: 5906440628e3,
-  inclination: 17.16,
-  longitudeAscending: 110.299,
-  argumentOfPeriapsis: 113.834,
-  trueAnomaly: 0,
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.2488,
+    semiMajorAxis: 5906440628e3,
+    inclination: 17.16,
+    longitudeAscending: 110.299,
+    argumentOfPeriapsis: 113.834,
+    meanAnomaly: 14.53,
+  },
   mass: 1.3025e22,
   radius: 1188.3e3,
   siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
@@ -218,12 +254,15 @@ export const PLUTO: CelestialBody = {
     {
       name: 'Charon',
       type: 'moon',
-      eccentricity: 0.00005,
-      semiMajorAxis: 19596e3,
-      inclination: 0.0,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
+      elements: {
+        epoch: 'JD2452600.5', // TODO: find J2000
+        eccentricity: 0.000161,
+        semiMajorAxis: 19595.764e3,
+        inclination: 0.08,
+        longitudeAscending: 223.046,
+        argumentOfPeriapsis: 0,
+        meanAnomaly: 0, // TODO: find
+      },
       mass: 1.586e21,
       radius: 606e3,
       siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
@@ -233,16 +272,76 @@ export const PLUTO: CelestialBody = {
   ],
 };
 
+export const QUAOAR: CelestialBody = {
+  name: '50000 Quaoar',
+  shortName: 'Quaoar',
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.04106,
+    semiMajorAxis: 43.694 * AU,
+    inclination: 7.9895,
+    longitudeAscending: 188.927,
+    argumentOfPeriapsis: 147.48,
+    meanAnomaly: 301.104,
+  },
+  mass: 1.2e21,
+  radius: 545e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const SEDNA: CelestialBody = {
+  name: '90377 Sedna',
+  shortName: 'Sedna',
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2458900.5', // TODO: find J2000
+    eccentricity: 0.8496,
+    semiMajorAxis: 506 * AU,
+    inclination: 11.9307,
+    longitudeAscending: 144.248,
+    argumentOfPeriapsis: 311.352,
+    meanAnomaly: 358.117,
+  },
+  mass: 2.5e21, // very rough estimate
+  radius: 906e3 / 2,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const ORCUS: CelestialBody = {
+  name: '90482 Orcus',
+  shortName: 'Orcus',
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.22701,
+    semiMajorAxis: 39.174 * AU,
+    inclination: 20.592,
+    longitudeAscending: 268.799,
+    argumentOfPeriapsis: 72.31,
+    meanAnomaly: 181.735,
+  },
+  mass: 6.348e20, // very rough estimate
+  radius: 910e3 / 2,
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
 export const ERIS: CelestialBody = {
   name: '136199 Eris',
   shortName: 'Eris',
-  type: 'trans-neptunian-object',
-  eccentricity: 0.43607,
-  semiMajorAxis: 67.864 * AU,
-  inclination: 44.04,
-  longitudeAscending: 35.951,
-  argumentOfPeriapsis: 151.639,
-  trueAnomaly: 0,
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.43607,
+    semiMajorAxis: 67.864 * AU,
+    inclination: 44.04,
+    longitudeAscending: 35.951,
+    argumentOfPeriapsis: 151.639,
+    meanAnomaly: 205.989,
+  },
   mass: 1.6466e22,
   radius: 1163e3,
   color: DEFAULT_ASTEROID_COLOR,
@@ -252,13 +351,16 @@ export const ERIS: CelestialBody = {
 export const HAUMEA: CelestialBody = {
   name: '136108 Haumea',
   shortName: 'Haumea',
-  type: 'trans-neptunian-object',
-  eccentricity: 0.19642,
-  semiMajorAxis: 43.116 * AU,
-  inclination: 28.2137,
-  longitudeAscending: 122.167,
-  argumentOfPeriapsis: 239.041,
-  trueAnomaly: 0,
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2459200.5', // TODO: find J2000
+    eccentricity: 0.19642,
+    semiMajorAxis: 43.116 * AU,
+    inclination: 28.2137,
+    longitudeAscending: 122.167,
+    argumentOfPeriapsis: 239.041,
+    meanAnomaly: 218.205,
+  },
   mass: 4.006e21,
   radius: 780e3,
   color: DEFAULT_ASTEROID_COLOR,
@@ -268,13 +370,16 @@ export const HAUMEA: CelestialBody = {
 export const MAKEMAKE: CelestialBody = {
   name: '136472 Makemake',
   shortName: 'Makemake',
-  type: 'trans-neptunian-object',
-  eccentricity: 0.16126,
-  semiMajorAxis: 45.43 * AU,
-  inclination: 28.9835,
-  longitudeAscending: 79.62,
-  argumentOfPeriapsis: 294.834,
-  trueAnomaly: 0,
+  type: 'dwarf-planet',
+  elements: {
+    epoch: 'JD2458900.5', // TODO: find J2000
+    eccentricity: 0.16126,
+    semiMajorAxis: 45.43 * AU,
+    inclination: 28.9835,
+    longitudeAscending: 79.62,
+    argumentOfPeriapsis: 294.834,
+    meanAnomaly: 165.514,
+  },
   mass: 3.1e21,
   radius: 715e3,
   color: DEFAULT_ASTEROID_COLOR,
@@ -284,30 +389,104 @@ export const MAKEMAKE: CelestialBody = {
 export const ARROKOTH: CelestialBody = {
   name: '486958 Arrokoth', // also known as Ultima Thule
   shortName: 'Arrokoth',
+  type: 'trans-neptunian-object',
   mass: 7.485e14, // kg
   radius: 18e3, // m (average radius based on length of 36 km)
-  eccentricity: 0.04172,
-  semiMajorAxis: 44.581 * AU,
-  inclination: 2.4512, // degrees
-  longitudeAscending: 158.998, // degrees
-  argumentOfPeriapsis: 174.418, // degrees
-  trueAnomaly: 0, // degrees (value at perihelion)
+  elements: {
+    epoch: 'JD2458600.5', // TODO: find J2000
+    eccentricity: 0.04172,
+    semiMajorAxis: 44.581 * AU,
+    inclination: 2.4512, // degrees
+    longitudeAscending: 158.998, // degrees
+    argumentOfPeriapsis: 174.418, // degrees
+    meanAnomaly: 316.551, // degrees
+  },
   color: DEFAULT_ASTEROID_COLOR,
-  type: 'trans-neptunian-object',
   satellites: [],
 };
 
-export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [PLUTO, ERIS, HAUMEA, MAKEMAKE, ARROKOTH];
+export const GONGGONG: CelestialBody = {
+  name: '225088 Gonggong',
+  shortName: 'Gonggong',
+  type: 'dwarf-planet',
+  mass: 1.75e21, // kg
+  radius: 615e3, // m
+  elements: {
+    epoch: 'JD2459200.5', // TODO: find J2000
+    eccentricity: 0.49943,
+    semiMajorAxis: 67.485 * AU,
+    inclination: 30.6273, // degrees
+    longitudeAscending: 336.8573, // degrees
+    argumentOfPeriapsis: 207.6675, // degrees
+    meanAnomaly: 106.496, // degrees
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const VP113: CelestialBody = {
+  name: '2012 VP133',
+  type: 'dwarf-planet',
+  mass: 1e21, // very very rough guess -- not known
+  radius: 574e3 / 2, // m
+  elements: {
+    epoch: 'JD2459800.5', // TODO: find J2000
+    eccentricity: 0.7036,
+    semiMajorAxis: 271.5 * AU,
+    inclination: 24.0563, // degrees
+    longitudeAscending: 90.787, // degrees
+    argumentOfPeriapsis: 293.8, // degrees
+    meanAnomaly: 3.5, // degrees
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const LELEAKUHONUA: CelestialBody = {
+  name: '541132 Leleākūhonua',
+  shortName: 'Leleākūhonua',
+  type: 'trans-neptunian-object',
+  mass: 1e20, // unknown, extremely rough guess
+  radius: 110e3 / 2,
+  elements: {
+    epoch: 'JD2459000.5', // TODO: find J2000
+    eccentricity: 0.93997,
+    semiMajorAxis: 1085 * AU,
+    inclination: 11.654, // degrees
+    longitudeAscending: 300.78, // degrees
+    argumentOfPeriapsis: 117.778, // degrees
+    meanAnomaly: 359.418, // degrees
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+  satellites: [],
+};
+
+export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
+  PLUTO,
+  QUAOAR,
+  SEDNA,
+  ORCUS,
+  ERIS,
+  HAUMEA,
+  MAKEMAKE,
+  ARROKOTH,
+  GONGGONG,
+  VP113,
+  LELEAKUHONUA,
+];
 
 export const MERCURY: CelestialBody = {
   name: 'Mercury',
   type: 'planet',
-  eccentricity: 0.2056,
-  semiMajorAxis: 57909050e3, // meters
-  inclination: 7.005, // degrees
-  longitudeAscending: 48.331, // degrees
-  argumentOfPeriapsis: 29.124, // degrees
-  trueAnomaly: 0, // degrees (choose initial position as desired)
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.20563,
+    semiMajorAxis: 57909050e3, // meters
+    inclination: 7.005, // degrees
+    longitudeAscending: 48.331, // degrees
+    argumentOfPeriapsis: 29.124, // degrees
+    meanAnomaly: 174.796, // degrees
+  },
   mass: 3.3011e23,
   radius: 2439.7e3,
   siderealRotationPeriod: 58.6467 * 24 * 60 * 60, // 58 days
@@ -318,12 +497,15 @@ export const MERCURY: CelestialBody = {
 export const VENUS: CelestialBody = {
   name: 'Venus',
   type: 'planet',
-  eccentricity: 0.006772,
-  semiMajorAxis: 108208000e3,
-  inclination: 3.39458,
-  longitudeAscending: 76.6799,
-  argumentOfPeriapsis: 54.884,
-  trueAnomaly: 0, // starting at periapsis // TODO: set real values
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.006772,
+    semiMajorAxis: 108208000e3,
+    inclination: 3.39458,
+    longitudeAscending: 76.6799,
+    argumentOfPeriapsis: 54.884,
+    meanAnomaly: 50.115,
+  },
   mass: 4.8675e24,
   radius: 6051.8e3,
   siderealRotationPeriod: -243.02 * 24 * 60 * 60, // 243 days; negative for retrograde rotation
@@ -353,12 +535,15 @@ export const VENUS: CelestialBody = {
 export const LUNA: CelestialBody = {
   name: 'Luna',
   type: 'moon',
-  eccentricity: 0.0549,
-  semiMajorAxis: 384400e3,
-  inclination: 5.145,
-  longitudeAscending: 125.08,
-  argumentOfPeriapsis: 318.15,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.0549,
+    semiMajorAxis: 384400e3,
+    inclination: 5.145,
+    longitudeAscending: 125.08,
+    argumentOfPeriapsis: 318.15,
+    meanAnomaly: 0, // TODO: find
+  },
   mass: 7.342e22,
   radius: 1737.4e3,
   siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
@@ -369,12 +554,15 @@ export const LUNA: CelestialBody = {
 export const EARTH: CelestialBody = {
   name: 'Earth',
   type: 'planet',
-  eccentricity: 0.0167086,
-  semiMajorAxis: 149597870.7e3, // 1 AU
-  inclination: 0.00005,
-  longitudeAscending: -11.26064,
-  argumentOfPeriapsis: 114.20783,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.0167086,
+    semiMajorAxis: 149597870.7e3, // 1 AU
+    inclination: 0.00005,
+    longitudeAscending: -11.26064,
+    argumentOfPeriapsis: 114.20783,
+    meanAnomaly: 358.617,
+  },
   mass: 5.972168e24,
   radius: 6371e3,
   siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
@@ -401,12 +589,15 @@ export const EARTH: CelestialBody = {
 export const PHOBOS: CelestialBody = {
   name: 'Phobos',
   type: 'moon',
-  eccentricity: 0.0151,
-  semiMajorAxis: 9376e3,
-  inclination: 1.093,
-  longitudeAscending: 0,
-  argumentOfPeriapsis: 0,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0151,
+    semiMajorAxis: 9376e3,
+    inclination: 1.093,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
   mass: 1.0659e16,
   radius: 11.2667e3,
   color: DEFAULT_MOON_COLOR,
@@ -416,12 +607,15 @@ export const PHOBOS: CelestialBody = {
 export const DEIMOS: CelestialBody = {
   name: 'Deimos',
   type: 'moon',
-  eccentricity: 0.00033,
-  semiMajorAxis: 23458e3,
-  inclination: 1.788,
-  longitudeAscending: 0,
-  argumentOfPeriapsis: 0,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.00033,
+    semiMajorAxis: 23458e3,
+    inclination: 1.788,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
   mass: 1.4762e15,
   radius: 6.2e3,
   color: DEFAULT_MOON_COLOR,
@@ -431,12 +625,15 @@ export const DEIMOS: CelestialBody = {
 export const MARS: CelestialBody = {
   name: 'Mars',
   type: 'planet',
-  eccentricity: 0.0935,
-  semiMajorAxis: 227939200e3,
-  inclination: 1.85,
-  longitudeAscending: 49.558,
-  argumentOfPeriapsis: 286.502,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.0935,
+    semiMajorAxis: 227939366e3,
+    inclination: 1.85,
+    longitudeAscending: 49.57854,
+    argumentOfPeriapsis: 286.502,
+    meanAnomaly: 19.412,
+  },
   mass: 6.4171e23,
   radius: 3389.5e3,
   siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
@@ -447,12 +644,15 @@ export const MARS: CelestialBody = {
 export const IO: CelestialBody = {
   name: 'Io',
   type: 'moon',
-  eccentricity: 0.0041,
-  semiMajorAxis: 421800e3,
-  inclination: 0.036,
-  longitudeAscending: 0, // approximate
-  argumentOfPeriapsis: 0, // approximated for circular orbits
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0041,
+    semiMajorAxis: 421800e3,
+    inclination: 0.036,
+    longitudeAscending: 0, // approximate
+    argumentOfPeriapsis: 0, // approximated for circular orbits
+    meanAnomaly: 0,
+  },
   mass: 8.931938e22,
   radius: 1821.6e3,
   color: DEFAULT_MOON_COLOR,
@@ -462,12 +662,15 @@ export const IO: CelestialBody = {
 export const EUROPA: CelestialBody = {
   name: 'Europa',
   type: 'moon',
-  eccentricity: 0.0094,
-  semiMajorAxis: 671100e3,
-  inclination: 0.466,
-  longitudeAscending: 0, // approximate
-  argumentOfPeriapsis: 0, // approximated for circular orbits
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0094,
+    semiMajorAxis: 671100e3,
+    inclination: 0.466,
+    longitudeAscending: 0, // approximate
+    argumentOfPeriapsis: 0, // approximated for circular orbits
+    meanAnomaly: 0,
+  },
   mass: 4.799844e22,
   radius: 1560.8e3,
   color: DEFAULT_MOON_COLOR,
@@ -477,12 +680,15 @@ export const EUROPA: CelestialBody = {
 export const GANYMEDE: CelestialBody = {
   name: 'Ganymede',
   type: 'moon',
-  eccentricity: 0.0013,
-  semiMajorAxis: 1070400e3,
-  inclination: 0.177,
-  longitudeAscending: 0,
-  argumentOfPeriapsis: 0,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0013,
+    semiMajorAxis: 1070400e3,
+    inclination: 0.177,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
   mass: 1.4819e23,
   radius: 2634.1e3,
   color: DEFAULT_MOON_COLOR,
@@ -492,12 +698,15 @@ export const GANYMEDE: CelestialBody = {
 export const CALLISTO: CelestialBody = {
   name: 'Callisto',
   type: 'moon',
-  eccentricity: 0.0074,
-  semiMajorAxis: 1882700e3,
-  inclination: 0.192,
-  longitudeAscending: 0,
-  argumentOfPeriapsis: 0,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0074,
+    semiMajorAxis: 1882700e3,
+    inclination: 0.192,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
   mass: 1.075938e23,
   radius: 2410.3e3,
   color: DEFAULT_MOON_COLOR,
@@ -507,12 +716,15 @@ export const CALLISTO: CelestialBody = {
 export const JUPITER: CelestialBody = {
   name: 'Jupiter',
   type: 'planet',
-  eccentricity: 0.0489,
-  semiMajorAxis: 778340821e3,
-  inclination: 1.305,
-  longitudeAscending: 100.556,
-  argumentOfPeriapsis: 14.753,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.0489,
+    semiMajorAxis: 778340821e3,
+    inclination: 1.303,
+    longitudeAscending: 100.464,
+    argumentOfPeriapsis: 273.867,
+    meanAnomaly: 20.02,
+  },
   mass: 1.8982e27,
   radius: 69911e3,
   siderealRotationPeriod: 9 * 60 * 60 + 55 * 60 + 30, // 9 hr 55 min 30 sec
@@ -523,14 +735,125 @@ export const JUPITER: CelestialBody = {
 export const MIMAS: CelestialBody = {
   name: 'Mimas',
   type: 'moon',
-  eccentricity: 0.0196,
-  semiMajorAxis: 185540e3,
-  inclination: 1.574,
-  longitudeAscending: 0,
-  argumentOfPeriapsis: 0,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0196,
+    semiMajorAxis: 185540e3,
+    inclination: 1.574,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
   mass: 3.7493e19,
   radius: 198.2e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const ENCELADUS: CelestialBody = {
+  name: 'Enceladus',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0047,
+    semiMajorAxis: 238040e3,
+    inclination: 0.009,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.08022e20,
+  radius: 252.1e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const TETHYS: CelestialBody = {
+  name: 'Tethys',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0001,
+    semiMajorAxis: 294670e3,
+    inclination: 1.091,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 6.17449e20,
+  radius: 531.1e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const DIONE: CelestialBody = {
+  name: 'Dione',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0022,
+    semiMajorAxis: 377420e3,
+    inclination: 0.028,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.095452e21,
+  radius: 561.4e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const RHEA: CelestialBody = {
+  name: 'Rhea',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.001,
+    semiMajorAxis: 527070e3,
+    inclination: 0.345,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 2.306518e21,
+  radius: 763.8e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const TITAN: CelestialBody = {
+  name: 'Titan',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0288,
+    semiMajorAxis: 1221870e3,
+    inclination: 0.348,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.3452e23,
+  radius: 2574.7e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const IAPETUS: CelestialBody = {
+  name: 'Iapetus',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0286,
+    semiMajorAxis: 3560820e3,
+    inclination: 15.47,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.805635e21,
+  radius: 734.5e3,
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -538,114 +861,34 @@ export const MIMAS: CelestialBody = {
 export const SATURN: CelestialBody = {
   name: 'Saturn',
   type: 'planet',
-  eccentricity: 0.0565,
-  semiMajorAxis: 1433449370e3,
-  inclination: 2.485,
-  longitudeAscending: 113.715,
-  argumentOfPeriapsis: 92.431,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.0565,
+    semiMajorAxis: 1433.53e9,
+    inclination: 2.485,
+    longitudeAscending: 113.665,
+    argumentOfPeriapsis: 339.392,
+    meanAnomaly: 317.02,
+  },
   mass: 5.6834e26,
   radius: 58232e3,
   siderealRotationPeriod: 10 * 60 * 60 + 32 * 60 + 35, // 10 hr 32 min 35 sec
   color: '#d7be87',
-  satellites: [
-    MIMAS,
-    {
-      name: 'Enceladus',
-      type: 'moon',
-      eccentricity: 0.0047,
-      semiMajorAxis: 238040e3,
-      inclination: 0.009,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.08022e20,
-      radius: 252.1e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Tethys',
-      type: 'moon',
-      eccentricity: 0.0001,
-      semiMajorAxis: 294670e3,
-      inclination: 1.091,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 6.17449e20,
-      radius: 531.1e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Dione',
-      type: 'moon',
-      eccentricity: 0.0022,
-      semiMajorAxis: 377420e3,
-      inclination: 0.028,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.095452e21,
-      radius: 561.4e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Rhea',
-      type: 'moon',
-      eccentricity: 0.001,
-      semiMajorAxis: 527070e3,
-      inclination: 0.345,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 2.306518e21,
-      radius: 763.8e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Titan',
-      type: 'moon',
-      eccentricity: 0.0288,
-      semiMajorAxis: 1221870e3,
-      inclination: 0.348,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.3452e23,
-      radius: 2574.7e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    {
-      name: 'Iapetus',
-      type: 'moon',
-      eccentricity: 0.0286,
-      semiMajorAxis: 3560820e3,
-      inclination: 15.47,
-      longitudeAscending: 0,
-      argumentOfPeriapsis: 0,
-      trueAnomaly: 0,
-      mass: 1.805635e21,
-      radius: 734.5e3,
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-  ],
+  satellites: [MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS],
 };
 
 export const URANUS: CelestialBody = {
   name: 'Uranus',
   type: 'planet',
-  eccentricity: 0.0457,
-  semiMajorAxis: 2876679082e3,
-  inclination: 0.772,
-  longitudeAscending: 74.006,
-  argumentOfPeriapsis: 170.964,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0.04717,
+    semiMajorAxis: 19.19126 * AU,
+    inclination: 0.773,
+    longitudeAscending: 74.006,
+    argumentOfPeriapsis: 96.998857,
+    meanAnomaly: 142.2386,
+  },
   mass: 8.681e25,
   radius: 25362e3,
   siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
@@ -656,48 +899,57 @@ export const URANUS: CelestialBody = {
   ],
 };
 
+export const TRITON: CelestialBody = {
+  name: 'Triton',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.000016,
+    semiMajorAxis: 354759e3,
+    inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
+    longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
+    argumentOfPeriapsis: 260.64357,
+    meanAnomaly: 0,
+  },
+  mass: 2.1389e22,
+  radius: 1353.4e3,
+  siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const NEPTUNE: CelestialBody = {
   name: 'Neptune',
   type: 'planet',
-  eccentricity: 0.0086,
-  semiMajorAxis: 4503443661e3,
-  inclination: 1.77,
-  longitudeAscending: 131.784,
-  argumentOfPeriapsis: 44.971,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.008678,
+    semiMajorAxis: 4503443661e3,
+    inclination: 1.77,
+    longitudeAscending: 131.783,
+    argumentOfPeriapsis: 273.187,
+    meanAnomaly: 259.883,
+  },
   mass: 1.02409e26,
   radius: 24622e3,
   siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
   color: '#5a7cf6',
-  satellites: [
-    {
-      name: 'Triton',
-      type: 'moon',
-      eccentricity: 0.000016,
-      semiMajorAxis: 354759e3,
-      inclination: 129.608, // to Neptune's orbit -- is this the right inclination to use?
-      longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
-      argumentOfPeriapsis: 260.64357,
-      trueAnomaly: 0,
-      mass: 2.1389e22,
-      radius: 1353.4e3,
-      siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-    // TODO: there are many more
-  ],
+  // TODO: there are many more
+  satellites: [TRITON],
 };
 
 const SOL_FULL: CelestialBody = {
   name: 'Sol',
   type: 'sun',
-  eccentricity: 0,
-  semiMajorAxis: 0,
-  inclination: 0,
-  longitudeAscending: 0,
-  argumentOfPeriapsis: 0,
-  trueAnomaly: 0,
+  elements: {
+    epoch: 'J2000',
+    eccentricity: 0,
+    semiMajorAxis: 0,
+    inclination: 0,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
   mass: 1.9885e30,
   radius: 6.957e8,
   siderealRotationPeriod: 609.12 * 60 * 60, // 609 hours at 16º latitude; true period varies by latitude
@@ -731,7 +983,7 @@ function getCelestialBodyOrbitalPeriodsAboutParent(
 ): Record<string, number> {
   return child.satellites.reduce<Record<string, number>>(
     (acc, grandchild) => ({ ...acc, ...getCelestialBodyOrbitalPeriodsAboutParent(child, grandchild) }),
-    { [child.name]: parent != null ? orbitalPeriod(child.semiMajorAxis, parent.mass) : 1 }
+    { [child.name]: parent != null ? orbitalPeriod(child.elements.semiMajorAxis, parent.mass) : 1 }
   );
 }
 export const ORBITAL_PERIODS: Record<string, number> = getCelestialBodyOrbitalPeriodsAboutParent(null, SOL);

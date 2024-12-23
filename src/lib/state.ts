@@ -1,5 +1,5 @@
 import { SATURN } from './constants.ts';
-import { CelestialBodyType, Point2 } from './types.ts';
+import { CelestialBodyType, CelestialBodyTypes, Point2 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -18,17 +18,17 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: 60 * 60,
+  dt: 60 * 15,
   play: true,
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  metersPerPx: (2 * SATURN.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
+  metersPerPx: (2 * SATURN.elements.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
   center: 'Sol',
   hover: null,
   offset: [0, 0],
   planetScaleFactor: 1,
-  visibleTypes: new Set(['sun', 'planet', 'moon', 'asteroid', 'belt', 'trans-neptunian-object']),
+  visibleTypes: new Set(CelestialBodyTypes),
 };
 
 export function clampState({ dt, metersPerPx, planetScaleFactor, ...rest }: AppState): AppState {

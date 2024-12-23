@@ -11,39 +11,40 @@ type Props = {
   body: CelestialBodyState;
 };
 export function FactCard({ body }: Props) {
-  const { facts } = useFactsStream(`${body.name}+${body.type}`);
+  const { name, type, mass, radius, elements, velocity, color } = body;
+  const { facts } = useFactsStream(`${name}+${type}`);
 
   // TODO: period for non-sun-orbiting bodies? requires knowing the parent's mass
-  const period = orbitalPeriod(body.semiMajorAxis, SOL.mass);
+  const period = orbitalPeriod(elements.semiMajorAxis, SOL.mass);
   const [periodTime, periodUnits] = humanTimeUnits(period);
-  const [axisValue, axisUnits] = humanDistanceUnits(body.semiMajorAxis);
+  const [axisValue, axisUnits] = humanDistanceUnits(elements.semiMajorAxis);
   const bullets: Array<{ label: string; value: string }> = [
-    { label: 'mass', value: `${body.mass.toExponential(4)} kg` },
-    { label: 'radius', value: `${(body.radius / 1e3).toLocaleString()} km` },
+    { label: 'mass', value: `${mass.toExponential(4)} kg` },
+    { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
     { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
-    { label: 'eccentricity', value: body.eccentricity.toLocaleString() },
-    { label: 'inclination', value: `${body.inclination.toLocaleString()}º` },
-    { label: 'longitude of the ascending node', value: `${body.longitudeAscending.toLocaleString()}º` },
-    { label: 'argument of periapsis', value: `${body.argumentOfPeriapsis.toLocaleString()}º` },
+    { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
+    { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
+    { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
+    { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
     { label: 'orbital period', value: pluralize(periodTime, periodUnits) },
     // TODO: this doesn't update live due to the passed-in body being a ref -- should fix
-    { label: 'velocity', value: `${(magnitude(body.velocity) / 1e3).toLocaleString()} km/s` },
-    { label: 'surface gravity', value: `${(surfaceGravity(body.mass, body.radius) / g).toLocaleString()} g` },
+    { label: 'velocity', value: `${(magnitude(velocity) / 1e3).toLocaleString()} km/s` },
+    { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
   ];
   const factBullets = factsAsBullets(facts);
-  const galleryUrls = GalleryImages[body.name] ?? [];
+  const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Paper fz="xs" p="md" radius="md" withBorder bg="black" style={{ borderColor: body.color }}>
+    <Paper fz="xs" p="md" radius="md" withBorder bg="black" style={{ borderColor: color }}>
       <Stack gap={2}>
         <Group gap="xs" align="flex-start">
           <Stack gap="xs">
             <Group gap="xs" align="baseline">
               <Text fw="bold" size="md">
-                {body.name}
+                {name}
               </Text>
               <Text inherit c="dimmed">
-                {celestialBodyTypeName(body.type)}
+                {celestialBodyTypeName(type)}
               </Text>
             </Group>
             <FactGrid facts={bullets} valueWidth={120} />

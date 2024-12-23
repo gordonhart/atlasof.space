@@ -37,10 +37,14 @@ export function celestialBodyTypeName(type: CelestialBodyType) {
       return 'Planet';
     case 'moon':
       return 'Moon';
+    case 'dwarf-planet':
+      return 'Dwarf Planet';
     case 'asteroid':
       return 'Asteroid';
+    case 'comet':
+      return 'Comet';
     case 'trans-neptunian-object':
-      return 'TNO';
+      return 'Trans-Neptunian Object';
     case 'belt':
       return 'Belt';
   }

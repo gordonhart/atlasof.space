@@ -1,7 +1,7 @@
 import { CelestialBodyState, Point2 } from './types.ts';
 import { AppState } from './state.ts';
 import { ASTEROID_BELT, KUIPER_BELT } from './constants.ts';
-import { degreesToRadians, orbitalEllipseAtTheta, trueAnomaly } from './physics.ts';
+import { degreesToRadians, orbitalEllipseAtTheta, trueAnomalyFromPosition } from './physics.ts';
 import { findCelestialBody } from './utils.ts';
 
 const hoverScaleFactor = 5;
@@ -150,7 +150,7 @@ function drawBelt(
 
 function drawOrbit(
   ctx: CanvasRenderingContext2D,
-  body: CelestialBodyState,
+  { position, color, elements }: CelestialBodyState,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [offsetXm, offsetYm]: Point2,
   metersPerPx: number,
@@ -160,19 +160,19 @@ function drawOrbit(
     return [canvasWidthPx / 2 + (xM + offsetXm) / metersPerPx, canvasHeightPx / 2 + (yM + offsetYm) / metersPerPx];
   }
   const steps = 360; // number of segments to approximate the ellipse
-  const vTrueRaw = trueAnomaly(body.position, body.semiMajorAxis, body.eccentricity);
+  const vTrueRaw = trueAnomalyFromPosition(position, elements.semiMajorAxis, elements.eccentricity);
   const vTrue = isNaN(vTrueRaw) ? 0 : vTrueRaw;
   const thetaSpan = 2 * Math.PI;
   ctx.save();
   ctx.beginPath();
-  const [initX, initY] = orbitalEllipseAtTheta(body, vTrue);
+  const [initX, initY] = orbitalEllipseAtTheta(elements, vTrue);
   ctx.moveTo(...toPx(initX, initY));
   for (let step = 1; step <= steps; step += 2) {
-    const [p0x, p0y] = orbitalEllipseAtTheta(body, vTrue + (step / steps) * thetaSpan);
-    const [p1x, p1y] = orbitalEllipseAtTheta(body, vTrue + ((step + 1) / steps) * thetaSpan);
+    const [p0x, p0y] = orbitalEllipseAtTheta(elements, vTrue + (step / steps) * thetaSpan);
+    const [p1x, p1y] = orbitalEllipseAtTheta(elements, vTrue + ((step + 1) / steps) * thetaSpan);
     ctx.quadraticCurveTo(...toPx(p0x, p0y), ...toPx(p1x, p1y));
   }
-  ctx.strokeStyle = body.color;
+  ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
   ctx.restore();
