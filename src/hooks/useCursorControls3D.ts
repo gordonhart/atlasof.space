@@ -10,18 +10,18 @@ export function useCursorControls3D(
   bodies: Array<CelestialBody3D>,
   updateAppState: (state: Partial<AppState>) => void
 ) {
-  function onClick(event: MouseEvent<HTMLCanvasElement>) {
+  function onClick(event: MouseEvent<HTMLElement>) {
     if (renderer == null) return;
-    const eventPx = [event.clientX, event.clientY];
+    const eventPx: Point2 = [event.clientX, event.clientY];
     const closeBody = findCloseBody(renderer, bodies, eventPx, 25);
     if (closeBody != null) {
       updateAppState({ center: closeBody.name, offset: [0, 0] });
     }
   }
 
-  function onMouseMove(event: MouseEvent<HTMLCanvasElement>) {
+  function onMouseMove(event: MouseEvent<HTMLElement>) {
     if (renderer == null) return;
-    const eventPx = [event.clientX, event.clientY];
+    const eventPx: Point2 = [event.clientX, event.clientY];
     const closeBody = findCloseBody(renderer, bodies, eventPx, 25);
     updateAppState({ hover: closeBody?.name ?? null });
   }
@@ -34,7 +34,7 @@ function findCloseBody(
   bodies: Array<CelestialBody3D>,
   [xPx, yPx]: Point2,
   threshold = 10
-): CelestialBody3D | null {
+): CelestialBody3D | undefined {
   for (const body of [...bodies].reverse()) {
     const [bodyXpx, bodyYpx] = body.getScreenPosition(renderer.camera);
     if (magnitude([xPx - bodyXpx, yPx - bodyYpx, 0]) < threshold) {

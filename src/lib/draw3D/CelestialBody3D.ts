@@ -91,7 +91,7 @@ export function createCelestialSystem(
   systemState: CelestialBodyState,
   visibleTypes: Set<string>
 ): Array<CelestialBody3D> {
-  const bodies = [];
+  const bodies: Array<CelestialBody3D> = [];
 
   function createBodyRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) return;
