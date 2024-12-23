@@ -12,11 +12,9 @@ export class CelestialBody3D {
     this.scene = scene;
 
     // Create the main sphere geometry for the celestial body
-    const geometry = new THREE.SphereGeometry(24, 32, 32);
-    // const geometry = new THREE.SphereGeometry(bodyState.radius, 32, 32);
+    const geometry = new THREE.SphereGeometry(bodyState.radius, 32, 32);
     const material = new THREE.MeshBasicMaterial({
-      // color: new THREE.Color(bodyState.color),
-      color: new THREE.Color(0x00ff00),
+      color: new THREE.Color(bodyState.color),
     });
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(...bodyState.position);
@@ -29,6 +27,9 @@ export class CelestialBody3D {
   }
 
   private createRotationIndicator(bodyState: CelestialBodyState) {
+    // TODO: remove
+    return;
+
     // Create a small segment that indicates rotation
     const indicatorGeometry = new THREE.CircleGeometry(
       bodyState.radius + 1,

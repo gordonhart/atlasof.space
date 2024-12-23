@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
-import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { drawAnnotations, drawSystem } from '../lib/draw.ts';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/constants.ts';

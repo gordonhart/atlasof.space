@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { SolarSystemRenderer } from '../lib/renderer.ts';
+import { SolarSystemRenderer } from '../lib/renderer2.ts';
 import { createCelestialSystem, CelestialBody3D } from '../lib/draw3';
 import { CelestialBodyState } from '../lib/types';
 import { AppState } from '../lib/state';

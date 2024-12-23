@@ -11,12 +11,16 @@ export class SolarSystemRenderer {
   constructor(container: HTMLElement) {
     // Create scene
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0000ff);
+    this.scene.background = new THREE.Color(0x000000);
 
     // Create and position camera
     const aspect = window.innerWidth / window.innerHeight;
-    this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000000000000);
-    this.camera.position.set(0, 0, 1000000000); // Start zoomed out to see the whole system
+    // this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000000000000);
+    this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+    // this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000000000000);
+    // this.camera = new THREE.OrthographicCamera();
+    // this.camera.position.set(0, 0, 1000000000); // Start zoomed out to see the whole system
+    this.camera.position.set(0, 0, 10); // Start zoomed out to see the whole system
     this.camera.lookAt(0, 0, 0);
 
     // Create renderer
@@ -34,6 +38,14 @@ export class SolarSystemRenderer {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = true;
+
+    const geometry = new THREE.BoxGeometry(5, 5, 5);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    this.scene.add(ambientLight);
+    this.scene.add(new THREE.GridHelper(1e12, 1e11));
+    this.scene.add(cube);
 
     // Handle window resize
     window.addEventListener('resize', this.onWindowResize.bind(this));
