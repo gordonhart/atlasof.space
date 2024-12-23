@@ -233,6 +233,99 @@ export const ASTEROIDS: Array<CelestialBody> = [
   NEREUS,
 ];
 
+export const CHARON: CelestialBody = {
+  name: 'Charon',
+  type: 'moon',
+  elements: {
+    epoch: 'JD2452600.5', // TODO: find J2000
+    eccentricity: 0.000161,
+    semiMajorAxis: 19595.764e3,
+    inclination: 0.08,
+    longitudeAscending: 223.046,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0, // TODO: find
+  },
+  mass: 1.586e21,
+  radius: 606e3,
+  siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const STYX: CelestialBody = {
+  name: 'Styx',
+  type: 'moon',
+  elements: {
+    epoch: 'unknown', // TODO
+    eccentricity: 0.005787,
+    semiMajorAxis: 42656e3,
+    inclination: 0.809,
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 7.5e15,
+  radius: 12e3 / 2, // rough; not spherical
+  siderealRotationPeriod: 3.24 * 24 * 60 * 60,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const NIX: CelestialBody = {
+  name: 'Nix',
+  type: 'moon',
+  elements: {
+    epoch: 'unknown', // TODO
+    eccentricity: 0.002036,
+    semiMajorAxis: 48694e3,
+    inclination: 0.133,
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 2.6e16,
+  radius: 35e3 / 2, // not spherical
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const KERBEROS: CelestialBody = {
+  name: 'Kerberos',
+  type: 'moon',
+  elements: {
+    epoch: 'unknown', // TODO
+    eccentricity: 0.00328,
+    semiMajorAxis: 57783e3,
+    inclination: 0.389,
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 1.65e16,
+  radius: 12e3 / 2, // not spherical
+  siderealRotationPeriod: 5.31 * 24 * 60 * 60,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const HYDRA: CelestialBody = {
+  name: 'Hydra',
+  type: 'moon',
+  elements: {
+    epoch: 'unknown', // TODO
+    eccentricity: 0.005862,
+    semiMajorAxis: 64738e3,
+    inclination: 0.242,
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 3.01e16,
+  radius: 19e3, // not spherical
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
   shortName: 'Pluto',
@@ -250,26 +343,9 @@ export const PLUTO: CelestialBody = {
   radius: 1188.3e3,
   siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
   color: '#E7C7A4',
-  satellites: [
-    {
-      name: 'Charon',
-      type: 'moon',
-      elements: {
-        epoch: 'JD2452600.5', // TODO: find J2000
-        eccentricity: 0.000161,
-        semiMajorAxis: 19595.764e3,
-        inclination: 0.08,
-        longitudeAscending: 223.046,
-        argumentOfPeriapsis: 0,
-        meanAnomaly: 0, // TODO: find
-      },
-      mass: 1.586e21,
-      radius: 606e3,
-      siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
-      color: DEFAULT_MOON_COLOR,
-      satellites: [],
-    },
-  ],
+  // TODO: Charon is large enough that Charon and Pluto co-orbit their central mass; this is not reflected by this
+  //  parent-child relationship
+  satellites: [CHARON, STYX, NIX, KERBEROS, HYDRA],
 };
 
 export const QUAOAR: CelestialBody = {
@@ -877,6 +953,114 @@ export const SATURN: CelestialBody = {
   satellites: [MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS],
 };
 
+export const PUCK: CelestialBody = {
+  name: 'Puck',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.00012,
+    semiMajorAxis: 86004.444e3,
+    inclination: 0.31921, // TODO: to Uranus's equator, should this be adjusted?
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 1.91e18,
+  radius: 81e3 / 2,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const MIRANDA: CelestialBody = {
+  name: 'Miranda',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0013,
+    semiMajorAxis: 129390e3,
+    inclination: 4.232, // to Uranus's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 0,
+  radius: 0,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const ARIEL: CelestialBody = {
+  name: 'Ariel',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0012,
+    semiMajorAxis: 190900e3,
+    inclination: 0.26, // to Uranus's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 1.2331e21,
+  radius: 578.9e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const UMBRIEL: CelestialBody = {
+  name: 'Umbriel',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0039,
+    semiMajorAxis: 266000e3,
+    inclination: 0.128, // to Uranus's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 0,
+  radius: 0,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const TITANIA: CelestialBody = {
+  name: 'Titania',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0011,
+    semiMajorAxis: 435910e3,
+    inclination: 0.34, // to Uranus's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 3.455e21,
+  radius: 788.4e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const OBERON: CelestialBody = {
+  name: 'Oberon',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0014,
+    semiMajorAxis: 583520e3,
+    inclination: 0.058, // to Uranus's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 3.1104e21,
+  radius: 761.4e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
 export const URANUS: CelestialBody = {
   name: 'Uranus',
   type: 'planet',
@@ -893,12 +1077,10 @@ export const URANUS: CelestialBody = {
   radius: 25362e3,
   siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
   color: '#9bcee6',
-  satellites: [
-    // TODO: add the main moons: Miranda, Ariel, Umbriel, Titania, Oberon
-    //  there are more but we can ignore those for now
-  ],
+  satellites: [PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON],
 };
 
+const neptuneAxialTilt = 28.32; // relative to its orbit
 export const TRITON: CelestialBody = {
   name: 'Triton',
   type: 'moon',
@@ -914,6 +1096,96 @@ export const TRITON: CelestialBody = {
   mass: 2.1389e22,
   radius: 1353.4e3,
   siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const PROTEUS: CelestialBody = {
+  name: 'Proteus',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0005,
+    semiMajorAxis: 117646e3,
+    inclination: 0.524 - neptuneAxialTilt, // to Neptune's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 2.5e19, // wide uncertainty bars
+  radius: 209e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const NEREID: CelestialBody = {
+  name: 'Nereid',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.749,
+    semiMajorAxis: 5504000e3,
+    inclination: 5.8, // to the ecliptic
+    longitudeAscending: 326.0,
+    argumentOfPeriapsis: 290.3,
+    meanAnomaly: 318.0,
+  },
+  mass: 3.57e19,
+  radius: 357e3 / 2,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const DESPINA: CelestialBody = {
+  name: 'Despina',
+  type: 'moon',
+  elements: {
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.00038,
+    semiMajorAxis: 52525.95e3,
+    inclination: 0.216 - neptuneAxialTilt, // to Neptune's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 1.1e18, // high uncertainty
+  radius: 75e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const LARISSA: CelestialBody = {
+  name: 'Larissa',
+  type: 'moon',
+  elements: {
+    epoch: 'Epoch 18 August 1989', // TODO: find J2000
+    eccentricity: 0.001393,
+    semiMajorAxis: 73548.26e3,
+    inclination: 0.251 - neptuneAxialTilt, // to Neptune's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 2.5e18, // very high uncertainty
+  radius: 97e3,
+  color: DEFAULT_MOON_COLOR,
+  satellites: [],
+};
+
+export const GALATEA: CelestialBody = {
+  name: 'Galatea',
+  type: 'moon',
+  elements: {
+    epoch: 'Epoch 18 August 1989', // TODO: find J2000
+    eccentricity: 0.00022,
+    semiMajorAxis: 61952.57e3,
+    inclination: 0.052 - neptuneAxialTilt, // to Neptune's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 2.5e18, // very high uncertainty
+  radius: 97e3,
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -934,8 +1206,7 @@ export const NEPTUNE: CelestialBody = {
   radius: 24622e3,
   siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
   color: '#5a7cf6',
-  // TODO: there are many more
-  satellites: [TRITON],
+  satellites: [TRITON, PROTEUS, NEREID, DESPINA, LARISSA, GALATEA], // TODO: there are more
 };
 
 const SOL_FULL: CelestialBody = {
