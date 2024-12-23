@@ -1,4 +1,4 @@
-import { CelestialBodyState } from '../types.ts';
+import { CelestialBodyState, Point2 } from '../types.ts';
 import { MIN_SIZE, SCALE_FACTOR } from './constants.ts';
 import { mul3 } from '../physics.ts';
 import {
@@ -8,22 +8,26 @@ import {
   Material,
   Mesh,
   MeshBasicMaterial,
+  OrthographicCamera,
   Points,
   PointsMaterial,
   Scene,
   SphereGeometry,
+  Vector3,
 } from 'three';
 
-const hoverScaleFactor = 5;
-
 export class CelestialBody3D {
+  readonly name: string;
   readonly mesh: Mesh;
   readonly dot: Points;
   readonly dotPosition: BufferAttribute;
   private scene: Scene;
+  private screenPosition: Vector3;
 
   constructor(scene: Scene, bodyState: CelestialBodyState) {
+    this.name = bodyState.name;
     this.scene = scene;
+    this.screenPosition = new Vector3();
 
     // Create the main sphere geometry for the celestial body
     const geometry = new SphereGeometry(bodyState.radius / SCALE_FACTOR, 32, 32);
@@ -57,6 +61,20 @@ export class CelestialBody3D {
     // this.mesh.scale.set(scale, scale, scale);
   }
 
+  getScreenPosition(camera: OrthographicCamera): Point2 {
+    // Get world position
+    this.mesh.updateWorldMatrix(true, false);
+    this.screenPosition.setFromMatrixPosition(this.mesh.matrixWorld);
+
+    // Project to screen space
+    this.screenPosition.project(camera);
+
+    // Convert to pixels
+    const pixelX = ((this.screenPosition.x + 1) * window.innerWidth) / 2;
+    const pixelY = ((-this.screenPosition.y + 1) * window.innerHeight) / 2;
+    return [pixelX, pixelY];
+  }
+
   dispose() {
     this.mesh.geometry.dispose();
     (this.mesh.material as Material).dispose();
@@ -71,13 +89,13 @@ export function createCelestialSystem(
   scene: Scene,
   systemState: CelestialBodyState,
   visibleTypes: Set<string>
-): Map<string, CelestialBody3D> {
-  const bodies = new Map<string, CelestialBody3D>();
+): Array<CelestialBody3D> {
+  const bodies = [];
 
   function createBodyRecursive(body: CelestialBodyState) {
     if (!visibleTypes.has(body.type)) return;
-    bodies.set(body.name, new CelestialBody3D(scene, body));
     body.satellites.forEach(createBodyRecursive);
+    bodies.push(new CelestialBody3D(scene, body));
   }
 
   createBodyRecursive(systemState);

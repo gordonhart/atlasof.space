@@ -9,14 +9,14 @@ export function useSolarSystemRenderer(appState: AppState) {
   // Refs to store instances that need to persist between renders
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<SolarSystemRenderer | null>(null);
-  const bodiesRef = useRef<Map<string, CelestialBody3D>>(new Map());
+  const bodiesRef = useRef<Array<CelestialBody3D>>([]);
 
   function update(systemState: CelestialBodyState) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
     renderer.updateFromAppState(appState);
-    bodiesRef.current.forEach((body, name) => {
-      const bodyState = findCelestialBody(systemState, name);
+    bodiesRef.current.forEach(body => {
+      const bodyState = findCelestialBody(systemState, body.name);
       if (bodyState != null) {
         body.update(bodyState);
       }
@@ -36,8 +36,8 @@ export function useSolarSystemRenderer(appState: AppState) {
 
     // Cleanup
     return () => {
-      bodiesRef.current.forEach(body => body.dispose());
-      bodiesRef.current.clear();
+      Object.values(bodiesRef.current).forEach(body => body.dispose());
+      bodiesRef.current = [];
       if (rendererRef.current != null) {
         rendererRef.current?.dispose();
         rendererRef.current = null;
@@ -45,5 +45,11 @@ export function useSolarSystemRenderer(appState: AppState) {
     };
   }
 
-  return { ref: containerRef, initialize, update };
+  return {
+    ref: containerRef,
+    renderer: rendererRef.current,
+    bodies: bodiesRef.current,
+    initialize,
+    update,
+  };
 }

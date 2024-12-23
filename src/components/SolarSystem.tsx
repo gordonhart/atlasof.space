@@ -5,12 +5,19 @@ import { Controls } from './Controls/Controls.tsx';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/bodies.ts';
 import { useSolarSystemRenderer } from '../lib/draw3D/useSolarSystemRenderer.ts';
+import { useCursorControls3D } from '../hooks/useCursorControls3D.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
   const systemStateRef = useRef(getInitialState(null, SOL));
-  const { ref: containerRef, initialize: initializeRender, update: updateRender } = useSolarSystemRenderer(appState);
+  const {
+    ref: containerRef,
+    renderer,
+    bodies,
+    initialize: initializeRender,
+    update: updateRender,
+  } = useSolarSystemRenderer(appState);
 
   const updateState = useCallback(
     (newState: Partial<AppState>) => {
@@ -18,6 +25,8 @@ export function SolarSystem() {
     },
     [setAppState]
   );
+
+  const cursorControls = useCursorControls3D(renderer, bodies, updateState);
 
   const resetState = useCallback(() => {
     updateState(initialState);
@@ -59,7 +68,7 @@ export function SolarSystem() {
   }, []);
 
   return (
-    <Group align="center" justify="center" w="100vw" h="100vh">
+    <Group align="center" justify="center" w="100vw" h="100vh" onMouseMove={cursorControls.onMouseMove}>
       <Box ref={containerRef} pos="absolute" top={0} right={0} />
       <Controls state={appState} updateState={updateState} systemState={systemStateRef.current} reset={resetState} />
     </Group>
