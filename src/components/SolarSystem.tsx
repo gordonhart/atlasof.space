@@ -6,6 +6,7 @@ import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { drawAnnotations, drawSystem } from '../lib/draw.ts';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/constants.ts';
+import { SolarSystem3D } from './SolarSystem3D.tsx';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -27,7 +28,6 @@ export function SolarSystem() {
   // use two canvases to prevent "draw tails" from drawing labels and other annotations
   const systemCanvasRef = useRef<HTMLCanvasElement>(null);
   const annotationCanvasRef = useRef<HTMLCanvasElement>(null);
-  const cursorControls = useCursorControls(appState, updateState, systemStateRef.current);
 
   // set the mutable state ref (accessed by animation callback) on state update
   useEffect(() => {
@@ -85,14 +85,9 @@ export function SolarSystem() {
     };
   }, []);
 
-  const canvasStyle = { display: 'block', height: '100vh', width: '100vw' };
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
-      <canvas ref={systemCanvasRef} style={canvasStyle} {...cursorControls.canvasProps} />
-      <canvas
-        ref={annotationCanvasRef}
-        style={{ ...canvasStyle, position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
-      />
+      <SolarSystem3D appState={appState} systemState={systemStateRef.current} />
       <Controls state={appState} updateState={updateState} systemState={systemStateRef.current} reset={resetState} />
     </Group>
   );

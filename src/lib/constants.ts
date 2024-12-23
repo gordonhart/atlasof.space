@@ -1231,6 +1231,7 @@ const SOL_FULL: CelestialBody = {
 // keep this for convenience to make it easier to filter certain objects during dev
 export const SOL = {
   ...SOL_FULL,
+  satellites: [MERCURY],
   // satellites: SOL_FULL.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
   // satellites: SOL_FULL.satellites.filter(({ name }) => name === 'Mercury'),
 };
