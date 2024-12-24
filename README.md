@@ -17,11 +17,11 @@ yarn netlify dev
 - [x] Add planetary spin
 - [x] Set true anomaly (via mean anomaly)
   - [ ] Handle epochs correctly (map everything into consistent time)
+- [x] Update visualization to be 3D
+- [x] Move previously drawn paths on pan, zoom, and while paused
 - [ ] Add co-orbitals
 - [ ] Model spacecraft (e.g. Parker, Juno, Cassini, Voyager)
   - [ ] Choose mission from list to simulate
-- [ ] Update visualization to be 3D
-- [ ] Move previously drawn paths on pan, zoom, and while paused
 
 ## Resources
 
