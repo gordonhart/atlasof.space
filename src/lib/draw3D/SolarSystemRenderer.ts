@@ -17,7 +17,6 @@ export class SolarSystemRenderer {
   readonly bodies: Array<KeplerianBody3D>;
   readonly belts: Array<Belt3D>;
 
-  readonly vectorX: Vector3 = new Vector3(1, 0, 0);
   readonly debug = false;
 
   constructor(container: HTMLElement, appState: AppState, systemState: CelestialBodyState) {
@@ -81,7 +80,8 @@ export class SolarSystemRenderer {
 
   getVernalEquinox(): Point3 {
     // the Vernal Equinox is the direction of +X; find by applying matrix transforms
-    return this.vectorX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
+    const localX = new Vector3(1, 0, 0);
+    return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
   update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
