@@ -1,5 +1,5 @@
-import { SATURN, SOL, Time } from './bodies.ts';
-import { CelestialBodyType, CelestialBodyTypes } from './types.ts';
+import { SOL, Time } from './bodies.ts';
+import { CelestialBodyType, CelestialBodyTypes, Point3 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -8,11 +8,15 @@ export type AppState = {
   drawTail: boolean;
   drawOrbit: boolean;
   drawLabel: boolean;
-  metersPerPx: number; // controls zoom
   center: string; // name of body centering visualization
   hover: string | null; // name of hovered body
   planetScaleFactor: number;
   visibleTypes: Set<CelestialBodyType>;
+
+  // TODO: should these really live here?
+  // these values are readonly; driven by the renderer
+  metersPerPx: number; // describes zoom
+  vernalEquinox: Point3; // direction of the Vernal Equinox
 };
 
 export const initialState: AppState = {
@@ -22,18 +26,20 @@ export const initialState: AppState = {
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  metersPerPx: (2 * SATURN.elements.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
   center: SOL.name,
   hover: null,
   planetScaleFactor: 1,
   visibleTypes: new Set(CelestialBodyTypes),
+
+  // set by renderer
+  metersPerPx: 1,
+  vernalEquinox: [1, 0, 0],
 };
 
-export function clampState({ dt, metersPerPx, planetScaleFactor, ...rest }: AppState): AppState {
+export function clampState({ dt, planetScaleFactor, ...state }: AppState): AppState {
   return {
-    ...rest,
+    ...state,
     dt: Math.min(Math.max(dt, Time.SECOND), 365 * Time.DAY),
-    metersPerPx: Math.min(Math.max(metersPerPx, 10_000), 1e11),
     planetScaleFactor: Math.min(Math.max(planetScaleFactor, 1), 8192),
   };
 }

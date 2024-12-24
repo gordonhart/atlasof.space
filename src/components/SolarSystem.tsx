@@ -43,11 +43,12 @@ export function SolarSystem() {
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     const { play, dt } = appStateRef.current;
-    setAppState(prev => {
-      const time = play ? prev.time + dt : prev.time;
-      const metersPerPx = rendererRef.current?.getMetersPerPixel() ?? prev.metersPerPx;
-      return { ...prev, time, metersPerPx };
-    });
+    setAppState(prev => ({
+      ...prev,
+      time: play ? prev.time + dt : prev.time,
+      metersPerPx: rendererRef.current?.getMetersPerPixel() ?? prev.metersPerPx,
+      vernalEquinox: rendererRef?.current?.getVernalEquinox() ?? prev.vernalEquinox,
+    }));
     if (play) {
       systemStateRef.current = incrementState(systemStateRef.current, dt);
     }
