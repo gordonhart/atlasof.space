@@ -1,4 +1,4 @@
-# orbital-simulator
+# atlasof.space
 
 ```sh
 yarn install
