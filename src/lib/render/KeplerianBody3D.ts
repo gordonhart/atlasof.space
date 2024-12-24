@@ -21,11 +21,12 @@ import { AppState } from '../state.ts';
 import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
-import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels, isOffScreen } from '../draw.ts';
-import { getCircleTexture } from './utils.ts';
+import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
+import { getCircleTexture, isOffScreen } from './utils.ts';
+import { PhysicallyModeled } from './PhysicallyModeled.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
-export class KeplerianBody3D {
+export class KeplerianBody3D extends PhysicallyModeled {
   readonly body: CelestialBody;
   readonly parentName: string | null;
   readonly scene: Scene;
@@ -45,6 +46,7 @@ export class KeplerianBody3D {
   readonly ellipsePoints: number = 3600;
 
   constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+    super(body.mass, body.influencedBy);
     this.body = body;
     this.parentName = parent?.name ?? null;
     this.scene = scene;

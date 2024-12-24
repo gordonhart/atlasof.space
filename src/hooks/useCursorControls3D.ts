@@ -1,5 +1,5 @@
 import { MouseEvent } from 'react';
-import { SolarSystemRenderer } from '../lib/draw3D/SolarSystemRenderer.ts';
+import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
 import { Point2 } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
 

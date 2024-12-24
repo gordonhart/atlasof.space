@@ -16,29 +16,32 @@ export type KeplerianElements = {
   meanAnomaly: number; // degrees
 };
 
-export type CelestialBodyType =
-  | 'star'
-  | 'planet'
-  | 'moon'
-  | 'dwarf-planet'
-  | 'asteroid'
-  | 'comet'
-  | 'belt'
-  | 'trans-neptunian-object';
+export enum CelestialBodyType {
+  STAR = 'star',
+  PLANET = 'planet',
+  MOON = 'moon',
+  DWARF_PLANET = 'dwarf-planet',
+  ASTEROID = 'asteroid',
+  COMET = 'comet',
+  BELT = 'belt',
+  TRANS_NEPTUNIAN_OBJECT = 'trans-neptunian-object',
+}
 export const CelestialBodyTypes: Array<CelestialBodyType> = [
-  'star',
-  'planet',
-  'moon',
-  'dwarf-planet',
-  'asteroid',
-  'comet',
-  // 'belt',
-  'trans-neptunian-object',
+  CelestialBodyType.STAR,
+  CelestialBodyType.PLANET,
+  CelestialBodyType.MOON,
+  CelestialBodyType.DWARF_PLANET,
+  CelestialBodyType.ASTEROID,
+  CelestialBodyType.COMET,
+  // CelestialBodyType.BELT,
+  CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
 ];
 
 export type CelestialBody = {
+  type: CelestialBodyType;
   name: string;
   shortName?: string;
+  influencedBy: Array<string>; // name of bodies influencing this body's motion
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;
@@ -46,8 +49,6 @@ export type CelestialBody = {
   // TODO: axial tilt?
   siderealRotationPeriod?: number; // seconds, leave empty to omit spin indicator
   color: `#${string}`; // hex
-  satellites: Array<CelestialBody>; // keplerian elements in reference to parent body
-  type: CelestialBodyType;
 };
 
 export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &

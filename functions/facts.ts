@@ -153,7 +153,7 @@ ${wikidataInfoAsCsv(wikidataInfo)}
 \`\`\``;
 
   const stream = await client.messages.stream({
-    model: AnthropicModel.CLAUDE_3_5_SONNET,
+    model: AnthropicModel.CLAUDE_3_HAIKU,
     system,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,

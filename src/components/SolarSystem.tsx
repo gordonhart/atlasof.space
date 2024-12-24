@@ -4,8 +4,10 @@ import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { getInitialState, incrementState } from '../lib/physics.ts';
 import { SOL } from '../lib/bodies.ts';
-import { useSolarSystemRenderer } from '../lib/draw3D/useSolarSystemRenderer.ts';
+import { useSolarSystemRenderer } from '../hooks/useSolarSystemRenderer.ts';
 import { useCursorControls3D } from '../hooks/useCursorControls3D.ts';
+import { CelestialBody } from '../lib/types.ts';
+import { findCelestialBody } from '../lib/utils.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -16,6 +18,7 @@ export function SolarSystem() {
     rendererRef,
     canvasRef,
     initialize: initializeRender,
+    add: addRender,
     update: updateRender,
     reset: resetRender,
   } = useSolarSystemRenderer();
@@ -27,12 +30,22 @@ export function SolarSystem() {
     [setAppState]
   );
 
+  function addBody(body: CelestialBody) {
+    const systemState = systemStateRef.current;
+    if (systemState == null || findCelestialBody(systemState, body.name) != null) return;
+    const bodyState = getInitialState(systemState, body);
+    // TODO: support adding bodies that are not satellites of the Sun?
+    // TODO: this may be clobbered by animation frame
+    systemStateRef.current = { ...systemState, satellites: [...systemState.satellites, bodyState] };
+    addRender(appState, systemState, bodyState);
+  }
+
   const cursorControls = useCursorControls3D(rendererRef.current, appState, updateState);
 
   const resetState = useCallback(() => {
     updateState(initialState);
     systemStateRef.current = getInitialState(null, SOL);
-    resetRender();
+    resetRender(appState, systemStateRef.current);
   }, [updateState]);
 
   // set the mutable state ref (accessed by animation callback) on state update
@@ -74,7 +87,13 @@ export function SolarSystem() {
         ref={canvasRef}
         style={{ height: '100vh', width: '100vw', position: 'absolute', pointerEvents: 'none' }}
       />
-      <Controls state={appState} updateState={updateState} systemState={systemStateRef.current} reset={resetState} />
+      <Controls
+        state={appState}
+        addBody={addBody}
+        updateState={updateState}
+        systemState={systemStateRef.current}
+        reset={resetState}
+      />
     </Group>
   );
 }

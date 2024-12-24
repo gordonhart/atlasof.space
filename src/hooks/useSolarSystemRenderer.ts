@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import { SolarSystemRenderer } from './SolarSystemRenderer.ts';
-import { CelestialBodyState } from '../types.ts';
-import { AppState } from '../state.ts';
+import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
+import { CelestialBodyState } from '../lib/types.ts';
+import { AppState } from '../lib/state.ts';
 
 export function useSolarSystemRenderer() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,16 +36,22 @@ export function useSolarSystemRenderer() {
     };
   }
 
+  function add(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+    const renderer = rendererRef.current;
+    if (renderer == null) return;
+    renderer.add(appState, parent, body);
+  }
+
   function update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
     renderer.update(ctx, appState, systemState);
   }
 
-  function reset() {
+  function reset(appState: AppState, systemState: CelestialBodyState) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
-    renderer.reset();
+    renderer.reset(appState, systemState);
   }
 
   return {
@@ -53,6 +59,7 @@ export function useSolarSystemRenderer() {
     rendererRef,
     canvasRef,
     initialize,
+    add,
     update,
     reset,
   };

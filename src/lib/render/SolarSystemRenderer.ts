@@ -7,14 +7,15 @@ import { findCelestialBody } from '../utils.ts';
 import { CelestialBodyState, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { Belt3D } from './Belt3D.ts';
-import { isOffScreen } from '../draw.ts';
+
+import { isOffScreen } from './utils.ts';
 
 export class SolarSystemRenderer {
   readonly scene: Scene;
   readonly camera: OrthographicCamera;
   readonly renderer: WebGLRenderer;
   readonly controls: OrbitControls;
-  readonly bodies: Array<KeplerianBody3D>;
+  private bodies: Array<KeplerianBody3D>;
   readonly belts: Array<Belt3D>;
 
   readonly debug = false;
@@ -120,9 +121,17 @@ export class SolarSystemRenderer {
     }
   }
 
-  reset() {
+  add(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+    for (const body3d of this.createBodiesRecursive(appState, parent, body)) {
+      this.bodies.push(body3d);
+    }
+  }
+
+  reset(appState: AppState, systemState: CelestialBodyState) {
     this.setupCamera();
     this.controls.reset();
+    this.bodies.forEach(body => body.dispose());
+    this.bodies = this.createBodiesRecursive(appState, null, systemState);
   }
 
   dispose() {
