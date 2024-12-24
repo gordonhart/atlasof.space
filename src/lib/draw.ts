@@ -6,27 +6,6 @@ import { findCelestialBody } from './utils.ts';
 
 const hoverScaleFactor = 5;
 
-export function drawSystem(
-  ctx: CanvasRenderingContext2D,
-  { drawTail, metersPerPx, center, planetScaleFactor, offset, hover, visibleTypes }: AppState,
-  systemState: CelestialBodyState
-) {
-  ctx.fillStyle = drawTail ? 'rgba(0, 0, 0, 0.0)' : '#000';
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  const canvasPx = getCanvasPixels(ctx);
-  const offsetMeters = getOffsetMeters(systemState, offset, center);
-
-  function drawBodyRecursive(body: CelestialBodyState) {
-    if (!visibleTypes.has(body.type)) return;
-    body.satellites.forEach(drawBodyRecursive);
-    const radiusScaled = (body.name === hover ? body.radius * hoverScaleFactor : body.radius) * planetScaleFactor;
-    const bodyToDraw = { ...body, radius: radiusScaled };
-    drawBody(ctx, bodyToDraw, canvasPx, offsetMeters, metersPerPx);
-  }
-
-  drawBodyRecursive(systemState);
-}
-
 export function drawAnnotations(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
   const {
     drawOrbit: shouldDrawOrbits,
@@ -92,37 +71,6 @@ export function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
   return (
     xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
   );
-}
-
-function drawBody(
-  ctx: CanvasRenderingContext2D,
-  { position, radius, color, rotation, siderealRotationPeriod }: CelestialBodyState,
-  [canvasWidthPx, canvasHeightPx]: Point2,
-  [offsetXm, offsetYm]: Point2,
-  metersPerPx: number
-) {
-  const [positionXm, positionYm] = [position[0] + offsetXm, position[1] + offsetYm];
-  const positionXpx = canvasWidthPx / 2 + positionXm / metersPerPx;
-  const positionYpx = canvasHeightPx / 2 + positionYm / metersPerPx;
-  const radiusPx = Math.max(radius / metersPerPx, 1);
-  ctx.beginPath();
-  ctx.arc(positionXpx, positionYpx, radiusPx, 0, Math.PI * 2);
-  ctx.fillStyle = color;
-  ctx.fill();
-
-  // draw rotation indicator
-  if (siderealRotationPeriod != null) {
-    const rotationOffset = degreesToRadians(rotation);
-    ctx.beginPath();
-    ctx.arc(positionXpx, positionYpx, radiusPx + 1, rotationOffset - Math.PI / 32, rotationOffset + Math.PI / 32);
-    ctx.lineTo(positionXpx, positionYpx);
-    ctx.fillStyle = 'black';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(positionXpx, positionYpx, 0.8 * radiusPx, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-  }
 }
 
 function drawBelt(

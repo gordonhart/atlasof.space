@@ -1,4 +1,4 @@
-import { CelestialBody, CelestialBodyType } from './types.ts';
+import { Belt, CelestialBody, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
@@ -1243,8 +1243,8 @@ export const SOL = {
   // satellites: SOL_FULL.satellites.filter(({ name }) => name === 'Mercury'),
 };
 
-export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
-export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
+export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
+export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };
 
 function getValueRecursive<T extends CelestialBody[keyof CelestialBody]>(
   body: CelestialBody,

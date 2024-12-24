@@ -1,19 +1,21 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
-import { AU } from '../bodies.ts';
+import { ASTEROID_BELT, AU, KUIPER_BELT } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, Mesh, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, WebGLRenderer } from 'three';
 import { findCelestialBody } from '../utils.ts';
-import { CelestialBodyState, Point2 } from '../types.ts';
+import { Belt, CelestialBodyState, Point2 } from '../types.ts';
 import { CelestialBody3D } from './CelestialBody3D.ts';
 import { magnitude } from '../physics.ts';
+import { Belt3D } from './Belt3D.ts';
 
 export class SolarSystemRenderer {
   readonly scene: Scene;
   readonly camera: OrthographicCamera;
   private renderer: WebGLRenderer;
   private controls: OrbitControls;
-  private bodies: Array<CelestialBody3D>;
+  readonly bodies: Array<CelestialBody3D>;
+  readonly belts: Array<Belt3D>;
 
   constructor(container: HTMLElement, appState: AppState, systemState: CelestialBodyState) {
     this.scene = new Scene();
@@ -29,10 +31,7 @@ export class SolarSystemRenderer {
     this.camera.updateProjectionMatrix();
 
     // Create renderer with container dimensions
-    this.renderer = new WebGLRenderer({
-      antialias: true,
-      logarithmicDepthBuffer: true,
-    });
+    this.renderer = new WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
     this.renderer.setSize(w, h);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -50,21 +49,13 @@ export class SolarSystemRenderer {
     this.controls.minZoom = 0.001;
     this.controls.maxZoom = 1000;
 
-    // Add helpers
-    const axesHelper = new AxesHelper(AU / SCALE_FACTOR);
-    axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
-    this.scene.add(axesHelper);
-    /* TODO: enable? pretty noisy
-    const gridHelper = new GridHelper((AU * 100) / SCALE_FACTOR, 10);
-    gridHelper.rotateX(Math.PI / 2);
-    this.scene.add(gridHelper);
-     */
-
-    // Add bodies
-    this.bodies = this.createBodiesRecursive(null, systemState);
-
-    // Handle window resize
+    this.bodies = this.createBodiesRecursive(appState, null, systemState);
+    // TODO: enable if we can get the belts to look better; not great currently
+    this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
     window.addEventListener('resize', this.onWindowResize.bind(this));
+
+    // uncomment for debugging
+    // this.addHelpers();
   }
 
   private onWindowResize() {
@@ -120,13 +111,27 @@ export class SolarSystemRenderer {
     window.removeEventListener('resize', boundResizeHandler);
 
     this.bodies.forEach(body => body.dispose());
+    this.belts.forEach(belt => belt.dispose());
     this.renderer.dispose();
     this.controls.dispose();
   }
 
-  private createBodiesRecursive(parent: CelestialBodyState | null, body: CelestialBodyState): Array<CelestialBody3D> {
-    const thisBody = new CelestialBody3D(this.scene, parent, body);
-    return [...body.satellites.flatMap(child => this.createBodiesRecursive(body, child)), thisBody];
+  private addHelpers() {
+    const axesHelper = new AxesHelper(AU / SCALE_FACTOR);
+    axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
+    this.scene.add(axesHelper);
+    const gridHelper = new GridHelper((AU * 1000) / SCALE_FACTOR, 100);
+    gridHelper.rotateX(Math.PI / 2);
+    this.scene.add(gridHelper);
+  }
+
+  private createBodiesRecursive(
+    appState: AppState,
+    parent: CelestialBodyState | null,
+    body: CelestialBodyState
+  ): Array<CelestialBody3D> {
+    const thisBody = new CelestialBody3D(this.scene, appState, parent, body);
+    return [...body.satellites.flatMap(child => this.createBodiesRecursive(appState, body, child)), thisBody];
   }
 
   // TODO: this greedily takes the first match; should find the closest within threshold, prioritizing a parent

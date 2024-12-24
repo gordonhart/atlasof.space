@@ -1,3 +1,5 @@
+import { AU } from './bodies.ts';
+
 export type Point2 = [number, number];
 export type Point3 = [number, number, number];
 export type CartesianState = {
@@ -55,3 +57,8 @@ export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
     rotation: number; // degrees
     satellites: Array<CelestialBodyState>;
   };
+
+export type Belt = {
+  min: number;
+  max: number;
+};

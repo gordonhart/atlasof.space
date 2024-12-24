@@ -4,7 +4,6 @@ import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
   BufferAttribute,
   BufferGeometry,
-  CanvasTexture,
   Color,
   EllipseCurve,
   Material,
@@ -44,11 +43,12 @@ export class CelestialBody3D {
   readonly spherePoints: number = 32;
   readonly ellipsePoints: number = 360;
 
-  constructor(scene: Scene, parent: CelestialBodyState | null, body: CelestialBodyState) {
+  constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
     this.body = body;
     this.parentName = parent?.name ?? null;
     this.scene = scene;
     this.screenPosition = new Vector3();
+    this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
 
     // Create the main sphere geometry for the celestial body
@@ -155,11 +155,13 @@ export class CelestialBody3D {
   dispose() {
     this.sphere.geometry.dispose();
     (this.sphere.material as Material).dispose();
+    this.scene.remove(this.sphere);
     this.dot.geometry.dispose();
     (this.dot.material as Material).dispose();
+    this.scene.remove(this.dot);
     this.ellipse.geometry.dispose();
     (this.ellipse.material as Material).dispose();
-    this.scene.remove(this.sphere);
+    this.scene.remove(this.ellipse);
   }
 
   drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {
