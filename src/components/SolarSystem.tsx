@@ -27,7 +27,7 @@ export function SolarSystem() {
     [setAppState]
   );
 
-  const cursorControls = useCursorControls3D(rendererRef.current, updateState);
+  const cursorControls = useCursorControls3D(rendererRef.current, appState, updateState);
 
   const resetState = useCallback(() => {
     updateState(initialState);

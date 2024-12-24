@@ -4,10 +4,10 @@ import { AU, SOL } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { findCelestialBody } from '../utils.ts';
-import { CelestialBodyState, Point2, Point3 } from '../types.ts';
+import { CelestialBodyState, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
-import { magnitude } from '../physics.ts';
 import { Belt3D } from './Belt3D.ts';
+import { isOffScreen } from '../draw.ts';
 
 export class SolarSystemRenderer {
   readonly scene: Scene;
@@ -91,8 +91,8 @@ export class SolarSystemRenderer {
       const centerBody = this.bodies.find(({ body }) => body.name === appState.center);
       if (centerBody != null) {
         const [x, y] = centerBody.dotPosition.array;
-        this.camera.position.x = 0;
-        this.camera.position.y = 0;
+        this.camera.position.x = x;
+        this.camera.position.y = y;
         this.camera.position.z = 1e9;
         this.camera.lookAt(x, y, 0);
         this.camera.up.set(0, 1, 0);
@@ -153,14 +153,27 @@ export class SolarSystemRenderer {
     return [...body.satellites.flatMap(child => this.createBodiesRecursive(appState, body, child)), thisBody];
   }
 
-  // TODO: this greedily takes the first match; should find the closest within threshold, prioritizing a parent
-  //  (planet) over any of its children (moons)
-  findCloseBody([xPx, yPx]: Point2, threshold = 10): KeplerianBody3D | undefined {
+  findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody3D | undefined {
+    let closest: KeplerianBody3D | undefined = undefined;
+    let closestDistance = threshold;
     for (const body of [...this.bodies].reverse()) {
+      // ignore invisible types and offscreen bodies
+      if (!visibleTypes.has(body.body.type)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
-      if (magnitude([xPx - bodyXpx, yPx - bodyYpx, 0]) < threshold) {
-        return body;
+      if (isOffScreen(bodyXpx, bodyYpx, threshold)) continue;
+
+      // always give precedence to the sun
+      const distance = Math.sqrt((xPx - bodyXpx) ** 2 + (yPx - bodyYpx) ** 2);
+      if (distance < threshold && body.body.type === 'star') return body;
+
+      // only give precedence to non-moons, but still select moons if there are no other options
+      const bodyIsMoon = body.body.type === 'moon';
+      const closestIsMoon = closest?.body?.type === 'moon';
+      if (distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
+        closest = body;
+        closestDistance = distance;
       }
     }
+    return closest;
   }
 }
