@@ -198,14 +198,14 @@ async function storeResponse(store: Store, key: string, stream: ReadableStream) 
 function simulateTokenGeneration(eventStream: string) {
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
+  const [delayMin, delayMax] = [10, 25]; // Random delay between 10-25ms per "token"
 
   // Process in the background
   (async () => {
     const chunks = eventStream.split(' ');
     const encoder = new TextEncoder();
     for (const chunk of chunks) {
-      // Random delay between 10-25ms per "token"
-      await new Promise(resolve => setTimeout(resolve, Math.random() * 15 + 10));
+      await new Promise(resolve => setTimeout(resolve, Math.random() * (delayMax - delayMin) + delayMin));
       await writer.write(encoder.encode(chunk + ' '));
     }
     await writer.close();

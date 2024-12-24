@@ -6,13 +6,14 @@ import { g, SOL } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
 import { Thumbnail } from './Thumbnail.tsx';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
+import { LoadingCursor } from './LoadingCursor.tsx';
 
 type Props = {
   body: CelestialBodyState;
 };
 export function FactCard({ body }: Props) {
   const { name, type, mass, radius, elements, velocity, color } = body;
-  const { facts } = useFactsStream(`${name}+${type}`);
+  const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
   // TODO: period for non-sun-orbiting bodies? requires knowing the parent's mass
   const period = orbitalPeriod(elements.semiMajorAxis, SOL.mass);
@@ -55,13 +56,25 @@ export function FactCard({ body }: Props) {
 
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
 
-        <FactGrid facts={factBullets} valueWidth={300} />
+        {isLoading && factBullets.length === 0 ? (
+          <LoadingCursor />
+        ) : (
+          <FactGrid facts={factBullets} valueWidth={300} isLoading={isLoading} />
+        )}
       </Stack>
     </Paper>
   );
 }
 
-function FactGrid({ facts, valueWidth }: { facts: Array<{ value: string; label: string }>; valueWidth: number }) {
+function FactGrid({
+  facts,
+  valueWidth,
+  isLoading = false,
+}: {
+  facts: Array<{ value: string; label: string }>;
+  valueWidth: number;
+  isLoading?: boolean;
+}) {
   return (
     <Stack gap={2}>
       {facts.map(({ label, value }, i) => (
@@ -69,8 +82,9 @@ function FactGrid({ facts, valueWidth }: { facts: Array<{ value: string; label: 
           <Text inherit w={190} c="dimmed">
             {label}
           </Text>
-          <Text inherit maw={valueWidth}>
+          <Text span inherit maw={valueWidth}>
             {value}
+            {isLoading && i + 1 === facts.length && value !== '' && <LoadingCursor />}
           </Text>
         </Group>
       ))}
