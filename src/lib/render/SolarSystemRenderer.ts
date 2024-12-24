@@ -3,7 +3,6 @@ import { AppState } from '../state.ts';
 import { AU, SOL } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
-import { findCelestialBody } from '../utils.ts';
 import { CelestialBodyState, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -20,7 +19,7 @@ export class SolarSystemRenderer {
 
   readonly debug = false;
 
-  constructor(container: HTMLElement, appState: AppState, systemState: CelestialBodyState) {
+  constructor(container: HTMLElement, appState: AppState, systemState: Record<string, CelestialBodyState>) {
     this.scene = new Scene();
     this.scene.background = new Color(0x000000);
 
@@ -47,7 +46,7 @@ export class SolarSystemRenderer {
     this.controls.maxZoom = 10000;
     this.controls.zoomToCursor = true;
 
-    this.bodies = this.createBodiesRecursive(appState, null, systemState);
+    this.bodies = Object.values(systemState).map(body => new KeplerianBody3D(this.scene, appState, body));
     // TODO: enable if we can get the belts to look better; not great currently
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
     window.addEventListener('resize', this.onWindowResize.bind(this));
@@ -80,12 +79,12 @@ export class SolarSystemRenderer {
   }
 
   getVernalEquinox(): Point3 {
-    // the Vernal Equinox is the direction of +X; find by applying matrix transforms
+    // the Vernal Equinox is the direction of +X; find by applying matrix transformations from camera
     const localX = new Vector3(1, 0, 0);
     return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
-  update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
+  update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: Record<string, CelestialBodyState>) {
     this.controls.update();
 
     if (appState.center != null && appState.center != SOL.name) {
@@ -103,10 +102,9 @@ export class SolarSystemRenderer {
 
     // TODO: this method of looping is not very efficient
     this.bodies.forEach(body => {
-      const bodyState = findCelestialBody(systemState, body.body.name);
+      const bodyState = systemState[body.body.name];
       if (bodyState != null) {
-        const parentState = body.parentName != null ? findCelestialBody(systemState, body.parentName) : null;
-        body.update(appState, parentState ?? null, bodyState);
+        body.update(appState, bodyState);
       }
     });
 
@@ -121,17 +119,19 @@ export class SolarSystemRenderer {
     }
   }
 
+  /*
   add(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    for (const body3d of this.createBodiesRecursive(appState, parent, body)) {
+    for (const body3d of this.createBodies(appState, parent, body)) {
       this.bodies.push(body3d);
     }
   }
+  */
 
-  reset(appState: AppState, systemState: CelestialBodyState) {
+  reset(appState: AppState, systemState: Record<string, CelestialBodyState>) {
     this.setupCamera();
     this.controls.reset();
     this.bodies.forEach(body => body.dispose());
-    this.bodies = this.createBodiesRecursive(appState, null, systemState);
+    this.bodies = Object.values(systemState).map(body => new KeplerianBody3D(this.scene, appState, body));
   }
 
   dispose() {
@@ -151,15 +151,6 @@ export class SolarSystemRenderer {
     const gridHelper = new GridHelper((AU * 1000) / SCALE_FACTOR, 100);
     gridHelper.rotateX(Math.PI / 2);
     this.scene.add(gridHelper);
-  }
-
-  private createBodiesRecursive(
-    appState: AppState,
-    parent: CelestialBodyState | null,
-    body: CelestialBodyState
-  ): Array<KeplerianBody3D> {
-    const thisBody = new KeplerianBody3D(this.scene, appState, parent, body);
-    return [...body.satellites.flatMap(child => this.createBodiesRecursive(appState, body, child)), thisBody];
   }
 
   findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody3D | undefined {

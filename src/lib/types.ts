@@ -6,6 +6,8 @@ export type CartesianState = {
 };
 
 export type KeplerianElements = {
+  // parent body that these elements are given with respsect to, e.g. 'Jupiter' for a moon. null for the Sun
+  wrt: string | null;
   epoch: string; // e.g. 'J2000'
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters
@@ -51,10 +53,9 @@ export type CelestialBody = {
   color: `#${string}`; // hex
 };
 
-export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
+export type CelestialBodyState = CelestialBody &
   CartesianState & {
     rotation: number; // degrees
-    satellites: Array<CelestialBodyState>;
   };
 
 export type Belt = {

@@ -20,7 +20,7 @@ export function useSolarSystemRenderer() {
     ctx.translate(0, -canvas.height / dpr);
   }
 
-  function initialize(appState: AppState, systemState: CelestialBodyState) {
+  function initialize(appState: AppState, systemState: Record<string, CelestialBodyState>) {
     if (containerRef.current == null || canvasRef.current == null) return;
     if (rendererRef.current == null) {
       rendererRef.current = new SolarSystemRenderer(containerRef.current, appState, systemState);
@@ -36,19 +36,24 @@ export function useSolarSystemRenderer() {
     };
   }
 
-  function add(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+  function add(
+    appState: AppState,
+    parent: Record<string, CelestialBodyState> | null,
+    body: Record<string, CelestialBodyState>
+  ) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
-    renderer.add(appState, parent, body);
+    console.error('not implemented', appState, parent, body);
+    // renderer.add(appState, parent, body);
   }
 
-  function update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
+  function update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: Record<string, CelestialBodyState>) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
     renderer.update(ctx, appState, systemState);
   }
 
-  function reset(appState: AppState, systemState: CelestialBodyState) {
+  function reset(appState: AppState, systemState: Record<string, CelestialBodyState>) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
     renderer.reset(appState, systemState);

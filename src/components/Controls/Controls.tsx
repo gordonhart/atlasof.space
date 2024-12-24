@@ -10,7 +10,7 @@ const pad = 10;
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
-  systemState: CelestialBodyState;
+  systemState: Record<string, CelestialBodyState>;
   reset: () => void;
 };
 export function Controls({ state, addBody, updateState, systemState, reset }: Props) {

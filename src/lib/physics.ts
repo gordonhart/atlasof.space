@@ -169,15 +169,29 @@ function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState,
   return siderealRotationPeriod == null ? rotation : (rotation + (360 * dt) / siderealRotationPeriod) % 360;
 }
 
-export function getInitialState(parentState: CelestialBodyState | null, child: CelestialBody): CelestialBodyState {
-  let childCartesian: CartesianState = { position: [0, 0, 0], velocity: [0, 0, 0] };
-  if (parentState != null) {
-    const { position, velocity } = keplerianToCartesian(child.elements, G * parentState.mass);
-    childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
+export function getInitialState(bodies: Array<CelestialBody>): Record<string, CelestialBodyState> {
+  console.log('getInitialState called');
+  const initialState: Record<string, CelestialBodyState> = {};
+  const toInitialize = [...bodies];
+  // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
+  while (toInitialize.length > 0) {
+    const body = toInitialize.shift()!;
+    const parents = body.influencedBy.map(name => initialState[name]);
+    if (parents.some(p => p == null)) {
+      toInitialize.push(body);
+      continue;
+    }
+    if (parents.length > 0) {
+      const mainParentMass = parents.find(({ name }) => name === body.elements.wrt)?.mass ?? 1;
+      const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
+      const position = parents.reduce((acc, { position }) => add3(acc, position), cartesian.position);
+      const velocity = parents.reduce((acc, { velocity }) => add3(acc, velocity), cartesian.velocity);
+      initialState[body.name] = { ...body, rotation: 0, position, velocity };
+    } else {
+      initialState[body.name] = { ...body, rotation: 0, position: [0, 0, 0], velocity: [0, 0, 0] };
+    }
   }
-  const childState: CelestialBodyState = { ...child, ...childCartesian, rotation: 0, satellites: [] }; // satellites to be replaced
-  const satellites = child.satellites.map(grandchild => getInitialState(childState, grandchild));
-  return { ...childState, satellites };
+  return initialState;
 }
 
 function incrementStateByParents(
@@ -185,22 +199,38 @@ function incrementStateByParents(
   child: CelestialBodyState,
   dt: number
 ): CelestialBodyState {
-  const satellites = child.satellites.map(grandchild => incrementStateByParents([child, ...parents], grandchild, dt));
   const acceleration = parents.reduce<Point3>(
     (acc, parent) => add3(acc, gravitationalAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
     [0, 0, 0] as Point3
   );
   const newState = applyAcceleration(child, acceleration, dt);
   const rotation = applyRotation(child, dt);
-  return { ...child, ...newState, rotation, satellites };
+  return { ...child, ...newState, rotation };
 }
 
-export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
+export function incrementState(
+  system: Record<string, CelestialBodyState>,
+  dt: number
+): Record<string, CelestialBodyState> {
   // TODO: subdividing dt down to 1 hour increments slows down simulation significantly at faster playback speeds.
   //  Potential fix: identify fast-period bodies and subdivide those as necessary, but leave others at the requested dt?
+  /*
   const maxSafeDt = 3_600; // 1 hour
   const nIterations = Math.ceil(dt / maxSafeDt);
   return Array(nIterations)
     .fill(null)
     .reduce(acc => incrementStateByParents([], acc, dt / nIterations), state);
+   */
+  const incrementedState: Record<string, CelestialBodyState> = {};
+  const toIncrement = Object.values(system);
+  while (toIncrement.length > 0) {
+    const body = toIncrement.shift()!;
+    const parents = body.influencedBy.map(name => incrementedState[name]);
+    if (parents.some(p => p == null)) {
+      toIncrement.push(body);
+      continue;
+    }
+    incrementedState[body.name] = incrementStateByParents(parents, body, dt);
+  }
+  return incrementedState;
 }

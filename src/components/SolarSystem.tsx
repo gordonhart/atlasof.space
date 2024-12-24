@@ -3,22 +3,21 @@ import { Box, Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { getInitialState, incrementState } from '../lib/physics.ts';
-import { SOL } from '../lib/bodies.ts';
+import { SOLAR_SYSTEM, SOLAR_SYSTEM_INITIAL_STATE } from '../lib/bodies.ts';
 import { useSolarSystemRenderer } from '../hooks/useSolarSystemRenderer.ts';
 import { useCursorControls3D } from '../hooks/useCursorControls3D.ts';
 import { CelestialBody } from '../lib/types.ts';
-import { findCelestialBody } from '../lib/utils.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
-  const systemStateRef = useRef(getInitialState(null, SOL));
+  const systemStateRef = useRef(SOLAR_SYSTEM_INITIAL_STATE);
   const {
     containerRef,
     rendererRef,
     canvasRef,
     initialize: initializeRender,
-    add: addRender,
+    // add: addRender,
     update: updateRender,
     reset: resetRender,
   } = useSolarSystemRenderer();
@@ -31,20 +30,24 @@ export function SolarSystem() {
   );
 
   function addBody(body: CelestialBody) {
+    console.error('unimplemented for now', body);
+    /* TODO
     const systemState = systemStateRef.current;
-    if (systemState == null || findCelestialBody(systemState, body.name) != null) return;
+    if (systemState == null || systemState[body.name] != null) return;
     const bodyState = getInitialState(systemState, body);
     // TODO: support adding bodies that are not satellites of the Sun?
     // TODO: this may be clobbered by animation frame
     systemStateRef.current = { ...systemState, satellites: [...systemState.satellites, bodyState] };
     addRender(appState, systemState, bodyState);
+     */
   }
 
   const cursorControls = useCursorControls3D(rendererRef.current, appState, updateState);
 
   const resetState = useCallback(() => {
+    console.log('resetState called');
     updateState(initialState);
-    systemStateRef.current = getInitialState(null, SOL);
+    systemStateRef.current = getInitialState(SOLAR_SYSTEM);
     resetRender(appState, systemStateRef.current);
   }, [updateState]);
 

@@ -23,12 +23,11 @@ import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
 import { getCircleTexture, isOffScreen } from './utils.ts';
-import { PhysicallyModeled } from './PhysicallyModeled.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
-export class KeplerianBody3D extends PhysicallyModeled {
+// TODO: PhysicallyModeled?
+export class KeplerianBody3D /* extends PhysicallyModeled */ {
   readonly body: CelestialBody;
-  readonly parentName: string | null;
   readonly scene: Scene;
 
   // main objects
@@ -45,16 +44,16 @@ export class KeplerianBody3D extends PhysicallyModeled {
   readonly spherePoints: number = 36;
   readonly ellipsePoints: number = 3600;
 
-  constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    super(body.mass, body.influencedBy);
+  constructor(scene: Scene, appState: AppState, body: CelestialBodyState) {
+    // super(body.mass, body.influencedBy);
     this.body = body;
-    this.parentName = parent?.name ?? null;
     this.scene = scene;
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
 
     // Create the main sphere geometry for the celestial body
+    console.log(body.name, body.radius);
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const sphereMaterial = new MeshBasicMaterial({ color });
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
@@ -102,17 +101,19 @@ export class KeplerianBody3D extends PhysicallyModeled {
     const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution, transparent: true, opacity: 0.5 });
     ellipseMaterial.depthTest = false;
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
+    /* TODO
     if (parent != null) {
       this.ellipse.translateX(parent.position[0] / SCALE_FACTOR);
       this.ellipse.translateY(parent.position[1] / SCALE_FACTOR);
       this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR);
     }
+     */
     this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
     this.ellipse.rotateX(degreesToRadians(iDeg));
     scene.add(this.ellipse);
   }
 
-  update(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+  update(appState: AppState, body: CelestialBodyState) {
     this.visible = appState.visibleTypes.has(this.body.type);
     const position = mul3(1 / SCALE_FACTOR, body.position);
     this.sphere.position.set(...position);
@@ -124,6 +125,7 @@ export class KeplerianBody3D extends PhysicallyModeled {
     this.dot.visible = this.visible;
     this.ellipse.visible = this.visible && appState.drawOrbit;
 
+    /* TODO
     // move ellipse based on position of parent
     if (parent != null) {
       // TODO: do these ever rotate relative to the sun?
@@ -131,6 +133,7 @@ export class KeplerianBody3D extends PhysicallyModeled {
       this.ellipse.translateY(parent.position[1] / SCALE_FACTOR - this.ellipse.position.y);
       this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR - this.ellipse.position.z);
     }
+     */
 
     // scale body based on hover state
     if (appState.hover === this.body.name && !this.hovered) {
