@@ -35,54 +35,54 @@ import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
 import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
-import * as Objects from './bodies.ts';
+import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
-  [Objects.SOL.name]: sunSrc as string,
+  [Bodies.SOL.name]: sunSrc as string,
 
-  [Objects.MERCURY.name]: mercurySrc as string,
+  [Bodies.MERCURY.name]: mercurySrc as string,
 
-  [Objects.VENUS.name]: venusSrc as string,
+  [Bodies.VENUS.name]: venusSrc as string,
 
-  [Objects.EARTH.name]: earthSrc as string,
-  [Objects.LUNA.name]: lunaSrc as string,
+  [Bodies.EARTH.name]: earthSrc as string,
+  [Bodies.LUNA.name]: lunaSrc as string,
 
-  [Objects.MARS.name]: marsSrc as string,
-  [Objects.PHOBOS.name]: phobosSrc as string,
-  [Objects.DEIMOS.name]: deimosSrc as string,
+  [Bodies.MARS.name]: marsSrc as string,
+  [Bodies.PHOBOS.name]: phobosSrc as string,
+  [Bodies.DEIMOS.name]: deimosSrc as string,
 
-  [Objects.JUPITER.name]: jupiterSrc as string,
-  [Objects.IO.name]: ioSrc as string,
-  [Objects.EUROPA.name]: europaSrc as string,
-  [Objects.GANYMEDE.name]: ganymedeSrc as string,
-  [Objects.CALLISTO.name]: callistoSrc as string,
+  [Bodies.JUPITER.name]: jupiterSrc as string,
+  [Bodies.IO.name]: ioSrc as string,
+  [Bodies.EUROPA.name]: europaSrc as string,
+  [Bodies.GANYMEDE.name]: ganymedeSrc as string,
+  [Bodies.CALLISTO.name]: callistoSrc as string,
 
-  [Objects.SATURN.name]: saturnSrc as string,
-  [Objects.MIMAS.name]: mimasSrc as string,
+  [Bodies.SATURN.name]: saturnSrc as string,
+  [Bodies.MIMAS.name]: mimasSrc as string,
 
-  [Objects.URANUS.name]: uranusSrc as string,
+  [Bodies.URANUS.name]: uranusSrc as string,
 
-  [Objects.NEPTUNE.name]: neptuneSrc as string,
+  [Bodies.NEPTUNE.name]: neptuneSrc as string,
 
-  [Objects.PLUTO.name]: plutoSrc as string,
+  [Bodies.PLUTO.name]: plutoSrc as string,
 
-  [Objects.CERES.name]: ceresSrc as string,
-  [Objects.PALLAS.name]: pallasSrc as string,
-  [Objects.VESTA.name]: vestaSrc as string,
-  [Objects.HYGIEA.name]: hygieaSrc as string,
-  [Objects.JUNO.name]: junoSrc as string,
-  [Objects.CG67P.name]: cg57pSrc as string,
-  [Objects.RYUGU.name]: ryuguSrc as string,
-  [Objects.LUTETIA.name]: lutetiaSrc as string,
-  [Objects.NEREUS.name]: nereusSrc as string,
+  [Bodies.CERES.name]: ceresSrc as string,
+  [Bodies.PALLAS.name]: pallasSrc as string,
+  [Bodies.VESTA.name]: vestaSrc as string,
+  [Bodies.HYGIEA.name]: hygieaSrc as string,
+  [Bodies.JUNO.name]: junoSrc as string,
+  [Bodies.CG67P.name]: cg57pSrc as string,
+  [Bodies.RYUGU.name]: ryuguSrc as string,
+  [Bodies.LUTETIA.name]: lutetiaSrc as string,
+  [Bodies.NEREUS.name]: nereusSrc as string,
 
-  [Objects.MAKEMAKE.name]: makemakeSrc as string,
-  [Objects.EROS.name]: erosSrc as string,
-  [Objects.MATHILDE.name]: mathildeSrc as string,
-  [Objects.ARROKOTH.name]: arrokothSrc as string,
+  [Bodies.MAKEMAKE.name]: makemakeSrc as string,
+  [Bodies.EROS.name]: erosSrc as string,
+  [Bodies.MATHILDE.name]: mathildeSrc as string,
+  [Bodies.ARROKOTH.name]: arrokothSrc as string,
 } as const;
 
 export const GalleryImages: Record<string, Array<string>> = {
-  [Objects.CG67P.name]: [cg67pAnimationSrc, cg67pThumb2Src, cg67pThumb3Src] as Array<string>,
-  [Objects.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
+  [Bodies.CG67P.name]: [cg67pAnimationSrc, cg67pThumb2Src, cg67pThumb3Src] as Array<string>,
+  [Bodies.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
 } as const;

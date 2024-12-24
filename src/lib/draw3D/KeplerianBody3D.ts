@@ -24,7 +24,8 @@ import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels, isOffScreen } from '../draw.ts';
 import { getCircleTexture } from './utils.ts';
 
-export class CelestialBody3D {
+// body that follows an elliptical orbit around a parent described by Keplerian elements
+export class KeplerianBody3D {
   readonly body: CelestialBody;
   readonly parentName: string | null;
   readonly scene: Scene;
@@ -92,13 +93,11 @@ export class CelestialBody3D {
       false,
       omega
     );
-    // const ellipseMaterial = new MeshBasicMaterial({ color });
     const ellipsePoints = ellipseCurve.getPoints(this.ellipsePoints);
     const ellipseGeometry = new LineGeometry();
     ellipseGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
-    // const ellipseMaterial = new LineBasicMaterial({ color });
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution });
+    const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution, transparent: true, opacity: 0.5 });
     ellipseMaterial.depthTest = false;
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
     if (parent != null) {

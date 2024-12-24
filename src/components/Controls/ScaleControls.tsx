@@ -7,7 +7,7 @@ import { DirectionIndicator } from './DirectionIndicator.tsx';
 
 type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'metersPerPx'>;
 export const ScaleControls = memo(function ScaleControlsComponent({ metersPerPx }: Props) {
-  // TODO: add back buttons here to alter scale? difficulty as scale is managed internally via renderer; metersPerPx in
+  // TODO: add back buttons here to alter scale? difficult as scale is managed internally via renderer; metersPerPx in
   //  app state is a readonly translation of this value
   return (
     <Stack gap={buttonGap}>

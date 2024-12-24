@@ -1,11 +1,11 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
-import { AU } from '../bodies.ts';
+import { AU, SOL } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, WebGLRenderer } from 'three';
 import { findCelestialBody } from '../utils.ts';
 import { CelestialBodyState, Point2 } from '../types.ts';
-import { CelestialBody3D } from './CelestialBody3D.ts';
+import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { magnitude } from '../physics.ts';
 import { Belt3D } from './Belt3D.ts';
 
@@ -14,7 +14,7 @@ export class SolarSystemRenderer {
   readonly camera: OrthographicCamera;
   readonly renderer: WebGLRenderer;
   readonly controls: OrbitControls;
-  readonly bodies: Array<CelestialBody3D>;
+  readonly bodies: Array<KeplerianBody3D>;
   readonly belts: Array<Belt3D>;
 
   readonly debug = false;
@@ -43,7 +43,7 @@ export class SolarSystemRenderer {
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = true;
     this.controls.minZoom = 0.001;
-    this.controls.maxZoom = 1000;
+    this.controls.maxZoom = 10000;
     this.controls.zoomToCursor = true;
 
     this.bodies = this.createBodiesRecursive(appState, null, systemState);
@@ -81,20 +81,18 @@ export class SolarSystemRenderer {
   update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
     this.controls.update();
 
-    /* TODO: this doesn't work very well currently
     if (appState.center != null && appState.center != SOL.name) {
       const centerBody = this.bodies.find(({ body }) => body.name === appState.center);
       if (centerBody != null) {
-        const [x, y, z] = centerBody.dotPosition.array;
-        this.camera.position.x = x + AU / SCALE_FACTOR;
-        this.camera.position.y = y + AU / SCALE_FACTOR;
-        this.camera.position.z = z + 1e3;
-        this.camera.lookAt(x, y, z);
-        this.camera.rotation.x = 0;
+        const [x, y] = centerBody.dotPosition.array;
+        this.camera.position.x = 0;
+        this.camera.position.y = 0;
+        this.camera.position.z = 1e9;
+        this.camera.lookAt(x, y, 0);
+        this.camera.up.set(0, 1, 0);
         this.camera.updateProjectionMatrix();
       }
     }
-     */
 
     // TODO: this method of looping is not very efficient
     this.bodies.forEach(body => {
@@ -144,14 +142,14 @@ export class SolarSystemRenderer {
     appState: AppState,
     parent: CelestialBodyState | null,
     body: CelestialBodyState
-  ): Array<CelestialBody3D> {
-    const thisBody = new CelestialBody3D(this.scene, appState, parent, body);
+  ): Array<KeplerianBody3D> {
+    const thisBody = new KeplerianBody3D(this.scene, appState, parent, body);
     return [...body.satellites.flatMap(child => this.createBodiesRecursive(appState, body, child)), thisBody];
   }
 
   // TODO: this greedily takes the first match; should find the closest within threshold, prioritizing a parent
   //  (planet) over any of its children (moons)
-  findCloseBody([xPx, yPx]: Point2, threshold = 10): CelestialBody3D | undefined {
+  findCloseBody([xPx, yPx]: Point2, threshold = 10): KeplerianBody3D | undefined {
     for (const body of [...this.bodies].reverse()) {
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
       if (magnitude([xPx - bodyXpx, yPx - bodyYpx, 0]) < threshold) {
