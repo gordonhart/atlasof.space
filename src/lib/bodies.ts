@@ -1218,7 +1218,7 @@ export const NEPTUNE: CelestialBody = {
 
 const SOL_FULL: CelestialBody = {
   name: 'Sol',
-  type: 'sun',
+  type: 'star',
   elements: {
     epoch: 'J2000',
     eccentricity: 0,

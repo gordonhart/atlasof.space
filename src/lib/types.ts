@@ -17,7 +17,7 @@ export type KeplerianElements = {
 };
 
 export type CelestialBodyType =
-  | 'sun'
+  | 'star'
   | 'planet'
   | 'moon'
   | 'dwarf-planet'
@@ -26,7 +26,7 @@ export type CelestialBodyType =
   | 'belt'
   | 'trans-neptunian-object';
 export const CelestialBodyTypes: Array<CelestialBodyType> = [
-  'sun',
+  'star',
   'planet',
   'moon',
   'dwarf-planet',
