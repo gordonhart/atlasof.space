@@ -2,9 +2,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
 import { AU, SOL } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, WebGLRenderer } from 'three';
+import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { findCelestialBody } from '../utils.ts';
-import { CelestialBodyState, Point2 } from '../types.ts';
+import { CelestialBodyState, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { magnitude } from '../physics.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -17,6 +17,7 @@ export class SolarSystemRenderer {
   readonly bodies: Array<KeplerianBody3D>;
   readonly belts: Array<Belt3D>;
 
+  readonly vectorX: Vector3 = new Vector3(1, 0, 0);
   readonly debug = false;
 
   constructor(container: HTMLElement, appState: AppState, systemState: CelestialBodyState) {
@@ -76,6 +77,11 @@ export class SolarSystemRenderer {
   getMetersPerPixel() {
     const visibleWidth = (this.camera.right - this.camera.left) / this.camera.zoom;
     return (SCALE_FACTOR * visibleWidth) / window.innerWidth;
+  }
+
+  getVernalEquinox(): Point3 {
+    // the Vernal Equinox is the direction of +X; find by applying matrix transforms
+    return this.vectorX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
   update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {

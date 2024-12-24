@@ -1,5 +1,5 @@
 body {
-  color: white;
-  background-color: black;
+  color: var(--mantine-color-gray-light-color);
+  background-color: var(--mantine-color-black);
   overscroll-behavior: none;
 }

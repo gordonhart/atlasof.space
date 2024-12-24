@@ -18,7 +18,7 @@ export function ScaleIndicator({ metersPerPx }: Props) {
   return (
     <Paper p={4} bg="transparent" radius="md" style={{ backdropFilter: 'blur(4px)' }}>
       <Stack gap={4} align="flex-end">
-        <Box w={scaleWidthM / metersPerPx} h={1} bg="white" />
+        <Box w={scaleWidthM / metersPerPx} h={1} style={{ backgroundColor: 'var(--mantine-color-gray-light-color)' }} />
         <Text size="xs">
           {scaleDisplay.toLocaleString()} {scaleUnits}
         </Text>

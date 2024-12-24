@@ -20,7 +20,7 @@ export function Controls({ state, updateState, systemState, reset }: Props) {
       </Box>
 
       <Box pos="absolute" top={pad} right={pad}>
-        <ScaleControls metersPerPx={state.metersPerPx} updateState={updateState} />
+        <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
       </Box>
 
       <Box pos="absolute" bottom={pad} left={pad}>
