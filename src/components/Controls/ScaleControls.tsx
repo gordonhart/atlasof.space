@@ -1,28 +1,18 @@
-import { ActionIcon, Stack, Tooltip } from '@mantine/core';
-import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
+import { AppStateControlProps, buttonGap } from './constants.ts';
 import { ScaleIndicator } from './ScaleIndicator.tsx';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { memo } from 'react';
 import { AppState } from '../../lib/state.ts';
+import { Stack } from '@mantine/core';
+import { DirectionIndicator } from './DirectionIndicator.tsx';
 
 type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'metersPerPx'>;
-export const ScaleControls = memo(function ScaleControlsComponent({ metersPerPx, updateState }: Props) {
+export const ScaleControls = memo(function ScaleControlsComponent({ metersPerPx }: Props) {
+  // TODO: add back buttons here to alter scale? difficult as scale is managed internally via renderer; metersPerPx in
+  //  app state is a readonly translation of this value
   return (
-    <Stack gap={buttonGap} align="flex-end">
+    <Stack gap={buttonGap}>
       <ScaleIndicator metersPerPx={metersPerPx} />
-
-      <Stack gap={buttonGap}>
-        <Tooltip position="left" label="Zoom In">
-          <ActionIcon onClick={() => updateState({ metersPerPx: metersPerPx / 2 })}>
-            <IconPlus size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip position="left" label="Zoom Out">
-          <ActionIcon onClick={() => updateState({ metersPerPx: metersPerPx * 2 })}>
-            <IconMinus size={iconSize} />
-          </ActionIcon>
-        </Tooltip>
-      </Stack>
+      <DirectionIndicator />
     </Stack>
   );
 });

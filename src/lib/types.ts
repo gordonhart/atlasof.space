@@ -23,17 +23,17 @@ export type CelestialBodyType =
   | 'dwarf-planet'
   | 'asteroid'
   | 'comet'
-  | 'trans-neptunian-object'
-  | 'belt';
+  | 'belt'
+  | 'trans-neptunian-object';
 export const CelestialBodyTypes: Array<CelestialBodyType> = [
   'sun',
   'planet',
   'moon',
   'dwarf-planet',
   'asteroid',
-  'trans-neptunian-object',
   'comet',
-  'belt',
+  // 'belt',
+  'trans-neptunian-object',
 ];
 
 export type CelestialBody = {
@@ -55,3 +55,8 @@ export type CelestialBodyState = Omit<CelestialBody, 'satellites'> &
     rotation: number; // degrees
     satellites: Array<CelestialBodyState>;
   };
+
+export type Belt = {
+  min: number;
+  max: number;
+};

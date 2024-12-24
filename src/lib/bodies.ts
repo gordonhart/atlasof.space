@@ -1,9 +1,16 @@
-import { CelestialBody, CelestialBodyType } from './types.ts';
+import { Belt, CelestialBody, CelestialBodyType } from './types.ts';
 import { orbitalPeriod } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
 export const g = 9.807; // earth gravity
+
+export enum Time {
+  SECOND = 1,
+  MINUTE = 60 * SECOND,
+  HOUR = 60 * MINUTE,
+  DAY = 24 * HOUR,
+}
 
 const DEFAULT_MOON_COLOR = '#aaa';
 export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
@@ -135,7 +142,7 @@ export const LUTETIA: CelestialBody = {
     argumentOfPeriapsis: 249.997, // degrees
     meanAnomaly: 87.976, // degrees
   },
-  siderealRotationPeriod: 8.1655 * 3600, // hours to seconds
+  siderealRotationPeriod: 8.1655 * Time.HOUR,
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
   satellites: [],
@@ -156,7 +163,7 @@ export const CG67P: CelestialBody = {
     argumentOfPeriapsis: 12.78, // degrees
     meanAnomaly: 0, // degrees (value at perihelion)
   },
-  siderealRotationPeriod: 12.4 * 3600, // hours to seconds
+  siderealRotationPeriod: 12.4 * Time.HOUR,
   color: DEFAULT_ASTEROID_COLOR,
   satellites: [],
 };
@@ -213,7 +220,7 @@ export const NEREUS: CelestialBody = {
     argumentOfPeriapsis: 158.12, // degrees
     meanAnomaly: 0, // degrees (value at epoch)
   },
-  siderealRotationPeriod: 15.16 * 60 * 60,
+  siderealRotationPeriod: 15.16 * Time.HOUR,
   color: DEFAULT_ASTEROID_COLOR,
   type: 'asteroid',
   satellites: [],
@@ -247,7 +254,7 @@ export const CHARON: CelestialBody = {
   },
   mass: 1.586e21,
   radius: 606e3,
-  siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17 * 60 + 35.89, // mutually tidally locked w/ pluto
+  siderealRotationPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -266,7 +273,7 @@ export const STYX: CelestialBody = {
   },
   mass: 7.5e15,
   radius: 12e3 / 2, // rough; not spherical
-  siderealRotationPeriod: 3.24 * 24 * 60 * 60,
+  siderealRotationPeriod: 3.24 * Time.DAY,
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -303,7 +310,7 @@ export const KERBEROS: CelestialBody = {
   },
   mass: 1.65e16,
   radius: 12e3 / 2, // not spherical
-  siderealRotationPeriod: 5.31 * 24 * 60 * 60,
+  siderealRotationPeriod: 5.31 * Time.DAY,
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -341,7 +348,7 @@ export const PLUTO: CelestialBody = {
   },
   mass: 1.3025e22,
   radius: 1188.3e3,
-  siderealRotationPeriod: 6 * 24 * 60 * 60 + 9 * 60 * 60 + 17.6 * 60, // - 6 days 9 hr 17.6 min (sideways)
+  siderealRotationPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
   color: '#E7C7A4',
   // TODO: Charon is large enough that Charon and Pluto co-orbit their central mass; this is not reflected by this
   //  parent-child relationship
@@ -565,7 +572,7 @@ export const MERCURY: CelestialBody = {
   },
   mass: 3.3011e23,
   radius: 2439.7e3,
-  siderealRotationPeriod: 58.6467 * 24 * 60 * 60, // 58 days
+  siderealRotationPeriod: 58.6467 * Time.DAY,
   color: '#b3aeae',
   satellites: [],
 };
@@ -584,7 +591,7 @@ export const VENUS: CelestialBody = {
   },
   mass: 4.8675e24,
   radius: 6051.8e3,
-  siderealRotationPeriod: -243.02 * 24 * 60 * 60, // 243 days; negative for retrograde rotation
+  siderealRotationPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
   color: '#e6b667',
   satellites: [
     // TODO: this is not exactly a moon of Venus, how to model?
@@ -622,7 +629,7 @@ export const LUNA: CelestialBody = {
   },
   mass: 7.342e22,
   radius: 1737.4e3,
-  siderealRotationPeriod: 27.321661 * 24 * 60 * 60,
+  siderealRotationPeriod: 27.321661 * Time.DAY,
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -634,14 +641,14 @@ export const EARTH: CelestialBody = {
     epoch: 'J2000',
     eccentricity: 0.0167086,
     semiMajorAxis: 149597870.7e3, // 1 AU
-    inclination: 0.00005,
+    inclination: 0.00005, // shouldn't this be 0 (plane of the ecliptic)?
     longitudeAscending: -11.26064,
     argumentOfPeriapsis: 114.20783,
     meanAnomaly: 358.617,
   },
   mass: 5.972168e24,
   radius: 6371e3,
-  siderealRotationPeriod: 23 * 60 * 60 + 56 * 60 + 4.1, // 23h 56 m 4.100s
+  siderealRotationPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
   color: '#7e87dd',
   satellites: [
     LUNA,
@@ -712,7 +719,7 @@ export const MARS: CelestialBody = {
   },
   mass: 6.4171e23,
   radius: 3389.5e3,
-  siderealRotationPeriod: 24 * 60 * 60 + 37 * 60 + 22.66, // 24 hr 37 min 22.66 sec
+  siderealRotationPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
   color: '#c96c3c',
   satellites: [PHOBOS, DEIMOS],
 };
@@ -803,7 +810,7 @@ export const JUPITER: CelestialBody = {
   },
   mass: 1.8982e27,
   radius: 69911e3,
-  siderealRotationPeriod: 9 * 60 * 60 + 55 * 60 + 30, // 9 hr 55 min 30 sec
+  siderealRotationPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
   color: '#e9be76',
   satellites: [IO, EUROPA, GANYMEDE, CALLISTO],
 };
@@ -948,7 +955,7 @@ export const SATURN: CelestialBody = {
   },
   mass: 5.6834e26,
   radius: 58232e3,
-  siderealRotationPeriod: 10 * 60 * 60 + 32 * 60 + 35, // 10 hr 32 min 35 sec
+  siderealRotationPeriod: 10 * Time.HOUR + 32 * Time.MINUTE + 35, // 10 hr 32 min 35 sec
   color: '#d7be87',
   satellites: [MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS],
 };
@@ -1075,7 +1082,7 @@ export const URANUS: CelestialBody = {
   },
   mass: 8.681e25,
   radius: 25362e3,
-  siderealRotationPeriod: -17 * 60 * 60 + 14 * 60 + 24, // -17 hr 14 min 24 sec
+  siderealRotationPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
   color: '#9bcee6',
   satellites: [PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON],
 };
@@ -1095,7 +1102,7 @@ export const TRITON: CelestialBody = {
   },
   mass: 2.1389e22,
   radius: 1353.4e3,
-  siderealRotationPeriod: 5 * 24 * 60 * 60 + 21 * 60 * 60 + 2 * 60 + 53, // 5 d, 21 h, 2 min, 53 s
+  siderealRotationPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
   color: DEFAULT_MOON_COLOR,
   satellites: [],
 };
@@ -1204,7 +1211,7 @@ export const NEPTUNE: CelestialBody = {
   },
   mass: 1.02409e26,
   radius: 24622e3,
-  siderealRotationPeriod: 16 * 60 * 60 + 6.6 * 60, // 16 hr 6.6 min
+  siderealRotationPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
   color: '#5a7cf6',
   satellites: [TRITON, PROTEUS, NEREID, DESPINA, LARISSA, GALATEA], // TODO: there are more
 };
@@ -1223,7 +1230,7 @@ const SOL_FULL: CelestialBody = {
   },
   mass: 1.9885e30,
   radius: 6.957e8,
-  siderealRotationPeriod: 609.12 * 60 * 60, // 609 hours at 16º latitude; true period varies by latitude
+  siderealRotationPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
   color: '#fa0',
   // draw asteroids and TNOs first so that they are "underneath" more prominent planets
   satellites: [...ASTEROIDS, ...TRANS_NEPTUNIAN_OBJECTS, MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE],
@@ -1231,12 +1238,13 @@ const SOL_FULL: CelestialBody = {
 // keep this for convenience to make it easier to filter certain objects during dev
 export const SOL = {
   ...SOL_FULL,
+  // satellites: [MERCURY, VENUS, EARTH, MARS],
   // satellites: SOL_FULL.satellites.filter(({ type }) => type === 'sun' || type === 'planet'),
   // satellites: SOL_FULL.satellites.filter(({ name }) => name === 'Mercury'),
 };
 
-export const ASTEROID_BELT = { min: 2.2 * AU, max: 3.2 * AU };
-export const KUIPER_BELT = { min: 30 * AU, max: 55 * AU };
+export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
+export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };
 
 function getValueRecursive<T extends CelestialBody[keyof CelestialBody]>(
   body: CelestialBody,

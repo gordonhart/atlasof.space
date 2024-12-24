@@ -1,6 +1,6 @@
 import { Box, Button, Group, Menu, Stack, Text, Transition } from '@mantine/core';
 import { IconCircle, IconCircleDot, IconCircleFilled } from '@tabler/icons-react';
-import { CELESTIAL_BODY_CLASSES, CELESTIAL_BODY_NAMES, CELESTIAL_BODY_SHORT_NAMES } from '../../lib/constants.ts';
+import { CELESTIAL_BODY_CLASSES, CELESTIAL_BODY_NAMES, CELESTIAL_BODY_SHORT_NAMES } from '../../lib/bodies.ts';
 import { celestialBodyTypeName, findCelestialBody } from '../../lib/utils.ts';
 import { CelestialBodyState } from '../../lib/types.ts';
 import { FactCard } from './FactCard.tsx';
