@@ -1,5 +1,5 @@
-import { SATURN, Time } from './bodies.ts';
-import { CelestialBodyType, CelestialBodyTypes, Point2 } from './types.ts';
+import { SATURN, SOL, Time } from './bodies.ts';
+import { CelestialBodyType, CelestialBodyTypes } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -11,7 +11,6 @@ export type AppState = {
   metersPerPx: number; // controls zoom
   center: string; // name of body centering visualization
   hover: string | null; // name of hovered body
-  offset: Point2; // meters
   planetScaleFactor: number;
   visibleTypes: Set<CelestialBodyType>;
 };
@@ -24,9 +23,8 @@ export const initialState: AppState = {
   drawOrbit: true,
   drawLabel: true,
   metersPerPx: (2 * SATURN.elements.semiMajorAxis) / Math.max(window.innerWidth, window.innerHeight),
-  center: 'Sol',
+  center: SOL.name,
   hover: null,
-  offset: [0, 0],
   planetScaleFactor: 1,
   visibleTypes: new Set(CelestialBodyTypes),
 };

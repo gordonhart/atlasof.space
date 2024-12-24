@@ -23,17 +23,17 @@ export type CelestialBodyType =
   | 'dwarf-planet'
   | 'asteroid'
   | 'comet'
-  | 'trans-neptunian-object'
-  | 'belt';
+  | 'belt'
+  | 'trans-neptunian-object';
 export const CelestialBodyTypes: Array<CelestialBodyType> = [
   'sun',
   'planet',
   'moon',
   'dwarf-planet',
   'asteroid',
-  'trans-neptunian-object',
   'comet',
-  'belt',
+  // 'belt',
+  'trans-neptunian-object',
 ];
 
 export type CelestialBody = {

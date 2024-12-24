@@ -3,10 +3,7 @@ import {
   IconCircle,
   IconCircleDot,
   IconCircleFilled,
-  IconCircleMinus,
-  IconCirclePlus,
   IconEyeCog,
-  IconMeteorFilled,
   IconRestore,
   IconTagMinus,
   IconTagPlus,
@@ -32,6 +29,7 @@ export function GeneralControls({ state, updateState, systemState, reset }: Prop
     <Stack gap={buttonGap}>
       <AddSmallBodyMenu systemState={systemState} />
 
+      {/* TODO: enable for 3D?
       <Tooltip position="left" label="Enlarge Planets">
         <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}>
           <IconCirclePlus size={iconSize} />
@@ -43,6 +41,7 @@ export function GeneralControls({ state, updateState, systemState, reset }: Prop
           <IconCircleMinus size={iconSize} />
         </ActionIcon>
       </Tooltip>
+      */}
 
       <Tooltip position="left" label={`${state.drawOrbit ? 'Hide' : 'Show'} Orbits`}>
         <ActionIcon onClick={() => updateState({ drawOrbit: !state.drawOrbit })}>
@@ -76,11 +75,13 @@ export function GeneralControls({ state, updateState, systemState, reset }: Prop
         </ActionIcon>
       </Tooltip>
 
+      {/* TODO: implement for 3D
       <Tooltip position="left" label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
         <ActionIcon onClick={() => updateState({ drawTail: !state.drawTail })}>
           <IconMeteorFilled size={iconSize} />
         </ActionIcon>
       </Tooltip>
+      */}
 
       <Tooltip position="left" label="Reset">
         <ActionIcon onClick={reset}>

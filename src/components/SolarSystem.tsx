@@ -17,6 +17,7 @@ export function SolarSystem() {
     canvasRef,
     initialize: initializeRender,
     update: updateRender,
+    reset: resetRender,
   } = useSolarSystemRenderer();
 
   const updateState = useCallback(
@@ -31,6 +32,7 @@ export function SolarSystem() {
   const resetState = useCallback(() => {
     updateState(initialState);
     systemStateRef.current = getInitialState(null, SOL);
+    resetRender();
   }, [updateState]);
 
   // set the mutable state ref (accessed by animation callback) on state update

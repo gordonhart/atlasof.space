@@ -12,8 +12,8 @@ import { Belt3D } from './Belt3D.ts';
 export class SolarSystemRenderer {
   readonly scene: Scene;
   readonly camera: OrthographicCamera;
-  private renderer: WebGLRenderer;
-  private controls: OrbitControls;
+  readonly renderer: WebGLRenderer;
+  readonly controls: OrbitControls;
   readonly bodies: Array<CelestialBody3D>;
   readonly belts: Array<Belt3D>;
 
@@ -23,18 +23,12 @@ export class SolarSystemRenderer {
     this.scene = new Scene();
     this.scene.background = new Color(0x000000);
 
-    // Create and position camera using container dimensions
     const [w, h] = [window.innerWidth, window.innerHeight];
     this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
-    this.camera.up.set(0, 0, 1);
-    this.camera.position.set(0, 0, 1e9);
-    this.camera.lookAt(0, 0, 0);
-    this.camera.zoom = 1; // TODO: parameterize?
-    this.camera.updateProjectionMatrix();
+    this.setupCamera();
 
-    // Create renderer with container dimensions
     this.renderer = new WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
-    this.renderer.setSize(w, h);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     // Clear existing content and append renderer
@@ -50,6 +44,7 @@ export class SolarSystemRenderer {
     this.controls.screenSpacePanning = true;
     this.controls.minZoom = 0.001;
     this.controls.maxZoom = 1000;
+    this.controls.zoomToCursor = true;
 
     this.bodies = this.createBodiesRecursive(appState, null, systemState);
     // TODO: enable if we can get the belts to look better; not great currently
@@ -62,13 +57,20 @@ export class SolarSystemRenderer {
   }
 
   private onWindowResize() {
-    const [w, h] = [window.innerWidth, window.innerHeight];
-    this.camera.left = -w;
-    this.camera.right = w;
-    this.camera.top = h;
-    this.camera.bottom = -h;
+    this.camera.left = -window.innerWidth;
+    this.camera.right = window.innerWidth;
+    this.camera.top = window.innerHeight;
+    this.camera.bottom = -window.innerHeight;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(w, h);
+  }
+
+  private setupCamera() {
+    this.camera.clearViewOffset();
+    this.camera.up.set(0, 0, 1);
+    this.camera.position.set(0, 0, 1e9);
+    this.camera.lookAt(0, 0, 0);
+    this.camera.zoom = 1;
+    this.camera.updateProjectionMatrix();
   }
 
   getMetersPerPixel() {
@@ -79,12 +81,17 @@ export class SolarSystemRenderer {
   update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
     this.controls.update();
 
-    /* TODO: this doesn't work well, need to think through desired behavior
-    if (appState.center != null) {
+    /* TODO: this doesn't work very well currently
+    if (appState.center != null && appState.center != SOL.name) {
       const centerBody = this.bodies.find(({ body }) => body.name === appState.center);
       if (centerBody != null) {
-        this.camera.position.x = centerBody.dotPosition.array[0];
-        this.camera.position.y = centerBody.dotPosition.array[1];
+        const [x, y, z] = centerBody.dotPosition.array;
+        this.camera.position.x = x + AU / SCALE_FACTOR;
+        this.camera.position.y = y + AU / SCALE_FACTOR;
+        this.camera.position.z = z + 1e3;
+        this.camera.lookAt(x, y, z);
+        this.camera.rotation.x = 0;
+        this.camera.updateProjectionMatrix();
       }
     }
      */
@@ -107,6 +114,11 @@ export class SolarSystemRenderer {
         body.drawLabel(ctx, this.camera, metersPerPx);
       });
     }
+  }
+
+  reset() {
+    this.setupCamera();
+    this.controls.reset();
   }
 
   dispose() {

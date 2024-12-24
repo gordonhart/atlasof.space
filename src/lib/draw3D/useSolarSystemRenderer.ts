@@ -8,12 +8,6 @@ export function useSolarSystemRenderer() {
   const rendererRef = useRef<SolarSystemRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  function update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-    renderer.update(ctx, appState, systemState);
-  }
-
   function initializeCanvas() {
     const canvas = canvasRef.current;
     if (canvas == null) return;
@@ -42,11 +36,24 @@ export function useSolarSystemRenderer() {
     };
   }
 
+  function update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: CelestialBodyState) {
+    const renderer = rendererRef.current;
+    if (renderer == null) return;
+    renderer.update(ctx, appState, systemState);
+  }
+
+  function reset() {
+    const renderer = rendererRef.current;
+    if (renderer == null) return;
+    renderer.reset();
+  }
+
   return {
     containerRef,
     rendererRef,
     canvasRef,
     initialize,
     update,
+    reset,
   };
 }

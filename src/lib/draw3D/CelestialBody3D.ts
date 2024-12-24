@@ -40,8 +40,8 @@ export class CelestialBody3D {
 
   private visible: boolean = false;
   private hovered: boolean = false;
-  readonly spherePoints: number = 32;
-  readonly ellipsePoints: number = 360;
+  readonly spherePoints: number = 36;
+  readonly ellipsePoints: number = 3600;
 
   constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
     this.body = body;
@@ -65,6 +65,8 @@ export class CelestialBody3D {
     dotGeometry.setAttribute('position', this.dotPosition);
     const map = getCircleTexture(body.color);
     const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color, map, transparent: true, sizeAttenuation: false });
+    // TODO: debug issue where these points mysteriously disappear at certain zooms (sphere+ellipse are still visible)
+    dotMaterial.depthTest = true;
     this.dot = new Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
 
@@ -97,6 +99,7 @@ export class CelestialBody3D {
     // const ellipseMaterial = new LineBasicMaterial({ color });
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
     const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution });
+    ellipseMaterial.depthTest = false;
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
     if (parent != null) {
       this.ellipse.translateX(parent.position[0] / SCALE_FACTOR);
