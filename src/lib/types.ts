@@ -1,5 +1,3 @@
-import { AU } from './bodies.ts';
-
 export type Point2 = [number, number];
 export type Point3 = [number, number, number];
 export type CartesianState = {

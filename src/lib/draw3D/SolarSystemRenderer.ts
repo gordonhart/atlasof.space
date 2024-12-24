@@ -1,10 +1,10 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
-import { ASTEROID_BELT, AU, KUIPER_BELT } from '../bodies.ts';
+import { AU } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, WebGLRenderer } from 'three';
 import { findCelestialBody } from '../utils.ts';
-import { Belt, CelestialBodyState, Point2 } from '../types.ts';
+import { CelestialBodyState, Point2 } from '../types.ts';
 import { CelestialBody3D } from './CelestialBody3D.ts';
 import { magnitude } from '../physics.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -16,6 +16,8 @@ export class SolarSystemRenderer {
   private controls: OrbitControls;
   readonly bodies: Array<CelestialBody3D>;
   readonly belts: Array<Belt3D>;
+
+  readonly debug = false;
 
   constructor(container: HTMLElement, appState: AppState, systemState: CelestialBodyState) {
     this.scene = new Scene();
@@ -54,8 +56,9 @@ export class SolarSystemRenderer {
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
     window.addEventListener('resize', this.onWindowResize.bind(this));
 
-    // uncomment for debugging
-    // this.addHelpers();
+    if (this.debug) {
+      this.addHelpers();
+    }
   }
 
   private onWindowResize() {

@@ -7,10 +7,12 @@ export class Belt3D {
   readonly belt: Belt;
   readonly scene: Scene;
   readonly particles: Points;
+  private visible: boolean;
 
   constructor(scene: Scene, appState: AppState, belt: Belt) {
     this.belt = belt;
     this.scene = scene;
+    this.visible = appState.visibleTypes.has('belt');
 
     const width = (belt.max - belt.min) / SCALE_FACTOR;
     const particleGeometry = new BufferGeometry();
@@ -36,6 +38,7 @@ export class Belt3D {
       opacity: 0.25,
     });
     this.particles = new Points(particleGeometry, particleMaterial);
+    this.particles.visible = this.visible;
     scene.add(this.particles);
   }
 
