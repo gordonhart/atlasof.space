@@ -4,17 +4,16 @@ import {
   CELESTIAL_BODY_CLASSES,
   CELESTIAL_BODY_NAMES,
   CELESTIAL_BODY_SHORT_NAMES,
-  SOLAR_SYSTEM,
+  SOLAR_SYSTEM_BY_NAME,
 } from '../../lib/bodies.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { FactCard } from './FactCard.tsx';
-import { useMemo } from 'react';
 import { iconSize, AppStateControlProps } from './constants.ts';
 import { AppState } from '../../lib/state.ts';
 
 type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'hover' | 'center'>;
 export function FocusControls({ hover, center, updateState }: Props) {
-  const focusBody = useMemo(() => (hover != null ? SOLAR_SYSTEM.find(({ name }) => name === hover) : null), [hover]);
+  const focusBody = hover != null ? SOLAR_SYSTEM_BY_NAME[hover] : undefined;
 
   return (
     <Stack gap="xs" align="flex-start">

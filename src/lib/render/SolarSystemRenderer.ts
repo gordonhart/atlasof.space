@@ -1,6 +1,6 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
-import { AU, G, SOL } from '../bodies.ts';
+import { AU, G, SOL, Time } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
@@ -19,6 +19,7 @@ export class SolarSystemRenderer {
   private readonly belts: Array<Belt3D>;
 
   private readonly debug = false;
+  private readonly maxSafeDt = Time.HOUR;
 
   constructor(container: HTMLElement, appState: AppState, system: Array<CelestialBody>) {
     this.scene = new Scene();
@@ -86,8 +87,8 @@ export class SolarSystemRenderer {
     return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
-  update(ctx: CanvasRenderingContext2D, appState: AppState, dt: number) {
-    if (dt > 0) this.incrementKinematics(dt);
+  update(ctx: CanvasRenderingContext2D, appState: AppState) {
+    if (appState.play) this.incrementKinematics(appState.dt);
     this.controls.update();
     this.updateCenter(appState);
     Object.values(this.bodies).forEach(body => {
@@ -97,14 +98,6 @@ export class SolarSystemRenderer {
     this.renderer.render(this.scene, this.camera);
     this.drawLabels(ctx, appState);
   }
-
-  /*
-  add(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    for (const body3d of this.createBodies(appState, parent, body)) {
-      this.bodies.push(body3d);
-    }
-  }
-  */
 
   reset(appState: AppState, system: Array<CelestialBody>) {
     this.setupCamera();
@@ -150,27 +143,27 @@ export class SolarSystemRenderer {
   }
 
   private incrementKinematics(dt: number) {
+    // subdivide dt to a 'safe' value -- orbits with smaller periods can fall apart at high dt
+    // TODO: this algorithm could be improved; 1 hour is not always safe for e.g. LEO satellites of Earth, which have
+    //  orbital periods of ~90 minutes. It is also overzealous to subdivide like this for orbits with longer periods
+    const nIterations = Math.ceil(dt / this.maxSafeDt);
+    const safeDt = dt / nIterations;
+    Array(nIterations)
+      .fill(null)
+      .forEach(() => this.incrementKinematicsSafe(safeDt));
+  }
+
+  private incrementKinematicsSafe(dt: number) {
+    // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
+    //  opposite algorithm to the one performed during initialization
     const parentStates = map(
-      body => ({
-        position: body.position.clone(),
-        velocity: body.velocity.clone(),
-        mass: body.mass,
-      }),
+      body => ({ position: body.position.clone(), velocity: body.velocity.clone(), mass: body.mass }),
       this.bodies
     );
-    const toIncrement = Object.values(this.bodies).map(body => body.body.name);
-    const incremented = new Set();
-    while (toIncrement.length > 0) {
-      const bodyName = toIncrement.shift()!;
-      const body = this.bodies[bodyName]!;
-      const parents = body.influencedBy.filter(name => incremented.has(name)).map(name => parentStates[name]);
-      if (parents.length !== body.influencedBy.length) {
-        toIncrement.push(bodyName);
-        continue;
-      }
-      incremented.add(bodyName);
-      this.bodies[bodyName].increment(parents, dt);
-    }
+    Object.values(this.bodies).forEach(body => {
+      const parents = body.influencedBy.map(name => parentStates[name]);
+      body.increment(parents, dt);
+    });
   }
 
   private drawLabels(ctx: CanvasRenderingContext2D, appState: AppState) {

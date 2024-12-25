@@ -152,8 +152,8 @@ I've collected this data from Wikidata to help you provide this information:
 ${wikidataInfoAsCsv(wikidataInfo)}
 \`\`\``;
 
-  const stream = await client.messages.stream({
-    model: AnthropicModel.CLAUDE_3_HAIKU,
+  const stream = client.messages.stream({
+    model: AnthropicModel.CLAUDE_3_5_SONNET,
     system,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,

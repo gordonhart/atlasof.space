@@ -532,6 +532,7 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   return acc;
 }, []);
 
+// TODO: reenable
 type Props = {
   addBody: (body: CelestialBody) => void;
 };

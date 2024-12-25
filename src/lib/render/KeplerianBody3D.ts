@@ -117,24 +117,21 @@ export class KeplerianBody3D extends KinematicBody {
 
   update(appState: AppState, parent: this | null) {
     this.visible = appState.visibleTypes.has(this.body.type);
-    // TODO: avoid cloning?
-    const position = this.position.clone().multiplyScalar(1 / SCALE_FACTOR);
-    this.sphere.position.set(position.x, position.y, position.z);
+    this.sphere.position.set(...this.position.toArray()).multiplyScalar(1 / SCALE_FACTOR);
     this.sphere.visible = this.visible;
-    this.dotPosition.array[0] = position.x;
-    this.dotPosition.array[1] = position.y;
-    this.dotPosition.array[2] = position.z;
+    this.dotPosition.array[0] = this.sphere.position.x;
+    this.dotPosition.array[1] = this.sphere.position.y;
+    this.dotPosition.array[2] = this.sphere.position.z;
     this.dotPosition.needsUpdate = true;
     this.dot.visible = this.visible;
     this.ellipse.visible = this.visible && appState.drawOrbit;
 
+    // TODO: bug here where the ellipses of some moons fly away...?
     // move ellipse based on position of parent
     if (parent != null) {
-      // TODO: do these ever rotate relative to the sun?
-      const [parentX, parentY, parentZ] = parent.position.clone().multiplyScalar(1 / SCALE_FACTOR);
-      this.ellipse.translateX(parentX - this.ellipse.position.x);
-      this.ellipse.translateY(parentY - this.ellipse.position.y);
-      this.ellipse.translateZ(parentZ - this.ellipse.position.z);
+      this.ellipse.translateX(parent.position.x / SCALE_FACTOR - this.ellipse.position.x);
+      this.ellipse.translateY(parent.position.y / SCALE_FACTOR - this.ellipse.position.y);
+      this.ellipse.translateZ(parent.position.z / SCALE_FACTOR - this.ellipse.position.z);
     }
 
     // scale body based on hover state

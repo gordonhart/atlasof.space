@@ -21,8 +21,8 @@ export type AppState = {
 
 export const initialState: AppState = {
   time: 0,
-  dt: 0.00001, // 15 * Time.MINUTE,
-  play: false,
+  dt: 15 * Time.MINUTE,
+  play: true,
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,

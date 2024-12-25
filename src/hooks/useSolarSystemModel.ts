@@ -37,11 +37,10 @@ export function useSolarSystemModel() {
     };
   }
 
-  // TODO: do we need to pass in dt separately? probably not
-  function update(ctx: CanvasRenderingContext2D, appState: AppState, dt: number) {
+  function update(ctx: CanvasRenderingContext2D, appState: AppState) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
-    renderer.update(ctx, appState, dt);
+    renderer.update(ctx, appState);
   }
 
   function reset(appState: AppState, system: Array<CelestialBody>) {

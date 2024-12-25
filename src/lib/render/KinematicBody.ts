@@ -10,6 +10,9 @@ export class KinematicBody {
   velocity: Vector3;
   rotation: number;
 
+  private readonly acceleration;
+  private readonly tmp; // reuse for memory efficiency
+
   constructor(
     mass: number,
     influencedBy: Array<string>,
@@ -23,16 +26,18 @@ export class KinematicBody {
     this.position = position.clone();
     this.velocity = velocity.clone();
     this.rotation = 0; // TODO: initial state? hard to find
+    this.acceleration = new Vector3();
+    this.tmp = new Vector3();
   }
 
-  // TODO: subdivide dt to a safe value
   increment(parents: Array<Pick<KinematicBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
-    const acceleration = new Vector3(0, 0, 0);
+    this.acceleration.set(0, 0, 0);
     parents.forEach(parent => {
-      const positionDelta = this.position.clone().sub(parent.position);
-      acceleration.add(positionDelta.multiplyScalar((-G * parent.mass) / positionDelta.length() ** 3));
+      this.tmp.set(this.position.x, this.position.y, this.position.z).sub(parent.position); // position delta
+      this.tmp.multiplyScalar((-G * parent.mass) / this.tmp.length() ** 3); // gravitational acceleration from parent
+      this.acceleration.add(this.tmp);
     });
-    this.velocity.add(acceleration.multiplyScalar(dt));
+    this.velocity.add(this.acceleration.multiplyScalar(dt));
     this.position.add(this.velocity.clone().multiplyScalar(dt));
     if (this.rotationPeriod != null) {
       this.rotation = (this.rotation + (360 * dt) / this.rotationPeriod) % 360;

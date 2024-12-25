@@ -25,9 +25,7 @@ export function GeneralControls({ state, updateState, reset }: Props) {
 
   return (
     <Stack gap={buttonGap}>
-      {/* TODO
-      <AddSmallBodyMenu addBody={addBody} />
-      */}
+      {/* <AddSmallBodyMenu addBody={addBody} /> */}
 
       {/* TODO: enable for 3D?
       <Tooltip position="left" label="Enlarge Planets">

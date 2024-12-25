@@ -9,14 +9,7 @@ import { useCursorControls3D } from '../hooks/useCursorControls3D.ts';
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
-  const {
-    containerRef,
-    rendererRef,
-    canvasRef,
-    initialize: initializeRender,
-    update: updateRender,
-    reset: resetRender,
-  } = useSolarSystemModel();
+  const model = useSolarSystemModel();
 
   const updateState = useCallback(
     (newState: Partial<AppState>) => {
@@ -25,11 +18,11 @@ export function SolarSystem() {
     [setAppState]
   );
 
-  const cursorControls = useCursorControls3D(rendererRef.current, appState, updateState);
+  const cursorControls = useCursorControls3D(model.rendererRef.current, appState, updateState);
 
   const resetState = useCallback(() => {
     updateState(initialState);
-    resetRender(appState, SOLAR_SYSTEM);
+    model.reset(appState, SOLAR_SYSTEM);
   }, [updateState]);
 
   // set the mutable state ref (accessed by animation callback) on state update
@@ -43,19 +36,19 @@ export function SolarSystem() {
     setAppState(prev => ({
       ...prev,
       time: play ? prev.time + dt : prev.time,
-      metersPerPx: rendererRef.current?.getMetersPerPixel() ?? prev.metersPerPx,
-      vernalEquinox: rendererRef?.current?.getVernalEquinox() ?? prev.vernalEquinox,
+      metersPerPx: model.rendererRef.current?.getMetersPerPixel() ?? prev.metersPerPx,
+      vernalEquinox: model.rendererRef?.current?.getVernalEquinox() ?? prev.vernalEquinox,
     }));
-    const ctx = canvasRef.current?.getContext('2d');
+    const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
-      updateRender(ctx, appStateRef.current, play ? dt : 0);
+      model.update(ctx, appStateRef.current);
     }
     window.requestAnimationFrame(animationFrame);
   }
 
   useEffect(() => {
     const frameId = window.requestAnimationFrame(animationFrame);
-    initializeRender(appStateRef.current);
+    model.initialize(appStateRef.current);
     return () => {
       window.cancelAnimationFrame(frameId);
     };
@@ -63,9 +56,9 @@ export function SolarSystem() {
 
   return (
     <Group align="center" justify="center" w="100vw" h="100vh">
-      <Box ref={containerRef} pos="absolute" top={0} right={0} {...cursorControls} />
+      <Box ref={model.containerRef} pos="absolute" top={0} right={0} {...cursorControls} />
       <canvas
-        ref={canvasRef}
+        ref={model.canvasRef}
         style={{ height: '100vh', width: '100vw', position: 'absolute', pointerEvents: 'none' }}
       />
       <Controls state={appState} updateState={updateState} reset={resetState} />
