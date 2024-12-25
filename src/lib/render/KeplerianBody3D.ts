@@ -1,11 +1,10 @@
 import { CelestialBody, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, MIN_SIZE, SCALE_FACTOR } from './constants.ts';
-import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
+import { mul3 } from '../physics.ts';
 import {
   BufferAttribute,
   BufferGeometry,
   Color,
-  EllipseCurve,
   Material,
   Mesh,
   MeshBasicMaterial,
@@ -14,16 +13,13 @@ import {
   PointsMaterial,
   Scene,
   SphereGeometry,
-  Vector2,
   Vector3,
 } from 'three';
 import { AppState } from '../state.ts';
-import { Line2 } from 'three/examples/jsm/lines/Line2.js';
-import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
-import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
 import { getCircleTexture, isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';
+import { OrbitalEllipse } from './OrbitalEllipse.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody3D extends KinematicBody {
@@ -31,14 +27,13 @@ export class KeplerianBody3D extends KinematicBody {
   private readonly scene: Scene;
   private readonly sphere: Mesh;
   private readonly dot: Points;
-  private readonly ellipse: Line2;
+  private readonly ellipse: OrbitalEllipse;
   public readonly dotPosition: BufferAttribute;
   private readonly screenPosition: Vector3;
 
   private visible: boolean = false;
   private hovered: boolean = false;
   private readonly spherePoints: number = 36;
-  private readonly ellipsePoints: number = 3600;
 
   constructor(
     scene: Scene,
@@ -70,49 +65,14 @@ export class KeplerianBody3D extends KinematicBody {
     this.dotPosition = new BufferAttribute(new Float32Array(positionScaled), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
     const map = getCircleTexture(body.color);
-    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color, map, transparent: true, sizeAttenuation: false });
+    const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color, map, sizeAttenuation: false });
     // TODO: debug issue where these points mysteriously disappear at certain zooms (sphere+ellipse are still visible)
     dotMaterial.depthTest = true;
     this.dot = new Points(dotGeometry, dotMaterial);
     scene.add(this.dot);
 
     // add the orbital ellipse
-    const { elements } = body;
-    const {
-      semiMajorAxis: a,
-      eccentricity: e,
-      longitudeAscending: OmegaDeg,
-      argumentOfPeriapsis: omegaDeg,
-      inclination: iDeg,
-    } = elements;
-    const b = semiMinorAxis(a, e);
-    const focusDistance = Math.sqrt(a ** 2 - b ** 2);
-    const omega = degreesToRadians(omegaDeg);
-    const ellipseCurve = new EllipseCurve(
-      -(Math.cos(omega) * focusDistance) / SCALE_FACTOR, // not sure why the sign is negative, seems consistent
-      -(Math.sin(omega) * focusDistance) / SCALE_FACTOR,
-      a / SCALE_FACTOR,
-      b / SCALE_FACTOR,
-      0,
-      Math.PI * 2,
-      false,
-      omega
-    );
-    const ellipsePoints = ellipseCurve.getPoints(this.ellipsePoints);
-    const ellipseGeometry = new LineGeometry();
-    ellipseGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
-    const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution, transparent: true, opacity: 0.5 });
-    ellipseMaterial.depthTest = false;
-    this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
-    if (parent != null) {
-      this.ellipse.translateX(parent.position.x / SCALE_FACTOR);
-      this.ellipse.translateY(parent.position.y / SCALE_FACTOR);
-      this.ellipse.translateZ(parent.position.z / SCALE_FACTOR);
-    }
-    this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
-    this.ellipse.rotateX(degreesToRadians(iDeg));
-    scene.add(this.ellipse);
+    this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
   }
 
   update(appState: AppState, parent: this | null) {
@@ -124,27 +84,19 @@ export class KeplerianBody3D extends KinematicBody {
     this.dotPosition.array[2] = this.sphere.position.z;
     this.dotPosition.needsUpdate = true;
     this.dot.visible = this.visible;
-    this.ellipse.visible = this.visible && appState.drawOrbit;
-
-    // TODO: bug here where the ellipses of some moons fly away...?
-    // move ellipse based on position of parent
-    if (parent != null) {
-      this.ellipse.translateX(parent.position.x / SCALE_FACTOR - this.ellipse.position.x);
-      this.ellipse.translateY(parent.position.y / SCALE_FACTOR - this.ellipse.position.y);
-      this.ellipse.translateZ(parent.position.z / SCALE_FACTOR - this.ellipse.position.z);
-    }
+    this.ellipse.update(this.visible && appState.drawOrbit, parent?.position ?? null);
 
     // scale body based on hover state
     if (appState.hover === this.body.name && !this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover on
       const radius = (HOVER_SCALE_FACTOR * this.body.radius) / SCALE_FACTOR;
       this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
-      this.ellipse.material.linewidth = 3;
+      this.ellipse.focus();
       this.hovered = true;
     } else if (appState.hover !== this.body.name && this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover off
       this.sphere.geometry = new SphereGeometry(this.body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-      this.ellipse.material.linewidth = 1;
+      this.ellipse.blur();
       this.hovered = false;
     }
   }
@@ -165,9 +117,7 @@ export class KeplerianBody3D extends KinematicBody {
     this.dot.geometry.dispose();
     (this.dot.material as Material).dispose();
     this.scene.remove(this.dot);
-    this.ellipse.geometry.dispose();
-    (this.ellipse.material as Material).dispose();
-    this.scene.remove(this.ellipse);
+    this.ellipse.dispose();
   }
 
   drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {

@@ -97,6 +97,7 @@ export class SolarSystemRenderer {
     });
     this.renderer.render(this.scene, this.camera);
     this.drawLabels(ctx, appState);
+    console.log(this.renderer.info);
   }
 
   reset(appState: AppState, system: Array<CelestialBody>) {
