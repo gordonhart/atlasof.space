@@ -80,7 +80,6 @@ export class OrbitalEllipse {
     }
   }
 
-  // TODO: these can be simplified away, probably
   setFocus(focus: boolean) {
     this.ellipseFocus.visible = focus;
   }
