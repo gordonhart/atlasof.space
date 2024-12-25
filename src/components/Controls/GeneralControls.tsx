@@ -11,11 +11,12 @@ import {
 import { CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
+import { memo } from 'react';
 
 type Props = AppStateControlProps & {
   reset: () => void;
 };
-export function GeneralControls({ state, updateState, reset }: Props) {
+export const GeneralControls = memo(function GeneralControlsComponent({ state, updateState, reset }: Props) {
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
       ? new Set([...state.visibleTypes].filter(t => t !== type))
@@ -88,4 +89,4 @@ export function GeneralControls({ state, updateState, reset }: Props) {
       </Tooltip>
     </Stack>
   );
-}
+});

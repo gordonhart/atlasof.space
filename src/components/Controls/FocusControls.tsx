@@ -10,9 +10,10 @@ import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { FactCard } from './FactCard.tsx';
 import { iconSize, AppStateControlProps } from './constants.ts';
 import { AppState } from '../../lib/state.ts';
+import { memo } from 'react';
 
 type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'hover' | 'center'>;
-export function FocusControls({ hover, center, updateState }: Props) {
+export const FocusControls = memo(function FocusControlsComponent({ hover, center, updateState }: Props) {
   const focusBody = hover != null ? SOLAR_SYSTEM_BY_NAME[hover] : undefined;
 
   return (
@@ -45,4 +46,4 @@ export function FocusControls({ hover, center, updateState }: Props) {
       </Transition>
     </Stack>
   );
-}
+});
