@@ -91,12 +91,12 @@ export class KeplerianBody3D extends KinematicBody {
       this.sphere.geometry.dispose(); // toggle hover on
       const radius = (HOVER_SCALE_FACTOR * this.body.radius) / SCALE_FACTOR;
       this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
-      this.ellipse.focus();
+      this.ellipse.setFocus(true);
       this.hovered = true;
     } else if (appState.hover !== this.body.name && this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover off
       this.sphere.geometry = new SphereGeometry(this.body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-      this.ellipse.blur();
+      this.ellipse.setFocus(false);
       this.hovered = false;
     }
   }

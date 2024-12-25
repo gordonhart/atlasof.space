@@ -74,15 +74,15 @@ export class OrbitalEllipse {
       this.ellipse.translateX(offset.x / SCALE_FACTOR - this.ellipse.position.x);
       this.ellipse.translateY(offset.y / SCALE_FACTOR - this.ellipse.position.y);
       this.ellipse.translateZ(offset.z / SCALE_FACTOR - this.ellipse.position.z);
+      this.ellipseFocus.translateX(offset.x / SCALE_FACTOR - this.ellipseFocus.position.x);
+      this.ellipseFocus.translateY(offset.y / SCALE_FACTOR - this.ellipseFocus.position.y);
+      this.ellipseFocus.translateZ(offset.z / SCALE_FACTOR - this.ellipseFocus.position.z);
     }
   }
 
   // TODO: these can be simplified away, probably
-  focus() {
-    this.ellipseFocus.visible = true;
-  }
-  blur() {
-    this.ellipseFocus.visible = false;
+  setFocus(focus: boolean) {
+    this.ellipseFocus.visible = focus;
   }
 
   dispose() {
