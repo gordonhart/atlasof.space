@@ -79,7 +79,7 @@ export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number
 }
 
 // position WRT center of mass of the object we are orbiting around
-function gravitationalAcceleration(position: Point3, mu: number): Point3 {
+export function gravitationalAcceleration(position: Point3, mu: number): Point3 {
   const r = magnitude(position);
   return mul3(-mu / r ** 3, position);
 }
@@ -159,18 +159,17 @@ function keplerianToCartesian(
   return { position: positionInertial, velocity: velocityInertial };
 }
 
-function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
+export function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
   const newVelocity = add3(state.velocity, mul3(dt, acceleration));
   const newPosition = add3(state.position, mul3(dt, newVelocity));
   return { position: newPosition, velocity: newVelocity };
 }
 
-function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState, dt: number): number {
+export function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState, dt: number): number {
   return siderealRotationPeriod == null ? rotation : (rotation + (360 * dt) / siderealRotationPeriod) % 360;
 }
 
 export function getInitialState(bodies: Array<CelestialBody>): Record<string, CelestialBodyState> {
-  console.log('getInitialState called');
   const initialState: Record<string, CelestialBodyState> = {};
   const toInitialize = [...bodies];
   // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
@@ -191,46 +190,6 @@ export function getInitialState(bodies: Array<CelestialBody>): Record<string, Ce
       initialState[body.name] = { ...body, rotation: 0, position: [0, 0, 0], velocity: [0, 0, 0] };
     }
   }
-  return initialState;
-}
-
-function incrementStateByParents(
-  parents: Array<CelestialBodyState>,
-  child: CelestialBodyState,
-  dt: number
-): CelestialBodyState {
-  const acceleration = parents.reduce<Point3>(
-    (acc, parent) => add3(acc, gravitationalAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
-    [0, 0, 0] as Point3
-  );
-  const newState = applyAcceleration(child, acceleration, dt);
-  const rotation = applyRotation(child, dt);
-  return { ...child, ...newState, rotation };
-}
-
-export function incrementState(
-  system: Record<string, CelestialBodyState>,
-  dt: number
-): Record<string, CelestialBodyState> {
-  // TODO: subdividing dt down to 1 hour increments slows down simulation significantly at faster playback speeds.
-  //  Potential fix: identify fast-period bodies and subdivide those as necessary, but leave others at the requested dt?
-  /*
-  const maxSafeDt = 3_600; // 1 hour
-  const nIterations = Math.ceil(dt / maxSafeDt);
-  return Array(nIterations)
-    .fill(null)
-    .reduce(acc => incrementStateByParents([], acc, dt / nIterations), state);
-   */
-  const incrementedState: Record<string, CelestialBodyState> = {};
-  const toIncrement = Object.values(system);
-  while (toIncrement.length > 0) {
-    const body = toIncrement.shift()!;
-    const parents = body.influencedBy.map(name => incrementedState[name]);
-    if (parents.some(p => p == null)) {
-      toIncrement.push(body);
-      continue;
-    }
-    incrementedState[body.name] = incrementStateByParents(parents, body, dt);
-  }
-  return incrementedState;
+  // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
+  return Object.fromEntries(Object.entries(initialState).reverse());
 }

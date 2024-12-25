@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core';
 import { FocusControls } from './FocusControls.tsx';
-import { CelestialBody, CelestialBodyState } from '../../lib/types.ts';
+import { CelestialBodyState } from '../../lib/types.ts';
 import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
@@ -9,11 +9,11 @@ import { AppStateControlProps } from './constants.ts';
 const pad = 10;
 
 type Props = AppStateControlProps & {
-  addBody: (body: CelestialBody) => void;
-  systemState: Record<string, CelestialBodyState>;
   reset: () => void;
 };
-export function Controls({ state, addBody, updateState, systemState, reset }: Props) {
+export function Controls({ state, updateState, reset }: Props) {
+  // TODO: only needed for hover card
+  const systemState: Record<string, CelestialBodyState> = {};
   return (
     <>
       <Box pos="absolute" top={pad} left={pad}>
@@ -29,7 +29,7 @@ export function Controls({ state, addBody, updateState, systemState, reset }: Pr
       </Box>
 
       <Box pos="absolute" bottom={pad} right={pad}>
-        <GeneralControls state={state} addBody={addBody} updateState={updateState} reset={reset} />
+        <GeneralControls state={state} updateState={updateState} reset={reset} />
       </Box>
     </>
   );

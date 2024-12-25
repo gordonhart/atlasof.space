@@ -3,23 +3,25 @@ import { AppState } from '../state.ts';
 import { AU, SOL } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
-import { CelestialBodyState, CelestialBodyType, Point2, Point3 } from '../types.ts';
+import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { Belt3D } from './Belt3D.ts';
 
 import { isOffScreen } from './utils.ts';
+import { getInitialState } from '../physics.ts';
+import { map } from 'ramda';
 
 export class SolarSystemRenderer {
   readonly scene: Scene;
   readonly camera: OrthographicCamera;
   readonly renderer: WebGLRenderer;
   readonly controls: OrbitControls;
-  private bodies: Array<KeplerianBody3D>;
+  private bodies: Record<string, KeplerianBody3D>;
   readonly belts: Array<Belt3D>;
 
   readonly debug = false;
 
-  constructor(container: HTMLElement, appState: AppState, systemState: Record<string, CelestialBodyState>) {
+  constructor(container: HTMLElement, appState: AppState, system: Array<CelestialBody>) {
     this.scene = new Scene();
     this.scene.background = new Color(0x000000);
 
@@ -46,7 +48,8 @@ export class SolarSystemRenderer {
     this.controls.maxZoom = 10000;
     this.controls.zoomToCursor = true;
 
-    this.bodies = Object.values(systemState).map(body => new KeplerianBody3D(this.scene, appState, body));
+    this.bodies = this.createBodies(appState, system);
+
     // TODO: enable if we can get the belts to look better; not great currently
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
     window.addEventListener('resize', this.onWindowResize.bind(this));
@@ -84,11 +87,36 @@ export class SolarSystemRenderer {
     return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
-  update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: Record<string, CelestialBodyState>) {
+  update(ctx: CanvasRenderingContext2D, appState: AppState, dt: number) {
+    if (dt > 0) {
+      // TODO: set?
+      const parentStates = map(
+        body => ({
+          position: body.position.clone(),
+          velocity: body.velocity.clone(),
+          mass: body.mass,
+        }),
+        this.bodies
+      );
+      const toIncrement = Object.values(this.bodies).map(body => body.body.name);
+      const incremented = new Set();
+      while (toIncrement.length > 0) {
+        const bodyName = toIncrement.shift()!;
+        const body = this.bodies[bodyName]!;
+        const parents = body.influencedBy.filter(name => incremented.has(name)).map(name => parentStates[name]);
+        if (parents.length !== body.influencedBy.length) {
+          toIncrement.push(bodyName);
+          continue;
+        }
+        incremented.add(bodyName);
+        this.bodies[bodyName].increment(parents, dt);
+      }
+    }
+
     this.controls.update();
 
     if (appState.center != null && appState.center != SOL.name) {
-      const centerBody = this.bodies.find(({ body }) => body.name === appState.center);
+      const centerBody = this.bodies[appState.center];
       if (centerBody != null) {
         const [x, y] = centerBody.dotPosition.array;
         this.camera.position.x = x;
@@ -101,11 +129,9 @@ export class SolarSystemRenderer {
     }
 
     // TODO: this method of looping is not very efficient
-    this.bodies.forEach(body => {
-      const bodyState = systemState[body.body.name];
-      if (bodyState != null) {
-        body.update(appState, bodyState);
-      }
+    Object.values(this.bodies).forEach(body => {
+      const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
+      body.update(appState, parentState ?? null);
     });
 
     this.renderer.render(this.scene, this.camera);
@@ -113,7 +139,7 @@ export class SolarSystemRenderer {
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     if (appState.drawLabel) {
       const metersPerPx = this.getMetersPerPixel();
-      this.bodies.forEach(body => {
+      Object.values(this.bodies).forEach(body => {
         body.drawLabel(ctx, this.camera, metersPerPx);
       });
     }
@@ -127,21 +153,29 @@ export class SolarSystemRenderer {
   }
   */
 
-  reset(appState: AppState, systemState: Record<string, CelestialBodyState>) {
+  reset(appState: AppState, system: Array<CelestialBody>) {
     this.setupCamera();
     this.controls.reset();
-    this.bodies.forEach(body => body.dispose());
-    this.bodies = Object.values(systemState).map(body => new KeplerianBody3D(this.scene, appState, body));
+    Object.values(this.bodies).forEach(body => body.dispose());
+    this.bodies = this.createBodies(appState, system);
   }
 
   dispose() {
     const boundResizeHandler = this.onWindowResize.bind(this);
     window.removeEventListener('resize', boundResizeHandler);
 
-    this.bodies.forEach(body => body.dispose());
+    Object.values(this.bodies).forEach(body => body.dispose());
     this.belts.forEach(belt => belt.dispose());
     this.renderer.dispose();
     this.controls.dispose();
+  }
+
+  private createBodies(appState: AppState, system: Array<CelestialBody>) {
+    const systemState = getInitialState(system);
+    return map(body => {
+      const parent = body.elements.wrt != null ? systemState[body.elements.wrt] : undefined;
+      return new KeplerianBody3D(this.scene, appState, parent ?? null, body);
+    }, systemState);
   }
 
   private addHelpers() {
@@ -156,7 +190,7 @@ export class SolarSystemRenderer {
   findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody3D | undefined {
     let closest: KeplerianBody3D | undefined = undefined;
     let closestDistance = threshold;
-    for (const body of [...this.bodies].reverse()) {
+    for (const body of Object.values(this.bodies).reverse()) {
       // ignore invisible types and offscreen bodies
       if (!visibleTypes.has(body.body.type)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);

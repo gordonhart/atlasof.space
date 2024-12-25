@@ -1,5 +1,4 @@
 import { Belt, CelestialBody, CelestialBodyType } from './types.ts';
-import { getInitialState } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -116,7 +115,67 @@ export const LUNA: CelestialBody = {
   color: DEFAULT_MOON_COLOR,
 };
 
-export const EARTH_SYSTEM = [LUNA, EARTH];
+export const EARTH_SYSTEM = [EARTH, LUNA];
+
+export const MARS: CelestialBody = {
+  type: CelestialBodyType.PLANET,
+  name: 'Mars',
+  influencedBy: [SOL.name],
+  elements: {
+    wrt: SOL.name,
+    epoch: 'J2000',
+    eccentricity: 0.0935,
+    semiMajorAxis: 227939366e3,
+    inclination: 1.85,
+    longitudeAscending: 49.57854,
+    argumentOfPeriapsis: 286.502,
+    meanAnomaly: 19.412,
+  },
+  mass: 6.4171e23,
+  radius: 3389.5e3,
+  siderealRotationPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
+  color: '#c96c3c',
+};
+
+export const PHOBOS: CelestialBody = {
+  type: CelestialBodyType.MOON,
+  name: 'Phobos',
+  influencedBy: [SOL.name, MARS.name],
+  elements: {
+    wrt: MARS.name,
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.0151,
+    semiMajorAxis: 9376e3,
+    inclination: 1.093,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.0659e16,
+  radius: 11.2667e3,
+  color: DEFAULT_MOON_COLOR,
+};
+
+export const DEIMOS: CelestialBody = {
+  type: CelestialBodyType.MOON,
+  name: 'Deimos',
+  influencedBy: [SOL.name, MARS.name],
+  elements: {
+    wrt: MARS.name,
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.00033,
+    semiMajorAxis: 23458e3,
+    inclination: 1.788,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomaly: 0,
+  },
+  mass: 1.4762e15,
+  radius: 6.2e3,
+  color: DEFAULT_MOON_COLOR,
+};
+
+export const MARS_SYSTEM = [MARS, PHOBOS, DEIMOS];
 
 // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
 //  collected over time. Switch?
@@ -465,7 +524,7 @@ export const HYDRA: CelestialBody = {
   color: DEFAULT_MOON_COLOR,
 };
 
-export const PLUTO_SYSTEM = [HYDRA, KERBEROS, NIX, STYX, CHARON, PLUTO];
+export const PLUTO_SYSTEM = [PLUTO, CHARON, STYX, NIX, KERBEROS, HYDRA];
 
 export const QUAOAR: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
@@ -679,66 +738,6 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   LELEAKUHONUA,
 ];
 
-export const MARS: CelestialBody = {
-  type: CelestialBodyType.PLANET,
-  name: 'Mars',
-  influencedBy: [SOL.name],
-  elements: {
-    wrt: SOL.name,
-    epoch: 'J2000',
-    eccentricity: 0.0935,
-    semiMajorAxis: 227939366e3,
-    inclination: 1.85,
-    longitudeAscending: 49.57854,
-    argumentOfPeriapsis: 286.502,
-    meanAnomaly: 19.412,
-  },
-  mass: 6.4171e23,
-  radius: 3389.5e3,
-  siderealRotationPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
-  color: '#c96c3c',
-};
-
-export const PHOBOS: CelestialBody = {
-  type: CelestialBodyType.MOON,
-  name: 'Phobos',
-  influencedBy: [SOL.name, MARS.name],
-  elements: {
-    wrt: MARS.name,
-    epoch: 'J2000', // TODO: verify
-    eccentricity: 0.0151,
-    semiMajorAxis: 9376e3,
-    inclination: 1.093,
-    longitudeAscending: 0,
-    argumentOfPeriapsis: 0,
-    meanAnomaly: 0,
-  },
-  mass: 1.0659e16,
-  radius: 11.2667e3,
-  color: DEFAULT_MOON_COLOR,
-};
-
-export const DEIMOS: CelestialBody = {
-  type: CelestialBodyType.MOON,
-  name: 'Deimos',
-  influencedBy: [SOL.name, MARS.name],
-  elements: {
-    wrt: MARS.name,
-    epoch: 'J2000', // TODO: verify
-    eccentricity: 0.00033,
-    semiMajorAxis: 23458e3,
-    inclination: 1.788,
-    longitudeAscending: 0,
-    argumentOfPeriapsis: 0,
-    meanAnomaly: 0,
-  },
-  mass: 1.4762e15,
-  radius: 6.2e3,
-  color: DEFAULT_MOON_COLOR,
-};
-
-export const MARS_SYSTEM = [DEIMOS, PHOBOS, MARS];
-
 export const JUPITER: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Jupiter',
@@ -836,7 +835,7 @@ export const CALLISTO: CelestialBody = {
 };
 
 // TODO: there are more moons
-export const JUPITER_SYSTEM = [CALLISTO, GANYMEDE, EUROPA, IO, JUPITER];
+export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
 
 export const SATURN: CelestialBody = {
   type: CelestialBodyType.PLANET,
@@ -992,7 +991,7 @@ export const IAPETUS: CelestialBody = {
 };
 
 // TODO: there are more moons
-export const SATURN_SYSTEM = [IAPETUS, TITAN, RHEA, DIONE, TETHYS, ENCELADUS, MIMAS, SATURN];
+export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS];
 
 export const URANUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
@@ -1128,7 +1127,7 @@ export const OBERON: CelestialBody = {
   color: DEFAULT_MOON_COLOR,
 };
 
-export const URANUS_SYSTEM = [OBERON, TITANIA, UMBRIEL, ARIEL, MIRANDA, PUCK, URANUS];
+export const URANUS_SYSTEM = [URANUS, PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON];
 
 export const NEPTUNE: CelestialBody = {
   type: CelestialBodyType.PLANET,
@@ -1267,7 +1266,7 @@ export const GALATEA: CelestialBody = {
 };
 
 // TODO: there are more moons
-export const NEPTUNE_SYSTEM = [TRITON, PROTEUS, NEREID, DESPINA, LARISSA, GALATEA, NEPTUNE];
+export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTEUS, TRITON];
 
 export const SOLAR_SYSTEM = [
   SOL,
@@ -1284,7 +1283,6 @@ export const SOLAR_SYSTEM = [
   ...PLUTO_SYSTEM,
   ...TRANS_NEPTUNIAN_OBJECTS,
 ];
-export const SOLAR_SYSTEM_INITIAL_STATE = getInitialState(SOLAR_SYSTEM);
 
 export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
 export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };

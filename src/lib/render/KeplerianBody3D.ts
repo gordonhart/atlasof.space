@@ -23,10 +23,11 @@ import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
 import { getCircleTexture, isOffScreen } from './utils.ts';
+import { omit } from 'ramda';
+import { PhysicsBody } from './PhysicsBody.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
-// TODO: PhysicallyModeled?
-export class KeplerianBody3D /* extends PhysicallyModeled */ {
+export class KeplerianBody3D extends PhysicsBody {
   readonly body: CelestialBody;
   readonly scene: Scene;
 
@@ -44,16 +45,16 @@ export class KeplerianBody3D /* extends PhysicallyModeled */ {
   readonly spherePoints: number = 36;
   readonly ellipsePoints: number = 3600;
 
-  constructor(scene: Scene, appState: AppState, body: CelestialBodyState) {
-    // super(body.mass, body.influencedBy);
-    this.body = body;
+  constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+    super(body.mass, body.influencedBy, new Vector3(...body.position), new Vector3(...body.velocity));
+
+    this.body = omit(['position', 'velocity', 'rotation'], body);
     this.scene = scene;
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
 
     // Create the main sphere geometry for the celestial body
-    console.log(body.name, body.radius);
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const sphereMaterial = new MeshBasicMaterial({ color });
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
@@ -101,21 +102,23 @@ export class KeplerianBody3D /* extends PhysicallyModeled */ {
     const ellipseMaterial = new LineMaterial({ color, linewidth: 1, resolution, transparent: true, opacity: 0.5 });
     ellipseMaterial.depthTest = false;
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
-    /* TODO
     if (parent != null) {
       this.ellipse.translateX(parent.position[0] / SCALE_FACTOR);
       this.ellipse.translateY(parent.position[1] / SCALE_FACTOR);
       this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR);
     }
-     */
     this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
     this.ellipse.rotateX(degreesToRadians(iDeg));
     scene.add(this.ellipse);
   }
 
-  update(appState: AppState, body: CelestialBodyState) {
+  update(appState: AppState, parent: this | null) {
     this.visible = appState.visibleTypes.has(this.body.type);
-    const position = mul3(1 / SCALE_FACTOR, body.position);
+    // TODO: is this an in-place operation, or an immutable operation?
+    const position = this.position
+      .clone()
+      .multiplyScalar(1 / SCALE_FACTOR)
+      .toArray();
     this.sphere.position.set(...position);
     this.sphere.visible = this.visible;
     this.dotPosition.array[0] = position[0];
@@ -125,26 +128,25 @@ export class KeplerianBody3D /* extends PhysicallyModeled */ {
     this.dot.visible = this.visible;
     this.ellipse.visible = this.visible && appState.drawOrbit;
 
-    /* TODO
     // move ellipse based on position of parent
     if (parent != null) {
       // TODO: do these ever rotate relative to the sun?
-      this.ellipse.translateX(parent.position[0] / SCALE_FACTOR - this.ellipse.position.x);
-      this.ellipse.translateY(parent.position[1] / SCALE_FACTOR - this.ellipse.position.y);
-      this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR - this.ellipse.position.z);
+      const [parentX, parentY, parentZ] = parent.position.clone().multiplyScalar(1 / SCALE_FACTOR);
+      this.ellipse.translateX(parentX - this.ellipse.position.x);
+      this.ellipse.translateY(parentY - this.ellipse.position.y);
+      this.ellipse.translateZ(parentZ - this.ellipse.position.z);
     }
-     */
 
     // scale body based on hover state
     if (appState.hover === this.body.name && !this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover on
-      const radius = (HOVER_SCALE_FACTOR * body.radius) / SCALE_FACTOR;
+      const radius = (HOVER_SCALE_FACTOR * this.body.radius) / SCALE_FACTOR;
       this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
       this.ellipse.material.linewidth = 3;
       this.hovered = true;
     } else if (appState.hover !== this.body.name && this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover off
-      this.sphere.geometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
+      this.sphere.geometry = new SphereGeometry(this.body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
       this.ellipse.material.linewidth = 1;
       this.hovered = false;
     }

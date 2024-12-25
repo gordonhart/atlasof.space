@@ -1,9 +1,10 @@
 import { useRef } from 'react';
 import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
-import { CelestialBodyState } from '../lib/types.ts';
+import { CelestialBody } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
+import { SOLAR_SYSTEM } from '../lib/bodies.ts';
 
-export function useSolarSystemRenderer() {
+export function useSolarSystemModel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<SolarSystemRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -20,10 +21,10 @@ export function useSolarSystemRenderer() {
     ctx.translate(0, -canvas.height / dpr);
   }
 
-  function initialize(appState: AppState, systemState: Record<string, CelestialBodyState>) {
+  function initialize(appState: AppState) {
     if (containerRef.current == null || canvasRef.current == null) return;
     if (rendererRef.current == null) {
-      rendererRef.current = new SolarSystemRenderer(containerRef.current, appState, systemState);
+      rendererRef.current = new SolarSystemRenderer(containerRef.current, appState, SOLAR_SYSTEM);
     }
     initializeCanvas();
     window.addEventListener('resize', initializeCanvas);
@@ -36,27 +37,17 @@ export function useSolarSystemRenderer() {
     };
   }
 
-  function add(
-    appState: AppState,
-    parent: Record<string, CelestialBodyState> | null,
-    body: Record<string, CelestialBodyState>
-  ) {
+  // TODO: do we need to pass in dt separately? probably not
+  function update(ctx: CanvasRenderingContext2D, appState: AppState, dt: number) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
-    console.error('not implemented', appState, parent, body);
-    // renderer.add(appState, parent, body);
+    renderer.update(ctx, appState, dt);
   }
 
-  function update(ctx: CanvasRenderingContext2D, appState: AppState, systemState: Record<string, CelestialBodyState>) {
+  function reset(appState: AppState, system: Array<CelestialBody>) {
     const renderer = rendererRef.current;
     if (renderer == null) return;
-    renderer.update(ctx, appState, systemState);
-  }
-
-  function reset(appState: AppState, systemState: Record<string, CelestialBodyState>) {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-    renderer.reset(appState, systemState);
+    renderer.reset(appState, system);
   }
 
   return {
@@ -64,7 +55,6 @@ export function useSolarSystemRenderer() {
     rendererRef,
     canvasRef,
     initialize,
-    add,
     update,
     reset,
   };
