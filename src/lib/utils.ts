@@ -29,25 +29,17 @@ export function humanDistanceUnits(d: number): [number, string] {
   }
 }
 
-export function celestialBodyTypeName(type: CelestialBodyType) {
-  switch (type) {
-    case 'star':
-      return 'Star';
-    case 'planet':
-      return 'Planet';
-    case 'moon':
-      return 'Moon';
-    case 'dwarf-planet':
-      return 'Dwarf Planet';
-    case 'asteroid':
-      return 'Asteroid';
-    case 'comet':
-      return 'Comet';
-    case 'trans-neptunian-object':
-      return 'Trans-Neptunian Object';
-    case 'belt':
-      return 'Belt';
-  }
+export function celestialBodyTypeName(type: CelestialBodyType): string {
+  return {
+    [CelestialBodyType.STAR]: 'Star',
+    [CelestialBodyType.PLANET]: 'Planet',
+    [CelestialBodyType.MOON]: 'Moon',
+    [CelestialBodyType.DWARF_PLANET]: 'Dwarf Planet',
+    [CelestialBodyType.ASTEROID]: 'Asteroid',
+    [CelestialBodyType.COMET]: 'Comet',
+    [CelestialBodyType.BELT]: 'Belt',
+    [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 'Trans-Neptunian Object',
+  }[type];
 }
 
 // TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up

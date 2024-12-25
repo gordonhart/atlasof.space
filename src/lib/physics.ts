@@ -1,5 +1,5 @@
 import { G } from './bodies.ts';
-import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
+import { CartesianState, KeplerianElements, Point3 } from './types.ts';
 
 // TODO: use proper vector/matrix library?
 export function add3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
@@ -43,6 +43,10 @@ export function surfaceGravity(mass: number, radius: number) {
   return (G * mass) / radius ** 2; // m/s^2
 }
 
+export function estimateAsteroidMass(radius: number) {
+  return 2500 * (4 / 3) * Math.PI * radius ** 3; // best-effort guess using 2500kg/m3 density and a spherical shape
+}
+
 export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number): Point3 {
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = elements;
 
@@ -79,7 +83,7 @@ export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number
 }
 
 // position WRT center of mass of the object we are orbiting around
-function gravitationalAcceleration(position: Point3, mu: number): Point3 {
+export function gravitationalAcceleration(position: Point3, mu: number): Point3 {
   const r = magnitude(position);
   return mul3(-mu / r ** 3, position);
 }
@@ -114,7 +118,7 @@ export function trueAnomalyFromMean(meanAnomaly: number, eccentricity: number, t
   return trueAnomaly < 0 ? trueAnomaly + 2 * Math.PI : trueAnomaly;
 }
 
-function keplerianToCartesian(
+export function keplerianToCartesian(
   {
     eccentricity: e,
     semiMajorAxis: a,
@@ -157,50 +161,4 @@ function keplerianToCartesian(
   ) as Point3;
 
   return { position: positionInertial, velocity: velocityInertial };
-}
-
-function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
-  const newVelocity = add3(state.velocity, mul3(dt, acceleration));
-  const newPosition = add3(state.position, mul3(dt, newVelocity));
-  return { position: newPosition, velocity: newVelocity };
-}
-
-function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState, dt: number): number {
-  return siderealRotationPeriod == null ? rotation : (rotation + (360 * dt) / siderealRotationPeriod) % 360;
-}
-
-export function getInitialState(parentState: CelestialBodyState | null, child: CelestialBody): CelestialBodyState {
-  let childCartesian: CartesianState = { position: [0, 0, 0], velocity: [0, 0, 0] };
-  if (parentState != null) {
-    const { position, velocity } = keplerianToCartesian(child.elements, G * parentState.mass);
-    childCartesian = { position: add3(parentState.position, position), velocity: add3(parentState.velocity, velocity) };
-  }
-  const childState: CelestialBodyState = { ...child, ...childCartesian, rotation: 0, satellites: [] }; // satellites to be replaced
-  const satellites = child.satellites.map(grandchild => getInitialState(childState, grandchild));
-  return { ...childState, satellites };
-}
-
-function incrementStateByParents(
-  parents: Array<CelestialBodyState>,
-  child: CelestialBodyState,
-  dt: number
-): CelestialBodyState {
-  const satellites = child.satellites.map(grandchild => incrementStateByParents([child, ...parents], grandchild, dt));
-  const acceleration = parents.reduce<Point3>(
-    (acc, parent) => add3(acc, gravitationalAcceleration(subtract3(child.position, parent.position), G * parent.mass)),
-    [0, 0, 0] as Point3
-  );
-  const newState = applyAcceleration(child, acceleration, dt);
-  const rotation = applyRotation(child, dt);
-  return { ...child, ...newState, rotation, satellites };
-}
-
-export function incrementState(state: CelestialBodyState, dt: number): CelestialBodyState {
-  // TODO: subdividing dt down to 1 hour increments slows down simulation significantly at faster playback speeds.
-  //  Potential fix: identify fast-period bodies and subdivide those as necessary, but leave others at the requested dt?
-  const maxSafeDt = 3_600; // 1 hour
-  const nIterations = Math.ceil(dt / maxSafeDt);
-  return Array(nIterations)
-    .fill(null)
-    .reduce(acc => incrementStateByParents([], acc, dt / nIterations), state);
 }

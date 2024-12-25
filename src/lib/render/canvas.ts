@@ -1,14 +1,8 @@
-import { Point2 } from './types.ts';
+import { Point2 } from '../types.ts';
 
 export function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
   const dpr = window.devicePixelRatio ?? 1;
   return [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
-}
-
-export function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
-  return (
-    xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
-  );
 }
 
 export function drawOffscreenLabel(

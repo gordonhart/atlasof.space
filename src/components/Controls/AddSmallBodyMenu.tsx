@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
-import { getInitialState } from '../../lib/physics.ts';
 import {
   ActionIcon,
   Checkbox,
@@ -14,8 +13,8 @@ import {
 } from '@mantine/core';
 import { IconChevronDown, IconSpherePlus } from '@tabler/icons-react';
 import { iconSize } from './constants.ts';
-import { CelestialBody, CelestialBodyState } from '../../lib/types.ts';
-import { findCelestialBody, notNullish } from '../../lib/utils.ts';
+import { CelestialBody } from '../../lib/types.ts';
+import { notNullish } from '../../lib/utils.ts';
 import { UseQueryResult } from '@tanstack/react-query';
 
 // TODO: load from data; full list is ~1.5M, should at least include a few thousand
@@ -533,10 +532,11 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   return acc;
 }, []);
 
+// TODO: reenable
 type Props = {
-  systemState: CelestialBodyState;
+  addBody: (body: CelestialBody) => void;
 };
-export function AddSmallBodyMenu({ systemState }: Props) {
+export function AddSmallBodyMenu({ addBody }: Props) {
   const tree = useTree();
   const selectedBodies = tree.checkedState.map(key => key.split('/')[1]);
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
@@ -544,11 +544,7 @@ export function AddSmallBodyMenu({ systemState }: Props) {
 
   useEffect(() => {
     smallBodies.forEach(body => {
-      if (findCelestialBody(systemState, body.name) == null) {
-        // TODO: directly adding to systemState is buggy and bad practice
-        // TODO: initial state needs to take anomaly into account
-        systemState.satellites.push(getInitialState(systemState, body));
-      }
+      addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);
 

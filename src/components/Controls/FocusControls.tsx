@@ -1,19 +1,20 @@
 import { Box, Button, Group, Menu, Stack, Text, Transition } from '@mantine/core';
 import { IconCircle, IconCircleDot, IconCircleFilled } from '@tabler/icons-react';
-import { CELESTIAL_BODY_CLASSES, CELESTIAL_BODY_NAMES, CELESTIAL_BODY_SHORT_NAMES } from '../../lib/bodies.ts';
-import { celestialBodyTypeName, findCelestialBody } from '../../lib/utils.ts';
-import { CelestialBodyState } from '../../lib/types.ts';
+import {
+  CELESTIAL_BODY_CLASSES,
+  CELESTIAL_BODY_NAMES,
+  CELESTIAL_BODY_SHORT_NAMES,
+  SOLAR_SYSTEM_BY_NAME,
+} from '../../lib/bodies.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { FactCard } from './FactCard.tsx';
-import { useMemo } from 'react';
 import { iconSize, AppStateControlProps } from './constants.ts';
 import { AppState } from '../../lib/state.ts';
+import { memo } from 'react';
 
-type Props = Pick<AppStateControlProps, 'updateState'> &
-  Pick<AppState, 'hover' | 'center'> & {
-    systemState: CelestialBodyState;
-  };
-export function FocusControls({ hover, center, updateState, systemState }: Props) {
-  const focusBody = useMemo(() => (hover != null ? findCelestialBody(systemState, hover) : null), [hover]);
+type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'hover' | 'center'>;
+export const FocusControls = memo(function FocusControlsComponent({ hover, center, updateState }: Props) {
+  const focusBody = hover != null ? SOLAR_SYSTEM_BY_NAME[hover] : undefined;
 
   return (
     <Stack gap="xs" align="flex-start">
@@ -45,4 +46,4 @@ export function FocusControls({ hover, center, updateState, systemState }: Props
       </Transition>
     </Stack>
   );
-}
+});

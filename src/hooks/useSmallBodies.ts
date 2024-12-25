@@ -1,7 +1,8 @@
-import { CelestialBody } from '../lib/types.ts';
-import { AU, DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
+import { CelestialBody, CelestialBodyType } from '../lib/types.ts';
+import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
+import { estimateAsteroidMass } from '../lib/physics.ts';
 
 export function useSmallBodies(names: Array<string>) {
   return useQueries<UseQueryOptions<CelestialBody | null, Error>[]>({
@@ -25,10 +26,12 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
   // TODO: are units always km? should account for the reported unit type
   const radius = (Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2) * 1e3;
   return {
+    type: CelestialBodyType.ASTEROID, // TODO: sometimes comets
     name: object.fullname,
     shortName: object.shortname,
-    type: 'asteroid',
+    influencedBy: [SOL.name],
     elements: {
+      wrt: SOL.name,
       epoch: 'J2000', // TODO: should be in the response
       eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
       semiMajorAxis: Number(elements.find(({ name }) => name === 'a')?.value) * AU,
@@ -37,9 +40,8 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
       argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
       meanAnomaly: Number(elements.find(({ name }) => name === 'ma')?.value),
     },
-    mass: 2500 * (4 / 3) * Math.PI * radius ** 3, // best-effort guess using 2500kg/m3 density and a spherical shape
+    mass: estimateAsteroidMass(radius),
     radius,
     color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?
-    satellites: [],
   };
 }

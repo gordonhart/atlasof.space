@@ -1,5 +1,11 @@
 import { CanvasTexture } from 'three';
 
+export function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
+  return (
+    xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
+  );
+}
+
 export function getCircleTexture(color: string) {
   const canvas = document.createElement('canvas');
   canvas.width = 16;

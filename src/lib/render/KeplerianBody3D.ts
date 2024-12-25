@@ -1,4 +1,4 @@
-import { CelestialBody, CelestialBodyState, Point2 } from '../types.ts';
+import { CelestialBody, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, MIN_SIZE, SCALE_FACTOR } from './constants.ts';
 import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
@@ -21,32 +21,37 @@ import { AppState } from '../state.ts';
 import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
-import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels, isOffScreen } from '../draw.ts';
-import { getCircleTexture } from './utils.ts';
+import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
+import { getCircleTexture, isOffScreen } from './utils.ts';
+import { KinematicBody } from './KinematicBody.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
-export class KeplerianBody3D {
-  readonly body: CelestialBody;
-  readonly parentName: string | null;
-  readonly scene: Scene;
-
-  // main objects
-  readonly sphere: Mesh;
-  readonly dot: Points;
-  readonly ellipse: Line2;
-
-  // for memory efficiency
-  readonly dotPosition: BufferAttribute;
-  readonly screenPosition: Vector3;
+export class KeplerianBody3D extends KinematicBody {
+  public readonly body: CelestialBody;
+  private readonly scene: Scene;
+  private readonly sphere: Mesh;
+  private readonly dot: Points;
+  private readonly ellipse: Line2;
+  public readonly dotPosition: BufferAttribute;
+  private readonly screenPosition: Vector3;
 
   private visible: boolean = false;
   private hovered: boolean = false;
-  readonly spherePoints: number = 36;
-  readonly ellipsePoints: number = 3600;
+  private readonly spherePoints: number = 36;
+  private readonly ellipsePoints: number = 3600;
 
-  constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+  constructor(
+    scene: Scene,
+    appState: AppState,
+    parent: KeplerianBody3D | null,
+    body: CelestialBody,
+    position: Vector3,
+    velocity: Vector3
+  ) {
+    const { mass, influencedBy, siderealRotationPeriod } = body;
+    super(mass, influencedBy, siderealRotationPeriod, position, velocity);
+
     this.body = body;
-    this.parentName = parent?.name ?? null;
     this.scene = scene;
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
@@ -56,13 +61,13 @@ export class KeplerianBody3D {
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const sphereMaterial = new MeshBasicMaterial({ color });
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
-    const position = mul3(1 / SCALE_FACTOR, body.position);
-    this.sphere.position.set(...position);
+    const positionScaled = mul3(1 / SCALE_FACTOR, position.toArray());
+    this.sphere.position.set(...positionScaled);
     scene.add(this.sphere);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
     const dotGeometry = new BufferGeometry();
-    this.dotPosition = new BufferAttribute(new Float32Array(position), 3);
+    this.dotPosition = new BufferAttribute(new Float32Array(positionScaled), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
     const map = getCircleTexture(body.color);
     const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color, map, transparent: true, sizeAttenuation: false });
@@ -101,45 +106,44 @@ export class KeplerianBody3D {
     ellipseMaterial.depthTest = false;
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
     if (parent != null) {
-      this.ellipse.translateX(parent.position[0] / SCALE_FACTOR);
-      this.ellipse.translateY(parent.position[1] / SCALE_FACTOR);
-      this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR);
+      this.ellipse.translateX(parent.position.x / SCALE_FACTOR);
+      this.ellipse.translateY(parent.position.y / SCALE_FACTOR);
+      this.ellipse.translateZ(parent.position.z / SCALE_FACTOR);
     }
     this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
     this.ellipse.rotateX(degreesToRadians(iDeg));
     scene.add(this.ellipse);
   }
 
-  update(appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
+  update(appState: AppState, parent: this | null) {
     this.visible = appState.visibleTypes.has(this.body.type);
-    const position = mul3(1 / SCALE_FACTOR, body.position);
-    this.sphere.position.set(...position);
+    this.sphere.position.set(...this.position.toArray()).multiplyScalar(1 / SCALE_FACTOR);
     this.sphere.visible = this.visible;
-    this.dotPosition.array[0] = position[0];
-    this.dotPosition.array[1] = position[1];
-    this.dotPosition.array[2] = position[2];
+    this.dotPosition.array[0] = this.sphere.position.x;
+    this.dotPosition.array[1] = this.sphere.position.y;
+    this.dotPosition.array[2] = this.sphere.position.z;
     this.dotPosition.needsUpdate = true;
     this.dot.visible = this.visible;
     this.ellipse.visible = this.visible && appState.drawOrbit;
 
+    // TODO: bug here where the ellipses of some moons fly away...?
     // move ellipse based on position of parent
     if (parent != null) {
-      // TODO: do these ever rotate relative to the sun?
-      this.ellipse.translateX(parent.position[0] / SCALE_FACTOR - this.ellipse.position.x);
-      this.ellipse.translateY(parent.position[1] / SCALE_FACTOR - this.ellipse.position.y);
-      this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR - this.ellipse.position.z);
+      this.ellipse.translateX(parent.position.x / SCALE_FACTOR - this.ellipse.position.x);
+      this.ellipse.translateY(parent.position.y / SCALE_FACTOR - this.ellipse.position.y);
+      this.ellipse.translateZ(parent.position.z / SCALE_FACTOR - this.ellipse.position.z);
     }
 
     // scale body based on hover state
     if (appState.hover === this.body.name && !this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover on
-      const radius = (HOVER_SCALE_FACTOR * body.radius) / SCALE_FACTOR;
+      const radius = (HOVER_SCALE_FACTOR * this.body.radius) / SCALE_FACTOR;
       this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
       this.ellipse.material.linewidth = 3;
       this.hovered = true;
     } else if (appState.hover !== this.body.name && this.hovered) {
       this.sphere.geometry.dispose(); // toggle hover off
-      this.sphere.geometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
+      this.sphere.geometry = new SphereGeometry(this.body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
       this.ellipse.material.linewidth = 1;
       this.hovered = false;
     }

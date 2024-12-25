@@ -1,6 +1,6 @@
 import { BufferAttribute, BufferGeometry, Material, Points, PointsMaterial, Scene } from 'three';
 import { AppState } from '../state.ts';
-import { Belt } from '../types.ts';
+import { Belt, CelestialBodyType } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
 export class Belt3D {
@@ -12,7 +12,7 @@ export class Belt3D {
   constructor(scene: Scene, appState: AppState, belt: Belt) {
     this.belt = belt;
     this.scene = scene;
-    this.visible = appState.visibleTypes.has('belt');
+    this.visible = appState.visibleTypes.has(CelestialBodyType.BELT);
 
     const width = (belt.max - belt.min) / SCALE_FACTOR;
     const particleGeometry = new BufferGeometry();
