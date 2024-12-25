@@ -46,7 +46,8 @@ export class KeplerianBody3D extends PhysicsBody {
   readonly ellipsePoints: number = 3600;
 
   constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    super(body.mass, body.influencedBy, new Vector3(...body.position), new Vector3(...body.velocity));
+    const { mass, influencedBy, siderealRotationPeriod, position, velocity } = body;
+    super(mass, influencedBy, siderealRotationPeriod, new Vector3(...position), new Vector3(...velocity));
 
     this.body = omit(['position', 'velocity', 'rotation'], body);
     this.scene = scene;
@@ -58,13 +59,13 @@ export class KeplerianBody3D extends PhysicsBody {
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const sphereMaterial = new MeshBasicMaterial({ color });
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
-    const position = mul3(1 / SCALE_FACTOR, body.position);
-    this.sphere.position.set(...position);
+    const positionScaled = mul3(1 / SCALE_FACTOR, body.position);
+    this.sphere.position.set(...positionScaled);
     scene.add(this.sphere);
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
     const dotGeometry = new BufferGeometry();
-    this.dotPosition = new BufferAttribute(new Float32Array(position), 3);
+    this.dotPosition = new BufferAttribute(new Float32Array(positionScaled), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
     const map = getCircleTexture(body.color);
     const dotMaterial = new PointsMaterial({ size: MIN_SIZE, color, map, transparent: true, sizeAttenuation: false });
@@ -114,16 +115,13 @@ export class KeplerianBody3D extends PhysicsBody {
 
   update(appState: AppState, parent: this | null) {
     this.visible = appState.visibleTypes.has(this.body.type);
-    // TODO: is this an in-place operation, or an immutable operation?
-    const position = this.position
-      .clone()
-      .multiplyScalar(1 / SCALE_FACTOR)
-      .toArray();
-    this.sphere.position.set(...position);
+    // TODO: avoid cloning?
+    const position = this.position.clone().multiplyScalar(1 / SCALE_FACTOR);
+    this.sphere.position.set(position.x, position.y, position.z);
     this.sphere.visible = this.visible;
-    this.dotPosition.array[0] = position[0];
-    this.dotPosition.array[1] = position[1];
-    this.dotPosition.array[2] = position[2];
+    this.dotPosition.array[0] = position.x;
+    this.dotPosition.array[1] = position.y;
+    this.dotPosition.array[2] = position.z;
     this.dotPosition.needsUpdate = true;
     this.dot.visible = this.visible;
     this.ellipse.visible = this.visible && appState.drawOrbit;

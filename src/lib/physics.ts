@@ -159,16 +159,6 @@ function keplerianToCartesian(
   return { position: positionInertial, velocity: velocityInertial };
 }
 
-export function applyAcceleration(state: CartesianState, acceleration: Point3, dt: number): CartesianState {
-  const newVelocity = add3(state.velocity, mul3(dt, acceleration));
-  const newPosition = add3(state.position, mul3(dt, newVelocity));
-  return { position: newPosition, velocity: newVelocity };
-}
-
-export function applyRotation({ siderealRotationPeriod, rotation }: CelestialBodyState, dt: number): number {
-  return siderealRotationPeriod == null ? rotation : (rotation + (360 * dt) / siderealRotationPeriod) % 360;
-}
-
 export function getInitialState(bodies: Array<CelestialBody>): Record<string, CelestialBodyState> {
   const initialState: Record<string, CelestialBodyState> = {};
   const toInitialize = [...bodies];
