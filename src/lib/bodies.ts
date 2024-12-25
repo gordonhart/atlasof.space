@@ -1,4 +1,5 @@
 import { Belt, CelestialBody, CelestialBodyType } from './types.ts';
+import { estimateAsteroidMass } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -384,11 +385,11 @@ export const NEREUS: CelestialBody = {
   name: '4660 Nereus',
   shortName: 'Nereus',
   influencedBy: [SOL.name],
-  mass: 1, // TODO: not known
+  mass: estimateAsteroidMass(165), // not known
   radius: 165, // m
   elements: {
     wrt: SOL.name,
-    epoch: 'J2000', // TODO: verify
+    epoch: 'JD2459396.5',
     eccentricity: 0.36004,
     semiMajorAxis: 1.4889 * AU, // meters
     inclination: 1.4316, // degrees

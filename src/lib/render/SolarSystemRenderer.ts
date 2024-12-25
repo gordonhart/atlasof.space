@@ -12,14 +12,14 @@ import { getInitialState } from '../physics.ts';
 import { map } from 'ramda';
 
 export class SolarSystemRenderer {
-  readonly scene: Scene;
-  readonly camera: OrthographicCamera;
-  readonly renderer: WebGLRenderer;
-  readonly controls: OrbitControls;
-  private bodies: Record<string, KeplerianBody3D>;
-  readonly belts: Array<Belt3D>;
+  private readonly scene: Scene;
+  private readonly camera: OrthographicCamera;
+  private readonly renderer: WebGLRenderer;
+  private readonly controls: OrbitControls;
+  public bodies: Record<string, KeplerianBody3D>; // TODO: private?
+  private readonly belts: Array<Belt3D>;
 
-  readonly debug = false;
+  private readonly debug = false;
 
   constructor(container: HTMLElement, appState: AppState, system: Array<CelestialBody>) {
     this.scene = new Scene();

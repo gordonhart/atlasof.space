@@ -28,22 +28,18 @@ import { PhysicsBody } from './PhysicsBody.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody3D extends PhysicsBody {
-  readonly body: CelestialBody;
-  readonly scene: Scene;
-
-  // main objects
-  readonly sphere: Mesh;
-  readonly dot: Points;
-  readonly ellipse: Line2;
-
-  // for memory efficiency
-  readonly dotPosition: BufferAttribute;
-  readonly screenPosition: Vector3;
+  public readonly body: CelestialBody;
+  private readonly scene: Scene;
+  private readonly sphere: Mesh;
+  private readonly dot: Points;
+  private readonly ellipse: Line2;
+  public readonly dotPosition: BufferAttribute;
+  private readonly screenPosition: Vector3;
 
   private visible: boolean = false;
   private hovered: boolean = false;
-  readonly spherePoints: number = 36;
-  readonly ellipsePoints: number = 3600;
+  private readonly spherePoints: number = 36;
+  private readonly ellipsePoints: number = 3600;
 
   constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
     const { mass, influencedBy, siderealRotationPeriod, position, velocity } = body;

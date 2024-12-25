@@ -1,7 +1,7 @@
 import { Group, Image, Paper, Stack, Text } from '@mantine/core';
-import { CelestialBodyState } from '../../lib/types.ts';
+import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
-import { magnitude, orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
+import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g, SOL } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
 import { Thumbnail } from './Thumbnail.tsx';
@@ -9,10 +9,10 @@ import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 
 type Props = {
-  body: CelestialBodyState;
+  body: CelestialBody;
 };
 export function FactCard({ body }: Props) {
-  const { name, type, mass, radius, elements, velocity, color } = body;
+  const { name, type, mass, radius, elements, color } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
   // TODO: period for non-sun-orbiting bodies? requires knowing the parent's mass
@@ -28,8 +28,8 @@ export function FactCard({ body }: Props) {
     { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
     { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
     { label: 'orbital period', value: pluralize(periodTime, periodUnits) },
-    // TODO: this doesn't update live due to the passed-in body being a ref -- should fix
-    { label: 'velocity', value: `${(magnitude(velocity) / 1e3).toLocaleString()} km/s` },
+    // TODO: reenable? makes this rerender frequently
+    // { label: 'velocity', value: `${(magnitude(velocity) / 1e3).toLocaleString()} km/s` },
     { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
   ];
   const factBullets = factsAsBullets(facts);

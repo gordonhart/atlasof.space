@@ -2,6 +2,7 @@ import { CelestialBody, CelestialBodyType } from '../lib/types.ts';
 import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
+import { estimateAsteroidMass } from '../lib/physics.ts';
 
 export function useSmallBodies(names: Array<string>) {
   return useQueries<UseQueryOptions<CelestialBody | null, Error>[]>({
@@ -39,7 +40,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
       argumentOfPeriapsis: Number(elements.find(({ name }) => name === 'w')?.value),
       meanAnomaly: Number(elements.find(({ name }) => name === 'ma')?.value),
     },
-    mass: 2500 * (4 / 3) * Math.PI * radius ** 3, // best-effort guess using 2500kg/m3 density and a spherical shape
+    mass: estimateAsteroidMass(radius),
     radius,
     color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?
   };

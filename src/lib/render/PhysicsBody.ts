@@ -25,7 +25,6 @@ export class PhysicsBody {
     this.rotation = 0; // TODO: initial state? hard to find
   }
 
-  // TODO: deal with friction between Vector3/Point3 math
   // TODO: subdivide dt to a safe value
   increment(parents: Array<Pick<PhysicsBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
     const acceleration = new Vector3(0, 0, 0);

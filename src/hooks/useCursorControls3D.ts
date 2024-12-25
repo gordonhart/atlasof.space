@@ -1,4 +1,4 @@
-import { PointerEvent, useRef } from 'react';
+import { MouseEvent, PointerEvent, useRef } from 'react';
 import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
 import { Point2 } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
@@ -27,7 +27,20 @@ export function useCursorControls3D(
     dragDetectorRef.current = null;
   }
 
-  function onClick(event: PointerEvent<HTMLElement>) {
+  function onPointerMove(event: PointerEvent<HTMLElement>) {
+    const dragDetector = dragDetectorRef.current;
+    if (dragDetector != null) {
+      const distance = magnitude(subtract3([...dragDetector.initial, 0], [event.clientX, event.clientY, 0]));
+      dragDetectorRef.current = { ...dragDetector, dragged: dragDetector.dragged || distance > DRAG_PX_THRESHOLD };
+    }
+
+    if (renderer == null) return;
+    const eventPx: Point2 = [event.clientX, event.clientY];
+    const closeBody = renderer.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
+    updateAppState({ hover: closeBody?.body?.name ?? null });
+  }
+
+  function onClick(event: MouseEvent<HTMLElement>) {
     if (renderer == null) return;
 
     // only process this as a click if the user hasn't been dragging around; it's bad UX if the end of your dragging
@@ -42,19 +55,6 @@ export function useCursorControls3D(
     if (closeBody != null) {
       updateAppState({ center: closeBody.body.name });
     }
-  }
-
-  function onPointerMove(event: PointerEvent<HTMLElement>) {
-    const dragDetector = dragDetectorRef.current;
-    if (dragDetector != null) {
-      const distance = magnitude(subtract3([...dragDetector.initial, 0], [event.clientX, event.clientY, 0]));
-      dragDetectorRef.current = { ...dragDetector, dragged: dragDetector.dragged || distance > DRAG_PX_THRESHOLD };
-    }
-
-    if (renderer == null) return;
-    const eventPx: Point2 = [event.clientX, event.clientY];
-    const closeBody = renderer.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
-    updateAppState({ hover: closeBody?.body?.name ?? null });
   }
 
   return { onPointerDown, onPointerMove, onPointerLeave, onClick };
