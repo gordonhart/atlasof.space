@@ -53,11 +53,6 @@ export type CelestialBody = {
   color: `#${string}`; // hex
 };
 
-export type CelestialBodyState = CelestialBody &
-  CartesianState & {
-    rotation: number; // degrees
-  };
-
 export type Belt = {
   min: number;
   max: number;

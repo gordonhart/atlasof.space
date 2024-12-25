@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import { G } from '../bodies.ts';
 
-export class PhysicsBody {
+export class KinematicBody {
   readonly mass: number;
   readonly influencedBy: Array<string>;
   readonly rotationPeriod: number | undefined;
@@ -26,7 +26,7 @@ export class PhysicsBody {
   }
 
   // TODO: subdivide dt to a safe value
-  increment(parents: Array<Pick<PhysicsBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
+  increment(parents: Array<Pick<KinematicBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
     const acceleration = new Vector3(0, 0, 0);
     parents.forEach(parent => {
       const positionDelta = this.position.clone().sub(parent.position);

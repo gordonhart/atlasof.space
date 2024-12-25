@@ -1,14 +1,13 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
-import { AU, SOL } from '../bodies.ts';
+import { AU, G, SOL } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { Belt3D } from './Belt3D.ts';
-
 import { isOffScreen } from './utils.ts';
-import { getInitialState } from '../physics.ts';
+import { keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
 
 export class SolarSystemRenderer {
@@ -16,7 +15,7 @@ export class SolarSystemRenderer {
   private readonly camera: OrthographicCamera;
   private readonly renderer: WebGLRenderer;
   private readonly controls: OrbitControls;
-  public bodies: Record<string, KeplerianBody3D>; // TODO: private?
+  public bodies: Record<string, KeplerianBody3D>;
   private readonly belts: Array<Belt3D>;
 
   private readonly debug = false;
@@ -88,61 +87,15 @@ export class SolarSystemRenderer {
   }
 
   update(ctx: CanvasRenderingContext2D, appState: AppState, dt: number) {
-    if (dt > 0) {
-      // TODO: set?
-      const parentStates = map(
-        body => ({
-          position: body.position.clone(),
-          velocity: body.velocity.clone(),
-          mass: body.mass,
-        }),
-        this.bodies
-      );
-      const toIncrement = Object.values(this.bodies).map(body => body.body.name);
-      const incremented = new Set();
-      while (toIncrement.length > 0) {
-        const bodyName = toIncrement.shift()!;
-        const body = this.bodies[bodyName]!;
-        const parents = body.influencedBy.filter(name => incremented.has(name)).map(name => parentStates[name]);
-        if (parents.length !== body.influencedBy.length) {
-          toIncrement.push(bodyName);
-          continue;
-        }
-        incremented.add(bodyName);
-        this.bodies[bodyName].increment(parents, dt);
-      }
-    }
-
+    if (dt > 0) this.incrementKinematics(dt);
     this.controls.update();
-
-    if (appState.center != null && appState.center != SOL.name) {
-      const centerBody = this.bodies[appState.center];
-      if (centerBody != null) {
-        const [x, y] = centerBody.dotPosition.array;
-        this.camera.position.x = x;
-        this.camera.position.y = y;
-        this.camera.position.z = 1e9;
-        this.camera.lookAt(x, y, 0);
-        this.camera.up.set(0, 1, 0);
-        this.camera.updateProjectionMatrix();
-      }
-    }
-
-    // TODO: this method of looping is not very efficient
+    this.updateCenter(appState);
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(appState, parentState ?? null);
     });
-
     this.renderer.render(this.scene, this.camera);
-
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    if (appState.drawLabel) {
-      const metersPerPx = this.getMetersPerPixel();
-      Object.values(this.bodies).forEach(body => {
-        body.drawLabel(ctx, this.camera, metersPerPx);
-      });
-    }
+    this.drawLabels(ctx, appState);
   }
 
   /*
@@ -171,11 +124,78 @@ export class SolarSystemRenderer {
   }
 
   private createBodies(appState: AppState, system: Array<CelestialBody>) {
-    const systemState = getInitialState(system);
-    return map(body => {
-      const parent = body.elements.wrt != null ? systemState[body.elements.wrt] : undefined;
-      return new KeplerianBody3D(this.scene, appState, parent ?? null, body);
-    }, systemState);
+    const initialState: Record<string, KeplerianBody3D> = {};
+    const toInitialize = [...system];
+    // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
+    while (toInitialize.length > 0) {
+      const body = toInitialize.shift()!;
+      const parents = body.influencedBy.map(name => initialState[name]);
+      if (parents.some(p => p == null)) {
+        toInitialize.push(body);
+        continue;
+      }
+      if (parents.length > 0) {
+        const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
+        const mainParentMass = mainParent?.mass ?? 1;
+        const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
+        const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
+        const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
+        initialState[body.name] = new KeplerianBody3D(this.scene, appState, mainParent, body, position, velocity);
+      } else {
+        initialState[body.name] = new KeplerianBody3D(this.scene, appState, null, body, new Vector3(), new Vector3());
+      }
+    }
+    // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
+    return Object.fromEntries(Object.entries(initialState).reverse());
+  }
+
+  private incrementKinematics(dt: number) {
+    const parentStates = map(
+      body => ({
+        position: body.position.clone(),
+        velocity: body.velocity.clone(),
+        mass: body.mass,
+      }),
+      this.bodies
+    );
+    const toIncrement = Object.values(this.bodies).map(body => body.body.name);
+    const incremented = new Set();
+    while (toIncrement.length > 0) {
+      const bodyName = toIncrement.shift()!;
+      const body = this.bodies[bodyName]!;
+      const parents = body.influencedBy.filter(name => incremented.has(name)).map(name => parentStates[name]);
+      if (parents.length !== body.influencedBy.length) {
+        toIncrement.push(bodyName);
+        continue;
+      }
+      incremented.add(bodyName);
+      this.bodies[bodyName].increment(parents, dt);
+    }
+  }
+
+  private drawLabels(ctx: CanvasRenderingContext2D, appState: AppState) {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    if (appState.drawLabel) {
+      const metersPerPx = this.getMetersPerPixel();
+      Object.values(this.bodies).forEach(body => {
+        body.drawLabel(ctx, this.camera, metersPerPx);
+      });
+    }
+  }
+
+  private updateCenter(appState: AppState) {
+    if (appState.center != null && appState.center != SOL.name) {
+      const centerBody = this.bodies[appState.center];
+      if (centerBody != null) {
+        const [x, y] = centerBody.dotPosition.array;
+        this.camera.position.x = x;
+        this.camera.position.y = y;
+        this.camera.position.z = 1e9;
+        this.camera.lookAt(x, y, 0);
+        this.camera.up.set(0, 1, 0);
+        this.camera.updateProjectionMatrix();
+      }
+    }
   }
 
   private addHelpers() {

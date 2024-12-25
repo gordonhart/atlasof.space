@@ -1,4 +1,4 @@
-import { CelestialBody, CelestialBodyState, Point2 } from '../types.ts';
+import { CelestialBody, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, MIN_SIZE, SCALE_FACTOR } from './constants.ts';
 import { degreesToRadians, mul3, semiMinorAxis } from '../physics.ts';
 import {
@@ -23,11 +23,10 @@ import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
 import { getCircleTexture, isOffScreen } from './utils.ts';
-import { omit } from 'ramda';
-import { PhysicsBody } from './PhysicsBody.ts';
+import { KinematicBody } from './KinematicBody.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
-export class KeplerianBody3D extends PhysicsBody {
+export class KeplerianBody3D extends KinematicBody {
   public readonly body: CelestialBody;
   private readonly scene: Scene;
   private readonly sphere: Mesh;
@@ -41,11 +40,18 @@ export class KeplerianBody3D extends PhysicsBody {
   private readonly spherePoints: number = 36;
   private readonly ellipsePoints: number = 3600;
 
-  constructor(scene: Scene, appState: AppState, parent: CelestialBodyState | null, body: CelestialBodyState) {
-    const { mass, influencedBy, siderealRotationPeriod, position, velocity } = body;
-    super(mass, influencedBy, siderealRotationPeriod, new Vector3(...position), new Vector3(...velocity));
+  constructor(
+    scene: Scene,
+    appState: AppState,
+    parent: KeplerianBody3D | null,
+    body: CelestialBody,
+    position: Vector3,
+    velocity: Vector3
+  ) {
+    const { mass, influencedBy, siderealRotationPeriod } = body;
+    super(mass, influencedBy, siderealRotationPeriod, position, velocity);
 
-    this.body = omit(['position', 'velocity', 'rotation'], body);
+    this.body = body;
     this.scene = scene;
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
@@ -55,7 +61,7 @@ export class KeplerianBody3D extends PhysicsBody {
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const sphereMaterial = new MeshBasicMaterial({ color });
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
-    const positionScaled = mul3(1 / SCALE_FACTOR, body.position);
+    const positionScaled = mul3(1 / SCALE_FACTOR, position.toArray());
     this.sphere.position.set(...positionScaled);
     scene.add(this.sphere);
 
@@ -100,9 +106,9 @@ export class KeplerianBody3D extends PhysicsBody {
     ellipseMaterial.depthTest = false;
     this.ellipse = new Line2(ellipseGeometry, ellipseMaterial);
     if (parent != null) {
-      this.ellipse.translateX(parent.position[0] / SCALE_FACTOR);
-      this.ellipse.translateY(parent.position[1] / SCALE_FACTOR);
-      this.ellipse.translateZ(parent.position[2] / SCALE_FACTOR);
+      this.ellipse.translateX(parent.position.x / SCALE_FACTOR);
+      this.ellipse.translateY(parent.position.y / SCALE_FACTOR);
+      this.ellipse.translateZ(parent.position.z / SCALE_FACTOR);
     }
     this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
     this.ellipse.rotateX(degreesToRadians(iDeg));

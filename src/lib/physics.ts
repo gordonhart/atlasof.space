@@ -1,5 +1,5 @@
 import { G } from './bodies.ts';
-import { CartesianState, CelestialBody, CelestialBodyState, KeplerianElements, Point3 } from './types.ts';
+import { CartesianState, KeplerianElements, Point3 } from './types.ts';
 
 // TODO: use proper vector/matrix library?
 export function add3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
@@ -118,7 +118,7 @@ export function trueAnomalyFromMean(meanAnomaly: number, eccentricity: number, t
   return trueAnomaly < 0 ? trueAnomaly + 2 * Math.PI : trueAnomaly;
 }
 
-function keplerianToCartesian(
+export function keplerianToCartesian(
   {
     eccentricity: e,
     semiMajorAxis: a,
@@ -161,29 +161,4 @@ function keplerianToCartesian(
   ) as Point3;
 
   return { position: positionInertial, velocity: velocityInertial };
-}
-
-export function getInitialState(bodies: Array<CelestialBody>): Record<string, CelestialBodyState> {
-  const initialState: Record<string, CelestialBodyState> = {};
-  const toInitialize = [...bodies];
-  // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
-  while (toInitialize.length > 0) {
-    const body = toInitialize.shift()!;
-    const parents = body.influencedBy.map(name => initialState[name]);
-    if (parents.some(p => p == null)) {
-      toInitialize.push(body);
-      continue;
-    }
-    if (parents.length > 0) {
-      const mainParentMass = parents.find(({ name }) => name === body.elements.wrt)?.mass ?? 1;
-      const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
-      const position = parents.reduce((acc, { position }) => add3(acc, position), cartesian.position);
-      const velocity = parents.reduce((acc, { velocity }) => add3(acc, velocity), cartesian.velocity);
-      initialState[body.name] = { ...body, rotation: 0, position, velocity };
-    } else {
-      initialState[body.name] = { ...body, rotation: 0, position: [0, 0, 0], velocity: [0, 0, 0] };
-    }
-  }
-  // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
-  return Object.fromEntries(Object.entries(initialState).reverse());
 }
