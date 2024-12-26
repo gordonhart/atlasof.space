@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
-import { SOLAR_SYSTEM } from '../lib/bodies.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls3D } from '../hooks/useCursorControls3D.ts';
+import { CelestialBody } from '../lib/types.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -12,22 +12,44 @@ export function SolarSystem() {
   const model = useSolarSystemModel();
 
   const updateState = useCallback(
-    (newState: Partial<AppState>) => {
-      setAppState(prev => {
-        const updated = clampState({ ...prev, ...newState });
-        // set the mutable state ref (accessed by animation callback) on state update
-        appStateRef.current = updated;
-        return updated;
-      });
+    (update: Partial<AppState> | ((prev: AppState) => AppState)) => {
+      if (typeof update === 'function') {
+        setAppState(update);
+      } else {
+        setAppState(prev => {
+          const updated = clampState({ ...prev, ...update });
+          // set the mutable state ref (accessed by animation callback) on state update
+          appStateRef.current = updated;
+          return updated;
+        });
+      }
     },
     [setAppState]
   );
 
   const cursorControls = useCursorControls3D(model.rendererRef.current, appState, updateState);
 
+  function addBody(body: CelestialBody) {
+    updateState(prev => ({ ...prev, bodies: [...prev.bodies, body] }));
+    model.add(appStateRef.current, body);
+  }
+
+  function removeBody(name: string) {
+    const { bodies } = appStateRef.current;
+    const updatedBodies = bodies.filter(b => b.name !== name);
+    // handle small body names fetched via API not always matching up
+    let toRemoveName: string | undefined = name;
+    if (updatedBodies.length !== bodies.length - 1) {
+      toRemoveName = bodies.find(b => b.name.startsWith(name))?.name;
+    }
+    if (toRemoveName == null) return; // nothing to do
+    updateState({ bodies: updatedBodies });
+    model.remove(toRemoveName);
+  }
+
   const resetState = useCallback(() => {
     updateState(initialState);
-    model.reset(appState, SOLAR_SYSTEM);
+    model.reset(initialState);
   }, [updateState]);
 
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
@@ -63,8 +85,8 @@ export function SolarSystem() {
       <Controls
         state={appState}
         updateState={updateState}
-        addBody={body => model.add(appStateRef.current, body)}
-        removeBody={name => model.remove(name)}
+        addBody={addBody}
+        removeBody={removeBody}
         reset={resetState}
       />
     </Group>

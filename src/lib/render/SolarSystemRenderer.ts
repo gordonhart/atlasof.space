@@ -19,12 +19,10 @@ export class SolarSystemRenderer {
   public bodies: Record<string, KeplerianBody3D>;
   private readonly belts: Array<Belt3D>;
 
-  private center: string | null = null;
-
   private readonly debug = false;
   private readonly maxSafeDt = Time.HOUR;
 
-  constructor(container: HTMLElement, appState: AppState, system: Array<CelestialBody>) {
+  constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
     this.scene.background = new Color(0x000000);
 
@@ -49,7 +47,7 @@ export class SolarSystemRenderer {
     this.controls.maxZoom = 10000;
     this.controls.zoomToCursor = true;
 
-    this.bodies = this.createBodies(appState, system);
+    this.bodies = this.createBodies(appState);
 
     // TODO: enable if we can get the belts to look better; not great currently
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
@@ -108,20 +106,17 @@ export class SolarSystemRenderer {
   }
 
   remove(name: string) {
-    console.log(`removing ${name}`);
-    const toRemove = this.bodies[name];
-    console.log(Object.keys(this.bodies));
-    if (toRemove == null) return; // nothing to do
+    const toRemove: KeplerianBody3D | undefined = this.bodies[name];
+    if (name == null || toRemove == null) return; // nothing to do
     delete this.bodies[name];
     toRemove.dispose();
-    console.log(`removed ${name}, now have ${Object.keys(this.bodies).length}`);
   }
 
-  reset(appState: AppState, system: Array<CelestialBody>) {
+  reset(appState: AppState) {
     this.setupCamera();
     this.controls.reset();
     Object.values(this.bodies).forEach(body => body.dispose());
-    this.bodies = this.createBodies(appState, system);
+    this.bodies = this.createBodies(appState);
   }
 
   dispose() {
@@ -134,9 +129,9 @@ export class SolarSystemRenderer {
     this.controls.dispose();
   }
 
-  private createBodies(appState: AppState, system: Array<CelestialBody>) {
+  private createBodies(appState: AppState) {
     const initialState: Record<string, KeplerianBody3D> = {};
-    const toInitialize = [...system];
+    const toInitialize = [...appState.bodies];
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
     while (toInitialize.length > 0) {
       const body = toInitialize.shift()!;
@@ -187,9 +182,9 @@ export class SolarSystemRenderer {
     });
   }
 
-  private drawLabels(ctx: CanvasRenderingContext2D, appState: AppState) {
+  private drawLabels(ctx: CanvasRenderingContext2D, { drawLabel }: AppState) {
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    if (appState.drawLabel) {
+    if (drawLabel) {
       const metersPerPx = this.getMetersPerPixel();
       Object.values(this.bodies).forEach(body => {
         body.drawLabel(ctx, this.camera, metersPerPx);
@@ -197,18 +192,16 @@ export class SolarSystemRenderer {
     }
   }
 
-  private updateCenter(appState: AppState) {
-    if (appState.center == null || appState.center == SOL.name) {
-      this.center = null;
+  private updateCenter({ center }: AppState) {
+    if (center == null || center == SOL.name) {
       return;
     }
-    const centerBody = this.bodies[appState.center];
+    const centerBody = this.bodies[center];
     if (centerBody != null) {
       const { position } = centerBody;
       const { x, y, z } = position;
       this.controls.target.set(x / SCALE_FACTOR, y / SCALE_FACTOR, z / SCALE_FACTOR);
     }
-    this.center = appState.center;
   }
 
   private addHelpers() {

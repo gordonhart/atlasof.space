@@ -1,5 +1,5 @@
-import { SOL, Time } from './bodies.ts';
-import { CelestialBodyType, CelestialBodyTypes, Point3 } from './types.ts';
+import { SOL, SOLAR_SYSTEM, Time } from './bodies.ts';
+import { CelestialBody, CelestialBodyType, CelestialBodyTypes, Point3 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -12,6 +12,7 @@ export type AppState = {
   hover: string | null; // name of hovered body
   planetScaleFactor: number;
   visibleTypes: Set<CelestialBodyType>;
+  bodies: Array<CelestialBody>;
 
   // TODO: should these really live here?
   // these values are readonly; driven by the renderer
@@ -30,6 +31,7 @@ export const initialState: AppState = {
   hover: null,
   planetScaleFactor: 1,
   visibleTypes: new Set(CelestialBodyTypes),
+  bodies: SOLAR_SYSTEM,
 
   // set by renderer
   metersPerPx: 1,

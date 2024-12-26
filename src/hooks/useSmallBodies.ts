@@ -27,7 +27,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
   const radius = (Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2) * 1e3;
   return {
     type: CelestialBodyType.ASTEROID, // TODO: sometimes comets
-    name: object.fullname,
+    name,
     shortName: object.shortname,
     influencedBy: [SOL.name],
     elements: {

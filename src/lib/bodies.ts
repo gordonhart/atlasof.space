@@ -1284,14 +1284,6 @@ export const SOLAR_SYSTEM = [
   ...PLUTO_SYSTEM,
   ...TRANS_NEPTUNIAN_OBJECTS,
 ];
-export const SOLAR_SYSTEM_BY_NAME = SOLAR_SYSTEM.reduce<Record<string, CelestialBody>>(
-  (acc, b) => ({ ...acc, [b.name]: b }),
-  {}
-);
 
 export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
 export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };
-
-export const CELESTIAL_BODY_NAMES: Array<string> = SOLAR_SYSTEM.map(({ name }) => name);
-export const CELESTIAL_BODY_SHORT_NAMES: Array<string | undefined> = SOLAR_SYSTEM.map(({ shortName }) => shortName);
-export const CELESTIAL_BODY_CLASSES: Array<CelestialBodyType> = SOLAR_SYSTEM.map(({ type }) => type);

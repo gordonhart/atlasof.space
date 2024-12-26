@@ -1,20 +1,17 @@
 import { Box, Button, Group, Menu, Stack, Text, Transition } from '@mantine/core';
 import { IconCircle, IconCircleDot, IconCircleFilled } from '@tabler/icons-react';
-import {
-  CELESTIAL_BODY_CLASSES,
-  CELESTIAL_BODY_NAMES,
-  CELESTIAL_BODY_SHORT_NAMES,
-  SOLAR_SYSTEM_BY_NAME,
-} from '../../lib/bodies.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { FactCard } from './FactCard.tsx';
 import { iconSize, AppStateControlProps } from './constants.ts';
 import { AppState } from '../../lib/state.ts';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
-type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'hover' | 'center'>;
-export const FocusControls = memo(function FocusControlsComponent({ hover, center, updateState }: Props) {
-  const focusBody = hover != null ? SOLAR_SYSTEM_BY_NAME[hover] : undefined;
+type Props = Pick<AppStateControlProps, 'updateState'> & Pick<AppState, 'hover' | 'center' | 'bodies'>;
+export const FocusControls = memo(function FocusControlsComponent({ hover, center, bodies, updateState }: Props) {
+  const bodiesString = JSON.stringify(bodies);
+  const celestialBodyNames = useMemo(() => bodies.map(({ name }) => name), [bodiesString]);
+  const celestialBodyByName = useMemo(() => Object.fromEntries(bodies.map(body => [body.name, body])), [bodiesString]);
+  const focusBody = hover != null ? celestialBodyByName[hover] : undefined;
 
   return (
     <Stack gap="xs" align="flex-start">
@@ -25,15 +22,15 @@ export const FocusControls = memo(function FocusControlsComponent({ hover, cente
           </Button>
         </Menu.Target>
         <Menu.Dropdown mah={window.innerHeight - 150} style={{ overflow: 'auto' }}>
-          {CELESTIAL_BODY_NAMES.map((name, i) => (
+          {celestialBodyNames.map(name => (
             <Menu.Item key={name} onClick={() => updateState({ center: name })}>
               <Group gap="xs" justify="space-between" wrap="nowrap">
                 <Group gap="xs" align="center" wrap="nowrap">
                   {center === name ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                  {CELESTIAL_BODY_SHORT_NAMES[i] ?? name}
+                  {celestialBodyByName[name].shortName ?? name}
                 </Group>
                 <Text size="xs" c="dimmed">
-                  {celestialBodyTypeName(CELESTIAL_BODY_CLASSES[i])}
+                  {celestialBodyTypeName(celestialBodyByName[name].type)}
                 </Text>
               </Group>
             </Menu.Item>

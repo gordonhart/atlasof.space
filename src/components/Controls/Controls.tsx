@@ -17,7 +17,7 @@ export function Controls({ state, updateState, addBody, removeBody, reset }: Pro
   return (
     <>
       <Box pos="absolute" top={pad} left={pad}>
-        <FocusControls center={state.center} hover={state.hover} updateState={updateState} />
+        <FocusControls center={state.center} hover={state.hover} bodies={state.bodies} updateState={updateState} />
       </Box>
 
       <Box pos="absolute" top={pad} right={pad}>
