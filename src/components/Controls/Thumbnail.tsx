@@ -9,12 +9,12 @@ type Props = {
 export function Thumbnail({ body }: Props) {
   const { name, type } = body;
   const [isValid, setIsValid] = useState(false);
-  const thumbnailSize = 180;
+  const thumbnailSize = 220;
   const url = Thumbnails[name] ?? `/api/thumbnail?${new URLSearchParams({ search: `${name} ${type}` })}`;
   const validStyle = isValid ? {} : { display: 'none' };
   return (
     <Image
-      radius="xl"
+      radius="md"
       src={url}
       maw={thumbnailSize}
       mah={thumbnailSize}

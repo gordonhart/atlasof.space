@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import {
   ActionIcon,
@@ -12,8 +12,8 @@ import {
   useTree,
 } from '@mantine/core';
 import { IconChevronDown, IconSpherePlus } from '@tabler/icons-react';
-import { iconSize } from './constants.ts';
-import { CelestialBody } from '../../lib/types.ts';
+import { AppStateControlProps, iconSize } from './constants.ts';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { notNullish } from '../../lib/utils.ts';
 import { UseQueryResult } from '@tanstack/react-query';
 
@@ -532,21 +532,63 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   return acc;
 }, []);
 
-// TODO: reenable
-type Props = {
+type Props = Pick<AppStateControlProps, 'state'> & {
   addBody: (body: CelestialBody) => void;
+  removeBody: (name: string) => void;
 };
-export function AddSmallBodyMenu({ addBody }: Props) {
-  const tree = useTree();
-  const selectedBodies = tree.checkedState.map(key => key.split('/')[1]);
+export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
+  const initialCheckedState = useMemo(() => {
+    const names = state.bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
+    const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
+    return treeDataFlat.filter(({ value }) => names.some(name => value.includes(name))).map(({ value }) => value);
+  }, [JSON.stringify(state.bodies)]);
+
+  const tree = useTree({ initialCheckedState });
+  const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue);
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
   const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
 
   useEffect(() => {
     smallBodies.forEach(body => {
+      console.log(body);
       addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);
+
+  function renderTreeNode({ node, expanded, hasChildren, elementProps, tree }: RenderTreeNodePayload) {
+    const checked = tree.isNodeChecked(node.value);
+    const indeterminate = tree.isNodeIndeterminate(node.value);
+
+    function toggle() {
+      if (!checked) {
+        tree.checkNode(node.value);
+      } else {
+        removeBody(getBodyNameFromNodeValue(node.value));
+        node.children?.forEach(child => {
+          removeBody(getBodyNameFromNodeValue(child.value));
+        });
+        tree.uncheckNode(node.value);
+      }
+    }
+
+    function expand() {
+      tree.toggleExpanded(node.value);
+    }
+
+    return (
+      <Group gap="xs" py={2} {...elementProps}>
+        <Checkbox.Indicator checked={checked} indeterminate={indeterminate} size="xs" onClick={toggle} />
+
+        <Group gap={4} onClick={hasChildren ? expand : toggle}>
+          {hasChildren && (
+            <IconChevronDown size={14} style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+          )}
+
+          <Text size="xs">{node.label}</Text>
+        </Group>
+      </Group>
+    );
+  }
 
   // TODO: add search/filter box
   return (
@@ -564,33 +606,16 @@ export function AddSmallBodyMenu({ addBody }: Props) {
   );
 }
 
-function renderTreeNode({ node, expanded, hasChildren, elementProps, tree }: RenderTreeNodePayload) {
-  const checked = tree.isNodeChecked(node.value);
-  const indeterminate = tree.isNodeIndeterminate(node.value);
+const SMALL_BODY_TYPES = new Set([
+  CelestialBodyType.ASTEROID,
+  CelestialBodyType.COMET,
+  CelestialBodyType.DWARF_PLANET,
+  CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+]);
+function isSmallBody(type: CelestialBodyType) {
+  return SMALL_BODY_TYPES.has(type);
+}
 
-  function toggle() {
-    if (!checked) {
-      tree.checkNode(node.value);
-    } else {
-      tree.uncheckNode(node.value);
-    }
-  }
-
-  function expand() {
-    tree.toggleExpanded(node.value);
-  }
-
-  return (
-    <Group gap="xs" py={2} {...elementProps}>
-      <Checkbox.Indicator checked={checked} indeterminate={indeterminate} size="xs" onClick={toggle} />
-
-      <Group gap={4} onClick={hasChildren ? expand : toggle}>
-        {hasChildren && (
-          <IconChevronDown size={14} style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-        )}
-
-        <Text size="xs">{node.label}</Text>
-      </Group>
-    </Group>
-  );
+function getBodyNameFromNodeValue(value: string) {
+  return value.split('/')[1];
 }

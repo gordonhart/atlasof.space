@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
 import { CelestialBody } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
-import { SOLAR_SYSTEM } from '../lib/bodies.ts';
 
 export function useSolarSystemModel() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,7 +23,7 @@ export function useSolarSystemModel() {
   function initialize(appState: AppState) {
     if (containerRef.current == null || canvasRef.current == null) return;
     if (rendererRef.current == null) {
-      rendererRef.current = new SolarSystemRenderer(containerRef.current, appState, SOLAR_SYSTEM);
+      rendererRef.current = new SolarSystemRenderer(containerRef.current, appState);
     }
     initializeCanvas();
     window.addEventListener('resize', initializeCanvas);
@@ -38,15 +37,19 @@ export function useSolarSystemModel() {
   }
 
   function update(ctx: CanvasRenderingContext2D, appState: AppState) {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-    renderer.update(ctx, appState);
+    rendererRef.current?.update(ctx, appState);
   }
 
-  function reset(appState: AppState, system: Array<CelestialBody>) {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-    renderer.reset(appState, system);
+  function add(appState: AppState, body: CelestialBody) {
+    rendererRef.current?.add(appState, body);
+  }
+
+  function remove(name: string) {
+    rendererRef.current?.remove(name);
+  }
+
+  function reset(appState: AppState) {
+    rendererRef.current?.reset(appState);
   }
 
   return {
@@ -55,6 +58,8 @@ export function useSolarSystemModel() {
     canvasRef,
     initialize,
     update,
+    add,
+    remove,
     reset,
   };
 }

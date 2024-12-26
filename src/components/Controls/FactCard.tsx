@@ -51,7 +51,7 @@ export function FactCard({ body }: Props) {
             <FactGrid facts={bullets} valueWidth={120} />
           </Stack>
 
-          <Thumbnail body={body} />
+          <Thumbnail key={body.name} body={body} />
         </Group>
 
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}

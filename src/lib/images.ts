@@ -35,6 +35,7 @@ import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
 import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
+import arrokothAnimationSrc from '../../assets/arrokoth-rotation.gif';
 import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
@@ -85,4 +86,5 @@ export const Thumbnails: Record<string, string> = {
 export const GalleryImages: Record<string, Array<string>> = {
   [Bodies.CG67P.name]: [cg67pAnimationSrc, cg67pThumb2Src, cg67pThumb3Src] as Array<string>,
   [Bodies.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
+  [Bodies.ARROKOTH.name]: [arrokothAnimationSrc] as Array<string>,
 } as const;
