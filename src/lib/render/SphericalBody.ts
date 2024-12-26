@@ -23,7 +23,8 @@ export class SphericalBody {
   public readonly dotPosition: BufferAttribute;
 
   private readonly spherePoints: number = 36;
-  private readonly dotRadius: number = 5;
+  // TODO: dynamically set based on true size of body? e.g. between 2-6
+  private readonly dotSize: number = 5;
 
   constructor(scene: Scene, body: CelestialBody, position: Vector3, color: Color) {
     this.scene = scene;
@@ -35,7 +36,7 @@ export class SphericalBody {
     this.dotPosition = new BufferAttribute(new Float32Array(positionScaled), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
     const map = getCircleTexture(body.color);
-    const dotMaterial = new PointsMaterial({ size: this.dotRadius, color, map, sizeAttenuation: false });
+    const dotMaterial = new PointsMaterial({ size: this.dotSize, color, map, sizeAttenuation: false });
     this.dot = new Points(dotGeometry, dotMaterial);
     this.dot.frustumCulled = false;
     scene.add(this.dot);
@@ -64,11 +65,11 @@ export class SphericalBody {
       this.sphere.geometry.dispose(); // toggle hover on
       const radius = (HOVER_SCALE_FACTOR * this.body.radius) / SCALE_FACTOR;
       this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
-      (this.dot.material as PointsMaterial).size = this.dotRadius * 2;
+      (this.dot.material as PointsMaterial).size = this.dotSize * 2;
     } else {
       this.sphere.geometry.dispose(); // toggle hover off
       this.sphere.geometry = new SphereGeometry(this.body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-      (this.dot.material as PointsMaterial).size = this.dotRadius;
+      (this.dot.material as PointsMaterial).size = this.dotSize;
     }
   }
 

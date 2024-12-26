@@ -29,13 +29,11 @@ export class KeplerianBody3D extends KinematicBody {
   ) {
     const { mass, influencedBy, siderealRotationPeriod } = body;
     super(mass, influencedBy, siderealRotationPeriod, position, velocity);
-
     this.body = body;
     this.scene = scene;
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
-
     this.sphere = new SphericalBody(this.scene, body, position, color);
     this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
   }
