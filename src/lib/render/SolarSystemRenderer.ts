@@ -2,7 +2,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, Fog, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -23,7 +23,6 @@ export class SolarSystemRenderer {
 
   constructor(container: HTMLElement, appState: AppState, system: Array<CelestialBody>) {
     this.scene = new Scene();
-    this.scene.fog = new Fog(0xffffff, 0, 1e12);
     this.scene.background = new Color(0x000000);
 
     const [w, h] = [window.innerWidth, window.innerHeight];
