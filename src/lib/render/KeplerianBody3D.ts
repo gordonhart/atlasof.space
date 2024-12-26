@@ -46,14 +46,11 @@ export class KeplerianBody3D extends KinematicBody {
     this.ellipse.update(this.visible && appState.drawOrbit, parent?.position ?? null);
 
     // scale body based on hover state
-    if (appState.hover === this.body.name && !this.hovered) {
-      this.sphere.setFocus(true);
-      this.ellipse.setFocus(true);
-      this.hovered = true;
-    } else if (appState.hover !== this.body.name && this.hovered) {
-      this.sphere.setFocus(false);
-      this.ellipse.setFocus(false);
-      this.hovered = false;
+    const thisIsHovered = appState.hover === this.body.name;
+    if (thisIsHovered !== this.hovered) {
+      this.sphere.setFocus(thisIsHovered);
+      this.ellipse.setFocus(thisIsHovered);
+      this.hovered = thisIsHovered;
     }
   }
 
