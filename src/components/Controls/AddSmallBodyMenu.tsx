@@ -538,7 +538,7 @@ type Props = {
 };
 export function AddSmallBodyMenu({ addBody, removeBody }: Props) {
   const tree = useTree();
-  const selectedBodies = tree.checkedState.map(key => key.split('/')[1]);
+  const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue);
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
   const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
 
@@ -556,8 +556,10 @@ export function AddSmallBodyMenu({ addBody, removeBody }: Props) {
       if (!checked) {
         tree.checkNode(node.value);
       } else {
-        console.log(node.value);
-        removeBody(node.value.split('/')[1]);
+        removeBody(getBodyNameFromNodeValue(node.value));
+        node.children?.forEach(child => {
+          removeBody(getBodyNameFromNodeValue(child.value));
+        });
         tree.uncheckNode(node.value);
       }
     }
@@ -595,4 +597,8 @@ export function AddSmallBodyMenu({ addBody, removeBody }: Props) {
       </Popover.Dropdown>
     </Popover>
   );
+}
+
+function getBodyNameFromNodeValue(value: string) {
+  return value.split('/')[1];
 }
