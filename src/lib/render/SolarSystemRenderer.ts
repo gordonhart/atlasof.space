@@ -2,7 +2,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { AxesHelper, Color, Fog, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody3D } from './KeplerianBody3D.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -23,6 +23,7 @@ export class SolarSystemRenderer {
 
   constructor(container: HTMLElement, appState: AppState, system: Array<CelestialBody>) {
     this.scene = new Scene();
+    this.scene.fog = new Fog(0xffffff, 0, 1e12);
     this.scene.background = new Color(0x000000);
 
     const [w, h] = [window.innerWidth, window.innerHeight];
@@ -175,17 +176,16 @@ export class SolarSystemRenderer {
   }
 
   private updateCenter(appState: AppState) {
-    if (appState.center != null && appState.center != SOL.name) {
-      const centerBody = this.bodies[appState.center];
-      if (centerBody != null) {
-        this.camera.position.x = centerBody.position.x / SCALE_FACTOR;
-        this.camera.position.y = centerBody.position.y / SCALE_FACTOR;
-        this.camera.position.z = 1e9;
-        this.camera.lookAt(centerBody.position.x / SCALE_FACTOR, centerBody.position.y / SCALE_FACTOR, 0);
-        this.camera.up.set(0, 1, 0);
-        this.camera.updateProjectionMatrix();
-      }
-    }
+    // TODO: reset controls when center is cleared? can get wonky as-is
+    if (appState.center == null || appState.center === SOL.name) return;
+    const centerBody = this.bodies[appState.center];
+    if (centerBody == null) return;
+    this.camera.position.x = centerBody.position.x / SCALE_FACTOR;
+    this.camera.position.y = centerBody.position.y / SCALE_FACTOR;
+    this.camera.position.z = 1e9;
+    this.camera.lookAt(centerBody.position.x / SCALE_FACTOR, centerBody.position.y / SCALE_FACTOR, 0);
+    this.camera.up.set(0, 1, 0);
+    this.camera.updateProjectionMatrix();
   }
 
   private addHelpers() {
