@@ -13,16 +13,13 @@ export function SolarSystem() {
 
   const updateState = useCallback(
     (update: Partial<AppState> | ((prev: AppState) => AppState)) => {
-      if (typeof update === 'function') {
-        setAppState(update);
-      } else {
-        setAppState(prev => {
-          const updated = clampState({ ...prev, ...update });
-          // set the mutable state ref (accessed by animation callback) on state update
-          appStateRef.current = updated;
-          return updated;
-        });
-      }
+      setAppState(prev => {
+        const updated = typeof update === 'function' ? update(prev) : { ...prev, ...update };
+        const updatedClamped = clampState(updated);
+        // set the mutable state ref (accessed by animation callback) on state update
+        appStateRef.current = updatedClamped;
+        return updatedClamped;
+      });
     },
     [setAppState]
   );
