@@ -18,6 +18,7 @@ export class FocalRadius {
     material.depthTest = false;
     this.line = new Line2(geometry, material);
     this.line.visible = false;
+    this.line.renderOrder = 0;
     this.scene.add(this.line);
   }
 

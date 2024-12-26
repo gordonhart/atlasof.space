@@ -550,7 +550,6 @@ export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
 
   useEffect(() => {
     smallBodies.forEach(body => {
-      console.log(body);
       addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);

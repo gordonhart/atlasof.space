@@ -112,7 +112,7 @@ export const LUNA: CelestialBody = {
   },
   mass: 7.342e22,
   radius: 1737.4e3,
-  siderealRotationPeriod: 27.321661 * Time.DAY,
+  siderealRotationPeriod: 27.321661 * Time.DAY, // TODO: something is wrong with this
   color: DEFAULT_MOON_COLOR,
 };
 
@@ -1271,9 +1271,10 @@ export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTE
 
 export const SOLAR_SYSTEM = [
   SOL,
-  MERCURY,
-  VENUS,
+  // MERCURY,
+  // VENUS,
   ...EARTH_SYSTEM,
+  /*
   ...ASTEROIDS,
   ...COMETS,
   ...MARS_SYSTEM,
@@ -1283,6 +1284,7 @@ export const SOLAR_SYSTEM = [
   ...NEPTUNE_SYSTEM,
   ...PLUTO_SYSTEM,
   ...TRANS_NEPTUNIAN_OBJECTS,
+   */
 ];
 
 export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };

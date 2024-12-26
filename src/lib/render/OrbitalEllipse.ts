@@ -55,6 +55,7 @@ export class OrbitalEllipse {
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
     this.ellipse.rotateZ(Omega);
     this.ellipse.rotateX(i);
+    this.ellipse.renderOrder = 0;
     scene.add(this.ellipse);
 
     const ellipseFocusGeometry = new LineGeometry();
@@ -66,6 +67,7 @@ export class OrbitalEllipse {
     this.ellipseFocus.rotateZ(Omega);
     this.ellipseFocus.rotateX(i);
     this.ellipseFocus.visible = false;
+    this.ellipseFocus.renderOrder = 0;
     scene.add(this.ellipseFocus);
 
     const faceGeometry = new BufferGeometry();
@@ -80,11 +82,12 @@ export class OrbitalEllipse {
       transparent: true,
       opacity: 0.2,
       side: DoubleSide,
-      depthWrite: false, // helps with transparency rendering
+      depthWrite: true, // helps with transparency rendering
     });
     this.face = new Mesh(faceGeometry, faceMaterial);
     this.face.rotateZ(Omega);
     this.face.rotateX(i);
+    this.face.renderOrder = 0;
     this.face.visible = false;
     scene.add(this.face);
 

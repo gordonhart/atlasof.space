@@ -2,7 +2,17 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AppState } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import {
+  AmbientLight,
+  AxesHelper,
+  Color,
+  GridHelper,
+  OrthographicCamera,
+  PointLight,
+  Scene,
+  Vector3,
+  WebGLRenderer,
+} from 'three';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -25,6 +35,12 @@ export class SolarSystemRenderer {
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
     this.scene.background = new Color(0x000000);
+
+    const ambientLight = new AmbientLight(0x404040); // soft white light
+    this.scene.add(ambientLight);
+    const sunLight = new PointLight(0xfffff0, 1e5); // slight yellow, high intensity manually tuned
+    sunLight.position.set(0, 0, 0); // Position it wherever your sun is
+    this.scene.add(sunLight);
 
     const [w, h] = [window.innerWidth, window.innerHeight];
     this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
