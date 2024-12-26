@@ -34,8 +34,8 @@ export class KeplerianBody3D extends KinematicBody {
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
-    this.sphere = new SphericalBody(this.scene, body, position, color);
     this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
+    this.sphere = new SphericalBody(this.scene, body, position, color);
   }
 
   update(appState: AppState, parent: this | null) {

@@ -175,17 +175,16 @@ export class SolarSystemRenderer {
   }
 
   private updateCenter(appState: AppState) {
-    if (appState.center != null && appState.center != SOL.name) {
-      const centerBody = this.bodies[appState.center];
-      if (centerBody != null) {
-        this.camera.position.x = centerBody.position.x / SCALE_FACTOR;
-        this.camera.position.y = centerBody.position.y / SCALE_FACTOR;
-        this.camera.position.z = 1e9;
-        this.camera.lookAt(centerBody.position.x / SCALE_FACTOR, centerBody.position.y / SCALE_FACTOR, 0);
-        this.camera.up.set(0, 1, 0);
-        this.camera.updateProjectionMatrix();
-      }
-    }
+    // TODO: reset controls when center is cleared? can get wonky as-is
+    if (appState.center == null || appState.center === SOL.name) return;
+    const centerBody = this.bodies[appState.center];
+    if (centerBody == null) return;
+    this.camera.position.x = centerBody.position.x / SCALE_FACTOR;
+    this.camera.position.y = centerBody.position.y / SCALE_FACTOR;
+    this.camera.position.z = 1e9;
+    this.camera.lookAt(centerBody.position.x / SCALE_FACTOR, centerBody.position.y / SCALE_FACTOR, 0);
+    this.camera.up.set(0, 1, 0);
+    this.camera.updateProjectionMatrix();
   }
 
   private addHelpers() {

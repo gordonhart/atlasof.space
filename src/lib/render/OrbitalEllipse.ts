@@ -48,7 +48,7 @@ export class OrbitalEllipse {
     const ellipseFocusGeometry = new LineGeometry();
     ellipseFocusGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution, transparent: true, opacity: 0.5 });
+    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution });
     ellipseFocusMaterial.depthTest = false;
     this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
     this.ellipseFocus.visible = false;
