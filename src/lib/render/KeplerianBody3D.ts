@@ -55,10 +55,8 @@ export class KeplerianBody3D extends KinematicBody {
   getScreenPosition(camera: OrthographicCamera): Point2 {
     this.screenPosition.set(this.position.x, this.position.y, this.position.z);
     this.screenPosition.multiplyScalar(1 / SCALE_FACTOR).project(camera);
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = window.innerHeight;
-    const pixelX = ((this.screenPosition.x + 1) * canvasWidth) / 2;
-    const pixelY = ((1 - this.screenPosition.y) * canvasHeight) / 2;
+    const pixelX = ((this.screenPosition.x + 1) * window.innerWidth) / 2;
+    const pixelY = ((1 - this.screenPosition.y) * window.innerHeight) / 2;
     return [pixelX, pixelY]; // return pixel values
   }
 
