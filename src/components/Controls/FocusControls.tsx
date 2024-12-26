@@ -39,7 +39,7 @@ export const FocusControls = memo(function FocusControlsComponent({ hover, cente
       </Menu>
 
       <Transition mounted={focusBody != null} transition="slide-right" duration={200} timingFunction="ease">
-        {styles => <Box style={styles}>{focusBody != null && <FactCard body={focusBody} />}</Box>}
+        {styles => <Box style={styles}>{focusBody != null && <FactCard body={focusBody} bodies={bodies} />}</Box>}
       </Transition>
     </Stack>
   );

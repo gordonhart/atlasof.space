@@ -2,21 +2,23 @@ import { Group, Image, Paper, Stack, Text } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { g, SOL } from '../../lib/bodies.ts';
+import { g } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
 import { Thumbnail } from './Thumbnail.tsx';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
+import { memo } from 'react';
 
 type Props = {
   body: CelestialBody;
+  bodies: Array<CelestialBody>;
 };
-export function FactCard({ body }: Props) {
+export const FactCard = memo(function FactCardComponent({ body, bodies }: Props) {
   const { name, type, mass, radius, elements, color } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
-  // TODO: period for non-sun-orbiting bodies? requires knowing the parent's mass
-  const period = orbitalPeriod(elements.semiMajorAxis, SOL.mass);
+  const parent = bodies.find(({ name }) => name === body.elements.wrt);
+  const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(elements.semiMajorAxis);
   const bullets: Array<{ label: string; value: string }> = [
@@ -27,7 +29,7 @@ export function FactCard({ body }: Props) {
     { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
     { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
     { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
-    { label: 'orbital period', value: pluralize(periodTime, periodUnits) },
+    ...(parent != null ? [{ label: 'orbital period', value: pluralize(periodTime, periodUnits) }] : []),
     // TODO: reenable? makes this rerender frequently
     // { label: 'velocity', value: `${(magnitude(velocity) / 1e3).toLocaleString()} km/s` },
     { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
@@ -64,7 +66,7 @@ export function FactCard({ body }: Props) {
       </Stack>
     </Paper>
   );
-}
+});
 
 function FactGrid({
   facts,
