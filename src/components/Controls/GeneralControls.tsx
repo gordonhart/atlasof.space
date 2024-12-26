@@ -35,7 +35,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({
 
   return (
     <Stack gap={buttonGap}>
-      <AddSmallBodyMenu addBody={addBody} removeBody={removeBody} />
+      <AddSmallBodyMenu state={state} addBody={addBody} removeBody={removeBody} />
 
       {/* TODO: enable for 3D?
       <Tooltip position="left" label="Enlarge Planets">

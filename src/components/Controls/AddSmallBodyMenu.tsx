@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import {
   ActionIcon,
@@ -12,8 +12,8 @@ import {
   useTree,
 } from '@mantine/core';
 import { IconChevronDown, IconSpherePlus } from '@tabler/icons-react';
-import { iconSize } from './constants.ts';
-import { CelestialBody } from '../../lib/types.ts';
+import { AppStateControlProps, iconSize } from './constants.ts';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { notNullish } from '../../lib/utils.ts';
 import { UseQueryResult } from '@tanstack/react-query';
 
@@ -532,18 +532,25 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   return acc;
 }, []);
 
-type Props = {
+type Props = Pick<AppStateControlProps, 'state'> & {
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
-export function AddSmallBodyMenu({ addBody, removeBody }: Props) {
-  const tree = useTree();
+export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
+  const initialCheckedState = useMemo(() => {
+    const names = state.bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
+    const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
+    return treeDataFlat.filter(({ value }) => names.some(name => value.includes(name))).map(({ value }) => value);
+  }, [JSON.stringify(state.bodies)]);
+
+  const tree = useTree({ initialCheckedState });
   const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue);
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
   const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
 
   useEffect(() => {
     smallBodies.forEach(body => {
+      console.log(body);
       addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);
@@ -597,6 +604,16 @@ export function AddSmallBodyMenu({ addBody, removeBody }: Props) {
       </Popover.Dropdown>
     </Popover>
   );
+}
+
+const SMALL_BODY_TYPES = new Set([
+  CelestialBodyType.ASTEROID,
+  CelestialBodyType.COMET,
+  CelestialBodyType.DWARF_PLANET,
+  CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+]);
+function isSmallBody(type: CelestialBodyType) {
+  return SMALL_BODY_TYPES.has(type);
 }
 
 function getBodyNameFromNodeValue(value: string) {

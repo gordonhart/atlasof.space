@@ -32,7 +32,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     influencedBy: [SOL.name],
     elements: {
       wrt: SOL.name,
-      epoch: 'J2000', // TODO: should be in the response
+      epoch: `JD${orbit.epoch}`,
       eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
       semiMajorAxis: Number(elements.find(({ name }) => name === 'a')?.value) * AU,
       inclination: Number(elements.find(({ name }) => name === 'i')?.value),

@@ -32,16 +32,8 @@ export function SolarSystem() {
   }
 
   function removeBody(name: string) {
-    const { bodies } = appStateRef.current;
-    const updatedBodies = bodies.filter(b => b.name !== name);
-    // handle small body names fetched via API not always matching up
-    let toRemoveName: string | undefined = name;
-    if (updatedBodies.length !== bodies.length - 1) {
-      toRemoveName = bodies.find(b => b.name.startsWith(name))?.name;
-    }
-    if (toRemoveName == null) return; // nothing to do
-    updateState({ bodies: updatedBodies });
-    model.remove(toRemoveName);
+    updateState(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.name !== name) }));
+    model.remove(name);
   }
 
   const resetState = useCallback(() => {
