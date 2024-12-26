@@ -58,6 +58,7 @@ export class SolarSystemRenderer {
     }
   }
 
+  // TODO: this doesn't work well currently
   private onWindowResize() {
     this.camera.left = -window.innerWidth / 2;
     this.camera.right = window.innerWidth / 2;
@@ -193,9 +194,7 @@ export class SolarSystemRenderer {
   }
 
   private updateCenter({ center }: AppState) {
-    if (center == null || center == SOL.name) {
-      return;
-    }
+    if (center == null || center == SOL.name) return;
     const centerBody = this.bodies[center];
     if (centerBody != null) {
       const { position } = centerBody;
