@@ -33,13 +33,11 @@ export class SolarSystemRenderer {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
-    // Clear existing content and append renderer
     while (container.firstChild != null) {
       container.removeChild(container.firstChild);
     }
     container.appendChild(this.renderer.domElement);
 
-    // Add orbit controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
@@ -180,11 +178,10 @@ export class SolarSystemRenderer {
     if (appState.center != null && appState.center != SOL.name) {
       const centerBody = this.bodies[appState.center];
       if (centerBody != null) {
-        const [x, y] = centerBody.dotPosition.array;
-        this.camera.position.x = x;
-        this.camera.position.y = y;
+        this.camera.position.x = centerBody.position.x / SCALE_FACTOR;
+        this.camera.position.y = centerBody.position.y / SCALE_FACTOR;
         this.camera.position.z = 1e9;
-        this.camera.lookAt(x, y, 0);
+        this.camera.lookAt(centerBody.position.x / SCALE_FACTOR, centerBody.position.y / SCALE_FACTOR, 0);
         this.camera.up.set(0, 1, 0);
         this.camera.updateProjectionMatrix();
       }

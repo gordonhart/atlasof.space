@@ -16,36 +16,33 @@ export class OrbitalEllipse {
     this.scene = scene;
 
     const {
-      semiMajorAxis: a,
+      semiMajorAxis,
       eccentricity: e,
       longitudeAscending: OmegaDeg,
       argumentOfPeriapsis: omegaDeg,
       inclination: iDeg,
     } = elements;
+    const a = semiMajorAxis / SCALE_FACTOR;
     const b = semiMinorAxis(a, e);
     const focusDistance = Math.sqrt(a ** 2 - b ** 2);
     const omega = degreesToRadians(omegaDeg);
-    const ellipseCurve = new EllipseCurve(
-      -(Math.cos(omega) * focusDistance) / SCALE_FACTOR, // not sure why the sign is negative, seems consistent
-      -(Math.sin(omega) * focusDistance) / SCALE_FACTOR,
-      a / SCALE_FACTOR,
-      b / SCALE_FACTOR,
-      0,
-      Math.PI * 2,
-      false,
-      omega
-    );
+    const Omega = degreesToRadians(OmegaDeg);
+    const i = degreesToRadians(iDeg);
+
+    // not sure why the sign is negative, seems consistent
+    const rA = -(Math.cos(omega) * focusDistance);
+    const rB = -(Math.sin(omega) * focusDistance);
+    const ellipseCurve = new EllipseCurve(rA, rB, a, b, 0, Math.PI * 2, false, omega);
     const ellipsePoints = ellipseCurve.getPoints(this.nPoints);
+
     const ellipseGeometry = new BufferGeometry().setFromPoints(ellipsePoints);
     const ellipseMaterial = new LineBasicMaterial({ color });
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
+    this.ellipse.rotateZ(Omega);
+    this.ellipse.rotateX(i);
     if (offset != null) {
-      this.ellipse.translateX(offset.x / SCALE_FACTOR);
-      this.ellipse.translateY(offset.y / SCALE_FACTOR);
-      this.ellipse.translateZ(offset.z / SCALE_FACTOR);
+      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
     }
-    this.ellipse.rotateZ(degreesToRadians(OmegaDeg));
-    this.ellipse.rotateX(degreesToRadians(iDeg));
     scene.add(this.ellipse);
 
     const ellipseFocusGeometry = new LineGeometry();
@@ -55,28 +52,19 @@ export class OrbitalEllipse {
     ellipseFocusMaterial.depthTest = false;
     this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
     this.ellipseFocus.visible = false;
+    this.ellipseFocus.rotateZ(Omega);
+    this.ellipseFocus.rotateX(i);
     if (offset != null) {
-      this.ellipseFocus.translateX(offset.x / SCALE_FACTOR);
-      this.ellipseFocus.translateY(offset.y / SCALE_FACTOR);
-      this.ellipseFocus.translateZ(offset.z / SCALE_FACTOR);
+      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
     }
-    this.ellipseFocus.rotateZ(degreesToRadians(OmegaDeg));
-    this.ellipseFocus.rotateX(degreesToRadians(iDeg));
     scene.add(this.ellipseFocus);
   }
 
   update(visible: boolean, offset: Vector3 | null) {
     this.ellipse.visible = visible;
-
-    // TODO: bug here where the ellipses of some moons fly away...?
-    // move ellipse based on position of parent
     if (offset != null) {
-      this.ellipse.translateX(offset.x / SCALE_FACTOR - this.ellipse.position.x);
-      this.ellipse.translateY(offset.y / SCALE_FACTOR - this.ellipse.position.y);
-      this.ellipse.translateZ(offset.z / SCALE_FACTOR - this.ellipse.position.z);
-      this.ellipseFocus.translateX(offset.x / SCALE_FACTOR - this.ellipseFocus.position.x);
-      this.ellipseFocus.translateY(offset.y / SCALE_FACTOR - this.ellipseFocus.position.y);
-      this.ellipseFocus.translateZ(offset.z / SCALE_FACTOR - this.ellipseFocus.position.z);
+      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
+      this.ellipseFocus.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
     }
   }
 
