@@ -14,7 +14,7 @@ export class FocalRadius {
     const geometry = new LineGeometry();
     geometry.setPositions([start, end].flatMap(p => [p.x / SCALE_FACTOR, p.y / SCALE_FACTOR, p.z / SCALE_FACTOR]));
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const material = new LineMaterial({ color, linewidth: 2, resolution });
+    const material = new LineMaterial({ color, linewidth: 1, resolution });
     material.depthTest = false;
     this.line = new Line2(geometry, material);
     this.line.visible = false;

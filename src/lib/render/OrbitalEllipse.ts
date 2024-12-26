@@ -1,5 +1,4 @@
 import {
-  AdditiveBlending,
   BufferAttribute,
   BufferGeometry,
   Color,
@@ -81,8 +80,7 @@ export class OrbitalEllipse {
       transparent: true,
       opacity: 0.2,
       side: DoubleSide,
-      depthWrite: false, // Helps with transparency rendering
-      blending: AdditiveBlending,
+      depthWrite: false, // helps with transparency rendering
     });
     this.face = new Mesh(faceGeometry, faceMaterial);
     this.face.rotateZ(Omega);
