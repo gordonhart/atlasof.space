@@ -13,7 +13,12 @@ export function SolarSystem() {
 
   const updateState = useCallback(
     (newState: Partial<AppState>) => {
-      setAppState(prev => clampState({ ...prev, ...newState }));
+      setAppState(prev => {
+        const updated = clampState({ ...prev, ...newState });
+        // set the mutable state ref (accessed by animation callback) on state update
+        appStateRef.current = updated;
+        return updated;
+      });
     },
     [setAppState]
   );
@@ -25,20 +30,14 @@ export function SolarSystem() {
     model.reset(appState, SOLAR_SYSTEM);
   }, [updateState]);
 
-  // set the mutable state ref (accessed by animation callback) on state update
-  useEffect(() => {
-    appStateRef.current = appState;
-  }, [JSON.stringify(appState)]);
-
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
-    const { play, dt } = appStateRef.current;
-    setAppState(prev => ({
-      ...prev,
-      time: play ? prev.time + dt : prev.time,
-      metersPerPx: model.rendererRef.current?.getMetersPerPixel() ?? prev.metersPerPx,
-      vernalEquinox: model.rendererRef?.current?.getVernalEquinox() ?? prev.vernalEquinox,
-    }));
+    const { play, time, dt, metersPerPx, vernalEquinox } = appStateRef.current;
+    updateState({
+      time: play ? time + dt : time,
+      metersPerPx: model.rendererRef.current?.getMetersPerPixel() ?? metersPerPx,
+      vernalEquinox: model.rendererRef?.current?.getVernalEquinox() ?? vernalEquinox,
+    });
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
       model.update(ctx, appStateRef.current);
@@ -61,7 +60,13 @@ export function SolarSystem() {
         ref={model.canvasRef}
         style={{ height: '100vh', width: '100vw', position: 'absolute', pointerEvents: 'none' }}
       />
-      <Controls state={appState} updateState={updateState} reset={resetState} />
+      <Controls
+        state={appState}
+        updateState={updateState}
+        addBody={body => model.add(appStateRef.current, body)}
+        removeBody={name => model.remove(name)}
+        reset={resetState}
+      />
     </Group>
   );
 }

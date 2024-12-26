@@ -9,6 +9,7 @@ import { Belt3D } from './Belt3D.ts';
 import { isOffScreen } from './utils.ts';
 import { keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
+import { notNullish } from '../utils.ts';
 
 export class SolarSystemRenderer {
   private readonly scene: Scene;
@@ -17,6 +18,8 @@ export class SolarSystemRenderer {
   private readonly controls: OrbitControls;
   public bodies: Record<string, KeplerianBody3D>;
   private readonly belts: Array<Belt3D>;
+
+  private center: string | null = null;
 
   private readonly debug = false;
   private readonly maxSafeDt = Time.HOUR;
@@ -58,10 +61,10 @@ export class SolarSystemRenderer {
   }
 
   private onWindowResize() {
-    this.camera.left = -window.innerWidth;
-    this.camera.right = window.innerWidth;
-    this.camera.top = window.innerHeight;
-    this.camera.bottom = -window.innerHeight;
+    this.camera.left = -window.innerWidth / 2;
+    this.camera.right = window.innerWidth / 2;
+    this.camera.top = window.innerHeight / 2;
+    this.camera.bottom = -window.innerHeight / 2;
     this.camera.updateProjectionMatrix();
   }
 
@@ -97,6 +100,23 @@ export class SolarSystemRenderer {
     this.drawLabels(ctx, appState);
   }
 
+  add(appState: AppState, body: CelestialBody) {
+    if (Object.keys(this.bodies).some(name => name === body.name)) return; // already exists, don't re-add
+    const parents = body.influencedBy.map(name => this.bodies[name]).filter(notNullish);
+    // TODO: map into consistent epoch
+    this.bodies[body.name] = this.createBodyWithParents(appState, parents, body);
+  }
+
+  remove(name: string) {
+    console.log(`removing ${name}`);
+    const toRemove = this.bodies[name];
+    console.log(Object.keys(this.bodies));
+    if (toRemove == null) return; // nothing to do
+    delete this.bodies[name];
+    toRemove.dispose();
+    console.log(`removed ${name}, now have ${Object.keys(this.bodies).length}`);
+  }
+
   reset(appState: AppState, system: Array<CelestialBody>) {
     this.setupCamera();
     this.controls.reset();
@@ -125,19 +145,22 @@ export class SolarSystemRenderer {
         toInitialize.push(body);
         continue;
       }
-      if (parents.length > 0) {
-        const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
-        const mainParentMass = mainParent?.mass ?? 1;
-        const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
-        const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
-        const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
-        initialState[body.name] = new KeplerianBody3D(this.scene, appState, mainParent, body, position, velocity);
-      } else {
-        initialState[body.name] = new KeplerianBody3D(this.scene, appState, null, body, new Vector3(), new Vector3());
-      }
+      initialState[body.name] =
+        parents.length > 0
+          ? this.createBodyWithParents(appState, parents, body)
+          : new KeplerianBody3D(this.scene, appState, null, body, new Vector3(), new Vector3());
     }
     // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
+  }
+
+  private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody3D>, body: CelestialBody) {
+    const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
+    const mainParentMass = mainParent?.mass ?? 1;
+    const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
+    const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
+    const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
+    return new KeplerianBody3D(this.scene, appState, mainParent, body, position, velocity);
   }
 
   private incrementKinematics(dt: number) {
@@ -175,16 +198,17 @@ export class SolarSystemRenderer {
   }
 
   private updateCenter(appState: AppState) {
-    // TODO: reset controls when center is cleared? can get wonky as-is
-    if (appState.center == null || appState.center === SOL.name) return;
+    if (appState.center == null || appState.center == SOL.name) {
+      this.center = null;
+      return;
+    }
     const centerBody = this.bodies[appState.center];
-    if (centerBody == null) return;
-    this.camera.position.x = centerBody.position.x / SCALE_FACTOR;
-    this.camera.position.y = centerBody.position.y / SCALE_FACTOR;
-    this.camera.position.z = 1e9;
-    this.camera.lookAt(centerBody.position.x / SCALE_FACTOR, centerBody.position.y / SCALE_FACTOR, 0);
-    this.camera.up.set(0, 1, 0);
-    this.camera.updateProjectionMatrix();
+    if (centerBody != null) {
+      const { position } = centerBody;
+      const { x, y, z } = position;
+      this.controls.target.set(x / SCALE_FACTOR, y / SCALE_FACTOR, z / SCALE_FACTOR);
+    }
+    this.center = appState.center;
   }
 
   private addHelpers() {

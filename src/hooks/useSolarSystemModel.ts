@@ -38,15 +38,19 @@ export function useSolarSystemModel() {
   }
 
   function update(ctx: CanvasRenderingContext2D, appState: AppState) {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-    renderer.update(ctx, appState);
+    rendererRef.current?.update(ctx, appState);
+  }
+
+  function add(appState: AppState, body: CelestialBody) {
+    rendererRef.current?.add(appState, body);
+  }
+
+  function remove(name: string) {
+    rendererRef.current?.remove(name);
   }
 
   function reset(appState: AppState, system: Array<CelestialBody>) {
-    const renderer = rendererRef.current;
-    if (renderer == null) return;
-    renderer.reset(appState, system);
+    rendererRef.current?.reset(appState, system);
   }
 
   return {
@@ -55,6 +59,8 @@ export function useSolarSystemModel() {
     canvasRef,
     initialize,
     update,
+    add,
+    remove,
     reset,
   };
 }

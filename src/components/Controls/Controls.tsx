@@ -4,13 +4,16 @@ import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
 import { AppStateControlProps } from './constants.ts';
+import { CelestialBody } from '../../lib/types.ts';
 
 const pad = 10;
 
 type Props = AppStateControlProps & {
+  addBody: (body: CelestialBody) => void;
+  removeBody: (name: string) => void;
   reset: () => void;
 };
-export function Controls({ state, updateState, reset }: Props) {
+export function Controls({ state, updateState, addBody, removeBody, reset }: Props) {
   return (
     <>
       <Box pos="absolute" top={pad} left={pad}>
@@ -26,7 +29,13 @@ export function Controls({ state, updateState, reset }: Props) {
       </Box>
 
       <Box pos="absolute" bottom={pad} right={pad}>
-        <GeneralControls state={state} updateState={updateState} reset={reset} />
+        <GeneralControls
+          state={state}
+          updateState={updateState}
+          addBody={addBody}
+          removeBody={removeBody}
+          reset={reset}
+        />
       </Box>
     </>
   );

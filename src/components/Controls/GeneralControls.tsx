@@ -8,15 +8,24 @@ import {
   IconTagMinus,
   IconTagPlus,
 } from '@tabler/icons-react';
-import { CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
+import { CelestialBody, CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
+import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 
 type Props = AppStateControlProps & {
+  addBody: (body: CelestialBody) => void;
+  removeBody: (name: string) => void;
   reset: () => void;
 };
-export const GeneralControls = memo(function GeneralControlsComponent({ state, updateState, reset }: Props) {
+export const GeneralControls = memo(function GeneralControlsComponent({
+  state,
+  updateState,
+  addBody,
+  removeBody,
+  reset,
+}: Props) {
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
       ? new Set([...state.visibleTypes].filter(t => t !== type))
@@ -26,7 +35,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({ state, u
 
   return (
     <Stack gap={buttonGap}>
-      {/* <AddSmallBodyMenu addBody={addBody} /> */}
+      <AddSmallBodyMenu addBody={addBody} removeBody={removeBody} />
 
       {/* TODO: enable for 3D?
       <Tooltip position="left" label="Enlarge Planets">

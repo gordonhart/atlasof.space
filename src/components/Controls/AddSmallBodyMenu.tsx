@@ -532,11 +532,11 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   return acc;
 }, []);
 
-// TODO: reenable
 type Props = {
   addBody: (body: CelestialBody) => void;
+  removeBody: (name: string) => void;
 };
-export function AddSmallBodyMenu({ addBody }: Props) {
+export function AddSmallBodyMenu({ addBody, removeBody }: Props) {
   const tree = useTree();
   const selectedBodies = tree.checkedState.map(key => key.split('/')[1]);
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
@@ -547,6 +547,39 @@ export function AddSmallBodyMenu({ addBody }: Props) {
       addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);
+
+  function renderTreeNode({ node, expanded, hasChildren, elementProps, tree }: RenderTreeNodePayload) {
+    const checked = tree.isNodeChecked(node.value);
+    const indeterminate = tree.isNodeIndeterminate(node.value);
+
+    function toggle() {
+      if (!checked) {
+        tree.checkNode(node.value);
+      } else {
+        console.log(node.value);
+        removeBody(node.value.split('/')[1]);
+        tree.uncheckNode(node.value);
+      }
+    }
+
+    function expand() {
+      tree.toggleExpanded(node.value);
+    }
+
+    return (
+      <Group gap="xs" py={2} {...elementProps}>
+        <Checkbox.Indicator checked={checked} indeterminate={indeterminate} size="xs" onClick={toggle} />
+
+        <Group gap={4} onClick={hasChildren ? expand : toggle}>
+          {hasChildren && (
+            <IconChevronDown size={14} style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+          )}
+
+          <Text size="xs">{node.label}</Text>
+        </Group>
+      </Group>
+    );
+  }
 
   // TODO: add search/filter box
   return (
@@ -561,36 +594,5 @@ export function AddSmallBodyMenu({ addBody }: Props) {
         <Tree tree={tree} data={treeData} levelOffset={23} expandOnClick={false} renderNode={renderTreeNode} />
       </Popover.Dropdown>
     </Popover>
-  );
-}
-
-function renderTreeNode({ node, expanded, hasChildren, elementProps, tree }: RenderTreeNodePayload) {
-  const checked = tree.isNodeChecked(node.value);
-  const indeterminate = tree.isNodeIndeterminate(node.value);
-
-  function toggle() {
-    if (!checked) {
-      tree.checkNode(node.value);
-    } else {
-      tree.uncheckNode(node.value);
-    }
-  }
-
-  function expand() {
-    tree.toggleExpanded(node.value);
-  }
-
-  return (
-    <Group gap="xs" py={2} {...elementProps}>
-      <Checkbox.Indicator checked={checked} indeterminate={indeterminate} size="xs" onClick={toggle} />
-
-      <Group gap={4} onClick={hasChildren ? expand : toggle}>
-        {hasChildren && (
-          <IconChevronDown size={14} style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-        )}
-
-        <Text size="xs">{node.label}</Text>
-      </Group>
-    </Group>
   );
 }
