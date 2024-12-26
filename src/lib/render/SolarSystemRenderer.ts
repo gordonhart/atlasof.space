@@ -4,7 +4,7 @@ import { AU, G, SOL, Time } from '../bodies.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
-import { KeplerianBody3D } from './KeplerianBody3D.ts';
+import { KeplerianBody } from './KeplerianBody.ts';
 import { Belt3D } from './Belt3D.ts';
 import { isOffScreen } from './utils.ts';
 import { keplerianToCartesian } from '../physics.ts';
@@ -16,7 +16,7 @@ export class SolarSystemRenderer {
   private readonly camera: OrthographicCamera;
   private readonly renderer: WebGLRenderer;
   private readonly controls: OrbitControls;
-  public bodies: Record<string, KeplerianBody3D>;
+  public bodies: Record<string, KeplerianBody>;
   private readonly belts: Array<Belt3D>;
 
   private readonly debug = false;
@@ -107,7 +107,7 @@ export class SolarSystemRenderer {
   }
 
   remove(name: string) {
-    const toRemove: KeplerianBody3D | undefined = this.bodies[name];
+    const toRemove: KeplerianBody | undefined = this.bodies[name];
     if (name == null || toRemove == null) return; // nothing to do
     delete this.bodies[name];
     toRemove.dispose();
@@ -131,7 +131,7 @@ export class SolarSystemRenderer {
   }
 
   private createBodies(appState: AppState) {
-    const initialState: Record<string, KeplerianBody3D> = {};
+    const initialState: Record<string, KeplerianBody> = {};
     const toInitialize = [...appState.bodies];
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
     while (toInitialize.length > 0) {
@@ -144,19 +144,19 @@ export class SolarSystemRenderer {
       initialState[body.name] =
         parents.length > 0
           ? this.createBodyWithParents(appState, parents, body)
-          : new KeplerianBody3D(this.scene, appState, null, body, new Vector3(), new Vector3());
+          : new KeplerianBody(this.scene, appState, null, body, new Vector3(), new Vector3());
     }
     // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
   }
 
-  private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody3D>, body: CelestialBody) {
+  private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody) {
     const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.mass ?? 1;
     const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
-    return new KeplerianBody3D(this.scene, appState, mainParent, body, position, velocity);
+    return new KeplerianBody(this.scene, appState, mainParent, body, position, velocity);
   }
 
   private incrementKinematics(dt: number) {
@@ -212,8 +212,8 @@ export class SolarSystemRenderer {
     this.scene.add(gridHelper);
   }
 
-  findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody3D | undefined {
-    let closest: KeplerianBody3D | undefined = undefined;
+  findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody | undefined {
+    let closest: KeplerianBody | undefined = undefined;
     let closestDistance = threshold;
     for (const body of Object.values(this.bodies).reverse()) {
       // ignore invisible types and offscreen bodies

@@ -35,11 +35,12 @@ export class SphericalBody {
     const dotGeometry = new BufferGeometry();
     this.dotPosition = new BufferAttribute(new Float32Array(positionScaled), 3);
     dotGeometry.setAttribute('position', this.dotPosition);
+    const map = getCircleTexture('#ffffff');
     const dotMaterial = new PointsMaterial({
       size: this.dotSize,
       color,
-      map: getCircleTexture(body.color),
-      alphaMap: getCircleTexture('#ffffff'), // ensure dark corners are not rendered as black
+      map,
+      alphaMap: map, // ensure dark corners are not rendered as black
       transparent: true,
       sizeAttenuation: false,
     });

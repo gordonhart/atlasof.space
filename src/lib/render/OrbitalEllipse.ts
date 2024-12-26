@@ -1,4 +1,19 @@
-import { BufferGeometry, Color, EllipseCurve, Line, LineBasicMaterial, Material, Scene, Vector2, Vector3 } from 'three';
+import {
+  AdditiveBlending,
+  BufferAttribute,
+  BufferGeometry,
+  Color,
+  DoubleSide,
+  EllipseCurve,
+  Line,
+  LineBasicMaterial,
+  Material,
+  Mesh,
+  MeshBasicMaterial,
+  Scene,
+  Vector2,
+  Vector3,
+} from 'three';
 import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
@@ -10,6 +25,7 @@ export class OrbitalEllipse {
   private readonly scene: Scene;
   private readonly ellipse: Line; // use a 1px-thick Line for normal rendering (fast)
   private readonly ellipseFocus: Line2; // use an Npx-thick Line2 for focus rendering (slower)
+  private readonly face: Mesh;
   private readonly nPoints: number = 3600;
 
   constructor(scene: Scene, elements: KeplerianElements, offset: Vector3 | null, color: Color) {
@@ -29,7 +45,7 @@ export class OrbitalEllipse {
     const Omega = degreesToRadians(OmegaDeg);
     const i = degreesToRadians(iDeg);
 
-    // not sure why the sign is negative, seems consistent
+    // not sure why the sign is negative, looks to be consistent though
     const rA = -(Math.cos(omega) * focusDistance);
     const rB = -(Math.sin(omega) * focusDistance);
     const ellipseCurve = new EllipseCurve(rA, rB, a, b, 0, Math.PI * 2, false, omega);
@@ -40,9 +56,6 @@ export class OrbitalEllipse {
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
     this.ellipse.rotateZ(Omega);
     this.ellipse.rotateX(i);
-    if (offset != null) {
-      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
-    }
     scene.add(this.ellipse);
 
     const ellipseFocusGeometry = new LineGeometry();
@@ -51,13 +64,35 @@ export class OrbitalEllipse {
     const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution });
     ellipseFocusMaterial.depthTest = false;
     this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
-    this.ellipseFocus.visible = false;
     this.ellipseFocus.rotateZ(Omega);
     this.ellipseFocus.rotateX(i);
-    if (offset != null) {
-      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
-    }
+    this.ellipseFocus.visible = false;
     scene.add(this.ellipseFocus);
+
+    const faceGeometry = new BufferGeometry();
+    const vertices = new Float32Array(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
+    faceGeometry.setAttribute('position', new BufferAttribute(vertices, 3));
+    const indices = Array(ellipsePoints.length - 2)
+      .fill(null)
+      .flatMap((_, i) => [0, i + 1, i + 2]);
+    faceGeometry.setIndex(indices);
+    const faceMaterial = new MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: 0.2,
+      side: DoubleSide,
+      depthWrite: false, // Helps with transparency rendering
+      blending: AdditiveBlending,
+    });
+    this.face = new Mesh(faceGeometry, faceMaterial);
+    this.face.rotateZ(Omega);
+    this.face.rotateX(i);
+    this.face.visible = false;
+    scene.add(this.face);
+
+    if (offset != null) {
+      this.update(true, offset);
+    }
   }
 
   update(visible: boolean, offset: Vector3 | null) {
@@ -65,11 +100,13 @@ export class OrbitalEllipse {
     if (offset != null) {
       this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
       this.ellipseFocus.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
+      this.face.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
     }
   }
 
   setFocus(focus: boolean) {
     this.ellipseFocus.visible = focus;
+    this.face.visible = focus;
   }
 
   dispose() {
@@ -79,5 +116,8 @@ export class OrbitalEllipse {
     this.ellipseFocus.geometry.dispose();
     (this.ellipseFocus.material as Material).dispose();
     this.scene.remove(this.ellipseFocus);
+    this.face.geometry.dispose();
+    (this.face.material as Material).dispose();
+    this.scene.remove(this.face);
   }
 }

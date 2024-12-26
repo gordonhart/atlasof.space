@@ -7,13 +7,15 @@ import { isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
+import { FocalRadius } from './FocalRadius.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
-export class KeplerianBody3D extends KinematicBody {
+export class KeplerianBody extends KinematicBody {
   public readonly body: CelestialBody;
   private readonly scene: Scene;
   private readonly sphere: SphericalBody;
   private readonly ellipse: OrbitalEllipse;
+  private readonly radius: FocalRadius;
   private readonly screenPosition: Vector3;
 
   private visible: boolean = false;
@@ -22,7 +24,7 @@ export class KeplerianBody3D extends KinematicBody {
   constructor(
     scene: Scene,
     appState: AppState,
-    parent: KeplerianBody3D | null,
+    parent: KeplerianBody | null,
     body: CelestialBody,
     position: Vector3,
     velocity: Vector3
@@ -36,6 +38,7 @@ export class KeplerianBody3D extends KinematicBody {
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
     this.sphere = new SphericalBody(this.scene, body, position, color);
+    this.radius = new FocalRadius(this.scene, parent?.position ?? new Vector3(), position, color);
   }
 
   update(appState: AppState, parent: this | null) {
@@ -50,6 +53,7 @@ export class KeplerianBody3D extends KinematicBody {
       this.ellipse.setFocus(thisIsHovered);
       this.hovered = thisIsHovered;
     }
+    this.radius.update(parent?.position ?? null, this.position, thisIsHovered);
   }
 
   getScreenPosition(camera: OrthographicCamera): Point2 {
@@ -63,6 +67,7 @@ export class KeplerianBody3D extends KinematicBody {
   dispose() {
     this.sphere.dispose();
     this.ellipse.dispose();
+    this.radius.dispose();
   }
 
   drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {
