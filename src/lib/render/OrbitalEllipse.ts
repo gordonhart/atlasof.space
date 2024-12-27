@@ -61,8 +61,7 @@ export class OrbitalEllipse {
     const ellipseFocusGeometry = new LineGeometry();
     ellipseFocusGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution });
-    ellipseFocusMaterial.depthTest = false;
+    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
     this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
     this.ellipseFocus.rotateZ(Omega);
     this.ellipseFocus.rotateX(i);
@@ -80,9 +79,10 @@ export class OrbitalEllipse {
     const faceMaterial = new MeshBasicMaterial({
       color,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.025,
       side: DoubleSide,
       depthWrite: true, // helps with transparency rendering
+      depthTest: true,
     });
     this.face = new Mesh(faceGeometry, faceMaterial);
     this.face.rotateZ(Omega);

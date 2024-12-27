@@ -1271,10 +1271,9 @@ export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTE
 
 export const SOLAR_SYSTEM = [
   SOL,
-  // MERCURY,
-  // VENUS,
+  MERCURY,
+  VENUS,
   ...EARTH_SYSTEM,
-  /*
   ...ASTEROIDS,
   ...COMETS,
   ...MARS_SYSTEM,
@@ -1284,7 +1283,6 @@ export const SOLAR_SYSTEM = [
   ...NEPTUNE_SYSTEM,
   ...PLUTO_SYSTEM,
   ...TRANS_NEPTUNIAN_OBJECTS,
-   */
 ];
 
 export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };

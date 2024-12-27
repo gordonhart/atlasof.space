@@ -8,6 +8,7 @@ import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
 import { FocalRadius } from './FocalRadius.ts';
+import { SOL } from '../bodies.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody extends KinematicBody {
@@ -38,7 +39,7 @@ export class KeplerianBody extends KinematicBody {
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
     this.radius = new FocalRadius(this.scene, parent?.position ?? new Vector3(), position, color);
-    this.sphere = new SphericalBody(this.scene, body, position, color);
+    this.sphere = new SphericalBody(this.scene, body, position, color, body.name === SOL.name);
   }
 
   update(appState: AppState, parent: this | null) {

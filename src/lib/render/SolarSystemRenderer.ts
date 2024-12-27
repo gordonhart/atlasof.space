@@ -1,7 +1,4 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { AppState } from '../state.ts';
-import { AU, G, SOL, Time } from '../bodies.ts';
-import { SCALE_FACTOR } from './constants.ts';
 import {
   AmbientLight,
   AxesHelper,
@@ -10,9 +7,16 @@ import {
   OrthographicCamera,
   PointLight,
   Scene,
+  Vector2,
   Vector3,
   WebGLRenderer,
 } from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { AppState } from '../state.ts';
+import { AU, G, SOL, Time } from '../bodies.ts';
+import { SCALE_FACTOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -24,8 +28,9 @@ import { notNullish } from '../utils.ts';
 export class SolarSystemRenderer {
   private readonly scene: Scene;
   private readonly camera: OrthographicCamera;
-  private readonly renderer: WebGLRenderer;
   private readonly controls: OrbitControls;
+  private readonly renderer: WebGLRenderer;
+  private readonly composer: EffectComposer;
   public bodies: Record<string, KeplerianBody>;
   private readonly belts: Array<Belt3D>;
 
@@ -69,6 +74,12 @@ export class SolarSystemRenderer {
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
     window.addEventListener('resize', this.onWindowResize.bind(this));
 
+    const renderScene = new RenderPass(this.scene, this.camera);
+    const bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 1, 1, 0);
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(renderScene);
+    this.composer.addPass(bloomPass);
+
     if (this.debug) {
       this.addHelpers();
     }
@@ -111,7 +122,7 @@ export class SolarSystemRenderer {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(appState, parentState ?? null);
     });
-    this.renderer.render(this.scene, this.camera);
+    this.composer.render();
     this.drawLabels(ctx, appState);
   }
 
