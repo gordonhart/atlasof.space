@@ -14,7 +14,7 @@ export type AppState = {
   bodies: Array<CelestialBody>;
 
   // TODO: should these really live here?
-  // these values are readonly; driven by the renderer
+  // these values are readonly; driven by the model
   metersPerPx: number; // describes zoom
   vernalEquinox: Point3; // direction of the Vernal Equinox
 };
@@ -31,7 +31,7 @@ export const initialState: AppState = {
   visibleTypes: new Set(CelestialBodyTypes),
   bodies: SOLAR_SYSTEM,
 
-  // set by renderer
+  // set by model on update
   metersPerPx: 1,
   vernalEquinox: [1, 0, 0],
 };

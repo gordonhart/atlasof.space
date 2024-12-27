@@ -112,7 +112,7 @@ export class SolarSystemModel {
 
   getMetersPerPixel() {
     const visibleWidth = (this.camera.right - this.camera.left) / this.camera.zoom;
-    return (SCALE_FACTOR * visibleWidth) / this.renderer.domElement.width;
+    return (SCALE_FACTOR * visibleWidth) / this.resolution.width;
   }
 
   getVernalEquinox(): Point3 {
@@ -220,7 +220,7 @@ export class SolarSystemModel {
   }
 
   private drawLabels(ctx: CanvasRenderingContext2D, { drawLabel }: AppState) {
-    ctx.clearRect(0, 0, this.renderer.domElement.width, this.renderer.domElement.height);
+    ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     if (drawLabel) {
       const metersPerPx = this.getMetersPerPixel();
       Object.values(this.bodies).forEach(body => {

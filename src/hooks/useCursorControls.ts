@@ -13,7 +13,7 @@ type DragDetector = {
 };
 
 export function useCursorControls(
-  renderer: SolarSystemModel | null,
+  model: SolarSystemModel | null,
   { visibleTypes }: AppState,
   updateAppState: (state: Partial<AppState>) => void
 ) {
@@ -34,14 +34,14 @@ export function useCursorControls(
       dragDetectorRef.current = { ...dragDetector, dragged: dragDetector.dragged || distance > DRAG_PX_THRESHOLD };
     }
 
-    if (renderer == null) return;
+    if (model == null) return;
     const eventPx: Point2 = [event.clientX, event.clientY];
-    const closeBody = renderer.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
+    const closeBody = model.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
     updateAppState({ hover: closeBody?.body?.name ?? null });
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {
-    if (renderer == null) return;
+    if (model == null) return;
 
     // only process this as a click if the user hasn't been dragging around; it's bad UX if the end of your dragging
     // ends in selecting the planet underneath your cursor
@@ -51,7 +51,7 @@ export function useCursorControls(
     }
 
     const eventPx: Point2 = [event.clientX, event.clientY];
-    const closeBody = renderer.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
+    const closeBody = model.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
     if (closeBody != null) {
       updateAppState({ center: closeBody.body.name });
     }
