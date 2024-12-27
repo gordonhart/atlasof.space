@@ -4,6 +4,7 @@ import { estimateAsteroidMass } from './physics.ts';
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
 export const g = 9.807; // earth gravity
+export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
 
 export enum Time {
   SECOND = 1,
@@ -31,7 +32,10 @@ export const SOL: CelestialBody = {
   },
   mass: 1.9885e30,
   radius: 6.957e8,
-  siderealRotationPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
+  rotation: {
+    axialTilt: 7.25,
+    siderealPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
+  },
   color: '#fa0',
 };
 
@@ -51,7 +55,10 @@ export const MERCURY: CelestialBody = {
   },
   mass: 3.3011e23,
   radius: 2439.7e3,
-  siderealRotationPeriod: 58.6467 * Time.DAY,
+  rotation: {
+    axialTilt: 0.034,
+    siderealPeriod: 58.6467 * Time.DAY,
+  },
   color: '#b3aeae',
 };
 
@@ -72,7 +79,10 @@ export const VENUS: CelestialBody = {
   },
   mass: 4.8675e24,
   radius: 6051.8e3,
-  siderealRotationPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
+  rotation: {
+    axialTilt: 2.64, // TODO: retrograde; is this modeled correctly?
+    siderealPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
+  },
   color: '#e6b667',
 };
 
@@ -92,7 +102,10 @@ export const EARTH: CelestialBody = {
   },
   mass: 5.972168e24,
   radius: 6371e3,
-  siderealRotationPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
+  rotation: {
+    axialTilt: 23.4,
+    siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
+  },
   color: '#7e87dd',
 };
 
@@ -112,7 +125,10 @@ export const LUNA: CelestialBody = {
   },
   mass: 7.342e22,
   radius: 1737.4e3,
-  siderealRotationPeriod: 27.321661 * Time.DAY, // TODO: something is wrong with this
+  rotation: {
+    axialTilt: 6.687,
+    siderealPeriod: 27.321661 * Time.DAY,
+  },
   color: DEFAULT_MOON_COLOR,
 };
 
@@ -134,7 +150,10 @@ export const MARS: CelestialBody = {
   },
   mass: 6.4171e23,
   radius: 3389.5e3,
-  siderealRotationPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
+  rotation: {
+    axialTilt: 25.19,
+    siderealPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
+  },
   color: '#c96c3c',
 };
 
@@ -315,7 +334,10 @@ export const LUTETIA: CelestialBody = {
     argumentOfPeriapsis: 249.997, // degrees
     meanAnomaly: 87.976, // degrees
   },
-  siderealRotationPeriod: 8.1655 * Time.HOUR,
+  rotation: {
+    axialTilt: 96,
+    siderealPeriod: 8.1655 * Time.HOUR,
+  },
   color: DEFAULT_ASTEROID_COLOR,
 };
 
@@ -336,7 +358,10 @@ export const CG67P: CelestialBody = {
     argumentOfPeriapsis: 12.78, // degrees
     meanAnomaly: 0, // degrees (value at perihelion)
   },
-  siderealRotationPeriod: 12.4 * Time.HOUR,
+  rotation: {
+    axialTilt: 52,
+    siderealPeriod: 12.4 * Time.HOUR,
+  },
   color: DEFAULT_ASTEROID_COLOR,
 };
 
@@ -397,7 +422,10 @@ export const NEREUS: CelestialBody = {
     argumentOfPeriapsis: 158.12, // degrees
     meanAnomaly: 0, // degrees (value at epoch)
   },
-  siderealRotationPeriod: 15.16 * Time.HOUR,
+  rotation: {
+    axialTilt: 0, // TODO: find
+    siderealPeriod: 15.16 * Time.HOUR,
+  },
   color: DEFAULT_ASTEROID_COLOR,
 };
 
@@ -423,7 +451,10 @@ export const PLUTO: CelestialBody = {
   },
   mass: 1.3025e22,
   radius: 1188.3e3,
-  siderealRotationPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
+  rotation: {
+    axialTilt: 122.53,
+    siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
+  },
   color: '#E7C7A4',
 };
 
@@ -443,7 +474,10 @@ export const CHARON: CelestialBody = {
   },
   mass: 1.586e21,
   radius: 606e3,
-  siderealRotationPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
+  rotation: {
+    axialTilt: 0, // TODO: verify -- pretty sure it's not tilted WRT its orbit around Pluto
+    siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
+  },
   color: DEFAULT_MOON_COLOR,
 };
 
@@ -463,7 +497,10 @@ export const STYX: CelestialBody = {
   },
   mass: 7.5e15,
   radius: 12e3 / 2, // rough; not spherical
-  siderealRotationPeriod: 3.24 * Time.DAY,
+  rotation: {
+    axialTilt: 82,
+    siderealPeriod: 3.24 * Time.DAY,
+  },
   color: DEFAULT_MOON_COLOR,
 };
 
@@ -502,7 +539,10 @@ export const KERBEROS: CelestialBody = {
   },
   mass: 1.65e16,
   radius: 12e3 / 2, // not spherical
-  siderealRotationPeriod: 5.31 * Time.DAY,
+  rotation: {
+    axialTilt: 96, // TODO: verify that this is WRT its own orbit
+    siderealPeriod: 5.31 * Time.DAY,
+  },
   color: DEFAULT_MOON_COLOR,
 };
 
@@ -755,7 +795,10 @@ export const JUPITER: CelestialBody = {
   },
   mass: 1.8982e27,
   radius: 69911e3,
-  siderealRotationPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
+  rotation: {
+    axialTilt: 3.13,
+    siderealPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
+  },
   color: '#e9be76',
 };
 
@@ -854,7 +897,10 @@ export const SATURN: CelestialBody = {
   },
   mass: 5.6834e26,
   radius: 58232e3,
-  siderealRotationPeriod: 10 * Time.HOUR + 32 * Time.MINUTE + 35, // 10 hr 32 min 35 sec
+  rotation: {
+    axialTilt: 26.73,
+    siderealPeriod: 10 * Time.HOUR + 32 * Time.MINUTE + 35, // 10 hr 32 min 35 sec
+  },
   color: '#d7be87',
 };
 
@@ -1010,7 +1056,10 @@ export const URANUS: CelestialBody = {
   },
   mass: 8.681e25,
   radius: 25362e3,
-  siderealRotationPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
+  rotation: {
+    axialTilt: 82.23, // TODO: retrograde -- modeled correctly?
+    siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
+  },
   color: '#9bcee6',
 };
 
@@ -1146,7 +1195,10 @@ export const NEPTUNE: CelestialBody = {
   },
   mass: 1.02409e26,
   radius: 24622e3,
-  siderealRotationPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
+  rotation: {
+    axialTilt: 28.32,
+    siderealPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
+  },
   color: '#5a7cf6',
 };
 
@@ -1167,7 +1219,10 @@ export const TRITON: CelestialBody = {
   },
   mass: 2.1389e22,
   radius: 1353.4e3,
-  siderealRotationPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
+  rotation: {
+    axialTilt: 0,
+    siderealPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
+  },
   color: DEFAULT_MOON_COLOR,
 };
 

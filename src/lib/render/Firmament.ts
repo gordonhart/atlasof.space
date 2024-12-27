@@ -12,6 +12,8 @@ import {
 import { Textures } from '../images.ts';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { CAMERA_INIT } from './constants.ts';
+import { degreesToRadians } from '../physics.ts';
+import { ECLIPTIC_TILT } from '../bodies.ts';
 
 export class Firmament {
   private readonly scene: Scene;
@@ -26,9 +28,7 @@ export class Firmament {
     this.camera.position.set(...CAMERA_INIT.position);
     this.camera.lookAt(...CAMERA_INIT.lookAt);
 
-    const geometry = new SphereGeometry(2e6, 32, 32); // Create a large sphere for the skybox
-    // geometry.scale(-1, 1, 1); // Flip the geometry inside out
-
+    const geometry = new SphereGeometry(2e6, 32, 32);
     const texture = new TextureLoader().load(Textures.FIRMAMENT);
     const material = new MeshBasicMaterial({
       map: texture,
@@ -36,8 +36,9 @@ export class Firmament {
       transparent: true,
       opacity: 0.2,
     });
+    // material.depthTest = false;
     this.skybox = new Mesh(geometry, material);
-    this.skybox.rotateX(Math.PI / 2);
+    this.skybox.rotateX(Math.PI / 2 - degreesToRadians(ECLIPTIC_TILT));
     this.skybox.renderOrder = -1;
     this.scene.add(this.skybox);
     this.renderPass = new RenderPass(this.scene, this.camera);

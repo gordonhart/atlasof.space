@@ -16,7 +16,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { AppState } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
-import { CAMERA_INIT, SCALE_FACTOR } from './constants.ts';
+import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -42,11 +42,10 @@ export class SolarSystemRenderer {
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
-    // this.scene.background = new Color(0x000000);
 
-    const sunLight = new PointLight(0xfffff0, 1e5); // slight yellow, high intensity manually tuned
+    const sunLight = new PointLight(SUNLIGHT_COLOR, 1e5); // high intensity manually tuned
     sunLight.position.set(0, 0, 0);
-    this.lights = [new AmbientLight(0xfffff0, 0.5), sunLight];
+    this.lights = [new AmbientLight(SUNLIGHT_COLOR, 0.5), sunLight];
     this.lights.forEach(light => this.scene.add(light));
 
     const [w, h] = [window.innerWidth, window.innerHeight];
@@ -80,6 +79,8 @@ export class SolarSystemRenderer {
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;
     const bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 1, 1, 0);
+    // bloomPass.clearColor = new Color(0, 0, 0);
+    // bloomPass.clear = false;
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(this.firmament.renderPass);
     this.composer.addPass(renderScene);

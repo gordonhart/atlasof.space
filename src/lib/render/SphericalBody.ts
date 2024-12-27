@@ -78,7 +78,8 @@ export class SphericalBody {
       sphereMaterial = new MeshBasicMaterial({ color });
     }
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
-    this.sphere.rotation.x = Math.PI / 2;
+    const axialTilt = body.rotation != null ? degreesToRadians(body.rotation.axialTilt) : 0;
+    this.sphere.rotation.x = Math.PI / 2 + axialTilt;
     this.sphere.position.set(positionScaled.x, positionScaled.y, positionScaled.z);
     this.sphere.renderOrder = 1;
     scene.add(this.sphere);
