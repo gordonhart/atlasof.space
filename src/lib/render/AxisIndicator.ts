@@ -1,9 +1,9 @@
 import { Color, Euler, Material, Scene, Vector2, Vector3 } from 'three';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { degreesToRadians } from '../physics.ts';
-import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry';
 
 export class AxisIndicator {
   private readonly scene: Scene;

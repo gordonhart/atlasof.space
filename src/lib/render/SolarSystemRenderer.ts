@@ -79,8 +79,6 @@ export class SolarSystemRenderer {
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;
     const bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 1, 1, 0);
-    // bloomPass.clearColor = new Color(0, 0, 0);
-    // bloomPass.clear = false;
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(this.firmament.renderPass);
     this.composer.addPass(renderScene);
@@ -192,18 +190,8 @@ export class SolarSystemRenderer {
     const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
-    // TODO: conditionally excluding the sun is kinda gross
+    // TODO: conditionally excluding the sun is a little gross
     const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
-    /*
-    if (parent != null && parent.body.rotation != null) {
-      position.sub(parent.position);
-      position.applyEuler(new Euler(degreesToRadians(parent.body.rotation.axialTilt), 0, 0));
-      position.add(parent.position);
-      velocity.sub(parent.velocity);
-      velocity.applyEuler(new Euler(degreesToRadians(parent.body.rotation.axialTilt), 0, 0));
-      velocity.add(parent.velocity);
-    }
-     */
     return new KeplerianBody(this.scene, appState, parent, body, position, velocity);
   }
 
