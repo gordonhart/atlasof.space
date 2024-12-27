@@ -36,6 +36,7 @@ import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
 import arrokothAnimationSrc from '../../assets/arrokoth-rotation.gif';
+import firmamentTextureSrc from '../../assets/firmament.jpg';
 import solTextureSrc from '../../assets/sol-texture.jpg';
 import mercuryTextureSrc from '../../assets/mercury-texture.jpg';
 import venusTextureSrc from '../../assets/venus-texture.jpg';
@@ -100,6 +101,7 @@ export const GalleryImages: Record<string, Array<string>> = {
 } as const;
 
 export const Textures: Record<string, string> = {
+  FIRMAMENT: firmamentTextureSrc as string,
   [Bodies.SOL.name]: solTextureSrc as string,
   [Bodies.MERCURY.name]: mercuryTextureSrc as string,
   [Bodies.VENUS.name]: venusTextureSrc as string,
