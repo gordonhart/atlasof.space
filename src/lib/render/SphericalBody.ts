@@ -72,7 +72,7 @@ export class SphericalBody {
           metalness: 0.1, // Lower metalness for less reflection
         });
       } else {
-        sphereMaterial = new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 0.7 });
+        sphereMaterial = new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
       }
     } else {
       sphereMaterial = new MeshBasicMaterial({ color });
