@@ -180,7 +180,7 @@ export class SolarSystemModel {
           ? this.createBodyWithParents(appState, parents, body)
           : new KeplerianBody(this.scene, this.resolution, appState, null, body, new Vector3(), new Vector3());
     }
-    // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
+    // reverse creation order; first objects created are the highest up in the hierarchy, model them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
   }
 

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { SolarSystemModel } from '../lib/render/SolarSystemModel.ts';
+import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { CelestialBody } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
 

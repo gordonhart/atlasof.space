@@ -1,5 +1,5 @@
 import { MouseEvent, PointerEvent, useRef } from 'react';
-import { SolarSystemModel } from '../lib/render/SolarSystemModel.ts';
+import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { Point2 } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
 import { magnitude, subtract3 } from '../lib/physics.ts';
