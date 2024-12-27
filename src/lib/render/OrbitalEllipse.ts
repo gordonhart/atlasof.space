@@ -27,7 +27,7 @@ export class OrbitalEllipse {
   private readonly face: Mesh;
   private readonly nPoints: number = 3600;
 
-  constructor(scene: Scene, elements: KeplerianElements, offset: Vector3 | null, color: Color) {
+  constructor(scene: Scene, elements: KeplerianElements, positionOffset: Vector3 | null, color: Color) {
     this.scene = scene;
 
     const {
@@ -91,8 +91,8 @@ export class OrbitalEllipse {
     this.face.visible = false;
     scene.add(this.face);
 
-    if (offset != null) {
-      this.update(true, offset);
+    if (positionOffset != null) {
+      this.update(true, positionOffset);
     }
   }
 

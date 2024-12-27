@@ -1072,7 +1072,7 @@ export const PUCK: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.00012,
     semiMajorAxis: 86004.444e3,
-    inclination: 0.31921, // TODO: to Uranus's equator, should this be adjusted?
+    inclination: 0.31921 + URANUS.rotation!.axialTilt, // inclination WRT Uranus's equator; offset by axial tilt
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1091,7 +1091,7 @@ export const MIRANDA: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0013,
     semiMajorAxis: 129390e3,
-    inclination: 4.232, // to Uranus's equator
+    inclination: 4.232 + URANUS.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1110,7 +1110,7 @@ export const ARIEL: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0012,
     semiMajorAxis: 190900e3,
-    inclination: 0.26, // to Uranus's equator
+    inclination: 0.26 + URANUS.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1129,7 +1129,7 @@ export const UMBRIEL: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0039,
     semiMajorAxis: 266000e3,
-    inclination: 0.128, // to Uranus's equator
+    inclination: 0.128 + URANUS.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1148,7 +1148,7 @@ export const TITANIA: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0011,
     semiMajorAxis: 435910e3,
-    inclination: 0.34, // to Uranus's equator
+    inclination: 0.34 + URANUS.rotation!.axialTilt, // inclination WRT Uranus's equator; offset by axial tilt
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1167,7 +1167,7 @@ export const OBERON: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0014,
     semiMajorAxis: 583520e3,
-    inclination: 0.058, // to Uranus's equator
+    inclination: 0.058 + URANUS.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1202,7 +1202,6 @@ export const NEPTUNE: CelestialBody = {
   color: '#5a7cf6',
 };
 
-const neptuneAxialTilt = 28.32; // relative to its orbit
 export const TRITON: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Triton',
@@ -1235,7 +1234,7 @@ export const PROTEUS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0005,
     semiMajorAxis: 117646e3,
-    inclination: 0.524 - neptuneAxialTilt, // to Neptune's equator
+    inclination: 0.524 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1273,7 +1272,7 @@ export const DESPINA: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.00038,
     semiMajorAxis: 52525.95e3,
-    inclination: 0.216 - neptuneAxialTilt, // to Neptune's equator
+    inclination: 0.216 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1292,7 +1291,7 @@ export const LARISSA: CelestialBody = {
     epoch: 'Epoch 18 August 1989', // TODO: find J2000
     eccentricity: 0.001393,
     semiMajorAxis: 73548.26e3,
-    inclination: 0.251 - neptuneAxialTilt, // to Neptune's equator
+    inclination: 0.251 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1311,7 +1310,7 @@ export const GALATEA: CelestialBody = {
     epoch: 'Epoch 18 August 1989', // TODO: find J2000
     eccentricity: 0.00022,
     semiMajorAxis: 61952.57e3,
-    inclination: 0.052 - neptuneAxialTilt, // to Neptune's equator
+    inclination: 0.052 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO

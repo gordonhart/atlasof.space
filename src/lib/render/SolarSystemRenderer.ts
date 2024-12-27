@@ -192,7 +192,19 @@ export class SolarSystemRenderer {
     const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
-    return new KeplerianBody(this.scene, appState, mainParent, body, position, velocity);
+    // TODO: conditionally excluding the sun is kinda gross
+    const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
+    /*
+    if (parent != null && parent.body.rotation != null) {
+      position.sub(parent.position);
+      position.applyEuler(new Euler(degreesToRadians(parent.body.rotation.axialTilt), 0, 0));
+      position.add(parent.position);
+      velocity.sub(parent.velocity);
+      velocity.applyEuler(new Euler(degreesToRadians(parent.body.rotation.axialTilt), 0, 0));
+      velocity.add(parent.velocity);
+    }
+     */
+    return new KeplerianBody(this.scene, appState, parent, body, position, velocity);
   }
 
   private incrementKinematics(dt: number) {
