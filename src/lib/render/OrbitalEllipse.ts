@@ -27,7 +27,7 @@ export class OrbitalEllipse {
   private readonly face: Mesh;
   private readonly nPoints: number = 3600;
 
-  constructor(scene: Scene, elements: KeplerianElements, offset: Vector3 | null, color: Color) {
+  constructor(scene: Scene, elements: KeplerianElements, positionOffset: Vector3 | null, color: Color) {
     this.scene = scene;
 
     const {
@@ -55,17 +55,18 @@ export class OrbitalEllipse {
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
     this.ellipse.rotateZ(Omega);
     this.ellipse.rotateX(i);
+    this.ellipse.renderOrder = 0;
     scene.add(this.ellipse);
 
     const ellipseFocusGeometry = new LineGeometry();
     ellipseFocusGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
     const resolution = new Vector2(window.innerWidth, window.innerHeight);
-    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution });
-    ellipseFocusMaterial.depthTest = false;
+    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
     this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
     this.ellipseFocus.rotateZ(Omega);
     this.ellipseFocus.rotateX(i);
     this.ellipseFocus.visible = false;
+    this.ellipseFocus.renderOrder = 0;
     scene.add(this.ellipseFocus);
 
     const faceGeometry = new BufferGeometry();
@@ -78,18 +79,20 @@ export class OrbitalEllipse {
     const faceMaterial = new MeshBasicMaterial({
       color,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.025,
       side: DoubleSide,
-      depthWrite: false, // helps with transparency rendering
+      depthWrite: true, // helps with transparency rendering
+      depthTest: true,
     });
     this.face = new Mesh(faceGeometry, faceMaterial);
     this.face.rotateZ(Omega);
     this.face.rotateX(i);
+    this.face.renderOrder = 0;
     this.face.visible = false;
     scene.add(this.face);
 
-    if (offset != null) {
-      this.update(true, offset);
+    if (positionOffset != null) {
+      this.update(true, positionOffset);
     }
   }
 

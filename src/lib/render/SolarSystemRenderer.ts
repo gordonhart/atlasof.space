@@ -1,8 +1,22 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import {
+  AmbientLight,
+  AxesHelper,
+  GridHelper,
+  Light,
+  OrthographicCamera,
+  PointLight,
+  Scene,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
+} from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { AppState } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
-import { SCALE_FACTOR } from './constants.ts';
-import { AxesHelper, Color, GridHelper, OrthographicCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { Belt3D } from './Belt3D.ts';
@@ -10,21 +24,29 @@ import { isOffScreen } from './utils.ts';
 import { keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
 import { notNullish } from '../utils.ts';
+import { Firmament } from './Firmament.ts';
 
 export class SolarSystemRenderer {
   private readonly scene: Scene;
   private readonly camera: OrthographicCamera;
-  private readonly renderer: WebGLRenderer;
   private readonly controls: OrbitControls;
-  public bodies: Record<string, KeplerianBody>;
+  private readonly renderer: WebGLRenderer;
+  private readonly composer: EffectComposer;
+  private bodies: Record<string, KeplerianBody>;
   private readonly belts: Array<Belt3D>;
+  private readonly firmament: Firmament;
+  private readonly lights: Array<Light>;
 
   private readonly debug = false;
   private readonly maxSafeDt = Time.HOUR;
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
-    this.scene.background = new Color(0x000000);
+
+    const sunLight = new PointLight(SUNLIGHT_COLOR, 1e5); // high intensity manually tuned
+    sunLight.position.set(0, 0, 0);
+    this.lights = [new AmbientLight(SUNLIGHT_COLOR, 0.5), sunLight];
+    this.lights.forEach(light => this.scene.add(light));
 
     const [w, h] = [window.innerWidth, window.innerHeight];
     this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
@@ -48,10 +70,19 @@ export class SolarSystemRenderer {
     this.controls.zoomToCursor = true;
 
     this.bodies = this.createBodies(appState);
-
     // TODO: enable if we can get the belts to look better; not great currently
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
+    this.firmament = new Firmament();
+
     window.addEventListener('resize', this.onWindowResize.bind(this));
+
+    const renderScene = new RenderPass(this.scene, this.camera);
+    renderScene.clear = false;
+    const bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 1, 1, 0);
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(this.firmament.renderPass);
+    this.composer.addPass(renderScene);
+    this.composer.addPass(bloomPass);
 
     if (this.debug) {
       this.addHelpers();
@@ -69,9 +100,9 @@ export class SolarSystemRenderer {
 
   private setupCamera() {
     this.camera.clearViewOffset();
-    this.camera.up.set(0, 0, 1);
-    this.camera.position.set(0, 0, 1e9);
-    this.camera.lookAt(0, 0, 0);
+    this.camera.up.set(...CAMERA_INIT.up);
+    this.camera.position.set(...CAMERA_INIT.position);
+    this.camera.lookAt(...CAMERA_INIT.lookAt);
     this.camera.zoom = 1;
     this.camera.updateProjectionMatrix();
   }
@@ -90,12 +121,13 @@ export class SolarSystemRenderer {
   update(ctx: CanvasRenderingContext2D, appState: AppState) {
     if (appState.play) this.incrementKinematics(appState.dt);
     this.controls.update();
+    this.firmament.update(this.camera.position, this.controls.target);
     this.updateCenter(appState);
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(appState, parentState ?? null);
     });
-    this.renderer.render(this.scene, this.camera);
+    this.composer.render();
     this.drawLabels(ctx, appState);
   }
 
@@ -126,6 +158,8 @@ export class SolarSystemRenderer {
 
     Object.values(this.bodies).forEach(body => body.dispose());
     this.belts.forEach(belt => belt.dispose());
+    this.lights.forEach(light => light.dispose());
+    this.firmament.dispose();
     this.renderer.dispose();
     this.controls.dispose();
   }
@@ -156,7 +190,9 @@ export class SolarSystemRenderer {
     const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
-    return new KeplerianBody(this.scene, appState, mainParent, body, position, velocity);
+    // TODO: conditionally excluding the sun is a little gross
+    const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
+    return new KeplerianBody(this.scene, appState, parent, body, position, velocity);
   }
 
   private incrementKinematics(dt: number) {

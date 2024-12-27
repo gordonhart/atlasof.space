@@ -8,6 +8,8 @@ import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
 import { FocalRadius } from './FocalRadius.ts';
+import { SOL } from '../bodies.ts';
+import { AxisIndicator } from './AxisIndicator.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody extends KinematicBody {
@@ -16,6 +18,7 @@ export class KeplerianBody extends KinematicBody {
   private readonly sphere: SphericalBody;
   private readonly ellipse: OrbitalEllipse;
   private readonly radius: FocalRadius;
+  private readonly axis: AxisIndicator | null = null;
   private readonly screenPosition: Vector3;
 
   private visible: boolean = false;
@@ -29,8 +32,8 @@ export class KeplerianBody extends KinematicBody {
     position: Vector3,
     velocity: Vector3
   ) {
-    const { mass, influencedBy, siderealRotationPeriod } = body;
-    super(mass, influencedBy, siderealRotationPeriod, position, velocity);
+    const { mass, influencedBy, rotation } = body;
+    super(mass, influencedBy, rotation?.siderealPeriod, position, velocity);
     this.body = body;
     this.scene = scene;
     this.screenPosition = new Vector3();
@@ -38,12 +41,15 @@ export class KeplerianBody extends KinematicBody {
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
     this.radius = new FocalRadius(this.scene, parent?.position ?? new Vector3(), position, color);
-    this.sphere = new SphericalBody(this.scene, body, position, color);
+    this.sphere = new SphericalBody(this.scene, body, position, color, body.name === SOL.name);
+    if (body.rotation != null) {
+      this.axis = new AxisIndicator(this.scene, this.position, body.rotation.axialTilt, body.radius, color);
+    }
   }
 
   update(appState: AppState, parent: this | null) {
     this.visible = appState.visibleTypes.has(this.body.type);
-    this.sphere.update(this.position, this.visible);
+    this.sphere.update(this.position, this.rotation, this.visible);
     this.ellipse.update(this.visible && appState.drawOrbit, parent?.position ?? null);
 
     // scale body based on hover state
@@ -54,6 +60,14 @@ export class KeplerianBody extends KinematicBody {
       this.hovered = thisIsHovered;
     }
     this.radius.update(parent?.position ?? null, this.position, thisIsHovered);
+    this.axis?.update(this.position, thisIsHovered);
+  }
+
+  dispose() {
+    this.sphere.dispose();
+    this.ellipse.dispose();
+    this.radius.dispose();
+    this.axis?.dispose();
   }
 
   getScreenPosition(camera: OrthographicCamera): Point2 {
@@ -62,12 +76,6 @@ export class KeplerianBody extends KinematicBody {
     const pixelX = ((this.screenPosition.x + 1) * window.innerWidth) / 2;
     const pixelY = ((1 - this.screenPosition.y) * window.innerHeight) / 2;
     return [pixelX, pixelY]; // return pixel values
-  }
-
-  dispose() {
-    this.sphere.dispose();
-    this.ellipse.dispose();
-    this.radius.dispose();
   }
 
   drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {

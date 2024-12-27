@@ -18,6 +18,12 @@ export type KeplerianElements = {
   meanAnomaly: number; // degrees
 };
 
+export type RotationElements = {
+  // TODO: initial rotation?
+  axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
+  siderealPeriod: number; // seconds
+};
+
 export enum CelestialBodyType {
   STAR = 'star',
   PLANET = 'planet',
@@ -47,9 +53,7 @@ export type CelestialBody = {
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;
-  // TODO: initial rotation?
-  // TODO: axial tilt?
-  siderealRotationPeriod?: number; // seconds, leave empty to omit spin indicator
+  rotation?: RotationElements; // leave empty to omit spin
   color: `#${string}`; // hex
 };
 

@@ -1,4 +1,4 @@
-import sunSrc from '../../assets/sun-thumb.jpg';
+import solSrc from '../../assets/sol-thumb.jpg';
 import mercurySrc from '../../assets/mercury-thumb.jpg';
 import venusSrc from '../../assets/venus-thumb.jpg';
 import earthSrc from '../../assets/earth-thumb.jpg';
@@ -36,10 +36,21 @@ import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
 import arrokothAnimationSrc from '../../assets/arrokoth-rotation.gif';
+import firmamentTextureSrc from '../../assets/firmament.jpg';
+import solTextureSrc from '../../assets/sol-texture.jpg';
+import mercuryTextureSrc from '../../assets/mercury-texture.jpg';
+import venusTextureSrc from '../../assets/venus-texture.jpg';
+import earthTextureSrc from '../../assets/earth-texture.jpg';
+import lunaTextureSrc from '../../assets/luna-texture.jpg';
+import marsTextureSrc from '../../assets/mars-texture.jpg';
+import jupiterTextureSrc from '../../assets/jupiter-texture.jpg';
+import saturnTextureSrc from '../../assets/saturn-texture.jpg';
+import uranusTextureSrc from '../../assets/uranus-texture.jpg';
+import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
 import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
-  [Bodies.SOL.name]: sunSrc as string,
+  [Bodies.SOL.name]: solSrc as string,
 
   [Bodies.MERCURY.name]: mercurySrc as string,
 
@@ -88,3 +99,17 @@ export const GalleryImages: Record<string, Array<string>> = {
   [Bodies.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
   [Bodies.ARROKOTH.name]: [arrokothAnimationSrc] as Array<string>,
 } as const;
+
+export const Textures: Record<string, string> = {
+  FIRMAMENT: firmamentTextureSrc as string,
+  [Bodies.SOL.name]: solTextureSrc as string,
+  [Bodies.MERCURY.name]: mercuryTextureSrc as string,
+  [Bodies.VENUS.name]: venusTextureSrc as string,
+  [Bodies.EARTH.name]: earthTextureSrc as string,
+  [Bodies.LUNA.name]: lunaTextureSrc as string,
+  [Bodies.MARS.name]: marsTextureSrc as string,
+  [Bodies.JUPITER.name]: jupiterTextureSrc as string,
+  [Bodies.SATURN.name]: saturnTextureSrc as string,
+  [Bodies.URANUS.name]: uranusTextureSrc as string,
+  [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,
+};
