@@ -10,7 +10,6 @@ export type AppState = {
   drawLabel: boolean;
   center: string; // name of body centering visualization
   hover: string | null; // name of hovered body
-  planetScaleFactor: number;
   visibleTypes: Set<CelestialBodyType>;
   bodies: Array<CelestialBody>;
 
@@ -29,7 +28,6 @@ export const initialState: AppState = {
   drawLabel: true,
   center: SOL.name,
   hover: null,
-  planetScaleFactor: 1,
   visibleTypes: new Set(CelestialBodyTypes),
   bodies: SOLAR_SYSTEM,
 
@@ -38,10 +36,9 @@ export const initialState: AppState = {
   vernalEquinox: [1, 0, 0],
 };
 
-export function clampState({ dt, planetScaleFactor, ...state }: AppState): AppState {
+export function clampState({ dt, ...state }: AppState): AppState {
   return {
     ...state,
     dt: Math.min(Math.max(dt, Time.SECOND), 365 * Time.DAY),
-    planetScaleFactor: Math.min(Math.max(planetScaleFactor, 1), 8192),
   };
 }

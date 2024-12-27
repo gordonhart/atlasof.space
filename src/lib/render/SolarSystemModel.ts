@@ -26,8 +26,9 @@ import { map } from 'ramda';
 import { notNullish } from '../utils.ts';
 import { Firmament } from './Firmament.ts';
 
-export class SolarSystemRenderer {
+export class SolarSystemModel {
   private readonly scene: Scene;
+  private readonly resolution: Vector2;
   private readonly camera: OrthographicCamera;
   private readonly controls: OrbitControls;
   private readonly renderer: WebGLRenderer;
@@ -42,24 +43,24 @@ export class SolarSystemRenderer {
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
+    this.resolution = new Vector2(container.clientWidth, container.clientHeight);
 
     const sunLight = new PointLight(SUNLIGHT_COLOR, 1e5); // high intensity manually tuned
     sunLight.position.set(0, 0, 0);
     this.lights = [new AmbientLight(SUNLIGHT_COLOR, 0.5), sunLight];
     this.lights.forEach(light => this.scene.add(light));
 
-    const [w, h] = [window.innerWidth, window.innerHeight];
-    this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
-    this.setupCamera();
-
     this.renderer = new WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(this.resolution.x, this.resolution.y);
     this.renderer.setPixelRatio(window.devicePixelRatio);
-
     while (container.firstChild != null) {
       container.removeChild(container.firstChild);
     }
     container.appendChild(this.renderer.domElement);
+
+    const [w, h] = [this.resolution.x, this.resolution.y];
+    this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
+    this.setupCamera();
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -72,13 +73,11 @@ export class SolarSystemRenderer {
     this.bodies = this.createBodies(appState);
     // TODO: enable if we can get the belts to look better; not great currently
     this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
-    this.firmament = new Firmament();
-
-    window.addEventListener('resize', this.onWindowResize.bind(this));
+    this.firmament = new Firmament(this.resolution);
 
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;
-    const bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 1, 1, 0);
+    const bloomPass = new UnrealBloomPass(this.resolution, 1, 1, 0);
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(this.firmament.renderPass);
     this.composer.addPass(renderScene);
@@ -89,12 +88,16 @@ export class SolarSystemRenderer {
     }
   }
 
-  // TODO: this doesn't work well currently
-  private onWindowResize() {
-    this.camera.left = -window.innerWidth / 2;
-    this.camera.right = window.innerWidth / 2;
-    this.camera.top = window.innerHeight / 2;
-    this.camera.bottom = -window.innerHeight / 2;
+  resize(width: number, height: number) {
+    this.renderer.setSize(width, height);
+    this.composer.setSize(width, height);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.resolution.set(width, height);
+    this.firmament.resize(width, height);
+    this.camera.left = -width / 2;
+    this.camera.right = width / 2;
+    this.camera.top = height / 2;
+    this.camera.bottom = -height / 2;
     this.camera.updateProjectionMatrix();
   }
 
@@ -109,7 +112,7 @@ export class SolarSystemRenderer {
 
   getMetersPerPixel() {
     const visibleWidth = (this.camera.right - this.camera.left) / this.camera.zoom;
-    return (SCALE_FACTOR * visibleWidth) / window.innerWidth;
+    return (SCALE_FACTOR * visibleWidth) / this.renderer.domElement.width;
   }
 
   getVernalEquinox(): Point3 {
@@ -153,9 +156,6 @@ export class SolarSystemRenderer {
   }
 
   dispose() {
-    const boundResizeHandler = this.onWindowResize.bind(this);
-    window.removeEventListener('resize', boundResizeHandler);
-
     Object.values(this.bodies).forEach(body => body.dispose());
     this.belts.forEach(belt => belt.dispose());
     this.lights.forEach(light => light.dispose());
@@ -178,7 +178,7 @@ export class SolarSystemRenderer {
       initialState[body.name] =
         parents.length > 0
           ? this.createBodyWithParents(appState, parents, body)
-          : new KeplerianBody(this.scene, appState, null, body, new Vector3(), new Vector3());
+          : new KeplerianBody(this.scene, this.resolution, appState, null, body, new Vector3(), new Vector3());
     }
     // reverse creation order; first objects created are the highest up in the hierarchy, render them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
@@ -192,7 +192,7 @@ export class SolarSystemRenderer {
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
     // TODO: conditionally excluding the sun is a little gross
     const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
-    return new KeplerianBody(this.scene, appState, parent, body, position, velocity);
+    return new KeplerianBody(this.scene, this.resolution, appState, parent, body, position, velocity);
   }
 
   private incrementKinematics(dt: number) {
@@ -220,7 +220,7 @@ export class SolarSystemRenderer {
   }
 
   private drawLabels(ctx: CanvasRenderingContext2D, { drawLabel }: AppState) {
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.clearRect(0, 0, this.renderer.domElement.width, this.renderer.domElement.height);
     if (drawLabel) {
       const metersPerPx = this.getMetersPerPixel();
       Object.values(this.bodies).forEach(body => {

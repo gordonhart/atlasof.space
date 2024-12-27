@@ -1,10 +1,10 @@
 import { MouseEvent, PointerEvent, useRef } from 'react';
-import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
+import { SolarSystemModel } from '../lib/render/SolarSystemModel.ts';
 import { Point2 } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
 import { magnitude, subtract3 } from '../lib/physics.ts';
 
-const INTERACT_PX_THRESHOLD = 25;
+const INTERACT_PX_THRESHOLD = 10;
 const DRAG_PX_THRESHOLD = 10;
 
 type DragDetector = {
@@ -12,8 +12,8 @@ type DragDetector = {
   initial: Point2;
 };
 
-export function useCursorControls3D(
-  renderer: SolarSystemRenderer | null,
+export function useCursorControls(
+  renderer: SolarSystemModel | null,
   { visibleTypes }: AppState,
   updateAppState: (state: Partial<AppState>) => void
 ) {

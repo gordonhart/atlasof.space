@@ -1,20 +1,20 @@
 import { useRef } from 'react';
-import { SolarSystemRenderer } from '../lib/render/SolarSystemRenderer.ts';
+import { SolarSystemModel } from '../lib/render/SolarSystemModel.ts';
 import { CelestialBody } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
 
 export function useSolarSystemModel() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<SolarSystemRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const modelRef = useRef<SolarSystemModel | null>(null);
 
   function initializeCanvas() {
     const canvas = canvasRef.current;
-    if (canvas == null) return;
+    if (canvas == null || containerRef.current == null) return;
     const ctx = canvas.getContext('2d')!;
     const dpr = window.devicePixelRatio ?? 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    canvas.width = containerRef.current.clientWidth * dpr;
+    canvas.height = containerRef.current.clientHeight * dpr;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.scale(dpr, -dpr);
     ctx.translate(0, -canvas.height / dpr);
@@ -22,40 +22,47 @@ export function useSolarSystemModel() {
 
   function initialize(appState: AppState) {
     if (containerRef.current == null || canvasRef.current == null) return;
-    if (rendererRef.current == null) {
-      rendererRef.current = new SolarSystemRenderer(containerRef.current, appState);
+    if (modelRef.current == null) {
+      modelRef.current = new SolarSystemModel(containerRef.current, appState);
     }
     initializeCanvas();
-    window.addEventListener('resize', initializeCanvas);
+    window.addEventListener('resize', resize);
     return () => {
-      window.removeEventListener('resize', initializeCanvas);
-      if (rendererRef.current != null) {
-        rendererRef.current?.dispose();
-        rendererRef.current = null;
+      window.removeEventListener('resize', resize);
+      if (modelRef.current != null) {
+        modelRef.current?.dispose();
+        modelRef.current = null;
       }
     };
   }
 
+  function resize() {
+    const width = containerRef.current?.clientWidth ?? window.innerWidth;
+    const height = containerRef.current?.clientHeight ?? window.innerHeight;
+    modelRef.current?.resize(width, height);
+    initializeCanvas();
+  }
+
   function update(ctx: CanvasRenderingContext2D, appState: AppState) {
-    rendererRef.current?.update(ctx, appState);
+    modelRef.current?.update(ctx, appState);
   }
 
   function add(appState: AppState, body: CelestialBody) {
-    rendererRef.current?.add(appState, body);
+    modelRef.current?.add(appState, body);
   }
 
   function remove(name: string) {
-    rendererRef.current?.remove(name);
+    modelRef.current?.remove(name);
   }
 
   function reset(appState: AppState) {
-    rendererRef.current?.reset(appState);
+    modelRef.current?.reset(appState);
   }
 
   return {
     containerRef,
-    rendererRef,
     canvasRef,
+    modelRef,
     initialize,
     update,
     add,

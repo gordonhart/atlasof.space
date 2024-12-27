@@ -27,7 +27,13 @@ export class OrbitalEllipse {
   private readonly face: Mesh;
   private readonly nPoints: number = 3600;
 
-  constructor(scene: Scene, elements: KeplerianElements, positionOffset: Vector3 | null, color: Color) {
+  constructor(
+    scene: Scene,
+    resolution: Vector2,
+    elements: KeplerianElements,
+    positionOffset: Vector3 | null,
+    color: Color
+  ) {
     this.scene = scene;
 
     const {
@@ -60,7 +66,6 @@ export class OrbitalEllipse {
 
     const ellipseFocusGeometry = new LineGeometry();
     ellipseFocusGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
-    const resolution = new Vector2(window.innerWidth, window.innerHeight);
     const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
     this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
     this.ellipseFocus.rotateZ(Omega);

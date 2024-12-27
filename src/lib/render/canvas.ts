@@ -8,7 +8,7 @@ export function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
 export function drawOffscreenLabel(
   ctx: CanvasRenderingContext2D,
   label: string,
-  color: string,
+  color: `#${string}`,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2
@@ -43,7 +43,7 @@ export function drawOffscreenLabel(
 export function drawLabelAtLocation(
   ctx: CanvasRenderingContext2D,
   label: string,
-  color: string,
+  color: `#${string}`,
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2
 ) {
@@ -72,7 +72,7 @@ export function drawLabelAtLocation(
 type CaretType = 'right' | 'left' | 'up' | 'down';
 function drawCaretAtLocation(
   ctx: CanvasRenderingContext2D,
-  color: string,
+  color: `#${string}`,
   [xPx, yPx]: Point2, // centered on this value
   type: CaretType
 ) {

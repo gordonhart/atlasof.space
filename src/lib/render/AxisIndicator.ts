@@ -13,7 +13,7 @@ export class AxisIndicator {
   private readonly rotationEuler: Euler;
   private readonly segments: [Vector3, Vector3, Vector3, Vector3];
 
-  constructor(scene: Scene, center: Vector3, axialTilt: number, bodyRadius: number, color: Color) {
+  constructor(scene: Scene, resolution: Vector2, center: Vector3, axialTilt: number, bodyRadius: number, color: Color) {
     this.scene = scene;
     this.bodyRadius = bodyRadius;
 
@@ -22,7 +22,6 @@ export class AxisIndicator {
 
     const geometry = new LineSegmentsGeometry();
     geometry.setPositions(this.calculatePositions(center));
-    const resolution = new Vector2(window.innerWidth, window.innerHeight);
     const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true });
     material.depthTest = true;
     this.line = new LineSegments2(geometry, material);
@@ -34,7 +33,6 @@ export class AxisIndicator {
   update(position: Vector3, visible: boolean) {
     this.line.visible = visible;
     if (visible) {
-      console.log('axis indicator visible', this.calculatePositions(position));
       this.line.geometry.setPositions(this.calculatePositions(position));
     }
   }

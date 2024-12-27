@@ -37,20 +37,6 @@ export const GeneralControls = memo(function GeneralControlsComponent({
     <Stack gap={buttonGap}>
       <AddSmallBodyMenu state={state} addBody={addBody} removeBody={removeBody} />
 
-      {/* TODO: enable for 3D?
-      <Tooltip position="left" label="Enlarge Planets">
-        <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor * 2 })}>
-          <IconCirclePlus size={iconSize} />
-        </ActionIcon>
-      </Tooltip>
-
-      <Tooltip position="left" label="Shrink Planets">
-        <ActionIcon onClick={() => updateState({ planetScaleFactor: state.planetScaleFactor / 2 })}>
-          <IconCircleMinus size={iconSize} />
-        </ActionIcon>
-      </Tooltip>
-      */}
-
       <Tooltip position="left" label={`${state.drawOrbit ? 'Hide' : 'Show'} Orbits`}>
         <ActionIcon onClick={() => updateState({ drawOrbit: !state.drawOrbit })}>
           {state.drawOrbit ? <IconCircleDot size={iconSize} /> : <IconCircle size={iconSize} />}

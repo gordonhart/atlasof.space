@@ -1,6 +1,6 @@
 import { CelestialBody, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
-import { Color, OrthographicCamera, Scene, Vector3 } from 'three';
+import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import { AppState } from '../state.ts';
 import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
 import { isOffScreen } from './utils.ts';
@@ -14,7 +14,7 @@ import { AxisIndicator } from './AxisIndicator.ts';
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody extends KinematicBody {
   public readonly body: CelestialBody;
-  private readonly scene: Scene;
+  private readonly resolution: Vector2;
   private readonly sphere: SphericalBody;
   private readonly ellipse: OrbitalEllipse;
   private readonly radius: FocalRadius;
@@ -26,6 +26,7 @@ export class KeplerianBody extends KinematicBody {
 
   constructor(
     scene: Scene,
+    resolution: Vector2,
     appState: AppState,
     parent: KeplerianBody | null,
     body: CelestialBody,
@@ -35,15 +36,15 @@ export class KeplerianBody extends KinematicBody {
     const { mass, influencedBy, rotation } = body;
     super(mass, influencedBy, rotation?.siderealPeriod, position, velocity);
     this.body = body;
-    this.scene = scene;
+    this.resolution = resolution;
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
-    this.ellipse = new OrbitalEllipse(this.scene, body.elements, parent?.position ?? null, color);
-    this.radius = new FocalRadius(this.scene, parent?.position ?? new Vector3(), position, color);
-    this.sphere = new SphericalBody(this.scene, body, position, color, body.name === SOL.name);
+    this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, color);
+    this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
+    this.sphere = new SphericalBody(scene, body, position, color, body.name === SOL.name);
     if (body.rotation != null) {
-      this.axis = new AxisIndicator(this.scene, this.position, body.rotation.axialTilt, body.radius, color);
+      this.axis = new AxisIndicator(scene, resolution, this.position, body.rotation.axialTilt, body.radius, color);
     }
   }
 
@@ -71,10 +72,9 @@ export class KeplerianBody extends KinematicBody {
   }
 
   getScreenPosition(camera: OrthographicCamera): Point2 {
-    this.screenPosition.set(this.position.x, this.position.y, this.position.z);
-    this.screenPosition.multiplyScalar(1 / SCALE_FACTOR).project(camera);
-    const pixelX = ((this.screenPosition.x + 1) * window.innerWidth) / 2;
-    const pixelY = ((1 - this.screenPosition.y) * window.innerHeight) / 2;
+    this.screenPosition.copy(this.position).divideScalar(SCALE_FACTOR).project(camera);
+    const pixelX = ((this.screenPosition.x + 1) * this.resolution.x) / 2;
+    const pixelY = ((1 - this.screenPosition.y) * this.resolution.y) / 2;
     return [pixelX, pixelY]; // return pixel values
   }
 
@@ -82,10 +82,10 @@ export class KeplerianBody extends KinematicBody {
     if (!this.visible) return;
 
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera);
-    const bodyYpx = window.innerHeight - bodyYpxInverted;
+    const bodyYpx = this.resolution.y - bodyYpxInverted;
 
     const label = this.body.shortName ?? this.body.name;
-    ctx.font = '12px Arial';
+    ctx.font = '12px Arial'; // TODO: better font
     const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
     const textPx: Point2 = [textWidthPx, textHeightPx];
     const canvasPx = getCanvasPixels(ctx);

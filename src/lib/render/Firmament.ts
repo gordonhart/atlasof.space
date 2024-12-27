@@ -7,6 +7,7 @@ import {
   Scene,
   SphereGeometry,
   TextureLoader,
+  Vector2,
   Vector3,
 } from 'three';
 import { Textures } from '../images.ts';
@@ -21,9 +22,9 @@ export class Firmament {
   private readonly skybox: Mesh;
   public readonly renderPass: RenderPass;
 
-  constructor() {
+  constructor(resolution: Vector2) {
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3e6);
+    this.camera = new PerspectiveCamera(75, resolution.x / resolution.y, 1, 3e6);
     this.camera.up.set(...CAMERA_INIT.up);
     this.camera.position.set(...CAMERA_INIT.position);
     this.camera.lookAt(...CAMERA_INIT.lookAt);
@@ -45,8 +46,13 @@ export class Firmament {
   }
 
   update(center: Vector3, target: Vector3) {
-    this.camera.position.set(center.x, center.y, center.z);
+    this.camera.position.copy(center);
     this.camera.lookAt(target);
+  }
+
+  resize(width: number, height: number) {
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
   }
 
   dispose() {
