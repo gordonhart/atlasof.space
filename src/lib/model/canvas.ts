@@ -69,6 +69,46 @@ export function drawLabelAtLocation(
   ctx.restore();
 }
 
+export function drawCoolLabelAtLocation(
+  ctx: CanvasRenderingContext2D,
+  label: string,
+  color: `#${string}`,
+  [xPx, yPx]: Point2,
+  [textWidthPx, textHeightPx]: Point2,
+  radius: number
+) {
+  ctx.save();
+  ctx.scale(1, -1); // flip and translate to get text right-side-up
+  ctx.translate(0, -ctx.canvas.height);
+  const yPxInverted = ctx.canvas.height - yPx;
+
+  // draw background
+  // const offset = 15;
+  const boxPadPx = 4;
+  const angle = Math.atan2(2, 1);
+  const [x0, y0] = [xPx + radius * Math.cos(angle), yPxInverted - radius * Math.sin(angle)];
+  const h = textHeightPx + boxPadPx * 2;
+  const w = textWidthPx + h / 2;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x0 + w + boxPadPx, y0);
+  ctx.lineTo(x0 + w + boxPadPx, y0 - h);
+  ctx.lineTo(x0 + h / 2, y0 - h);
+  ctx.closePath();
+  ctx.fillStyle = 'black';
+  ctx.strokeStyle = color;
+  // const boxLocationPx: Point2 = [xPx - boxPadPx, yPxInverted - textHeightPx - boxPadPx];
+  // const boxDimensionPx: Point2 = [textWidthPx + boxPadPx * 2, textHeightPx + boxPadPx * 2];
+  // ctx.roundRect(...boxLocationPx, ...boxDimensionPx, 5);
+  ctx.fill();
+  ctx.stroke();
+
+  // draw text
+  ctx.fillStyle = color;
+  ctx.fillText(label, x0 + h / 2, y0 - boxPadPx);
+  ctx.restore();
+}
+
 type CaretType = 'right' | 'left' | 'up' | 'down';
 function drawCaretAtLocation(
   ctx: CanvasRenderingContext2D,

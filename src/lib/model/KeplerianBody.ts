@@ -2,7 +2,7 @@ import { CelestialBody, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import { AppState } from '../state.ts';
-import { drawLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
+import { drawCoolLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
 import { isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
@@ -96,8 +96,11 @@ export class KeplerianBody extends KinematicBody {
     } else {
       const baseRadius = this.body.radius / metersPerPx;
       const radius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
-      const [offsetXpx, offsetYpx] = [textWidthPx / 2, Math.max(radius, 1) + 10];
-      drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx - offsetXpx, bodyYpx + offsetYpx], textPx);
+      const radiusPx = Math.max(radius, 1) + 5;
+      if (this.body.name === 'Sol') {
+        console.log(metersPerPx, baseRadius, radius, radiusPx);
+      }
+      drawCoolLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, radiusPx);
     }
   }
 }
