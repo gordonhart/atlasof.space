@@ -99,7 +99,7 @@ export function SolarSystem() {
       </Box>
       {focusBody != null && (
         <Box h="100vh" style={{ borderLeft: `1px solid ${focusBody.color}` }}>
-          <FactSheet body={focusBody} bodies={appState.bodies} clear={() => updateState({ center: undefined })} />
+          <FactSheet body={focusBody} bodies={appState.bodies} updateState={updateState} />
         </Box>
       )}
     </Group>

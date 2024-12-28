@@ -125,11 +125,11 @@ export class SolarSystemModel {
     if (appState.play) this.incrementKinematics(appState.dt);
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
-    this.updateCenter(appState);
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(appState, parentState ?? null);
     });
+    this.updateCenter(appState);
     this.composer.render();
     this.drawLabels(ctx, appState);
   }
@@ -230,7 +230,7 @@ export class SolarSystemModel {
   }
 
   private updateCenter({ center }: AppState) {
-    if (center == null || center == SOL.name) return;
+    if (center == null) return;
     const centerBody = this.bodies[center];
     if (centerBody != null) {
       const { position } = centerBody;

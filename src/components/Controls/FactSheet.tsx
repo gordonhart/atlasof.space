@@ -10,13 +10,15 @@ import { LoadingCursor } from './LoadingCursor.tsx';
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { iconSize } from './constants.ts';
+import { MajorMoons } from './MajorMoons.tsx';
+import { AppState } from '../../lib/state.ts';
 
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  clear: () => void;
+  updateState: (update: Partial<AppState>) => void;
 };
-export const FactSheet = memo(function FactSheetComponent({ body, bodies, clear }: Props) {
+export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState }: Props) {
   const { name, type, mass, radius, elements } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
@@ -41,9 +43,9 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, clear 
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={600} fz="xs" p="md" gap={2} justify="space-between" h="100%">
+    <Stack w={600} fz="xs" p="md" gap={2} justify="space-between" h="100%" style={{ overflow: 'auto' }}>
       <Stack gap={2}>
-        <Group gap="xs" align="flex-start">
+        <Group gap="xs" align="flex-start" justify="space-between">
           <Stack gap="xs">
             <Group gap="xs" justify="space-between">
               <Group gap="xs" align="baseline">
@@ -54,7 +56,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, clear 
                   {celestialBodyTypeName(type)}
                 </Text>
               </Group>
-              <ActionIcon onClick={clear}>
+              <ActionIcon onClick={() => updateState({ center: null })}>
                 <IconX size={iconSize} />
               </ActionIcon>
             </Group>
@@ -70,6 +72,8 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, clear 
           <FactGrid facts={factBullets} valueWidth={300} isLoading={isLoading} />
         )}
       </Stack>
+
+      <MajorMoons body={body} bodies={bodies} updateState={updateState} />
 
       {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
     </Stack>
