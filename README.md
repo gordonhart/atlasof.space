@@ -31,3 +31,4 @@ yarn netlify dev
 - Ephemeris generator ([ssd.jpl.nasa.gov](https://ssd.jpl.nasa.gov/horizons/app.html#/))
 - Asteroid fact sheet ([nssdc.gsfc.nasa.gov](https://nssdc.gsfc.nasa.gov/planetary/factsheet/asteroidfact.html))
 - Planet textures ([solarsystemscope.com](https://www.solarsystemscope.com/textures/))
+- Asteroid 3D models ([3d-asteroids.space](https://3d-asteroids.space/asteroids/))

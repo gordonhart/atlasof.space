@@ -49,8 +49,8 @@ export function drawLabelAtLocation(
 ) {
   ctx.save();
   ctx.scale(1, -1); // flip and translate to get text right-side-up
-  ctx.translate(0, -window.innerHeight);
-  const yPxInverted = window.innerHeight - yPx;
+  ctx.translate(0, -ctx.canvas.height);
+  const yPxInverted = ctx.canvas.height - yPx;
 
   // draw background
   ctx.beginPath();

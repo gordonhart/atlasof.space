@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Group } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { CelestialBody } from '../lib/types.ts';
+import { FactSheet } from './Controls/FactSheet.tsx';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -64,29 +65,43 @@ export function SolarSystem() {
     };
   }, []);
 
+  useEffect(() => {
+    model.resize();
+  }, [appState.center]);
+
+  const focusBody = useMemo(
+    () => appState.bodies.find(body => body.name === appState.center),
+    [appState.center, JSON.stringify(appState.bodies)]
+  );
+
   return (
-    <Group align="center" justify="center" w="100vw" h="100vh">
-      <Box
-        style={{ cursor: appState.hover != null ? 'pointer' : 'unset' }}
-        ref={model.containerRef}
-        pos="absolute"
-        w="100vw"
-        h="100vh"
-        top={0}
-        right={0}
-        {...cursorControls}
-      />
-      <canvas
-        ref={model.canvasRef}
-        style={{ height: '100vh', width: '100vw', position: 'absolute', pointerEvents: 'none' }}
-      />
-      <Controls
-        state={appState}
-        updateState={updateState}
-        addBody={addBody}
-        removeBody={removeBody}
-        reset={resetState}
-      />
+    <Group gap={0} w="100vw" h="100vh" flex={1}>
+      <Box pos="relative" w="100%" h="100vh" flex={1}>
+        <Box
+          style={{ cursor: appState.hover != null ? 'pointer' : 'unset' }}
+          ref={model.containerRef}
+          pos="absolute"
+          w="100%"
+          h="100%"
+          {...cursorControls}
+        />
+        <canvas
+          ref={model.canvasRef}
+          style={{ height: '100%', width: '100%', position: 'absolute', pointerEvents: 'none' }}
+        />
+        <Controls
+          state={appState}
+          updateState={updateState}
+          addBody={addBody}
+          removeBody={removeBody}
+          reset={resetState}
+        />
+      </Box>
+      {focusBody != null && (
+        <Box h="100vh" style={{ borderLeft: `1px solid ${focusBody.color}` }}>
+          <FactSheet body={focusBody} bodies={appState.bodies} clear={() => updateState({ center: undefined })} />
+        </Box>
+      )}
     </Group>
   );
 }

@@ -16,7 +16,7 @@ export function DirectionIndicator({ vernalEquinox }: Props) {
           <IconZodiacAries size={iconSize} />
         </Group>
       }
-      position="left"
+      position="top"
     >
       <Group
         p={pad}

@@ -19,8 +19,13 @@ export function useCursorControls(
 ) {
   const dragDetectorRef = useRef<DragDetector | null>(null);
 
+  function getCursorCoordinates(event: PointerEvent<HTMLElement> | MouseEvent<HTMLElement>): Point2 {
+    const { left, top } = event.currentTarget.getBoundingClientRect();
+    return [event.clientX - left, event.clientY - top];
+  }
+
   function onPointerDown(event: PointerEvent<HTMLElement>) {
-    dragDetectorRef.current = { dragged: false, initial: [event.clientX, event.clientY] };
+    dragDetectorRef.current = { dragged: false, initial: getCursorCoordinates(event) };
   }
 
   function onPointerLeave() {
@@ -29,13 +34,13 @@ export function useCursorControls(
 
   function onPointerMove(event: PointerEvent<HTMLElement>) {
     const dragDetector = dragDetectorRef.current;
+    const eventPx = getCursorCoordinates(event);
     if (dragDetector != null) {
-      const distance = magnitude(subtract3([...dragDetector.initial, 0], [event.clientX, event.clientY, 0]));
+      const distance = magnitude(subtract3([...dragDetector.initial, 0], [...eventPx, 0]));
       dragDetectorRef.current = { ...dragDetector, dragged: dragDetector.dragged || distance > DRAG_PX_THRESHOLD };
     }
 
     if (model == null) return;
-    const eventPx: Point2 = [event.clientX, event.clientY];
     const closeBody = model.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
     updateAppState({ hover: closeBody?.body?.name ?? null });
   }
@@ -50,8 +55,7 @@ export function useCursorControls(
       return;
     }
 
-    const eventPx: Point2 = [event.clientX, event.clientY];
-    const closeBody = model.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
+    const closeBody = model.findCloseBody(getCursorCoordinates(event), visibleTypes, INTERACT_PX_THRESHOLD);
     if (closeBody != null) {
       updateAppState({ center: closeBody.body.name });
     }
