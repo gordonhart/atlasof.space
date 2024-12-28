@@ -255,7 +255,7 @@ export class SolarSystemModel {
       // ignore invisible types and offscreen bodies
       if (!visibleTypes.has(body.body.type)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
-      if (isOffScreen(bodyXpx, bodyYpx, threshold)) continue;
+      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], threshold)) continue;
 
       // always give precedence to the sun
       const distance = Math.sqrt((xPx - bodyXpx) ** 2 + (yPx - bodyYpx) ** 2);

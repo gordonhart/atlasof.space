@@ -1,4 +1,4 @@
-import { Group, Image, Paper, Stack, Text } from '@mantine/core';
+import { ActionIcon, Group, Image, Stack, Text } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -8,13 +8,16 @@ import { Thumbnail } from './Thumbnail.tsx';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { memo } from 'react';
+import { IconX } from '@tabler/icons-react';
+import { iconSize } from './constants.ts';
 
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
+  clear: () => void;
 };
-export const FactCard = memo(function FactCardComponent({ body, bodies }: Props) {
-  const { name, type, mass, radius, elements, color } = body;
+export const FactCard = memo(function FactCardComponent({ body, bodies, clear }: Props) {
+  const { name, type, mass, radius, elements } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
   const parent = bodies.find(({ name }) => name === body.elements.wrt);
@@ -38,17 +41,22 @@ export const FactCard = memo(function FactCardComponent({ body, bodies }: Props)
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Paper fz="xs" p="md" radius="md" withBorder bg="black" style={{ borderColor: color }}>
+    <Stack w={600} fz="xs" p="md" gap={2} justify="space-between" h="100%">
       <Stack gap={2}>
         <Group gap="xs" align="flex-start">
           <Stack gap="xs">
-            <Group gap="xs" align="baseline">
-              <Text fw="bold" size="md">
-                {name}
-              </Text>
-              <Text inherit c="dimmed">
-                {celestialBodyTypeName(type)}
-              </Text>
+            <Group gap="xs" justify="space-between">
+              <Group gap="xs" align="baseline">
+                <Text fw="bold" size="md">
+                  {name}
+                </Text>
+                <Text inherit c="dimmed">
+                  {celestialBodyTypeName(type)}
+                </Text>
+              </Group>
+              <ActionIcon onClick={clear}>
+                <IconX size={iconSize} />
+              </ActionIcon>
             </Group>
             <FactGrid facts={bullets} valueWidth={120} />
           </Stack>
@@ -56,15 +64,15 @@ export const FactCard = memo(function FactCardComponent({ body, bodies }: Props)
           <Thumbnail key={body.name} body={body} />
         </Group>
 
-        {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-
         {isLoading && factBullets.length === 0 ? (
           <LoadingCursor />
         ) : (
           <FactGrid facts={factBullets} valueWidth={300} isLoading={isLoading} />
         )}
       </Stack>
-    </Paper>
+
+      {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+    </Stack>
   );
 });
 

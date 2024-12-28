@@ -91,7 +91,7 @@ export class KeplerianBody extends KinematicBody {
     const canvasPx = getCanvasPixels(ctx);
 
     // body is off-screen; draw a pointer
-    if (isOffScreen(bodyXpx, bodyYpx)) {
+    if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
       drawOffscreenLabel(ctx, label, this.body.color, canvasPx, [bodyXpx, bodyYpx], textPx);
     } else {
       const baseRadius = this.body.radius / metersPerPx;

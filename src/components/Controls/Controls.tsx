@@ -1,5 +1,4 @@
 import { Box } from '@mantine/core';
-import { FocusControls } from './FocusControls.tsx';
 import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
@@ -16,10 +15,6 @@ type Props = AppStateControlProps & {
 export function Controls({ state, updateState, addBody, removeBody, reset }: Props) {
   return (
     <>
-      <Box pos="absolute" top={pad} left={pad}>
-        <FocusControls center={state.center} hover={state.hover} bodies={state.bodies} updateState={updateState} />
-      </Box>
-
       <Box pos="absolute" top={pad} right={pad}>
         <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
       </Box>

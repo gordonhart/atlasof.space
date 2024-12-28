@@ -66,6 +66,7 @@ export function useSolarSystemModel() {
     initialize,
     update,
     add,
+    resize,
     remove,
     reset,
   };

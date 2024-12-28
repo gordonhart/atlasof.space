@@ -1328,14 +1328,15 @@ export const SOLAR_SYSTEM = [
   MERCURY,
   VENUS,
   ...EARTH_SYSTEM,
-  ...ASTEROIDS,
-  ...COMETS,
   ...MARS_SYSTEM,
   ...JUPITER_SYSTEM,
   ...SATURN_SYSTEM,
   ...URANUS_SYSTEM,
   ...NEPTUNE_SYSTEM,
   ...PLUTO_SYSTEM,
+  // position these last such that they are underneath other objects
+  ...ASTEROIDS,
+  ...COMETS,
   ...TRANS_NEPTUNIAN_OBJECTS,
 ];
 
