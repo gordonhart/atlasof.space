@@ -591,7 +591,7 @@ export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
 
   // TODO: add search/filter box
   return (
-    <Popover position="left-start" offset={0}>
+    <Popover position="top" offset={0}>
       <Popover.Target>
         <ActionIcon>
           <IconSpherePlus size={iconSize} />

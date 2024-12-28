@@ -15,15 +15,11 @@ type Props = AppStateControlProps & {
 export function Controls({ state, updateState, addBody, removeBody, reset }: Props) {
   return (
     <>
-      <Box pos="absolute" top={pad} right={pad}>
-        <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
-      </Box>
-
       <Box pos="absolute" bottom={pad} left={pad}>
         <TimeControls state={state} updateState={updateState} />
       </Box>
 
-      <Box pos="absolute" bottom={pad} right={pad}>
+      <Box pos="absolute" bottom={pad} left="50%" style={{ transform: 'translate(-50%, 0)' }}>
         <GeneralControls
           state={state}
           updateState={updateState}
@@ -31,6 +27,10 @@ export function Controls({ state, updateState, addBody, removeBody, reset }: Pro
           removeBody={removeBody}
           reset={reset}
         />
+      </Box>
+
+      <Box pos="absolute" bottom={pad} right={pad}>
+        <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
       </Box>
     </>
   );
