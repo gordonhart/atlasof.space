@@ -2,7 +2,7 @@ import { CelestialBody, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import { AppState } from '../state.ts';
-import { drawCoolLabelAtLocation, drawOffscreenLabel, getCanvasPixels } from './canvas.ts';
+import { drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
 import { isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
@@ -92,15 +92,12 @@ export class KeplerianBody extends KinematicBody {
 
     // body is off-screen; draw a pointer
     if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
-      drawOffscreenLabel(ctx, label, this.body.color, canvasPx, [bodyXpx, bodyYpx], textPx);
+      drawOffscreenIndicator(ctx, this.body.color, canvasPx, [bodyXpx, bodyYpx]);
     } else {
       const baseRadius = this.body.radius / metersPerPx;
       const radius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
       const radiusPx = Math.max(radius, 1) + 5;
-      if (this.body.name === 'Sol') {
-        console.log(metersPerPx, baseRadius, radius, radiusPx);
-      }
-      drawCoolLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, radiusPx);
+      drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, radiusPx);
     }
   }
 }

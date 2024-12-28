@@ -5,13 +5,12 @@ export function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
   return [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 }
 
-export function drawOffscreenLabel(
+// TODO: corners behave weirdly with this implementation; may want 4 more types for the corners
+export function drawOffscreenIndicator(
   ctx: CanvasRenderingContext2D,
-  label: string,
   color: `#${string}`,
   [canvasWidthPx, canvasHeightPx]: Point2,
-  [xPx, yPx]: Point2,
-  [textWidthPx, textHeightPx]: Point2
+  [xPx, yPx]: Point2
 ) {
   const edgePad = 24;
   const [halfX, halfY] = [canvasWidthPx / 2, canvasHeightPx / 2];
@@ -23,19 +22,18 @@ export function drawOffscreenLabel(
   let caret: { type: CaretType; offsetPx: Point2 } = { type: 'left', offsetPx: [0, 0] };
   if (yMin <= leftEdgeY && leftEdgeY <= yMax && targetXpx < 0) {
     drawPx = [xMin + edgePad, leftEdgeY];
-    caret = { type: 'left', offsetPx: [-edgePad / 2, textHeightPx / 2] };
+    caret = { type: 'left', offsetPx: [-edgePad / 2, 0] };
   } else if (yMin <= rightEdgeY && rightEdgeY <= yMax) {
-    drawPx = [xMax - edgePad - textWidthPx, rightEdgeY];
-    caret = { type: 'right', offsetPx: [textWidthPx + edgePad / 2, textHeightPx / 2] };
+    drawPx = [xMax - edgePad, rightEdgeY];
+    caret = { type: 'right', offsetPx: [edgePad / 2, 0] };
   } else if (xMin <= bottomEdgeX && bottomEdgeX <= xMax && targetYpx < 0) {
     drawPx = [bottomEdgeX, yMin + edgePad];
-    caret = { type: 'down', offsetPx: [textWidthPx / 2, -edgePad / 2] };
+    caret = { type: 'down', offsetPx: [0, -edgePad / 2] };
   } else if (xMin <= topEdgeX && topEdgeX <= xMax) {
-    drawPx = [topEdgeX, yMax - edgePad - textHeightPx];
-    caret = { type: 'up', offsetPx: [textWidthPx / 2, textHeightPx + edgePad / 2] };
+    drawPx = [topEdgeX, yMax - edgePad];
+    caret = { type: 'up', offsetPx: [0, edgePad / 2] };
   }
   const [drawXpx, drawYpx]: Point2 = [drawPx[0] + halfX, drawPx[1] + halfY];
-  drawLabelAtLocation(ctx, label, color, [drawXpx, drawYpx], [textWidthPx, textHeightPx]);
   const trianglePx: Point2 = [drawXpx + caret.offsetPx[0], drawYpx + caret.offsetPx[1]];
   drawCaretAtLocation(ctx, color, trianglePx, caret.type);
 }
@@ -45,67 +43,47 @@ export function drawLabelAtLocation(
   label: string,
   color: `#${string}`,
   [xPx, yPx]: Point2,
-  [textWidthPx, textHeightPx]: Point2
-) {
-  ctx.save();
-  ctx.scale(1, -1); // flip and translate to get text right-side-up
-  ctx.translate(0, -ctx.canvas.height);
-  const yPxInverted = ctx.canvas.height - yPx;
-
-  // draw background
-  ctx.beginPath();
-  ctx.fillStyle = 'black';
-  ctx.strokeStyle = color;
-  const boxPadPx = 4;
-  const boxLocationPx: Point2 = [xPx - boxPadPx, yPxInverted - textHeightPx - boxPadPx];
-  const boxDimensionPx: Point2 = [textWidthPx + boxPadPx * 2, textHeightPx + boxPadPx * 2];
-  ctx.roundRect(...boxLocationPx, ...boxDimensionPx, 5);
-  ctx.fill();
-  ctx.stroke();
-
-  // draw text
-  ctx.fillStyle = color;
-  ctx.fillText(label, xPx, yPxInverted);
-  ctx.restore();
-}
-
-export function drawCoolLabelAtLocation(
-  ctx: CanvasRenderingContext2D,
-  label: string,
-  color: `#${string}`,
-  [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2,
   radius: number
 ) {
+  const dpr = window.devicePixelRatio;
+  const [canvasWidthPx, canvasHeightPx] = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
   ctx.save();
   ctx.scale(1, -1); // flip and translate to get text right-side-up
-  ctx.translate(0, -ctx.canvas.height);
-  const yPxInverted = ctx.canvas.height - yPx;
+  ctx.translate(0, -canvasHeightPx);
+  const yPxInverted = canvasHeightPx - yPx;
 
-  // draw background
-  // const offset = 15;
   const boxPadPx = 4;
-  const angle = Math.atan2(2, 1);
-  const [x0, y0] = [xPx + radius * Math.cos(angle), yPxInverted - radius * Math.sin(angle)];
   const h = textHeightPx + boxPadPx * 2;
   const w = textWidthPx + h / 2;
+  const angle = Math.atan2(2, 1);
+  const [xOffset, yOffset] = [radius * Math.cos(angle), radius * Math.sin(angle)];
+
+  // calculate flippage to keep labels from going offscreen
+  const xIsCloseToRightEdge = xPx + xOffset + w + boxPadPx > canvasWidthPx - boxPadPx;
+  const xSign = xIsCloseToRightEdge ? -1 : 1;
+  const yIsCloseToTopEdge = yPxInverted - yOffset - h - boxPadPx < boxPadPx;
+  const ySign = yIsCloseToTopEdge ? -1 : 1;
+
+  // draw background
+  const [x0, y0] = [xPx + xOffset * xSign, yPxInverted - yOffset * ySign];
+  const offsets: Array<Point2> = [
+    [w + boxPadPx, 0],
+    [w + boxPadPx, h],
+    [h / 2, h],
+  ];
   ctx.beginPath();
   ctx.moveTo(x0, y0);
-  ctx.lineTo(x0 + w + boxPadPx, y0);
-  ctx.lineTo(x0 + w + boxPadPx, y0 - h);
-  ctx.lineTo(x0 + h / 2, y0 - h);
+  offsets.forEach(([x, y]) => ctx.lineTo(x0 + x * xSign, y0 - y * ySign));
   ctx.closePath();
   ctx.fillStyle = 'black';
   ctx.strokeStyle = color;
-  // const boxLocationPx: Point2 = [xPx - boxPadPx, yPxInverted - textHeightPx - boxPadPx];
-  // const boxDimensionPx: Point2 = [textWidthPx + boxPadPx * 2, textHeightPx + boxPadPx * 2];
-  // ctx.roundRect(...boxLocationPx, ...boxDimensionPx, 5);
   ctx.fill();
   ctx.stroke();
 
   // draw text
   ctx.fillStyle = color;
-  ctx.fillText(label, x0 + h / 2, y0 - boxPadPx);
+  ctx.fillText(label, xIsCloseToRightEdge ? x0 - w : x0 + h / 2, y0 - boxPadPx + (yIsCloseToTopEdge ? h : 0));
   ctx.restore();
 }
 
@@ -119,18 +97,20 @@ function drawCaretAtLocation(
   const size = 3;
   // prettier-ignore
   const vertices: Array<Point2> = type === 'right'
-    ? [[xPx + size, yPx], [xPx - size, yPx - size], [xPx - size, yPx + size]]
+    ? [[xPx + size, yPx], [xPx - size, yPx - size * 2], [xPx - size, yPx + size * 2]]
     : type === 'left'
-      ? [[xPx - size, yPx], [xPx + size, yPx - size], [xPx + size, yPx + size]]
+      ? [[xPx - size, yPx], [xPx + size, yPx - size * 2], [xPx + size, yPx + size * 2]]
       : type === 'up'
-        ? [[xPx, yPx + size], [xPx + size, yPx - size], [xPx - size, yPx - size]]
-        : [[xPx, yPx - size], [xPx + size, yPx + size], [xPx - size, yPx + size]];
+        ? [[xPx, yPx + size], [xPx + size * 2, yPx - size], [xPx - size * 2, yPx - size]]
+        : [[xPx, yPx - size], [xPx + size * 2, yPx + size], [xPx - size * 2, yPx + size]];
   ctx.beginPath();
   ctx.moveTo(...vertices[0]);
   vertices.reverse().forEach(vertex => {
     ctx.lineTo(...vertex);
   });
   ctx.closePath();
-  ctx.fillStyle = color;
+  ctx.fillStyle = 'black';
+  ctx.strokeStyle = color;
   ctx.fill();
+  ctx.stroke();
 }
