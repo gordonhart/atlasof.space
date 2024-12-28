@@ -16,7 +16,7 @@ type Props = {
   bodies: Array<CelestialBody>;
   clear: () => void;
 };
-export const FactCard = memo(function FactCardComponent({ body, bodies, clear }: Props) {
+export const FactSheet = memo(function FactSheetComponent({ body, bodies, clear }: Props) {
   const { name, type, mass, radius, elements } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 

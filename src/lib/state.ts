@@ -1,4 +1,4 @@
-import { SOL, SOLAR_SYSTEM, Time } from './bodies.ts';
+import { SOLAR_SYSTEM, Time } from './bodies.ts';
 import { CelestialBody, CelestialBodyType, CelestialBodyTypes, Point3 } from './types.ts';
 
 export type AppState = {
@@ -8,7 +8,7 @@ export type AppState = {
   drawTail: boolean;
   drawOrbit: boolean;
   drawLabel: boolean;
-  center: string; // name of body centering visualization
+  center: string | null; // name of body centering visualization
   hover: string | null; // name of hovered body
   visibleTypes: Set<CelestialBodyType>;
   bodies: Array<CelestialBody>;
@@ -26,7 +26,7 @@ export const initialState: AppState = {
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  center: SOL.name,
+  center: null,
   hover: null,
   visibleTypes: new Set(CelestialBodyTypes),
   bodies: SOLAR_SYSTEM,
