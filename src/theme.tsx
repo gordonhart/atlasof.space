@@ -11,7 +11,7 @@ export const theme = createTheme({
         style: { backdropFilter: 'blur(4px)' },
       },
     }),
-    Tooltip: Tooltip.extend({ defaultProps: { openDelay: 400 } }),
+    Tooltip: Tooltip.extend({ defaultProps: { fz: 'xs', px: 6, py: 2, openDelay: 400 } }),
     Paper: Paper.extend({ defaultProps: { bg: 'transparent', style: { backdropFilter: 'blur(4px)' } } }),
   },
 });
