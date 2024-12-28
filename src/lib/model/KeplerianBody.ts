@@ -85,7 +85,7 @@ export class KeplerianBody extends KinematicBody {
     const bodyYpx = this.resolution.y - bodyYpxInverted;
 
     const label = this.body.shortName ?? this.body.name;
-    ctx.font = '12px Arial'; // TODO: better font
+    ctx.font = '12px Electrolize, Arial'; // TODO: better font
     const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
     const textPx: Point2 = [textWidthPx, textHeightPx];
     const canvasPx = getCanvasPixels(ctx);
