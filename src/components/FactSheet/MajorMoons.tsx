@@ -44,7 +44,7 @@ function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
   return (
     <Paper withBorder p="xs" style={{ cursor: 'pointer' }} onClick={() => updateState({ center: body.name })}>
       <Group gap="xs" justify="space-between" align="flex-start" wrap="nowrap">
-        <Stack gap="xs">
+        <Stack gap={4}>
           <Title order={6}>{body.name}</Title>
           <Text inherit c="dimmed">
             {summary}
