@@ -13,7 +13,7 @@ export enum Time {
   DAY = 24 * HOUR,
 }
 
-const DEFAULT_MOON_COLOR = '#aaaaaa';
+export const DEFAULT_MOON_COLOR = '#aaaaaa';
 export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
 
 export const SOL: CelestialBody = {
@@ -214,6 +214,10 @@ export const CERES: CelestialBody = {
     argumentOfPeriapsis: 73.597,
     meanAnomaly: 291.4,
   },
+  rotation: {
+    axialTilt: 4,
+    siderealPeriod: 9.07417 * Time.HOUR,
+  },
   mass: 9.3839e20,
   radius: 966.2e3 / 2,
   color: DEFAULT_ASTEROID_COLOR,
@@ -317,6 +321,27 @@ export const RYUGU: CelestialBody = {
   radius: 448,
   color: DEFAULT_ASTEROID_COLOR,
 };
+
+export const BENNU: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '101955 Bennu',
+  shortName: 'Bennu',
+  influencedBy: [SOL.name],
+  elements: {
+    wrt: SOL.name,
+    epoch: 'JD2455562.5', // TODO: find J2000
+    eccentricity: 0.2038,
+    semiMajorAxis: 1.1264 * AU,
+    inclination: 6.0349,
+    longitudeAscending: 2.0609,
+    argumentOfPeriapsis: 66.2231,
+    meanAnomaly: 0,
+  },
+  mass: 7.329e10,
+  radius: 245.03,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
 export const LUTETIA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '21 Lutetia',
@@ -429,7 +454,7 @@ export const NEREUS: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const ASTEROIDS = [CERES, PALLAS, VESTA, HYGIEA, JUNO, RYUGU, LUTETIA, EROS, MATHILDE, NEREUS];
+export const ASTEROIDS = [CERES, PALLAS, VESTA, HYGIEA, JUNO, RYUGU, BENNU, LUTETIA, EROS, MATHILDE, NEREUS];
 export const COMETS: Array<CelestialBody> = [CG67P];
 
 export const PLUTO: CelestialBody = {

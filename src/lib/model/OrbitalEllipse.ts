@@ -23,7 +23,7 @@ import { degreesToRadians, semiMinorAxis } from '../physics.ts';
 export class OrbitalEllipse {
   private readonly scene: Scene;
   private readonly ellipse: Line; // use a 1px-thick Line for normal rendering (fast)
-  private readonly ellipseFocus: Line2; // use an Npx-thick Line2 for focus rendering (slower)
+  private readonly ellipseHover: Line2; // use an Npx-thick Line2 for hover rendering (slower)
   private readonly face: Mesh;
   private readonly nPoints: number = 3600;
 
@@ -64,15 +64,15 @@ export class OrbitalEllipse {
     this.ellipse.renderOrder = 0;
     scene.add(this.ellipse);
 
-    const ellipseFocusGeometry = new LineGeometry();
-    ellipseFocusGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
-    const ellipseFocusMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
-    this.ellipseFocus = new Line2(ellipseFocusGeometry, ellipseFocusMaterial);
-    this.ellipseFocus.rotateZ(Omega);
-    this.ellipseFocus.rotateX(i);
-    this.ellipseFocus.visible = false;
-    this.ellipseFocus.renderOrder = 0;
-    scene.add(this.ellipseFocus);
+    const ellipseHoverGeometry = new LineGeometry();
+    ellipseHoverGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
+    const ellipseHoverMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
+    this.ellipseHover = new Line2(ellipseHoverGeometry, ellipseHoverMaterial);
+    this.ellipseHover.rotateZ(Omega);
+    this.ellipseHover.rotateX(i);
+    this.ellipseHover.visible = false;
+    this.ellipseHover.renderOrder = 0;
+    scene.add(this.ellipseHover);
 
     const faceGeometry = new BufferGeometry();
     const vertices = new Float32Array(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
@@ -101,27 +101,30 @@ export class OrbitalEllipse {
     }
   }
 
+  // TODO: often the ellipse does not align perfectly with the simulated body. It should probably update its geometry
+  //  live to reflect changes in the simulated orbit, or at least be fudged such that when you zoom in it always passes
+  //  through the center of the body
   update(visible: boolean, offset: Vector3 | null) {
     this.ellipse.visible = visible;
     if (offset != null) {
-      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
-      this.ellipseFocus.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
-      this.face.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
+      this.ellipse.position.copy(offset).divideScalar(SCALE_FACTOR);
+      this.ellipseHover.position.copy(offset).divideScalar(SCALE_FACTOR);
+      this.face.position.copy(offset).divideScalar(SCALE_FACTOR);
     }
   }
 
-  setFocus(focus: boolean) {
-    this.ellipseFocus.visible = focus;
-    this.face.visible = focus;
+  setHover(hovered: boolean) {
+    this.ellipseHover.visible = hovered;
+    this.face.visible = hovered;
   }
 
   dispose() {
     this.ellipse.geometry.dispose();
     (this.ellipse.material as Material).dispose();
     this.scene.remove(this.ellipse);
-    this.ellipseFocus.geometry.dispose();
-    (this.ellipseFocus.material as Material).dispose();
-    this.scene.remove(this.ellipseFocus);
+    this.ellipseHover.geometry.dispose();
+    (this.ellipseHover.material as Material).dispose();
+    this.scene.remove(this.ellipseHover);
     this.face.geometry.dispose();
     (this.face.material as Material).dispose();
     this.scene.remove(this.face);

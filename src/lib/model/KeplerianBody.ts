@@ -8,7 +8,6 @@ import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
 import { FocalRadius } from './FocalRadius.ts';
-import { SOL } from '../bodies.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
@@ -42,7 +41,7 @@ export class KeplerianBody extends KinematicBody {
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, color);
     this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
-    this.sphere = new SphericalBody(scene, body, position, color, body.name === SOL.name);
+    this.sphere = new SphericalBody(scene, body, position, color);
     if (body.rotation != null) {
       this.axis = new AxisIndicator(scene, resolution, this.position, body.rotation.axialTilt, body.radius, color);
     }
@@ -56,8 +55,8 @@ export class KeplerianBody extends KinematicBody {
     // scale body based on hover state
     const thisIsHovered = appState.hover === this.body.name;
     if (thisIsHovered !== this.hovered) {
-      this.sphere.setFocus(thisIsHovered);
-      this.ellipse.setFocus(thisIsHovered);
+      this.sphere.setHover(thisIsHovered);
+      this.ellipse.setHover(thisIsHovered);
       this.hovered = thisIsHovered;
     }
     this.radius.update(parent?.position ?? null, this.position, thisIsHovered);

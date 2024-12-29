@@ -42,22 +42,6 @@ export function celestialBodyTypeName(type: CelestialBodyType): string {
   }[type];
 }
 
-// TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
-export function findCelestialBody<T extends { name: string; satellites: Array<T> }>(
-  body: T,
-  name: string
-): T | undefined {
-  if (name === body.name) {
-    return body;
-  }
-  for (const child of body.satellites) {
-    const found = findCelestialBody(child, name);
-    if (found != null) {
-      return found;
-    }
-  }
-}
-
 export function notNullish<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
 }
