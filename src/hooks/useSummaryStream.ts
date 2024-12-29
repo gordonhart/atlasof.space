@@ -1,8 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { CelestialBody, CelestialBodyType } from '../lib/types.ts';
+import { celestialBodyTypeName } from '../lib/utils.ts';
 
-export function useSummaryStream(search: string) {
+export function useSummaryStream(body: CelestialBody) {
   const [isStreaming, setIsStreaming] = useState(false);
+  const search = useMemo(() => getSearch(body), [JSON.stringify(body)]);
+
   const queryClient = useQueryClient();
   const queryKey = ['GET', 'facts', search];
 
@@ -41,4 +45,13 @@ export function useSummaryStream(search: string) {
   });
 
   return { ...query, isLoading: isStreaming };
+}
+
+function getSearch(body: CelestialBody) {
+  switch (body.type) {
+    case CelestialBodyType.MOON:
+      return `${body.elements.wrt}'s moon ${body.name}`;
+    default:
+      return `the ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name}`;
+  }
 }
