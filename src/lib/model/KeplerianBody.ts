@@ -48,16 +48,16 @@ export class KeplerianBody extends KinematicBody {
     }
   }
 
-  update(appState: AppState, parent: this | null) {
+  update(appState: AppState, parent: this | null, metersPerPx: number) {
     this.visible = appState.visibleTypes.has(this.body.type);
-    this.sphere.update(this.position, this.rotation, this.visible);
+    this.sphere.update(this.position, this.rotation, this.visible, metersPerPx);
     this.ellipse.update(this.visible && appState.drawOrbit, parent?.position ?? null);
 
     // scale body based on hover state
     const thisIsHovered = appState.hover === this.body.name;
     if (thisIsHovered !== this.hovered) {
-      this.sphere.setFocus(thisIsHovered);
-      this.ellipse.setFocus(thisIsHovered);
+      this.sphere.setHover(thisIsHovered);
+      this.ellipse.setHover(thisIsHovered);
       this.hovered = thisIsHovered;
     }
     this.radius.update(parent?.position ?? null, this.position, thisIsHovered);

@@ -27,6 +27,8 @@ export class SphericalBody {
   private readonly dot: Points;
   public readonly dotPosition: BufferAttribute;
   private readonly emissive: boolean;
+  private hasShapeToLoad: boolean;
+  private hovered = false;
 
   private readonly spherePoints: number = 144;
   // TODO: dynamically set based on true size of body? e.g. between 2-6
@@ -68,12 +70,7 @@ export class SphericalBody {
     this.sphere.renderOrder = 1;
     scene.add(this.sphere);
 
-    // TODO: lazy-load this only when the body is clicked? zoomed in past a certain size?
-    const ply = Shapes[body.name];
-    if (ply != null) {
-      const loader = new PLYLoader();
-      loader.load(ply, this.onShapeLoad);
-    }
+    this.hasShapeToLoad = Shapes[this.body.name] != null;
   }
 
   private getShapeMaterial(): Material {
@@ -106,6 +103,24 @@ export class SphericalBody {
     return new MeshBasicMaterial({ color });
   }
 
+  private lazyLoadShape(metersPerPx: number) {
+    if (!this.hasShapeToLoad || !this.sphere.visible) return;
+
+    // if this body is currently offscreen, bail
+    // TODO
+
+    // if the shape wouldn't be visible at this current zoom level, bail
+    const hoverScaleFactor = this.hovered ? HOVER_SCALE_FACTOR : 1;
+    const isGeometryVisible = (this.body.radius / metersPerPx) * hoverScaleFactor >= 2;
+    if (!isGeometryVisible) return;
+
+    const ply = Shapes[this.body.name];
+    if (ply == null) return; // shouldn't happen
+    this.hasShapeToLoad = false;
+    const loader = new PLYLoader();
+    loader.load(ply, this.onShapeLoad.bind(this));
+  }
+
   private onShapeLoad(geometry: BufferGeometry) {
     geometry.computeVertexNormals(); // for proper shading
     const material = this.sphere.material as Material; // reuse the existing shape material
@@ -127,7 +142,7 @@ export class SphericalBody {
     this.scene.add(this.sphere);
   }
 
-  update(position: Vector3, rotation: number, visible: boolean) {
+  update(position: Vector3, rotation: number, visible: boolean, metersPerPx: number) {
     this.sphere.updateWorldMatrix(true, false);
     this.sphere.position.copy(position).divideScalar(SCALE_FACTOR);
     this.sphere.rotation.y = degreesToRadians(rotation);
@@ -137,10 +152,12 @@ export class SphericalBody {
     this.dotPosition.array[2] = this.sphere.position.z;
     this.dotPosition.needsUpdate = true;
     this.dot.visible = visible;
+    this.lazyLoadShape(metersPerPx);
   }
 
-  setFocus(focus: boolean) {
-    if (focus) {
+  setHover(hovered: boolean) {
+    this.hovered = hovered;
+    if (hovered) {
       this.sphere.scale.multiplyScalar(HOVER_SCALE_FACTOR);
       (this.dot.material as PointsMaterial).size = this.dotSize * 2;
     } else {

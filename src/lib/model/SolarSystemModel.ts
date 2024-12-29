@@ -117,7 +117,7 @@ export class SolarSystemModel {
 
   getVernalEquinox(): Point3 {
     // the Vernal Equinox is the direction of +X; find by applying matrix transformations from camera
-    const localX = new Vector3(1, 0, 0);
+    const localX = new Vector3(1, 0, 0); // TODO: no new allocation
     return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
@@ -126,9 +126,10 @@ export class SolarSystemModel {
     this.updateCenter(appState); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
+    const metersPerPx = this.getMetersPerPixel();
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
-      body.update(appState, parentState ?? null);
+      body.update(appState, parentState ?? null, metersPerPx);
     });
     this.composer.render();
     this.drawLabels(ctx, appState);
