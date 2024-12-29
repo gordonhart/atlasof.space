@@ -15,26 +15,24 @@ import {
 } from 'three';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { getCircleTexture } from './utils.ts';
-import { CelestialBody } from '../types.ts';
+import { CelestialBody, CelestialBodyType } from '../types.ts';
 import { Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 
 export class SphericalBody {
   private readonly scene: Scene;
   private readonly body: CelestialBody;
-  private sphere: Mesh;
+  private readonly sphere: Mesh;
   private readonly dot: Points;
   public readonly dotPosition: BufferAttribute;
-  private readonly emissive: boolean;
 
   private readonly spherePoints: number = 144;
   // TODO: dynamically set based on true size of body? e.g. between 2-6
   private readonly dotSize: number = 5;
 
-  constructor(scene: Scene, body: CelestialBody, position: Vector3, color: Color, emissive = false) {
+  constructor(scene: Scene, body: CelestialBody, position: Vector3, color: Color) {
     this.scene = scene;
     this.body = body;
-    this.emissive = emissive;
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
     const positionScaled = position.clone().multiplyScalar(1 / SCALE_FACTOR);
@@ -102,11 +100,12 @@ export class SphericalBody {
   private getShapeMaterial(): Material {
     const color = new Color(this.body.color);
     const texture = Textures[this.body.name];
+    const emissive = this.body.type === CelestialBodyType.STAR;
 
     if (texture != null) {
       const textureLoader = new TextureLoader();
       const textureMap = textureLoader.load(texture);
-      if (this.emissive) {
+      if (emissive) {
         // TODO: better parameterization of this?
         return new MeshStandardMaterial({
           map: textureMap,
