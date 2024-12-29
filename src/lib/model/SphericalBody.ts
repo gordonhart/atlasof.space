@@ -13,6 +13,7 @@ import {
   TextureLoader,
   Vector3,
 } from 'three';
+import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { getCircleTexture } from './utils.ts';
 import { CelestialBody } from '../types.ts';
@@ -22,7 +23,7 @@ import { degreesToRadians } from '../physics.ts';
 export class SphericalBody {
   private readonly scene: Scene;
   private readonly body: CelestialBody;
-  private readonly sphere: Mesh;
+  private sphere: Mesh;
   private readonly dot: Points;
   public readonly dotPosition: BufferAttribute;
 
@@ -54,11 +55,17 @@ export class SphericalBody {
     this.dot.renderOrder = 0;
     scene.add(this.dot);
 
+    const ply = body.name.toLowerCase().includes('ceres') ? '/assets/bennu-radar.ply' : undefined;
+
     // create the main sphere geometry for the celestial body
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const texture = Textures[body.name];
     let sphereMaterial: Material;
-    if (texture != null) {
+
+    // TODO: the logic to instantiate different materials is very gross
+    if (ply != null) {
+      sphereMaterial = new MeshStandardMaterial({ color, metalness: 0, roughness: 1 });
+    } else if (texture != null) {
       sphereMaterial = new MeshBasicMaterial({ color });
       const textureLoader = new TextureLoader();
       const textureMap = textureLoader.load(texture);
@@ -77,6 +84,7 @@ export class SphericalBody {
     } else {
       sphereMaterial = new MeshBasicMaterial({ color });
     }
+
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
     const inclination = degreesToRadians(body.elements.inclination);
     const axialTilt = body.rotation != null ? degreesToRadians(body.rotation.axialTilt) : 0;
@@ -84,6 +92,34 @@ export class SphericalBody {
     this.sphere.position.set(positionScaled.x, positionScaled.y, positionScaled.z);
     this.sphere.renderOrder = 1;
     scene.add(this.sphere);
+
+    if (ply != null) {
+      this.loadPly(ply);
+    }
+  }
+
+  private loadPly(file: string) {
+    const loader = new PLYLoader();
+    loader.load(file, geometry => {
+      const material = this.sphere.material as Material;
+
+      // dispose the regular sphere
+      this.sphere.geometry.dispose();
+      this.scene.remove(this.sphere);
+
+      this.sphere = new Mesh(geometry, material);
+      const inclination = degreesToRadians(this.body.elements.inclination);
+      const axialTilt = this.body.rotation != null ? degreesToRadians(this.body.rotation.axialTilt) : 0;
+      this.sphere.rotation.x = Math.PI / 2 + inclination + axialTilt;
+      this.sphere.position.copy(this.dot.position);
+      this.sphere.renderOrder = 1;
+
+      // Scale and position the mesh (adjust as necessary)
+      this.sphere.scale.set(1, 1, 1);
+
+      // Add the mesh to the scene
+      this.scene.add(this.sphere);
+    });
   }
 
   update(position: Vector3, rotation: number, visible: boolean) {
@@ -100,13 +136,10 @@ export class SphericalBody {
 
   setFocus(focus: boolean) {
     if (focus) {
-      this.sphere.geometry.dispose(); // toggle hover on
-      const radius = (HOVER_SCALE_FACTOR * this.body.radius) / SCALE_FACTOR;
-      this.sphere.geometry = new SphereGeometry(radius, this.spherePoints, this.spherePoints);
+      this.sphere.scale.set(HOVER_SCALE_FACTOR, HOVER_SCALE_FACTOR, HOVER_SCALE_FACTOR);
       (this.dot.material as PointsMaterial).size = this.dotSize * 2;
     } else {
-      this.sphere.geometry.dispose(); // toggle hover off
-      this.sphere.geometry = new SphereGeometry(this.body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
+      this.sphere.scale.set(1, 1, 1);
       (this.dot.material as PointsMaterial).size = this.dotSize;
     }
   }
