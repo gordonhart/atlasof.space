@@ -5,7 +5,7 @@ import { Controls } from './Controls/Controls.tsx';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { CelestialBody } from '../lib/types.ts';
-import { FactSheet } from './Controls/FactSheet.tsx';
+import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);

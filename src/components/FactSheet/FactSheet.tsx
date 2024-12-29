@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -9,7 +9,7 @@ import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
-import { iconSize } from './constants.ts';
+import { iconSize } from '../Controls/constants.ts';
 import { MajorMoons } from './MajorMoons.tsx';
 import { AppState } from '../../lib/state.ts';
 
@@ -43,32 +43,43 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={600} fz="xs" p="md" gap={2} justify="space-between" h="100%" style={{ overflow: 'auto' }}>
+    <Stack w={600} fz="xs" gap={2} justify="space-between" h="100%" style={{ overflow: 'auto' }}>
       <Stack gap={2}>
-        <Group gap="xs" align="flex-start" justify="space-between">
-          <Stack gap="xs">
-            <Group gap="xs" justify="space-between">
-              <Group gap="xs" align="baseline">
-                <Title order={3}>{name}</Title>
-                <Title order={6} c="dimmed">
-                  {celestialBodyTypeName(type)}
-                </Title>
-              </Group>
-              <ActionIcon onClick={() => updateState({ center: null })}>
-                <IconX size={iconSize} />
-              </ActionIcon>
-            </Group>
-            <FactGrid facts={bullets} valueWidth={120} />
-          </Stack>
-
-          <Thumbnail key={body.name} body={body} />
+        <Group
+          pos="sticky"
+          top={0}
+          bg="black"
+          p="md"
+          gap="xs"
+          justify="space-between"
+          style={{ borderBottom: `1px solid ${body.color}` }}
+        >
+          <Group gap="xs" align="baseline">
+            <Title order={2}>{name}</Title>
+            <Title order={6} c="dimmed">
+              {celestialBodyTypeName(type)}
+            </Title>
+          </Group>
+          <ActionIcon onClick={() => updateState({ center: null })}>
+            <IconX size={iconSize} />
+          </ActionIcon>
         </Group>
 
-        {isLoading && factBullets.length === 0 ? (
-          <LoadingCursor />
-        ) : (
-          <FactGrid facts={factBullets} valueWidth={300} isLoading={isLoading} />
-        )}
+        <Group pt="md" px="md" gap="xs" align="flex-start" justify="space-between">
+          <Stack gap="xs">
+            <Title order={5}>Key Facts</Title>
+            <FactGrid facts={bullets} valueWidth={120} />
+          </Stack>
+          <Thumbnail key={body.name} body={body} size={220} />
+        </Group>
+
+        <Box px="md">
+          {isLoading && factBullets.length === 0 ? (
+            <LoadingCursor />
+          ) : (
+            <FactGrid facts={factBullets} valueWidth={360} isLoading={isLoading} />
+          )}
+        </Box>
       </Stack>
 
       <MajorMoons body={body} bodies={bodies} updateState={updateState} />
@@ -110,11 +121,14 @@ function Gallery({ urls }: { urls: Array<string> }) {
   const galleryImageWidth = 120;
   // TODO: click 'g' to view in detail
   return (
-    <Group py="xs" gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
-      {urls.map((image, i) => (
-        <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
-      ))}
-    </Group>
+    <Stack p="md" gap="xs">
+      <Title order={5}>Gallery</Title>
+      <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
+        {urls.map((image, i) => (
+          <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
+        ))}
+      </Group>
+    </Stack>
   );
 }
 

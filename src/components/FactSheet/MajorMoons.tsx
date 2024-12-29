@@ -1,6 +1,6 @@
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { useMemo } from 'react';
-import { Card, Group, Stack, Text, Title } from '@mantine/core';
+import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { Thumbnail } from './Thumbnail.tsx';
 import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
@@ -30,7 +30,7 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
   }
 
   return (
-    <Stack gap="xs">
+    <Stack gap="xs" p="md" pt="xl">
       <Title order={5}>Major Satellites</Title>
       {moons.map((moon, i) => (
         <MoonCard key={i} body={moon} updateState={updateState} />
@@ -42,7 +42,7 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
 function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
   const { data: summary, isLoading } = useSummaryStream(getSearch(body));
   return (
-    <Card withBorder p="xs" style={{ cursor: 'pointer' }} onClick={() => updateState({ center: body.name })}>
+    <Paper withBorder p="xs" style={{ cursor: 'pointer' }} onClick={() => updateState({ center: body.name })}>
       <Group gap="xs" justify="space-between" align="flex-start" wrap="nowrap">
         <Stack gap="xs">
           <Title order={6}>{body.name}</Title>
@@ -51,9 +51,9 @@ function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
             {isLoading && <LoadingCursor />}
           </Text>
         </Stack>
-        <Thumbnail body={body} size={120} />
+        <Thumbnail body={body} size={100} />
       </Group>
-    </Card>
+    </Paper>
   );
 }
 

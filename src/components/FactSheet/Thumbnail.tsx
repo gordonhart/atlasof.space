@@ -5,9 +5,9 @@ import { Thumbnails } from '../../lib/images.ts';
 
 type Props = {
   body: CelestialBody;
-  size?: number;
+  size: number;
 };
-export function Thumbnail({ body, size = 220 }: Props) {
+export function Thumbnail({ body, size }: Props) {
   const { name, type } = body;
   const [isValid, setIsValid] = useState(false);
   const url = Thumbnails[name] ?? `/api/thumbnail?${new URLSearchParams({ search: `${name} ${type}` })}`;
