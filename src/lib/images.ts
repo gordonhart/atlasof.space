@@ -52,9 +52,6 @@ import saturnTextureSrc from '../../assets/saturn-texture.jpg';
 import uranusTextureSrc from '../../assets/uranus-texture.jpg';
 import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
 import ceresTextureSrc from '../../assets/ceres-texture.jpg';
-import bennuShapeSrc from '../../assets/bennu.ply';
-import ceresShapeSrc from '../../assets/ceres.ply';
-import cg67pShapeSrc from '../../assets/cg67p.ply';
 import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
@@ -112,10 +109,4 @@ export const Textures: Record<string, string> = {
   [Bodies.URANUS.name]: uranusTextureSrc as string,
   [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,
   [Bodies.CERES.name]: ceresTextureSrc as string,
-};
-
-export const Shapes: Record<string, string> = {
-  [Bodies.BENNU.name]: bennuShapeSrc as string,
-  [Bodies.CERES.name]: ceresShapeSrc as string,
-  [Bodies.CG67P.name]: cg67pShapeSrc as string,
 };

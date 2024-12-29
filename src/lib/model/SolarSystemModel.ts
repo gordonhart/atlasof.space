@@ -67,7 +67,7 @@ export class SolarSystemModel {
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = true;
     this.controls.minZoom = 1e-3;
-    this.controls.maxZoom = 1e5;
+    this.controls.maxZoom = 1e4;
     this.controls.zoomToCursor = true;
 
     this.bodies = this.createBodies(appState);
@@ -126,10 +126,9 @@ export class SolarSystemModel {
     this.updateCenter(appState); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
-    const metersPerPx = this.getMetersPerPixel();
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
-      body.update(appState, parentState ?? null, metersPerPx);
+      body.update(appState, parentState ?? null);
     });
     this.composer.render();
     this.drawLabels(ctx, appState);
@@ -238,7 +237,6 @@ export class SolarSystemModel {
     if (center == null) return;
     const centerBody = this.bodies[center];
     if (centerBody == null) return;
-    // console.log(centerBody.position.clone().divideScalar(SCALE_FACTOR));
     this.controls.target.copy(centerBody.position).divideScalar(SCALE_FACTOR);
   }
 
