@@ -44,27 +44,27 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
 
   return (
     <Stack w={600} fz="xs" gap={2} justify="space-between" h="100%" style={{ overflow: 'auto' }}>
-      <Stack gap={2}>
-        <Group
-          pos="sticky"
-          top={0}
-          bg="black"
-          p="md"
-          gap="xs"
-          justify="space-between"
-          style={{ borderBottom: `1px solid ${body.color}` }}
-        >
-          <Group gap="xs" align="baseline">
-            <Title order={2}>{name}</Title>
-            <Title order={6} c="dimmed">
-              {celestialBodyTypeName(type)}
-            </Title>
-          </Group>
-          <ActionIcon onClick={() => updateState({ center: null })}>
-            <IconX size={iconSize} />
-          </ActionIcon>
+      <Group
+        pos="sticky"
+        top={0}
+        bg="black"
+        p="md"
+        gap="xs"
+        justify="space-between"
+        style={{ borderBottom: `1px solid ${body.color}` }}
+      >
+        <Group gap="xs" align="baseline">
+          <Title order={2}>{name}</Title>
+          <Title order={6} c="dimmed">
+            {celestialBodyTypeName(type)}
+          </Title>
         </Group>
+        <ActionIcon onClick={() => updateState({ center: null })}>
+          <IconX size={iconSize} />
+        </ActionIcon>
+      </Group>
 
+      <Stack gap={2}>
         <Group pt="md" px="md" gap="xs" align="flex-start" justify="space-between">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
