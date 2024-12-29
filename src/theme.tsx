@@ -2,6 +2,7 @@ import { ActionIcon, Button, createTheme, Paper, Tooltip } from '@mantine/core';
 
 export const theme = createTheme({
   primaryColor: 'violet',
+  headings: { fontFamily: 'Electrolize, sans-serif' },
   components: {
     Button: Button.extend({ defaultProps: { style: { backdropFilter: 'blur(4px)' } } }),
     ActionIcon: ActionIcon.extend({

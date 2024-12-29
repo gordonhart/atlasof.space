@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Image, Stack, Text } from '@mantine/core';
+import { ActionIcon, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -49,12 +49,10 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
           <Stack gap="xs">
             <Group gap="xs" justify="space-between">
               <Group gap="xs" align="baseline">
-                <Text fw="bold" size="md">
-                  {name}
-                </Text>
-                <Text inherit c="dimmed">
+                <Title order={3}>{name}</Title>
+                <Title order={6} c="dimmed">
                   {celestialBodyTypeName(type)}
-                </Text>
+                </Title>
               </Group>
               <ActionIcon onClick={() => updateState({ center: null })}>
                 <IconX size={iconSize} />

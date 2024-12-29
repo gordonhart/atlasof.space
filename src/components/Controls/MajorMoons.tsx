@@ -1,8 +1,11 @@
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { useMemo } from 'react';
-import { Card, Group, Stack, Title } from '@mantine/core';
+import { Card, Group, Stack, Text, Title } from '@mantine/core';
 import { Thumbnail } from './Thumbnail.tsx';
 import { AppState } from '../../lib/state.ts';
+import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { LoadingCursor } from './LoadingCursor.tsx';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);
 
@@ -28,7 +31,7 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
 
   return (
     <Stack gap="xs">
-      <Title order={6}>Major Satellites</Title>
+      <Title order={5}>Major Satellites</Title>
       {moons.map((moon, i) => (
         <MoonCard key={i} body={moon} updateState={updateState} />
       ))}
@@ -37,15 +40,28 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
 }
 
 function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
+  const { data: summary, isLoading } = useSummaryStream(getSearch(body));
   return (
     <Card withBorder p="xs" style={{ cursor: 'pointer' }} onClick={() => updateState({ center: body.name })}>
       <Group gap="xs" justify="space-between" align="flex-start" wrap="nowrap">
         <Stack gap="xs">
           <Title order={6}>{body.name}</Title>
-          {/* TODO: more */}
+          <Text inherit c="dimmed">
+            {summary}
+            {isLoading && <LoadingCursor />}
+          </Text>
         </Stack>
         <Thumbnail body={body} size={120} />
       </Group>
     </Card>
   );
+}
+
+function getSearch(body: CelestialBody) {
+  switch (body.type) {
+    case CelestialBodyType.MOON:
+      return `${body.elements.wrt}'s moon ${body.name}`;
+    default:
+      return `the ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name}`;
+  }
 }
