@@ -5,7 +5,7 @@ import { Controls } from './Controls/Controls.tsx';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { CelestialBody } from '../lib/types.ts';
-import { FactSheet } from './Controls/FactSheet.tsx';
+import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -99,7 +99,7 @@ export function SolarSystem() {
       </Box>
       {focusBody != null && (
         <Box h="100vh" style={{ borderLeft: `1px solid ${focusBody.color}` }}>
-          <FactSheet body={focusBody} bodies={appState.bodies} clear={() => updateState({ center: undefined })} />
+          <FactSheet body={focusBody} bodies={appState.bodies} updateState={updateState} />
         </Box>
       )}
     </Group>

@@ -125,11 +125,11 @@ export class SolarSystemModel {
     if (appState.play) this.incrementKinematics(appState.dt);
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
-    this.updateCenter(appState);
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(appState, parentState ?? null);
     });
+    this.updateCenter(appState);
     this.composer.render();
     this.drawLabels(ctx, appState);
   }
@@ -219,18 +219,22 @@ export class SolarSystemModel {
     });
   }
 
-  private drawLabels(ctx: CanvasRenderingContext2D, { drawLabel }: AppState) {
+  private drawLabels(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
+    const metersPerPx = this.getMetersPerPixel();
     if (drawLabel) {
-      const metersPerPx = this.getMetersPerPixel();
       Object.values(this.bodies).forEach(body => {
         body.drawLabel(ctx, this.camera, metersPerPx);
       });
     }
+    const hoverBody = this.bodies[hover ?? ''];
+    if (hoverBody != null) {
+      hoverBody.drawLabel(ctx, this.camera, metersPerPx);
+    }
   }
 
   private updateCenter({ center }: AppState) {
-    if (center == null || center == SOL.name) return;
+    if (center == null) return;
     const centerBody = this.bodies[center];
     if (centerBody != null) {
       const { position } = centerBody;
@@ -249,22 +253,26 @@ export class SolarSystemModel {
   }
 
   findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody | undefined {
+    const metersPerPx = this.getMetersPerPixel();
     let closest: KeplerianBody | undefined = undefined;
-    let closestDistance = threshold;
+    let closestDistance = Infinity;
     for (const body of Object.values(this.bodies).reverse()) {
+      // account for the displayed size of the body
+      const bodyThreshold = threshold + body.body.radius / metersPerPx;
+
       // ignore invisible types and offscreen bodies
       if (!visibleTypes.has(body.body.type)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
-      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], threshold)) continue;
+      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
 
       // always give precedence to the sun
       const distance = Math.sqrt((xPx - bodyXpx) ** 2 + (yPx - bodyYpx) ** 2);
-      if (distance < threshold && body.body.type === 'star') return body;
+      if (distance < bodyThreshold && body.body.type === 'star') return body;
 
       // only give precedence to non-moons, but still select moons if there are no other options
       const bodyIsMoon = body.body.type === 'moon';
       const closestIsMoon = closest?.body?.type === 'moon';
-      if (distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
+      if (distance < bodyThreshold && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
         closest = body;
         closestDistance = distance;
       }

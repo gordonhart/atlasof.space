@@ -94,15 +94,15 @@ function drawCaretAtLocation(
   [xPx, yPx]: Point2, // centered on this value
   type: CaretType
 ) {
-  const size = 3;
+  const [short, long] = [2, 6];
   // prettier-ignore
   const vertices: Array<Point2> = type === 'right'
-    ? [[xPx + size, yPx], [xPx - size, yPx - size * 2], [xPx - size, yPx + size * 2]]
+    ? [[xPx + short, yPx], [xPx - short, yPx - long], [xPx - short, yPx + long]]
     : type === 'left'
-      ? [[xPx - size, yPx], [xPx + size, yPx - size * 2], [xPx + size, yPx + size * 2]]
+      ? [[xPx - short, yPx], [xPx + short, yPx - long], [xPx + short, yPx + long]]
       : type === 'up'
-        ? [[xPx, yPx + size], [xPx + size * 2, yPx - size], [xPx - size * 2, yPx - size]]
-        : [[xPx, yPx - size], [xPx + size * 2, yPx + size], [xPx - size * 2, yPx + size]];
+        ? [[xPx, yPx + short], [xPx + long, yPx - short], [xPx - long, yPx - short]]
+        : [[xPx, yPx - short], [xPx + long, yPx + short], [xPx - long, yPx + short]];
   ctx.beginPath();
   ctx.moveTo(...vertices[0]);
   vertices.reverse().forEach(vertex => {

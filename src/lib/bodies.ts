@@ -1037,8 +1037,46 @@ export const IAPETUS: CelestialBody = {
   color: DEFAULT_MOON_COLOR,
 };
 
+export const HYPERION: CelestialBody = {
+  type: CelestialBodyType.MOON,
+  name: 'Hyperion',
+  influencedBy: [SOL.name, SATURN.name],
+  elements: {
+    wrt: SATURN.name,
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.1230061,
+    semiMajorAxis: 1481009e3,
+    inclination: 0.43 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 5.551e18,
+  radius: 135e3,
+  color: DEFAULT_MOON_COLOR,
+};
+
+export const PHOEBE: CelestialBody = {
+  type: CelestialBodyType.MOON,
+  name: 'Phoebe',
+  influencedBy: [SOL.name, SATURN.name],
+  elements: {
+    wrt: SATURN.name,
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.1562415,
+    semiMajorAxis: 12960000e3,
+    inclination: 151.78 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator
+    longitudeAscending: 0, // TODO
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 8.3123e18,
+  radius: 106.5e3,
+  color: DEFAULT_MOON_COLOR,
+};
+
 // TODO: there are more moons
-export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS];
+export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
 
 export const URANUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
