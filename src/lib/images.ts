@@ -51,37 +51,30 @@ import jupiterTextureSrc from '../../assets/jupiter-texture.jpg';
 import saturnTextureSrc from '../../assets/saturn-texture.jpg';
 import uranusTextureSrc from '../../assets/uranus-texture.jpg';
 import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
+import ceresTextureSrc from '../../assets/ceres-texture.jpg';
+import bennuShapeSrc from '../../assets/bennu.ply';
+import ceresShapeSrc from '../../assets/ceres.ply';
 import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
   [Bodies.SOL.name]: solSrc as string,
-
   [Bodies.MERCURY.name]: mercurySrc as string,
-
   [Bodies.VENUS.name]: venusSrc as string,
-
   [Bodies.EARTH.name]: earthSrc as string,
   [Bodies.LUNA.name]: lunaSrc as string,
-
   [Bodies.MARS.name]: marsSrc as string,
   [Bodies.PHOBOS.name]: phobosSrc as string,
   [Bodies.DEIMOS.name]: deimosSrc as string,
-
   [Bodies.JUPITER.name]: jupiterSrc as string,
   [Bodies.IO.name]: ioSrc as string,
   [Bodies.EUROPA.name]: europaSrc as string,
   [Bodies.GANYMEDE.name]: ganymedeSrc as string,
   [Bodies.CALLISTO.name]: callistoSrc as string,
-
   [Bodies.SATURN.name]: saturnSrc as string,
   [Bodies.MIMAS.name]: mimasSrc as string,
-
   [Bodies.URANUS.name]: uranusSrc as string,
-
   [Bodies.NEPTUNE.name]: neptuneSrc as string,
-
   [Bodies.PLUTO.name]: plutoSrc as string,
-
   [Bodies.CERES.name]: ceresSrc as string,
   [Bodies.PALLAS.name]: pallasSrc as string,
   [Bodies.VESTA.name]: vestaSrc as string,
@@ -92,7 +85,6 @@ export const Thumbnails: Record<string, string> = {
   [Bodies.BENNU.name]: bennuSrc as string,
   [Bodies.LUTETIA.name]: lutetiaSrc as string,
   [Bodies.NEREUS.name]: nereusSrc as string,
-
   [Bodies.MAKEMAKE.name]: makemakeSrc as string,
   [Bodies.EROS.name]: erosSrc as string,
   [Bodies.MATHILDE.name]: mathildeSrc as string,
@@ -118,4 +110,10 @@ export const Textures: Record<string, string> = {
   [Bodies.SATURN.name]: saturnTextureSrc as string,
   [Bodies.URANUS.name]: uranusTextureSrc as string,
   [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,
+  [Bodies.CERES.name]: ceresTextureSrc as string,
+};
+
+export const Shapes: Record<string, string> = {
+  [Bodies.BENNU.name]: bennuShapeSrc as string,
+  [Bodies.CERES.name]: ceresShapeSrc as string,
 };

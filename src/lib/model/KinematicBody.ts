@@ -33,7 +33,7 @@ export class KinematicBody {
   increment(parents: Array<Pick<KinematicBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
     this.acceleration.set(0, 0, 0);
     parents.forEach(parent => {
-      this.tmp.set(this.position.x, this.position.y, this.position.z).sub(parent.position); // position delta
+      this.tmp.copy(this.position).sub(parent.position); // position delta
       this.tmp.multiplyScalar((-G * parent.mass) / this.tmp.length() ** 3); // gravitational acceleration from parent
       this.acceleration.add(this.tmp);
     });

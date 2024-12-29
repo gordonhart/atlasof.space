@@ -101,12 +101,15 @@ export class OrbitalEllipse {
     }
   }
 
+  // TODO: often the ellipse does not align perfectly with the simulated body. It should probably update its geometry
+  //  live to reflect changes in the simulated orbit, or at least be fudged such that when you zoom in it always passes
+  //  through the center of the body
   update(visible: boolean, offset: Vector3 | null) {
     this.ellipse.visible = visible;
     if (offset != null) {
-      this.ellipse.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
-      this.ellipseFocus.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
-      this.face.position.set(offset.x, offset.y, offset.z).divideScalar(SCALE_FACTOR);
+      this.ellipse.position.copy(offset).divideScalar(SCALE_FACTOR);
+      this.ellipseFocus.position.copy(offset).divideScalar(SCALE_FACTOR);
+      this.face.position.copy(offset).divideScalar(SCALE_FACTOR);
     }
   }
 

@@ -17,7 +17,7 @@ import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { getCircleTexture } from './utils.ts';
 import { CelestialBody } from '../types.ts';
-import { Textures } from '../images.ts';
+import { Shapes, Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 
 export class SphericalBody {
@@ -26,6 +26,7 @@ export class SphericalBody {
   private sphere: Mesh;
   private readonly dot: Points;
   public readonly dotPosition: BufferAttribute;
+  private readonly emissive: boolean;
 
   private readonly spherePoints: number = 144;
   // TODO: dynamically set based on true size of body? e.g. between 2-6
@@ -34,6 +35,7 @@ export class SphericalBody {
   constructor(scene: Scene, body: CelestialBody, position: Vector3, color: Color, emissive = false) {
     this.scene = scene;
     this.body = body;
+    this.emissive = emissive;
 
     // add a fixed-size (in display-space) dot to ensure body is always visible, event at far zooms
     const positionScaled = position.clone().multiplyScalar(1 / SCALE_FACTOR);
@@ -55,36 +57,9 @@ export class SphericalBody {
     this.dot.renderOrder = 0;
     scene.add(this.dot);
 
-    const ply = body.name.toLowerCase().includes('ceres') ? '/assets/bennu-radar.ply' : undefined;
-
-    // create the main sphere geometry for the celestial body
+    // note that this will be disposed+replaced if there is a .ply shape to load
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-    const texture = Textures[body.name];
-    let sphereMaterial: Material;
-
-    // TODO: the logic to instantiate different materials is very gross
-    if (ply != null) {
-      sphereMaterial = new MeshStandardMaterial({ color, metalness: 0, roughness: 1 });
-    } else if (texture != null) {
-      sphereMaterial = new MeshBasicMaterial({ color });
-      const textureLoader = new TextureLoader();
-      const textureMap = textureLoader.load(texture);
-      if (emissive) {
-        // TODO: better parameterization of this?
-        sphereMaterial = new MeshStandardMaterial({
-          map: textureMap,
-          emissive: color, // Emissive color (same as base for glow)
-          emissiveIntensity: 0.5, // Intensity of the emissive glow
-          roughness: 0.2, // Lower roughness for more shine
-          metalness: 0.1, // Lower metalness for less reflection
-        });
-      } else {
-        sphereMaterial = new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
-      }
-    } else {
-      sphereMaterial = new MeshBasicMaterial({ color });
-    }
-
+    const sphereMaterial = this.getShapeMaterial();
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
     const inclination = degreesToRadians(body.elements.inclination);
     const axialTilt = body.rotation != null ? degreesToRadians(body.rotation.axialTilt) : 0;
@@ -93,38 +68,68 @@ export class SphericalBody {
     this.sphere.renderOrder = 1;
     scene.add(this.sphere);
 
+    // TODO: lazy-load this only when the body is clicked? zoomed in past a certain size?
+    const ply = Shapes[body.name];
     if (ply != null) {
-      this.loadPly(ply);
+      const loader = new PLYLoader();
+      loader.load(ply, this.onShapeLoad);
     }
   }
 
-  private loadPly(file: string) {
-    const loader = new PLYLoader();
-    loader.load(file, geometry => {
-      const material = this.sphere.material as Material;
+  private getShapeMaterial(): Material {
+    const color = new Color(this.body.color);
+    const ply = Shapes[this.body.name];
+    const texture = Textures[this.body.name];
 
-      // dispose the regular sphere
-      this.sphere.geometry.dispose();
-      this.scene.remove(this.sphere);
+    // NOTE: objects with non-spherical shapes won't have textures applied; mostly due to common .ply files missing the
+    //  uv mapping required to apply textures
+    if (ply != null) {
+      return new MeshStandardMaterial({ color, metalness: 0.2, roughness: 0.8 });
+    }
 
-      this.sphere = new Mesh(geometry, material);
-      const inclination = degreesToRadians(this.body.elements.inclination);
-      const axialTilt = this.body.rotation != null ? degreesToRadians(this.body.rotation.axialTilt) : 0;
-      this.sphere.rotation.x = Math.PI / 2 + inclination + axialTilt;
-      this.sphere.position.copy(this.dot.position);
-      this.sphere.renderOrder = 1;
+    if (texture != null) {
+      const textureLoader = new TextureLoader();
+      const textureMap = textureLoader.load(texture);
+      if (this.emissive) {
+        // TODO: better parameterization of this?
+        return new MeshStandardMaterial({
+          map: textureMap,
+          emissive: color, // Emissive color (same as base for glow)
+          emissiveIntensity: 0.5, // Intensity of the emissive glow
+          roughness: 0.2, // Lower roughness for more shine
+          metalness: 0.1, // Lower metalness for less reflection
+        });
+      }
+      return new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
+    }
 
-      // Scale and position the mesh (adjust as necessary)
-      this.sphere.scale.set(1, 1, 1);
+    return new MeshBasicMaterial({ color });
+  }
 
-      // Add the mesh to the scene
-      this.scene.add(this.sphere);
-    });
+  private onShapeLoad(geometry: BufferGeometry) {
+    geometry.computeVertexNormals(); // for proper shading
+    const material = this.sphere.material as Material; // reuse the existing shape material
+
+    // dispose the regular sphere
+    this.sphere.geometry.dispose();
+    this.scene.remove(this.sphere);
+
+    this.sphere = new Mesh(geometry, material);
+    const inclination = degreesToRadians(this.body.elements.inclination);
+    const axialTilt = this.body.rotation != null ? degreesToRadians(this.body.rotation.axialTilt) : 0;
+    this.sphere.rotation.x = Math.PI / 2 + inclination + axialTilt;
+    this.sphere.position.copy(this.dot.position);
+    this.sphere.renderOrder = 1;
+
+    // scale the mesh -- 1 unit per km seems to be the standard scale for .ply files downloaded
+    this.sphere.scale.divideScalar(SCALE_FACTOR / 1e3);
+
+    this.scene.add(this.sphere);
   }
 
   update(position: Vector3, rotation: number, visible: boolean) {
     this.sphere.updateWorldMatrix(true, false);
-    this.sphere.position.set(...position.toArray()).multiplyScalar(1 / SCALE_FACTOR);
+    this.sphere.position.copy(position).divideScalar(SCALE_FACTOR);
     this.sphere.rotation.y = degreesToRadians(rotation);
     this.sphere.visible = visible;
     this.dotPosition.array[0] = this.sphere.position.x;
@@ -136,10 +141,10 @@ export class SphericalBody {
 
   setFocus(focus: boolean) {
     if (focus) {
-      this.sphere.scale.set(HOVER_SCALE_FACTOR, HOVER_SCALE_FACTOR, HOVER_SCALE_FACTOR);
+      this.sphere.scale.multiplyScalar(HOVER_SCALE_FACTOR);
       (this.dot.material as PointsMaterial).size = this.dotSize * 2;
     } else {
-      this.sphere.scale.set(1, 1, 1);
+      this.sphere.scale.divideScalar(HOVER_SCALE_FACTOR);
       (this.dot.material as PointsMaterial).size = this.dotSize;
     }
   }

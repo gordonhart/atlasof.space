@@ -13,7 +13,7 @@ export enum Time {
   DAY = 24 * HOUR,
 }
 
-const DEFAULT_MOON_COLOR = '#aaaaaa';
+export const DEFAULT_MOON_COLOR = '#aaaaaa';
 export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
 
 export const SOL: CelestialBody = {
@@ -213,6 +213,10 @@ export const CERES: CelestialBody = {
     longitudeAscending: 80.305,
     argumentOfPeriapsis: 73.597,
     meanAnomaly: 291.4,
+  },
+  rotation: {
+    axialTilt: 4,
+    siderealPeriod: 9.07417 * Time.HOUR,
   },
   mass: 9.3839e20,
   radius: 966.2e3 / 2,
