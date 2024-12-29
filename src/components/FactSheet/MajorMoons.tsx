@@ -5,7 +5,6 @@ import { Thumbnail } from './Thumbnail.tsx';
 import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
-import { celestialBodyTypeName } from '../../lib/utils.ts';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);
 
@@ -40,7 +39,7 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
 }
 
 function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
-  const { data: summary, isLoading } = useSummaryStream(getSearch(body));
+  const { data: summary, isLoading } = useSummaryStream(body);
   return (
     <Paper withBorder p="xs" style={{ cursor: 'pointer' }} onClick={() => updateState({ center: body.name })}>
       <Group gap="xs" justify="space-between" align="flex-start" wrap="nowrap">
@@ -55,13 +54,4 @@ function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
       </Group>
     </Paper>
   );
-}
-
-function getSearch(body: CelestialBody) {
-  switch (body.type) {
-    case CelestialBodyType.MOON:
-      return `${body.elements.wrt}'s moon ${body.name}`;
-    default:
-      return `the ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name}`;
-  }
 }

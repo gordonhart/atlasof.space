@@ -12,6 +12,7 @@ import { IconX } from '@tabler/icons-react';
 import { iconSize } from '../Controls/constants.ts';
 import { MajorMoons } from './MajorMoons.tsx';
 import { AppState } from '../../lib/state.ts';
+import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 
 type Props = {
   body: CelestialBody;
@@ -64,8 +65,12 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         </ActionIcon>
       </Group>
 
+      <Box pt="md" px="md" mih={77 /* measured height of 3 lines + top padding */} style={{ flexShrink: 0 }}>
+        <Summary body={body} />
+      </Box>
+
       <Stack gap={2} flex={1}>
-        <Group pt="md" px="md" gap="xs" align="flex-start" justify="space-between">
+        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
             <FactGrid facts={bullets} valueWidth={120} />
@@ -89,6 +94,16 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
     </Stack>
   );
 });
+
+function Summary({ body }: { body: CelestialBody }) {
+  const { data: summary, isLoading } = useSummaryStream(body);
+  return (
+    <Text size="sm">
+      {summary}
+      {isLoading && <LoadingCursor />}
+    </Text>
+  );
+}
 
 function FactGrid({
   facts,
