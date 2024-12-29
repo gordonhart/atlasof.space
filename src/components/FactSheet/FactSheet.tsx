@@ -43,7 +43,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={600} fz="xs" gap={2} justify="space-between" h="100%" style={{ overflow: 'auto' }}>
+    <Stack w={600} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <Group
         pos="sticky"
         top={0}
@@ -64,7 +64,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         </ActionIcon>
       </Group>
 
-      <Stack gap={2}>
+      <Stack gap={2} flex={1}>
         <Group pt="md" px="md" gap="xs" align="flex-start" justify="space-between">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
@@ -82,9 +82,10 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         </Box>
       </Stack>
 
-      <MajorMoons body={body} bodies={bodies} updateState={updateState} />
-
-      {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+      <Box style={{ justifySelf: 'flex-end' }}>
+        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
+        {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+      </Box>
     </Stack>
   );
 });

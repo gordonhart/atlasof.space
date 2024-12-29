@@ -253,22 +253,26 @@ export class SolarSystemModel {
   }
 
   findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody | undefined {
+    const metersPerPx = this.getMetersPerPixel();
     let closest: KeplerianBody | undefined = undefined;
-    let closestDistance = threshold;
+    let closestDistance = Infinity;
     for (const body of Object.values(this.bodies).reverse()) {
+      // account for the displayed size of the body
+      const bodyThreshold = threshold + body.body.radius / metersPerPx;
+
       // ignore invisible types and offscreen bodies
       if (!visibleTypes.has(body.body.type)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
-      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], threshold)) continue;
+      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
 
       // always give precedence to the sun
       const distance = Math.sqrt((xPx - bodyXpx) ** 2 + (yPx - bodyYpx) ** 2);
-      if (distance < threshold && body.body.type === 'star') return body;
+      if (distance < bodyThreshold && body.body.type === 'star') return body;
 
       // only give precedence to non-moons, but still select moons if there are no other options
       const bodyIsMoon = body.body.type === 'moon';
       const closestIsMoon = closest?.body?.type === 'moon';
-      if (distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
+      if (distance < bodyThreshold && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
         closest = body;
         closestDistance = distance;
       }
