@@ -117,9 +117,8 @@ function FactGrid({
 
 function Gallery({ urls }: { urls: Array<string> }) {
   const nPerRow = 3;
-  const galleryGap = 4;
-  const galleryImageWidth = 120;
-  // TODO: click 'g' to view in detail
+  const galleryGap = 16;
+  const galleryImageWidth = 178;
   return (
     <Stack p="md" gap="xs">
       <Title order={5}>Gallery</Title>
