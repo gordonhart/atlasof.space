@@ -54,6 +54,8 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         justify="space-between"
         style={{ borderBottom: `1px solid ${body.color}` }}
       >
+        <Caret position="tl" color={body.color} />
+        <Caret position="br" color={body.color} />
         <Group gap="xs" align="baseline">
           <Title order={2}>{name}</Title>
           <Title order={6} c="dimmed">
@@ -144,6 +146,29 @@ function Gallery({ urls }: { urls: Array<string> }) {
         ))}
       </Group>
     </Stack>
+  );
+}
+
+function Caret({ color, position }: { color: string; position: 'tl' | 'tr' | 'bl' | 'br' }) {
+  const size = 8;
+  const pad = 'calc(var(--mantine-spacing-md) / 4)';
+  const border = `1px solid ${color}`;
+  return (
+    <Box
+      pos="absolute"
+      w={size}
+      h={size}
+      top={position.startsWith('t') ? pad : undefined}
+      left={position.endsWith('l') ? pad : undefined}
+      right={position.endsWith('r') ? pad : undefined}
+      bottom={position.startsWith('b') ? pad : undefined}
+      style={{
+        borderTop: position.startsWith('t') ? border : undefined,
+        borderLeft: position.endsWith('l') ? border : undefined,
+        borderRight: position.endsWith('r') ? border : undefined,
+        borderBottom: position.startsWith('b') ? border : undefined,
+      }}
+    />
   );
 }
 

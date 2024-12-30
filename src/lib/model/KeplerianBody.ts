@@ -1,8 +1,8 @@
-import { CelestialBody, Point2 } from '../types.ts';
+import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import { AppState } from '../state.ts';
-import { drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
+import { drawDotAtLocation, drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
 import { isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
@@ -19,6 +19,7 @@ export class KeplerianBody extends KinematicBody {
   private readonly radius: FocalRadius;
   private readonly axis: AxisIndicator | null = null;
   private readonly screenPosition: Vector3;
+  private readonly dotRadius: number;
 
   private visible: boolean = false;
   private hovered: boolean = false;
@@ -41,7 +42,8 @@ export class KeplerianBody extends KinematicBody {
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, color);
     this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
-    this.sphere = new SphericalBody(scene, body, position, color);
+    this.sphere = new SphericalBody(scene, body, position);
+    this.dotRadius = KeplerianBody.getDotRadius(body);
     if (body.rotation != null) {
       this.axis = new AxisIndicator(scene, resolution, this.position, body.rotation.axialTilt, body.radius, color);
     }
@@ -94,9 +96,27 @@ export class KeplerianBody extends KinematicBody {
       drawOffscreenIndicator(ctx, this.body.color, canvasPx, [bodyXpx, bodyYpx]);
     } else {
       const baseRadius = this.body.radius / metersPerPx;
-      const radius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
-      const radiusPx = Math.max(radius, 1) + 5;
-      drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, radiusPx);
+      const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
+      if (bodyRadius < this.dotRadius) {
+        drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
+      }
+      const labelRadius = Math.max(bodyRadius, 1) + 5;
+      drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
+    }
+  }
+
+  // TODO: dynamically size by actual radius? log scale between ~1-4?
+  private static getDotRadius(body: CelestialBody) {
+    switch (body.type) {
+      case CelestialBodyType.STAR:
+        return 3;
+      case CelestialBodyType.PLANET:
+        return 2.5;
+      case CelestialBodyType.MOON:
+      case CelestialBodyType.DWARF_PLANET:
+        return 2;
+      default:
+        return 1.5;
     }
   }
 }
