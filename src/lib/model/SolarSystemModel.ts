@@ -20,7 +20,7 @@ import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { isOffScreen } from './utils.ts';
-import { keplerianToCartesian } from '../physics.ts';
+import { convertToEpoch, keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
 import { notNullish } from '../utils.ts';
 import { Firmament } from './Firmament.ts';
@@ -123,7 +123,7 @@ export class SolarSystemModel {
       body.update(appState, parentState ?? null);
     });
     this.composer.render();
-    this.drawLabels(ctx, appState);
+    this.drawAnnotations(ctx, appState);
   }
 
   add(appState: AppState, body: CelestialBody) {
@@ -178,7 +178,9 @@ export class SolarSystemModel {
   private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody) {
     const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.mass ?? 1;
-    const cartesian = keplerianToCartesian(body.elements, G * mainParentMass);
+    const elementsInEpoch =
+      mainParent != null ? convertToEpoch(body.elements, mainParent.body.mass, appState.epoch) : body.elements;
+    const cartesian = keplerianToCartesian(elementsInEpoch, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
     // TODO: conditionally excluding the sun is a little gross
@@ -210,17 +212,15 @@ export class SolarSystemModel {
     });
   }
 
-  private drawLabels(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
+  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
-    if (drawLabel) {
-      Object.values(this.bodies).forEach(body => {
-        body.drawLabel(ctx, this.camera, metersPerPx);
-      });
-    }
+    Object.values(this.bodies).forEach(body => {
+      body.drawAnnotations(ctx, this.camera, metersPerPx, drawLabel);
+    });
     const hoverBody = this.bodies[hover ?? ''];
     if (hoverBody != null) {
-      hoverBody.drawLabel(ctx, this.camera, metersPerPx);
+      hoverBody.drawAnnotations(ctx, this.camera, metersPerPx);
     }
   }
 

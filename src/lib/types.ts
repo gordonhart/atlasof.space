@@ -5,10 +5,21 @@ export type CartesianState = {
   velocity: Point3; // meters per second
 };
 
+export type Epoch = {
+  name: string;
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+  // no time zone necessary; always UTC
+};
+
 export type KeplerianElements = {
-  // parent body that these elements are given with respsect to, e.g. 'Jupiter' for a moon. null for the Sun
+  // parent body that these elements are given with respect to, e.g. 'Jupiter' for a moon. null for the Sun
   wrt: string | null;
-  epoch: string; // e.g. 'J2000'
+  epoch: Epoch;
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters
   inclination: number; // degrees

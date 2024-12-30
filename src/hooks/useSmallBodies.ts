@@ -1,8 +1,9 @@
+import { useQueries, UseQueryOptions } from '@tanstack/react-query';
 import { CelestialBody, CelestialBodyType } from '../lib/types.ts';
 import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
-import { useQueries, UseQueryOptions } from '@tanstack/react-query';
 import { estimateAsteroidMass } from '../lib/physics.ts';
+import { julianDayToEpoch } from '../lib/epoch.ts';
 
 export function useSmallBodies(names: Array<string>) {
   return useQueries<UseQueryOptions<CelestialBody | null, Error>[]>({
@@ -32,7 +33,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     influencedBy: [SOL.name],
     elements: {
       wrt: SOL.name,
-      epoch: `JD${orbit.epoch}`,
+      epoch: julianDayToEpoch(`JD${orbit.epoch}`),
       eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
       semiMajorAxis: Number(elements.find(({ name }) => name === 'a')?.value) * AU,
       inclination: Number(elements.find(({ name }) => name === 'i')?.value),

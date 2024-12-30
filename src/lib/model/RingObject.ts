@@ -26,24 +26,13 @@ export class RingObject {
     const [r0, r1] = [ring.start / SCALE_FACTOR, ring.end / SCALE_FACTOR];
     const geometry = new RingGeometry(r0, r1, this.nSegments);
 
-    // Modify UV coordinates for radial texture mapping
+    // modify UV coordinates for radial texture mapping
     const pos = geometry.attributes.position;
     const uv = geometry.attributes.uv;
-
     for (let i = 0; i < pos.count; i++) {
       const vertex = new Vector2(pos.getX(i), pos.getY(i));
-      const angle = vertex.angle();
-
-      // Normalize radius between inner and outer edge
-      const radius = vertex.length();
-      const v = (radius - r0) / (r1 - r0);
-
-      // Map u coordinate to angle, v to radius
-      uv.setXY(
-        i,
-        (angle + Math.PI) / (2 * Math.PI), // u: angle normalized to [0,1]
-        v // v: radius normalized to [0,1]
-      );
+      const v = (vertex.length() - r0) / (r1 - r0);
+      uv.setXY(i, (vertex.angle() + Math.PI) / (2 * Math.PI), v);
     }
 
     // TODO: use body color if no texture is provided

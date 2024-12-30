@@ -35,6 +35,7 @@ export class KinematicBody {
     parents.forEach(parent => {
       this.tmp.copy(this.position).sub(parent.position); // position delta
       const distance = this.tmp.length();
+      // TODO: is it correct to use the mean motion equation here?
       this.tmp // gravitational acceleration from parent
         .multiplyScalar(-G * parent.mass)
         .divideScalar(distance) // apply as three separate operations to avoid very large r^3 value
