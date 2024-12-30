@@ -22,6 +22,8 @@ yarn netlify dev
 - [ ] Add co-orbitals
 - [ ] Model spacecraft (e.g. Parker, Juno, Cassini, Voyager)
   - [ ] Choose mission from list to simulate
+- [ ] Incorporate apsidal and nodal precession (changing ω and Ω over time)
+- [ ] Use ephemeris data for modeling
 
 ## Resources
 

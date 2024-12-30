@@ -166,10 +166,14 @@ export const PHOBOS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0151,
     semiMajorAxis: 9376e3,
-    inclination: 1.093,
+    inclination: 1.093 + MARS.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
+  },
+  rotation: {
+    axialTilt: 0,
+    siderealPeriod: 7 * Time.HOUR + 39 * Time.MINUTE + 12, // synchronous
   },
   mass: 1.0659e16,
   radius: 11.2667e3,
@@ -185,10 +189,14 @@ export const DEIMOS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.00033,
     semiMajorAxis: 23458e3,
-    inclination: 1.788,
+    inclination: 0.93 + MARS.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
+  },
+  rotation: {
+    axialTilt: 0,
+    siderealPeriod: 30.312 * Time.HOUR, // synchronous
   },
   mass: 1.4762e15,
   radius: 6.2e3,
@@ -366,30 +374,6 @@ export const LUTETIA: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const CG67P: CelestialBody = {
-  type: CelestialBodyType.COMET,
-  name: '67P/Churyumov–Gerasimenko',
-  shortName: '67P/C–G',
-  influencedBy: [SOL.name],
-  mass: 1e13, // kg
-  radius: 2000, // m (average radius based on dimensions)
-  elements: {
-    wrt: SOL.name,
-    epoch: 'J2000', // TODO: verify
-    eccentricity: 0.64,
-    semiMajorAxis: 3.463 * 1.496e11, // AU to meters
-    inclination: 7.04, // degrees
-    longitudeAscending: 50.19, // degrees
-    argumentOfPeriapsis: 12.78, // degrees
-    meanAnomaly: 0, // degrees (value at perihelion)
-  },
-  rotation: {
-    axialTilt: 52,
-    siderealPeriod: 12.4 * Time.HOUR,
-  },
-  color: DEFAULT_ASTEROID_COLOR,
-};
-
 export const EROS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '433 Eros',
@@ -455,7 +439,72 @@ export const NEREUS: CelestialBody = {
 };
 
 export const ASTEROIDS = [CERES, PALLAS, VESTA, HYGIEA, JUNO, RYUGU, BENNU, LUTETIA, EROS, MATHILDE, NEREUS];
-export const COMETS: Array<CelestialBody> = [CG67P];
+
+export const CG67P: CelestialBody = {
+  type: CelestialBodyType.COMET,
+  name: '67P/Churyumov–Gerasimenko',
+  shortName: '67P/C–G',
+  influencedBy: [SOL.name],
+  mass: 1e13, // kg
+  radius: 2000, // m (average radius based on dimensions)
+  elements: {
+    wrt: SOL.name,
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.64,
+    semiMajorAxis: 3.463 * AU,
+    inclination: 7.04, // degrees
+    longitudeAscending: 50.19, // degrees
+    argumentOfPeriapsis: 12.78, // degrees
+    meanAnomaly: 0, // degrees (value at perihelion)
+  },
+  rotation: {
+    axialTilt: 52,
+    siderealPeriod: 12.4 * Time.HOUR,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const HALLEY: CelestialBody = {
+  type: CelestialBodyType.COMET,
+  name: "Halley's Comet (1P/Halley)",
+  shortName: 'Halley',
+  influencedBy: [SOL.name],
+  mass: 2.2e14,
+  radius: 5.5e3, // average radius based on dimensions
+  elements: {
+    wrt: SOL.name,
+    epoch: 'JD2474040.5', // TODO: find J2000
+    eccentricity: 0.96658,
+    semiMajorAxis: 17.737 * AU,
+    inclination: 161.96,
+    longitudeAscending: 59.396,
+    argumentOfPeriapsis: 112.05,
+    meanAnomaly: 0.07323,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const HALE_BOPP: CelestialBody = {
+  type: CelestialBodyType.COMET,
+  name: 'Hale-Bopp (C/1995 O1)',
+  shortName: 'Hale-Bopp',
+  influencedBy: [SOL.name],
+  mass: 1.3e19,
+  radius: 30e3, // average radius based on dimensions
+  elements: {
+    wrt: SOL.name,
+    epoch: 'JD2459837.5', // TODO: find J2000
+    eccentricity: 0.99498,
+    semiMajorAxis: 177.43 * AU,
+    inclination: 89.3,
+    longitudeAscending: 282.73,
+    argumentOfPeriapsis: 130.41,
+    meanAnomaly: 3.8784,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
@@ -836,7 +885,7 @@ export const IO: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0041,
     semiMajorAxis: 421800e3,
-    inclination: 0.036,
+    inclination: 0.05 + JUPITER.rotation!.axialTilt,
     longitudeAscending: 0, // approximate
     argumentOfPeriapsis: 0, // approximated for circular orbits
     meanAnomaly: 0,
@@ -855,7 +904,7 @@ export const EUROPA: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0094,
     semiMajorAxis: 671100e3,
-    inclination: 0.466,
+    inclination: 0.466 + JUPITER.rotation!.axialTilt,
     longitudeAscending: 0, // approximate
     argumentOfPeriapsis: 0, // approximated for circular orbits
     meanAnomaly: 0,
@@ -874,7 +923,7 @@ export const GANYMEDE: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0013,
     semiMajorAxis: 1070400e3,
-    inclination: 0.177,
+    inclination: 0.177 + JUPITER.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -893,7 +942,7 @@ export const CALLISTO: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0074,
     semiMajorAxis: 1882700e3,
-    inclination: 0.192,
+    inclination: 2.017,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -938,7 +987,7 @@ export const MIMAS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0196,
     semiMajorAxis: 185540e3,
-    inclination: 1.574,
+    inclination: 1.574 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -957,7 +1006,7 @@ export const ENCELADUS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0047,
     semiMajorAxis: 238040e3,
-    inclination: 0.009,
+    inclination: 0.009 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -976,7 +1025,7 @@ export const TETHYS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0001,
     semiMajorAxis: 294670e3,
-    inclination: 1.091,
+    inclination: 1.091 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -995,7 +1044,7 @@ export const DIONE: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0022,
     semiMajorAxis: 377420e3,
-    inclination: 0.028,
+    inclination: 0.028 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1014,7 +1063,7 @@ export const RHEA: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.001,
     semiMajorAxis: 527070e3,
-    inclination: 0.345,
+    inclination: 0.345 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1033,7 +1082,7 @@ export const TITAN: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0288,
     semiMajorAxis: 1221870e3,
-    inclination: 0.348,
+    inclination: 0.34854 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1052,7 +1101,7 @@ export const IAPETUS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0286,
     semiMajorAxis: 3560820e3,
-    inclination: 15.47,
+    inclination: 15.47 + SATURN.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1094,6 +1143,10 @@ export const PHOEBE: CelestialBody = {
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
+  },
+  rotation: {
+    axialTilt: 152.14,
+    siderealPeriod: 9.2735 * Time.HOUR,
   },
   mass: 8.3123e18,
   radius: 106.5e3,

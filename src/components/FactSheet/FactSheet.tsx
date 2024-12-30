@@ -1,3 +1,5 @@
+import { memo } from 'react';
+import { IconX } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
@@ -7,19 +9,20 @@ import { GalleryImages } from '../../lib/images.ts';
 import { Thumbnail } from './Thumbnail.tsx';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
-import { memo } from 'react';
-import { IconX } from '@tabler/icons-react';
 import { iconSize } from '../Controls/constants.ts';
 import { MajorMoons } from './MajorMoons.tsx';
 import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { ParentBody } from './ParentBody.tsx';
+import { OtherBodies } from './OtherBodies.tsx';
 
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
   updateState: (update: Partial<AppState>) => void;
+  width?: number;
 };
-export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState }: Props) {
+export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState, width }: Props) {
   const { name, type, mass, radius, elements } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
@@ -44,7 +47,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={600} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack w={width} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <Group
         pos="sticky"
         top={0}
@@ -54,6 +57,8 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         justify="space-between"
         style={{ borderBottom: `1px solid ${body.color}` }}
       >
+        <Caret position="tl" color={body.color} />
+        <Caret position="br" color={body.color} />
         <Group gap="xs" align="baseline">
           <Title order={2}>{name}</Title>
           <Title order={6} c="dimmed">
@@ -88,8 +93,10 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
+        <ParentBody body={body} bodies={bodies} updateState={updateState} />
+        <OtherBodies body={body} bodies={bodies} updateState={updateState} />
       </Box>
     </Stack>
   );
@@ -144,6 +151,29 @@ function Gallery({ urls }: { urls: Array<string> }) {
         ))}
       </Group>
     </Stack>
+  );
+}
+
+function Caret({ color, position }: { color: string; position: 'tl' | 'tr' | 'bl' | 'br' }) {
+  const size = 8;
+  const pad = 'calc(var(--mantine-spacing-md) / 4)';
+  const border = `1px solid ${color}`;
+  return (
+    <Box
+      pos="absolute"
+      w={size}
+      h={size}
+      top={position.startsWith('t') ? pad : undefined}
+      left={position.endsWith('l') ? pad : undefined}
+      right={position.endsWith('r') ? pad : undefined}
+      bottom={position.startsWith('b') ? pad : undefined}
+      style={{
+        borderTop: position.startsWith('t') ? border : undefined,
+        borderLeft: position.endsWith('l') ? border : undefined,
+        borderRight: position.endsWith('r') ? border : undefined,
+        borderBottom: position.startsWith('b') ? border : undefined,
+      }}
+    />
   );
 }
 

@@ -544,7 +544,10 @@ export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
   }, [JSON.stringify(state.bodies)]);
 
   const tree = useTree({ initialCheckedState });
-  const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue);
+
+  // filter out bodies that are already in the state to avoid re-fetching hardcoded bodies from SBDB (e.g. Ceres)
+  const existingBodyNames = new Set(state.bodies.map(({ name }) => name));
+  const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue).filter(name => !existingBodyNames.has(name));
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
   const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Group } from '@mantine/core';
+import { Box, Group, Stack } from '@mantine/core';
 import { AppState, clampState, initialState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
@@ -74,8 +74,10 @@ export function SolarSystem() {
     [appState.center, JSON.stringify(appState.bodies)]
   );
 
+  const isMobile = window.innerWidth < 1080;
+  const LayoutComponent = isMobile ? Stack : Group;
   return (
-    <Group gap={0} w="100vw" h="100vh" flex={1}>
+    <LayoutComponent gap={0} w="100vw" h="100vh" flex={1}>
       <Box pos="relative" w="100%" h="100vh" flex={1}>
         <Box
           style={{ cursor: appState.hover != null ? 'pointer' : 'unset' }}
@@ -98,10 +100,21 @@ export function SolarSystem() {
         />
       </Box>
       {focusBody != null && (
-        <Box h="100vh" style={{ borderLeft: `1px solid ${focusBody.color}` }}>
-          <FactSheet body={focusBody} bodies={appState.bodies} updateState={updateState} />
+        <Box
+          h={isMobile ? '50vh' : '100vh'}
+          style={{
+            borderLeft: isMobile ? undefined : `1px solid ${focusBody.color}`,
+            borderTop: isMobile ? `1px solid ${focusBody.color}` : undefined,
+          }}
+        >
+          <FactSheet
+            body={focusBody}
+            bodies={appState.bodies}
+            updateState={updateState}
+            width={isMobile ? undefined : 600}
+          />
         </Box>
       )}
-    </Group>
+    </LayoutComponent>
   );
 }

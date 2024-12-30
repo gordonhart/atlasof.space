@@ -87,6 +87,19 @@ export function drawLabelAtLocation(
   ctx.restore();
 }
 
+export function drawDotAtLocation(
+  ctx: CanvasRenderingContext2D,
+  color: `#${string}`,
+  [xPx, yPx]: Point2, // centered on this value
+  radiusPx: number
+) {
+  ctx.beginPath();
+  ctx.arc(xPx, yPx, radiusPx, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.closePath();
+  ctx.fill();
+}
+
 type CaretType = 'right' | 'left' | 'up' | 'down';
 function drawCaretAtLocation(
   ctx: CanvasRenderingContext2D,

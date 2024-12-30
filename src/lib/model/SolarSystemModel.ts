@@ -39,7 +39,7 @@ export class SolarSystemModel {
   private readonly lights: Array<Light>;
 
   private readonly debug = false;
-  private readonly maxSafeDt = Time.HOUR;
+  private readonly maxSafeDt = Time.HOUR / 2;
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
@@ -52,11 +52,7 @@ export class SolarSystemModel {
 
     this.renderer = new WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
     this.renderer.setSize(this.resolution.x, this.resolution.y);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    while (container.firstChild != null) {
-      container.removeChild(container.firstChild);
-    }
-    container.appendChild(this.renderer.domElement);
+    this.setupRenderer(container);
 
     const [w, h] = [this.resolution.x, this.resolution.y];
     this.camera = new OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0, SCALE_FACTOR * 10);
@@ -88,10 +84,11 @@ export class SolarSystemModel {
     }
   }
 
-  resize(width: number, height: number) {
-    this.renderer.setSize(width, height);
+  resize(container: HTMLElement) {
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    this.setupRenderer(container);
     this.composer.setSize(width, height);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.resolution.set(width, height);
     this.firmament.resize(width, height);
     this.camera.left = -width / 2;
@@ -275,5 +272,15 @@ export class SolarSystemModel {
       }
     }
     return closest;
+  }
+
+  private setupRenderer(container: HTMLElement) {
+    const [width, height] = [container.clientWidth, container.clientHeight];
+    this.renderer.setSize(width, height);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    while (container.firstChild != null) {
+      container.removeChild(container.firstChild);
+    }
+    container.appendChild(this.renderer.domElement);
   }
 }
