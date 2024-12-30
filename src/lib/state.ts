@@ -1,5 +1,5 @@
 import { SOLAR_SYSTEM, Time } from './bodies.ts';
-import { CelestialBody, CelestialBodyType, CelestialBodyTypes, Point3 } from './types.ts';
+import { CelestialBody, CelestialBodyType, Point3 } from './types.ts';
 
 export type AppState = {
   time: number; // seconds
@@ -28,7 +28,15 @@ export const initialState: AppState = {
   drawLabel: true,
   center: null,
   hover: null,
-  visibleTypes: new Set(CelestialBodyTypes),
+  visibleTypes: new Set([
+    CelestialBodyType.STAR,
+    CelestialBodyType.PLANET,
+    CelestialBodyType.MOON,
+    CelestialBodyType.DWARF_PLANET,
+    CelestialBodyType.ASTEROID,
+    CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+    // absent: comet, spacecraft
+  ]),
   bodies: SOLAR_SYSTEM,
 
   // set by model on update
