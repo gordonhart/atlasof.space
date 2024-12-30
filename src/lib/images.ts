@@ -52,6 +52,7 @@ import saturnTextureSrc from '../../assets/saturn-texture.jpg';
 import uranusTextureSrc from '../../assets/uranus-texture.jpg';
 import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
 import ceresTextureSrc from '../../assets/ceres-texture.jpg';
+import saturnRingsTextureSrc from '../../assets/saturn-rings-texture.png';
 import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
@@ -109,4 +110,5 @@ export const Textures: Record<string, string> = {
   [Bodies.URANUS.name]: uranusTextureSrc as string,
   [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,
   [Bodies.CERES.name]: ceresTextureSrc as string,
+  [Bodies.SATURN.rings![0].name]: saturnRingsTextureSrc as string,
 };

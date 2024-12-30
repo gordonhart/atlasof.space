@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
-import { ActionIcon, Box, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Group, Image, Stack, Table, Text, Title } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -78,7 +78,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
-            <FactGrid facts={bullets} valueWidth={120} />
+            <FactGrid facts={bullets} />
           </Stack>
           <Thumbnail key={body.name} body={body} size={220} />
         </Group>
@@ -87,7 +87,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
           {isLoading && factBullets.length === 0 ? (
             <LoadingCursor />
           ) : (
-            <FactGrid facts={factBullets} valueWidth={360} isLoading={isLoading} />
+            <FactGrid facts={factBullets} isLoading={isLoading} />
           )}
         </Box>
       </Stack>
@@ -114,27 +114,31 @@ function Summary({ body }: { body: CelestialBody }) {
 
 function FactGrid({
   facts,
-  valueWidth,
   isLoading = false,
 }: {
   facts: Array<{ value: string; label: string }>;
-  valueWidth: number;
   isLoading?: boolean;
 }) {
   return (
-    <Stack gap={2}>
-      {facts.map(({ label, value }, i) => (
-        <Group key={i} gap={2} align="flex-start" wrap="nowrap">
-          <Text inherit w={190} c="dimmed">
-            {label}
-          </Text>
-          <Text span inherit maw={valueWidth}>
-            {value}
-            {isLoading && i + 1 === facts.length && value !== '' && <LoadingCursor />}
-          </Text>
-        </Group>
-      ))}
-    </Stack>
+    <Table fz="xs" horizontalSpacing={0} verticalSpacing={2} withRowBorders={false}>
+      <Table.Tbody>
+        {facts.map(({ label, value }, i) => (
+          <Table.Tr key={i} style={{ verticalAlign: 'top' }}>
+            <Table.Td style={{ width: 190 }}>
+              <Text inherit c="dimmed">
+                {label}
+              </Text>
+            </Table.Td>
+            <Table.Td pl="xs">
+              <Text span inherit>
+                {value}
+                {isLoading && i + 1 === facts.length && value !== '' && <LoadingCursor />}
+              </Text>
+            </Table.Td>
+          </Table.Tr>
+        ))}
+      </Table.Tbody>
+    </Table>
   );
 }
 

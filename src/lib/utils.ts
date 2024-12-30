@@ -37,8 +37,8 @@ export function celestialBodyTypeName(type: CelestialBodyType): string {
     [CelestialBodyType.DWARF_PLANET]: 'Dwarf Planet',
     [CelestialBodyType.ASTEROID]: 'Asteroid',
     [CelestialBodyType.COMET]: 'Comet',
-    [CelestialBodyType.BELT]: 'Belt',
     [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 'Trans-Neptunian Object',
+    [CelestialBodyType.SPACECRAFT]: 'Spacecraft',
   }[type];
 }
 
