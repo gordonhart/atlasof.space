@@ -171,7 +171,6 @@ export function keplerianToCartesian(
 export function convertToEpoch(elements: KeplerianElements, parentMass: number, epoch: Epoch) {
   const { semiMajorAxis: a } = elements;
   const dt = (Number(epochToDate(epoch)) - Number(epochToDate(elements.epoch))) / 1000; // dt in seconds
-  // TODO: this generally works for long-period bodies, but error adds up for closer bodies like Mercury
   const n = Math.sqrt((G * parentMass) / a / a / a); // calculate mean motion
   const newM = elements.meanAnomaly + radiansToDegrees(n * dt); // update mean anomaly
   return { ...elements, epoch, meanAnomaly: ((newM % 360) + 360) % 360 }; // Normalize mean anomaly to [0, 360)
