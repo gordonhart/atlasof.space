@@ -528,27 +528,7 @@ export const TESLA_ROADSTER: CelestialBody = {
   color: DEFAULT_SPACECRAFT_COLOR,
 };
 
-export const ALDRIN_CYCLER: CelestialBody = {
-  name: 'Aldrin Cycler (Earth-Mars transport)',
-  shortName: 'Mars Cycler',
-  type: CelestialBodyType.SPACECRAFT,
-  influencedBy: [SOL.name],
-  elements: {
-    wrt: SOL.name,
-    epoch: J2000,
-    eccentricity: 0.393,
-    semiMajorAxis: 1.6 * AU,
-    inclination: MARS.elements.inclination,
-    longitudeAscending: MARS.elements.longitudeAscending,
-    argumentOfPeriapsis: 260, // TODO
-    meanAnomaly: 310, // TODO
-  },
-  mass: 100e3, // i.e. a Starship
-  radius: 10,
-  color: DEFAULT_SPACECRAFT_COLOR,
-};
-
-export const SPACECRAFT = [TESLA_ROADSTER, ALDRIN_CYCLER];
+export const SPACECRAFT = [TESLA_ROADSTER];
 
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
