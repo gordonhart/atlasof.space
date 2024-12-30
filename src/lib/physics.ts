@@ -1,5 +1,6 @@
-import { G } from './bodies.ts';
-import { CartesianState, KeplerianElements, Point3 } from './types.ts';
+import { CartesianState, CelestialBody, Epoch, KeplerianElements, Point3 } from './types.ts';
+import { G, Time } from './bodies.ts';
+import { epochToDate } from './epoch.ts';
 
 // TODO: use proper vector/matrix library?
 export function add3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
@@ -161,4 +162,22 @@ export function keplerianToCartesian(
   ) as Point3;
 
   return { position: positionInertial, velocity: velocityInertial };
+}
+
+export function convertToEpoch(elements: KeplerianElements, parent: CelestialBody | null, epoch: Epoch) {
+  if (parent == null) return { ...elements, epoch };
+
+  // Calculate time difference in days
+  const dt = (epochToDate(epoch) - epochToDate(elements.epoch)) / (Time.DAY * 1000);
+
+  // Calculate mean motion
+  const n = Math.sqrt((G * parent.mass) / Math.pow(elements.semiMajorAxis, 3));
+
+  // Update mean anomaly
+  let newM = elements.meanAnomaly + degreesToRadians(n * dt);
+
+  // Normalize mean anomaly to [0, 360)
+  newM = ((newM % 360) + 360) % 360;
+
+  return { ...elements, epoch, meanAnomaly: newM };
 }
