@@ -15,6 +15,7 @@ export enum Time {
 
 export const DEFAULT_MOON_COLOR = '#aaaaaa';
 export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 
 export const SOL: CelestialBody = {
   type: CelestialBodyType.STAR,
@@ -506,6 +507,28 @@ export const HALE_BOPP: CelestialBody = {
 
 export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
+export const TESLA_ROADSTER: CelestialBody = {
+  name: "Elon Musk's Tesla Roadster",
+  shortName: 'Roadster',
+  type: CelestialBodyType.SPACECRAFT,
+  influencedBy: [SOL.name],
+  elements: {
+    wrt: SOL.name,
+    epoch: 'J2000',
+    eccentricity: 0.25591503690056,
+    semiMajorAxis: 1.325313962984 * AU,
+    inclination: 1.0737669848641,
+    longitudeAscending: 316.80045452644,
+    argumentOfPeriapsis: 177.89825115403,
+    meanAnomaly: 99.302874432786,
+  },
+  mass: 1300,
+  radius: 2,
+  color: DEFAULT_SPACECRAFT_COLOR,
+};
+
+export const SPACECRAFT = [TESLA_ROADSTER];
+
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
   shortName: 'Pluto',
@@ -975,6 +998,14 @@ export const SATURN: CelestialBody = {
     axialTilt: 26.73,
     siderealPeriod: 10 * Time.HOUR + 32 * Time.MINUTE + 35, // 10 hr 32 min 35 sec
   },
+  rings: [
+    // TODO: separate ring objects for different bands? only have one texture for now
+    {
+      name: 'DCBAF', // represents the main rings, from innermost to outermost
+      start: 70000e3, // rough value from Saturn's center for start of D ring
+      end: 142000e3, // rough value from Saturn's center for end of F ring
+    },
+  ],
   color: '#d7be87',
 };
 
@@ -1441,12 +1472,15 @@ export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTE
 
 export const SOLAR_SYSTEM = [
   SOL,
+  /*
   MERCURY,
   VENUS,
   ...EARTH_SYSTEM,
   ...MARS_SYSTEM,
   ...JUPITER_SYSTEM,
+   */
   ...SATURN_SYSTEM,
+  /*
   ...URANUS_SYSTEM,
   ...NEPTUNE_SYSTEM,
   ...PLUTO_SYSTEM,
@@ -1454,7 +1488,10 @@ export const SOLAR_SYSTEM = [
   ...ASTEROIDS,
   ...COMETS,
   ...TRANS_NEPTUNIAN_OBJECTS,
+  ...SPACECRAFT,
+   */
 ];
 
+// TODO: what to do with these?
 export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
 export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };

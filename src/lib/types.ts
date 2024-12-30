@@ -24,6 +24,12 @@ export type RotationElements = {
   siderealPeriod: number; // seconds
 };
 
+export type Ring = {
+  name: string; // name of this ring
+  start: number; // meters from the center of the parent
+  end: number; // meters from the center of the parent
+};
+
 export enum CelestialBodyType {
   STAR = 'star',
   PLANET = 'planet',
@@ -31,8 +37,8 @@ export enum CelestialBodyType {
   DWARF_PLANET = 'dwarf-planet',
   ASTEROID = 'asteroid',
   COMET = 'comet',
-  BELT = 'belt',
   TRANS_NEPTUNIAN_OBJECT = 'trans-neptunian-object',
+  SPACECRAFT = 'spacecraft',
 }
 export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.STAR,
@@ -41,8 +47,8 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.DWARF_PLANET,
   CelestialBodyType.ASTEROID,
   CelestialBodyType.COMET,
-  // CelestialBodyType.BELT,
   CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  CelestialBodyType.SPACECRAFT,
 ];
 
 export type CelestialBody = {
@@ -54,6 +60,7 @@ export type CelestialBody = {
   radius: number; // m
   elements: KeplerianElements;
   rotation?: RotationElements; // leave empty to omit spin
+  rings?: Array<Ring>;
   color: `#${string}`; // hex
 };
 

@@ -19,7 +19,6 @@ import { AU, G, SOL, Time } from '../bodies.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
-import { Belt3D } from './Belt3D.ts';
 import { isOffScreen } from './utils.ts';
 import { keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
@@ -34,7 +33,6 @@ export class SolarSystemModel {
   private readonly renderer: WebGLRenderer;
   private readonly composer: EffectComposer;
   private bodies: Record<string, KeplerianBody>;
-  private readonly belts: Array<Belt3D>;
   private readonly firmament: Firmament;
   private readonly lights: Array<Light>;
 
@@ -67,8 +65,6 @@ export class SolarSystemModel {
     this.controls.zoomToCursor = true;
 
     this.bodies = this.createBodies(appState);
-    // TODO: enable if we can get the belts to look better; not great currently
-    this.belts = [].map(belt => new Belt3D(this.scene, appState, belt));
     this.firmament = new Firmament(this.resolution);
 
     const renderScene = new RenderPass(this.scene, this.camera);
@@ -85,9 +81,8 @@ export class SolarSystemModel {
   }
 
   resize(container: HTMLElement) {
-    const width = container.clientWidth;
-    const height = container.clientHeight;
     this.setupRenderer(container);
+    const [width, height] = [container.clientWidth, container.clientHeight];
     this.composer.setSize(width, height);
     this.resolution.set(width, height);
     this.firmament.resize(width, height);
@@ -154,7 +149,6 @@ export class SolarSystemModel {
 
   dispose() {
     Object.values(this.bodies).forEach(body => body.dispose());
-    this.belts.forEach(belt => belt.dispose());
     this.lights.forEach(light => light.dispose());
     this.firmament.dispose();
     this.renderer.dispose();
