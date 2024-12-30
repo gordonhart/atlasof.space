@@ -1,5 +1,5 @@
-import { CartesianState, CelestialBody, Epoch, KeplerianElements, Point3 } from './types.ts';
-import { G, Time } from './bodies.ts';
+import { CartesianState, Epoch, KeplerianElements, Point3 } from './types.ts';
+import { G } from './bodies.ts';
 import { epochToDate } from './epoch.ts';
 
 // TODO: use proper vector/matrix library?
@@ -17,6 +17,10 @@ export function mul3(s: number, [a, b, c]: Point3): Point3 {
 
 export function degreesToRadians(degrees: number) {
   return (degrees * Math.PI) / 180;
+}
+
+export function radiansToDegrees(radians: number) {
+  return (radians * 180) / Math.PI;
 }
 
 export function magnitude(v: Array<number>) {
@@ -164,20 +168,11 @@ export function keplerianToCartesian(
   return { position: positionInertial, velocity: velocityInertial };
 }
 
-export function convertToEpoch(elements: KeplerianElements, parent: CelestialBody | null, epoch: Epoch) {
-  if (parent == null) return { ...elements, epoch };
-
-  // Calculate time difference in days
-  const dt = (epochToDate(epoch) - epochToDate(elements.epoch)) / (Time.DAY * 1000);
-
-  // Calculate mean motion
-  const n = Math.sqrt((G * parent.mass) / Math.pow(elements.semiMajorAxis, 3));
-
-  // Update mean anomaly
-  let newM = elements.meanAnomaly + degreesToRadians(n * dt);
-
-  // Normalize mean anomaly to [0, 360)
-  newM = ((newM % 360) + 360) % 360;
-
-  return { ...elements, epoch, meanAnomaly: newM };
+export function convertToEpoch(elements: KeplerianElements, parentMass: number, epoch: Epoch) {
+  const { semiMajorAxis: a } = elements;
+  const dt = (Number(epochToDate(epoch)) - Number(epochToDate(elements.epoch))) / 1000; // dt in seconds
+  // TODO: this generally works for long-period bodies, but error adds up for closer bodies like Mercury
+  const n = Math.sqrt((G * parentMass) / a / a / a); // calculate mean motion
+  const newM = elements.meanAnomaly + radiansToDegrees(n * dt); // update mean anomaly
+  return { ...elements, epoch, meanAnomaly: ((newM % 360) + 360) % 360 }; // Normalize mean anomaly to [0, 360)
 }

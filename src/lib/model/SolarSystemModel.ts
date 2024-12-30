@@ -180,7 +180,8 @@ export class SolarSystemModel {
   private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody, epoch: Epoch) {
     const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.mass ?? 1;
-    const elementsInEpoch = convertToEpoch(body.elements, epoch);
+    const elementsInEpoch =
+      mainParent != null ? convertToEpoch(body.elements, mainParent.body.mass, epoch) : body.elements;
     const cartesian = keplerianToCartesian(elementsInEpoch, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
