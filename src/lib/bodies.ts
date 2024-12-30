@@ -1187,6 +1187,7 @@ export const PHOEBE: CelestialBody = {
 // TODO: there are more moons
 export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
 
+// TODO: add rings
 export const URANUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
