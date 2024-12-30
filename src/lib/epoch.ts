@@ -18,7 +18,7 @@ export function julianDayToEpoch(name: `JD${string}`): Epoch {
   const date = new Date((jd - JD_UNIX_EPOCH) * Time.DAY * 1000); // convert into calendar days
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth();
-  const day = date.getUTCDay();
+  const day = date.getUTCDate();
   const hour = date.getUTCHours();
   const minute = date.getUTCMinutes();
   const second = date.getUTCSeconds();
@@ -28,7 +28,7 @@ export function julianDayToEpoch(name: `JD${string}`): Epoch {
 export function dateToEpoch(name: string, date: Date): Epoch {
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth();
-  const day = date.getUTCDay();
+  const day = date.getUTCDate();
   const hour = date.getUTCHours();
   const minute = date.getUTCMinutes();
   const second = date.getUTCSeconds();
@@ -62,4 +62,8 @@ function getJulianDate(date: Date): `JD${string}` {
   const B = 2 - A + Math.floor(A / 4);
   const jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + decimalDay + B - 1524.5;
   return `JD${jd}`;
+}
+
+export function dateToHumanReadable(date: Date): string {
+  return date.toISOString().split('T')[0];
 }

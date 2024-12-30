@@ -3,9 +3,10 @@ import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
+import { dateToHumanReadable, epochToDate } from '../../lib/epoch.ts';
 
 export const TimeControls = memo(function TimeControlsComponent({ state, updateState }: AppStateControlProps) {
-  const [t, tUnits] = humanTimeUnits(state.time);
+  const date = new Date(Number(epochToDate(state.epoch)) + state.time * 1000);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(state.dt), [state.dt]);
 
   return (
@@ -18,7 +19,7 @@ export const TimeControls = memo(function TimeControlsComponent({ state, updateS
                 t
               </Text>
             </Group>
-            <Text inherit>{pluralize(Number(t.toFixed(0)), tUnits)}</Text>
+            <Text inherit>{dateToHumanReadable(date)}</Text>
           </Group>
           <Group gap={8}>
             <Group justify="flex-end" w={20}>

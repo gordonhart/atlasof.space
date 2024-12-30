@@ -16,7 +16,7 @@ yarn netlify dev
 - [x] Hover interactions (display information about body on hover)
 - [x] Add planetary spin
 - [x] Set true anomaly (via mean anomaly)
-  - [ ] Handle epochs correctly (map everything into consistent time)
+  - [x] Handle epochs correctly (map everything into consistent time)
 - [x] Update visualization to be 3D
 - [x] Move previously drawn paths on pan, zoom, and while paused
 - [ ] Add co-orbitals

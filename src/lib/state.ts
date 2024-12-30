@@ -1,7 +1,9 @@
 import { SOLAR_SYSTEM, Time } from './bodies.ts';
-import { CelestialBody, CelestialBodyType, Point3 } from './types.ts';
+import { CelestialBody, CelestialBodyType, Epoch, Point3 } from './types.ts';
+import { nowEpoch } from './epoch.ts';
 
 export type AppState = {
+  epoch: Epoch;
   time: number; // seconds
   dt: number; // seconds
   play: boolean;
@@ -20,6 +22,7 @@ export type AppState = {
 };
 
 export const initialState: AppState = {
+  epoch: nowEpoch(),
   time: 0,
   dt: 30 * Time.MINUTE,
   play: true,

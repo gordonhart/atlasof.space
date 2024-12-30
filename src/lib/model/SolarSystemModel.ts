@@ -17,14 +17,13 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { AppState } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
-import { CelestialBody, CelestialBodyType, Epoch, Point2, Point3 } from '../types.ts';
+import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { isOffScreen } from './utils.ts';
 import { convertToEpoch, keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
 import { notNullish } from '../utils.ts';
 import { Firmament } from './Firmament.ts';
-import { nowEpoch } from '../epoch.ts';
 
 export class SolarSystemModel {
   private readonly scene: Scene;
@@ -157,7 +156,6 @@ export class SolarSystemModel {
   }
 
   private createBodies(appState: AppState) {
-    const epochNow = nowEpoch();
     const initialState: Record<string, KeplerianBody> = {};
     const toInitialize = [...appState.bodies];
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
@@ -170,18 +168,18 @@ export class SolarSystemModel {
       }
       initialState[body.name] =
         parents.length > 0
-          ? this.createBodyWithParents(appState, parents, body, epochNow)
+          ? this.createBodyWithParents(appState, parents, body)
           : new KeplerianBody(this.scene, this.resolution, appState, null, body, new Vector3(), new Vector3());
     }
     // reverse creation order; first objects created are the highest up in the hierarchy, model them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
   }
 
-  private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody, epoch: Epoch) {
+  private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody) {
     const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.mass ?? 1;
     const elementsInEpoch =
-      mainParent != null ? convertToEpoch(body.elements, mainParent.body.mass, epoch) : body.elements;
+      mainParent != null ? convertToEpoch(body.elements, mainParent.body.mass, appState.epoch) : body.elements;
     const cartesian = keplerianToCartesian(elementsInEpoch, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
