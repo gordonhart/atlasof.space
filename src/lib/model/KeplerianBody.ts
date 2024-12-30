@@ -79,7 +79,8 @@ export class KeplerianBody extends KinematicBody {
     return [pixelX, pixelY]; // return pixel values
   }
 
-  drawLabel(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number) {
+  // draw the dot and label for this body
+  drawAnnotations(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number, drawLabel = true) {
     if (!this.visible) return;
 
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera);
@@ -100,8 +101,10 @@ export class KeplerianBody extends KinematicBody {
       if (bodyRadius < this.dotRadius) {
         drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
       }
-      const labelRadius = Math.max(bodyRadius, 1) + 5;
-      drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
+      if (drawLabel) {
+        const labelRadius = Math.max(bodyRadius, 1) + 5;
+        drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
+      }
     }
   }
 

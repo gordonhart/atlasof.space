@@ -123,7 +123,7 @@ export class SolarSystemModel {
       body.update(appState, parentState ?? null);
     });
     this.composer.render();
-    this.drawLabels(ctx, appState);
+    this.drawAnnotations(ctx, appState);
   }
 
   add(appState: AppState, body: CelestialBody) {
@@ -210,17 +210,15 @@ export class SolarSystemModel {
     });
   }
 
-  private drawLabels(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
+  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
-    if (drawLabel) {
-      Object.values(this.bodies).forEach(body => {
-        body.drawLabel(ctx, this.camera, metersPerPx);
-      });
-    }
+    Object.values(this.bodies).forEach(body => {
+      body.drawAnnotations(ctx, this.camera, metersPerPx, drawLabel);
+    });
     const hoverBody = this.bodies[hover ?? ''];
     if (hoverBody != null) {
-      hoverBody.drawLabel(ctx, this.camera, metersPerPx);
+      hoverBody.drawAnnotations(ctx, this.camera, metersPerPx);
     }
   }
 
