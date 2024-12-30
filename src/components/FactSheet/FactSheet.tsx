@@ -13,6 +13,7 @@ import { iconSize } from '../Controls/constants.ts';
 import { MajorMoons } from './MajorMoons.tsx';
 import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { OtherBodies } from './OtherBodies.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -92,6 +93,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
       <Box style={{ justifySelf: 'flex-end' }}>
         <MajorMoons body={body} bodies={bodies} updateState={updateState} />
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+        <OtherBodies body={body} bodies={bodies} updateState={updateState} />
       </Box>
     </Stack>
   );

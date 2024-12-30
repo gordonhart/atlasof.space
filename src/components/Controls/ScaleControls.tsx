@@ -3,14 +3,14 @@ import { ScaleIndicator } from './ScaleIndicator.tsx';
 import { memo } from 'react';
 import { AppState } from '../../lib/state.ts';
 import { DirectionIndicator } from './DirectionIndicator.tsx';
-import { Stack } from '@mantine/core';
+import { Group } from '@mantine/core';
 
 type Props = Pick<AppState, 'metersPerPx' | 'vernalEquinox'>;
 export const ScaleControls = memo(function ScaleControlsComponent({ metersPerPx, vernalEquinox }: Props) {
   return (
-    <Stack gap={buttonGap} align="flex-end">
-      <DirectionIndicator vernalEquinox={vernalEquinox} />
+    <Group gap={buttonGap} align="flex-end">
       <ScaleIndicator metersPerPx={metersPerPx} />
-    </Stack>
+      <DirectionIndicator vernalEquinox={vernalEquinox} />
+    </Group>
   );
 });

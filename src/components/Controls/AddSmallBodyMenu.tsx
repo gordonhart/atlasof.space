@@ -537,6 +537,7 @@ type Props = Pick<AppStateControlProps, 'state'> & {
   removeBody: (name: string) => void;
 };
 export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
+  const existingBodyNames = new Set(state.bodies.map(({ name }) => name));
   const initialCheckedState = useMemo(() => {
     const names = state.bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
     const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
@@ -544,7 +545,7 @@ export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
   }, [JSON.stringify(state.bodies)]);
 
   const tree = useTree({ initialCheckedState });
-  const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue);
+  const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue).filter(name => !existingBodyNames.has(name));
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
   const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
 
