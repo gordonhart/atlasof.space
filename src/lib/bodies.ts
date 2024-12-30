@@ -1473,15 +1473,12 @@ export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTE
 
 export const SOLAR_SYSTEM = [
   SOL,
-  /*
   MERCURY,
   VENUS,
   ...EARTH_SYSTEM,
   ...MARS_SYSTEM,
   ...JUPITER_SYSTEM,
-   */
   ...SATURN_SYSTEM,
-  /*
   ...URANUS_SYSTEM,
   ...NEPTUNE_SYSTEM,
   ...PLUTO_SYSTEM,
@@ -1490,7 +1487,6 @@ export const SOLAR_SYSTEM = [
   ...COMETS,
   ...TRANS_NEPTUNIAN_OBJECTS,
   ...SPACECRAFT,
-   */
 ];
 
 // TODO: what to do with these?

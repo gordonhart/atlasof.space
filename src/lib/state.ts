@@ -26,7 +26,7 @@ export const initialState: AppState = {
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  center: 'Saturn', // TODO: revert to null
+  center: null,
   hover: null,
   visibleTypes: new Set(CelestialBodyTypes),
   bodies: SOLAR_SYSTEM,
