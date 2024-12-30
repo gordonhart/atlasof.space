@@ -39,7 +39,7 @@ export class SolarSystemModel {
   private readonly lights: Array<Light>;
 
   private readonly debug = false;
-  private readonly maxSafeDt = Time.HOUR;
+  private readonly maxSafeDt = Time.HOUR / 2;
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
@@ -209,7 +209,6 @@ export class SolarSystemModel {
   private incrementKinematicsSafe(dt: number) {
     // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
     //  opposite algorithm to the one performed during initialization
-    // const parentStates = map(body => pick(['positionB', 'velocityB', 'massB'], body), this.bodies);
     const parentStates = map(
       body => ({ position: body.position.clone(), velocity: body.velocity.clone(), mass: body.mass }),
       this.bodies

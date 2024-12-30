@@ -70,7 +70,6 @@ export class SphericalBody {
     this.sphere.position.copy(position).divideScalar(SCALE_FACTOR);
     this.sphere.rotation.y = degreesToRadians(rotation);
     this.sphere.visible = visible;
-    this.sphere.visible = false;
     this.dot.geometry.attributes.position.array[0] = this.sphere.position.x;
     this.dot.geometry.attributes.position.array[1] = this.sphere.position.y;
     this.dot.geometry.attributes.position.array[2] = this.sphere.position.z;

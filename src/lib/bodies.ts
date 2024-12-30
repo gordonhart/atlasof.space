@@ -166,10 +166,14 @@ export const PHOBOS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.0151,
     semiMajorAxis: 9376e3,
-    inclination: 1.093,
+    inclination: 1.093 + MARS.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
+  },
+  rotation: {
+    axialTilt: 0,
+    siderealPeriod: 7 * Time.HOUR + 39 * Time.MINUTE + 12, // synchronous
   },
   mass: 1.0659e16,
   radius: 11.2667e3,
@@ -185,10 +189,14 @@ export const DEIMOS: CelestialBody = {
     epoch: 'J2000', // TODO: verify
     eccentricity: 0.00033,
     semiMajorAxis: 23458e3,
-    inclination: 1.788,
+    inclination: 0.93 + MARS.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
+  },
+  rotation: {
+    axialTilt: 0,
+    siderealPeriod: 30.312 * Time.HOUR, // synchronous
   },
   mass: 1.4762e15,
   radius: 6.2e3,
