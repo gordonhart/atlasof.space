@@ -1,3 +1,5 @@
+import { memo } from 'react';
+import { IconX } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
@@ -7,12 +9,11 @@ import { GalleryImages } from '../../lib/images.ts';
 import { Thumbnail } from './Thumbnail.tsx';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
-import { memo } from 'react';
-import { IconX } from '@tabler/icons-react';
 import { iconSize } from '../Controls/constants.ts';
 import { MajorMoons } from './MajorMoons.tsx';
 import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { ParentBody } from './ParentBody.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 
 type Props = {
@@ -91,8 +92,9 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
+        <ParentBody body={body} bodies={bodies} updateState={updateState} />
         <OtherBodies body={body} bodies={bodies} updateState={updateState} />
       </Box>
     </Stack>

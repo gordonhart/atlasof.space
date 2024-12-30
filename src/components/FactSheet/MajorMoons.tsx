@@ -1,10 +1,8 @@
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { useMemo } from 'react';
-import { Group, Paper, Stack, Text, Title } from '@mantine/core';
-import { Thumbnail } from './Thumbnail.tsx';
+import { Stack, Title } from '@mantine/core';
 import { AppState } from '../../lib/state.ts';
-import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
-import { LoadingCursor } from './LoadingCursor.tsx';
+import { BodyCard } from './BodyCard.tsx';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);
 
@@ -32,26 +30,8 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
     <Stack gap="xs" p="md" pt="xl">
       <Title order={5}>Major Satellites</Title>
       {moons.map((moon, i) => (
-        <MoonCard key={i} body={moon} updateState={updateState} />
+        <BodyCard key={i} body={moon} updateState={updateState} />
       ))}
     </Stack>
-  );
-}
-
-function MoonCard({ body, updateState }: Pick<Props, 'body' | 'updateState'>) {
-  const { data: summary, isLoading } = useSummaryStream(body);
-  return (
-    <Paper withBorder p="xs" style={{ cursor: 'pointer' }} onClick={() => updateState({ center: body.name })}>
-      <Group gap="xs" justify="space-between" align="flex-start" wrap="nowrap">
-        <Stack gap={4}>
-          <Title order={6}>{body.name}</Title>
-          <Text inherit c="dimmed">
-            {summary}
-            {isLoading && <LoadingCursor />}
-          </Text>
-        </Stack>
-        <Thumbnail body={body} size={100} />
-      </Group>
-    </Paper>
   );
 }
