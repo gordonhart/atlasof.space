@@ -39,6 +39,7 @@ export const initialState: AppState = {
     CelestialBodyType.ASTEROID,
     CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
     // absent: comet, spacecraft
+    CelestialBodyType.SPACECRAFT, // TODO: remove
   ]),
   bodies: SOLAR_SYSTEM,
 
