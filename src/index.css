@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Electrolize';
-  src: url('/assets/electrolize.ttf') format('ttf');
+  src: url('../assets/electrolize.ttf') format('truetype');
 }
 
 body {

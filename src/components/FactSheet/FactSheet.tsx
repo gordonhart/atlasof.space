@@ -55,6 +55,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         p="md"
         gap="xs"
         justify="space-between"
+        wrap="nowrap"
         style={{ borderBottom: `1px solid ${body.color}` }}
       >
         <Caret position="tl" color={body.color} />

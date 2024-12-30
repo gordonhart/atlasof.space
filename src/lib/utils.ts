@@ -29,8 +29,8 @@ export function humanDistanceUnits(d: number): [number, string] {
   }
 }
 
-export function celestialBodyTypeName(type: CelestialBodyType): string {
-  return {
+export function celestialBodyTypeName(type: CelestialBodyType, plural = false): string {
+  const baseName = {
     [CelestialBodyType.STAR]: 'Star',
     [CelestialBodyType.PLANET]: 'Planet',
     [CelestialBodyType.MOON]: 'Moon',
@@ -40,6 +40,8 @@ export function celestialBodyTypeName(type: CelestialBodyType): string {
     [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 'Trans-Neptunian Object',
     [CelestialBodyType.SPACECRAFT]: 'Spacecraft',
   }[type];
+  if (!plural) return baseName;
+  return type !== CelestialBodyType.SPACECRAFT ? `${baseName}s` : baseName;
 }
 
 export function notNullish<TValue>(value: TValue | null | undefined): value is TValue {
