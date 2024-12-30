@@ -37,7 +37,7 @@ export class KinematicBody {
       const distance = this.tmp.length();
       this.tmp // gravitational acceleration from parent
         .multiplyScalar(-G * parent.mass)
-        .divideScalar(distance)
+        .divideScalar(distance) // apply as three separate operations to avoid very large r^3 value
         .divideScalar(distance)
         .divideScalar(distance);
       this.acceleration.add(this.tmp);

@@ -374,30 +374,6 @@ export const LUTETIA: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const CG67P: CelestialBody = {
-  type: CelestialBodyType.COMET,
-  name: '67P/Churyumov–Gerasimenko',
-  shortName: '67P/C–G',
-  influencedBy: [SOL.name],
-  mass: 1e13, // kg
-  radius: 2000, // m (average radius based on dimensions)
-  elements: {
-    wrt: SOL.name,
-    epoch: 'J2000', // TODO: verify
-    eccentricity: 0.64,
-    semiMajorAxis: 3.463 * 1.496e11, // AU to meters
-    inclination: 7.04, // degrees
-    longitudeAscending: 50.19, // degrees
-    argumentOfPeriapsis: 12.78, // degrees
-    meanAnomaly: 0, // degrees (value at perihelion)
-  },
-  rotation: {
-    axialTilt: 52,
-    siderealPeriod: 12.4 * Time.HOUR,
-  },
-  color: DEFAULT_ASTEROID_COLOR,
-};
-
 export const EROS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '433 Eros',
@@ -463,7 +439,72 @@ export const NEREUS: CelestialBody = {
 };
 
 export const ASTEROIDS = [CERES, PALLAS, VESTA, HYGIEA, JUNO, RYUGU, BENNU, LUTETIA, EROS, MATHILDE, NEREUS];
-export const COMETS: Array<CelestialBody> = [CG67P];
+
+export const CG67P: CelestialBody = {
+  type: CelestialBodyType.COMET,
+  name: '67P/Churyumov–Gerasimenko',
+  shortName: '67P/C–G',
+  influencedBy: [SOL.name],
+  mass: 1e13, // kg
+  radius: 2000, // m (average radius based on dimensions)
+  elements: {
+    wrt: SOL.name,
+    epoch: 'J2000', // TODO: verify
+    eccentricity: 0.64,
+    semiMajorAxis: 3.463 * AU,
+    inclination: 7.04, // degrees
+    longitudeAscending: 50.19, // degrees
+    argumentOfPeriapsis: 12.78, // degrees
+    meanAnomaly: 0, // degrees (value at perihelion)
+  },
+  rotation: {
+    axialTilt: 52,
+    siderealPeriod: 12.4 * Time.HOUR,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const HALLEY: CelestialBody = {
+  type: CelestialBodyType.COMET,
+  name: "Halley's Comet (1P/Halley)",
+  shortName: 'Halley',
+  influencedBy: [SOL.name],
+  mass: 2.2e14,
+  radius: 5.5e3, // average radius based on dimensions
+  elements: {
+    wrt: SOL.name,
+    epoch: 'JD2474040.5', // TODO: find J2000
+    eccentricity: 0.96658,
+    semiMajorAxis: 17.737 * AU,
+    inclination: 161.96,
+    longitudeAscending: 59.396,
+    argumentOfPeriapsis: 112.05,
+    meanAnomaly: 0.07323,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const HALE_BOPP: CelestialBody = {
+  type: CelestialBodyType.COMET,
+  name: 'Hale-Bopp (C/1995 O1)',
+  shortName: 'Hale-Bopp',
+  influencedBy: [SOL.name],
+  mass: 1.3e19,
+  radius: 30e3, // average radius based on dimensions
+  elements: {
+    wrt: SOL.name,
+    epoch: 'JD2459837.5', // TODO: find J2000
+    eccentricity: 0.99498,
+    semiMajorAxis: 177.43 * AU,
+    inclination: 89.3,
+    longitudeAscending: 282.73,
+    argumentOfPeriapsis: 130.41,
+    meanAnomaly: 3.8784,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
 export const PLUTO: CelestialBody = {
   name: '134340 Pluto',

@@ -1,10 +1,10 @@
 import { CelestialBody } from '../../lib/types.ts';
 import { AppState } from '../../lib/state.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
-import { Group, Pill, Stack, Text, Title } from '@mantine/core';
-import { IconArrowUpRight } from '@tabler/icons-react';
+import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import styles from './RelatedBodies.module.css';
 import { useMemo } from 'react';
+import { Thumbnail } from './Thumbnail.tsx';
 
 const N_RELATED = 6;
 
@@ -23,20 +23,23 @@ export function OtherBodies({ body, bodies, updateState }: Props) {
     return bodiesOfType.slice(startIndex, startIndex + N_RELATED);
   }, [JSON.stringify(body), JSON.stringify(bodies)]);
 
+  const thumbnailSize = 14;
   return otherBodies.length > 0 ? (
     <Stack gap="xs" p="md">
       <Title order={5}>Other {celestialBodyTypeName(body.type)}s</Title>
       <Group gap={8}>
         {otherBodies.map((relatedBody, i) => (
           <Pill
-            key={i}
+            key={`${relatedBody.name}-${i}`}
             className={styles.LinkPill}
             style={{ cursor: 'pointer' }}
             onClick={() => updateState({ center: relatedBody.name })}
           >
-            <Group gap={2} align="center" wrap="nowrap">
-              <Text inherit>{relatedBody.shortName ?? relatedBody.name}</Text>
-              <IconArrowUpRight size={14} />
+            <Group gap={8} align="center" wrap="nowrap">
+              <Box w={thumbnailSize}>
+                <Thumbnail body={relatedBody} size={thumbnailSize} />
+              </Box>
+              {relatedBody.shortName ?? relatedBody.name}
             </Group>
           </Pill>
         ))}
