@@ -37,9 +37,8 @@ export function useSolarSystemModel() {
   }
 
   function resize() {
-    const width = containerRef.current?.clientWidth ?? window.innerWidth;
-    const height = containerRef.current?.clientHeight ?? window.innerHeight;
-    modelRef.current?.resize(width, height);
+    if (containerRef.current == null) return;
+    modelRef.current?.resize(containerRef.current);
     initializeCanvas();
   }
 

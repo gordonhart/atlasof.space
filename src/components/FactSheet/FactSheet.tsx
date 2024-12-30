@@ -20,8 +20,9 @@ type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
   updateState: (update: Partial<AppState>) => void;
+  width?: number;
 };
-export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState }: Props) {
+export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState, width }: Props) {
   const { name, type, mass, radius, elements } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
@@ -46,7 +47,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={600} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack w={width} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <Group
         pos="sticky"
         top={0}
