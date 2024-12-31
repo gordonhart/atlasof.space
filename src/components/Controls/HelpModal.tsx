@@ -4,22 +4,72 @@ import {
   IconArrowsMove,
   IconCircleDot,
   IconClick,
+  IconHandClick,
+  IconHandMove,
+  IconHandTwoFingers,
   IconHelp,
   IconRotate3d,
   IconX,
   IconZoomScan,
 } from '@tabler/icons-react';
 import { ReactNode } from 'react';
+import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
+
+const MOUSE_BULLETS = [
+  {
+    IconComponent: IconZoomScan,
+    segments: [{ content: 'Scroll', highlight: true }, { content: ' to zoom' }],
+  },
+  {
+    IconComponent: IconRotate3d,
+    segments: [{ content: 'Click + drag', highlight: true }, { content: ' to rotate' }],
+  },
+  {
+    IconComponent: IconArrowsMove,
+    segments: [{ content: 'Double-click + drag', highlight: true }, { content: ' to pan' }],
+  },
+  {
+    IconComponent: IconClick,
+    segments: [{ content: 'Click', highlight: true }, { content: ' on an object to learn more' }],
+  },
+];
+const TOUCH_BULLETS = [
+  {
+    IconComponent: IconZoomScan,
+    segments: [{ content: 'Pinch', highlight: true }, { content: ' to zoom' }],
+  },
+  {
+    IconComponent: IconHandMove,
+    segments: [{ content: 'Drag', highlight: true }, { content: ' to rotate' }],
+  },
+  {
+    IconComponent: IconHandTwoFingers,
+    segments: [{ content: 'Drag with two fingers', highlight: true }, { content: ' to pan' }],
+  },
+  {
+    IconComponent: IconHandClick,
+    segments: [{ content: 'Tap', highlight: true }, { content: ' on an object to learn more' }],
+  },
+];
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 export function HelpModal({ isOpen, onClose }: Props) {
+  const isTouchDevice = useIsTouchDevice();
+
   return (
-    <Modal opened={isOpen} onClose={onClose} withCloseButton={false} centered transitionProps={{ transition: 'fade' }}>
+    <Modal
+      size="md"
+      opened={isOpen}
+      onClose={onClose}
+      withCloseButton={false}
+      centered
+      transitionProps={{ transition: 'fade' }}
+    >
       <Stack
         gap={0}
         fz="sm"
@@ -49,22 +99,9 @@ export function HelpModal({ isOpen, onClose }: Props) {
           />
           {/* TODO: change wording if user is on mobile */}
           <List fz="sm" spacing="xs" withPadding center>
-            <ControlBullet
-              IconComponent={IconZoomScan}
-              segments={[{ content: 'Scroll', highlight: true }, { content: ' to zoom' }]}
-            />
-            <ControlBullet
-              IconComponent={IconRotate3d}
-              segments={[{ content: 'Click + drag', highlight: true }, { content: ' to rotate' }]}
-            />
-            <ControlBullet
-              IconComponent={IconArrowsMove}
-              segments={[{ content: 'Double-click + drag', highlight: true }, { content: ' to pan' }]}
-            />
-            <ControlBullet
-              IconComponent={IconClick}
-              segments={[{ content: 'Click', highlight: true }, { content: ' on an object to learn more' }]}
-            />
+            {(isTouchDevice ? TOUCH_BULLETS : MOUSE_BULLETS).map(({ IconComponent, segments }, i) => (
+              <ControlBullet key={i} IconComponent={IconComponent} segments={segments} />
+            ))}
           </List>
           <HighlightedText
             segments={[
