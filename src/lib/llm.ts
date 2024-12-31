@@ -27,16 +27,16 @@ export function asSseStream(stream: MessageStream) {
   });
 }
 
-export function simulateTokenGeneration(eventStream: string) {
+export function simulateTokenGeneration(eventStream: string, delayMin = 10, delayMax = 25) {
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
-  const [delayMin, delayMax] = [10, 25]; // Random delay between 10-25ms per "token"
 
   // Process in the background
   (async () => {
     const chunks = eventStream.split(' ');
     const encoder = new TextEncoder();
     for (const chunk of chunks) {
+      // random delay between delayMin and delayMax milliseconds per "token"
       await new Promise(resolve => setTimeout(resolve, Math.random() * (delayMax - delayMin) + delayMin));
       await writer.write(encoder.encode(chunk + ' '));
     }

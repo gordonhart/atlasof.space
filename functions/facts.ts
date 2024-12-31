@@ -175,7 +175,7 @@ export default async function handle(request: Request) {
   const store = getStore('facts');
   const stored = await store.get(search);
   if (stored != null) {
-    return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
+    return new Response(simulateTokenGeneration(stored, 5, 15), { headers: responseHeaders });
   }
 
   const id = await getWikidataId(search);
