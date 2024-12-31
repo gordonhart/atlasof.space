@@ -4,6 +4,7 @@ import {
   IconCircleDot,
   IconCircleFilled,
   IconEyeCog,
+  IconHelp,
   IconRestore,
   IconTagMinus,
   IconTagPlus,
@@ -11,9 +12,11 @@ import {
 import { CelestialBody, CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
+import { useDisclosure } from '@mantine/hooks';
+import { HelpModal } from './HelpModal.tsx';
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
@@ -27,6 +30,23 @@ export const GeneralControls = memo(function GeneralControlsComponent({
   removeBody,
   reset,
 }: Props) {
+  const [helpOpen, helpControls] = useDisclosure(false);
+
+  function openHelp() {
+    updateState({ play: false });
+    helpControls.open();
+  }
+
+  function closeHelp() {
+    updateState({ play: true });
+    helpControls.close();
+  }
+
+  // TODO: store in localStorage when this is closed and avoid opening it by default for people who have visited before
+  useEffect(() => {
+    openHelp();
+  }, []);
+
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
       ? new Set([...state.visibleTypes].filter(t => t !== type))
@@ -85,6 +105,14 @@ export const GeneralControls = memo(function GeneralControlsComponent({
           <IconRestore size={iconSize} />
         </ActionIcon>
       </Tooltip>
+
+      <Tooltip position="top" label="Help">
+        <ActionIcon onClick={openHelp}>
+          <IconHelp size={iconSize} />
+        </ActionIcon>
+      </Tooltip>
+
+      <HelpModal isOpen={helpOpen} onClose={closeHelp} />
     </Group>
   );
 });

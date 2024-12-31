@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Spotlight, spotlight } from '@mantine/spotlight';
-import { ActionIcon, Box, Group, Kbd, Text } from '@mantine/core';
+import { ActionIcon, Box, Group, Kbd, Text, Tooltip } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
 import styles from './SelectOmnibox.module.css';
@@ -45,9 +45,11 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
 
   return (
     <>
-      <ActionIcon onClick={spotlight.open}>
-        <IconSearch size={iconSize} />
-      </ActionIcon>
+      <Tooltip position="top" label="Search">
+        <ActionIcon onClick={spotlight.open}>
+          <IconSearch size={iconSize} />
+        </ActionIcon>
+      </Tooltip>
 
       <Spotlight.Root
         radius="md"
