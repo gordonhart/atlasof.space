@@ -916,7 +916,7 @@ export const IO: CelestialBody = {
   },
   mass: 8.931938e22,
   radius: 1821.6e3,
-  color: DEFAULT_MOON_COLOR,
+  color: '#fcf794',
 };
 
 export const EUROPA: CelestialBody = {
@@ -935,7 +935,7 @@ export const EUROPA: CelestialBody = {
   },
   mass: 4.799844e22,
   radius: 1560.8e3,
-  color: DEFAULT_MOON_COLOR,
+  color: '#bfcccb',
 };
 
 export const GANYMEDE: CelestialBody = {
@@ -1121,7 +1121,7 @@ export const TITAN: CelestialBody = {
   },
   mass: 1.3452e23,
   radius: 2574.7e3,
-  color: DEFAULT_MOON_COLOR,
+  color: '#f1e193',
 };
 
 export const IAPETUS: CelestialBody = {
