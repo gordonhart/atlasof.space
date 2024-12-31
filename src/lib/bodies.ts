@@ -39,6 +39,12 @@ export const SOL: CelestialBody = {
     siderealPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
   },
   color: '#fa0',
+  facts: [
+    { label: 'age', value: '4.6 billion years' },
+    { label: 'star type', value: 'G-type main-sequence star (yellow dwarf)' },
+    { label: 'temperature (center)', value: '15,700,000 K' },
+    { label: 'temperature (corona)', value: '5,000,000 K' },
+  ],
 };
 
 export const MERCURY: CelestialBody = {
@@ -62,6 +68,12 @@ export const MERCURY: CelestialBody = {
     siderealPeriod: 58.6467 * Time.DAY,
   },
   color: '#b3aeae',
+  facts: [
+    {
+      label: 'solar day length',
+      value: 'A solar day on Mercury (176 Earth days) is longer than a year (88 Earth days)',
+    },
+  ],
 };
 
 // TODO: add pseudo-moon Zoozve?
@@ -113,7 +125,8 @@ export const EARTH: CelestialBody = {
 
 export const LUNA: CelestialBody = {
   type: CelestialBodyType.MOON,
-  name: 'Luna',
+  name: 'Luna (The Moon)',
+  shortName: 'Luna',
   influencedBy: [SOL.name, EARTH.name],
   elements: {
     wrt: EARTH.name,
@@ -916,7 +929,7 @@ export const IO: CelestialBody = {
   },
   mass: 8.931938e22,
   radius: 1821.6e3,
-  color: DEFAULT_MOON_COLOR,
+  color: '#fcf794',
 };
 
 export const EUROPA: CelestialBody = {
@@ -935,7 +948,14 @@ export const EUROPA: CelestialBody = {
   },
   mass: 4.799844e22,
   radius: 1560.8e3,
-  color: DEFAULT_MOON_COLOR,
+  color: '#bfcccb',
+  facts: [
+    {
+      label: 'volume of water',
+      value:
+        "Europa's subsurface ocean is believed to contain about twice as much water as all of Earth's oceans, combined",
+    },
+  ],
 };
 
 export const GANYMEDE: CelestialBody = {
@@ -1121,7 +1141,7 @@ export const TITAN: CelestialBody = {
   },
   mass: 1.3452e23,
   radius: 2574.7e3,
-  color: DEFAULT_MOON_COLOR,
+  color: '#f1e193',
 };
 
 export const IAPETUS: CelestialBody = {

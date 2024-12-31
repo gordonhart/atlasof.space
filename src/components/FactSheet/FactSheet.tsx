@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
-import { ActionIcon, Box, Group, Image, Stack, Table, Text, Title } from '@mantine/core';
-import { CelestialBody } from '../../lib/types.ts';
+import { ActionIcon, Box, Group, Stack, Table, Text, Title } from '@mantine/core';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g } from '../../lib/bodies.ts';
@@ -15,6 +15,7 @@ import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 import { ParentBody } from './ParentBody.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
+import { Gallery } from './Gallery.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -34,11 +35,14 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const bullets: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
-    { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
-    { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
-    { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
-    { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
-    { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
+    // prettier-ignore
+    ...(body.type !== CelestialBodyType.STAR ? [
+      { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
+      { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
+      { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
+      { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
+      { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
+    ] : []),
     ...(parent != null ? [{ label: 'orbital period', value: pluralize(periodTime, periodUnits) }] : []),
     // prettier-ignore
     ...(rotation != null ? [
@@ -49,6 +53,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
       { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
     ] : []),
     { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
+    ...(body.facts ?? []),
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];
   const factBullets = factsAsBullets(facts);
@@ -153,22 +158,6 @@ function FactGrid({
   );
 }
 
-function Gallery({ urls }: { urls: Array<string> }) {
-  const nPerRow = 3;
-  const galleryGap = 16;
-  const galleryImageWidth = 178;
-  return (
-    <Stack p="md" gap="xs">
-      <Title order={5}>Gallery</Title>
-      <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
-        {urls.map((image, i) => (
-          <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
-        ))}
-      </Group>
-    </Stack>
-  );
-}
-
 function Caret({ color, position }: { color: string; position: 'tl' | 'tr' | 'bl' | 'br' }) {
   const size = 8;
   const pad = 'calc(var(--mantine-spacing-md) / 4)';
@@ -216,7 +205,10 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
       if (currentLabel != null) {
         result.push({
           label: currentLabel.toLowerCase(),
-          value: currentValues.filter(v => v !== '').join(', '),
+          value: currentValues
+            .filter(v => v !== '')
+            .join(', ')
+            .replace(/\.$/, ''),
         });
         currentLabel = null;
       }
@@ -239,7 +231,10 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
   if (currentLabel != null) {
     result.push({
       label: currentLabel.toLowerCase(),
-      value: currentValues.filter(v => v !== '').join(', '),
+      value: currentValues
+        .filter(v => v !== '')
+        .join(', ')
+        .replace(/\.$/, ''),
     });
   }
 

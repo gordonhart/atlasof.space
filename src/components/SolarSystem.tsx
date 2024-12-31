@@ -108,6 +108,7 @@ export function SolarSystem() {
           }}
         >
           <FactSheet
+            key={focusBody.name}
             body={focusBody}
             bodies={appState.bodies}
             updateState={updateState}
