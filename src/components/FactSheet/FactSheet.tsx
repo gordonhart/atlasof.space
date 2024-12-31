@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
-import { ActionIcon, Box, Group, Image, Stack, Table, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Group, Stack, Table, Text, Title } from '@mantine/core';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -15,6 +15,7 @@ import { AppState } from '../../lib/state.ts';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 import { ParentBody } from './ParentBody.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
+import { Gallery } from './Gallery.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -154,22 +155,6 @@ function FactGrid({
         ))}
       </Table.Tbody>
     </Table>
-  );
-}
-
-function Gallery({ urls }: { urls: Array<string> }) {
-  const nPerRow = 3;
-  const galleryGap = 16;
-  const galleryImageWidth = 178;
-  return (
-    <Stack p="md" gap="xs">
-      <Title order={5}>Gallery</Title>
-      <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
-        {urls.map((image, i) => (
-          <Image key={i} radius="md" src={image} maw={galleryImageWidth} />
-        ))}
-      </Group>
-    </Stack>
   );
 }
 

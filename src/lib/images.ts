@@ -30,12 +30,18 @@ import makemakeSrc from '../../assets/makemake-thumb.jpg';
 import erosSrc from '../../assets/eros-thumb.jpg';
 import mathildeSrc from '../../assets/mathilde-thumb.jpg';
 import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
+import marsVikingSrc from '../../assets/mars-viking.jpg';
+import marsCuriositySrc from '../../assets/mars-curiosity.jpg';
+import marsKorolevSrc from '../../assets/mars-korolev.jpg';
 import cg67pAnimationSrc from '../../assets/cg67p-animation.gif';
 import cg67pThumb2Src from '../../assets/cg67p-thumb2.jpg';
 import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
 import bennuLandingSrc from '../../assets/bennu-landing.jpg';
 import bennuRotationSrc from '../../assets/bennu-rotation.gif';
 import bennuSurfaceSrc from '../../assets/bennu-surface.jpg';
+import ryuguSurfaceSrc from '../../assets/ryugu-surface.jpg';
+import ryuguSurface2Src from '../../assets/ryugu-surface2.jpg';
+import ryuguRotationSrc from '../../assets/ryugu-rotation.gif';
 import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
@@ -91,10 +97,12 @@ export const Thumbnails: Record<string, string> = {
 } as const;
 
 export const GalleryImages: Record<string, Array<string>> = {
+  [Bodies.MARS.name]: [marsKorolevSrc, marsVikingSrc, marsCuriositySrc] as Array<string>,
   [Bodies.CG67P.name]: [cg67pAnimationSrc, cg67pThumb2Src, cg67pThumb3Src] as Array<string>,
   [Bodies.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
   [Bodies.ARROKOTH.name]: [arrokothAnimationSrc] as Array<string>,
   [Bodies.BENNU.name]: [bennuLandingSrc, bennuRotationSrc, bennuSurfaceSrc] as Array<string>,
+  [Bodies.RYUGU.name]: [ryuguSurfaceSrc, ryuguSurface2Src, ryuguRotationSrc] as Array<string>,
 } as const;
 
 export const Textures: Record<string, string> = {

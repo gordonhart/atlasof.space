@@ -68,6 +68,12 @@ export const MERCURY: CelestialBody = {
     siderealPeriod: 58.6467 * Time.DAY,
   },
   color: '#b3aeae',
+  facts: [
+    {
+      label: 'solar day length',
+      value: 'A solar day on Mercury (176 Earth days) is longer than a year (88 Earth days)',
+    },
+  ],
 };
 
 // TODO: add pseudo-moon Zoozve?
@@ -119,7 +125,8 @@ export const EARTH: CelestialBody = {
 
 export const LUNA: CelestialBody = {
   type: CelestialBodyType.MOON,
-  name: 'Luna',
+  name: 'Luna (The Moon)',
+  shortName: 'Luna',
   influencedBy: [SOL.name, EARTH.name],
   elements: {
     wrt: EARTH.name,
