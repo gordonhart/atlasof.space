@@ -40,7 +40,7 @@ export class KeplerianBody extends KinematicBody {
     this.screenPosition = new Vector3();
     this.visible = appState.visibleTypes.has(body.type);
     const color = new Color(body.color);
-    this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, color);
+    this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, position, color);
     this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
     this.sphere = new SphericalBody(scene, body, position);
     this.dotRadius = KeplerianBody.getDotRadius(body);
@@ -52,9 +52,9 @@ export class KeplerianBody extends KinematicBody {
   update(appState: AppState, parent: this | null) {
     this.visible = appState.visibleTypes.has(this.body.type);
     this.sphere.update(this.position, this.rotation, this.visible);
-    this.ellipse.update(this.visible && appState.drawOrbit, parent?.position ?? null);
+    this.ellipse.update(parent?.position ?? null, this.position, this.visible && appState.drawOrbit);
 
-    // scale body based on hover state
+    // apply hover effects (scale body, bold ellipse, etc.)
     const thisIsHovered = appState.hover === this.body.name;
     if (thisIsHovered !== this.hovered) {
       this.sphere.setHover(thisIsHovered);
