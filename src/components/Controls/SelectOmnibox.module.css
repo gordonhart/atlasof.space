@@ -1,5 +1,5 @@
 .Action:hover {
-  background-color: var(--mantine-color-gray-9) !important;
+  background-color: color-mix(in srgb, var(--mantine-color-gray-9), transparent 50%) !important;
 }
 .Action[data-selected] {
   background-color: var(--mantine-color-gray-9) !important;

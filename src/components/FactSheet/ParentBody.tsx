@@ -3,6 +3,7 @@ import { AppState } from '../../lib/state.ts';
 import { Stack, Title } from '@mantine/core';
 import { BodyCard } from './BodyCard.tsx';
 import { useMemo } from 'react';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 
 type Props = {
   body: CelestialBody;
@@ -16,7 +17,7 @@ export function ParentBody({ body, bodies, updateState }: Props) {
   );
   return parentBody != null ? (
     <Stack gap="xs" p="md" pt="xl">
-      <Title order={5}>Parent</Title>
+      <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
       <BodyCard body={parentBody} updateState={updateState} />
     </Stack>
   ) : (

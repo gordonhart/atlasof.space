@@ -3,13 +3,11 @@ import { Spotlight, spotlight } from '@mantine/spotlight';
 import { ActionIcon, Box, Group, Kbd, Text } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
-import styles from './SelectControls.module.css';
+import styles from './SelectOmnibox.module.css';
 import { AppStateControlProps, iconSize } from './constants.ts';
 import { CelestialBody } from '../../lib/types.ts';
-import { celestialBodyTypeDescription, pluralize } from '../../lib/utils.ts';
+import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
-
-const N_LIMIT = 7;
 
 export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
   const [query, setQuery] = useState('');
@@ -81,15 +79,6 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
             {items.length > 0 ? items : <Spotlight.Empty>Nothing found...</Spotlight.Empty>}
           </Spotlight.ActionsList>
-          {items.length > N_LIMIT && (
-            <Spotlight.Footer>
-              <Group justify="center">
-                <Text c="dimmed" fs="italic" size="xs">
-                  and {pluralize(items.length - N_LIMIT, 'other')}
-                </Text>
-              </Group>
-            </Spotlight.Footer>
-          )}
         </Box>
       </Spotlight.Root>
     </>
