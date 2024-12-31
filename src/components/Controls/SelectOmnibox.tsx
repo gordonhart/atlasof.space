@@ -28,7 +28,11 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
             key={`${body.name}-${i}`}
             label={body.name}
             className={styles.Action}
-            leftSection={<Thumbnail body={body} size={24} />}
+            leftSection={
+              <Box miw={24}>
+                <Thumbnail body={body} size={24} />
+              </Box>
+            }
             rightSection={
               <Text c="dimmed" size="xs">
                 {celestialBodyTypeDescription(body)}

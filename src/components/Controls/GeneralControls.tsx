@@ -36,8 +36,8 @@ export const GeneralControls = memo(function GeneralControlsComponent({
 
   return (
     <Group gap={buttonGap}>
+      {/* TODO: these two controls should be merged, ideally */}
       <SelectOmnibox state={state} updateState={updateState} />
-
       <AddSmallBodyMenu state={state} addBody={addBody} removeBody={removeBody} />
 
       <Tooltip position="top" label={`${state.drawOrbit ? 'Hide' : 'Show'} Orbits`}>

@@ -129,7 +129,6 @@ export class SolarSystemModel {
   add(appState: AppState, body: CelestialBody) {
     if (Object.keys(this.bodies).some(name => name === body.name)) return; // already exists, don't re-add
     const parents = body.influencedBy.map(name => this.bodies[name]).filter(notNullish);
-    // TODO: map into consistent epoch
     this.bodies[body.name] = this.createBodyWithParents(appState, parents, body);
   }
 
