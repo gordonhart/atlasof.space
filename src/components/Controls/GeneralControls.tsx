@@ -13,6 +13,7 @@ import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
+import { SelectOmnibox } from './SelectOmnibox.tsx';
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
@@ -35,6 +36,8 @@ export const GeneralControls = memo(function GeneralControlsComponent({
 
   return (
     <Group gap={buttonGap}>
+      <SelectOmnibox state={state} updateState={updateState} />
+
       <AddSmallBodyMenu state={state} addBody={addBody} removeBody={removeBody} />
 
       <Tooltip position="top" label={`${state.drawOrbit ? 'Hide' : 'Show'} Orbits`}>

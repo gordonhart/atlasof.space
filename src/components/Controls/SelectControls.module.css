@@ -1,0 +1,6 @@
+.Action:hover {
+  background-color: var(--mantine-color-gray-9) !important;
+}
+.Action[data-selected] {
+  background-color: var(--mantine-color-gray-9) !important;
+}

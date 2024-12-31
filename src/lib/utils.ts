@@ -1,5 +1,5 @@
 import { AU } from './bodies.ts';
-import { CelestialBodyType } from './types.ts';
+import { CelestialBody, CelestialBodyType } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
   return n > 1 || n === 0 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
@@ -42,6 +42,11 @@ export function celestialBodyTypeName(type: CelestialBodyType, plural = false): 
   }[type];
   if (!plural) return baseName;
   return type !== CelestialBodyType.SPACECRAFT ? `${baseName}s` : baseName;
+}
+
+export function celestialBodyTypeDescription(body: CelestialBody): string {
+  const baseName = celestialBodyTypeName(body.type);
+  return body.type !== CelestialBodyType.MOON ? baseName : `${baseName} of ${body.elements.wrt}`;
 }
 
 export function notNullish<TValue>(value: TValue | null | undefined): value is TValue {

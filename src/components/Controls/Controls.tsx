@@ -4,7 +4,6 @@ import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
 import { AppStateControlProps } from './constants.ts';
 import { CelestialBody } from '../../lib/types.ts';
-import { SelectControls } from './SelectControls.tsx';
 
 const pad = 10;
 
@@ -18,10 +17,6 @@ export function Controls({ state, updateState, addBody, removeBody, reset }: Pro
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
         <TimeControls state={state} updateState={updateState} />
-      </Box>
-
-      <Box pos="absolute" top={pad} left="50%" right="50%">
-        <SelectControls />
       </Box>
 
       <Box pos="absolute" bottom={pad} left="50%" style={{ transform: 'translate(-50%, 0)' }}>
