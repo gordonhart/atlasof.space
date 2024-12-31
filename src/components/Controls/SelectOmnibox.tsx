@@ -27,6 +27,7 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
             label={body.name}
             className={styles.Action}
             leftSection={
+              // TODO: lazy load thumbnails for visible objects only
               <Box miw={24}>
                 <Thumbnail body={body} size={24} />
               </Box>
