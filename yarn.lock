@@ -915,6 +915,18 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.14.3.tgz#26bfbf7d851989be170caaae4189833131a3e28a"
   integrity sha512-cU3R9b8GLs6aCvpsVC56ZOOJCUIoDqX3RcLWkcfpA5a47LjWa/rzegP4YWfNW6/E9vodPJT4AEbYXVffYlyNwA==
 
+"@mantine/spotlight@^7.15.2":
+  version "7.15.2"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-7.15.2.tgz#2b56f453738510dae8c6519fbfadec7af51d3d61"
+  integrity sha512-wN0Glp7NjxQyRzr1djHFbZfDZRMhvNXmKpd4OxFpwcdE5W8Iqo1MTv5yzL/qx45F8o2wzdqd4wgfvlnTVsKs9g==
+  dependencies:
+    "@mantine/store" "7.15.2"
+
+"@mantine/store@7.15.2":
+  version "7.15.2"
+  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.15.2.tgz#90fb34f257a4a7514747a035eee76c41055128d6"
+  integrity sha512-8ZVRr6D/8GEu2VmUVU447w4H+hl9dwefl//GpSGI2vKxXBqlud5X9PJQkSwi5J7I5FAxvlG5dr/zCxC3r3nsIQ==
+
 "@mapbox/node-pre-gyp@^1.0.11":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.11.tgz#417db42b7f5323d79e93b34a6d7a2a12c0df43fa"

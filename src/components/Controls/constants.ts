@@ -5,5 +5,5 @@ export const buttonGap = 2;
 
 export type AppStateControlProps = {
   state: AppState;
-  updateState: (state: Partial<AppState>) => void;
+  updateState: (update: Partial<AppState> | ((prev: AppState) => AppState)) => void;
 };

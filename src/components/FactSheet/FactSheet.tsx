@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Image, Stack, Table, Text, Title } from '@mantine/core';
 import { CelestialBody } from '../../lib/types.ts';
-import { celestialBodyTypeName, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
+import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
@@ -71,7 +71,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         <Group gap="xs" align="baseline">
           <Title order={2}>{name}</Title>
           <Title order={6} c="dimmed">
-            {celestialBodyTypeName(type)}
+            {celestialBodyTypeDescription(body)}
           </Title>
         </Group>
         <ActionIcon onClick={() => updateState({ center: null })}>
