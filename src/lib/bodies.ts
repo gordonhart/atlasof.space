@@ -942,6 +942,13 @@ export const EUROPA: CelestialBody = {
   mass: 4.799844e22,
   radius: 1560.8e3,
   color: '#bfcccb',
+  facts: [
+    {
+      label: 'volume of water',
+      value:
+        "Europa's subsurface ocean is believed to contain about twice as much water as all of Earth's oceans, combined",
+    },
+  ],
 };
 
 export const GANYMEDE: CelestialBody = {

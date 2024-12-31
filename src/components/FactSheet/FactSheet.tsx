@@ -34,7 +34,6 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const bullets: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
-    ...(body.facts ?? []),
     // prettier-ignore
     ...(body.type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
@@ -53,6 +52,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
       { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
     ] : []),
     { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
+    ...(body.facts ?? []),
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];
   const factBullets = factsAsBullets(facts);
@@ -220,7 +220,10 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
       if (currentLabel != null) {
         result.push({
           label: currentLabel.toLowerCase(),
-          value: currentValues.filter(v => v !== '').join(', '),
+          value: currentValues
+            .filter(v => v !== '')
+            .join(', ')
+            .replace(/\.$/, ''),
         });
         currentLabel = null;
       }
@@ -243,7 +246,10 @@ function factsAsBullets(facts: string | undefined): Array<{ label: string; value
   if (currentLabel != null) {
     result.push({
       label: currentLabel.toLowerCase(),
-      value: currentValues.filter(v => v !== '').join(', '),
+      value: currentValues
+        .filter(v => v !== '')
+        .join(', ')
+        .replace(/\.$/, ''),
     });
   }
 
