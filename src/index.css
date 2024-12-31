@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Electrolize';
+  src: url('../assets/electrolize.ttf') format('truetype');
+}
+
 body {
   color: var(--mantine-color-gray-light-color);
   background-color: var(--mantine-color-black);

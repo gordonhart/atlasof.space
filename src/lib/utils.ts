@@ -29,33 +29,19 @@ export function humanDistanceUnits(d: number): [number, string] {
   }
 }
 
-export function celestialBodyTypeName(type: CelestialBodyType): string {
-  return {
+export function celestialBodyTypeName(type: CelestialBodyType, plural = false): string {
+  const baseName = {
     [CelestialBodyType.STAR]: 'Star',
     [CelestialBodyType.PLANET]: 'Planet',
     [CelestialBodyType.MOON]: 'Moon',
     [CelestialBodyType.DWARF_PLANET]: 'Dwarf Planet',
     [CelestialBodyType.ASTEROID]: 'Asteroid',
     [CelestialBodyType.COMET]: 'Comet',
-    [CelestialBodyType.BELT]: 'Belt',
     [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 'Trans-Neptunian Object',
+    [CelestialBodyType.SPACECRAFT]: 'Spacecraft',
   }[type];
-}
-
-// TODO: this could be more performant, maybe constructing an index of the state tree once then just looking up
-export function findCelestialBody<T extends { name: string; satellites: Array<T> }>(
-  body: T,
-  name: string
-): T | undefined {
-  if (name === body.name) {
-    return body;
-  }
-  for (const child of body.satellites) {
-    const found = findCelestialBody(child, name);
-    if (found != null) {
-      return found;
-    }
-  }
+  if (!plural) return baseName;
+  return type !== CelestialBodyType.SPACECRAFT ? `${baseName}s` : baseName;
 }
 
 export function notNullish<TValue>(value: TValue | null | undefined): value is TValue {

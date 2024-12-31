@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { getStore, Store } from '@netlify/blobs';
-import { AnthropicModel } from '../src/lib/llm';
+import { getStore } from '@netlify/blobs';
+import { AnthropicModel, asSseStream, simulateTokenGeneration } from '../src/lib/llm';
+import { storeResponse } from '../src/lib/functions';
 
 async function getWikidataId(search: string): Promise<string | undefined> {
   const baseUrl = 'https://www.wikidata.org/w/api.php';
@@ -63,7 +64,7 @@ WHERE {
   }
   const body = await response.json();
 
-  const bindings: Array<object> = body.results.bindings;
+  const bindings: Array<unknown> = body.results.bindings;
   /*
   example "bindings" object: {
     value: { datatype: 'http://www.w3.org/2001/XMLSchema#decimal', type: 'literal', value: '1.702' },
@@ -159,59 +160,7 @@ ${wikidataInfoAsCsv(wikidataInfo)}
     max_tokens: 1024,
   });
 
-  return new ReadableStream({
-    async start(controller) {
-      const encoder = new TextEncoder();
-      try {
-        for await (const chunk of stream) {
-          const text = chunk.delta?.text || '';
-          if (text) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: text })}\n\n`));
-          }
-        }
-      } catch (error) {
-        console.error('Stream error:', error);
-        controller.error(error);
-      } finally {
-        controller.close();
-      }
-    },
-  });
-}
-
-async function storeResponse(store: Store, key: string, stream: ReadableStream) {
-  const reader = stream.getReader();
-  let finalResult = '';
-
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      finalResult += new TextDecoder().decode(value);
-    }
-    await store.set(key, finalResult);
-  } catch (error) {
-    console.error('Error processing stream:', error);
-  }
-}
-
-function simulateTokenGeneration(eventStream: string) {
-  const stream = new TransformStream();
-  const writer = stream.writable.getWriter();
-  const [delayMin, delayMax] = [10, 25]; // Random delay between 10-25ms per "token"
-
-  // Process in the background
-  (async () => {
-    const chunks = eventStream.split(' ');
-    const encoder = new TextEncoder();
-    for (const chunk of chunks) {
-      await new Promise(resolve => setTimeout(resolve, Math.random() * (delayMax - delayMin) + delayMin));
-      await writer.write(encoder.encode(chunk + ' '));
-    }
-    await writer.close();
-  })();
-
-  return stream.readable;
+  return asSseStream(stream);
 }
 
 export default async function handle(request: Request) {

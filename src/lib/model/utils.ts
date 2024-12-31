@@ -1,9 +1,8 @@
 import { CanvasTexture } from 'three';
+import { Point2 } from '../types.ts';
 
-export function isOffScreen(xPx: number, yPx: number, marginPx = 0) {
-  return (
-    xPx < -marginPx || xPx > window.innerWidth + marginPx || yPx < -marginPx || yPx > window.innerHeight + marginPx
-  );
+export function isOffScreen([xPx, yPx]: Point2, [containerXpx, containerYpx]: Point2, marginPx = 0) {
+  return xPx < -marginPx || xPx > containerXpx + marginPx || yPx < -marginPx || yPx > containerYpx + marginPx;
 }
 
 export function getCircleTexture(color: string, size = 64) {

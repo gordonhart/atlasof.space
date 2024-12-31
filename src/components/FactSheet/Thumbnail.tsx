@@ -5,19 +5,19 @@ import { Thumbnails } from '../../lib/images.ts';
 
 type Props = {
   body: CelestialBody;
+  size: number;
 };
-export function Thumbnail({ body }: Props) {
+export function Thumbnail({ body, size }: Props) {
   const { name, type } = body;
   const [isValid, setIsValid] = useState(false);
-  const thumbnailSize = 220;
   const url = Thumbnails[name] ?? `/api/thumbnail?${new URLSearchParams({ search: `${name} ${type}` })}`;
   const validStyle = isValid ? {} : { display: 'none' };
   return (
     <Image
       radius="md"
       src={url}
-      maw={thumbnailSize}
-      mah={thumbnailSize}
+      maw={size}
+      mah={size}
       style={validStyle}
       onLoad={() => setIsValid(true)}
       onError={() => setIsValid(false)}

@@ -33,8 +33,14 @@ export class KinematicBody {
   increment(parents: Array<Pick<KinematicBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
     this.acceleration.set(0, 0, 0);
     parents.forEach(parent => {
-      this.tmp.set(this.position.x, this.position.y, this.position.z).sub(parent.position); // position delta
-      this.tmp.multiplyScalar((-G * parent.mass) / this.tmp.length() ** 3); // gravitational acceleration from parent
+      this.tmp.copy(this.position).sub(parent.position); // position delta
+      const distance = this.tmp.length();
+      // TODO: is it correct to use the mean motion equation here?
+      this.tmp // gravitational acceleration from parent
+        .multiplyScalar(-G * parent.mass)
+        .divideScalar(distance) // apply as three separate operations to avoid very large r^3 value
+        .divideScalar(distance)
+        .divideScalar(distance);
       this.acceleration.add(this.tmp);
     });
     this.velocity.add(this.acceleration.multiplyScalar(dt));

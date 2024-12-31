@@ -5,10 +5,21 @@ export type CartesianState = {
   velocity: Point3; // meters per second
 };
 
+export type Epoch = {
+  name: string;
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+  // no time zone necessary; always UTC
+};
+
 export type KeplerianElements = {
-  // parent body that these elements are given with respsect to, e.g. 'Jupiter' for a moon. null for the Sun
+  // parent body that these elements are given with respect to, e.g. 'Jupiter' for a moon. null for the Sun
   wrt: string | null;
-  epoch: string; // e.g. 'J2000'
+  epoch: Epoch;
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters
   inclination: number; // degrees
@@ -18,6 +29,18 @@ export type KeplerianElements = {
   meanAnomaly: number; // degrees
 };
 
+export type RotationElements = {
+  // TODO: initial rotation?
+  axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
+  siderealPeriod: number; // seconds
+};
+
+export type Ring = {
+  name: string; // name of this ring
+  start: number; // meters from the center of the parent
+  end: number; // meters from the center of the parent
+};
+
 export enum CelestialBodyType {
   STAR = 'star',
   PLANET = 'planet',
@@ -25,8 +48,8 @@ export enum CelestialBodyType {
   DWARF_PLANET = 'dwarf-planet',
   ASTEROID = 'asteroid',
   COMET = 'comet',
-  BELT = 'belt',
   TRANS_NEPTUNIAN_OBJECT = 'trans-neptunian-object',
+  SPACECRAFT = 'spacecraft',
 }
 export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.STAR,
@@ -35,8 +58,8 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.DWARF_PLANET,
   CelestialBodyType.ASTEROID,
   CelestialBodyType.COMET,
-  // CelestialBodyType.BELT,
   CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  CelestialBodyType.SPACECRAFT,
 ];
 
 export type CelestialBody = {
@@ -47,9 +70,8 @@ export type CelestialBody = {
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;
-  // TODO: initial rotation?
-  // TODO: axial tilt?
-  siderealRotationPeriod?: number; // seconds, leave empty to omit spin indicator
+  rotation?: RotationElements; // leave empty to omit spin
+  rings?: Array<Ring>;
   color: `#${string}`; // hex
 };
 
