@@ -50,13 +50,10 @@ export class AxisIndicator {
   }
 
   private calculatePositions() {
-    this.segments[0].set(0, 0, this.bodyRadius * HOVER_SCALE_FACTOR);
-    this.segments[1].set(0, 0, this.bodyRadius * HOVER_SCALE_FACTOR * 1.5);
-    this.segments[2].set(0, 0, -this.bodyRadius * HOVER_SCALE_FACTOR);
-    this.segments[3].set(0, 0, -this.bodyRadius * HOVER_SCALE_FACTOR * 1.5);
-    this.segments.forEach(p => {
-      p.applyEuler(this.rotationEuler);
-    });
+    this.segments[0].set(0, 0, this.bodyRadius * HOVER_SCALE_FACTOR).applyEuler(this.rotationEuler);
+    this.segments[1].set(0, 0, this.bodyRadius * HOVER_SCALE_FACTOR * 1.5).applyEuler(this.rotationEuler);
+    this.segments[2].set(0, 0, -this.bodyRadius * HOVER_SCALE_FACTOR).applyEuler(this.rotationEuler);
+    this.segments[3].set(0, 0, -this.bodyRadius * HOVER_SCALE_FACTOR * 1.5).applyEuler(this.rotationEuler);
     return this.segments.flatMap(p => [p.x, p.y, p.z]).map(p => p / SCALE_FACTOR);
   }
 }

@@ -17,8 +17,7 @@ export class FocalRadius {
     this.scene.add(this.group);
 
     const geometry = new LineGeometry();
-    const parentRelativePositions = bodyPosition.clone().sub(parentPosition).divideScalar(SCALE_FACTOR);
-    const { x: px, y: py, z: pz } = parentRelativePositions;
+    const { x: px, y: py, z: pz } = bodyPosition.clone().sub(parentPosition).divideScalar(SCALE_FACTOR);
     geometry.setPositions([0, 0, 0, px, py, pz]);
     const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true });
     this.line = new Line2(geometry, material);
@@ -36,6 +35,7 @@ export class FocalRadius {
         ((parentPosition?.y ?? 0) - bodyPosition.y) / SCALE_FACTOR,
         ((parentPosition?.z ?? 0) - bodyPosition.z) / SCALE_FACTOR,
       ];
+      // the target body is always at the origin in the group geometry, with parent offset from there
       this.line.geometry.setPositions([0, 0, 0, ...parentRelativePositions]);
     }
   }

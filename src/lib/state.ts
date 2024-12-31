@@ -25,7 +25,7 @@ export const initialState: AppState = {
   epoch: nowEpoch(),
   time: 0,
   dt: 30 * Time.MINUTE,
-  play: false,
+  play: true,
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
