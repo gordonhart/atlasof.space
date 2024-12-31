@@ -16,13 +16,7 @@ const JD_UNIX_EPOCH = 2440588; // 1970-01-01, the Unix epoch
 export function julianDayToEpoch(name: `JD${string}`): Epoch {
   const jd = Number(name.slice(2, name.length));
   const date = new Date((jd - JD_UNIX_EPOCH) * Time.DAY * 1000); // convert into calendar days
-  const year = date.getUTCFullYear();
-  const month = date.getUTCMonth();
-  const day = date.getUTCDate();
-  const hour = date.getUTCHours();
-  const minute = date.getUTCMinutes();
-  const second = date.getUTCSeconds();
-  return { name, year, month, day, hour, minute, second };
+  return dateToEpoch(name, date);
 }
 
 export function dateToEpoch(name: string, date: Date): Epoch {
@@ -45,12 +39,8 @@ export function nowEpoch(): Epoch {
 }
 
 function getJulianDate(date: Date): `JD${string}` {
-  const year = date.getUTCFullYear();
-  const month = date.getUTCMonth() + 1; // JavaScript months are 0-based
-  const day = date.getUTCDate();
-  const hour = date.getUTCHours();
-  const minute = date.getUTCMinutes();
-  const second = date.getUTCSeconds();
+  const { year, month: monthIndex, day, hour, minute, second } = dateToEpoch('', date);
+  const month = monthIndex + 1; // JavaScript months are 0-based
   const millisecond = date.getUTCMilliseconds();
 
   const decimalDay = day + hour / 24.0 + minute / 1440.0 + second / 86400.0 + millisecond / 86400000.0;

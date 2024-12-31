@@ -39,6 +39,12 @@ export const SOL: CelestialBody = {
     siderealPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
   },
   color: '#fa0',
+  facts: [
+    { label: 'age', value: '4.6 billion years' },
+    { label: 'star type', value: 'G-type main-sequence star (yellow dwarf)' },
+    { label: 'temperature (center)', value: '15,700,000 K' },
+    { label: 'temperature (corona)', value: '5,000,000 K' },
+  ],
 };
 
 export const MERCURY: CelestialBody = {

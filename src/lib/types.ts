@@ -41,6 +41,11 @@ export type Ring = {
   end: number; // meters from the center of the parent
 };
 
+export type CelestialBodyFact = {
+  label: string;
+  value: string;
+};
+
 export enum CelestialBodyType {
   STAR = 'star',
   PLANET = 'planet',
@@ -73,6 +78,7 @@ export type CelestialBody = {
   rotation?: RotationElements; // leave empty to omit spin
   rings?: Array<Ring>;
   color: `#${string}`; // hex
+  facts?: Array<CelestialBodyFact>;
 };
 
 export type Belt = {

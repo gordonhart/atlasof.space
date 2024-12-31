@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { ActionIcon, Box, Group, Image, Stack, Table, Text, Title } from '@mantine/core';
-import { CelestialBody } from '../../lib/types.ts';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { g } from '../../lib/bodies.ts';
@@ -34,11 +34,15 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const bullets: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
-    { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
-    { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
-    { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
-    { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
-    { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
+    ...(body.facts ?? []),
+    // prettier-ignore
+    ...(body.type !== CelestialBodyType.STAR ? [
+      { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
+      { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
+      { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
+      { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
+      { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
+    ] : []),
     ...(parent != null ? [{ label: 'orbital period', value: pluralize(periodTime, periodUnits) }] : []),
     // prettier-ignore
     ...(rotation != null ? [
