@@ -15,7 +15,7 @@ import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { memo, useEffect } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { HelpModal } from './HelpModal.tsx';
 
 type Props = AppStateControlProps & {
@@ -30,11 +30,16 @@ export const GeneralControls = memo(function GeneralControlsComponent({
   removeBody,
   reset,
 }: Props) {
+  const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
+    key: 'has-seen-help-modal',
+    getInitialValueInEffect: false,
+  });
   const [helpOpen, helpControls] = useDisclosure(false);
 
   function openHelp() {
     updateState({ play: false });
     helpControls.open();
+    setHasSeenHelpModal('true');
   }
 
   function closeHelp() {
@@ -42,10 +47,10 @@ export const GeneralControls = memo(function GeneralControlsComponent({
     helpControls.close();
   }
 
-  // TODO: store in localStorage when this is closed and avoid opening it by default for people who have visited before
   useEffect(() => {
-    openHelp();
-  }, []);
+    console.log(hasSeenHelpModal);
+    if (hasSeenHelpModal !== 'true') openHelp();
+  }, [hasSeenHelpModal]);
 
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
