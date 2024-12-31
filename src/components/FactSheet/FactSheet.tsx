@@ -23,13 +23,14 @@ type Props = {
   width?: number;
 };
 export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState, width }: Props) {
-  const { name, type, mass, radius, elements } = body;
+  const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
   const parent = bodies.find(({ name }) => name === body.elements.wrt);
   const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(elements.semiMajorAxis);
+  const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const bullets: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
@@ -39,9 +40,16 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
     { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
     { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
     ...(parent != null ? [{ label: 'orbital period', value: pluralize(periodTime, periodUnits) }] : []),
-    // TODO: reenable? makes this rerender frequently
-    // { label: 'velocity', value: `${(magnitude(velocity) / 1e3).toLocaleString()} km/s` },
+    // prettier-ignore
+    ...(rotation != null ? [
+      {
+        label: 'sidereal rotation period',
+        value: `${pluralize(rotationTime, rotationUnits)}${rotation.siderealPeriod < 0 ? ' (retrograde)' : ''}`,
+      },
+      { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
+    ] : []),
     { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
+    // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];
   const factBullets = factsAsBullets(facts);
   const galleryUrls = GalleryImages[name] ?? [];
@@ -76,12 +84,14 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
       </Box>
 
       <Stack gap={2} flex={1}>
-        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between">
+        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
             <FactGrid facts={bullets} />
           </Stack>
-          <Thumbnail key={body.name} body={body} size={220} />
+          <Box style={{ flexShrink: 1 }}>
+            <Thumbnail key={body.name} body={body} size={220} />
+          </Box>
         </Group>
 
         <Box px="md">

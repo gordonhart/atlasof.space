@@ -1,9 +1,11 @@
 import {
-  BufferAttribute,
   BufferGeometry,
+  CatmullRomCurve3,
   Color,
   DoubleSide,
   EllipseCurve,
+  Euler,
+  Group,
   Line,
   LineBasicMaterial,
   Material,
@@ -22,6 +24,8 @@ import { degreesToRadians, semiMinorAxis } from '../physics.ts';
 
 export class OrbitalEllipse {
   private readonly scene: Scene;
+  private readonly parentGroup: Group; // e.g. position of Jupiter WRT Sol
+  private readonly bodyGroup: Group; // e.g. initial position of Io WRT Jupiter
   private readonly ellipse: Line; // use a 1px-thick Line for normal rendering (fast)
   private readonly ellipseHover: Line2; // use an Npx-thick Line2 for hover rendering (slower)
   private readonly face: Mesh;
@@ -31,10 +35,26 @@ export class OrbitalEllipse {
     scene: Scene,
     resolution: Vector2,
     elements: KeplerianElements,
-    positionOffset: Vector3 | null,
+    parentPosition: Vector3 | null,
+    bodyPosition: Vector3,
     color: Color
   ) {
     this.scene = scene;
+
+    // location of parent, i.e. the body this ellipse is orbiting around
+    this.parentGroup = new Group();
+    if (parentPosition != null) this.parentGroup.position.copy(parentPosition).divideScalar(SCALE_FACTOR);
+    this.scene.add(this.parentGroup);
+
+    // location of body, using the starting position of the body as the center of the ellipse's frame such that jitter
+    // is minimized when bodies are near this position. Error will accumulate as the body reaches the other side of its
+    // orbit, but the error is small enough for small-period bodies to not be noticeable, and long-period bodies will
+    // take a very long time of the simulation running to reach the other side of their orbit
+    this.bodyGroup = new Group();
+    this.bodyGroup.position.copy(bodyPosition);
+    if (parentPosition != null) this.bodyGroup.position.sub(parentPosition);
+    this.bodyGroup.position.divideScalar(SCALE_FACTOR);
+    this.parentGroup.add(this.bodyGroup);
 
     const {
       semiMajorAxis,
@@ -54,30 +74,36 @@ export class OrbitalEllipse {
     const rA = -(Math.cos(omega) * focusDistance);
     const rB = -(Math.sin(omega) * focusDistance);
     const ellipseCurve = new EllipseCurve(rA, rB, a, b, 0, Math.PI * 2, false, omega);
-    const ellipsePoints = ellipseCurve.getPoints(this.nPoints);
 
-    const ellipseGeometry = new BufferGeometry().setFromPoints(ellipsePoints);
+    // map the points into body-local frame
+    const ellipsePointOffset = bodyPosition
+      .clone()
+      .sub(parentPosition ?? new Vector3())
+      .divideScalar(SCALE_FACTOR);
+    const ellipsePointEuler = new Euler(i, 0, Omega, 'ZYX'); // apply asc node, inclination rotations in that order
+    const ellipsePoints = ellipseCurve
+      .getPoints(this.nPoints)
+      .map(p => new Vector3(p.x, p.y, 0).applyEuler(ellipsePointEuler).sub(ellipsePointOffset));
+
+    // interpolate the points as a spline for less jagged and bouncy display
+    const ellipseSpline = new CatmullRomCurve3(ellipsePoints, true, 'catmullrom', 0.5);
+    const ellipseSplinePoints = ellipseSpline.getPoints(this.nPoints * 2); // 2x points for smoother interpolation
+
+    const ellipseGeometry = new BufferGeometry().setFromPoints(ellipseSplinePoints);
     const ellipseMaterial = new LineBasicMaterial({ color });
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
-    this.ellipse.rotateZ(Omega);
-    this.ellipse.rotateX(i);
     this.ellipse.renderOrder = 0;
-    scene.add(this.ellipse);
+    this.bodyGroup.add(this.ellipse);
 
-    const ellipseHoverGeometry = new LineGeometry();
-    ellipseHoverGeometry.setPositions(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
+    const ellipseHoverGeometry = new LineGeometry().setFromPoints(ellipseSplinePoints);
     const ellipseHoverMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
     this.ellipseHover = new Line2(ellipseHoverGeometry, ellipseHoverMaterial);
-    this.ellipseHover.rotateZ(Omega);
-    this.ellipseHover.rotateX(i);
     this.ellipseHover.visible = false;
     this.ellipseHover.renderOrder = 0;
-    scene.add(this.ellipseHover);
+    this.bodyGroup.add(this.ellipseHover);
 
-    const faceGeometry = new BufferGeometry();
-    const vertices = new Float32Array(ellipsePoints.flatMap(p => [p.x, p.y, 0]));
-    faceGeometry.setAttribute('position', new BufferAttribute(vertices, 3));
-    const indices = Array(ellipsePoints.length - 2)
+    const faceGeometry = new BufferGeometry().setFromPoints(ellipseSplinePoints);
+    const indices = Array(ellipseSplinePoints.length - 2)
       .fill(null)
       .flatMap((_, i) => [0, i + 1, i + 2]);
     faceGeometry.setIndex(indices);
@@ -90,27 +116,18 @@ export class OrbitalEllipse {
       depthTest: true,
     });
     this.face = new Mesh(faceGeometry, faceMaterial);
-    this.face.rotateZ(Omega);
-    this.face.rotateX(i);
     this.face.renderOrder = 0;
     this.face.visible = false;
-    scene.add(this.face);
-
-    if (positionOffset != null) {
-      this.update(true, positionOffset);
-    }
+    this.bodyGroup.add(this.face);
   }
 
-  // TODO: often the ellipse does not align perfectly with the simulated body. It should probably update its geometry
-  //  live to reflect changes in the simulated orbit, or at least be fudged such that when you zoom in it always passes
-  //  through the center of the body
-  update(visible: boolean, offset: Vector3 | null) {
+  // TODO: often the ellipse does not align perfectly with the simulated body, due to the slightly off shape of the
+  //  ellipse spline and due to the simulation not perfectly aligning with the ellipse described by the initial orbital
+  //  elements. Consider fudging this such that the ellipse always passes through the center of the body
+  update(parentPosition: Vector3 | null, visible: boolean) {
     this.ellipse.visible = visible;
-    if (offset != null) {
-      this.ellipse.position.copy(offset).divideScalar(SCALE_FACTOR);
-      this.ellipseHover.position.copy(offset).divideScalar(SCALE_FACTOR);
-      this.face.position.copy(offset).divideScalar(SCALE_FACTOR);
-    }
+    if (parentPosition != null) this.parentGroup.position.copy(parentPosition).divideScalar(SCALE_FACTOR);
+    // NOTE: bodyGroup position is not updated as that would require translating all geometry points too
   }
 
   setHover(hovered: boolean) {
@@ -121,12 +138,10 @@ export class OrbitalEllipse {
   dispose() {
     this.ellipse.geometry.dispose();
     (this.ellipse.material as Material).dispose();
-    this.scene.remove(this.ellipse);
     this.ellipseHover.geometry.dispose();
     (this.ellipseHover.material as Material).dispose();
-    this.scene.remove(this.ellipseHover);
     this.face.geometry.dispose();
     (this.face.material as Material).dispose();
-    this.scene.remove(this.face);
+    this.scene.remove(this.parentGroup);
   }
 }
