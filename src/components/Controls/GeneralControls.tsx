@@ -12,11 +12,10 @@ import {
 import { CelestialBody, CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
-import { useDisclosure, useLocalStorage } from '@mantine/hooks';
-import { HelpModal } from './HelpModal.tsx';
+import { useHelpModal } from '../../hooks/useHelpModal.tsx';
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
@@ -30,27 +29,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({
   removeBody,
   reset,
 }: Props) {
-  const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
-    key: 'has-seen-help-modal',
-    getInitialValueInEffect: false,
-  });
-  const [helpOpen, helpControls] = useDisclosure(false);
-
-  function openHelp() {
-    updateState({ play: false });
-    helpControls.open();
-    setHasSeenHelpModal('true');
-  }
-
-  function closeHelp() {
-    updateState({ play: true });
-    helpControls.close();
-  }
-
-  useEffect(() => {
-    console.log(hasSeenHelpModal);
-    if (hasSeenHelpModal !== 'true') openHelp();
-  }, [hasSeenHelpModal]);
+  const helpModal = useHelpModal({ updateState });
 
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
@@ -112,12 +91,12 @@ export const GeneralControls = memo(function GeneralControlsComponent({
       </Tooltip>
 
       <Tooltip position="top" label="Help">
-        <ActionIcon onClick={openHelp}>
+        <ActionIcon onClick={helpModal.open}>
           <IconHelp size={iconSize} />
         </ActionIcon>
       </Tooltip>
 
-      <HelpModal isOpen={helpOpen} onClose={closeHelp} />
+      {helpModal.Component}
     </Group>
   );
 });

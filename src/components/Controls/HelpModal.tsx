@@ -28,7 +28,7 @@ const MOUSE_BULLETS = [
   },
   {
     IconComponent: IconArrowsMove,
-    segments: [{ content: 'Double-click + drag', highlight: true }, { content: ' to pan' }],
+    segments: [{ content: 'Right-click + drag', highlight: true }, { content: ' to pan' }],
   },
   {
     IconComponent: IconClick,
@@ -68,6 +68,10 @@ export function HelpModal({ isOpen, onClose }: Props) {
       onClose={onClose}
       withCloseButton={false}
       centered
+      overlayProps={{
+        backgroundOpacity: 0,
+        style: { backdropFilter: 'blur(4px)' },
+      }}
       transitionProps={{ transition: 'fade' }}
     >
       <Stack
@@ -119,6 +123,7 @@ export function HelpModal({ isOpen, onClose }: Props) {
             color="blue"
             rightSection={<IconArrowRight size={iconProps.size} />}
             onClick={onClose}
+            data-autofocus
           >
             Get Started
           </Button>
