@@ -1,6 +1,9 @@
 import { Belt, CelestialBody, CelestialBodyType } from './types.ts';
 import { J2000, julianDayToEpoch } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
+import { MINOR_PLANET_CENTER, parseMoonsHtml } from './minorPlanetCenter.ts';
+import jupiterMoonsHtml from '../../data/jupiter-moons.html?raw';
+import saturnMoonsHtml from '../../data/saturn-moons.html?raw';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.496e11; // meters
@@ -996,8 +999,19 @@ export const CALLISTO: CelestialBody = {
   color: DEFAULT_MOON_COLOR,
 };
 
-// TODO: there are more moons
-export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
+// TODO: this is too many moons
+const jupiterMoonsParsed: Array<CelestialBody> = Object.entries(parseMoonsHtml(JUPITER, jupiterMoonsHtml)).map(
+  ([name, elements]) => ({
+    type: CelestialBodyType.MOON,
+    name,
+    influencedBy: [SOL.name, JUPITER.name],
+    elements,
+    mass: 100, // TODO
+    radius: 100, // TODO
+    color: DEFAULT_ASTEROID_COLOR,
+  })
+);
+export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO, ...jupiterMoonsParsed];
 
 export const SATURN: CelestialBody = {
   type: CelestialBodyType.PLANET,
@@ -1188,13 +1202,14 @@ export const PHOEBE: CelestialBody = {
   influencedBy: [SOL.name, SATURN.name],
   elements: {
     wrt: SATURN.name,
-    epoch: J2000, // TODO: verify
-    eccentricity: 0.1562415,
-    semiMajorAxis: 12960000e3,
+    epoch: julianDayToEpoch('JD2460000.5'), // TODO: verify
+    source: MINOR_PLANET_CENTER,
+    eccentricity: 0.1796752,
+    semiMajorAxis: 0.0861776 * AU, // 12960000e3,
     inclination: 151.78 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator
-    longitudeAscending: 0, // TODO
-    argumentOfPeriapsis: 0, // TODO
-    meanAnomaly: 0, // TODO
+    longitudeAscending: 269.35082,
+    argumentOfPeriapsis: 15.26338,
+    meanAnomaly: 174.44144,
   },
   rotation: {
     axialTilt: 152.14,
@@ -1206,9 +1221,31 @@ export const PHOEBE: CelestialBody = {
 };
 
 // TODO: there are more moons
-export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
+const saturnMoonsParsed: Array<CelestialBody> = Object.entries(parseMoonsHtml(SATURN, saturnMoonsHtml)).map(
+  ([name, elements]) => ({
+    type: CelestialBodyType.MOON,
+    name,
+    influencedBy: [SOL.name, SATURN.name],
+    elements,
+    mass: 100, // TODO
+    radius: 100, // TODO
+    color: DEFAULT_ASTEROID_COLOR,
+  })
+);
+export const SATURN_SYSTEM = [
+  SATURN,
+  MIMAS,
+  ENCELADUS,
+  TETHYS,
+  DIONE,
+  RHEA,
+  TITAN,
+  IAPETUS,
+  HYPERION,
+  PHOEBE,
+  ...saturnMoonsParsed,
+];
 
-// TODO: add rings
 export const URANUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
@@ -1230,6 +1267,7 @@ export const URANUS: CelestialBody = {
     siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
   },
   color: '#9bcee6',
+  // rings: [], // TODO
 };
 
 export const PUCK: CelestialBody = {

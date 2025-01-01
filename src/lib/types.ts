@@ -8,7 +8,7 @@ export type CartesianState = {
 export type Epoch = {
   name: string;
   year: number;
-  month: number;
+  month: number; // index, e.g. January = 0
   day: number;
   hour: number;
   minute: number;
@@ -20,6 +20,7 @@ export type KeplerianElements = {
   // parent body that these elements are given with respect to, e.g. 'Jupiter' for a moon. null for the Sun
   wrt: string | null;
   epoch: Epoch;
+  source?: string; // optionally include a citation, link, or blurb about data source
   eccentricity: number; // ratio
   semiMajorAxis: number; // meters
   inclination: number; // degrees

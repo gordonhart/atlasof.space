@@ -2,7 +2,6 @@ import { Vector3 } from 'three';
 import { G } from '../bodies.ts';
 
 export class KinematicBody {
-  readonly mass: number;
   readonly influencedBy: Array<string>;
   readonly rotationPeriod: number | undefined;
 
@@ -13,14 +12,7 @@ export class KinematicBody {
   private readonly acceleration;
   private readonly tmp; // reuse for memory efficiency
 
-  constructor(
-    mass: number,
-    influencedBy: Array<string>,
-    rotationPeriod: number | undefined,
-    position: Vector3,
-    velocity: Vector3
-  ) {
-    this.mass = mass;
+  constructor(influencedBy: Array<string>, rotationPeriod: number | undefined, position: Vector3, velocity: Vector3) {
     this.influencedBy = influencedBy;
     this.rotationPeriod = rotationPeriod;
     this.position = position.clone();
@@ -30,12 +22,11 @@ export class KinematicBody {
     this.tmp = new Vector3();
   }
 
-  increment(parents: Array<Pick<KinematicBody, 'position' | 'velocity' | 'mass'>>, dt: number) {
+  increment(parents: Array<{ position: Vector3; velocity: Vector3; mass: number }>, dt: number) {
     this.acceleration.set(0, 0, 0);
     parents.forEach(parent => {
       this.tmp.copy(this.position).sub(parent.position); // position delta
       const distance = this.tmp.length();
-      // TODO: is it correct to use the mean motion equation here?
       this.tmp // gravitational acceleration from parent
         .multiplyScalar(-G * parent.mass)
         .divideScalar(distance) // apply as three separate operations to avoid very large r^3 value

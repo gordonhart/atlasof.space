@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Button, Divider, Group, List, Modal, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Button, Divider, Group, Kbd, List, Modal, Stack, Text, Title } from '@mantine/core';
 import {
   IconArrowRight,
   IconArrowsMove,
@@ -9,11 +9,13 @@ import {
   IconHandTwoFingers,
   IconHelp,
   IconRotate3d,
+  IconSearch,
   IconX,
   IconZoomScan,
 } from '@tabler/icons-react';
 import { ReactNode } from 'react';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
+import { useModifierKey } from '../../hooks/useModifierKey.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
 
@@ -60,6 +62,7 @@ type Props = {
 };
 export function HelpModal({ isOpen, onClose }: Props) {
   const isTouchDevice = useIsTouchDevice();
+  const modifierKey = useModifierKey();
 
   return (
     <Modal
@@ -109,12 +112,26 @@ export function HelpModal({ isOpen, onClose }: Props) {
           </List>
           <HighlightedText
             segments={[
+              { content: 'Use ' },
+              { content: 'Search ', highlight: true },
+              { content: <IconSearch size={14} style={{ marginBottom: -2 }} />, highlight: true },
+              // prettier-ignore
+              ...(isTouchDevice
+                ? []
+                : [
+                  { content: ' or ' },
+                  { content: <Kbd>{modifierKey}</Kbd> },
+                  { content: ' + ' },
+                  { content: <Kbd>k</Kbd> },
+                ]),
+              { content: ' to jump to a specific planet.' },
+            ]}
+          />
+          <HighlightedText
+            segments={[
               { content: 'Use the controls at the bottom of the screen to change settings or click ' },
               { content: 'Help ', highlight: true },
-              {
-                content: <IconHelp size={14} style={{ paddingTop: 2 }} />,
-                highlight: true,
-              },
+              { content: <IconHelp size={14} style={{ marginBottom: -2 }} />, highlight: true },
               { content: ' to open this menu.' },
             ]}
           />

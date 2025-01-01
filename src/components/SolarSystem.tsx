@@ -98,6 +98,7 @@ export function SolarSystem() {
           addBody={addBody}
           removeBody={removeBody}
           reset={resetState}
+          isMobile={isMobile}
         />
       </Box>
       {focusBody != null && (
