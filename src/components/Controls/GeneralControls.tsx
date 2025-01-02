@@ -14,6 +14,7 @@ import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
+import { HelpModalButton } from './HelpModalButton.tsx';
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
@@ -85,6 +86,8 @@ export const GeneralControls = memo(function GeneralControlsComponent({
           <IconRestore size={iconSize} />
         </ActionIcon>
       </Tooltip>
+
+      <HelpModalButton state={state} updateState={updateState} />
     </Group>
   );
 });

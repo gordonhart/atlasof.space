@@ -30,7 +30,7 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
     <Stack gap="xs" p="md" pt="xl">
       <Title order={5}>Major Satellites</Title>
       {moons.map((moon, i) => (
-        <BodyCard key={`${moon.name}-${i}`} body={moon} updateState={updateState} />
+        <BodyCard key={`${moon.name}-${i}`} body={moon} onClick={() => updateState({ center: moon.name })} />
       ))}
     </Stack>
   );

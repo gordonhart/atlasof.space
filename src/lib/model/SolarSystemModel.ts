@@ -37,7 +37,7 @@ export class SolarSystemModel {
   private readonly lights: Array<Light>;
 
   private readonly debug = false;
-  private readonly maxSafeDt = Time.HOUR / 2;
+  private readonly maxSafeDt = Time.MINUTE * 15;
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
@@ -176,9 +176,9 @@ export class SolarSystemModel {
 
   private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody) {
     const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
-    const mainParentMass = mainParent?.mass ?? 1;
+    const mainParentMass = mainParent?.body?.mass ?? 1;
     const elementsInEpoch =
-      mainParent != null ? convertToEpoch(body.elements, mainParent.body.mass, appState.epoch) : body.elements;
+      mainParent != null ? convertToEpoch(body.elements, mainParentMass, appState.epoch) : body.elements;
     const cartesian = keplerianToCartesian(elementsInEpoch, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
@@ -202,7 +202,7 @@ export class SolarSystemModel {
     // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
     //  opposite algorithm to the one performed during initialization
     const parentStates = map(
-      body => ({ position: body.position.clone(), velocity: body.velocity.clone(), mass: body.mass }),
+      ({ position, velocity, body }) => ({ position: position.clone(), velocity: velocity.clone(), mass: body.mass }),
       this.bodies
     );
     Object.values(this.bodies).forEach(body => {

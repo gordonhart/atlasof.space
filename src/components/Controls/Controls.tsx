@@ -11,15 +11,20 @@ type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
   reset: () => void;
+  isMobile: boolean;
 };
-export function Controls({ state, updateState, addBody, removeBody, reset }: Props) {
+export function Controls({ state, updateState, addBody, removeBody, reset, isMobile }: Props) {
   return (
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
         <TimeControls state={state} updateState={updateState} />
       </Box>
 
-      <Box pos="absolute" bottom={pad} left="50%" style={{ transform: 'translate(-50%, 0)' }}>
+      <Box
+        pos="absolute"
+        bottom={pad}
+        {...(isMobile ? { right: pad } : { left: '50%', style: { transform: 'translate(-50%, 0)' } })}
+      >
         <GeneralControls
           state={state}
           updateState={updateState}
@@ -29,7 +34,7 @@ export function Controls({ state, updateState, addBody, removeBody, reset }: Pro
         />
       </Box>
 
-      <Box pos="absolute" bottom={pad} right={pad}>
+      <Box pos="absolute" right={pad} {...(isMobile ? { top: pad } : { bottom: pad })}>
         <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
       </Box>
     </>

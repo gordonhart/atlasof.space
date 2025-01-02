@@ -77,6 +77,7 @@ export function SolarSystem() {
   const isMobile = window.innerWidth < 1080;
   const LayoutComponent = isMobile ? Stack : Group;
   return (
+    // TODO: vh units are mobile-unfriendly; may need to update approach
     <LayoutComponent gap={0} w="100vw" h="100vh" flex={1}>
       <Box pos="relative" w="100%" h="100vh" flex={1}>
         <Box
@@ -97,6 +98,7 @@ export function SolarSystem() {
           addBody={addBody}
           removeBody={removeBody}
           reset={resetState}
+          isMobile={isMobile}
         />
       </Box>
       {focusBody != null && (

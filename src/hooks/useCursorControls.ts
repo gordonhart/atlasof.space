@@ -3,8 +3,8 @@ import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { Point2 } from '../lib/types.ts';
 import { AppState } from '../lib/state.ts';
 import { magnitude, subtract3 } from '../lib/physics.ts';
+import { useIsTouchDevice } from './useIsTouchDevice.ts';
 
-const INTERACT_PX_THRESHOLD = 10;
 const DRAG_PX_THRESHOLD = 10;
 
 type DragDetector = {
@@ -17,7 +17,9 @@ export function useCursorControls(
   { visibleTypes }: AppState,
   updateAppState: (state: Partial<AppState>) => void
 ) {
+  const isTouchDevice = useIsTouchDevice();
   const dragDetectorRef = useRef<DragDetector | null>(null);
+  const interactPxThreshold = isTouchDevice ? 25 : 10;
 
   function getCursorCoordinates(event: PointerEvent<HTMLElement> | MouseEvent<HTMLElement>): Point2 {
     const { left, top } = event.currentTarget.getBoundingClientRect();
@@ -41,7 +43,7 @@ export function useCursorControls(
     }
 
     if (model == null) return;
-    const closeBody = model.findCloseBody(eventPx, visibleTypes, INTERACT_PX_THRESHOLD);
+    const closeBody = model.findCloseBody(eventPx, visibleTypes, interactPxThreshold);
     updateAppState({ hover: closeBody?.body?.name ?? null });
   }
 
@@ -55,7 +57,7 @@ export function useCursorControls(
       return;
     }
 
-    const closeBody = model.findCloseBody(getCursorCoordinates(event), visibleTypes, INTERACT_PX_THRESHOLD);
+    const closeBody = model.findCloseBody(getCursorCoordinates(event), visibleTypes, interactPxThreshold);
     if (closeBody != null) {
       updateAppState({ center: closeBody.body.name });
     }

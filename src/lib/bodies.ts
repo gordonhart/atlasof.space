@@ -1188,13 +1188,13 @@ export const PHOEBE: CelestialBody = {
   influencedBy: [SOL.name, SATURN.name],
   elements: {
     wrt: SATURN.name,
-    epoch: J2000, // TODO: verify
-    eccentricity: 0.1562415,
-    semiMajorAxis: 12960000e3,
+    epoch: julianDayToEpoch('JD2460000.5'),
+    eccentricity: 0.1796752,
+    semiMajorAxis: 0.0861776 * AU, // 12960000e3,
     inclination: 151.78 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator
-    longitudeAscending: 0, // TODO
-    argumentOfPeriapsis: 0, // TODO
-    meanAnomaly: 0, // TODO
+    longitudeAscending: 269.35082,
+    argumentOfPeriapsis: 15.26338,
+    meanAnomaly: 174.44144,
   },
   rotation: {
     axialTilt: 152.14,
@@ -1205,10 +1205,8 @@ export const PHOEBE: CelestialBody = {
   color: DEFAULT_MOON_COLOR,
 };
 
-// TODO: there are more moons
 export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
 
-// TODO: add rings
 export const URANUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
@@ -1230,6 +1228,7 @@ export const URANUS: CelestialBody = {
     siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
   },
   color: '#9bcee6',
+  // rings: [], // TODO
 };
 
 export const PUCK: CelestialBody = {
