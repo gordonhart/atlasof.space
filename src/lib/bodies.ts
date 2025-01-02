@@ -1011,7 +1011,7 @@ const jupiterMoonsParsed: Array<CelestialBody> = Object.entries(parseMoonsHtml(J
     color: DEFAULT_ASTEROID_COLOR,
   })
 );
-export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO, ...jupiterMoonsParsed];
+export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO /* ...jupiterMoonsParsed */];
 
 export const SATURN: CelestialBody = {
   type: CelestialBodyType.PLANET,
@@ -1243,7 +1243,7 @@ export const SATURN_SYSTEM = [
   IAPETUS,
   HYPERION,
   PHOEBE,
-  ...saturnMoonsParsed,
+  // ...saturnMoonsParsed,
 ];
 
 export const URANUS: CelestialBody = {

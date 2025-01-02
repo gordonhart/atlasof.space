@@ -37,7 +37,7 @@ export class SolarSystemModel {
   private readonly lights: Array<Light>;
 
   private readonly debug = false;
-  private readonly maxSafeDt = Time.HOUR / 2;
+  private readonly maxSafeDt = Time.MINUTE * 15;
 
   constructor(container: HTMLElement, appState: AppState) {
     this.scene = new Scene();
@@ -209,6 +209,15 @@ export class SolarSystemModel {
       const parents = body.influencedBy.map(name => parentStates[name]);
       body.increment(parents, dt);
     });
+    /*
+    Object.values(this.bodies).forEach(body => {
+      body.incrementPositions(dt);
+    });
+    Object.values(this.bodies).forEach(body => {
+      const parents = body.influencedBy.map(name => parentStates[name]);
+      body.incrementVelocities(parents, dt);
+    });
+     */
   }
 
   private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {

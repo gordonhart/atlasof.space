@@ -25,11 +25,11 @@ export const initialState: AppState = {
   epoch: nowEpoch(),
   time: 0,
   dt: 30 * Time.MINUTE,
-  play: true,
+  play: false, // TODO
   drawTail: false,
   drawOrbit: true,
   drawLabel: true,
-  center: null,
+  center: 'Mars', // TODO
   hover: null,
   visibleTypes: new Set([
     CelestialBodyType.STAR,
