@@ -34,7 +34,7 @@ export function HelpModalButton({ state, updateState }: AppStateControlProps) {
           <IconHelp size={iconSize} />
         </ActionIcon>
       </Tooltip>
-      <HelpModal isOpen={isOpen} onClose={closeHelp} state={state} updateState={updateState} />,
+      <HelpModal isOpen={isOpen} onClose={closeHelp} state={state} updateState={updateState} />
     </>
   );
 }
