@@ -33,7 +33,9 @@ export function OtherBodies({ body, bodies, updateState }: Props) {
             key={`${relatedBody.name}-${i}`}
             className={styles.LinkPill}
             style={{ cursor: 'pointer' }}
-            onClick={() => updateState({ center: relatedBody.name })}
+            onClick={() => updateState({ center: relatedBody.name, hover: null })}
+            onMouseEnter={() => updateState({ hover: relatedBody.name })}
+            onMouseLeave={() => updateState({ hover: null })}
           >
             <Group gap={8} align="center" wrap="nowrap">
               <Box w={thumbnailSize}>

@@ -18,7 +18,11 @@ export function ParentBody({ body, bodies, updateState }: Props) {
   return parentBody != null ? (
     <Stack gap="xs" p="md" pt="xl">
       <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
-      <BodyCard body={parentBody} onClick={() => updateState({ center: parentBody.name })} />
+      <BodyCard
+        body={parentBody}
+        onClick={() => updateState({ center: parentBody.name, hover: null })}
+        onHover={hovered => updateState({ hover: hovered ? parentBody.name : null })}
+      />
     </Stack>
   ) : (
     <></>

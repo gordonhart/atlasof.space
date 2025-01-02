@@ -8,11 +8,20 @@ import styles from './BodyCard.module.css';
 type Props = {
   body: CelestialBody;
   onClick: () => void;
+  onHover?: (hovered: boolean) => void;
 };
-export function BodyCard({ body, onClick }: Props) {
+export function BodyCard({ body, onClick, onHover }: Props) {
   const { data: summary, isLoading } = useSummaryStream(body);
   return (
-    <Paper className={styles.Card} withBorder p="xs" style={{ cursor: 'pointer' }} onClick={onClick}>
+    <Paper
+      className={styles.Card}
+      withBorder
+      p="xs"
+      style={{ cursor: 'pointer' }}
+      onClick={onClick}
+      onMouseEnter={onHover != null ? () => onHover(true) : undefined}
+      onMouseLeave={onHover != null ? () => onHover(false) : undefined}
+    >
       <Box ml="xs" style={{ float: 'right' }}>
         <Thumbnail body={body} size={100} />
       </Box>
