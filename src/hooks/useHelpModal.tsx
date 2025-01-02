@@ -4,9 +4,10 @@ import { AppState } from '../lib/state.ts';
 import { HelpModal } from '../components/Controls/HelpModal.tsx';
 
 type Params = {
+  state: AppState;
   updateState: (update: Partial<AppState> | ((prev: AppState) => AppState)) => void;
 };
-export function useHelpModal({ updateState }: Params) {
+export function useHelpModal({ state, updateState }: Params) {
   const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
     key: 'has-seen-help-modal',
     getInitialValueInEffect: false,
@@ -29,7 +30,7 @@ export function useHelpModal({ updateState }: Params) {
   }, [hasSeenHelpModal]);
 
   return {
-    Component: <HelpModal isOpen={isOpen} onClose={closeHelp} updateState={updateState} />,
+    Component: <HelpModal isOpen={isOpen} onClose={closeHelp} state={state} updateState={updateState} />,
     open: openHelp,
   };
 }

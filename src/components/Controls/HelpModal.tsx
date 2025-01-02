@@ -26,11 +26,10 @@ import {
   IconX,
   IconZoomScan,
 } from '@tabler/icons-react';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
-import { GANYMEDE, MARS, RYUGU } from '../../lib/bodies.ts';
 import { AppState } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 
@@ -76,11 +75,13 @@ const TOUCH_BULLETS = [
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  state: AppState;
   updateState: (update: Partial<AppState> | ((prev: AppState) => AppState)) => void;
 };
-export function HelpModal({ isOpen, onClose, updateState }: Props) {
+export function HelpModal({ isOpen, onClose, state, updateState }: Props) {
   const isTouchDevice = useIsTouchDevice();
   const modifierKey = useModifierKey();
+  const sampleBodies = useMemo(() => [...state.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
   function onCardClick(body: CelestialBody) {
     updateState({ center: body.name });
@@ -163,7 +164,7 @@ export function HelpModal({ isOpen, onClose, updateState }: Props) {
             Get Started
           </Button>
           <SimpleGrid cols={3}>
-            {[MARS, GANYMEDE, RYUGU].map(body => (
+            {sampleBodies.map(body => (
               <BodyCard key={body.name} body={body} onClick={() => onCardClick(body)} />
             ))}
           </SimpleGrid>

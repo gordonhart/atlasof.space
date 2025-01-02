@@ -29,7 +29,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({
   removeBody,
   reset,
 }: Props) {
-  const helpModal = useHelpModal({ updateState });
+  const helpModal = useHelpModal({ state, updateState });
 
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
