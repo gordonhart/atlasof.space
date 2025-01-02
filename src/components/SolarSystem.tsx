@@ -78,9 +78,8 @@ export function SolarSystem() {
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
-    // TODO: vh units are mobile-unfriendly; may need to update approach
-    <LayoutComponent gap={0} w="100vw" h="100vh" flex={1}>
-      <Box pos="relative" w="100%" h="100vh" flex={1}>
+    <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
+      <Box pos="relative" w="100%" h="100dvh" flex={1}>
         <Box
           style={{ cursor: appState.hover != null ? 'pointer' : 'unset' }}
           ref={model.containerRef}
@@ -103,7 +102,7 @@ export function SolarSystem() {
       </Box>
       {focusBody != null && (
         <Box
-          h={isSmallDisplay ? '50vh' : '100vh'}
+          h={isSmallDisplay ? '50dvh' : '100dvh'}
           style={{
             borderLeft: isSmallDisplay ? undefined : `1px solid ${focusBody.color}`,
             borderTop: isSmallDisplay ? `1px solid ${focusBody.color}` : undefined,
