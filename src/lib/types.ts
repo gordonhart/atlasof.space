@@ -31,9 +31,9 @@ export type KeplerianElements = {
 };
 
 export type RotationElements = {
-  // TODO: initial rotation?
   axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
   siderealPeriod: number; // seconds
+  initialRotation?: number; // degrees -- often unavailable, defaults to zero
 };
 
 export type Ring = {

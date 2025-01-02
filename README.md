@@ -18,6 +18,7 @@ yarn netlify dev
     - [ ] Fix sporadic black blocks rendering around focus body
   - [ ] Fix alignment between planet and ellipse
   - [ ] Render 3D models for asteroids
+  - [ ] Fix spinning issue when zooming out from selected body
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [ ] Set URL part for focused planet to enable link sharing

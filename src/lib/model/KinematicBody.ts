@@ -1,5 +1,6 @@
 import { Vector3 } from 'three';
 import { G } from '../bodies.ts';
+import { RotationElements } from '../types.ts';
 
 export class KinematicBody {
   readonly influencedBy: Array<string>;
@@ -12,12 +13,17 @@ export class KinematicBody {
   private readonly acceleration;
   private readonly tmp; // reuse for memory efficiency
 
-  constructor(influencedBy: Array<string>, rotationPeriod: number | undefined, position: Vector3, velocity: Vector3) {
+  constructor(
+    influencedBy: Array<string>,
+    rotation: RotationElements | undefined,
+    position: Vector3,
+    velocity: Vector3
+  ) {
     this.influencedBy = influencedBy;
-    this.rotationPeriod = rotationPeriod;
+    this.rotationPeriod = rotation?.siderealPeriod;
     this.position = position.clone();
     this.velocity = velocity.clone();
-    this.rotation = 0; // TODO: initial state? hard to find
+    this.rotation = rotation?.initialRotation ?? 0;
     this.acceleration = new Vector3();
     this.tmp = new Vector3();
   }

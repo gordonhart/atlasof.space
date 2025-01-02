@@ -31,13 +31,13 @@ type SmallBodyOrbit = {
   last_obs: string; // e.g. '2021-05-13'
   sb_used: string; // e.g. 'SB441-N16'
   n_obs_used: number;
-  two_body: null; // TODO
+  two_body: unknown; // TODO
   producer: string; // e.g. 'Giorgini'
   t_jup: string; // e.g. '4.582'
   n_dop_obs_used: number;
   epoch: string; // e.g. '2460600.5'
   data_arc: string; // e.g. '46582'
-  not_valid_after: null; // TODO
+  not_valid_after: unknown; // TODO
   n_del_obs_used: number;
   elements: Array<SmallBodyElement>;
 };
@@ -75,7 +75,7 @@ type SmallBodyDiscovery = {
   name: string; // e.g. 'Bennu'
   who: string; // e.g. 'LINEAR'
   discovery: string; // e.g. 'Discovered 1999 Sept. 11 by the Lincoln Laboratory Near-Earth Asteroid Research Team at Socorro.'
-  site: string | null; // TODO
+  site: unknown; // TODO
   ref: string; // e.g. '20051019/Numbers.arc'
   citation: string; // e.g. "Bennu was an Egyptian mythological figure associated with Osiris, Atum and Ra.  This minor planet is the target of the OSIRIS-REx sample return mission.  OSIRIS-REx's Touch-and-Go Sampler evokes Bennu's image as a heron. Name suggested by Michael Toler Puzio (b. 2004) via a naming contest for students."
   date: string; // e.g. '1999-Sep-11'
