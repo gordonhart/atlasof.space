@@ -20,6 +20,7 @@ yarn netlify dev
   - [ ] Render 3D models for asteroids
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
+  - [ ] Set URL part for focused planet to enable link sharing
 
 ## Resources
 

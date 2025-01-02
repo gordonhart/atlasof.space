@@ -6,11 +6,13 @@ import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { CelestialBody } from '../lib/types.ts';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
+import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
+  const isSmallDisplay = useIsSmallDisplay();
 
   const updateState = useCallback(
     (update: Partial<AppState> | ((prev: AppState) => AppState)) => {
@@ -74,12 +76,10 @@ export function SolarSystem() {
     [appState.center, JSON.stringify(appState.bodies)]
   );
 
-  const isMobile = window.innerWidth < 1080;
-  const LayoutComponent = isMobile ? Stack : Group;
+  const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
-    // TODO: vh units are mobile-unfriendly; may need to update approach
-    <LayoutComponent gap={0} w="100vw" h="100vh" flex={1}>
-      <Box pos="relative" w="100%" h="100vh" flex={1}>
+    <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
+      <Box pos="relative" w="100%" h="100dvh" flex={1}>
         <Box
           style={{ cursor: appState.hover != null ? 'pointer' : 'unset' }}
           ref={model.containerRef}
@@ -98,15 +98,14 @@ export function SolarSystem() {
           addBody={addBody}
           removeBody={removeBody}
           reset={resetState}
-          isMobile={isMobile}
         />
       </Box>
       {focusBody != null && (
         <Box
-          h={isMobile ? '50vh' : '100vh'}
+          h={isSmallDisplay ? '50dvh' : '100dvh'}
           style={{
-            borderLeft: isMobile ? undefined : `1px solid ${focusBody.color}`,
-            borderTop: isMobile ? `1px solid ${focusBody.color}` : undefined,
+            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusBody.color}`,
+            borderTop: isSmallDisplay ? `1px solid ${focusBody.color}` : undefined,
           }}
         >
           <FactSheet
@@ -114,7 +113,7 @@ export function SolarSystem() {
             body={focusBody}
             bodies={appState.bodies}
             updateState={updateState}
-            width={isMobile ? undefined : 600}
+            width={isSmallDisplay ? undefined : 600}
           />
         </Box>
       )}

@@ -32,6 +32,7 @@ import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
 import { AppState } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
+import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
 
@@ -80,6 +81,7 @@ type Props = {
 };
 export function HelpModal({ isOpen, onClose, state, updateState }: Props) {
   const isTouchDevice = useIsTouchDevice();
+  const isSmallDisplay = useIsSmallDisplay();
   const modifierKey = useModifierKey();
   const sampleBodies = useMemo(() => [...state.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
@@ -87,6 +89,10 @@ export function HelpModal({ isOpen, onClose, state, updateState }: Props) {
     updateState({ center: body.name });
     onClose();
   }
+
+  const sampleBodyCards = sampleBodies.map(body => (
+    <BodyCard key={body.name} body={body} onClick={() => onCardClick(body)} />
+  ));
 
   return (
     <Modal
@@ -163,11 +169,11 @@ export function HelpModal({ isOpen, onClose, state, updateState }: Props) {
           >
             Get Started
           </Button>
-          <SimpleGrid cols={3}>
-            {sampleBodies.map(body => (
-              <BodyCard key={body.name} body={body} onClick={() => onCardClick(body)} />
-            ))}
-          </SimpleGrid>
+          {isSmallDisplay ? (
+            <Stack gap="xs">{sampleBodyCards}</Stack>
+          ) : (
+            <SimpleGrid cols={3}>{sampleBodyCards}</SimpleGrid>
+          )}
         </Stack>
       </Stack>
     </Modal>

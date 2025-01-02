@@ -16,6 +16,7 @@ import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 import { ParentBody } from './ParentBody.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { Gallery } from './Gallery.tsx';
+import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 
 type Props = {
   body: CelestialBody;
@@ -26,6 +27,7 @@ type Props = {
 export const FactSheet = memo(function FactSheetComponent({ body, bodies, updateState, width }: Props) {
   const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
+  const isSmallDisplay = useIsSmallDisplay();
 
   const parent = bodies.find(({ name }) => name === body.elements.wrt);
   const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);
@@ -65,7 +67,8 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         pos="sticky"
         top={0}
         bg="black"
-        p="md"
+        px="md"
+        py={isSmallDisplay ? 'xs' : 'md'}
         gap="xs"
         justify="space-between"
         wrap="nowrap"
