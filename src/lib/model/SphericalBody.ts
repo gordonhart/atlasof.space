@@ -85,7 +85,7 @@ export class SphericalBody {
           metalness: 0.1, // Lower metalness for less reflection
         });
       }
-      return new MeshStandardMaterial({ map: textureMap, bumpMap, bumpScale: 5, metalness: 0, roughness: 1 });
+      return new MeshStandardMaterial({ map: textureMap, bumpMap, metalness: 0, roughness: 1 });
     }
     return new MeshBasicMaterial({ color });
   }

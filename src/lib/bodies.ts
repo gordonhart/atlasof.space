@@ -143,6 +143,7 @@ export const LUNA: CelestialBody = {
   rotation: {
     axialTilt: 6.687,
     siderealPeriod: 27.321661 * Time.DAY,
+    initialRotation: 150, // manually tuned such that the visible side lines up with the view from Earth
   },
   color: DEFAULT_MOON_COLOR,
 };
