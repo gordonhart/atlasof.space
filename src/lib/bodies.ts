@@ -569,6 +569,7 @@ export const PLUTO: CelestialBody = {
   color: '#E7C7A4',
 };
 
+// TODO: Charon and Pluto's other moons are inclined relative to Pluto's equator
 export const CHARON: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Charon',
