@@ -4,6 +4,7 @@ import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
 import { AppStateControlProps } from './constants.ts';
 import { CelestialBody } from '../../lib/types.ts';
+import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 
 const pad = 10;
 
@@ -11,9 +12,9 @@ type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
   reset: () => void;
-  isMobile: boolean;
 };
-export function Controls({ state, updateState, addBody, removeBody, reset, isMobile }: Props) {
+export function Controls({ state, updateState, addBody, removeBody, reset }: Props) {
+  const isSmallDisplay = useIsSmallDisplay();
   return (
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
@@ -23,7 +24,7 @@ export function Controls({ state, updateState, addBody, removeBody, reset, isMob
       <Box
         pos="absolute"
         bottom={pad}
-        {...(isMobile ? { right: pad } : { left: '50%', style: { transform: 'translate(-50%, 0)' } })}
+        {...(isSmallDisplay ? { right: pad } : { left: '50%', style: { transform: 'translate(-50%, 0)' } })}
       >
         <GeneralControls
           state={state}
@@ -34,7 +35,7 @@ export function Controls({ state, updateState, addBody, removeBody, reset, isMob
         />
       </Box>
 
-      <Box pos="absolute" right={pad} {...(isMobile ? { top: pad } : { bottom: pad })}>
+      <Box pos="absolute" right={pad} {...(isSmallDisplay ? { top: pad } : { bottom: pad })}>
         <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
       </Box>
     </>
