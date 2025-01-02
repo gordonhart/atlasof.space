@@ -11,7 +11,7 @@ import {
 } from 'three';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType } from '../types.ts';
-import { Textures } from '../images.ts';
+import { Bumps, Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 import { RingObject } from './RingObject.ts';
 
@@ -68,11 +68,13 @@ export class SphericalBody {
   private getShapeMaterial(): Material {
     const color = new Color(this.body.color);
     const texture = Textures[this.body.name];
+    const bump = Bumps[this.body.name];
     const emissive = this.body.type === CelestialBodyType.STAR;
 
     if (texture != null) {
       const textureLoader = new TextureLoader();
       const textureMap = textureLoader.load(texture);
+      const bumpMap = bump != null ? textureLoader.load(bump) : null;
       if (emissive) {
         // TODO: better parameterization of this?
         return new MeshStandardMaterial({
@@ -83,7 +85,7 @@ export class SphericalBody {
           metalness: 0.1, // Lower metalness for less reflection
         });
       }
-      return new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
+      return new MeshStandardMaterial({ map: textureMap, bumpMap, bumpScale: 5, metalness: 0, roughness: 1 });
     }
     return new MeshBasicMaterial({ color });
   }

@@ -59,6 +59,8 @@ import uranusTextureSrc from '../../assets/uranus-texture.jpg';
 import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
 import ceresTextureSrc from '../../assets/ceres-texture.jpg';
 import saturnRingsTextureSrc from '../../assets/saturn-rings-texture.png';
+import earthBumpSrc from '../../assets/earth-bump.jpg';
+import lunaBumpSrc from '../../assets/luna-bump.jpg';
 import * as Bodies from './bodies.ts';
 
 export const Thumbnails: Record<string, string> = {
@@ -119,4 +121,10 @@ export const Textures: Record<string, string> = {
   [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,
   [Bodies.CERES.name]: ceresTextureSrc as string,
   [Bodies.SATURN.rings![0].name]: saturnRingsTextureSrc as string,
+};
+
+// source: https://planetpixelemporium.com/
+export const Bumps: Record<string, string> = {
+  [Bodies.EARTH.name]: earthBumpSrc as string,
+  [Bodies.LUNA.name]: lunaBumpSrc as string,
 };
