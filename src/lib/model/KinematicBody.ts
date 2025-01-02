@@ -29,7 +29,7 @@ export class KinematicBody {
   }
 
   // semi-implicit Euler integration
-  increment(parents: Array<{ position: Vector3; velocity: Vector3; mass: number }>, dt: number) {
+  increment(parents: Array<{ position: Vector3; mass: number }>, dt: number) {
     this.acceleration.set(0, 0, 0);
     parents.forEach(parent => {
       this.tmp.copy(this.position).sub(parent.position); // position delta

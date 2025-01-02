@@ -36,6 +36,7 @@ export class SolarSystemModel {
   private readonly firmament: Firmament;
   private readonly lights: Array<Light>;
 
+  private readonly vernalEquinox = new Vector3(1, 0, 0);
   private readonly debug = false;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
@@ -109,8 +110,12 @@ export class SolarSystemModel {
 
   getVernalEquinox(): Point3 {
     // the Vernal Equinox is the direction of +X; find by applying matrix transformations from camera
-    const localX = new Vector3(1, 0, 0); // TODO: no new allocation
-    return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
+    return this.vernalEquinox
+      .set(1, 0, 0)
+      .applyMatrix4(this.camera.matrixWorld)
+      .sub(this.camera.position)
+      .normalize()
+      .toArray();
   }
 
   update(ctx: CanvasRenderingContext2D, appState: AppState) {
@@ -189,8 +194,9 @@ export class SolarSystemModel {
 
   private incrementKinematics(dt: number) {
     // subdivide dt to a 'safe' value -- orbits with smaller periods can fall apart at high dt
-    // TODO: this algorithm could be improved; 1 hour is not always safe for e.g. LEO satellites of Earth, which have
-    //  orbital periods of ~90 minutes. It is also overzealous to subdivide like this for orbits with longer periods
+    // TODO: this algorithm could be improved; maxSafeDt varies widely by orbital period. The hardcoded value is mostly
+    //  OK for most objects, but will fail for e.g. LEO satellites of Earth, which have orbital periods of ~90 minutes.
+    //  It is also overzealous to subdivide like this for orbits with longer periods
     const nIterations = Math.ceil(dt / this.maxSafeDt);
     const safeDt = dt / nIterations;
     Array(nIterations)
@@ -199,12 +205,7 @@ export class SolarSystemModel {
   }
 
   private incrementKinematicsSafe(dt: number) {
-    // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
-    //  opposite algorithm to the one performed during initialization
-    const parentStates = map(
-      ({ position, velocity, body }) => ({ position: position.clone(), velocity: velocity.clone(), mass: body.mass }),
-      this.bodies
-    );
+    const parentStates = map(({ position, body }) => ({ position, mass: body.mass }), this.bodies);
     Object.values(this.bodies).forEach(body => {
       const parents = body.influencedBy.map(name => parentStates[name]);
       body.increment(parents, dt);
@@ -254,11 +255,11 @@ export class SolarSystemModel {
 
       // always give precedence to the sun
       const distance = Math.sqrt((xPx - bodyXpx) ** 2 + (yPx - bodyYpx) ** 2);
-      if (distance < bodyThreshold && body.body.type === 'star') return body;
+      if (distance < bodyThreshold && body.body.type === CelestialBodyType.STAR) return body;
 
-      // only give precedence to non-moons, but still select moons if there are no other options
-      const bodyIsMoon = body.body.type === 'moon';
-      const closestIsMoon = closest?.body?.type === 'moon';
+      // give precedence to non-moons, but still select moons if there are no other options
+      const bodyIsMoon = body.body.type === CelestialBodyType.MOON;
+      const closestIsMoon = closest?.body?.type === CelestialBodyType.MOON;
       if (distance < bodyThreshold && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
         closest = body;
         closestDistance = distance;

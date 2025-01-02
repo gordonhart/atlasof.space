@@ -43,6 +43,6 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     },
     mass: estimateAsteroidMass(radius),
     radius,
-    color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?
+    color: DEFAULT_ASTEROID_COLOR,
   };
 }

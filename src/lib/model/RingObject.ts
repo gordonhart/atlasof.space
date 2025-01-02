@@ -8,6 +8,8 @@ import {
   Vector2,
   TextureLoader,
   Vector3,
+  MeshBasicMaterial,
+  Color,
 } from 'three';
 import { CelestialBody, Ring } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
@@ -26,19 +28,25 @@ export class RingObject {
     const [r0, r1] = [ring.start / SCALE_FACTOR, ring.end / SCALE_FACTOR];
     const geometry = new RingGeometry(r0, r1, this.nSegments);
 
-    // modify UV coordinates for radial texture mapping
-    const pos = geometry.attributes.position;
-    const uv = geometry.attributes.uv;
-    for (let i = 0; i < pos.count; i++) {
-      const vertex = new Vector2(pos.getX(i), pos.getY(i));
-      const v = (vertex.length() - r0) / (r1 - r0);
-      uv.setXY(i, (vertex.angle() + Math.PI) / (2 * Math.PI), v);
+    const texture = Textures[ring.name];
+    let material: MeshStandardMaterial | MeshBasicMaterial;
+    if (texture != null) {
+      // modify UV coordinates for radial texture mapping
+      const pos = geometry.attributes.position;
+      const uv = geometry.attributes.uv;
+      for (let i = 0; i < pos.count; i++) {
+        const vertex = new Vector2(pos.getX(i), pos.getY(i));
+        const v = (vertex.length() - r0) / (r1 - r0);
+        uv.setXY(i, (vertex.angle() + Math.PI) / (2 * Math.PI), v);
+      }
+
+      const textureLoader = new TextureLoader();
+      const textureMap = textureLoader.load(Textures[ring.name]);
+      material = new MeshStandardMaterial({ map: textureMap, side: DoubleSide });
+    } else {
+      material = new MeshBasicMaterial({ color: new Color(body.color), side: DoubleSide });
     }
 
-    // TODO: use body color if no texture is provided
-    const textureLoader = new TextureLoader();
-    const textureMap = textureLoader.load(Textures[ring.name]);
-    const material = new MeshStandardMaterial({ map: textureMap, side: DoubleSide });
     this.ring = new Mesh(geometry, material);
     this.ring.rotation.x =
       degreesToRadians(body.elements.inclination) + degreesToRadians(body.rotation?.axialTilt ?? 0);

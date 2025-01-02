@@ -1229,7 +1229,11 @@ export const URANUS: CelestialBody = {
     siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
   },
   color: '#9bcee6',
-  // rings: [], // TODO
+  rings: [
+    // TODO: there are more rings
+    // source: https://nssdc.gsfc.nasa.gov/planetary/factsheet/uranringfact.html
+    { name: 'epsilon', start: 51149e3, end: 51149e3 + 75e3 },
+  ],
 };
 
 export const PUCK: CelestialBody = {
