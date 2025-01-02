@@ -55,9 +55,9 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
         radius="md"
         query={query}
         onQueryChange={setQuery}
-        overlayProps={{ opacity: 0 }}
         onSpotlightClose={() => setQuery('')}
-        transitionProps={{ transition: 'fade', duration: 200 }}
+        overlayProps={{ blur: 4, backgroundOpacity: 0 }}
+        transitionProps={{ transition: 'fade' }}
         scrollable
       >
         <Box
