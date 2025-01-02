@@ -29,7 +29,7 @@ export function useHelpModal({ updateState }: Params) {
   }, [hasSeenHelpModal]);
 
   return {
-    Component: <HelpModal isOpen={isOpen} onClose={closeHelp} />,
+    Component: <HelpModal isOpen={isOpen} onClose={closeHelp} updateState={updateState} />,
     open: openHelp,
   };
 }

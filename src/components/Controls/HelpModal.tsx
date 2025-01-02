@@ -1,4 +1,17 @@
-import { ActionIcon, Box, Button, Divider, Group, Kbd, List, Modal, Stack, Text, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Divider,
+  Group,
+  Kbd,
+  List,
+  Modal,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import {
   IconArrowRight,
   IconArrowsMove,
@@ -16,6 +29,10 @@ import {
 import { ReactNode } from 'react';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
+import { BodyCard } from '../FactSheet/BodyCard.tsx';
+import { GANYMEDE, MARS, RYUGU } from '../../lib/bodies.ts';
+import { AppState } from '../../lib/state.ts';
+import { CelestialBody } from '../../lib/types.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
 
@@ -59,22 +76,24 @@ const TOUCH_BULLETS = [
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  updateState: (update: Partial<AppState> | ((prev: AppState) => AppState)) => void;
 };
-export function HelpModal({ isOpen, onClose }: Props) {
+export function HelpModal({ isOpen, onClose, updateState }: Props) {
   const isTouchDevice = useIsTouchDevice();
   const modifierKey = useModifierKey();
 
+  function onCardClick(body: CelestialBody) {
+    updateState({ center: body.name });
+    onClose();
+  }
+
   return (
     <Modal
-      size="md"
+      size="xl"
       opened={isOpen}
       onClose={onClose}
       withCloseButton={false}
-      centered
-      overlayProps={{
-        backgroundOpacity: 0,
-        style: { backdropFilter: 'blur(4px)' },
-      }}
+      overlayProps={{ blur: 4, backgroundOpacity: 0 }}
       transitionProps={{ transition: 'fade' }}
     >
       <Stack
@@ -99,12 +118,11 @@ export function HelpModal({ isOpen, onClose }: Props) {
         <Stack p="md" gap="md">
           <HighlightedText
             segments={[
-              { content: 'The Atlas of Space is an ' },
+              { content: 'Welcome to the Atlas of Space — an ' },
               { content: 'interactive visualization', highlight: true },
-              { content: ' of the planets, moons, asteroids, and other objects in the Solar System.' },
+              { content: ' to explore the planets, moons, asteroids, and other objects in the Solar System.' },
             ]}
           />
-          {/* TODO: change wording if user is on mobile */}
           <List fz="sm" spacing="xs" withPadding center>
             {(isTouchDevice ? TOUCH_BULLETS : MOUSE_BULLETS).map(({ IconComponent, segments }, i) => (
               <ControlBullet key={i} IconComponent={IconComponent} segments={segments} />
@@ -144,6 +162,11 @@ export function HelpModal({ isOpen, onClose }: Props) {
           >
             Get Started
           </Button>
+          <SimpleGrid cols={3}>
+            {[MARS, GANYMEDE, RYUGU].map(body => (
+              <BodyCard key={body.name} body={body} onClick={() => onCardClick(body)} />
+            ))}
+          </SimpleGrid>
         </Stack>
       </Stack>
     </Modal>
