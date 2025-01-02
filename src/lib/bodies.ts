@@ -1188,8 +1188,7 @@ export const PHOEBE: CelestialBody = {
   influencedBy: [SOL.name, SATURN.name],
   elements: {
     wrt: SATURN.name,
-    epoch: julianDayToEpoch('JD2460000.5'), // TODO: verify
-    // source: MINOR_PLANET_CENTER,
+    epoch: julianDayToEpoch('JD2460000.5'),
     eccentricity: 0.1796752,
     semiMajorAxis: 0.0861776 * AU, // 12960000e3,
     inclination: 151.78 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator

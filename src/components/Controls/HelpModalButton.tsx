@@ -1,13 +1,11 @@
+import { ActionIcon, Tooltip } from '@mantine/core';
+import { IconHelp } from '@tabler/icons-react';
+import { AppStateControlProps, iconSize } from './constants.ts';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect } from 'react';
-import { AppState } from '../lib/state.ts';
-import { HelpModal } from '../components/Controls/HelpModal.tsx';
+import { HelpModal } from './HelpModal.tsx';
 
-type Params = {
-  state: AppState;
-  updateState: (update: Partial<AppState> | ((prev: AppState) => AppState)) => void;
-};
-export function useHelpModal({ state, updateState }: Params) {
+export function HelpModalButton({ state, updateState }: AppStateControlProps) {
   const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
     key: 'has-seen-help-modal',
     getInitialValueInEffect: false,
@@ -29,8 +27,14 @@ export function useHelpModal({ state, updateState }: Params) {
     if (hasSeenHelpModal !== 'true') openHelp();
   }, [hasSeenHelpModal]);
 
-  return {
-    Component: <HelpModal isOpen={isOpen} onClose={closeHelp} state={state} updateState={updateState} />,
-    open: openHelp,
-  };
+  return (
+    <>
+      <Tooltip position="top" label="Help">
+        <ActionIcon onClick={controls.open}>
+          <IconHelp size={iconSize} />
+        </ActionIcon>
+      </Tooltip>
+      <HelpModal isOpen={isOpen} onClose={closeHelp} state={state} updateState={updateState} />,
+    </>
+  );
 }

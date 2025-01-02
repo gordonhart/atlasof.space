@@ -4,7 +4,6 @@ import {
   IconCircleDot,
   IconCircleFilled,
   IconEyeCog,
-  IconHelp,
   IconRestore,
   IconTagMinus,
   IconTagPlus,
@@ -15,7 +14,7 @@ import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
-import { useHelpModal } from '../../hooks/useHelpModal.tsx';
+import { HelpModalButton } from './HelpModalButton.tsx';
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
@@ -29,8 +28,6 @@ export const GeneralControls = memo(function GeneralControlsComponent({
   removeBody,
   reset,
 }: Props) {
-  const helpModal = useHelpModal({ state, updateState });
-
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = state.visibleTypes.has(type)
       ? new Set([...state.visibleTypes].filter(t => t !== type))
@@ -90,13 +87,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({
         </ActionIcon>
       </Tooltip>
 
-      <Tooltip position="top" label="Help">
-        <ActionIcon onClick={helpModal.open}>
-          <IconHelp size={iconSize} />
-        </ActionIcon>
-      </Tooltip>
-
-      {helpModal.Component}
+      <HelpModalButton state={state} updateState={updateState} />
     </Group>
   );
 });

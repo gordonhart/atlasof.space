@@ -209,15 +209,6 @@ export class SolarSystemModel {
       const parents = body.influencedBy.map(name => parentStates[name]);
       body.increment(parents, dt);
     });
-    /*
-    Object.values(this.bodies).forEach(body => {
-      body.incrementPositions(dt);
-    });
-    Object.values(this.bodies).forEach(body => {
-      const parents = body.influencedBy.map(name => parentStates[name]);
-      body.incrementVelocities(parents, dt);
-    });
-     */
   }
 
   private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
