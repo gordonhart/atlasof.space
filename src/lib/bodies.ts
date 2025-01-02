@@ -547,7 +547,7 @@ export const PLUTO: CelestialBody = {
   name: '134340 Pluto',
   shortName: 'Pluto',
   type: CelestialBodyType.DWARF_PLANET,
-  // TODO: Charon is large enough that Charon and Pluto co-orbit their central mass; this is not reflected by this
+  // TODO: Charon is large enough that Charon and Pluto co-orbit their barycenter; this is not reflected by this
   //  parent-child relationship
   influencedBy: [SOL.name],
   elements: {
