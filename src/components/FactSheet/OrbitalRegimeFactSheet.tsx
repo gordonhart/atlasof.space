@@ -1,4 +1,4 @@
-import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
+import { CelestialBody, HeliocentricOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
 import { AppState } from '../../lib/state.ts';
 import { Box, Stack, Title } from '@mantine/core';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
@@ -7,21 +7,23 @@ import { useMemo } from 'react';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
+import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 
 type Props = {
   regime: OrbitalRegime;
-  bodies: Array<CelestialBody>;
+  state: AppState;
   updateState: (update: Partial<AppState>) => void;
-  width?: number;
+  addBody: (body: CelestialBody) => void;
+  removeBody: (name: string) => void;
 };
-export function OrbitalRegimeFactSheet({ regime, bodies, updateState, width }: Props) {
+export function OrbitalRegimeFactSheet({ regime, state, updateState, addBody, removeBody }: Props) {
   const bodiesInRegime = useMemo(
-    () => bodies.filter(body => body.orbitalRegime === regime.name),
-    [regime.name, JSON.stringify(bodies)]
+    () => state.bodies.filter(body => body.orbitalRegime === regime.name),
+    [regime.name, JSON.stringify(state.bodies)]
   );
 
   return (
-    <Stack w={width} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={regime.name}
         subTitle="Orbital Regime"
@@ -36,6 +38,9 @@ export function OrbitalRegimeFactSheet({ regime, bodies, updateState, width }: P
         {bodiesInRegime.map((body, i) => (
           <BodyCard key={`${body.name}-${i}`} body={body} onClick={() => updateState({ center: body.name })} />
         ))}
+        {regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT && (
+          <AddSmallBodyButton state={state} addBody={addBody} removeBody={removeBody} />
+        )}
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>

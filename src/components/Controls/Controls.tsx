@@ -3,17 +3,14 @@ import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
 import { AppStateControlProps } from './constants.ts';
-import { CelestialBody } from '../../lib/types.ts';
 import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 
 const pad = 10;
 
 type Props = AppStateControlProps & {
-  addBody: (body: CelestialBody) => void;
-  removeBody: (name: string) => void;
   reset: () => void;
 };
-export function Controls({ state, updateState, addBody, removeBody, reset }: Props) {
+export function Controls({ state, updateState, reset }: Props) {
   const isSmallDisplay = useIsSmallDisplay();
   return (
     <>
@@ -26,13 +23,7 @@ export function Controls({ state, updateState, addBody, removeBody, reset }: Pro
         bottom={pad}
         {...(isSmallDisplay ? { right: pad } : { left: '50%', style: { transform: 'translate(-50%, 0)' } })}
       >
-        <GeneralControls
-          state={state}
-          updateState={updateState}
-          addBody={addBody}
-          removeBody={removeBody}
-          reset={reset}
-        />
+        <GeneralControls state={state} updateState={updateState} reset={reset} />
       </Box>
 
       <Box pos="absolute" right={pad} {...(isSmallDisplay ? { top: pad } : { bottom: pad })}>

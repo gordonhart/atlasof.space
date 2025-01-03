@@ -2,17 +2,21 @@ import { useEffect, useMemo } from 'react';
 import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import {
   ActionIcon,
+  Box,
   Checkbox,
+  Divider,
   Group,
-  Popover,
+  Modal,
+  Paper,
   RenderTreeNodePayload,
   Text,
+  Title,
   Tree,
   TreeNodeData,
   useTree,
 } from '@mantine/core';
-import { IconChevronDown, IconSpherePlus } from '@tabler/icons-react';
-import { AppStateControlProps, iconSize } from './constants.ts';
+import { IconChevronDown, IconX } from '@tabler/icons-react';
+import { AppStateControlProps } from './constants.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { notNullish } from '../../lib/utils.ts';
 import { UseQueryResult } from '@tanstack/react-query';
@@ -533,10 +537,12 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
 }, []);
 
 type Props = Pick<AppStateControlProps, 'state'> & {
+  isOpen: boolean;
+  onClose: () => void;
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
-export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
+export function AddSmallBodyModal({ state, isOpen, onClose, addBody, removeBody }: Props) {
   const initialCheckedState = useMemo(() => {
     const names = state.bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
     const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
@@ -594,17 +600,27 @@ export function AddSmallBodyMenu({ state, addBody, removeBody }: Props) {
 
   // TODO: add search/filter box
   return (
-    <Popover position="top" offset={0}>
-      <Popover.Target>
-        <ActionIcon>
-          <IconSpherePlus size={iconSize} />
-        </ActionIcon>
-      </Popover.Target>
-
-      <Popover.Dropdown p={8} miw={200} mah={window.innerHeight - 150} style={{ overflow: 'auto' }}>
-        <Tree tree={tree} data={treeData} levelOffset={23} expandOnClick={false} renderNode={renderTreeNode} />
-      </Popover.Dropdown>
-    </Popover>
+    <Modal
+      size="md"
+      centered
+      opened={isOpen}
+      onClose={onClose}
+      withCloseButton={false}
+      styles={{ body: { padding: 0 } }}
+    >
+      <Paper bg="black" withBorder style={{ overflow: 'hidden' }}>
+        <Group p="md" gap="xs" justify="space-between" wrap="nowrap">
+          <Title order={5}>Add Asteroids from JPL Small Body Database</Title>
+          <ActionIcon onClick={onClose}>
+            <IconX color="var(--mantine-color-gray-light-color)" size={20} />
+          </ActionIcon>
+        </Group>
+        <Divider />
+        <Box p="md" mah="calc(100dvh - 180px)" style={{ overflow: 'auto' }}>
+          <Tree tree={tree} data={treeData} levelOffset={23} expandOnClick={false} renderNode={renderTreeNode} />
+        </Box>
+      </Paper>
+    </Modal>
   );
 }
 
