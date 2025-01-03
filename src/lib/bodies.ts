@@ -909,11 +909,11 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
   SEDNA,
   ORCUS,
-  ERIS,
   HAUMEA,
+  ERIS,
   MAKEMAKE,
-  ARROKOTH,
   GONGGONG,
+  ARROKOTH,
   VP113,
   LELEAKUHONUA,
 ];
