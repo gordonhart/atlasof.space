@@ -17,6 +17,7 @@ type Props = {
   removeBody: (name: string) => void;
 };
 export function OrbitalRegimeFactSheet({ regime, state, updateState, addBody, removeBody }: Props) {
+  const isAsteroidBelt = regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT;
   const bodiesInRegime = useMemo(
     () => state.bodies.filter(body => body.orbitalRegime === regime.name),
     [regime.name, JSON.stringify(state.bodies)]
@@ -34,13 +35,11 @@ export function OrbitalRegimeFactSheet({ regime, state, updateState, addBody, re
       <FactSheetSummary obj={regime} />
 
       <Stack p="md" gap="xs" flex={1}>
-        <Title order={5}>Celestial Bodies</Title>
+        <Title order={5}>{isAsteroidBelt ? 'Asteroids' : 'Celestial Bodies'}</Title>
         {bodiesInRegime.map((body, i) => (
           <BodyCard key={`${body.name}-${i}`} body={body} onClick={() => updateState({ center: body.name })} />
         ))}
-        {regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT && (
-          <AddSmallBodyButton state={state} addBody={addBody} removeBody={removeBody} />
-        )}
+        {isAsteroidBelt && <AddSmallBodyButton state={state} addBody={addBody} removeBody={removeBody} />}
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>

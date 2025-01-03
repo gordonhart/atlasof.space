@@ -599,6 +599,8 @@ export function AddSmallBodyModal({ state, isOpen, onClose, addBody, removeBody 
   }
 
   // TODO: add search/filter box
+  // TODO: not convinced that a tree is the right approach here. Ideally this is an ~infinite scrolling omnibox,
+  //  dynamically loading the next N names from a function (where they are hardcoded)
   return (
     <Modal
       size="md"
