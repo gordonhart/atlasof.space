@@ -37,18 +37,26 @@ export class OrbitalRegime {
       blendDst: OneFactor,
     });
     this.mesh = new Mesh(geometry, material);
-    this.mesh.visible = appState.visibleRegimes.has(regime.name);
+    this.mesh.visible = this.isVisible(appState);
     this.mesh.scale.z = regime.roundness; // flatten or stretch torus
     scene.add(this.mesh);
   }
 
   update(appState: AppState) {
-    this.mesh.visible = appState.visibleRegimes.has(this.regime.name);
+    this.mesh.visible = this.isVisible(appState);
   }
 
   dispose() {
     this.mesh.geometry.dispose();
     (this.mesh.material as Material).dispose();
     this.scene.remove(this.mesh);
+  }
+
+  private isVisible(appState: AppState) {
+    return (
+      appState.hover === this.regime.name ||
+      appState.center === this.regime.name ||
+      appState.visibleRegimes.has(this.regime.name)
+    );
   }
 }

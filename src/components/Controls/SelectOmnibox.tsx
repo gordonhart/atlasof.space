@@ -58,9 +58,7 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
                 Orbital Regime
               </Text>
             }
-            onClick={() =>
-              updateState(prev => ({ ...prev, center: name, visibleRegimes: new Set([...prev.visibleRegimes, name]) }))
-            }
+            onClick={() => updateState(prev => ({ ...prev, center: name }))}
           />
         )),
     [query]
