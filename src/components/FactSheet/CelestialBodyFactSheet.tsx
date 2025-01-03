@@ -15,6 +15,8 @@ import { Gallery } from './Gallery.tsx';
 import { FactGrid } from './FactGrid.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
+import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
+import { ReactNode } from 'react';
 
 type Props = {
   body: CelestialBody;
@@ -31,10 +33,14 @@ export function CelestialBodyFactSheet({ body, bodies, updateState, width }: Pro
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(elements.semiMajorAxis);
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
-  const bullets: Array<{ label: string; value: string }> = [
+  const orbitalRegimePill =
+    body.orbitalRegime != null ? (
+      <OrbitalRegimePill regime={body.orbitalRegime} updateState={updateState} />
+    ) : undefined;
+  const bullets: Array<{ label: string; value: ReactNode }> = [
+    ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
-    ...(body.orbitalRegime != null ? [{ label: 'orbital regime', value: body.orbitalRegime }] : []),
     // prettier-ignore
     ...(body.type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
