@@ -1,8 +1,9 @@
 import { Table, Text } from '@mantine/core';
 import { LoadingCursor } from './LoadingCursor.tsx';
+import { ReactNode } from 'react';
 
 type Props = {
-  facts: Array<{ value: string; label: string }>;
+  facts: Array<{ label: string; value: ReactNode }>;
   isLoading?: boolean;
 };
 export function FactGrid({ facts, isLoading = false }: Props) {
