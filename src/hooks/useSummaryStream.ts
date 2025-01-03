@@ -1,6 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { CelestialBody, CelestialBodyType, isOrbitalRegime, OrbitalRegime } from '../lib/types.ts';
+import {
+  CelestialBody,
+  CelestialBodyType,
+  HeliocentricOrbitalRegime,
+  isOrbitalRegime,
+  OrbitalRegime,
+} from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
 
 export function useSummaryStream(obj: CelestialBody | OrbitalRegime) {
@@ -49,7 +55,9 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime) {
 
 function getSearch(obj: CelestialBody | OrbitalRegime) {
   if (isOrbitalRegime(obj)) {
-    return `the heliocentric orbital regime '${obj.name}'`;
+    // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
+    const orbitalRegimes = Object.values(HeliocentricOrbitalRegime).join(', ');
+    return `the heliocentric orbital regime '${obj.name}' (of the set with ${orbitalRegimes})`;
   }
   switch (obj.type) {
     case CelestialBodyType.MOON:

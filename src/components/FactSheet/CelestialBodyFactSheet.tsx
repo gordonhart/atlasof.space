@@ -17,6 +17,7 @@ import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 import { ReactNode } from 'react';
+import { OtherRegimes } from './OtherRegimes.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -102,6 +103,7 @@ export function CelestialBodyFactSheet({ body, bodies, updateState, width }: Pro
         <MajorMoons body={body} bodies={bodies} updateState={updateState} />
         <ParentBody body={body} bodies={bodies} updateState={updateState} />
         <OtherBodies body={body} bodies={bodies} updateState={updateState} />
+        {body.type === CelestialBodyType.STAR && <OtherRegimes updateState={updateState} title="Orbital Regimes" />}
       </Box>
     </Stack>
   );

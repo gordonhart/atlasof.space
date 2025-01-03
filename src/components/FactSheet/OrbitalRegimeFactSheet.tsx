@@ -1,13 +1,12 @@
 import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
 import { AppState } from '../../lib/state.ts';
-import { Box, Group, Stack, Title } from '@mantine/core';
+import { Box, Stack, Title } from '@mantine/core';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
 import { useMemo } from 'react';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
-import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
-import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
+import { OtherRegimes } from './OtherRegimes.tsx';
 
 type Props = {
   regime: OrbitalRegime;
@@ -19,10 +18,6 @@ export function OrbitalRegimeFactSheet({ regime, bodies, updateState, width }: P
   const bodiesInRegime = useMemo(
     () => bodies.filter(body => body.orbitalRegime === regime.name),
     [regime.name, JSON.stringify(bodies)]
-  );
-  const otherRegimes: Array<OrbitalRegime> = useMemo(
-    () => ORBITAL_REGIMES.filter(({ name }) => name !== regime.name),
-    [JSON.stringify(regime)]
   );
 
   return (
@@ -44,14 +39,7 @@ export function OrbitalRegimeFactSheet({ regime, bodies, updateState, width }: P
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <Stack gap="xs" p="md">
-          <Title order={5}>Other Orbital Regimes</Title>
-          <Group gap={8}>
-            {otherRegimes.map((otherRegime, i) => (
-              <OrbitalRegimePill key={`${otherRegime.name}-${i}`} regime={otherRegime.name} updateState={updateState} />
-            ))}
-          </Group>
-        </Stack>
+        <OtherRegimes regime={regime} updateState={updateState} />
       </Box>
     </Stack>
   );

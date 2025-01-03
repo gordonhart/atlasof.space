@@ -468,7 +468,7 @@ export const NEREUS: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const ASTEROIDS = [CERES, PALLAS, VESTA, HYGIEA, JUNO, RYUGU, BENNU, LUTETIA, EROS, MATHILDE, NEREUS];
+export const ASTEROIDS = [CERES, PALLAS, JUNO, VESTA, HYGIEA, LUTETIA, MATHILDE, EROS, NEREUS, BENNU, RYUGU];
 
 export const CG67P: CelestialBody = {
   type: CelestialBodyType.COMET,
