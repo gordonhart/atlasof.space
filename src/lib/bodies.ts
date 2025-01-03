@@ -1,9 +1,9 @@
-import { Belt, CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
+import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
 import { J2000, julianDayToEpoch } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
-export const AU = 1.496e11; // meters
+export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
 export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
 
@@ -1540,16 +1540,3 @@ export const SOLAR_SYSTEM = [
   ...TRANS_NEPTUNIAN_OBJECTS,
   ...SPACECRAFT,
 ];
-
-// TODO: what to do with these?
-export const INNER_SYSTEM: Belt = { name: HeliocentricOrbitalRegime.INNER_SYSTEM, min: 0.1 * AU, max: 2.2 * AU };
-export const ASTEROID_BELT: Belt = { name: HeliocentricOrbitalRegime.ASTEROID_BELT, min: 2.2 * AU, max: 3.2 * AU };
-export const OUTER_SYSTEM: Belt = { name: HeliocentricOrbitalRegime.OUTER_SYSTEM, min: 3.2 * AU, max: 30 * AU };
-export const KUIPER_BELT: Belt = { name: HeliocentricOrbitalRegime.KUIPER_BELT, min: 30 * AU, max: 55 * AU };
-export const INNER_OORT_CLOUD: Belt = {
-  name: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
-  min: 55 * AU,
-  max: 20000 * AU,
-};
-
-export const ORBITAL_REGIMES: Array<Belt> = [INNER_SYSTEM, ASTEROID_BELT, OUTER_SYSTEM, KUIPER_BELT, INNER_OORT_CLOUD];

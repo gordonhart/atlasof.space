@@ -15,7 +15,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { AppState } from '../state.ts';
-import { AU, G, ORBITAL_REGIMES, SOL, Time } from '../bodies.ts';
+import { AU, G, SOL, Time } from '../bodies.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
@@ -25,6 +25,7 @@ import { map } from 'ramda';
 import { notNullish } from '../utils.ts';
 import { Firmament } from './Firmament.ts';
 import { OrbitalRegime } from './OrbitalRegime.ts';
+import { ORBITAL_REGIMES } from '../regimes.ts';
 
 export class SolarSystemModel {
   private readonly scene: Scene;
@@ -68,7 +69,7 @@ export class SolarSystemModel {
 
     this.bodies = this.createBodies(appState);
     this.firmament = new Firmament(this.resolution);
-    this.regimes = ORBITAL_REGIMES.map(belt => new OrbitalRegime(this.scene, appState, belt));
+    this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, appState, regime));
 
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;

@@ -91,8 +91,29 @@ export type CelestialBody = {
   facts?: Array<CelestialBodyFact>;
 };
 
-export type Belt = {
+export type OrbitalRegime = {
   name: HeliocentricOrbitalRegime;
   min: number;
   max: number;
+  roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
 };
+
+export function isCelestialBody(obj: unknown): obj is CelestialBody {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'type' in obj &&
+    typeof obj.type === 'string' &&
+    CelestialBodyTypes.includes(obj.type as CelestialBodyType)
+  );
+}
+
+export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'name' in obj &&
+    typeof obj.name === 'string' &&
+    Object.values(HeliocentricOrbitalRegime).includes(obj.name as HeliocentricOrbitalRegime)
+  );
+}

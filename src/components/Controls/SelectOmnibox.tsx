@@ -8,6 +8,7 @@ import { AppStateControlProps, iconSize } from './constants.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
+import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
 
 export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
   const [query, setQuery] = useState('');
@@ -17,7 +18,7 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
     updateState(prev => ({ ...prev, center: body.name, visibleTypes: new Set([...prev.visibleTypes, body.type]) }));
   }
 
-  const items = useMemo(
+  const bodyItems = useMemo(
     () =>
       state.bodies
         .filter(body => query.length === 0 || matchesQuery(body, query))
@@ -41,6 +42,28 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
           />
         )),
     [query, JSON.stringify(state.bodies)]
+  );
+
+  const regimeItems = useMemo(
+    () =>
+      Object.values(ORBITAL_REGIMES)
+        .filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
+        .map(({ name }, i) => (
+          <Spotlight.Action
+            key={`${name}-${i}`}
+            label={name}
+            className={styles.Action}
+            rightSection={
+              <Text c="dimmed" size="xs">
+                Orbital Regime
+              </Text>
+            }
+            onClick={() =>
+              updateState(prev => ({ ...prev, center: name, visibleRegimes: new Set([...prev.visibleRegimes, name]) }))
+            }
+          />
+        )),
+    [query]
   );
 
   return (
@@ -80,7 +103,19 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
             }
           />
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
-            {items.length > 0 ? items : <Spotlight.Empty>Nothing found...</Spotlight.Empty>}
+            {bodyItems.length + regimeItems.length < 1 && <Spotlight.Empty>Nothing found...</Spotlight.Empty>}
+            {bodyItems.length > 0 && (
+              <Spotlight.ActionsGroup label="Celestial Bodies">
+                <Box pb="xs" />
+                {bodyItems}
+              </Spotlight.ActionsGroup>
+            )}
+            {regimeItems.length > 0 && (
+              <Spotlight.ActionsGroup label="Orbital Regimes">
+                <Box pb="xs" />
+                {regimeItems}
+              </Spotlight.ActionsGroup>
+            )}
           </Spotlight.ActionsList>
         </Box>
       </Spotlight.Root>

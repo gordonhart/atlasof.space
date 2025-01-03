@@ -1,11 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { CelestialBody, CelestialBodyType } from '../lib/types.ts';
+import { CelestialBody, CelestialBodyType, isOrbitalRegime, OrbitalRegime } from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
 
-export function useSummaryStream(body: CelestialBody) {
+export function useSummaryStream(obj: CelestialBody | OrbitalRegime) {
   const [isStreaming, setIsStreaming] = useState(false);
-  const search = useMemo(() => getSearch(body), [JSON.stringify(body)]);
+  const search = useMemo(() => getSearch(obj), [JSON.stringify(obj)]);
 
   const queryClient = useQueryClient();
   const queryKey = ['GET', 'facts', search];
@@ -47,11 +47,14 @@ export function useSummaryStream(body: CelestialBody) {
   return { ...query, isLoading: isStreaming };
 }
 
-function getSearch(body: CelestialBody) {
-  switch (body.type) {
+function getSearch(obj: CelestialBody | OrbitalRegime) {
+  if (isOrbitalRegime(obj)) {
+    return `the heliocentric orbital regime '${obj.name}'`;
+  }
+  switch (obj.type) {
     case CelestialBodyType.MOON:
-      return `${body.elements.wrt}'s moon ${body.name}`;
+      return `${obj.elements.wrt}'s moon ${obj.name}`;
     default:
-      return `the ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name}`;
+      return `the ${celestialBodyTypeName(obj.type).toLowerCase()} ${obj.name}`;
   }
 }
