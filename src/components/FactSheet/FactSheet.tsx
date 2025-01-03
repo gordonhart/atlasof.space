@@ -74,6 +74,8 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         justify="space-between"
         wrap="nowrap"
         style={{ borderBottom: `1px solid ${body.color}` }}
+        onMouseEnter={() => updateState({ hover: body.name })}
+        onMouseLeave={() => updateState({ hover: null })}
       >
         <Caret position="tl" color={body.color} />
         <Caret position="br" color={body.color} />
