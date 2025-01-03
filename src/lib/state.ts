@@ -10,8 +10,8 @@ export type AppState = {
   drawTail: boolean;
   drawOrbit: boolean;
   drawLabel: boolean;
-  center: string | null; // name of body centering visualization
-  hover: string | null; // name of hovered body
+  center: string | null; // name of body or orbital regime centering visualization (focused)
+  hover: string | null; // name of hovered body/regime
   visibleTypes: Set<CelestialBodyType>;
   visibleRegimes: Set<HeliocentricOrbitalRegime>;
   bodies: Array<CelestialBody>;
