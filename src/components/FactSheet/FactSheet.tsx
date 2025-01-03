@@ -37,6 +37,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const bullets: Array<{ label: string; value: string }> = [
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
+    ...(body.orbitalRegime != null ? [{ label: 'orbital regime', value: body.orbitalRegime }] : []),
     // prettier-ignore
     ...(body.type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },

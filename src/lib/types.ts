@@ -68,11 +68,20 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.SPACECRAFT,
 ];
 
+export enum HeliocentricOrbitalRegime {
+  INNER_SYSTEM = 'Inner System',
+  ASTEROID_BELT = 'Asteroid Belt',
+  OUTER_SYSTEM = 'Outer System',
+  KUIPER_BELT = 'Kuiper Belt',
+  OORT_CLOUD = 'Oort Cloud',
+}
+
 export type CelestialBody = {
   type: CelestialBodyType;
   name: string;
   shortName?: string;
   influencedBy: Array<string>; // name of bodies influencing this body's motion
+  orbitalRegime?: HeliocentricOrbitalRegime;
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;

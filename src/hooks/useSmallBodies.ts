@@ -1,5 +1,5 @@
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
-import { CelestialBody, CelestialBodyType } from '../lib/types.ts';
+import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from '../lib/types.ts';
 import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
 import { isNotFound, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
 import { estimateAsteroidMass } from '../lib/physics.ts';
@@ -31,6 +31,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     name,
     shortName: object.shortname,
     influencedBy: [SOL.name],
+    orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
     elements: {
       wrt: SOL.name,
       epoch: julianDayToEpoch(`JD${orbit.epoch}`),
