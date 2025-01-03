@@ -1,20 +1,12 @@
-import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
-import {
-  IconCircle,
-  IconCircleDot,
-  IconCircleFilled,
-  IconEyeCog,
-  IconRestore,
-  IconTagMinus,
-  IconTagPlus,
-} from '@tabler/icons-react';
-import { CelestialBody, CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
-import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { ActionIcon, Group, Tooltip } from '@mantine/core';
+import { IconCircle, IconCircleDot, IconRestore, IconTagMinus, IconTagPlus } from '@tabler/icons-react';
+import { CelestialBody } from '../../lib/types.ts';
 import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
 import { AddSmallBodyMenu } from './AddSmallBodyMenu.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
 import { HelpModalButton } from './HelpModalButton.tsx';
+import { VisibilityControls } from './VisibilityControls.tsx';
 
 type Props = AppStateControlProps & {
   addBody: (body: CelestialBody) => void;
@@ -28,13 +20,6 @@ export const GeneralControls = memo(function GeneralControlsComponent({
   removeBody,
   reset,
 }: Props) {
-  function toggleVisibleType(type: CelestialBodyType) {
-    const newVisibleTypes = state.visibleTypes.has(type)
-      ? new Set([...state.visibleTypes].filter(t => t !== type))
-      : new Set([...state.visibleTypes, type]);
-    updateState({ visibleTypes: newVisibleTypes });
-  }
-
   return (
     <Group gap={buttonGap}>
       {/* TODO: these two controls should be merged, ideally */}
@@ -47,25 +32,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({
         </ActionIcon>
       </Tooltip>
 
-      <Menu position="top" offset={0} closeOnItemClick={false}>
-        <Menu.Target>
-          <Tooltip position="top" label="Toggle Visibility">
-            <ActionIcon>
-              <IconEyeCog size={iconSize} />
-            </ActionIcon>
-          </Tooltip>
-        </Menu.Target>
-        <Menu.Dropdown>
-          {CelestialBodyTypes.map(type => (
-            <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
-              <Group gap="xs" align="center">
-                {state.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-                {celestialBodyTypeName(type)}
-              </Group>
-            </Menu.Item>
-          ))}
-        </Menu.Dropdown>
-      </Menu>
+      <VisibilityControls state={state} updateState={updateState} />
 
       <Tooltip position="top" label={`${state.drawLabel ? 'Hide' : 'Show'} Labels`}>
         <ActionIcon onClick={() => updateState({ drawLabel: !state.drawLabel })}>

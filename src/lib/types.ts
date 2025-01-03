@@ -68,11 +68,20 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.SPACECRAFT,
 ];
 
+export enum HeliocentricOrbitalRegime {
+  INNER_SYSTEM = 'Inner System',
+  ASTEROID_BELT = 'Asteroid Belt',
+  OUTER_SYSTEM = 'Outer System',
+  KUIPER_BELT = 'Kuiper Belt',
+  INNER_OORT_CLOUD = 'Inner Oort Cloud',
+}
+
 export type CelestialBody = {
   type: CelestialBodyType;
   name: string;
   shortName?: string;
   influencedBy: Array<string>; // name of bodies influencing this body's motion
+  orbitalRegime?: HeliocentricOrbitalRegime;
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;
@@ -82,7 +91,29 @@ export type CelestialBody = {
   facts?: Array<CelestialBodyFact>;
 };
 
-export type Belt = {
+export type OrbitalRegime = {
+  name: HeliocentricOrbitalRegime;
   min: number;
   max: number;
+  roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
 };
+
+export function isCelestialBody(obj: unknown): obj is CelestialBody {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'type' in obj &&
+    typeof obj.type === 'string' &&
+    CelestialBodyTypes.includes(obj.type as CelestialBodyType)
+  );
+}
+
+export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'name' in obj &&
+    typeof obj.name === 'string' &&
+    Object.values(HeliocentricOrbitalRegime).includes(obj.name as HeliocentricOrbitalRegime)
+  );
+}

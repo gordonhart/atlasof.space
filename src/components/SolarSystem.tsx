@@ -5,8 +5,10 @@ import { Controls } from './Controls/Controls.tsx';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { CelestialBody } from '../lib/types.ts';
-import { FactSheet } from './FactSheet/FactSheet.tsx';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
+import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
+import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const [appState, setAppState] = useState(initialState);
@@ -75,6 +77,7 @@ export function SolarSystem() {
     () => appState.bodies.find(body => body.name === appState.center),
     [appState.center, JSON.stringify(appState.bodies)]
   );
+  const focusRegime = useMemo(() => ORBITAL_REGIMES.find(({ name }) => name === appState.center), [appState.center]);
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
@@ -100,17 +103,18 @@ export function SolarSystem() {
           reset={resetState}
         />
       </Box>
-      {focusBody != null && (
+      {(focusBody != null || focusRegime != null) && (
         <Box
           h={isSmallDisplay ? '50dvh' : '100dvh'}
           style={{
-            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusBody.color}`,
-            borderTop: isSmallDisplay ? `1px solid ${focusBody.color}` : undefined,
+            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusBody?.color ?? DEFAULT_ASTEROID_COLOR}`,
+            borderTop: isSmallDisplay ? `1px solid ${focusBody?.color ?? DEFAULT_ASTEROID_COLOR}` : undefined,
           }}
         >
           <FactSheet
-            key={focusBody.name}
+            key={focusBody?.name ?? focusRegime?.name} // ensure that the component is rerendered when focus changes
             body={focusBody}
+            regime={focusRegime}
             bodies={appState.bodies}
             updateState={updateState}
             width={isSmallDisplay ? undefined : 600}

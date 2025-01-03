@@ -24,6 +24,8 @@ import { convertToEpoch, keplerianToCartesian } from '../physics.ts';
 import { map } from 'ramda';
 import { notNullish } from '../utils.ts';
 import { Firmament } from './Firmament.ts';
+import { OrbitalRegime } from './OrbitalRegime.ts';
+import { ORBITAL_REGIMES } from '../regimes.ts';
 
 export class SolarSystemModel {
   private readonly scene: Scene;
@@ -34,6 +36,7 @@ export class SolarSystemModel {
   private readonly composer: EffectComposer;
   private bodies: Record<string, KeplerianBody>;
   private readonly firmament: Firmament;
+  private readonly regimes: Array<OrbitalRegime>;
   private readonly lights: Array<Light>;
 
   private readonly debug = false;
@@ -66,6 +69,7 @@ export class SolarSystemModel {
 
     this.bodies = this.createBodies(appState);
     this.firmament = new Firmament(this.resolution);
+    this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, appState, regime));
 
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;
@@ -118,6 +122,7 @@ export class SolarSystemModel {
     this.updateCenter(appState); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
+    this.regimes.forEach(regime => regime.update(appState));
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(appState, parentState ?? null);
@@ -150,6 +155,7 @@ export class SolarSystemModel {
     Object.values(this.bodies).forEach(body => body.dispose());
     this.lights.forEach(light => light.dispose());
     this.firmament.dispose();
+    this.regimes.forEach(regime => regime.dispose());
     this.renderer.dispose();
     this.controls.dispose();
   }
