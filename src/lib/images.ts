@@ -54,6 +54,7 @@ import earthTextureSrc from '../../assets/earth-texture.jpg';
 import lunaTextureSrc from '../../assets/luna-texture.jpg';
 import marsTextureSrc from '../../assets/mars-texture.jpg';
 import jupiterTextureSrc from '../../assets/jupiter-texture.jpg';
+import ioTextureSrc from '../../assets/io-texture.jpg';
 import saturnTextureSrc from '../../assets/saturn-texture.jpg';
 import uranusTextureSrc from '../../assets/uranus-texture.jpg';
 import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
@@ -116,6 +117,7 @@ export const Textures: Record<string, string> = {
   [Bodies.LUNA.name]: lunaTextureSrc as string,
   [Bodies.MARS.name]: marsTextureSrc as string,
   [Bodies.JUPITER.name]: jupiterTextureSrc as string,
+  [Bodies.IO.name]: ioTextureSrc as string,
   [Bodies.SATURN.name]: saturnTextureSrc as string,
   [Bodies.URANUS.name]: uranusTextureSrc as string,
   [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,

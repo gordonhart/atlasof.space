@@ -25,7 +25,7 @@ export function OtherBodies({ body, bodies, updateState }: Props) {
 
   const thumbnailSize = 14;
   return otherBodies.length > 0 ? (
-    <Stack gap="xs" p="md">
+    <Stack gap="xs">
       <Title order={5}>Other {celestialBodyTypeName(body.type, true)}</Title>
       <Group gap={8}>
         {otherBodies.map((relatedBody, i) => (

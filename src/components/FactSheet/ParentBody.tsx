@@ -16,7 +16,7 @@ export function ParentBody({ body, bodies, updateState }: Props) {
     [JSON.stringify(body), JSON.stringify(bodies)]
   );
   return parentBody != null ? (
-    <Stack gap="xs" p="md" pt="xl">
+    <Stack gap="xs">
       <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
       <BodyCard
         body={parentBody}

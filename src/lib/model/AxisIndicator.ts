@@ -27,7 +27,7 @@ export class AxisIndicator {
 
     const geometry = new LineSegmentsGeometry();
     geometry.setPositions(this.calculatePositions());
-    const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true });
+    const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true, depthWrite: true });
     material.depthTest = true;
     this.line = new LineSegments2(geometry, material);
     this.line.visible = false;

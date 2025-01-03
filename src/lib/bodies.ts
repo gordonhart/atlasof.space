@@ -936,6 +936,10 @@ export const IO: CelestialBody = {
   },
   mass: 8.931938e22,
   radius: 1821.6e3,
+  rotation: {
+    axialTilt: 0,
+    siderealPeriod: 1.769137786 * Time.DAY,
+  },
   color: '#fcf794',
 };
 

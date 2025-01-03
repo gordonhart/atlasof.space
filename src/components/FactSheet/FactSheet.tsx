@@ -63,7 +63,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={width} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack w={width} fz="xs" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <Group
         pos="sticky"
         top={0}
@@ -88,36 +88,36 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
         </ActionIcon>
       </Group>
 
-      <Box pt="md" px="md" mih={77 /* measured height of 3 lines + top padding */} style={{ flexShrink: 0 }}>
-        <Summary body={body} />
-      </Box>
+      <Stack gap="md" p="md" flex={1}>
+        <Box mih={61 /* measured height of 3 lines + top padding */} style={{ flexShrink: 0 }}>
+          <Summary body={body} />
+        </Box>
 
-      <Stack gap={2} flex={1}>
-        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
-          <Stack gap="xs">
-            <Title order={5}>Key Facts</Title>
-            <FactGrid facts={bullets} />
-          </Stack>
-          <Box style={{ flexShrink: 1 }}>
-            <Thumbnail key={body.name} body={body} size={220} />
-          </Box>
-        </Group>
+        <Stack gap={2} flex={1}>
+          <Group gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
+            <Stack gap="xs">
+              <Title order={5}>Key Facts</Title>
+              <FactGrid facts={bullets} />
+            </Stack>
+            <Box style={{ flexShrink: 1 }}>
+              <Thumbnail key={body.name} body={body} size={220} />
+            </Box>
+          </Group>
 
-        <Box px="md">
           {isLoading && factBullets.length === 0 ? (
             <LoadingCursor />
           ) : (
             <FactGrid facts={factBullets} isLoading={isLoading} />
           )}
-        </Box>
-      </Stack>
+        </Stack>
 
-      <Box style={{ justifySelf: 'flex-end' }}>
-        {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
-        <ParentBody body={body} bodies={bodies} updateState={updateState} />
-        <OtherBodies body={body} bodies={bodies} updateState={updateState} />
-      </Box>
+        <Stack gap="md" style={{ justifySelf: 'flex-end' }}>
+          {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
+          <MajorMoons body={body} bodies={bodies} updateState={updateState} />
+          <ParentBody body={body} bodies={bodies} updateState={updateState} />
+          <OtherBodies body={body} bodies={bodies} updateState={updateState} />
+        </Stack>
+      </Stack>
     </Stack>
   );
 });

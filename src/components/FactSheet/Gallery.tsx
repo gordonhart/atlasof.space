@@ -8,7 +8,7 @@ export function Gallery({ urls }: Props) {
   const galleryGap = 16;
   const galleryImageWidth = 178;
   return (
-    <Stack p="md" gap="xs">
+    <Stack gap="xs">
       <Title order={5}>Gallery</Title>
       <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
         {urls.map((image, i) => (
