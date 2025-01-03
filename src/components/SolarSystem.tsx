@@ -95,17 +95,12 @@ export function SolarSystem() {
           ref={model.canvasRef}
           style={{ height: '100%', width: '100%', position: 'absolute', pointerEvents: 'none' }}
         />
-        <Controls
-          state={appState}
-          updateState={updateState}
-          addBody={addBody}
-          removeBody={removeBody}
-          reset={resetState}
-        />
+        <Controls state={appState} updateState={updateState} reset={resetState} />
       </Box>
       {(focusBody != null || focusRegime != null) && (
         <Box
           h={isSmallDisplay ? '50dvh' : '100dvh'}
+          w={isSmallDisplay ? undefined : 600}
           style={{
             borderLeft: isSmallDisplay ? undefined : `1px solid ${focusBody?.color ?? DEFAULT_ASTEROID_COLOR}`,
             borderTop: isSmallDisplay ? `1px solid ${focusBody?.color ?? DEFAULT_ASTEROID_COLOR}` : undefined,
@@ -115,9 +110,10 @@ export function SolarSystem() {
             key={focusBody?.name ?? focusRegime?.name} // ensure that the component is rerendered when focus changes
             body={focusBody}
             regime={focusRegime}
-            bodies={appState.bodies}
+            state={appState}
             updateState={updateState}
-            width={isSmallDisplay ? undefined : 600}
+            addBody={addBody}
+            removeBody={removeBody}
           />
         </Box>
       )}

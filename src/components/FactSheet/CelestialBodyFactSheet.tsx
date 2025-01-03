@@ -16,16 +16,19 @@ import { FactGrid } from './FactGrid.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 import { OtherRegimes } from './OtherRegimes.tsx';
 
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
   updateState: (update: Partial<AppState>) => void;
-  width?: number;
 };
-export function CelestialBodyFactSheet({ body, bodies, updateState, width }: Props) {
+export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
+  body,
+  bodies,
+  updateState,
+}: Props) {
   const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
@@ -67,7 +70,7 @@ export function CelestialBodyFactSheet({ body, bodies, updateState, width }: Pro
   const galleryUrls = GalleryImages[name] ?? [];
 
   return (
-    <Stack w={width} fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={body.name}
         subTitle={celestialBodyTypeDescription(body)}
@@ -107,7 +110,7 @@ export function CelestialBodyFactSheet({ body, bodies, updateState, width }: Pro
       </Box>
     </Stack>
   );
-}
+});
 
 // TODO: better to have Claude generate facts as structured data
 function factsAsBullets(facts: string | undefined): Array<{ label: string; value: string }> {

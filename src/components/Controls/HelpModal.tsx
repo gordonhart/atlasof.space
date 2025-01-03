@@ -95,14 +95,7 @@ export function HelpModal({ isOpen, onClose, state, updateState }: Props) {
   ));
 
   return (
-    <Modal
-      size="xl"
-      opened={isOpen}
-      onClose={onClose}
-      withCloseButton={false}
-      overlayProps={{ blur: 4, backgroundOpacity: 0 }}
-      transitionProps={{ transition: 'fade' }}
-    >
+    <Modal size="xl" opened={isOpen} onClose={onClose} withCloseButton={false}>
       <Stack
         gap={0}
         fz="sm"
