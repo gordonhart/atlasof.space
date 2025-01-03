@@ -73,7 +73,7 @@ export enum HeliocentricOrbitalRegime {
   ASTEROID_BELT = 'Asteroid Belt',
   OUTER_SYSTEM = 'Outer System',
   KUIPER_BELT = 'Kuiper Belt',
-  OORT_CLOUD = 'Oort Cloud',
+  INNER_OORT_CLOUD = 'Inner Oort Cloud',
 }
 
 export type CelestialBody = {
@@ -92,6 +92,7 @@ export type CelestialBody = {
 };
 
 export type Belt = {
+  name: HeliocentricOrbitalRegime;
   min: number;
   max: number;
 };

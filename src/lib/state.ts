@@ -1,5 +1,5 @@
 import { SOLAR_SYSTEM, Time } from './bodies.ts';
-import { CelestialBody, CelestialBodyType, Epoch, Point3 } from './types.ts';
+import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
 import { nowEpoch } from './epoch.ts';
 
 export type AppState = {
@@ -13,6 +13,7 @@ export type AppState = {
   center: string | null; // name of body centering visualization
   hover: string | null; // name of hovered body
   visibleTypes: Set<CelestialBodyType>;
+  visibleRegimes: Set<HeliocentricOrbitalRegime>;
   bodies: Array<CelestialBody>;
 
   // TODO: should these really live here?
@@ -40,6 +41,7 @@ export const initialState: AppState = {
     CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
     // absent: comet, spacecraft
   ]),
+  visibleRegimes: new Set([]),
   bodies: SOLAR_SYSTEM,
 
   // set by model on update

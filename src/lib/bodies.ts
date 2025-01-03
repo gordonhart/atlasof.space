@@ -722,7 +722,7 @@ export const SEDNA: CelestialBody = {
   name: '90377 Sedna',
   shortName: 'Sedna',
   influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.OORT_CLOUD,
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   elements: {
     wrt: SOL.name,
     epoch: julianDayToEpoch('JD2458900.5'),
@@ -868,7 +868,7 @@ export const VP113: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '2012 VP133',
   influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.OORT_CLOUD,
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: 1e21, // very very rough guess -- not known
   radius: 574e3 / 2, // m
   elements: {
@@ -889,7 +889,7 @@ export const LELEAKUHONUA: CelestialBody = {
   name: '541132 Leleākūhonua',
   shortName: 'Leleākūhonua',
   influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.OORT_CLOUD,
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: 1e20, // unknown, extremely rough guess
   radius: 110e3 / 2,
   elements: {
@@ -1542,5 +1542,14 @@ export const SOLAR_SYSTEM = [
 ];
 
 // TODO: what to do with these?
-export const ASTEROID_BELT: Belt = { min: 2.2 * AU, max: 3.2 * AU };
-export const KUIPER_BELT: Belt = { min: 30 * AU, max: 55 * AU };
+export const INNER_SYSTEM: Belt = { name: HeliocentricOrbitalRegime.INNER_SYSTEM, min: 0.1 * AU, max: 2.2 * AU };
+export const ASTEROID_BELT: Belt = { name: HeliocentricOrbitalRegime.ASTEROID_BELT, min: 2.2 * AU, max: 3.2 * AU };
+export const OUTER_SYSTEM: Belt = { name: HeliocentricOrbitalRegime.OUTER_SYSTEM, min: 3.2 * AU, max: 30 * AU };
+export const KUIPER_BELT: Belt = { name: HeliocentricOrbitalRegime.KUIPER_BELT, min: 30 * AU, max: 55 * AU };
+export const INNER_OORT_CLOUD: Belt = {
+  name: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  min: 55 * AU,
+  max: 20000 * AU,
+};
+
+export const ORBITAL_REGIMES: Array<Belt> = [INNER_SYSTEM, ASTEROID_BELT, OUTER_SYSTEM, KUIPER_BELT, INNER_OORT_CLOUD];
