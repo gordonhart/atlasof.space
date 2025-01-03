@@ -28,6 +28,8 @@ export type KeplerianElements = {
   argumentOfPeriapsis: number; // degrees
   // true anomaly is almost never provided; derive from mean anomaly + eccentricity
   meanAnomaly: number; // degrees
+  apsidalPrecession?: number; // degrees per second
+  nodalPrecession?: number; // degrees per second
 };
 
 export type RotationElements = {

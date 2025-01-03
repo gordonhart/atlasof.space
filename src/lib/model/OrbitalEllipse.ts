@@ -121,13 +121,10 @@ export class OrbitalEllipse {
     this.bodyGroup.add(this.face);
   }
 
-  // TODO: often the ellipse does not align perfectly with the simulated body, due to the slightly off shape of the
-  //  ellipse spline and due to the simulation not perfectly aligning with the ellipse described by the initial orbital
-  //  elements. Consider fudging this such that the ellipse always passes through the center of the body
-  update(parentPosition: Vector3 | null, visible: boolean) {
+  update(parentPosition: Vector3 | null, dt: number, visible: boolean) {
     this.ellipse.visible = visible;
     if (parentPosition != null) this.parentGroup.position.copy(parentPosition).divideScalar(SCALE_FACTOR);
-    // NOTE: bodyGroup position is not updated as that would require translating all geometry points too
+    // TODO: update the shape of the ellipses to replace the closest point to bodyPosition with bodyPosition
   }
 
   setHover(hovered: boolean) {

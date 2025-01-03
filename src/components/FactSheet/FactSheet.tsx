@@ -39,6 +39,7 @@ export const FactSheet = memo(function FactSheetComponent({ body, bodies, update
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
     // prettier-ignore
     ...(body.type !== CelestialBodyType.STAR ? [
+      { label: 'epoch', value: elements.epoch.name },
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
       { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
       { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },

@@ -12,6 +12,7 @@ export enum Time {
   MINUTE = 60 * SECOND,
   HOUR = 60 * MINUTE,
   DAY = 24 * HOUR,
+  YEAR = 365.25 * DAY,
 }
 
 export const DEFAULT_MOON_COLOR = '#aaaaaa';
@@ -133,10 +134,12 @@ export const LUNA: CelestialBody = {
     epoch: J2000,
     eccentricity: 0.0549,
     semiMajorAxis: 384400e3,
-    inclination: 5.145,
+    inclination: 5.145, // to the ecliptic
     longitudeAscending: 125.08,
     argumentOfPeriapsis: 318.15,
     meanAnomaly: 0, // TODO: find
+    apsidalPrecession: 360 / (8.8504 * Time.YEAR),
+    nodalPrecession: 360 / (-18.5996 * Time.YEAR),
   },
   mass: 7.342e22,
   radius: 1737.4e3,
@@ -186,6 +189,8 @@ export const PHOBOS: CelestialBody = {
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
+    apsidalPrecession: 0.4352 / Time.DAY,
+    nodalPrecession: -0.4358 / Time.DAY,
   },
   rotation: {
     axialTilt: 0,

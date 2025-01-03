@@ -189,7 +189,8 @@ export class SolarSystemModel {
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
     // TODO: conditionally excluding the sun is a little gross
     const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
-    return new KeplerianBody(this.scene, this.resolution, appState, parent, body, position, velocity);
+    const bodyInEpoch = { ...body, elements: elementsInEpoch };
+    return new KeplerianBody(this.scene, this.resolution, appState, parent, bodyInEpoch, position, velocity);
   }
 
   private incrementKinematics(dt: number) {
