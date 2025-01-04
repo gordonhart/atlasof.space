@@ -1,5 +1,11 @@
-import { Time } from './bodies.ts';
 import { Epoch } from './types.ts';
+
+export enum Time {
+  SECOND = 1,
+  MINUTE = 60 * SECOND,
+  HOUR = 60 * MINUTE,
+  DAY = 24 * HOUR,
+}
 
 export const J2000: Epoch = {
   name: 'J2000',

@@ -37,7 +37,7 @@ export class KeplerianBody extends KinematicBody {
     this.body = body;
     this.resolution = resolution;
     this.screenPosition = new Vector3();
-    this.visible = settings.visibleTypes.has(body.type);
+    this.visible = this.isVisible(settings);
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, position, color);
     this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
@@ -49,7 +49,7 @@ export class KeplerianBody extends KinematicBody {
   }
 
   update(settings: Settings, parent: this | null) {
-    this.visible = settings.visibleTypes.has(this.body.type);
+    this.visible = this.isVisible(settings);
     this.sphere.update(this.position, this.rotation, this.visible);
     this.ellipse.update(parent?.position ?? null, this.visible && settings.drawOrbit);
 
@@ -106,6 +106,14 @@ export class KeplerianBody extends KinematicBody {
         drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
       }
     }
+  }
+
+  isVisible(settings: Settings) {
+    return (
+      settings.hover === this.body.name ||
+      settings.center === this.body.name ||
+      settings.visibleTypes.has(this.body.type)
+    );
   }
 
   // TODO: dynamically size by actual radius? log scale between ~1-4?
