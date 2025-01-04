@@ -2,7 +2,13 @@ import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import { Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
-import { drawDotAtLocation, drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
+import {
+  drawDotAtLocation,
+  drawLabelAtLocation,
+  drawOffscreenIndicator,
+  getCanvasPixels,
+  LABEL_FONT_FAMILY,
+} from './canvas.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';
@@ -87,7 +93,7 @@ export class KeplerianBody extends KinematicBody {
 
     const label = this.body.shortName ?? this.body.name;
     const fontSize = this.hovered ? '14px' : '12px';
-    ctx.font = `${fontSize} Electrolize, Arial`; // TODO: better font
+    ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
     const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
     const textPx: Point2 = [textWidthPx, textHeightPx];
     const canvasPx = getCanvasPixels(ctx);

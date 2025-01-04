@@ -98,6 +98,24 @@ export type OrbitalRegime = {
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
 };
 
+// user-pilotable spacecraft
+export type Spacecraft = {
+  name: string;
+  mass: number; // kg
+  thrust: number; // newtons
+  launchLocation: string; // name of celestial body, start on the surface
+  launchVelocity: number; // m/s
+  launchDirection: Point3; // ecliptic unit vector, e.g. vernal equinox = [1, 0, 0]
+  launchTime: number | null; // offset from t0 as determined by settings, null before launch
+  color: `#${string}`; // hex
+  controls: {
+    launch: boolean;
+    fire: boolean;
+  };
+  // TODO: burn with different intensity?
+  // TODO: burn fuel through time?
+};
+
 export function isCelestialBody(obj: unknown): obj is CelestialBody {
   return (
     obj != null &&

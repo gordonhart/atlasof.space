@@ -1,6 +1,7 @@
 import { SOLAR_SYSTEM } from './bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
-import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
+import { OP_DRIVE_SPACECRAFT } from './spacecraft.ts';
+import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3, Spacecraft } from './types.ts';
 
 export type Settings = {
   epoch: Epoch;
@@ -14,6 +15,7 @@ export type Settings = {
   visibleTypes: Set<CelestialBodyType>;
   visibleRegimes: Set<HeliocentricOrbitalRegime>;
   bodies: Array<CelestialBody>;
+  spacecraft?: Spacecraft;
 };
 
 // these values are readonly; driven by the model
@@ -49,6 +51,7 @@ export const initialState: AppState = {
     ]),
     visibleRegimes: new Set([]),
     bodies: SOLAR_SYSTEM,
+    spacecraft: OP_DRIVE_SPACECRAFT,
   },
 
   // set by model on update

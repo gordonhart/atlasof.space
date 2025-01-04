@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
+import { useSpacecraftControls } from '../hooks/useSpacecraftControls.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
@@ -31,6 +32,7 @@ export function SolarSystem() {
   );
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
+  useSpacecraftControls(updateSettings);
 
   function addBody(body: CelestialBody) {
     updateSettings(prev => {

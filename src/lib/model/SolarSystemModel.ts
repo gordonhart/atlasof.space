@@ -26,6 +26,7 @@ import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { OrbitalRegime } from './OrbitalRegime.ts';
+import { Spacecraft } from './Spacecraft.ts';
 import { isOffScreen } from './utils.ts';
 
 export class SolarSystemModel {
@@ -36,6 +37,7 @@ export class SolarSystemModel {
   private readonly renderer: WebGLRenderer;
   private readonly composer: EffectComposer;
   private bodies: Record<string, KeplerianBody>;
+  private spacecraft: Spacecraft | null;
   private readonly firmament: Firmament;
   private readonly regimes: Array<OrbitalRegime>;
   private readonly lights: Array<Light>;
@@ -69,6 +71,7 @@ export class SolarSystemModel {
     this.controls.zoomToCursor = true;
 
     this.bodies = this.createBodies(settings);
+    this.spacecraft = this.createSpacecraft(settings);
     this.firmament = new Firmament(this.resolution);
     this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, settings, regime));
 
@@ -124,6 +127,7 @@ export class SolarSystemModel {
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
     this.regimes.forEach(regime => regime.update(settings));
+    this.spacecraft?.update(settings);
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(settings, parentState ?? null);
@@ -150,10 +154,13 @@ export class SolarSystemModel {
     this.controls.reset();
     Object.values(this.bodies).forEach(body => body.dispose());
     this.bodies = this.createBodies(settings);
+    this.spacecraft?.dispose();
+    this.spacecraft = this.createSpacecraft(settings);
   }
 
   dispose() {
     Object.values(this.bodies).forEach(body => body.dispose());
+    this.spacecraft?.dispose();
     this.lights.forEach(light => light.dispose());
     this.firmament.dispose();
     this.regimes.forEach(regime => regime.dispose());
@@ -194,6 +201,14 @@ export class SolarSystemModel {
     return new KeplerianBody(this.scene, this.resolution, settings, parent, body, position, velocity);
   }
 
+  private createSpacecraft(settings: Settings): Spacecraft | null {
+    if (settings.spacecraft == null) return null;
+    const startOn = this.bodies[settings.spacecraft.launchLocation];
+    if (startOn == null) return null;
+    const influencedBy = Object.values(this.bodies).map(({ body }) => body);
+    return new Spacecraft(settings.spacecraft, influencedBy, startOn, this.resolution);
+  }
+
   private incrementKinematics(dt: number) {
     // subdivide dt to a 'safe' value -- orbits with smaller periods can fall apart at high dt
     // TODO: this algorithm could be improved; 1 hour is not always safe for e.g. LEO satellites of Earth, which have
@@ -212,6 +227,7 @@ export class SolarSystemModel {
       ({ position, velocity, body }) => ({ position: position.clone(), velocity: velocity.clone(), mass: body.mass }),
       this.bodies
     );
+    this.spacecraft?.increment(Object.values(parentStates), dt);
     Object.values(this.bodies).forEach(body => {
       const parents = body.influencedBy.map(name => parentStates[name]);
       body.increment(parents, dt);
@@ -224,6 +240,7 @@ export class SolarSystemModel {
     Object.values(this.bodies).forEach(body => {
       body.drawAnnotations(ctx, this.camera, metersPerPx, drawLabel);
     });
+    this.spacecraft?.drawAnnotations(ctx, this.camera, drawLabel);
     const hoverBody = this.bodies[hover ?? ''];
     if (hoverBody != null) {
       hoverBody.drawAnnotations(ctx, this.camera, metersPerPx);
