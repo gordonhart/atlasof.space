@@ -1,7 +1,7 @@
 import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
-import { AppState } from '../state.ts';
+import { Settings } from '../state.ts';
 import { drawDotAtLocation, drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
 import { isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';
@@ -27,7 +27,7 @@ export class KeplerianBody extends KinematicBody {
   constructor(
     scene: Scene,
     resolution: Vector2,
-    appState: AppState,
+    settings: Settings,
     parent: KeplerianBody | null,
     body: CelestialBody,
     position: Vector3,
@@ -37,7 +37,7 @@ export class KeplerianBody extends KinematicBody {
     this.body = body;
     this.resolution = resolution;
     this.screenPosition = new Vector3();
-    this.visible = appState.visibleTypes.has(body.type);
+    this.visible = settings.visibleTypes.has(body.type);
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, position, color);
     this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
@@ -48,13 +48,13 @@ export class KeplerianBody extends KinematicBody {
     }
   }
 
-  update(appState: AppState, parent: this | null) {
-    this.visible = appState.visibleTypes.has(this.body.type);
+  update(settings: Settings, parent: this | null) {
+    this.visible = settings.visibleTypes.has(this.body.type);
     this.sphere.update(this.position, this.rotation, this.visible);
-    this.ellipse.update(parent?.position ?? null, this.visible && appState.drawOrbit);
+    this.ellipse.update(parent?.position ?? null, this.visible && settings.drawOrbit);
 
     // apply hover effects (scale body, bold ellipse, etc.)
-    const thisIsHovered = appState.hover === this.body.name;
+    const thisIsHovered = settings.hover === this.body.name;
     if (thisIsHovered !== this.hovered) {
       this.sphere.setHover(thisIsHovered);
       this.ellipse.setHover(thisIsHovered);

@@ -30,7 +30,7 @@ import { ReactNode, useMemo } from 'react';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
-import { AppState } from '../../lib/state.ts';
+import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 
@@ -76,17 +76,17 @@ const TOUCH_BULLETS = [
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  state: AppState;
-  updateState: (update: Partial<AppState> | ((prev: AppState) => AppState)) => void;
+  settings: Settings;
+  updateSettings: (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
 };
-export function HelpModal({ isOpen, onClose, state, updateState }: Props) {
+export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) {
   const isTouchDevice = useIsTouchDevice();
   const isSmallDisplay = useIsSmallDisplay();
   const modifierKey = useModifierKey();
-  const sampleBodies = useMemo(() => [...state.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
+  const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
   function onCardClick(body: CelestialBody) {
-    updateState({ center: body.name });
+    updateSettings({ center: body.name });
     onClose();
   }
 

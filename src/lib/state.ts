@@ -2,9 +2,8 @@ import { SOLAR_SYSTEM, Time } from './bodies.ts';
 import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
 import { nowEpoch } from './epoch.ts';
 
-export type AppState = {
+export type Settings = {
   epoch: Epoch;
-  time: number; // seconds
   dt: number; // seconds
   play: boolean;
   drawTail: boolean;
@@ -15,43 +14,56 @@ export type AppState = {
   visibleTypes: Set<CelestialBodyType>;
   visibleRegimes: Set<HeliocentricOrbitalRegime>;
   bodies: Array<CelestialBody>;
+};
 
-  // TODO: should these really live here?
-  // these values are readonly; driven by the model
+// these values are readonly; driven by the model
+export type ModelState = {
+  time: number; // seconds
   metersPerPx: number; // describes zoom
   vernalEquinox: Point3; // direction of the Vernal Equinox
 };
 
-export const initialState: AppState = {
-  epoch: nowEpoch(),
-  time: 0,
-  dt: 30 * Time.MINUTE,
-  play: true,
-  drawTail: false,
-  drawOrbit: true,
-  drawLabel: true,
-  center: null,
-  hover: null,
-  visibleTypes: new Set([
-    CelestialBodyType.STAR,
-    CelestialBodyType.PLANET,
-    CelestialBodyType.MOON,
-    CelestialBodyType.DWARF_PLANET,
-    CelestialBodyType.ASTEROID,
-    CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
-    // absent: comet, spacecraft
-  ]),
-  visibleRegimes: new Set([]),
-  bodies: SOLAR_SYSTEM,
-
-  // set by model on update
-  metersPerPx: 1,
-  vernalEquinox: [1, 0, 0],
+export type AppState = {
+  settings: Settings;
+  model: ModelState;
 };
 
-export function clampState({ dt, ...state }: AppState): AppState {
+export const initialState: AppState = {
+  settings: {
+    epoch: nowEpoch(),
+    dt: 30 * Time.MINUTE,
+    play: true,
+    drawTail: false,
+    drawOrbit: true,
+    drawLabel: true,
+    center: null,
+    hover: null,
+    visibleTypes: new Set([
+      CelestialBodyType.STAR,
+      CelestialBodyType.PLANET,
+      CelestialBodyType.MOON,
+      CelestialBodyType.DWARF_PLANET,
+      CelestialBodyType.ASTEROID,
+      CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+      // absent: comet, spacecraft
+    ]),
+    visibleRegimes: new Set([]),
+    bodies: SOLAR_SYSTEM,
+  },
+
+  // set by model on update
+  model: {
+    time: 0,
+    metersPerPx: 1,
+    vernalEquinox: [1, 0, 0],
+  },
+};
+
+export function clampSettings({ dt, ...settings }: Settings): Settings {
   return {
-    ...state,
+    ...settings,
     dt: Math.min(Math.max(dt, Time.SECOND), 365 * Time.DAY),
   };
 }
+
+export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;

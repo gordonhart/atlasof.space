@@ -1,7 +1,7 @@
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { useMemo } from 'react';
 import { Stack, Title } from '@mantine/core';
-import { AppState } from '../../lib/state.ts';
+import { Settings } from '../../lib/state.ts';
 import { BodyCard } from './BodyCard.tsx';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);
@@ -9,9 +9,9 @@ const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyTy
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateState: (update: Partial<AppState>) => void;
+  updateSettings: (update: Partial<Settings>) => void;
 };
-export function MajorMoons({ body, bodies, updateState }: Props) {
+export function MajorMoons({ body, bodies, updateSettings }: Props) {
   const bodiesByName = useMemo(() => Object.fromEntries(bodies.map(b => [b.name, b])), [JSON.stringify(bodies)]);
   const moons = useMemo(
     () =>
@@ -33,8 +33,8 @@ export function MajorMoons({ body, bodies, updateState }: Props) {
         <BodyCard
           key={`${moon.name}-${i}`}
           body={moon}
-          onClick={() => updateState({ center: moon.name, hover: null })}
-          onHover={hovered => updateState({ hover: hovered ? moon.name : null })}
+          onClick={() => updateSettings({ center: moon.name, hover: null })}
+          onHover={hovered => updateSettings({ hover: hovered ? moon.name : null })}
         />
       ))}
     </Stack>

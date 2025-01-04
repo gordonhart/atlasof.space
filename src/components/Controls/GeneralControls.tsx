@@ -1,28 +1,31 @@
 import { ActionIcon, Group, Tooltip } from '@mantine/core';
 import { IconCircle, IconCircleDot, IconRestore, IconTagMinus, IconTagPlus } from '@tabler/icons-react';
-import { AppStateControlProps, buttonGap, iconSize } from './constants.ts';
+import { buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
 import { HelpModalButton } from './HelpModalButton.tsx';
 import { VisibilityControls } from './VisibilityControls.tsx';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 
-type Props = AppStateControlProps & {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
   reset: () => void;
 };
-export const GeneralControls = memo(function GeneralControlsComponent({ state, updateState, reset }: Props) {
+export const GeneralControls = memo(function GeneralControlsComponent({ settings, updateSettings, reset }: Props) {
   return (
     <Group gap={buttonGap}>
-      <SelectOmnibox state={state} updateState={updateState} />
+      <SelectOmnibox settings={settings} updateSettings={updateSettings} />
 
-      <Tooltip position="top" label={`${state.drawOrbit ? 'Hide' : 'Show'} Orbits`}>
-        <ActionIcon onClick={() => updateState({ drawOrbit: !state.drawOrbit })}>
-          {state.drawOrbit ? <IconCircleDot size={iconSize} /> : <IconCircle size={iconSize} />}
+      <Tooltip position="top" label={`${settings.drawOrbit ? 'Hide' : 'Show'} Orbits`}>
+        <ActionIcon onClick={() => updateSettings({ drawOrbit: !settings.drawOrbit })}>
+          {settings.drawOrbit ? <IconCircleDot size={iconSize} /> : <IconCircle size={iconSize} />}
         </ActionIcon>
       </Tooltip>
 
-      <Tooltip position="top" label={`${state.drawLabel ? 'Hide' : 'Show'} Labels`}>
-        <ActionIcon onClick={() => updateState({ drawLabel: !state.drawLabel })}>
-          {state.drawLabel ? <IconTagMinus size={iconSize} /> : <IconTagPlus size={iconSize} />}
+      <Tooltip position="top" label={`${settings.drawLabel ? 'Hide' : 'Show'} Labels`}>
+        <ActionIcon onClick={() => updateSettings({ drawLabel: !settings.drawLabel })}>
+          {settings.drawLabel ? <IconTagMinus size={iconSize} /> : <IconTagPlus size={iconSize} />}
         </ActionIcon>
       </Tooltip>
 
@@ -34,7 +37,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({ state, u
       </Tooltip>
       */}
 
-      <VisibilityControls state={state} updateState={updateState} />
+      <VisibilityControls settings={settings} updateSettings={updateSettings} />
 
       <Tooltip position="top" label="Reset">
         <ActionIcon onClick={reset}>
@@ -42,7 +45,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({ state, u
         </ActionIcon>
       </Tooltip>
 
-      <HelpModalButton state={state} updateState={updateState} />
+      <HelpModalButton settings={settings} updateSettings={updateSettings} />
     </Group>
   );
 });

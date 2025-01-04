@@ -14,7 +14,7 @@ import {
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { AppState } from '../state.ts';
+import { Settings } from '../state.ts';
 import { AU, G, SOL, Time } from '../bodies.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
@@ -42,7 +42,7 @@ export class SolarSystemModel {
   private readonly debug = false;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
-  constructor(container: HTMLElement, appState: AppState) {
+  constructor(container: HTMLElement, settings: Settings) {
     this.scene = new Scene();
     this.resolution = new Vector2(container.clientWidth, container.clientHeight);
 
@@ -67,9 +67,9 @@ export class SolarSystemModel {
     this.controls.maxZoom = 1e4;
     this.controls.zoomToCursor = true;
 
-    this.bodies = this.createBodies(appState);
+    this.bodies = this.createBodies(settings);
     this.firmament = new Firmament(this.resolution);
-    this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, appState, regime));
+    this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, settings, regime));
 
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;
@@ -117,24 +117,24 @@ export class SolarSystemModel {
     return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
-  update(ctx: CanvasRenderingContext2D, appState: AppState) {
-    if (appState.play) this.incrementKinematics(appState.dt);
-    this.updateCenter(appState); // NOTE: must happen after kinematics are incremented and before controls are updated
+  update(ctx: CanvasRenderingContext2D, settings: Settings) {
+    if (settings.play) this.incrementKinematics(settings.dt);
+    this.updateCenter(settings); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
-    this.regimes.forEach(regime => regime.update(appState));
+    this.regimes.forEach(regime => regime.update(settings));
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
-      body.update(appState, parentState ?? null);
+      body.update(settings, parentState ?? null);
     });
     this.composer.render();
-    this.drawAnnotations(ctx, appState);
+    this.drawAnnotations(ctx, settings);
   }
 
-  add(appState: AppState, body: CelestialBody) {
+  add(settings: Settings, body: CelestialBody) {
     if (Object.keys(this.bodies).some(name => name === body.name)) return; // already exists, don't re-add
     const parents = body.influencedBy.map(name => this.bodies[name]).filter(notNullish);
-    this.bodies[body.name] = this.createBodyWithParents(appState, parents, body);
+    this.bodies[body.name] = this.createBodyWithParents(settings, parents, body);
   }
 
   remove(name: string) {
@@ -144,11 +144,11 @@ export class SolarSystemModel {
     toRemove.dispose();
   }
 
-  reset(appState: AppState) {
+  reset(settings: Settings) {
     this.setupCamera();
     this.controls.reset();
     Object.values(this.bodies).forEach(body => body.dispose());
-    this.bodies = this.createBodies(appState);
+    this.bodies = this.createBodies(settings);
   }
 
   dispose() {
@@ -160,9 +160,9 @@ export class SolarSystemModel {
     this.controls.dispose();
   }
 
-  private createBodies(appState: AppState) {
+  private createBodies(settings: Settings) {
     const initialState: Record<string, KeplerianBody> = {};
-    const toInitialize = [...appState.bodies];
+    const toInitialize = [...settings.bodies];
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
     while (toInitialize.length > 0) {
       const body = toInitialize.shift()!;
@@ -173,24 +173,24 @@ export class SolarSystemModel {
       }
       initialState[body.name] =
         parents.length > 0
-          ? this.createBodyWithParents(appState, parents, body)
-          : new KeplerianBody(this.scene, this.resolution, appState, null, body, new Vector3(), new Vector3());
+          ? this.createBodyWithParents(settings, parents, body)
+          : new KeplerianBody(this.scene, this.resolution, settings, null, body, new Vector3(), new Vector3());
     }
     // reverse creation order; first objects created are the highest up in the hierarchy, model them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
   }
 
-  private createBodyWithParents(appState: AppState, parents: Array<KeplerianBody>, body: CelestialBody) {
+  private createBodyWithParents(settings: Settings, parents: Array<KeplerianBody>, body: CelestialBody) {
     const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.body?.mass ?? 1;
     const elementsInEpoch =
-      mainParent != null ? convertToEpoch(body.elements, mainParentMass, appState.epoch) : body.elements;
+      mainParent != null ? convertToEpoch(body.elements, mainParentMass, settings.epoch) : body.elements;
     const cartesian = keplerianToCartesian(elementsInEpoch, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
     // TODO: conditionally excluding the sun is a little gross
     const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
-    return new KeplerianBody(this.scene, this.resolution, appState, parent, body, position, velocity);
+    return new KeplerianBody(this.scene, this.resolution, settings, parent, body, position, velocity);
   }
 
   private incrementKinematics(dt: number) {
@@ -217,7 +217,7 @@ export class SolarSystemModel {
     });
   }
 
-  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: AppState) {
+  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: Settings) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
     Object.values(this.bodies).forEach(body => {
@@ -229,7 +229,7 @@ export class SolarSystemModel {
     }
   }
 
-  private updateCenter({ center }: AppState) {
+  private updateCenter({ center }: Settings) {
     if (center == null) return;
     const centerBody = this.bodies[center];
     if (centerBody == null) return;

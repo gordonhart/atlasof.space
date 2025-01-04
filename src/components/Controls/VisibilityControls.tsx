@@ -1,22 +1,27 @@
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { IconCircle, IconCircleFilled, IconEyeCog } from '@tabler/icons-react';
-import { AppStateControlProps, iconSize } from './constants.ts';
+import { iconSize } from './constants.ts';
 import { CelestialBodyType, CelestialBodyTypes, HeliocentricOrbitalRegime } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 
-export function VisibilityControls({ state, updateState }: AppStateControlProps) {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
+};
+export function VisibilityControls({ settings, updateSettings }: Props) {
   function toggleVisibleType(type: CelestialBodyType) {
-    const newVisibleTypes = state.visibleTypes.has(type)
-      ? new Set([...state.visibleTypes].filter(t => t !== type))
-      : new Set([...state.visibleTypes, type]);
-    updateState({ visibleTypes: newVisibleTypes });
+    const newVisibleTypes = settings.visibleTypes.has(type)
+      ? new Set([...settings.visibleTypes].filter(t => t !== type))
+      : new Set([...settings.visibleTypes, type]);
+    updateSettings({ visibleTypes: newVisibleTypes });
   }
 
   function toggleVisibleRegime(regime: HeliocentricOrbitalRegime) {
-    const newVisibleRegimes = state.visibleRegimes.has(regime)
-      ? new Set([...state.visibleRegimes].filter(t => t !== regime))
-      : new Set([...state.visibleRegimes, regime]);
-    updateState({ visibleRegimes: newVisibleRegimes });
+    const newVisibleRegimes = settings.visibleRegimes.has(regime)
+      ? new Set([...settings.visibleRegimes].filter(t => t !== regime))
+      : new Set([...settings.visibleRegimes, regime]);
+    updateSettings({ visibleRegimes: newVisibleRegimes });
   }
 
   return (
@@ -33,7 +38,7 @@ export function VisibilityControls({ state, updateState }: AppStateControlProps)
         {CelestialBodyTypes.map(type => (
           <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
             <Group gap="xs" align="center">
-              {state.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+              {settings.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
               {celestialBodyTypeName(type)}
             </Group>
           </Menu.Item>
@@ -43,7 +48,7 @@ export function VisibilityControls({ state, updateState }: AppStateControlProps)
         {Object.values(HeliocentricOrbitalRegime).map(regime => (
           <Menu.Item key={regime} onClick={() => toggleVisibleRegime(regime)}>
             <Group gap="xs" align="center">
-              {state.visibleRegimes.has(regime) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+              {settings.visibleRegimes.has(regime) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
               {regime}
             </Group>
           </Menu.Item>

@@ -8,7 +8,7 @@ import { Thumbnail } from './Thumbnail.tsx';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { MajorMoons } from './MajorMoons.tsx';
-import { AppState } from '../../lib/state.ts';
+import { Settings } from '../../lib/state.ts';
 import { ParentBody } from './ParentBody.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { Gallery } from './Gallery.tsx';
@@ -22,12 +22,12 @@ import { OtherRegimes } from './OtherRegimes.tsx';
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateState: (update: Partial<AppState>) => void;
+  updateSettings: (update: Partial<Settings>) => void;
 };
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
   bodies,
-  updateState,
+  updateSettings,
 }: Props) {
   const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
@@ -39,7 +39,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
     body.orbitalRegime != null ? (
-      <OrbitalRegimePill regime={body.orbitalRegime} updateState={updateState} />
+      <OrbitalRegimePill regime={body.orbitalRegime} updateSettings={updateSettings} />
     ) : undefined;
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
@@ -75,8 +75,8 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         title={body.name}
         subTitle={celestialBodyTypeDescription(body)}
         color={body.color}
-        onClose={() => updateState({ center: null })}
-        onHover={hovered => updateState({ hover: hovered ? name : null })}
+        onClose={() => updateSettings({ center: null })}
+        onHover={hovered => updateSettings({ hover: hovered ? name : null })}
       />
 
       <FactSheetSummary obj={body} />
@@ -103,10 +103,12 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       <Box style={{ justifySelf: 'flex-end' }}>
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-        <MajorMoons body={body} bodies={bodies} updateState={updateState} />
-        <ParentBody body={body} bodies={bodies} updateState={updateState} />
-        <OtherBodies body={body} bodies={bodies} updateState={updateState} />
-        {body.type === CelestialBodyType.STAR && <OtherRegimes updateState={updateState} title="Orbital Regimes" />}
+        <MajorMoons body={body} bodies={bodies} updateSettings={updateSettings} />
+        <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
+        <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
+        {body.type === CelestialBodyType.STAR && (
+          <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />
+        )}
       </Box>
     </Stack>
   );

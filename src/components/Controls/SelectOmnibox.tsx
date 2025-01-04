@@ -4,23 +4,28 @@ import { ActionIcon, Box, Group, Kbd, Text, Tooltip } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
 import styles from './SelectOmnibox.module.css';
-import { AppStateControlProps, iconSize } from './constants.ts';
+import { iconSize } from './constants.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 
-export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
+};
+export function SelectOmnibox({ settings, updateSettings }: Props) {
   const [query, setQuery] = useState('');
   const modifierKey = useModifierKey();
 
   function handleSelect(body: CelestialBody) {
-    updateState(prev => ({ ...prev, center: body.name, visibleTypes: new Set([...prev.visibleTypes, body.type]) }));
+    updateSettings(prev => ({ ...prev, center: body.name, visibleTypes: new Set([...prev.visibleTypes, body.type]) }));
   }
 
   const bodyItems = useMemo(
     () =>
-      state.bodies
+      settings.bodies
         .filter(body => query.length === 0 || matchesQuery(body, query))
         .map((body, i) => (
           <Spotlight.Action
@@ -41,7 +46,7 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
             onClick={() => handleSelect(body)}
           />
         )),
-    [query, JSON.stringify(state.bodies)]
+    [query, JSON.stringify(settings.bodies)]
   );
 
   const regimeItems = useMemo(
@@ -58,7 +63,7 @@ export function SelectOmnibox({ state, updateState }: AppStateControlProps) {
                 Orbital Regime
               </Text>
             }
-            onClick={() => updateState(prev => ({ ...prev, center: name }))}
+            onClick={() => updateSettings(prev => ({ ...prev, center: name }))}
           />
         )),
     [query]

@@ -1,9 +1,9 @@
-import { AppState } from '../../lib/state.ts';
+import { ModelState } from '../../lib/state.ts';
 import { buttonGap } from './constants.ts';
 import { Group, Text, Tooltip } from '@mantine/core';
 import { IconArrowRightBar, IconZodiacAries } from '@tabler/icons-react';
 
-type Props = Pick<AppState, 'vernalEquinox'>;
+type Props = Pick<ModelState, 'vernalEquinox'>;
 export function DirectionIndicator({ vernalEquinox }: Props) {
   const iconSize = 20;
   const angle = Number(Math.atan2(vernalEquinox[1], vernalEquinox[0]).toFixed(3));
