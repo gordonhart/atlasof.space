@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Group, Stack } from '@mantine/core';
-import { clampSettings, Settings, initialState } from '../lib/state.ts';
+import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
@@ -17,8 +17,8 @@ export function SolarSystem() {
   const isSmallDisplay = useIsSmallDisplay();
   const { settings } = appState;
 
-  const updateSettings = useCallback(
-    (update: Partial<Settings> | ((prev: Settings) => Settings)) => {
+  const updateSettings: UpdateSettings = useCallback(
+    update => {
       setAppState(prev => {
         const updated = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
         const newState = { ...prev, settings: clampSettings(updated) };

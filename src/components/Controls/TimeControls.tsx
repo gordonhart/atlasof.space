@@ -1,12 +1,14 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
-import { SettingsControlProps, buttonGap, iconSize } from './constants.ts';
+import { buttonGap, iconSize } from './constants.ts';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
 import { dateToHumanReadable, epochToDate } from '../../lib/epoch.ts';
-import { ModelState } from '../../lib/state.ts';
+import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 
-type Props = SettingsControlProps & {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
   model: ModelState;
 };
 export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {

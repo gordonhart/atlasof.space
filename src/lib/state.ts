@@ -16,10 +16,9 @@ export type Settings = {
   bodies: Array<CelestialBody>;
 };
 
+// these values are readonly; driven by the model
 export type ModelState = {
   time: number; // seconds
-  // TODO: should these really live here?
-  // these values are readonly; driven by the model
   metersPerPx: number; // describes zoom
   vernalEquinox: Point3; // direction of the Vernal Equinox
 };
@@ -66,3 +65,5 @@ export function clampSettings({ dt, ...settings }: Settings): Settings {
     dt: Math.min(Math.max(dt, Time.SECOND), 365 * Time.DAY),
   };
 }
+
+export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;

@@ -2,13 +2,14 @@ import { Box } from '@mantine/core';
 import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
-import { SettingsControlProps } from './constants.ts';
 import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
-import { ModelState } from '../../lib/state.ts';
+import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 
 const pad = 10;
 
-type Props = SettingsControlProps & {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
   model: ModelState;
   reset: () => void;
 };

@@ -1,10 +1,15 @@
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { IconCircle, IconCircleFilled, IconEyeCog } from '@tabler/icons-react';
-import { SettingsControlProps, iconSize } from './constants.ts';
+import { iconSize } from './constants.ts';
 import { CelestialBodyType, CelestialBodyTypes, HeliocentricOrbitalRegime } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 
-export function VisibilityControls({ settings, updateSettings }: SettingsControlProps) {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
+};
+export function VisibilityControls({ settings, updateSettings }: Props) {
   function toggleVisibleType(type: CelestialBodyType) {
     const newVisibleTypes = settings.visibleTypes.has(type)
       ? new Set([...settings.visibleTypes].filter(t => t !== type))

@@ -1,11 +1,16 @@
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconHelp } from '@tabler/icons-react';
-import { SettingsControlProps, iconSize } from './constants.ts';
+import { iconSize } from './constants.ts';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { HelpModal } from './HelpModal.tsx';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 
-export function HelpModalButton({ settings, updateSettings }: SettingsControlProps) {
+type Props = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
+};
+export function HelpModalButton({ settings, updateSettings }: Props) {
   const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
     key: 'has-seen-help-modal',
     getInitialValueInEffect: false,
