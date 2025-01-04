@@ -1,4 +1,4 @@
-import { J2000, julianDayToEpoch } from './epoch.ts';
+import { J2000, julianDayToEpoch, Time } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
 import { SBDB_URL } from './sbdb.ts';
 import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
@@ -6,13 +6,6 @@ import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './t
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
 export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
-
-export enum Time {
-  SECOND = 1,
-  MINUTE = 60 * SECOND,
-  HOUR = 60 * MINUTE,
-  DAY = 24 * HOUR,
-}
 
 export const DEFAULT_MOON_COLOR = '#aaaaaa';
 export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids

@@ -1,5 +1,5 @@
-import { SOLAR_SYSTEM, Time } from './bodies.ts';
-import { nowEpoch } from './epoch.ts';
+import { SOLAR_SYSTEM } from './bodies.ts';
+import { nowEpoch, Time } from './epoch.ts';
 import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
 
 export type Settings = {
