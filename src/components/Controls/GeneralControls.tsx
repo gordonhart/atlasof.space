@@ -1,4 +1,5 @@
-import { ActionIcon, Group, Tooltip } from '@mantine/core';
+import { ActionIcon, Group, Kbd, Tooltip } from '@mantine/core';
+import { useHotkeys } from '@mantine/hooks';
 import { IconCircle, IconCircleDot, IconRestore, IconTagMinus, IconTagPlus } from '@tabler/icons-react';
 import { memo } from 'react';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
@@ -13,6 +14,8 @@ type Props = {
   reset: () => void;
 };
 export const GeneralControls = memo(function GeneralControlsComponent({ settings, updateSettings, reset }: Props) {
+  useHotkeys([['r', reset]]);
+
   return (
     <Group gap={buttonGap}>
       <SelectOmnibox settings={settings} updateSettings={updateSettings} />
@@ -39,7 +42,17 @@ export const GeneralControls = memo(function GeneralControlsComponent({ settings
 
       <VisibilityControls settings={settings} updateSettings={updateSettings} />
 
-      <Tooltip position="top" label="Reset">
+      <Tooltip
+        position="top"
+        label={
+          <Group gap={2}>
+            Reset
+            <Kbd size="xs" px={4} py={0}>
+              r
+            </Kbd>
+          </Group>
+        }
+      >
         <ActionIcon onClick={reset}>
           <IconRestore size={iconSize} />
         </ActionIcon>

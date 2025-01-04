@@ -99,6 +99,11 @@ export type OrbitalRegime = {
 };
 
 // user-pilotable spacecraft
+export type SpacecraftControls = {
+  launch: boolean;
+  fire: boolean;
+  rotate: 'north' | 'east' | 'south' | 'west' | null;
+};
 export type Spacecraft = {
   name: string;
   mass: number; // kg
@@ -108,10 +113,7 @@ export type Spacecraft = {
   launchDirection: Point3; // ecliptic unit vector, e.g. vernal equinox = [1, 0, 0]
   launchTime: number | null; // offset from t0 as determined by settings, null before launch
   color: `#${string}`; // hex
-  controls: {
-    launch: boolean;
-    fire: boolean;
-  };
+  controls: SpacecraftControls;
   // TODO: burn with different intensity?
   // TODO: burn fuel through time?
 };

@@ -1,3 +1,4 @@
+import { degreesToRadians } from '../physics.ts';
 import { Point2 } from '../types.ts';
 
 export const LABEL_FONT_FAMILY = 'Electrolize, Arial';
@@ -100,6 +101,29 @@ export function drawDotAtLocation(
   ctx.fillStyle = color;
   ctx.closePath();
   ctx.fill();
+}
+
+export function drawSpacecraftAtLocation(
+  ctx: CanvasRenderingContext2D,
+  color: `#${string}`,
+  [xPx, yPx]: Point2, // centered on this value
+  angle: number // degrees
+) {
+  const size = 5;
+  ctx.save(); // Save the current context
+  ctx.translate(xPx, yPx); // Move to the specified coordinates
+  ctx.rotate(degreesToRadians(angle)); // Rotate to the specified angle
+
+  // Draw the caret
+  ctx.beginPath();
+  ctx.moveTo(size, 0);
+  ctx.lineTo(-size, -size / 2);
+  ctx.lineTo(-size, size / 2);
+  ctx.closePath();
+
+  ctx.fillStyle = color;
+  ctx.fill(); // Outline the caret
+  ctx.restore(); // Restore the original context
 }
 
 type CaretType = 'right' | 'left' | 'up' | 'down';

@@ -1,33 +1,36 @@
 import { useCallback, useEffect } from 'react';
 import { UpdateSettings } from '../lib/state.ts';
+import { SpacecraftControls } from '../lib/types.ts';
 
 export function useSpacecraftControls(updateSettings: UpdateSettings) {
-  const toggleFire = useCallback(
-    (pressed: boolean) => {
+  const updateSpacecraftControls = useCallback(
+    (updateFn: (prev: SpacecraftControls) => Partial<SpacecraftControls>) => {
       updateSettings(prev => {
         const { spacecraft } = prev;
         if (spacecraft == null) return prev;
-        return {
-          ...prev,
-          spacecraft: { ...spacecraft, controls: { ...spacecraft.controls, fire: pressed } },
-        };
+        const { controls } = spacecraft;
+        return { ...prev, spacecraft: { ...spacecraft, controls: { ...controls, ...updateFn(controls) } } };
       });
     },
     [updateSettings]
   );
+  const toggleFire = useCallback(
+    (pressed: boolean) => updateSpacecraftControls(() => ({ fire: pressed })),
+    [updateSpacecraftControls]
+  );
 
   const toggleLaunch = useCallback(
-    (pressed: boolean) => {
-      updateSettings(prev => {
-        const { spacecraft } = prev;
-        if (spacecraft == null) return prev;
-        return {
-          ...prev,
-          spacecraft: { ...spacecraft, controls: { ...spacecraft.controls, launch: pressed } },
-        };
-      });
+    (pressed: boolean) => updateSpacecraftControls(() => ({ launch: pressed })),
+    [updateSpacecraftControls]
+  );
+
+  const rotate = useCallback(
+    (direction: 'north' | 'east' | 'south' | 'west') => {
+      return function handleRotate(pressed: boolean) {
+        updateSpacecraftControls(() => ({ rotate: pressed ? direction : null }));
+      };
     },
-    [updateSettings]
+    [updateSpacecraftControls]
   );
 
   // hand-roll effect to listen to both keyup and keydown events
@@ -35,6 +38,10 @@ export function useSpacecraftControls(updateSettings: UpdateSettings) {
     const hotkeys: Array<[string, (pressed: boolean) => void]> = [
       ['f', toggleFire],
       ['l', toggleLaunch],
+      ['ArrowUp', rotate('north')],
+      ['ArrowLeft', rotate('west')],
+      ['ArrowDown', rotate('south')],
+      ['ArrowRight', rotate('east')],
     ];
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -52,5 +59,5 @@ export function useSpacecraftControls(updateSettings: UpdateSettings) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [toggleFire, toggleLaunch]);
+  }, [toggleFire, toggleLaunch, rotate]);
 }

@@ -13,5 +13,6 @@ export const OP_DRIVE_SPACECRAFT: Spacecraft = {
   controls: {
     launch: false,
     fire: false,
+    rotate: null,
   },
 };

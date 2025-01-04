@@ -1,10 +1,11 @@
 import { OrthographicCamera, Vector2, Vector3 } from 'three';
+import { radiansToDegrees } from '../physics.ts';
 import { Settings } from '../state.ts';
-import { CelestialBody, Point2, Spacecraft as SpacecraftType } from '../types.ts';
+import { CelestialBody, Point2, Point3, Spacecraft as SpacecraftType } from '../types.ts';
 import {
-  drawDotAtLocation,
   drawLabelAtLocation,
   drawOffscreenIndicator,
+  drawSpacecraftAtLocation,
   getCanvasPixels,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
@@ -17,6 +18,7 @@ export class Spacecraft extends KinematicBody {
   private readonly spacecraft: SpacecraftType;
   private readonly startOn: KeplerianBody;
   private readonly resolution: Vector2;
+  private readonly orientation: Vector3; // unit vector
 
   private screenPosition: Vector3 = new Vector3();
   private launched: boolean = false;
@@ -27,6 +29,7 @@ export class Spacecraft extends KinematicBody {
     this.spacecraft = spacecraft;
     this.startOn = startOn;
     this.resolution = resolution;
+    this.orientation = new Vector3(...spacecraft.launchDirection);
   }
 
   increment(parents: Array<{ position: Vector3; velocity: Vector3; mass: number }>, dt: number) {
@@ -37,15 +40,20 @@ export class Spacecraft extends KinematicBody {
   update(settings: Settings) {
     if (settings.spacecraft == null || !settings.play) return;
     const { controls } = settings.spacecraft;
-    const { launch, fire } = controls;
+    const { launch, fire, rotate } = controls;
     if (launch && !this.launched) {
       console.log(`launching from ${this.startOn.body.name}`);
       this.launch();
     }
+    if (rotate != null && this.launched) {
+      const direction: Point3 =
+        rotate === 'east' ? [1, 0, 0] : rotate === 'north' ? [0, 1, 0] : rotate === 'west' ? [-1, 0, 0] : [0, -1, 0];
+      this.orientation.set(...direction);
+    }
     if (fire && this.launched) {
       const thrustAcceleration = this.spacecraft.thrust / this.spacecraft.mass;
       console.log(`firing with ${thrustAcceleration} m/s2`);
-      const thrustVector = new Vector3(1, 0, 0); // TODO: should store and update from controls
+      const thrustVector = this.orientation.clone();
       this.velocity.add(thrustVector.multiplyScalar(thrustAcceleration * settings.dt));
       this.position.add(thrustVector.multiplyScalar(settings.dt));
     }
@@ -89,10 +97,10 @@ export class Spacecraft extends KinematicBody {
     if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
       drawOffscreenIndicator(ctx, this.spacecraft.color, canvasPx, [bodyXpx, bodyYpx]);
     } else {
-      const dotRadius = 5;
-      drawDotAtLocation(ctx, this.spacecraft.color, [bodyXpx, bodyYpx], dotRadius);
+      const rotationAngle = radiansToDegrees(Math.atan2(this.orientation.y, this.orientation.x));
+      drawSpacecraftAtLocation(ctx, this.spacecraft.color, [bodyXpx, bodyYpx], rotationAngle);
       if (drawLabel) {
-        drawLabelAtLocation(ctx, label, this.spacecraft.color, [bodyXpx, bodyYpx], textPx, dotRadius + 5);
+        drawLabelAtLocation(ctx, label, this.spacecraft.color, [bodyXpx, bodyYpx], textPx, 10);
       }
     }
   }
