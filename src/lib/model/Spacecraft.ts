@@ -35,15 +35,19 @@ export class Spacecraft extends KinematicBody {
   }
 
   update(settings: Settings) {
-    if (settings.spacecraft == null) return;
+    if (settings.spacecraft == null || !settings.play) return;
     const { controls } = settings.spacecraft;
     const { launch, fire } = controls;
     if (launch && !this.launched) {
       console.log(`launching from ${this.startOn.body.name}`);
       this.launch();
     }
-    if (fire) {
-      console.log(`firing with ${this.spacecraft.thrust} N`);
+    if (fire && this.launched) {
+      const thrustAcceleration = this.spacecraft.thrust / this.spacecraft.mass;
+      console.log(`firing with ${thrustAcceleration} m/s2`);
+      const thrustVector = new Vector3(1, 0, 0); // TODO: should store and update from controls
+      this.velocity.add(thrustVector.multiplyScalar(thrustAcceleration * settings.dt));
+      this.position.add(thrustVector.multiplyScalar(settings.dt));
     }
   }
 

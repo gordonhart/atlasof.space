@@ -115,6 +115,7 @@ export class SolarSystemModel {
     return (SCALE_FACTOR * visibleWidth) / this.resolution.width;
   }
 
+  // TODO: is this math correct? seems 180º offset from the location of Earth at the equinox in March
   getVernalEquinox(): Point3 {
     // the Vernal Equinox is the direction of +X; find by applying matrix transformations from camera
     const localX = new Vector3(1, 0, 0); // TODO: no new allocation

@@ -4,7 +4,7 @@ import { Spacecraft } from './types.ts';
 export const OP_DRIVE_SPACECRAFT: Spacecraft = {
   name: 'OP Drive',
   mass: 100e3,
-  thrust: 1000,
+  thrust: 1e4, // 10 kN
   launchLocation: EARTH.name,
   launchVelocity: 12e3,
   launchDirection: [1, 0, 0],
