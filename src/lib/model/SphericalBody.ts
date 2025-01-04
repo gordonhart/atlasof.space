@@ -9,10 +9,10 @@ import {
   TextureLoader,
   Vector3,
 } from 'three';
-import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
-import { CelestialBody, CelestialBodyType } from '../types.ts';
 import { Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
+import { CelestialBody, CelestialBodyType } from '../types.ts';
+import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { RingObject } from './RingObject.ts';
 
 export class SphericalBody {

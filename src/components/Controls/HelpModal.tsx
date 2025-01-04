@@ -27,12 +27,12 @@ import {
   IconZoomScan,
 } from '@tabler/icons-react';
 import { ReactNode, useMemo } from 'react';
+import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
-import { BodyCard } from '../FactSheet/BodyCard.tsx';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
-import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { BodyCard } from '../FactSheet/BodyCard.tsx';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
 

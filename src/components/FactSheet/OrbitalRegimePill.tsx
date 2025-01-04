@@ -1,8 +1,8 @@
 import { Group, Pill } from '@mantine/core';
+import { IconCircleDotFilled } from '@tabler/icons-react';
+import { Settings } from '../../lib/state.ts';
 import { HeliocentricOrbitalRegime } from '../../lib/types.ts';
 import styles from './RelatedBodies.module.css';
-import { Settings } from '../../lib/state.ts';
-import { IconCircleDotFilled } from '@tabler/icons-react';
 
 type Props = {
   regime: HeliocentricOrbitalRegime;

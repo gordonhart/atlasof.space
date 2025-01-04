@@ -1,23 +1,23 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
-import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
-import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
-import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
+import { memo, ReactNode } from 'react';
+import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
-import { Thumbnail } from './Thumbnail.tsx';
-import { useFactsStream } from '../../hooks/useFactsStream.ts';
+import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
+import { Settings } from '../../lib/state.ts';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
+import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
+import { FactGrid } from './FactGrid.tsx';
+import { FactSheetSummary } from './FactSheetSummary.tsx';
+import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { Gallery } from './Gallery.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { MajorMoons } from './MajorMoons.tsx';
-import { Settings } from '../../lib/state.ts';
-import { ParentBody } from './ParentBody.tsx';
-import { OtherBodies } from './OtherBodies.tsx';
-import { Gallery } from './Gallery.tsx';
-import { FactGrid } from './FactGrid.tsx';
-import { FactSheetTitle } from './FactSheetTitle.tsx';
-import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
-import { memo, ReactNode } from 'react';
+import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
+import { ParentBody } from './ParentBody.tsx';
+import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
   body: CelestialBody;

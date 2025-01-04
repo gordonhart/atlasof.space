@@ -1,9 +1,9 @@
 import { Group, Stack, Title } from '@mantine/core';
-import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
-import { OrbitalRegime } from '../../lib/types.ts';
 import { useMemo } from 'react';
 import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
 import { Settings } from '../../lib/state.ts';
+import { OrbitalRegime } from '../../lib/types.ts';
+import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 
 type Props = {
   regime?: OrbitalRegime;

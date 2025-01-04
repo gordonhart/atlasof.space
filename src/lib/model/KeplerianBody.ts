@@ -1,14 +1,14 @@
-import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
-import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import { Settings } from '../state.ts';
+import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
+import { AxisIndicator } from './AxisIndicator.ts';
 import { drawDotAtLocation, drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
-import { isOffScreen } from './utils.ts';
+import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
+import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
-import { FocalRadius } from './FocalRadius.ts';
-import { AxisIndicator } from './AxisIndicator.ts';
+import { isOffScreen } from './utils.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody extends KinematicBody {

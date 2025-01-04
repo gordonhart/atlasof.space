@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
-import { CelestialBody } from '../lib/types.ts';
 import { Settings } from '../lib/state.ts';
+import { CelestialBody } from '../lib/types.ts';
 
 export function useSolarSystemModel() {
   const containerRef = useRef<HTMLDivElement>(null);

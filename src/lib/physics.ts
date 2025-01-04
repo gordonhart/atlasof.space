@@ -1,5 +1,5 @@
-import { CartesianState, Epoch, KeplerianElements, Point3 } from './types.ts';
 import { epochToDate } from './epoch.ts';
+import { CartesianState, Epoch, KeplerianElements, Point3 } from './types.ts';
 
 export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 

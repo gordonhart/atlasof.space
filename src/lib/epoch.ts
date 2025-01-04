@@ -1,5 +1,5 @@
-import { Epoch } from './types.ts';
 import { Time } from './bodies.ts';
+import { Epoch } from './types.ts';
 
 export const J2000: Epoch = {
   name: 'J2000',

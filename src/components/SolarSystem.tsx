@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Group, Stack } from '@mantine/core';
-import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
-import { Controls } from './Controls/Controls.tsx';
-import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
-import { CelestialBody } from '../lib/types.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
-import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
+import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
+import { CelestialBody } from '../lib/types.ts';
+import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {

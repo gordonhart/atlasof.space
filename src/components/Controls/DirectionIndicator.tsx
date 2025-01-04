@@ -1,7 +1,7 @@
-import { ModelState } from '../../lib/state.ts';
-import { buttonGap } from './constants.ts';
 import { Group, Text, Tooltip } from '@mantine/core';
 import { IconArrowRightBar, IconZodiacAries } from '@tabler/icons-react';
+import { ModelState } from '../../lib/state.ts';
+import { buttonGap } from './constants.ts';
 
 type Props = Pick<ModelState, 'vernalEquinox'>;
 export function DirectionIndicator({ vernalEquinox }: Props) {

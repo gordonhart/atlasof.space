@@ -10,11 +10,11 @@ import {
   Vector2,
   Vector3,
 } from 'three';
-import { Textures } from '../images.ts';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { CAMERA_INIT } from './constants.ts';
-import { degreesToRadians } from '../physics.ts';
 import { ECLIPTIC_TILT } from '../bodies.ts';
+import { Textures } from '../images.ts';
+import { degreesToRadians } from '../physics.ts';
+import { CAMERA_INIT } from './constants.ts';
 
 export class Firmament {
   private readonly scene: Scene;

@@ -9,10 +9,10 @@ import {
   TextureLoader,
   Vector3,
 } from 'three';
-import { CelestialBody, Ring } from '../types.ts';
-import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
+import { CelestialBody, Ring } from '../types.ts';
+import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 
 export class RingObject {
   private readonly scene: Scene;

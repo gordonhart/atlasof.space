@@ -1,8 +1,8 @@
 import { MouseEvent, PointerEvent, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
-import { Point2 } from '../lib/types.ts';
-import { Settings } from '../lib/state.ts';
 import { magnitude } from '../lib/physics.ts';
+import { Settings } from '../lib/state.ts';
+import { Point2 } from '../lib/types.ts';
 import { useIsTouchDevice } from './useIsTouchDevice.ts';
 
 const DRAG_PX_THRESHOLD = 10;

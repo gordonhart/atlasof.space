@@ -1,11 +1,11 @@
 import { ActionIcon, Group, Tooltip } from '@mantine/core';
 import { IconCircle, IconCircleDot, IconRestore, IconTagMinus, IconTagPlus } from '@tabler/icons-react';
-import { buttonGap, iconSize } from './constants.ts';
 import { memo } from 'react';
-import { SelectOmnibox } from './SelectOmnibox.tsx';
-import { HelpModalButton } from './HelpModalButton.tsx';
-import { VisibilityControls } from './VisibilityControls.tsx';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { buttonGap, iconSize } from './constants.ts';
+import { HelpModalButton } from './HelpModalButton.tsx';
+import { SelectOmnibox } from './SelectOmnibox.tsx';
+import { VisibilityControls } from './VisibilityControls.tsx';
 
 type Props = {
   settings: Settings;

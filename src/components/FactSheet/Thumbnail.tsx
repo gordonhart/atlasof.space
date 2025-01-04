@@ -1,7 +1,7 @@
 import { Image } from '@mantine/core';
 import { useState } from 'react';
-import { CelestialBody } from '../../lib/types.ts';
 import { Thumbnails } from '../../lib/images.ts';
+import { CelestialBody } from '../../lib/types.ts';
 
 type Props = {
   body: CelestialBody;
