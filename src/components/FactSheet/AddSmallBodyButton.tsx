@@ -1,9 +1,9 @@
 import { Button } from '@mantine/core';
-import { IconSpherePlus } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { iconSize } from '../Controls/constants.ts';
-import { AddSmallBodyModal } from '../Controls/AddSmallBodyModal.tsx';
+import { IconSpherePlus } from '@tabler/icons-react';
 import { CelestialBody } from '../../lib/types.ts';
+import { AddSmallBodyModal } from '../Controls/AddSmallBodyModal.tsx';
+import { iconSize } from '../Controls/constants.ts';
 
 type Props = {
   bodies: Array<CelestialBody>;

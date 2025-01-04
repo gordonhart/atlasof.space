@@ -1,4 +1,3 @@
-import { useEffect, useMemo } from 'react';
 import {
   ActionIcon,
   Box,
@@ -16,6 +15,7 @@ import {
 } from '@mantine/core';
 import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { UseQueryResult } from '@tanstack/react-query';
+import { useEffect, useMemo } from 'react';
 import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { notNullish } from '../../lib/utils.ts';

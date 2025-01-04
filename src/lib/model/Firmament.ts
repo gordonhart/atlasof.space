@@ -11,9 +11,9 @@ import {
   Vector3,
 } from 'three';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ECLIPTIC_TILT } from '../bodies.ts';
 import { Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
-import { ECLIPTIC_TILT } from '../bodies.ts';
 import { CAMERA_INIT } from './constants.ts';
 
 export class Firmament {

@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
 import { Settings } from '../../lib/state.ts';
+import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
 

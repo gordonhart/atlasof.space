@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
 import { Stack, Title } from '@mantine/core';
-import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
+import { useMemo } from 'react';
 import { Settings } from '../../lib/state.ts';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { BodyCard } from './BodyCard.tsx';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);

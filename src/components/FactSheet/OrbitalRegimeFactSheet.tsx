@@ -1,13 +1,13 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
-import { CelestialBody, HeliocentricOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
-import { Settings } from '../../lib/state.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
-import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { Settings } from '../../lib/state.ts';
+import { CelestialBody, HeliocentricOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
+import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
+import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
-import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 
 type Props = {
   regime: OrbitalRegime;

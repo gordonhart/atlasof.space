@@ -30,7 +30,16 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'unused-imports/no-unused-imports': 'error',
       'prettier/prettier': ['error'],
-      'import/order': ['error'],
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
     },
   }
 );

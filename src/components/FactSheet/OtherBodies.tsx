@@ -1,7 +1,7 @@
 import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
-import { CelestialBody } from '../../lib/types.ts';
 import { Settings } from '../../lib/state.ts';
+import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import styles from './RelatedBodies.module.css';
 import { Thumbnail } from './Thumbnail.tsx';

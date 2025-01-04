@@ -1,9 +1,9 @@
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
-import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from '../lib/types.ts';
 import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
-import { isNotFound, SBDB_URL, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
-import { estimateAsteroidMass } from '../lib/physics.ts';
 import { julianDayToEpoch } from '../lib/epoch.ts';
+import { estimateAsteroidMass } from '../lib/physics.ts';
+import { isNotFound, SBDB_URL, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
+import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from '../lib/types.ts';
 
 export function useSmallBodies(names: Array<string>) {
   return useQueries<UseQueryOptions<CelestialBody | null, Error>[]>({

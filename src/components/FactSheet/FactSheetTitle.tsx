@@ -1,7 +1,7 @@
 import { ActionIcon, Box, Group, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { iconSize } from '../Controls/constants.ts';
 import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { iconSize } from '../Controls/constants.ts';
 
 type Props = {
   title: string;

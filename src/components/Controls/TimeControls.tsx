@@ -1,9 +1,9 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
-import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { dateToHumanReadable, epochToDate } from '../../lib/epoch.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
+import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
 
 type Props = {

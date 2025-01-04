@@ -1,7 +1,7 @@
-import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
 import { J2000, julianDayToEpoch } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
 import { SBDB_URL } from './sbdb.ts';
+import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
 
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity

@@ -3,8 +3,8 @@ import { IconCircle, IconCircleDot, IconRestore, IconTagMinus, IconTagPlus } fro
 import { memo } from 'react';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { buttonGap, iconSize } from './constants.ts';
-import { SelectOmnibox } from './SelectOmnibox.tsx';
 import { HelpModalButton } from './HelpModalButton.tsx';
+import { SelectOmnibox } from './SelectOmnibox.tsx';
 import { VisibilityControls } from './VisibilityControls.tsx';
 
 type Props = {

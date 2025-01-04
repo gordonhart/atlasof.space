@@ -1,5 +1,5 @@
-import { OrbitalRegime, HeliocentricOrbitalRegime } from './types.ts';
 import { AU } from './bodies.ts';
+import { OrbitalRegime, HeliocentricOrbitalRegime } from './types.ts';
 
 export const INNER_SYSTEM: OrbitalRegime = {
   name: HeliocentricOrbitalRegime.INNER_SYSTEM,
