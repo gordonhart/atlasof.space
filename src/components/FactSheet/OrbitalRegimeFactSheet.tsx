@@ -1,5 +1,5 @@
 import { CelestialBody, HeliocentricOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
-import { AppState } from '../../lib/state.ts';
+import { Settings } from '../../lib/state.ts';
 import { Box, Stack, Title } from '@mantine/core';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
@@ -11,16 +11,16 @@ import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 
 type Props = {
   regime: OrbitalRegime;
-  state: AppState;
-  updateState: (update: Partial<AppState>) => void;
+  settings: Settings;
+  updateSettings: (update: Partial<Settings>) => void;
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
-export function OrbitalRegimeFactSheet({ regime, state, updateState, addBody, removeBody }: Props) {
+export function OrbitalRegimeFactSheet({ regime, settings, updateSettings, addBody, removeBody }: Props) {
   const isAsteroidBelt = regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT;
   const bodiesInRegime = useMemo(
-    () => state.bodies.filter(body => body.orbitalRegime === regime.name),
-    [regime.name, JSON.stringify(state.bodies)]
+    () => settings.bodies.filter(body => body.orbitalRegime === regime.name),
+    [regime.name, JSON.stringify(settings.bodies)]
   );
 
   return (
@@ -29,7 +29,7 @@ export function OrbitalRegimeFactSheet({ regime, state, updateState, addBody, re
         title={regime.name}
         subTitle="Orbital Regime"
         color={DEFAULT_ASTEROID_COLOR}
-        onClose={() => updateState({ center: null })}
+        onClose={() => updateSettings({ center: null })}
       />
 
       <FactSheetSummary obj={regime} />
@@ -37,13 +37,13 @@ export function OrbitalRegimeFactSheet({ regime, state, updateState, addBody, re
       <Stack p="md" gap="xs" flex={1}>
         <Title order={5}>{isAsteroidBelt ? 'Asteroids' : 'Celestial Bodies'}</Title>
         {bodiesInRegime.map((body, i) => (
-          <BodyCard key={`${body.name}-${i}`} body={body} onClick={() => updateState({ center: body.name })} />
+          <BodyCard key={`${body.name}-${i}`} body={body} onClick={() => updateSettings({ center: body.name })} />
         ))}
-        {isAsteroidBelt && <AddSmallBodyButton state={state} addBody={addBody} removeBody={removeBody} />}
+        {isAsteroidBelt && <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />}
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <OtherRegimes regime={regime} updateState={updateState} />
+        <OtherRegimes regime={regime} updateSettings={updateSettings} />
       </Box>
     </Stack>
   );

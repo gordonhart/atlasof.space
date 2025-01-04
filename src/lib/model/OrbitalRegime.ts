@@ -9,7 +9,7 @@ import {
   OneFactor,
   DoubleSide,
 } from 'three';
-import { AppState } from '../state.ts';
+import { Settings } from '../state.ts';
 import { OrbitalRegime as OrbitalRegimeType } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
@@ -18,7 +18,7 @@ export class OrbitalRegime {
   readonly scene: Scene;
   readonly mesh: Mesh;
 
-  constructor(scene: Scene, appState: AppState, regime: OrbitalRegimeType) {
+  constructor(scene: Scene, settings: Settings, regime: OrbitalRegimeType) {
     this.regime = regime;
     this.scene = scene;
 
@@ -37,13 +37,13 @@ export class OrbitalRegime {
       blendDst: OneFactor,
     });
     this.mesh = new Mesh(geometry, material);
-    this.mesh.visible = this.isVisible(appState);
+    this.mesh.visible = this.isVisible(settings);
     this.mesh.scale.z = regime.roundness; // flatten or stretch torus
     scene.add(this.mesh);
   }
 
-  update(appState: AppState) {
-    this.mesh.visible = this.isVisible(appState);
+  update(settings: Settings) {
+    this.mesh.visible = this.isVisible(settings);
   }
 
   dispose() {
@@ -52,11 +52,11 @@ export class OrbitalRegime {
     this.scene.remove(this.mesh);
   }
 
-  private isVisible(appState: AppState) {
+  private isVisible(settings: Settings) {
     return (
-      appState.hover === this.regime.name ||
-      appState.center === this.regime.name ||
-      appState.visibleRegimes.has(this.regime.name)
+      settings.hover === this.regime.name ||
+      settings.center === this.regime.name ||
+      settings.visibleRegimes.has(this.regime.name)
     );
   }
 }

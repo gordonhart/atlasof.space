@@ -1,11 +1,11 @@
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconHelp } from '@tabler/icons-react';
-import { AppStateControlProps, iconSize } from './constants.ts';
+import { SettingsControlProps, iconSize } from './constants.ts';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { HelpModal } from './HelpModal.tsx';
 
-export function HelpModalButton({ state, updateState }: AppStateControlProps) {
+export function HelpModalButton({ settings, updateSettings }: SettingsControlProps) {
   const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
     key: 'has-seen-help-modal',
     getInitialValueInEffect: false,
@@ -13,12 +13,12 @@ export function HelpModalButton({ state, updateState }: AppStateControlProps) {
   const [isOpen, controls] = useDisclosure(false);
 
   function openHelp() {
-    updateState({ play: false });
+    updateSettings({ play: false });
     controls.open();
   }
 
   function closeHelp() {
-    updateState({ play: true });
+    updateSettings({ play: true });
     controls.close();
     setHasSeenHelpModal('true');
   }
@@ -34,7 +34,7 @@ export function HelpModalButton({ state, updateState }: AppStateControlProps) {
           <IconHelp size={iconSize} />
         </ActionIcon>
       </Tooltip>
-      <HelpModal isOpen={isOpen} onClose={closeHelp} state={state} updateState={updateState} />
+      <HelpModal isOpen={isOpen} onClose={closeHelp} settings={settings} updateSettings={updateSettings} />
     </>
   );
 }

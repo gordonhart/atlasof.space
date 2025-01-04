@@ -1,9 +1,8 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
 import { AU } from '../../lib/bodies.ts';
+import { ModelState } from '../../lib/state.ts';
 
-type Props = {
-  metersPerPx: number;
-};
+type Props = Pick<ModelState, 'metersPerPx'>;
 export function ScaleIndicator({ metersPerPx }: Props) {
   let scaleWidthM, scaleDisplay, scaleUnits;
   if (metersPerPx > 0.005 * AU) {

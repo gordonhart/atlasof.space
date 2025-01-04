@@ -1,5 +1,5 @@
 import { CelestialBody } from '../../lib/types.ts';
-import { AppState } from '../../lib/state.ts';
+import { Settings } from '../../lib/state.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import styles from './RelatedBodies.module.css';
@@ -11,9 +11,9 @@ const N_RELATED = 6;
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateState: (update: Partial<AppState>) => void;
+  updateSettings: (update: Partial<Settings>) => void;
 };
-export function OtherBodies({ body, bodies, updateState }: Props) {
+export function OtherBodies({ body, bodies, updateSettings }: Props) {
   const otherBodies: Array<CelestialBody> = useMemo(() => {
     const bodiesOfType = bodies.filter(({ type }) => type === body.type);
     const bodyIndex = bodiesOfType.findIndex(({ name }) => name === body.name);
@@ -33,9 +33,9 @@ export function OtherBodies({ body, bodies, updateState }: Props) {
             key={`${relatedBody.name}-${i}`}
             className={styles.LinkPill}
             style={{ cursor: 'pointer' }}
-            onClick={() => updateState({ center: relatedBody.name, hover: null })}
-            onMouseEnter={() => updateState({ hover: relatedBody.name })}
-            onMouseLeave={() => updateState({ hover: null })}
+            onClick={() => updateSettings({ center: relatedBody.name, hover: null })}
+            onMouseEnter={() => updateSettings({ hover: relatedBody.name })}
+            onMouseLeave={() => updateSettings({ hover: null })}
           >
             <Group gap={8} align="center" wrap="nowrap">
               <Box w={thumbnailSize}>

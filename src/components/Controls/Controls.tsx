@@ -2,20 +2,22 @@ import { Box } from '@mantine/core';
 import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
-import { AppStateControlProps } from './constants.ts';
+import { SettingsControlProps } from './constants.ts';
 import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { ModelState } from '../../lib/state.ts';
 
 const pad = 10;
 
-type Props = AppStateControlProps & {
+type Props = SettingsControlProps & {
+  model: ModelState;
   reset: () => void;
 };
-export function Controls({ state, updateState, reset }: Props) {
+export function Controls({ settings, updateSettings, model, reset }: Props) {
   const isSmallDisplay = useIsSmallDisplay();
   return (
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
-        <TimeControls state={state} updateState={updateState} />
+        <TimeControls settings={settings} updateSettings={updateSettings} />
       </Box>
 
       <Box
@@ -23,11 +25,11 @@ export function Controls({ state, updateState, reset }: Props) {
         bottom={pad}
         {...(isSmallDisplay ? { right: pad } : { left: '50%', style: { transform: 'translate(-50%, 0)' } })}
       >
-        <GeneralControls state={state} updateState={updateState} reset={reset} />
+        <GeneralControls settings={settings} updateSettings={updateSettings} reset={reset} />
       </Box>
 
       <Box pos="absolute" right={pad} {...(isSmallDisplay ? { top: pad } : { bottom: pad })}>
-        <ScaleControls metersPerPx={state.metersPerPx} vernalEquinox={state.vernalEquinox} />
+        <ScaleControls metersPerPx={model.metersPerPx} vernalEquinox={model.vernalEquinox} />
       </Box>
     </>
   );

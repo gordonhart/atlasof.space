@@ -1,5 +1,5 @@
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
-import { AppState } from '../../lib/state.ts';
+import { Settings } from '../../lib/state.ts';
 import { Stack, Title } from '@mantine/core';
 import { BodyCard } from './BodyCard.tsx';
 import { useMemo } from 'react';
@@ -8,9 +8,9 @@ import { celestialBodyTypeName } from '../../lib/utils.ts';
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateState: (update: Partial<AppState>) => void;
+  updateSettings: (update: Partial<Settings>) => void;
 };
-export function ParentBody({ body, bodies, updateState }: Props) {
+export function ParentBody({ body, bodies, updateSettings }: Props) {
   const parentBody = useMemo(
     () => bodies.find(({ type, name }) => type !== CelestialBodyType.STAR && name === body.elements.wrt),
     [JSON.stringify(body), JSON.stringify(bodies)]
@@ -20,8 +20,8 @@ export function ParentBody({ body, bodies, updateState }: Props) {
       <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
       <BodyCard
         body={parentBody}
-        onClick={() => updateState({ center: parentBody.name, hover: null })}
-        onHover={hovered => updateState({ hover: hovered ? parentBody.name : null })}
+        onClick={() => updateSettings({ center: parentBody.name, hover: null })}
+        onHover={hovered => updateSettings({ hover: hovered ? parentBody.name : null })}
       />
     </Stack>
   ) : (

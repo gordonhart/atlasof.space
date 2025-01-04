@@ -16,7 +16,6 @@ import {
   useTree,
 } from '@mantine/core';
 import { IconChevronDown, IconX } from '@tabler/icons-react';
-import { AppStateControlProps } from './constants.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { notNullish } from '../../lib/utils.ts';
 import { UseQueryResult } from '@tanstack/react-query';
@@ -536,23 +535,24 @@ const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   return acc;
 }, []);
 
-type Props = Pick<AppStateControlProps, 'state'> & {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
+  bodies: Array<CelestialBody>;
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
-export function AddSmallBodyModal({ state, isOpen, onClose, addBody, removeBody }: Props) {
+export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody }: Props) {
   const initialCheckedState = useMemo(() => {
-    const names = state.bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
+    const names = bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
     const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
     return treeDataFlat.filter(({ value }) => names.some(name => value.includes(name))).map(({ value }) => value);
-  }, [JSON.stringify(state.bodies)]);
+  }, [JSON.stringify(bodies)]);
 
   const tree = useTree({ initialCheckedState });
 
   // filter out bodies that are already in the state to avoid re-fetching hardcoded bodies from SBDB (e.g. Ceres)
-  const existingBodyNames = new Set(state.bodies.map(({ name }) => name));
+  const existingBodyNames = new Set(bodies.map(({ name }) => name));
   const selectedBodies = tree.checkedState.map(getBodyNameFromNodeValue).filter(name => !existingBodyNames.has(name));
   const smallBodyQueries: Array<UseQueryResult<CelestialBody | null>> = useSmallBodies(selectedBodies);
   const smallBodies: Array<CelestialBody> = smallBodyQueries.map(({ data }) => data).filter(notNullish);
