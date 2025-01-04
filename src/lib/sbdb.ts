@@ -1,3 +1,5 @@
+export const SBDB_URL = 'https://ssd-api.jpl.nasa.gov/doc/sbdb.html';
+
 export type SmallBodyNotFound = {
   code: string; // e.g. '200'
   moreInfo: string; // e.g. 'https://ssd-api.jpl.nasa.gov/doc/sbdb.html'

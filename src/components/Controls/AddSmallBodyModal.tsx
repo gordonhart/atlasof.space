@@ -612,7 +612,7 @@ export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody
     >
       <Paper bg="black" withBorder style={{ overflow: 'hidden' }}>
         <Group p="md" gap="xs" justify="space-between" wrap="nowrap">
-          <Title order={5}>Add Asteroids from JPL Small Body Database</Title>
+          <Title order={5}>Add Asteroids from JPL Small-Body Database</Title>
           <ActionIcon onClick={onClose}>
             <IconX color="var(--mantine-color-gray-light-color)" size={20} />
           </ActionIcon>
