@@ -1,5 +1,12 @@
 import { Epoch } from './types.ts';
 
+export enum Time {
+  SECOND = 1,
+  MINUTE = 60 * SECOND,
+  HOUR = 60 * MINUTE,
+  DAY = 24 * HOUR,
+}
+
 export const J2000: Epoch = {
   name: 'J2000',
   year: 2000,
@@ -11,13 +18,6 @@ export const J2000: Epoch = {
 };
 // const JD_J2000 = 2451545.0; // Julian days since January 1, 4713 BCE, at noon (UTC)
 const JD_UNIX_EPOCH = 2440588; // 1970-01-01, the Unix epoch
-
-export enum Time {
-  SECOND = 1,
-  MINUTE = 60 * SECOND,
-  HOUR = 60 * MINUTE,
-  DAY = 24 * HOUR,
-}
 
 export function julianDayToEpoch(name: `JD${string}`): Epoch {
   const jd = Number(name.slice(2, name.length));
