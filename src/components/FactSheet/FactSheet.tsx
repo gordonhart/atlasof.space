@@ -1,7 +1,7 @@
-import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
+import { memo } from 'react';
 import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
 import { Settings } from '../../lib/state.ts';
-import { memo } from 'react';
+import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here

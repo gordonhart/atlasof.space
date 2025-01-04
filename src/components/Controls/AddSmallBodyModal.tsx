@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import {
   ActionIcon,
   Box,
@@ -16,9 +15,10 @@ import {
   useTree,
 } from '@mantine/core';
 import { IconChevronDown, IconX } from '@tabler/icons-react';
+import { UseQueryResult } from '@tanstack/react-query';
+import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { notNullish } from '../../lib/utils.ts';
-import { UseQueryResult } from '@tanstack/react-query';
 
 // TODO: load from data; full list is ~1.5M, should at least include a few thousand
 const bodies = [

@@ -1,6 +1,6 @@
-import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { useMemo } from 'react';
 import { Stack, Title } from '@mantine/core';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { Settings } from '../../lib/state.ts';
 import { BodyCard } from './BodyCard.tsx';
 

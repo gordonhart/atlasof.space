@@ -14,18 +14,18 @@ import {
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { map } from 'ramda';
 import { Settings } from '../state.ts';
 import { AU, SOL, Time } from '../bodies.ts';
-import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
+import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
+import { notNullish } from '../utils.ts';
+import { ORBITAL_REGIMES } from '../regimes.ts';
+import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { isOffScreen } from './utils.ts';
-import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
-import { map } from 'ramda';
-import { notNullish } from '../utils.ts';
 import { Firmament } from './Firmament.ts';
 import { OrbitalRegime } from './OrbitalRegime.ts';
-import { ORBITAL_REGIMES } from '../regimes.ts';
 
 export class SolarSystemModel {
   private readonly scene: Scene;

@@ -1,7 +1,7 @@
-import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
-import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
+import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
 import { Settings } from '../state.ts';
+import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 import { drawDotAtLocation, drawLabelAtLocation, drawOffscreenIndicator, getCanvasPixels } from './canvas.ts';
 import { isOffScreen } from './utils.ts';
 import { KinematicBody } from './KinematicBody.ts';

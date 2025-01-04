@@ -1,6 +1,6 @@
 import { Table, Text } from '@mantine/core';
-import { LoadingCursor } from './LoadingCursor.tsx';
 import { ReactNode } from 'react';
+import { LoadingCursor } from './LoadingCursor.tsx';
 
 type Props = {
   facts: Array<{ label: string; value: ReactNode }>;

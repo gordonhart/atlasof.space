@@ -3,13 +3,13 @@ import { Spotlight, spotlight } from '@mantine/spotlight';
 import { ActionIcon, Box, Group, Kbd, Text, Tooltip } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
-import styles from './SelectOmnibox.module.css';
-import { iconSize } from './constants.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { iconSize } from './constants.ts';
+import styles from './SelectOmnibox.module.css';
 
 type Props = {
   settings: Settings;

@@ -1,10 +1,10 @@
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconHelp } from '@tabler/icons-react';
-import { iconSize } from './constants.ts';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect } from 'react';
-import { HelpModal } from './HelpModal.tsx';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { HelpModal } from './HelpModal.tsx';
+import { iconSize } from './constants.ts';
 
 type Props = {
   settings: Settings;

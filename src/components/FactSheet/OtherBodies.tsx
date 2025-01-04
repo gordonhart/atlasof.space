@@ -1,9 +1,9 @@
+import { Box, Group, Pill, Stack, Title } from '@mantine/core';
+import { useMemo } from 'react';
 import { CelestialBody } from '../../lib/types.ts';
 import { Settings } from '../../lib/state.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
-import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import styles from './RelatedBodies.module.css';
-import { useMemo } from 'react';
 import { Thumbnail } from './Thumbnail.tsx';
 
 const N_RELATED = 6;

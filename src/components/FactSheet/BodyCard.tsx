@@ -1,8 +1,8 @@
-import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 import { Box, Paper, Text, Title } from '@mantine/core';
+import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { CelestialBody } from '../../lib/types.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { Thumbnail } from './Thumbnail.tsx';
-import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
 
 type Props = {

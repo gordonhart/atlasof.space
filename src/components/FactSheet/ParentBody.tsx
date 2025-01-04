@@ -1,9 +1,9 @@
+import { Stack, Title } from '@mantine/core';
+import { useMemo } from 'react';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { Settings } from '../../lib/state.ts';
-import { Stack, Title } from '@mantine/core';
-import { BodyCard } from './BodyCard.tsx';
-import { useMemo } from 'react';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { BodyCard } from './BodyCard.tsx';
 
 type Props = {
   body: CelestialBody;

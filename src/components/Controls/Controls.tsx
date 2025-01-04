@@ -1,9 +1,9 @@
 import { Box } from '@mantine/core';
+import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 import { GeneralControls } from './GeneralControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
-import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
-import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 
 const pad = 10;
 
