@@ -1,5 +1,6 @@
 import { Vector3 } from 'three';
-import { G } from '../bodies.ts';
+
+import { G } from '../physics.ts';
 
 export class KinematicBody {
   readonly influencedBy: Array<string>;

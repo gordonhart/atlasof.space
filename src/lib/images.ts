@@ -42,6 +42,8 @@ import bennuSurfaceSrc from '../../assets/bennu-surface.jpg';
 import ryuguSurfaceSrc from '../../assets/ryugu-surface.jpg';
 import ryuguSurface2Src from '../../assets/ryugu-surface2.jpg';
 import ryuguRotationSrc from '../../assets/ryugu-rotation.gif';
+import psycheIllustrationSrc from '../../assets/psyche-illustration.jpg';
+import psycheMissionIllustrationSrc from '../../assets/psyche-mission-illustration.jpg';
 import venusVeneraSrc from '../../assets/venus-venera.jpg';
 import venusVenera2Src from '../../assets/venus-venera2.jpg';
 import venusMagellanSrc from '../../assets/venus-magellan.jpg';
@@ -103,6 +105,7 @@ export const GalleryImages: Record<string, Array<string>> = {
   [Bodies.ARROKOTH.name]: [arrokothAnimationSrc] as Array<string>,
   [Bodies.BENNU.name]: [bennuLandingSrc, bennuRotationSrc, bennuSurfaceSrc] as Array<string>,
   [Bodies.RYUGU.name]: [ryuguSurfaceSrc, ryuguSurface2Src, ryuguRotationSrc] as Array<string>,
+  [Bodies.PSYCHE.name]: [psycheIllustrationSrc, psycheMissionIllustrationSrc] as Array<string>,
 } as const;
 
 export const Textures: Record<string, string> = {

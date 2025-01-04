@@ -1,8 +1,8 @@
 import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
 import { J2000, julianDayToEpoch } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
+import { SBDB_URL } from './sbdb.ts';
 
-export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
 export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
@@ -251,27 +251,6 @@ export const CERES: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const VESTA: CelestialBody = {
-  type: CelestialBodyType.ASTEROID,
-  name: '4 Vesta',
-  shortName: 'Vesta',
-  influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
-  elements: {
-    wrt: SOL.name,
-    epoch: julianDayToEpoch('JD2453300.5'),
-    eccentricity: 0.0894,
-    semiMajorAxis: 2.36 * AU,
-    inclination: 7.1422,
-    longitudeAscending: 103.71,
-    argumentOfPeriapsis: 151.66,
-    meanAnomaly: 169.4,
-  },
-  mass: 2.590271e20,
-  radius: 278.6e3,
-  color: DEFAULT_ASTEROID_COLOR,
-};
-
 export const PALLAS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '2 Pallas',
@@ -290,26 +269,6 @@ export const PALLAS: CelestialBody = {
   },
   mass: 2.04e20,
   radius: 256e3,
-  color: DEFAULT_ASTEROID_COLOR,
-};
-export const HYGIEA: CelestialBody = {
-  type: CelestialBodyType.ASTEROID,
-  name: '10 Hygiea',
-  shortName: 'Hygiea',
-  influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
-  elements: {
-    wrt: SOL.name,
-    epoch: J2000, // TODO: verify
-    eccentricity: 0.1125,
-    semiMajorAxis: 3.1415 * AU,
-    inclination: 3.8316,
-    longitudeAscending: 283.2,
-    argumentOfPeriapsis: 312.32,
-    meanAnomaly: 0,
-  },
-  mass: 8.74e19,
-  radius: 215e3,
   color: DEFAULT_ASTEROID_COLOR,
 };
 
@@ -334,46 +293,118 @@ export const JUNO: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const RYUGU: CelestialBody = {
+export const VESTA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
-  name: '162173 Ryugu',
-  shortName: 'Ryugu',
+  name: '4 Vesta',
+  shortName: 'Vesta',
   influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
     wrt: SOL.name,
-    epoch: J2000, // TODO: verify
-    eccentricity: 0.1902,
-    semiMajorAxis: 1.1896 * AU,
-    inclination: 5.8837,
-    longitudeAscending: 251.62,
-    argumentOfPeriapsis: 211.43,
-    meanAnomaly: 0,
+    epoch: julianDayToEpoch('JD2453300.5'),
+    eccentricity: 0.0894,
+    semiMajorAxis: 2.36 * AU,
+    inclination: 7.1422,
+    longitudeAscending: 103.71,
+    argumentOfPeriapsis: 151.66,
+    meanAnomaly: 169.4,
   },
-  mass: 4.5e11,
-  radius: 448,
+  mass: 2.590271e20,
+  radius: 278.6e3,
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const BENNU: CelestialBody = {
+export const HEBE: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
-  name: '101955 Bennu',
-  shortName: 'Bennu',
+  name: '6 Hebe',
+  shortName: 'Hebe',
   influencedBy: [SOL.name],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
     wrt: SOL.name,
-    epoch: julianDayToEpoch('JD2455562.5'),
-    eccentricity: 0.2038,
-    semiMajorAxis: 1.1264 * AU,
-    inclination: 6.0349,
-    longitudeAscending: 2.0609,
-    argumentOfPeriapsis: 66.2231,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.2024234177620576,
+    semiMajorAxis: 362930294023.13635,
+    inclination: 14.7343613757291,
+    longitudeAscending: 138.6198303084144,
+    argumentOfPeriapsis: 239.6481345551401,
+    meanAnomaly: 248.2729238857798,
+  },
+  mass: 1.24e19,
+  radius: 92.59e3,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const IRIS: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '7 Iris',
+  shortName: 'Iris',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.name,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.2298579625141813,
+    semiMajorAxis: 356947274432.7954,
+    inclination: 5.51947889466475,
+    longitudeAscending: 259.4989908638725,
+    argumentOfPeriapsis: 145.5201004327357,
+    meanAnomaly: 314.7578447776537,
+  },
+  mass: 13.5e18,
+  radius: 99.915e3,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const HYGIEA: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '10 Hygiea',
+  shortName: 'Hygiea',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.name,
+    epoch: J2000, // TODO: verify
+    eccentricity: 0.1125,
+    semiMajorAxis: 3.1415 * AU,
+    inclination: 3.8316,
+    longitudeAscending: 283.2,
+    argumentOfPeriapsis: 312.32,
     meanAnomaly: 0,
   },
-  mass: 7.329e10,
-  radius: 245.03,
+  mass: 8.74e19,
+  radius: 215e3,
   color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const PSYCHE: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '16 Psyche',
+  shortName: 'Psyche',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.name,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.1341242551713989,
+    semiMajorAxis: 437195001460.578,
+    inclination: 3.097229304279378,
+    longitudeAscending: 150.01901994,
+    argumentOfPeriapsis: 229.5887902320436,
+    meanAnomaly: 321.8655831010872,
+  },
+  mass: 2.29e19,
+  radius: 111.5e3,
+  color: DEFAULT_ASTEROID_COLOR,
+  facts: [
+    {
+      label: 'spacecraft mission',
+      value: 'NASA launched a mission to Psyche on October 13th, 2023, expected to arrive in 2029',
+    },
+  ],
 };
 
 export const LUTETIA: CelestialBody = {
@@ -401,24 +432,25 @@ export const LUTETIA: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const EROS: CelestialBody = {
+export const IDA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
-  name: '433 Eros',
-  shortName: 'Eros',
+  name: '243 Ida',
+  shortName: 'Ida',
   influencedBy: [SOL.name],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
     wrt: SOL.name,
-    epoch: J2000, // TODO: verify
-    eccentricity: 0.2226,
-    semiMajorAxis: 1.4579 * AU, // meters
-    inclination: 10.828, // degrees
-    longitudeAscending: 304.32, // degrees
-    argumentOfPeriapsis: 178.82, // degrees
-    meanAnomaly: 0, // degrees (value at epoch)
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.04468707145845256,
+    semiMajorAxis: 427849743875.60846,
+    inclination: 1.130081146832236,
+    longitudeAscending: 323.584684217808,
+    argumentOfPeriapsis: 114.1278027764417,
+    meanAnomaly: 286.6317462477484,
   },
-  mass: 6.687e15, // kg
-  radius: 8420, // m, average (highly irregular)
+  mass: 4.2e16,
+  radius: 15.7e3,
   color: DEFAULT_ASTEROID_COLOR,
 };
 
@@ -440,6 +472,71 @@ export const MATHILDE: CelestialBody = {
   },
   mass: 1.033e17, // kg
   radius: 26.4e3, // m
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const EROS: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '433 Eros',
+  shortName: 'Eros',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM, // NEA
+  elements: {
+    wrt: SOL.name,
+    epoch: J2000, // TODO: verify
+    eccentricity: 0.2226,
+    semiMajorAxis: 1.4579 * AU, // meters
+    inclination: 10.828, // degrees
+    longitudeAscending: 304.32, // degrees
+    argumentOfPeriapsis: 178.82, // degrees
+    meanAnomaly: 0, // degrees (value at epoch)
+  },
+  mass: 6.687e15, // kg
+  radius: 8420, // m, average (highly irregular)
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const GASPRA: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '951 Gaspra',
+  shortName: 'Gaspra',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.name,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.1732495684718864,
+    semiMajorAxis: 330592928867.86774,
+    inclination: 4.106111105065087,
+    longitudeAscending: 252.9889923571982,
+    argumentOfPeriapsis: 129.9547895107816,
+    meanAnomaly: 293.0013480495998,
+  },
+  mass: 2.5e15,
+  radius: 6.1e3,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const STEINS: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '2867 Šteins',
+  shortName: 'Šteins',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.name,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.1455164445582001,
+    semiMajorAxis: 353830229254.9914,
+    inclination: 9.929375137550416,
+    longitudeAscending: 55.33347402049609,
+    argumentOfPeriapsis: 251.3574059590774,
+    meanAnomaly: 112.7677797374499,
+  },
+  mass: 179840597118453.84, // estimate
+  radius: 2.58e3,
   color: DEFAULT_ASTEROID_COLOR,
 };
 
@@ -468,7 +565,113 @@ export const NEREUS: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
-export const ASTEROIDS = [CERES, PALLAS, JUNO, VESTA, HYGIEA, LUTETIA, MATHILDE, EROS, NEREUS, BENNU, RYUGU];
+export const ITOKAWA: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '25143 Itokawa',
+  shortName: 'Itokawa',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.name,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.28025543912428,
+    semiMajorAxis: 198088010254.65103,
+    inclination: 1.621180357660033,
+    longitudeAscending: 69.07689932024779,
+    argumentOfPeriapsis: 162.8201675534644,
+    meanAnomaly: 142.5740672564167,
+  },
+  mass: 3.51e10,
+  radius: 165,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const DIDYMOS: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '65803 Didymos',
+  shortName: 'Didymos',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM, // NEA
+  elements: {
+    wrt: SOL.name,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.3832511742413838,
+    semiMajorAxis: 245729426006.04123,
+    inclination: 3.41417645416608,
+    longitudeAscending: 72.9859763839095,
+    argumentOfPeriapsis: 319.602659066438,
+    meanAnomaly: 339.9299652879553,
+  },
+  mass: 5.2e11,
+  radius: 382.5,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const BENNU: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '101955 Bennu',
+  shortName: 'Bennu',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.name,
+    epoch: julianDayToEpoch('JD2455562.5'),
+    eccentricity: 0.2038,
+    semiMajorAxis: 1.1264 * AU,
+    inclination: 6.0349,
+    longitudeAscending: 2.0609,
+    argumentOfPeriapsis: 66.2231,
+    meanAnomaly: 0,
+  },
+  mass: 7.329e10,
+  radius: 245.03,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const RYUGU: CelestialBody = {
+  type: CelestialBodyType.ASTEROID,
+  name: '162173 Ryugu',
+  shortName: 'Ryugu',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.name,
+    epoch: J2000, // TODO: verify
+    eccentricity: 0.1902,
+    semiMajorAxis: 1.1896 * AU,
+    inclination: 5.8837,
+    longitudeAscending: 251.62,
+    argumentOfPeriapsis: 211.43,
+    meanAnomaly: 0,
+  },
+  mass: 4.5e11,
+  radius: 448,
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
+export const ASTEROIDS = [
+  CERES,
+  PALLAS,
+  JUNO,
+  VESTA,
+  HEBE,
+  IRIS,
+  HYGIEA,
+  PSYCHE,
+  LUTETIA,
+  IDA,
+  MATHILDE,
+  EROS,
+  GASPRA,
+  STEINS,
+  NEREUS,
+  ITOKAWA,
+  DIDYMOS,
+  BENNU,
+  RYUGU,
+];
 
 export const CG67P: CelestialBody = {
   type: CelestialBodyType.COMET,

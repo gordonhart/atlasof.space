@@ -1,19 +1,7 @@
 import { CartesianState, Epoch, KeplerianElements, Point3 } from './types.ts';
-import { G } from './bodies.ts';
 import { epochToDate } from './epoch.ts';
 
-// TODO: use proper vector/matrix library?
-export function add3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
-  return [a1 + b1, a2 + b2, a3 + b3];
-}
-
-export function subtract3([a1, a2, a3]: Point3, [b1, b2, b3]: Point3): Point3 {
-  return [a1 - b1, a2 - b2, a3 - b3];
-}
-
-export function mul3(s: number, [a, b, c]: Point3): Point3 {
-  return [s * a, s * b, s * c];
-}
+export const G = 6.6743e-11; // gravitational constant, N⋅m2⋅kg−2
 
 export function degreesToRadians(degrees: number) {
   return (degrees * Math.PI) / 180;
@@ -85,19 +73,6 @@ export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number
   const Y_f = X * Math.sin(Omega) + Y * Math.cos(Omega);
   const Z_f = Z; // Not used for drawing top-down, but kept for completeness
   return [X_f, Y_f, Z_f];
-}
-
-// position WRT center of mass of the object we are orbiting around
-export function gravitationalAcceleration(position: Point3, mu: number): Point3 {
-  const r = magnitude(position);
-  return mul3(-mu / r ** 3, position);
-}
-
-// TODO: this is a finicky implementation as the position must lie exactly on the ellipse
-export function trueAnomalyFromPosition(position: Point3, semiMajorAxis: number, eccentricity: number) {
-  const rMag = magnitude(position);
-  const cosV = (semiMajorAxis * (1 - eccentricity ** 2)) / (rMag * eccentricity) - 1 / eccentricity;
-  return Math.acos(cosV);
 }
 
 export function trueAnomalyFromMean(meanAnomaly: number, eccentricity: number, tolerance = 1e-8, maxIterations = 100) {
