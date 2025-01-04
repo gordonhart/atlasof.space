@@ -19,10 +19,6 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
   const [query, setQuery] = useState('');
   const modifierKey = useModifierKey();
 
-  function handleSelect(body: CelestialBody) {
-    updateSettings(prev => ({ ...prev, center: body.name, visibleTypes: new Set([...prev.visibleTypes, body.type]) }));
-  }
-
   const bodyItems = useMemo(
     () =>
       settings.bodies
@@ -43,7 +39,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
                 {celestialBodyTypeDescription(body)}
               </Text>
             }
-            onClick={() => handleSelect(body)}
+            onClick={() => updateSettings(prev => ({ ...prev, center: body.name }))}
           />
         )),
     [query, JSON.stringify(settings.bodies)]

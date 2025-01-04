@@ -20,7 +20,7 @@ import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
 import { Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
+import { CelestialBody, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
@@ -246,7 +246,7 @@ export class SolarSystemModel {
     this.scene.add(gridHelper);
   }
 
-  findCloseBody([xPx, yPx]: Point2, visibleTypes: Set<CelestialBodyType>, threshold = 10): KeplerianBody | undefined {
+  findCloseBody([xPx, yPx]: Point2, settings: Settings, threshold = 10): KeplerianBody | undefined {
     const metersPerPx = this.getMetersPerPixel();
     let closest: KeplerianBody | undefined = undefined;
     let closestDistance = Infinity;
@@ -255,7 +255,7 @@ export class SolarSystemModel {
       const bodyThreshold = threshold + body.body.radius / metersPerPx;
 
       // ignore invisible types and offscreen bodies
-      if (!visibleTypes.has(body.body.type)) continue;
+      if (!body.isVisible(settings)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
       if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
 
