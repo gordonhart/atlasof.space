@@ -4,9 +4,13 @@ import { SettingsControlProps, buttonGap, iconSize } from './constants.ts';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
 import { dateToHumanReadable, epochToDate } from '../../lib/epoch.ts';
+import { ModelState } from '../../lib/state.ts';
 
-export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings }: SettingsControlProps) {
-  const date = new Date(Number(epochToDate(settings.epoch)) + settings.time * 1000);
+type Props = SettingsControlProps & {
+  model: ModelState;
+};
+export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {
+  const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
   const [dt, dtUnits] = useMemo(() => humanTimeUnits(settings.dt), [settings.dt]);
 
   return (

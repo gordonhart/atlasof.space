@@ -3,7 +3,7 @@ import { Settings } from '../../lib/state.ts';
 import { Box, Stack, Title } from '@mantine/core';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
@@ -16,7 +16,13 @@ type Props = {
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
-export function OrbitalRegimeFactSheet({ regime, settings, updateSettings, addBody, removeBody }: Props) {
+export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
+  regime,
+  settings,
+  updateSettings,
+  addBody,
+  removeBody,
+}: Props) {
   const isAsteroidBelt = regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT;
   const bodiesInRegime = useMemo(
     () => settings.bodies.filter(body => body.orbitalRegime === regime.name),
@@ -47,4 +53,4 @@ export function OrbitalRegimeFactSheet({ regime, settings, updateSettings, addBo
       </Box>
     </Stack>
   );
-}
+});

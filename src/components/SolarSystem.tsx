@@ -33,8 +33,10 @@ export function SolarSystem() {
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
 
   function addBody(body: CelestialBody) {
-    updateSettings(prev => ({ ...prev, bodies: [...prev.bodies, body] }));
-    model.add(appStateRef.current, body);
+    updateSettings(prev => {
+      model.add(prev, body);
+      return { ...prev, bodies: [...prev.bodies, body] };
+    });
   }
 
   function removeBody(name: string) {
@@ -43,8 +45,9 @@ export function SolarSystem() {
   }
 
   const resetState = useCallback(() => {
-    updateSettings(initialState.settings);
-    model.reset(initialState);
+    setAppState(initialState);
+    appStateRef.current = initialState;
+    model.reset(initialState.settings);
   }, [updateSettings]);
 
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
@@ -61,14 +64,14 @@ export function SolarSystem() {
     });
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
-      model.update(ctx, appStateRef.current);
+      model.update(ctx, appStateRef.current.settings);
     }
     window.requestAnimationFrame(animationFrame);
   }
 
   useEffect(() => {
     const frameId = window.requestAnimationFrame(animationFrame);
-    model.initialize(appStateRef.current);
+    model.initialize(appStateRef.current.settings);
     return () => {
       window.cancelAnimationFrame(frameId);
     };

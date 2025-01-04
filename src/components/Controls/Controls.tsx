@@ -17,7 +17,7 @@ export function Controls({ settings, updateSettings, model, reset }: Props) {
   return (
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
-        <TimeControls settings={settings} updateSettings={updateSettings} />
+        <TimeControls settings={settings} updateSettings={updateSettings} model={model} />
       </Box>
 
       <Box

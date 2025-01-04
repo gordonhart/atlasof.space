@@ -22,7 +22,7 @@ export const FactSheet = memo(function FactSheetComponent({
   removeBody,
 }: Props) {
   return body != null ? (
-    <CelestialBodyFactSheet body={body} bodies={settings.bodies} updateSettings={updateState} />
+    <CelestialBodyFactSheet body={body} bodies={settings.bodies} updateSettings={updateSettings} />
   ) : regime != null ? (
     <OrbitalRegimeFactSheet
       regime={regime}
