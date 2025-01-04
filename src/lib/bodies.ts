@@ -404,6 +404,8 @@ export const PSYCHE: CelestialBody = {
       label: 'spacecraft mission',
       value: 'NASA launched a mission to Psyche on October 13th, 2023, expected to arrive in 2029',
     },
+    { label: 'estimated value', value: 'Estimated $10,000 quadrillion due to size and metallic composition' },
+    { label: 'material composition', value: 'Believed to be mainly iron and nickel' },
   ],
 };
 

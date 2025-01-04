@@ -1,5 +1,4 @@
 import { Vector3 } from 'three';
-
 import { G } from '../physics.ts';
 
 export class KinematicBody {

@@ -559,7 +559,6 @@ export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody
 
   useEffect(() => {
     smallBodies.forEach(body => {
-      console.log(body);
       addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);
