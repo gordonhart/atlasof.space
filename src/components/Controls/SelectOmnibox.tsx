@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Group, Kbd, Text, Tooltip } from '@mantine/core';
-import { Spotlight, spotlight } from '@mantine/spotlight';
+import { Spotlight, spotlight, SpotlightAction } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
@@ -65,6 +65,24 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
     [query]
   );
 
+  const spacecraftItem = useMemo(
+    () =>
+      settings.spacecraft != null ? (
+        <SpotlightAction
+          key="spacecraft"
+          label={settings.spacecraft.name}
+          className={styles.Action}
+          rightSection={
+            <Text c="dimmed" size="xs">
+              Fictional Spacecraft
+            </Text>
+          }
+          onClick={() => updateSettings(prev => ({ ...prev, center: settings.spacecraft?.name ?? null }))}
+        />
+      ) : undefined,
+    [query]
+  );
+
   return (
     <>
       <Tooltip position="top" label="Search">
@@ -102,7 +120,9 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             }
           />
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
-            {bodyItems.length + regimeItems.length < 1 && <Spotlight.Empty>Nothing found...</Spotlight.Empty>}
+            {bodyItems.length + regimeItems.length < 1 && spacecraftItem == null && (
+              <Spotlight.Empty>Nothing found...</Spotlight.Empty>
+            )}
             {bodyItems.length > 0 && (
               <Spotlight.ActionsGroup label="Celestial Bodies">
                 <Box pb="xs" />
@@ -113,6 +133,12 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
               <Spotlight.ActionsGroup label="Orbital Regimes">
                 <Box pb="xs" />
                 {regimeItems}
+              </Spotlight.ActionsGroup>
+            )}
+            {spacecraftItem != null && (
+              <Spotlight.ActionsGroup label="Fictional Spacecraft">
+                <Box pb="xs" />
+                {spacecraftItem}
               </Spotlight.ActionsGroup>
             )}
           </Spotlight.ActionsList>

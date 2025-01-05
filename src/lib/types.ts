@@ -109,6 +109,7 @@ export type Spacecraft = {
   mass: number; // kg
   thrust: number; // newtons
   launchLocation: string; // name of celestial body, start on the surface
+  launchAltitude: number; // m, distance from the center of the starting body
   launchVelocity: number; // m/s
   launchDirection: Point3; // ecliptic unit vector, e.g. vernal equinox = [1, 0, 0]
   launchTime: number | null; // offset from t0 as determined by settings, null before launch

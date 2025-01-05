@@ -1,4 +1,17 @@
-import { Euler, OrthographicCamera, Vector2, Vector3 } from 'three';
+import {
+  BufferGeometry,
+  CatmullRomCurve3,
+  Color,
+  Euler,
+  Line,
+  LineBasicMaterial,
+  Material,
+  OrthographicCamera,
+  Scene,
+  Vector2,
+  Vector3,
+} from 'three';
+import { Time } from '../epoch.ts';
 import { degreesToRadians, radiansToDegrees } from '../physics.ts';
 import { Settings, SpacecraftModelState } from '../state.ts';
 import { CelestialBody, Point2, Spacecraft as SpacecraftType, SpacecraftControls } from '../types.ts';
@@ -14,18 +27,27 @@ import { KinematicBody } from './KinematicBody.ts';
 import { isOffScreen, vernalEquinox } from './utils.ts';
 
 export class Spacecraft extends KinematicBody {
+  private readonly scene: Scene;
   public readonly spacecraft: SpacecraftType;
   private readonly startOn: KeplerianBody;
   private readonly resolution: Vector2;
-  private readonly orientation: Vector3; // unit vector
+  private readonly path: Line;
 
+  private readonly orientation: Vector3; // unit vector
   private launched: number | null = null;
   private lastRotation: SpacecraftControls['rotate'] = null;
   private displaySize = 5;
 
-  constructor(spacecraft: SpacecraftType, bodies: Array<CelestialBody>, startOn: KeplerianBody, resolution: Vector2) {
+  constructor(
+    scene: Scene,
+    spacecraft: SpacecraftType,
+    bodies: Array<CelestialBody>,
+    startOn: KeplerianBody,
+    resolution: Vector2
+  ) {
     const influencedBy = bodies.map(({ name }) => name);
     super(influencedBy, undefined, startOn.position, startOn.velocity);
+    this.scene = scene;
     this.spacecraft = spacecraft;
     this.startOn = startOn;
     this.resolution = resolution;
@@ -34,6 +56,16 @@ export class Spacecraft extends KinematicBody {
     //  - Hard mode: create an ellipse from the current position and velocity
     //  - Easy mode: treat spacecraft as a Sun-dependent body (the Sun doesn't move in this reference system) and
     //     forward propagate the state N times to get future points, then plot those on a spline
+
+    const nPoints = 24 * 30;
+    const dt = Time.HOUR;
+    const pathPoints = this.projectPathPoints(nPoints, dt);
+    const pathSpline = new CatmullRomCurve3(pathPoints, true, 'catmullrom', 0.5);
+    const pathSplinePoints = pathSpline.getPoints(nPoints * 2); // 2x points for smoother interpolation
+    const pathGeometry = new BufferGeometry().setFromPoints(pathSplinePoints);
+    const pathMaterial = new LineBasicMaterial({ color: new Color(spacecraft.color) });
+    this.path = new Line(pathGeometry, pathMaterial);
+    this.scene.add(this.path);
   }
 
   increment(parents: Array<{ position: Vector3; velocity: Vector3; mass: number }>, dt: number) {
@@ -47,7 +79,6 @@ export class Spacecraft extends KinematicBody {
     const { controls } = settings.spacecraft;
     const { launch, fire, rotate } = controls;
     if (launch && this.launched == null) {
-      console.log(`launching from ${this.startOn.body.name}`);
       this.launch(time);
     }
     if (this.launched == null) return;
@@ -66,17 +97,21 @@ export class Spacecraft extends KinematicBody {
     if (fire) {
       const thrustAcceleration = this.spacecraft.thrust / this.spacecraft.mass;
       const thrustVector = this.orientation.clone();
-      this.velocity.add(thrustVector.multiplyScalar(thrustAcceleration * settings.dt));
+      this.acceleration.add(thrustVector.multiplyScalar(thrustAcceleration));
+      this.velocity.add(thrustVector.multiplyScalar(settings.dt));
       this.position.add(thrustVector.multiplyScalar(settings.dt));
     }
   }
 
   private launch(time: number) {
+    console.log(`launching from ${this.startOn.body.name} at ${time}`);
     const launchDirection = new Vector3(...this.spacecraft.launchDirection);
-    const launchPositionOffset = launchDirection.clone().multiplyScalar(this.startOn.body.radius);
+    // need to start far enough away from the starting body that the initial acceleration from its gravity is reasonable
+    const launchPositionOffset = launchDirection.clone().multiplyScalar(this.spacecraft.launchAltitude);
     this.position.copy(this.startOn.position).add(launchPositionOffset);
     const launchVelocity = launchDirection.clone().multiplyScalar(this.spacecraft.launchVelocity);
     this.velocity.copy(this.startOn.velocity).add(launchVelocity);
+    this.orientation.copy(this.startOn.velocity).normalize();
     this.launched = time;
   }
 
@@ -90,8 +125,14 @@ export class Spacecraft extends KinematicBody {
     };
   }
 
+  isVisible() {
+    return this.launched != null;
+  }
+
   dispose() {
-    // TODO
+    this.path.geometry.dispose();
+    (this.path.material as Material).dispose();
+    this.scene.remove(this.path);
   }
 
   drawAnnotations(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, drawLabel = true) {
@@ -120,5 +161,9 @@ export class Spacecraft extends KinematicBody {
         drawLabelAtLocation(ctx, label, this.spacecraft.color, [bodyXpx, bodyYpx], textPx, this.displaySize + 2);
       }
     }
+  }
+
+  private projectPathPoints(nPoints: number, dt: number): Array<Vector3> {
+    return [];
   }
 }

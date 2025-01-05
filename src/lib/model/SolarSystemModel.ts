@@ -153,7 +153,7 @@ export class SolarSystemModel {
 
   findCloseBodyName([xPx, yPx]: Point2, settings: Settings, threshold = 10): string | undefined {
     // spacecraft gets first priority, if it is within the threshold, return it
-    if (this.spacecraft != null) {
+    if (this.spacecraft != null && this.spacecraft.isVisible()) {
       const [bodyXpx, bodyYpx] = this.spacecraft.getScreenPosition(this.camera, this.resolution);
       const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
       if (distance < threshold + 2) return this.spacecraft.spacecraft.name;
@@ -224,7 +224,7 @@ export class SolarSystemModel {
     const startOn = this.bodies[settings.spacecraft.launchLocation];
     if (startOn == null) return null;
     const influencedBy = Object.values(this.bodies).map(({ body }) => body);
-    return new Spacecraft(settings.spacecraft, influencedBy, startOn, this.resolution);
+    return new Spacecraft(this.scene, settings.spacecraft, influencedBy, startOn, this.resolution);
   }
 
   private incrementKinematics(dt: number) {
@@ -268,7 +268,7 @@ export class SolarSystemModel {
 
   private updateCenter({ center }: Settings) {
     if (center == null) return;
-    const centerBody = this.bodies[center];
+    const centerBody = this.bodies[center] ?? (center === this.spacecraft?.spacecraft?.name ? this.spacecraft : null);
     if (centerBody == null) return;
     this.controls.target.copy(centerBody.position).divideScalar(SCALE_FACTOR);
   }
