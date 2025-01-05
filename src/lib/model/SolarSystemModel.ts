@@ -133,6 +133,7 @@ export class SolarSystemModel {
   }
 
   reset(settings: Settings) {
+    this.time = 0;
     this.setupCamera();
     this.controls.reset();
     Object.values(this.bodies).forEach(body => body.dispose());

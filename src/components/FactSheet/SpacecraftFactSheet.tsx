@@ -8,6 +8,7 @@ import { Spacecraft } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { FactGrid } from './FactGrid.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { SpacecraftPathLegend } from './SpacecraftPathLegend.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
@@ -15,6 +16,7 @@ type Props = {
   updateSettings: UpdateSettings;
   model: ModelState;
 };
+
 export function SpacecraftFactSheet({ spacecraft, settings, updateSettings, model }: Props) {
   const spacecraftModel = model.spacecraft!;
   const maxGees = useRef(magnitude(spacecraftModel.acceleration) / g);
@@ -59,6 +61,10 @@ export function SpacecraftFactSheet({ spacecraft, settings, updateSettings, mode
       />
       <Stack p="md" gap="xs" flex={1}>
         <FactGrid facts={facts} />
+      </Stack>
+
+      <Stack p="md" style={{ justifySelf: 'flex-end' }}>
+        <SpacecraftPathLegend color={spacecraft.color} />
       </Stack>
     </Stack>
   );

@@ -1,18 +1,18 @@
 import {
   BufferGeometry,
-  CatmullRomCurve3,
   Color,
   Euler,
   Line,
-  LineBasicMaterial,
+  LineDashedMaterial,
   Material,
   OrthographicCamera,
   Scene,
   Vector2,
   Vector3,
 } from 'three';
+import { SOL } from '../bodies.ts';
 import { Time } from '../epoch.ts';
-import { degreesToRadians, radiansToDegrees } from '../physics.ts';
+import { degreesToRadians, G, radiansToDegrees } from '../physics.ts';
 import { Settings, SpacecraftModelState } from '../state.ts';
 import { CelestialBody, Point2, Spacecraft as SpacecraftType, SpacecraftControls } from '../types.ts';
 import {
@@ -22,6 +22,7 @@ import {
   getCanvasPixels,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
+import { SCALE_FACTOR } from './constants.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { isOffScreen, vernalEquinox } from './utils.ts';
@@ -37,6 +38,9 @@ export class Spacecraft extends KinematicBody {
   private launched: number | null = null;
   private lastRotation: SpacecraftControls['rotate'] = null;
   private displaySize = 5;
+
+  private readonly nPathPoints = 24 * 90; // three months out into the future
+  private readonly pathDt = Time.HOUR;
 
   constructor(
     scene: Scene,
@@ -57,14 +61,20 @@ export class Spacecraft extends KinematicBody {
     //  - Easy mode: treat spacecraft as a Sun-dependent body (the Sun doesn't move in this reference system) and
     //     forward propagate the state N times to get future points, then plot those on a spline
 
-    const nPoints = 24 * 30;
-    const dt = Time.HOUR;
-    const pathPoints = this.projectPathPoints(nPoints, dt);
-    const pathSpline = new CatmullRomCurve3(pathPoints, true, 'catmullrom', 0.5);
-    const pathSplinePoints = pathSpline.getPoints(nPoints * 2); // 2x points for smoother interpolation
-    const pathGeometry = new BufferGeometry().setFromPoints(pathSplinePoints);
-    const pathMaterial = new LineBasicMaterial({ color: new Color(spacecraft.color) });
+    const pathPoints: Array<Vector3> = this.projectPathPoints();
+    const pathGeometry = new BufferGeometry().setFromPoints(pathPoints);
+    const pathMaterial = new LineDashedMaterial({
+      color: new Color(spacecraft.color),
+      linewidth: 1,
+      scale: 1,
+      dashSize: 3,
+      gapSize: 1,
+      depthTest: false,
+    });
     this.path = new Line(pathGeometry, pathMaterial);
+    this.path.computeLineDistances();
+    this.path.renderOrder = 0;
+    this.path.visible = false;
     this.scene.add(this.path);
   }
 
@@ -82,6 +92,9 @@ export class Spacecraft extends KinematicBody {
       this.launch(time);
     }
     if (this.launched == null) return;
+
+    this.path.geometry.setFromPoints(this.projectPathPoints());
+    this.path.computeLineDistances();
 
     // apply rotation
     const prevRotation = this.lastRotation;
@@ -113,6 +126,7 @@ export class Spacecraft extends KinematicBody {
     this.velocity.copy(this.startOn.velocity).add(launchVelocity);
     this.orientation.copy(this.startOn.velocity).normalize();
     this.launched = time;
+    this.path.visible = true;
   }
 
   getModelState(): SpacecraftModelState {
@@ -163,7 +177,23 @@ export class Spacecraft extends KinematicBody {
     }
   }
 
-  private projectPathPoints(nPoints: number, dt: number): Array<Vector3> {
-    return [];
+  // TODO: this duplicates the logic from KinematicBody
+  // TODO: for efficiency, this only accounts for acceleration from the sun -- not great
+  private projectPathPoints(): Array<Vector3> {
+    const future = { position: this.position.clone(), velocity: this.velocity.clone() };
+    return Array(this.nPathPoints)
+      .fill(null)
+      .map(() => {
+        const distanceToSun = future.position.length();
+        const acceleration = future.position
+          .clone()
+          .multiplyScalar(-G * SOL.mass)
+          .divideScalar(distanceToSun)
+          .divideScalar(distanceToSun)
+          .divideScalar(distanceToSun);
+        future.velocity.add(acceleration.multiplyScalar(this.pathDt));
+        future.position.add(future.velocity.clone().multiplyScalar(this.pathDt));
+        return future.position.clone().divideScalar(SCALE_FACTOR);
+      });
   }
 }

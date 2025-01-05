@@ -42,7 +42,7 @@ export type AppState = {
 export const initialState: AppState = {
   settings: {
     epoch: nowEpoch(),
-    dt: 1, // TODO: 30 * Time.MINUTE,
+    dt: 30 * Time.MINUTE,
     play: true,
     drawTail: false,
     drawOrbit: true,
