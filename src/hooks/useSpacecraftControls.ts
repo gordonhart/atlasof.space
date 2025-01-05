@@ -25,9 +25,9 @@ export function useSpacecraftControls(updateSettings: UpdateSettings) {
   );
 
   const rotate = useCallback(
-    (direction: 'north' | 'east' | 'south' | 'west') => {
+    (rotate: Exclude<SpacecraftControls['rotate'], null>) => {
       return function handleRotate(pressed: boolean) {
-        updateSpacecraftControls(() => ({ rotate: pressed ? direction : null }));
+        updateSpacecraftControls(() => ({ rotate: pressed ? rotate : null }));
       };
     },
     [updateSpacecraftControls]
@@ -38,10 +38,8 @@ export function useSpacecraftControls(updateSettings: UpdateSettings) {
     const hotkeys: Array<[string, (pressed: boolean) => void]> = [
       ['f', toggleFire],
       ['l', toggleLaunch],
-      ['ArrowUp', rotate('north')],
-      ['ArrowLeft', rotate('west')],
-      ['ArrowDown', rotate('south')],
-      ['ArrowRight', rotate('east')],
+      ['ArrowLeft', rotate('port')],
+      ['ArrowRight', rotate('starboard')],
     ];
 
     function handleKeyDown(event: KeyboardEvent) {

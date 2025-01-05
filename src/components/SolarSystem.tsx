@@ -4,10 +4,9 @@ import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useSpacecraftControls } from '../hooks/useSpacecraftControls.ts';
-import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
-import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { ASTEROID_BELT, ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
-import { CelestialBody } from '../lib/types.ts';
+import { CelestialBody, isOrbitalRegime } from '../lib/types.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -55,11 +54,7 @@ export function SolarSystem() {
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     setAppState(prev => {
-      const newModel = {
-        time: prev.settings.play ? prev.model.time + prev.settings.dt : prev.model.time,
-        metersPerPx: model.modelRef.current?.getMetersPerPixel() ?? prev.model.metersPerPx,
-        vernalEquinox: model.modelRef?.current?.getVernalEquinox() ?? prev.model.vernalEquinox,
-      };
+      const newModel = model.modelRef.current?.getModelState() ?? prev.model;
       const newState = { ...prev, model: newModel };
       appStateRef.current = newState;
       return newState;
@@ -83,11 +78,13 @@ export function SolarSystem() {
     model.resize();
   }, [settings.center]);
 
-  const focusBody = useMemo(
-    () => settings.bodies.find(body => body.name === settings.center),
-    [settings.center, JSON.stringify(settings.bodies)]
-  );
-  const focusRegime = useMemo(() => ORBITAL_REGIMES.find(({ name }) => name === settings.center), [settings.center]);
+  const focusItem = useMemo(() => {
+    const focusBody = settings.bodies.find(body => body.name === settings.center);
+    const focusRegime = ORBITAL_REGIMES.find(({ name }) => name === settings.center);
+    const focusSpacecraft = settings.center === settings.spacecraft?.name ? settings.spacecraft : undefined;
+    return focusBody ?? focusRegime ?? focusSpacecraft;
+  }, [settings.center, JSON.stringify(settings.bodies), JSON.stringify(settings.spacecraft)]);
+  const focusColor = isOrbitalRegime(focusItem) ? ASTEROID_BELT : focusItem?.color;
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
@@ -107,21 +104,21 @@ export function SolarSystem() {
         />
         <Controls settings={settings} updateSettings={updateSettings} model={appState.model} reset={resetState} />
       </Box>
-      {(focusBody != null || focusRegime != null) && (
+      {focusItem != null && focusColor != null && (
         <Box
           h={isSmallDisplay ? '50dvh' : '100dvh'}
           w={isSmallDisplay ? undefined : 600}
           style={{
-            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusBody?.color ?? DEFAULT_ASTEROID_COLOR}`,
-            borderTop: isSmallDisplay ? `1px solid ${focusBody?.color ?? DEFAULT_ASTEROID_COLOR}` : undefined,
+            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusColor}`,
+            borderTop: isSmallDisplay ? `1px solid ${focusColor}` : undefined,
           }}
         >
           <FactSheet
-            key={focusBody?.name ?? focusRegime?.name} // ensure that the component is rerendered when focus changes
-            body={focusBody}
-            regime={focusRegime}
+            key={focusItem.name} // ensure that the component is rerendered when focus changes
+            item={focusItem}
             settings={settings}
             updateSettings={updateSettings}
+            model={appState.model} // TODO: will this cause too many rerenders?
             addBody={addBody}
             removeBody={removeBody}
           />

@@ -107,9 +107,9 @@ export function drawSpacecraftAtLocation(
   ctx: CanvasRenderingContext2D,
   color: `#${string}`,
   [xPx, yPx]: Point2, // centered on this value
-  angle: number // degrees
+  angle: number, // degrees
+  size: number // pixels
 ) {
-  const size = 5;
   ctx.save(); // Save the current context
   ctx.translate(xPx, yPx); // Move to the specified coordinates
   ctx.rotate(degreesToRadians(angle)); // Rotate to the specified angle
@@ -118,6 +118,7 @@ export function drawSpacecraftAtLocation(
   ctx.beginPath();
   ctx.moveTo(size, 0);
   ctx.lineTo(-size, -size / 2);
+  ctx.lineTo(-size / 2, 0);
   ctx.lineTo(-size, size / 2);
   ctx.closePath();
 

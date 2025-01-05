@@ -102,7 +102,7 @@ export type OrbitalRegime = {
 export type SpacecraftControls = {
   launch: boolean;
   fire: boolean;
-  rotate: 'north' | 'east' | 'south' | 'west' | null;
+  rotate: 'port' | 'starboard' | null; // rotation relative to current heading
 };
 export type Spacecraft = {
   name: string;

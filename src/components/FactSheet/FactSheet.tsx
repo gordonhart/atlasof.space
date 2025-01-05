@@ -1,36 +1,39 @@
 import { memo } from 'react';
-import { Settings } from '../../lib/state.ts';
-import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
+import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
+import { CelestialBody, isCelestialBody, isOrbitalRegime, OrbitalRegime, Spacecraft } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
+import { SpacecraftFactSheet } from './SpacecraftFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here
 type Props = {
-  body?: CelestialBody;
-  regime?: OrbitalRegime;
+  item: CelestialBody | OrbitalRegime | Spacecraft;
   settings: Settings;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
+  model: ModelState;
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
 export const FactSheet = memo(function FactSheetComponent({
-  body,
-  regime,
+  item,
   settings,
   updateSettings,
+  model,
   addBody,
   removeBody,
 }: Props) {
-  return body != null ? (
-    <CelestialBodyFactSheet body={body} bodies={settings.bodies} updateSettings={updateSettings} />
-  ) : regime != null ? (
+  return isCelestialBody(item) ? (
+    <CelestialBodyFactSheet body={item} bodies={settings.bodies} updateSettings={updateSettings} />
+  ) : isOrbitalRegime(item) ? (
     <OrbitalRegimeFactSheet
-      regime={regime}
+      regime={item}
       settings={settings}
       updateSettings={updateSettings}
       addBody={addBody}
       removeBody={removeBody}
     />
+  ) : model.spacecraft != null ? (
+    <SpacecraftFactSheet spacecraft={item} settings={settings} updateSettings={updateSettings} model={model} />
   ) : (
     <></>
   );

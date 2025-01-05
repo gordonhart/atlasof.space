@@ -44,8 +44,8 @@ export function useCursorControls(
     }
 
     if (model == null) return;
-    const closeBody = model.findCloseBody([eventX, eventY], settings, interactPxThreshold);
-    updateSettings({ hover: closeBody?.body?.name ?? null });
+    const closeName = model.findCloseBodyName([eventX, eventY], settings, interactPxThreshold);
+    updateSettings({ hover: closeName ?? null });
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {
@@ -58,9 +58,9 @@ export function useCursorControls(
       return;
     }
 
-    const closeBody = model.findCloseBody(getCursorCoordinates(event), settings, interactPxThreshold);
-    if (closeBody != null) {
-      updateSettings({ center: closeBody.body.name });
+    const closeName = model.findCloseBodyName(getCursorCoordinates(event), settings, interactPxThreshold);
+    if (closeName != null) {
+      updateSettings({ center: closeName });
     }
   }
 

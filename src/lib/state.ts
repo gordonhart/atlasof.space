@@ -18,11 +18,20 @@ export type Settings = {
   spacecraft?: Spacecraft;
 };
 
+export type SpacecraftModelState = {
+  launchTime: number | null;
+  position: Point3;
+  velocity: Point3;
+  acceleration: Point3;
+  orientation: Point3;
+};
+
 // these values are readonly; driven by the model
 export type ModelState = {
   time: number; // seconds
   metersPerPx: number; // describes zoom
   vernalEquinox: Point3; // direction of the Vernal Equinox
+  spacecraft?: SpacecraftModelState;
 };
 
 export type AppState = {

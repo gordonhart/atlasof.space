@@ -9,7 +9,7 @@ import {
   getCanvasPixels,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
-import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
+import { HOVER_SCALE_FACTOR } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
@@ -24,7 +24,6 @@ export class KeplerianBody extends KinematicBody {
   private readonly ellipse: OrbitalEllipse;
   private readonly radius: FocalRadius;
   private readonly axis: AxisIndicator | null = null;
-  private readonly screenPosition: Vector3;
   private readonly dotRadius: number;
 
   private visible: boolean = false;
@@ -42,7 +41,6 @@ export class KeplerianBody extends KinematicBody {
     super(body.influencedBy, body.rotation?.siderealPeriod, position, velocity);
     this.body = body;
     this.resolution = resolution;
-    this.screenPosition = new Vector3();
     this.visible = this.isVisible(settings);
     const color = new Color(body.color);
     this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, position, color);
@@ -77,18 +75,11 @@ export class KeplerianBody extends KinematicBody {
     this.axis?.dispose();
   }
 
-  getScreenPosition(camera: OrthographicCamera): Point2 {
-    this.screenPosition.copy(this.position).divideScalar(SCALE_FACTOR).project(camera);
-    const pixelX = ((this.screenPosition.x + 1) * this.resolution.x) / 2;
-    const pixelY = ((1 - this.screenPosition.y) * this.resolution.y) / 2;
-    return [pixelX, pixelY]; // return pixel values
-  }
-
   // draw the dot and label for this body
   drawAnnotations(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number, drawLabel = true) {
     if (!this.visible) return;
 
-    const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera);
+    const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera, this.resolution);
     const bodyYpx = this.resolution.y - bodyYpxInverted;
 
     const label = this.body.shortName ?? this.body.name;
