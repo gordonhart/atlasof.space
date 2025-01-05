@@ -208,10 +208,7 @@ export class SolarSystemModel {
   private incrementKinematicsSafe(dt: number) {
     // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
     //  opposite algorithm to the one performed during initialization
-    const parentStates = map(
-      ({ position, velocity, body }) => ({ position: position.clone(), velocity: velocity.clone(), mass: body.mass }),
-      this.bodies
-    );
+    const parentStates = map(({ position, body }) => ({ position: position.clone(), mass: body.mass }), this.bodies);
     Object.values(this.bodies).forEach(body => {
       const parents = body.influencedBy.map(name => parentStates[name]);
       body.increment(parents, dt);
