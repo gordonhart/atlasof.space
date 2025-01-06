@@ -12,7 +12,7 @@ import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { Gallery } from './Gallery.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
-import { MajorMoons } from './MajorMoons.tsx';
+import { MajorSatellites } from './MajorSatellites.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
@@ -103,7 +103,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       <Box style={{ justifySelf: 'flex-end' }}>
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-        <MajorMoons body={body} bodies={bodies} updateSettings={updateSettings} />
+        <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
         {body.type === CelestialBodyType.STAR && (

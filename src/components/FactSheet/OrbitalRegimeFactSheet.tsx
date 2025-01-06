@@ -43,7 +43,12 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
       <Stack p="md" gap="xs" flex={1}>
         <Title order={5}>{isAsteroidBelt ? 'Asteroids' : 'Celestial Bodies'}</Title>
         {bodiesInRegime.map((body, i) => (
-          <BodyCard key={`${body.name}-${i}`} body={body} onClick={() => updateSettings({ center: body.name })} />
+          <BodyCard
+            key={`${body.name}-${i}`}
+            body={body}
+            onClick={() => updateSettings({ center: body.name })}
+            onHover={hovered => updateSettings({ hover: hovered ? body.name : null })}
+          />
         ))}
         {isAsteroidBelt && <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />}
       </Stack>
