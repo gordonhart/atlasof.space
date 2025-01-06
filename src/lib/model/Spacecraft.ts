@@ -36,6 +36,7 @@ export class Spacecraft extends KinematicBody {
 
   private readonly orientation: Vector3; // unit vector
   private launched: number | null = null;
+  private impulse: number = 0; // N * s
   private lastRotation: SpacecraftControls['rotate'] = null;
   private displaySize = 5;
 
@@ -113,6 +114,7 @@ export class Spacecraft extends KinematicBody {
       this.acceleration.add(thrustVector.multiplyScalar(thrustAcceleration));
       this.velocity.add(thrustVector.multiplyScalar(settings.dt));
       this.position.add(thrustVector.multiplyScalar(settings.dt));
+      this.impulse += this.spacecraft.thrust * settings.dt;
     }
   }
 
@@ -136,6 +138,7 @@ export class Spacecraft extends KinematicBody {
       velocity: this.velocity.toArray(),
       acceleration: this.acceleration.toArray(),
       orientation: this.orientation.toArray(),
+      impulse: this.impulse,
     };
   }
 

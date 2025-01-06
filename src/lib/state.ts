@@ -24,6 +24,7 @@ export type SpacecraftModelState = {
   velocity: Point3;
   acceleration: Point3;
   orientation: Point3;
+  impulse: number;
 };
 
 // these values are readonly; driven by the model

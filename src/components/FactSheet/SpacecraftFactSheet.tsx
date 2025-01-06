@@ -1,6 +1,6 @@
 import { Stack } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
-import { DEFAULT_SPACECRAFT_COLOR, g } from '../../lib/bodies.ts';
+import { AU, DEFAULT_SPACECRAFT_COLOR, g } from '../../lib/bodies.ts';
 import { dateToHumanReadable, epochToDate } from '../../lib/epoch.ts';
 import { magnitude, radiansToDegrees } from '../../lib/physics.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
@@ -41,9 +41,12 @@ export function SpacecraftFactSheet({ spacecraft, settings, updateSettings, mode
     { label: 'mission duration', value: `${pluralize(Number(t.toFixed(1)), tUnits)}` },
     { label: 'mass', value: `${spacecraft.mass.toLocaleString()} kg` },
     { label: 'thrust', value: `${spacecraft.thrust.toLocaleString()} N` },
+    { label: 'distance from sun', value: `${(magnitude(spacecraftModel.position) / AU).toFixed(2)} AU` },
     { label: 'velocity', value: `${(magnitude(spacecraftModel.velocity) / 1e3).toFixed(1)} km/s` },
     { label: 'acceleration', value: `${magnitude(spacecraftModel.acceleration).toFixed(3)} m/s` },
     { label: 'max acceleration', value: `${maxGees.current.toFixed(3)} g` },
+    { label: 'impulse', value: `${(spacecraftModel.impulse / 1e6).toFixed(0)} MN•s` },
+    { label: '∆v', value: `${(spacecraftModel.impulse / spacecraft.mass / 1e3).toFixed(3)} km/s` },
     { label: 'crew status', value: maxGees.current > 5 ? 'dead' : 'alive' },
     { label: 'ecliptic heading', value: `${eclipticHeading.toFixed(3)}º` },
     { label: 'inclination', value: `${inclination.toFixed(3)}º` },
