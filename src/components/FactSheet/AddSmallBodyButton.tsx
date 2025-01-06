@@ -23,7 +23,7 @@ export function AddSmallBodyButton({ bodies, addBody, removeBody }: Props) {
         leftSection={<IconSpherePlus size={iconSize} />}
         onClick={onOpen}
       >
-        Add Asteroids
+        Add Asteroids from JPL Small-Body Database
       </Button>
       <AddSmallBodyModal isOpen={isOpen} onClose={onClose} bodies={bodies} addBody={addBody} removeBody={removeBody} />
     </>
