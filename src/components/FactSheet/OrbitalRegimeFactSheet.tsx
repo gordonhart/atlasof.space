@@ -2,7 +2,14 @@ import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
 import { Settings } from '../../lib/state.ts';
-import { CelestialBody, HeliocentricOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
+import {
+  CelestialBody,
+  CelestialBodyType,
+  CelestialBodyTypes,
+  HeliocentricOrbitalRegime,
+  OrbitalRegime,
+} from '../../lib/types.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
@@ -23,11 +30,14 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   addBody,
   removeBody,
 }: Props) {
-  const isAsteroidBelt = regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT;
-  const bodiesInRegime = useMemo(
-    () => settings.bodies.filter(body => body.orbitalRegime === regime.name),
-    [regime.name, JSON.stringify(settings.bodies)]
-  );
+  const bodiesInRegimeByType = useMemo(() => {
+    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.name);
+    const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
+    return bodiesInRegime.reduce((acc, body) => {
+      acc[body.type].push(body);
+      return acc;
+    }, types);
+  }, [regime.name, JSON.stringify(settings.bodies)]);
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
@@ -40,17 +50,25 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
 
       <FactSheetSummary obj={regime} />
 
-      <Stack p="md" gap="xs" flex={1}>
-        <Title order={5}>{isAsteroidBelt ? 'Asteroids' : 'Celestial Bodies'}</Title>
-        {bodiesInRegime.map((body, i) => (
-          <BodyCard
-            key={`${body.name}-${i}`}
-            body={body}
-            onClick={() => updateSettings({ center: body.name })}
-            onHover={hovered => updateSettings({ hover: hovered ? body.name : null })}
-          />
-        ))}
-        {isAsteroidBelt && <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />}
+      <Stack p="md" gap="lg" flex={1}>
+        {Object.entries(bodiesInRegimeByType)
+          .filter(([, bodies]) => bodies.length > 0)
+          .map(([type, bodies], i) => (
+            <Stack gap="xs" key={`${type}-${i}`}>
+              <Title order={5}>{celestialBodyTypeName(type as CelestialBodyType, true)}</Title>
+              {bodies.map((body, j) => (
+                <BodyCard
+                  key={`${body.name}-${j}`}
+                  body={body}
+                  onClick={() => updateSettings({ center: body.name })}
+                  onHover={hovered => updateSettings({ hover: hovered ? body.name : null })}
+                />
+              ))}
+              {regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
+                <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />
+              )}
+            </Stack>
+          ))}
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
