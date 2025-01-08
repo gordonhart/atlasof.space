@@ -108,6 +108,7 @@ export class KeplerianBody extends KinematicBody {
     }
   }
 
+  // TODO: hide moons of hidden types (e.g. Pluto's moons should only be visible if dwarf planets are visible)
   isVisible(settings: Settings) {
     return (
       settings.hover === this.body.name ||

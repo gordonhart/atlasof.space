@@ -1719,7 +1719,7 @@ export const GALATEA: CelestialBody = {
 };
 
 // TODO: there are more moons
-export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTEUS, TRITON];
+export const NEPTUNE_SYSTEM = [NEPTUNE, TRITON, DESPINA, GALATEA, LARISSA, PROTEUS, NEREID];
 
 export const SOLAR_SYSTEM = [
   SOL,
