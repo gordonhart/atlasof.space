@@ -1103,6 +1103,27 @@ export const LELEAKUHONUA: CelestialBody = {
   color: DEFAULT_ASTEROID_COLOR,
 };
 
+export const FARFAROUT: CelestialBody = {
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '2018 AG37',
+  shortName: 'FarFarOut',
+  influencedBy: [SOL.name],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  mass: estimateAsteroidMass(200e3), // unknown
+  radius: 200e3, // estimate
+  elements: {
+    wrt: SOL.name,
+    epoch: julianDayToEpoch('JD2458540.5'),
+    eccentricity: 0.655,
+    semiMajorAxis: 80.2 * AU,
+    inclination: 18.68,
+    longitudeAscending: 68.35,
+    argumentOfPeriapsis: 231.9,
+    meanAnomaly: 186.9,
+  },
+  color: DEFAULT_ASTEROID_COLOR,
+};
+
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
   SEDNA,
@@ -1114,6 +1135,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   ARROKOTH,
   VP113,
   LELEAKUHONUA,
+  FARFAROUT,
 ];
 
 export const JUPITER: CelestialBody = {
@@ -1719,7 +1741,7 @@ export const GALATEA: CelestialBody = {
 };
 
 // TODO: there are more moons
-export const NEPTUNE_SYSTEM = [NEPTUNE, GALATEA, LARISSA, DESPINA, NEREID, PROTEUS, TRITON];
+export const NEPTUNE_SYSTEM = [NEPTUNE, TRITON, DESPINA, GALATEA, LARISSA, PROTEUS, NEREID];
 
 export const SOLAR_SYSTEM = [
   SOL,

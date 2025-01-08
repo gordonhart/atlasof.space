@@ -16,6 +16,7 @@ import earthTextureSrc from '../../assets/earth-texture.jpg';
 import earthSrc from '../../assets/earth-thumb.jpg';
 import erosSrc from '../../assets/eros-thumb.jpg';
 import europaSrc from '../../assets/europa-thumb.jpg';
+import farfaroutSrc from '../../assets/farfarout-thumb.gif';
 import firmamentTextureSrc from '../../assets/firmament.jpg';
 import ganymedeSrc from '../../assets/ganymede-thumb.jpg';
 import hygieaSrc from '../../assets/hygiea-thumb.jpg';
@@ -96,6 +97,7 @@ export const Thumbnails: Record<string, string> = {
   [Bodies.EROS.name]: erosSrc as string,
   [Bodies.MATHILDE.name]: mathildeSrc as string,
   [Bodies.ARROKOTH.name]: arrokothSrc as string,
+  [Bodies.FARFAROUT.name]: farfaroutSrc as string,
 } as const;
 
 export const GalleryImages: Record<string, Array<string>> = {
