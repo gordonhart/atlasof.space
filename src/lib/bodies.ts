@@ -113,7 +113,7 @@ export const EARTH: CelestialBody = {
   mass: 5.972168e24,
   radius: 6371e3,
   rotation: {
-    axialTilt: 23.4,
+    axialTilt: -23.4, // TODO: this points it in the right direction -- should all axial tilts be in this direction?
     siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
   },
   color: '#7e87dd',
