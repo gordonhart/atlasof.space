@@ -1106,11 +1106,11 @@ export const LELEAKUHONUA: CelestialBody = {
 export const FARFAROUT: CelestialBody = {
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '2018 AG37',
-  shortName: 'Farfarout',
+  shortName: 'FarFarOut',
   influencedBy: [SOL.name],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
-  mass: estimateAsteroidMass(200e3), // unknown, extremely rough guess
-  radius: 200e3,
+  mass: estimateAsteroidMass(200e3), // unknown
+  radius: 200e3, // estimate
   elements: {
     wrt: SOL.name,
     epoch: julianDayToEpoch('JD2458540.5'),
