@@ -15,6 +15,7 @@ import {
 import {
   IconArrowRight,
   IconArrowsMove,
+  IconArrowUpRight,
   IconBrandGithub,
   IconCircleDot,
   IconClick,
@@ -171,13 +172,22 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
           )}
         </Stack>
         <Divider />
-        <Group p="md" gap={8} justify="center">
-          <ActionIcon component="a" href="https://github.com/gordonhart/atlasof.space" variant="subtle">
-            <IconBrandGithub size={iconSize} color="var(--mantine-color-gray-light-color)" />
-          </ActionIcon>
-          <Text c="dimmed" size="xs">
-            Gordon Hart, 2024-{new Date().getFullYear()}
-          </Text>
+        <Group p="md" justify="center">
+          <Button
+            component="a"
+            href="https://github.com/gordonhart/atlasof.space"
+            variant="subtle"
+            size="compact-xs"
+            color="gray"
+          >
+            <Group gap={4} wrap="nowrap">
+              <IconBrandGithub size={iconSize} color="var(--mantine-color-dimmed)" />
+              <Text inherit c="dimmed" fw="bold">
+                @gordonhart/atlasof.space
+              </Text>
+              <IconArrowUpRight size={iconSize} color="var(--mantine-color-dimmed)" />
+            </Group>
+          </Button>
         </Group>
       </Stack>
     </Modal>
