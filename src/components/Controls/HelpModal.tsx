@@ -15,6 +15,7 @@ import {
 import {
   IconArrowRight,
   IconArrowsMove,
+  IconBrandGithub,
   IconCircleDot,
   IconClick,
   IconHandClick,
@@ -33,6 +34,7 @@ import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
+import { iconSize } from './constants.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
 
@@ -168,6 +170,15 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
             <SimpleGrid cols={3}>{sampleBodyCards}</SimpleGrid>
           )}
         </Stack>
+        <Divider />
+        <Group p="md" gap={8} justify="center">
+          <ActionIcon component="a" href="https://github.com/gordonhart/atlasof.space" variant="subtle">
+            <IconBrandGithub size={iconSize} color="var(--mantine-color-gray-light-color)" />
+          </ActionIcon>
+          <Text c="dimmed" size="xs">
+            Gordon Hart, 2024-{new Date().getFullYear()}
+          </Text>
+        </Group>
       </Stack>
     </Modal>
   );
