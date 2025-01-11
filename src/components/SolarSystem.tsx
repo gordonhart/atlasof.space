@@ -34,9 +34,19 @@ export function SolarSystem() {
     [setAppState]
   );
 
-  // sync center back to URL
+  // sync URL to center
   useEffect(() => {
-    navigate(`/${settings.center ?? ''}`);
+    if (settings.center !== id) {
+      updateSettings({ center: id });
+    }
+  }, [id]);
+
+  // sync center back to URL when state changes are initiated by non-URL source
+  useEffect(() => {
+    // Skip if the change was due to URL
+    if (settings.center != null && settings.center !== id) {
+      navigate(`/${settings.center}`);
+    }
   }, [settings.center]);
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
