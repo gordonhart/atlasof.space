@@ -4,7 +4,7 @@ import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { Settings } from '../../lib/state.ts';
+import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { FactGrid } from './FactGrid.tsx';
@@ -22,7 +22,7 @@ import { Thumbnail } from './Thumbnail.tsx';
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
 };
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,

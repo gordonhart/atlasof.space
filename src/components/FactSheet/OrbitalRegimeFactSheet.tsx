@@ -1,7 +1,7 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
-import { Settings } from '../../lib/state.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
   CelestialBodyType,
@@ -19,7 +19,7 @@ import { OtherRegimes } from './OtherRegimes.tsx';
 type Props = {
   regime: OrbitalRegime;
   settings: Settings;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };

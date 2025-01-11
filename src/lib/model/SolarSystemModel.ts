@@ -1,32 +1,21 @@
 import { map } from 'ramda';
-import {
-  AmbientLight,
-  AxesHelper,
-  GridHelper,
-  Light,
-  OrthographicCamera,
-  PointLight,
-  Scene,
-  Vector2,
-  Vector3,
-  WebGLRenderer,
-} from 'three';
+import { AmbientLight, Light, OrthographicCamera, PointLight, Scene, Vector2, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { AU, SOL } from '../bodies.ts';
+import { SOL } from '../bodies.ts';
 import { Time } from '../epoch.ts';
-import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
+import { convertToEpoch, G, keplerianToCartesian, magnitude } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
-import { Settings } from '../state.ts';
-import { CelestialBody, Point2, Point3 } from '../types.ts';
+import { ModelState, Settings } from '../state.ts';
+import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
+import { isOffScreen } from './canvas.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { OrbitalRegime } from './OrbitalRegime.ts';
-import { isOffScreen } from './utils.ts';
 
 export class SolarSystemModel {
   private readonly scene: Scene;
@@ -35,12 +24,12 @@ export class SolarSystemModel {
   private readonly controls: OrbitControls;
   private readonly renderer: WebGLRenderer;
   private readonly composer: EffectComposer;
-  private bodies: Record<string, KeplerianBody>;
+  private readonly lights: Array<Light>;
   private readonly firmament: Firmament;
   private readonly regimes: Array<OrbitalRegime>;
-  private readonly lights: Array<Light>;
+  private time: number = 0;
+  private bodies: Record<string, KeplerianBody>;
 
-  private readonly debug = false;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
   constructor(container: HTMLElement, settings: Settings) {
@@ -79,10 +68,6 @@ export class SolarSystemModel {
     this.composer.addPass(this.firmament.renderPass);
     this.composer.addPass(renderScene);
     this.composer.addPass(bloomPass);
-
-    if (this.debug) {
-      this.addHelpers();
-    }
   }
 
   resize(container: HTMLElement) {
@@ -98,15 +83,6 @@ export class SolarSystemModel {
     this.camera.updateProjectionMatrix();
   }
 
-  private setupCamera() {
-    this.camera.clearViewOffset();
-    this.camera.up.set(...CAMERA_INIT.up);
-    this.camera.position.set(...CAMERA_INIT.position);
-    this.camera.lookAt(...CAMERA_INIT.lookAt);
-    this.camera.zoom = 1;
-    this.camera.updateProjectionMatrix();
-  }
-
   getMetersPerPixel() {
     const visibleWidth = (this.camera.right - this.camera.left) / this.camera.zoom;
     return (SCALE_FACTOR * visibleWidth) / this.resolution.width;
@@ -116,6 +92,14 @@ export class SolarSystemModel {
     // the Vernal Equinox is the direction of +X; find by applying matrix transformations from camera
     const localX = new Vector3(1, 0, 0); // TODO: no new allocation
     return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
+  }
+
+  getModelState(): ModelState {
+    return {
+      time: this.time,
+      metersPerPx: this.getMetersPerPixel(),
+      vernalEquinox: this.getVernalEquinox(),
+    };
   }
 
   update(ctx: CanvasRenderingContext2D, settings: Settings) {
@@ -146,6 +130,7 @@ export class SolarSystemModel {
   }
 
   reset(settings: Settings) {
+    this.time = 0;
     this.setupCamera();
     this.controls.reset();
     Object.values(this.bodies).forEach(body => body.dispose());
@@ -159,6 +144,34 @@ export class SolarSystemModel {
     this.regimes.forEach(regime => regime.dispose());
     this.renderer.dispose();
     this.controls.dispose();
+  }
+
+  findCloseBody([xPx, yPx]: Point2, settings: Settings, threshold = 10) {
+    const metersPerPx = this.getMetersPerPixel();
+    let closest: KeplerianBody | undefined = undefined;
+    let closestDistance = Infinity;
+    for (const body of Object.values(this.bodies).reverse()) {
+      // account for the displayed size of the body
+      const bodyThreshold = threshold + body.body.radius / metersPerPx;
+
+      // ignore invisible types and offscreen bodies
+      if (!body.isVisible(settings)) continue;
+      const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera, this.resolution);
+      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
+
+      // always give precedence to the sun
+      const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
+      if (distance < bodyThreshold && body.body.type === CelestialBodyType.STAR) return body;
+
+      // only give precedence to non-moons, but still select moons if there are no other options
+      const bodyIsMoon = body.body.type === CelestialBodyType.MOON;
+      const closestIsMoon = closest?.body?.type === CelestialBodyType.MOON;
+      if (distance < bodyThreshold && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
+        closest = body;
+        closestDistance = distance;
+      }
+    }
+    return closest;
   }
 
   private createBodies(settings: Settings) {
@@ -198,6 +211,7 @@ export class SolarSystemModel {
     // subdivide dt to a 'safe' value -- orbits with smaller periods can fall apart at high dt
     // TODO: this algorithm could be improved; 1 hour is not always safe for e.g. LEO satellites of Earth, which have
     //  orbital periods of ~90 minutes. It is also overzealous to subdivide like this for orbits with longer periods
+    this.time += dt;
     const nIterations = Math.ceil(dt / this.maxSafeDt);
     const safeDt = dt / nIterations;
     Array(nIterations)
@@ -234,41 +248,13 @@ export class SolarSystemModel {
     this.controls.target.copy(centerBody.position).divideScalar(SCALE_FACTOR);
   }
 
-  private addHelpers() {
-    const axesHelper = new AxesHelper(AU / SCALE_FACTOR);
-    axesHelper.setColors(0xff0000, 0x00ff00, 0x0000ff);
-    this.scene.add(axesHelper);
-    const gridHelper = new GridHelper((AU * 1000) / SCALE_FACTOR, 100);
-    gridHelper.rotateX(Math.PI / 2);
-    this.scene.add(gridHelper);
-  }
-
-  findCloseBody([xPx, yPx]: Point2, settings: Settings, threshold = 10): KeplerianBody | undefined {
-    const metersPerPx = this.getMetersPerPixel();
-    let closest: KeplerianBody | undefined = undefined;
-    let closestDistance = Infinity;
-    for (const body of Object.values(this.bodies).reverse()) {
-      // account for the displayed size of the body
-      const bodyThreshold = threshold + body.body.radius / metersPerPx;
-
-      // ignore invisible types and offscreen bodies
-      if (!body.isVisible(settings)) continue;
-      const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera);
-      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
-
-      // always give precedence to the sun
-      const distance = Math.sqrt((xPx - bodyXpx) ** 2 + (yPx - bodyYpx) ** 2);
-      if (distance < bodyThreshold && body.body.type === 'star') return body;
-
-      // only give precedence to non-moons, but still select moons if there are no other options
-      const bodyIsMoon = body.body.type === 'moon';
-      const closestIsMoon = closest?.body?.type === 'moon';
-      if (distance < bodyThreshold && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
-        closest = body;
-        closestDistance = distance;
-      }
-    }
-    return closest;
+  private setupCamera() {
+    this.camera.clearViewOffset();
+    this.camera.up.set(...CAMERA_INIT.up);
+    this.camera.position.set(...CAMERA_INIT.position);
+    this.camera.lookAt(...CAMERA_INIT.lookAt);
+    this.camera.zoom = 1;
+    this.camera.updateProjectionMatrix();
   }
 
   private setupRenderer(container: HTMLElement) {
