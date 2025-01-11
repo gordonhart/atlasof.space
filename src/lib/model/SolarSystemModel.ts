@@ -59,6 +59,7 @@ export class SolarSystemModel {
     this.controls.minZoom = 1e-3;
     this.controls.maxZoom = 1e4;
     this.controls.zoomToCursor = true;
+    this.controls.keyPanSpeed = 10; // pixels per second
     this.controls.listenToKeyEvents(window);
 
     this.bodies = this.createBodies(settings);
@@ -151,6 +152,7 @@ export class SolarSystemModel {
     this.firmament.dispose();
     this.regimes.forEach(regime => regime.dispose());
     this.renderer.dispose();
+    this.controls.stopListenToKeyEvents();
     this.controls.dispose();
   }
 
