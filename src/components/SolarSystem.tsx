@@ -3,9 +3,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
-import { ASTEROID_BELT, ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
+import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
-import { CelestialBody, isOrbitalRegime } from '../lib/types.ts';
+import { CelestialBody, isCelestialBody } from '../lib/types.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -81,7 +82,7 @@ export function SolarSystem() {
     const focusRegime = ORBITAL_REGIMES.find(({ name }) => name === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
-  const focusColor = isOrbitalRegime(focusItem) ? ASTEROID_BELT : focusItem?.color;
+  const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ASTEROID_COLOR;
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
@@ -101,7 +102,7 @@ export function SolarSystem() {
         />
         <Controls settings={settings} updateSettings={updateSettings} model={appState.model} reset={resetState} />
       </Box>
-      {focusItem != null && focusColor != null && (
+      {focusItem != null && (
         <Box
           h={isSmallDisplay ? '50dvh' : '100dvh'}
           w={isSmallDisplay ? undefined : 600}
