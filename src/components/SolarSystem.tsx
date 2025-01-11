@@ -13,10 +13,8 @@ import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const { id } = useParams();
-  const [appState, setAppState] = useState({
-    ...initialState,
-    settings: { ...initialState.settings, center: id ?? null },
-  });
+  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: id ?? null } };
+  const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
   const isSmallDisplay = useIsSmallDisplay();

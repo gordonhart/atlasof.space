@@ -3,6 +3,9 @@ command = "yarn build"
 functions = "functions"
 publish = "dist"
 
+[build.environment]
+NODE_VERSION = "20"
+
 [[redirects]]
 force = true
 from = '/api/*'
