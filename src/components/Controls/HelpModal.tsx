@@ -17,6 +17,7 @@ import {
   IconArrowsMove,
   IconArrowUpRight,
   IconBrandGithub,
+  IconBrandOpenSource,
   IconCircleDot,
   IconClick,
   IconHandClick,
@@ -172,7 +173,13 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
           )}
         </Stack>
         <Divider />
-        <Group p="md" justify="center">
+        <Group p="md" gap={0} justify="center">
+          <Group gap={4}>
+            <IconBrandOpenSource size={iconSize} color="var(--mantine-color-dimmed)" />
+            <Text c="dimmed" fz="xs">
+              2024-{new Date().getFullYear()}
+            </Text>
+          </Group>
           <Button
             component="a"
             href="https://github.com/gordonhart/atlasof.space"
