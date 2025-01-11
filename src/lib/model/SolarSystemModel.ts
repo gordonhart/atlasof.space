@@ -6,7 +6,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { SOL } from '../bodies.ts';
 import { Time } from '../epoch.ts';
-import { convertToEpoch, G, keplerianToCartesian, magnitude } from '../physics.ts';
+import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
 import { ModelState, Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
@@ -170,13 +170,13 @@ export class SolarSystemModel {
       if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
 
       // always give precedence to the sun
-      const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
-      if (distance < bodyThreshold && body.body.type === CelestialBodyType.STAR) return body;
+      const [distance, isNear] = body.isNearCursor([xPx, yPx], this.camera, bodyThreshold);
+      if (isNear && body.body.type === CelestialBodyType.STAR) return body;
 
       // only give precedence to non-moons, but still select moons if there are no other options
       const bodyIsMoon = body.body.type === CelestialBodyType.MOON;
       const closestIsMoon = closest?.body?.type === CelestialBodyType.MOON;
-      if (distance < bodyThreshold && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
+      if (isNear && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
         closest = body;
         closestDistance = distance;
       }
