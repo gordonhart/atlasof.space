@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Anchor,
   Box,
   Button,
   Divider,
@@ -15,6 +16,9 @@ import {
 import {
   IconArrowRight,
   IconArrowsMove,
+  IconArrowUpRight,
+  IconBrandGithub,
+  IconBrandOpenSource,
   IconCircleDot,
   IconClick,
   IconHandClick,
@@ -33,6 +37,7 @@ import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
+import { iconSize } from './constants.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
 
@@ -168,6 +173,24 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
             <SimpleGrid cols={3}>{sampleBodyCards}</SimpleGrid>
           )}
         </Stack>
+        <Divider />
+        <Group p="md" gap={4} justify="center">
+          <Group gap={4} wrap="nowrap">
+            <IconBrandOpenSource size={iconSize} color="var(--mantine-color-dimmed)" />
+            <Text c="dimmed" fz="xs">
+              2024-{new Date().getFullYear()}
+            </Text>
+          </Group>
+          <Anchor href="https://github.com/gordonhart/atlasof.space">
+            <Group gap={4} wrap="nowrap">
+              <IconBrandGithub size={iconSize} color="var(--mantine-color-dimmed)" />
+              <Text fz="xs" c="dimmed" fw="bold">
+                @gordonhart/atlasof.space
+              </Text>
+              <IconArrowUpRight size={iconSize} color="var(--mantine-color-dimmed)" />
+            </Group>
+          </Anchor>
+        </Group>
       </Stack>
     </Modal>
   );
