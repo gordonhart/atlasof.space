@@ -51,7 +51,7 @@ export function drawLabelAtLocation(
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2,
   radius: number
-) {
+): [Point2, Point2] {
   const dpr = window.devicePixelRatio;
   const [canvasWidthPx, canvasHeightPx] = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
   ctx.save();
@@ -91,6 +91,12 @@ export function drawLabelAtLocation(
   ctx.fillStyle = color;
   ctx.fillText(label, xIsCloseToRightEdge ? x0 - w : x0 + h / 2, y0 - boxPadPx + (yIsCloseToTopEdge ? h : 0));
   ctx.restore();
+
+  const [oppositeX, oppositeY] = offsets[1];
+  return [
+    [x0, y0],
+    [x0 + oppositeX * xSign, y0 - oppositeY * ySign],
+  ];
 }
 
 export function drawDotAtLocation(

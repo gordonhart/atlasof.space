@@ -1,4 +1,5 @@
-import { Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
+import { Box2, Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
+import { magnitude } from '../physics.ts';
 import { Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
@@ -25,6 +26,7 @@ export class KeplerianBody extends KinematicBody {
   private readonly radius: FocalRadius;
   private readonly axis: AxisIndicator | null = null;
   private readonly dotRadius: number;
+  private readonly labelBox = new Box2();
 
   private visible: boolean = false;
   private hovered: boolean = false;
@@ -100,9 +102,22 @@ export class KeplerianBody extends KinematicBody {
       }
       if (drawLabel) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;
-        drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
+        const [p0, p1] = drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
+        this.labelBox.min.x = Math.min(p0[0], p1[0]);
+        this.labelBox.min.y = Math.min(p0[1], p1[1]);
+        this.labelBox.max.x = Math.max(p0[0], p1[0]);
+        this.labelBox.max.y = Math.max(p0[1], p1[1]);
       }
     }
+  }
+
+  isNear([xPx, yPx]: Point2, camera: OrthographicCamera, threshold = 10): [number, boolean] {
+    const [bodyXpx, bodyYpx] = this.getScreenPosition(camera, this.resolution);
+    const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
+    const bodyIsNear = distance < threshold;
+    // TODO: labels are slightly non-rectangular -- check the actual label polygon if the pointer is within the box?
+    const labelIsNear = this.labelBox.containsPoint(new Vector2(xPx, yPx));
+    return [distance, bodyIsNear || labelIsNear];
   }
 
   // TODO: hide moons of hidden types (e.g. Pluto's moons should only be visible if dwarf planets are visible)
