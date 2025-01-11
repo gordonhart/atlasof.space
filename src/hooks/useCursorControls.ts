@@ -4,7 +4,6 @@ import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { magnitude } from '../lib/physics.ts';
 import { Settings, UpdateSettings } from '../lib/state.ts';
 import { Point2 } from '../lib/types.ts';
-import { celestialBodySlug } from '../lib/utils.ts';
 import { useIsTouchDevice } from './useIsTouchDevice.ts';
 
 const DRAG_PX_THRESHOLD = 10;
@@ -44,7 +43,7 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
 
     if (model == null) return;
     const closeBody = model.findCloseBody([eventX, eventY], settings, interactPxThreshold);
-    updateSettings({ hover: closeBody != null ? celestialBodySlug(closeBody.body) : null });
+    updateSettings({ hover: closeBody != null ? closeBody.body.slug : null });
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {
@@ -59,7 +58,7 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
 
     const closeBody = model.findCloseBody(getCursorCoordinates(event), settings, interactPxThreshold);
     if (closeBody != null) {
-      updateSettings({ center: celestialBodySlug(closeBody.body) });
+      updateSettings({ center: closeBody.body.slug });
     }
   }
 

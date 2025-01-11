@@ -8,7 +8,6 @@ import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
 import { ORBITAL_REGIMES, orbitalRegimeSlug } from '../lib/regimes.ts';
 import { initialState, UpdateSettings } from '../lib/state.ts';
 import { CelestialBody, isCelestialBody } from '../lib/types.ts';
-import { celestialBodySlug } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -82,7 +81,7 @@ export function SolarSystem() {
   }, [settings.center]);
 
   const focusItem = useMemo(() => {
-    const focusBody = settings.bodies.find(body => celestialBodySlug(body) === settings.center);
+    const focusBody = settings.bodies.find(body => body.slug === settings.center);
     const focusRegime = ORBITAL_REGIMES.find(({ name }) => orbitalRegimeSlug(name) === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);

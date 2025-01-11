@@ -6,13 +6,7 @@ import { GalleryImages } from '../../lib/images.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
-import {
-  celestialBodySlug,
-  celestialBodyTypeDescription,
-  humanDistanceUnits,
-  humanTimeUnits,
-  pluralize,
-} from '../../lib/utils.ts';
+import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
@@ -82,7 +76,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         subTitle={celestialBodyTypeDescription(body)}
         color={body.color}
         onClose={() => updateSettings({ center: null })}
-        onHover={hovered => updateSettings({ hover: hovered ? celestialBodySlug(body) : null })}
+        onHover={hovered => updateSettings({ hover: hovered ? body.slug : null })}
       />
 
       <FactSheetSummary obj={body} />

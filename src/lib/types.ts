@@ -1,3 +1,4 @@
+export type Slug = string;
 export type Point2 = [number, number];
 export type Point3 = [number, number, number];
 export type CartesianState = {
@@ -17,8 +18,8 @@ export type Epoch = {
 };
 
 export type KeplerianElements = {
-  // parent body that these elements are given with respect to, e.g. 'Jupiter' for a moon. null for the Sun
-  wrt: string | null;
+  // parent body that these elements are given with respect to, e.g. 'jupiter' for a moon. null for the Sun
+  wrt: Slug | null;
   epoch: Epoch;
   source?: string; // optionally include a citation, link, or blurb about data source
   eccentricity: number; // ratio
@@ -78,9 +79,10 @@ export enum HeliocentricOrbitalRegime {
 
 export type CelestialBody = {
   type: CelestialBodyType;
+  slug: Slug;
   name: string;
   shortName?: string;
-  influencedBy: Array<string>; // slugs of bodies influencing this body's motion
+  influencedBy: Array<Slug>; // bodies influencing this body's motion
   orbitalRegime?: HeliocentricOrbitalRegime;
   mass: number; // kg
   radius: number; // m

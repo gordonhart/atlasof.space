@@ -2,7 +2,7 @@ import { Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
-import { celestialBodySlug, celestialBodyTypeName } from '../../lib/utils.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { BodyCard } from './BodyCard.tsx';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);
@@ -14,12 +14,11 @@ type Props = {
 };
 export function MajorSatellites({ body, bodies, updateSettings }: Props) {
   const bodiesByName = useMemo(() => Object.fromEntries(bodies.map(b => [b.name, b])), [JSON.stringify(bodies)]);
-  const slug = celestialBodySlug(body);
   const satellites = useMemo(
     () =>
       bodies.filter(
         ({ type, influencedBy }) =>
-          influencedBy[influencedBy.length - 1]?.includes(slug) && MAJOR_SATELLITE_TYPES.has(type)
+          influencedBy[influencedBy.length - 1]?.includes(body.slug) && MAJOR_SATELLITE_TYPES.has(type)
       ),
     [JSON.stringify(body), bodiesByName]
   );
@@ -38,8 +37,8 @@ export function MajorSatellites({ body, bodies, updateSettings }: Props) {
         <BodyCard
           key={`${satellite.name}-${i}`}
           body={satellite}
-          onClick={() => updateSettings({ center: celestialBodySlug(satellite), hover: null })}
-          onHover={hovered => updateSettings({ hover: hovered ? celestialBodySlug(satellite) : null })}
+          onClick={() => updateSettings({ center: satellite.slug, hover: null })}
+          onHover={hovered => updateSettings({ hover: hovered ? satellite.slug : null })}
         />
       ))}
     </Stack>

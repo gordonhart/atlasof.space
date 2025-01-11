@@ -6,7 +6,7 @@ import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { ORBITAL_REGIMES, orbitalRegimeSlug } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
-import { celestialBodySlug, celestialBodyTypeDescription } from '../../lib/utils.ts';
+import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
 import { iconSize } from './constants.ts';
 import styles from './SelectOmnibox.module.css';
@@ -39,7 +39,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
                 {celestialBodyTypeDescription(body)}
               </Text>
             }
-            onClick={() => updateSettings(prev => ({ ...prev, center: celestialBodySlug(body) }))}
+            onClick={() => updateSettings(prev => ({ ...prev, center: body.slug }))}
           />
         )),
     [query, JSON.stringify(settings.bodies)]
