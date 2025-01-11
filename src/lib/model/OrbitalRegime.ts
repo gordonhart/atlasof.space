@@ -9,7 +9,6 @@ import {
   OneFactor,
   DoubleSide,
 } from 'three';
-import { orbitalRegimeId } from '../regimes.ts';
 import { Settings } from '../state.ts';
 import { OrbitalRegime as OrbitalRegimeType } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
@@ -54,7 +53,10 @@ export class OrbitalRegime {
   }
 
   private isVisible(settings: Settings) {
-    const slug = orbitalRegimeId(this.regime.regime);
-    return settings.hover === slug || settings.center === slug || settings.visibleRegimes.has(this.regime.regime);
+    return (
+      settings.hover === this.regime.regime ||
+      settings.center === this.regime.regime ||
+      settings.visibleRegimes.has(this.regime.regime)
+    );
   }
 }

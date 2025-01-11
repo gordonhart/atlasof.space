@@ -50,8 +50,8 @@ export function useSolarSystemModel() {
     modelRef.current?.add(settings, body);
   }
 
-  function remove(slug: string) {
-    modelRef.current?.remove(slug);
+  function remove(id: string) {
+    modelRef.current?.remove(id);
   }
 
   function reset(settings: Settings) {

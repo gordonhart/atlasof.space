@@ -114,8 +114,8 @@ export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
   return (
     obj != null &&
     typeof obj === 'object' &&
-    'name' in obj &&
-    typeof obj.name === 'string' &&
-    Object.values(HeliocentricOrbitalRegime).includes(obj.name as HeliocentricOrbitalRegime)
+    'regime' in obj &&
+    typeof obj.regime === 'string' &&
+    Object.values(HeliocentricOrbitalRegime).includes(obj.regime as HeliocentricOrbitalRegime)
   );
 }

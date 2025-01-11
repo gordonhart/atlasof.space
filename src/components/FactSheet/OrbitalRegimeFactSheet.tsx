@@ -61,8 +61,8 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                 <BodyCard
                   key={`${body.name}-${j}`}
                   body={body}
-                  onClick={() => updateSettings({ center: body.slug })}
-                  onHover={hovered => updateSettings({ hover: hovered ? body.slug : null })}
+                  onClick={() => updateSettings({ center: body.id })}
+                  onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
                 />
               ))}
               {regime.regime === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (

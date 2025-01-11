@@ -12,7 +12,7 @@ type Props = {
 };
 export function OtherRegimes({ regime, updateSettings, title = 'Other Orbital Regimes' }: Props) {
   const otherRegimes: Array<OrbitalRegime> = useMemo(
-    () => ORBITAL_REGIMES.filter(({ regime }) => regime !== regime?.regime),
+    () => ORBITAL_REGIMES.filter(other => other.regime !== regime?.regime),
     [JSON.stringify(regime)]
   );
 

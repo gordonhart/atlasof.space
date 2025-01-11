@@ -1,6 +1,6 @@
 import { Group, Pill } from '@mantine/core';
 import { IconCircleDotFilled } from '@tabler/icons-react';
-import { orbitalRegimeId } from '../../lib/regimes.ts';
+import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings } from '../../lib/state.ts';
 import { HeliocentricOrbitalRegime } from '../../lib/types.ts';
 import styles from './RelatedBodies.module.css';
@@ -14,13 +14,13 @@ export function OrbitalRegimePill({ regime, updateSettings }: Props) {
     <Pill
       className={styles.LinkPill}
       style={{ cursor: 'pointer' }}
-      onClick={() => updateSettings({ center: orbitalRegimeId(regime), hover: null })}
-      onMouseEnter={() => updateSettings({ hover: orbitalRegimeId(regime) })}
+      onClick={() => updateSettings({ center: regime, hover: null })}
+      onMouseEnter={() => updateSettings({ hover: regime })}
       onMouseLeave={() => updateSettings({ hover: null })}
     >
       <Group gap={8} align="center" wrap="nowrap">
         <IconCircleDotFilled size={14} />
-        {regime}
+        {orbitalRegimeDisplayName(regime)}
       </Group>
     </Pill>
   );

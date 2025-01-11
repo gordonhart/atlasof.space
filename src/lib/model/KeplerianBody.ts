@@ -123,11 +123,8 @@ export class KeplerianBody extends KinematicBody {
 
   // TODO: hide moons of hidden types (e.g. Pluto's moons should only be visible if dwarf planets are visible)
   isVisible(settings: Settings) {
-    return (
-      settings.hover === this.body.name ||
-      settings.center === this.body.name ||
-      settings.visibleTypes.has(this.body.type)
-    );
+    const id = this.body.id;
+    return settings.hover === id || settings.center === id || settings.visibleTypes.has(this.body.type);
   }
 
   // TODO: dynamically size by actual radius? log scale between ~1-4?

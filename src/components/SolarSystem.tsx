@@ -5,7 +5,7 @@ import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
-import { ORBITAL_REGIMES, orbitalRegimeId } from '../lib/regimes.ts';
+import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { initialState, UpdateSettings } from '../lib/state.ts';
 import { CelestialBody, isCelestialBody } from '../lib/types.ts';
 import { Controls } from './Controls/Controls.tsx';
@@ -82,7 +82,7 @@ export function SolarSystem() {
 
   const focusItem = useMemo(() => {
     const focusBody = settings.bodies.find(body => body.id === settings.center);
-    const focusRegime = ORBITAL_REGIMES.find(({ regime }) => orbitalRegimeId(regime) === settings.center);
+    const focusRegime = ORBITAL_REGIMES.find(({ regime }) => regime === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ASTEROID_COLOR;
@@ -115,7 +115,7 @@ export function SolarSystem() {
           }}
         >
           <FactSheet
-            key={focusItem.regime} // ensure that the component is rerendered when focus changes
+            key={isCelestialBody(focusItem) ? focusItem.id : focusItem.regime} // rerender when focus item changes
             item={focusItem}
             settings={settings}
             updateSettings={updateSettings}
