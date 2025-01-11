@@ -126,14 +126,14 @@ export class SolarSystemModel {
 
   add(settings: Settings, body: CelestialBody) {
     if (Object.keys(this.bodies).some(s => s === body.id)) return; // already exists, don't re-add
-    const parents = body.influencedBy.map(slug => this.bodies[slug]).filter(notNullish);
+    const parents = body.influencedBy.map(id => this.bodies[id]).filter(notNullish);
     this.bodies[body.id] = this.createBodyWithParents(settings, parents, body);
   }
 
-  remove(slug: string) {
-    const toRemove: KeplerianBody | undefined = this.bodies[slug];
-    if (slug == null || toRemove == null) return; // nothing to do
-    delete this.bodies[slug];
+  remove(id: string) {
+    const toRemove: KeplerianBody | undefined = this.bodies[id];
+    if (id == null || toRemove == null) return; // nothing to do
+    delete this.bodies[id];
     toRemove.dispose();
   }
 
@@ -189,7 +189,7 @@ export class SolarSystemModel {
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
     while (toInitialize.length > 0) {
       const body = toInitialize.shift()!;
-      const parents = body.influencedBy.map(slug => initialState[slug]);
+      const parents = body.influencedBy.map(id => initialState[id]);
       if (parents.some(p => p == null)) {
         toInitialize.push(body);
         continue;
@@ -233,7 +233,7 @@ export class SolarSystemModel {
     //  opposite algorithm to the one performed during initialization
     const parentStates = map(({ position, body }) => ({ position: position.clone(), mass: body.mass }), this.bodies);
     Object.values(this.bodies).forEach(body => {
-      const parents = body.influencedBy.map(slug => parentStates[slug]);
+      const parents = body.influencedBy.map(id => parentStates[id]);
       body.increment(parents, dt);
     });
   }

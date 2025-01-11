@@ -2,6 +2,7 @@ import { J2000, julianDayToEpoch, Time } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
 import { SBDB_URL } from './sbdb.ts';
 import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
+import { celestialBodyWithDefaults } from './utils.ts';
 
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
@@ -11,17 +12,7 @@ export const DEFAULT_MOON_COLOR = '#aaaaaa';
 export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
 export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 
-export function withDefaults(
-  body: Omit<CelestialBody, 'id' | 'color'> & { id?: string; color?: CelestialBody['color'] }
-): CelestialBody {
-  return {
-    ...body,
-    id: body.id ?? (body.shortName ?? body.name).replace(/\s+/g, '-').toLowerCase(),
-    color: body.color ?? DEFAULT_ASTEROID_COLOR,
-  };
-}
-
-export const SOL: CelestialBody = withDefaults({
+export const SOL: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,
   name: 'Sol',
   influencedBy: [],
@@ -50,7 +41,7 @@ export const SOL: CelestialBody = withDefaults({
   ],
 });
 
-export const MERCURY: CelestialBody = withDefaults({
+export const MERCURY = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Mercury',
   influencedBy: [SOL.id],
@@ -81,7 +72,7 @@ export const MERCURY: CelestialBody = withDefaults({
 });
 
 // TODO: add pseudo-moon Zoozve?
-export const VENUS: CelestialBody = withDefaults({
+export const VENUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Venus',
   influencedBy: [SOL.id],
@@ -105,7 +96,7 @@ export const VENUS: CelestialBody = withDefaults({
   color: '#e6b667',
 });
 
-export const EARTH: CelestialBody = withDefaults({
+export const EARTH: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Earth',
   influencedBy: [SOL.id],
@@ -129,7 +120,7 @@ export const EARTH: CelestialBody = withDefaults({
   color: '#7e87dd',
 });
 
-export const LUNA: CelestialBody = withDefaults({
+export const LUNA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Luna (The Moon)',
   shortName: 'Luna',
@@ -155,7 +146,7 @@ export const LUNA: CelestialBody = withDefaults({
 
 export const EARTH_SYSTEM = [EARTH, LUNA];
 
-export const MARS: CelestialBody = withDefaults({
+export const MARS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Mars',
   influencedBy: [SOL.id],
@@ -179,7 +170,7 @@ export const MARS: CelestialBody = withDefaults({
   color: '#c96c3c',
 });
 
-export const PHOBOS: CelestialBody = withDefaults({
+export const PHOBOS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Phobos',
   influencedBy: [SOL.id, MARS.id],
@@ -202,7 +193,7 @@ export const PHOBOS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const DEIMOS: CelestialBody = withDefaults({
+export const DEIMOS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Deimos',
   influencedBy: [SOL.id, MARS.id],
@@ -229,7 +220,7 @@ export const MARS_SYSTEM = [MARS, PHOBOS, DEIMOS];
 
 // TODO: for these asteroids, we're using instantaneous orbital elements instead of 'proper' orbital elements
 //  collected over time. Switch?
-export const CERES: CelestialBody = withDefaults({
+export const CERES: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '1 Ceres',
   shortName: 'Ceres',
@@ -253,7 +244,7 @@ export const CERES: CelestialBody = withDefaults({
   radius: 966.2e3 / 2,
 });
 
-export const PALLAS: CelestialBody = withDefaults({
+export const PALLAS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '2 Pallas',
   shortName: 'Pallas',
@@ -273,7 +264,7 @@ export const PALLAS: CelestialBody = withDefaults({
   radius: 256e3,
 });
 
-export const JUNO: CelestialBody = withDefaults({
+export const JUNO: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '3 Juno',
   shortName: 'Juno',
@@ -293,7 +284,7 @@ export const JUNO: CelestialBody = withDefaults({
   radius: 127e3, // m
 });
 
-export const VESTA: CelestialBody = withDefaults({
+export const VESTA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '4 Vesta',
   shortName: 'Vesta',
@@ -313,7 +304,7 @@ export const VESTA: CelestialBody = withDefaults({
   radius: 278.6e3,
 });
 
-export const HEBE: CelestialBody = withDefaults({
+export const HEBE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '6 Hebe',
   shortName: 'Hebe',
@@ -334,7 +325,7 @@ export const HEBE: CelestialBody = withDefaults({
   radius: 92.59e3,
 });
 
-export const IRIS: CelestialBody = withDefaults({
+export const IRIS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '7 Iris',
   shortName: 'Iris',
@@ -355,7 +346,7 @@ export const IRIS: CelestialBody = withDefaults({
   radius: 99.915e3,
 });
 
-export const HYGIEA: CelestialBody = withDefaults({
+export const HYGIEA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '10 Hygiea',
   shortName: 'Hygiea',
@@ -375,7 +366,7 @@ export const HYGIEA: CelestialBody = withDefaults({
   radius: 215e3,
 });
 
-export const PSYCHE: CelestialBody = withDefaults({
+export const PSYCHE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '16 Psyche',
   shortName: 'Psyche',
@@ -405,7 +396,7 @@ export const PSYCHE: CelestialBody = withDefaults({
   ],
 });
 
-export const LUTETIA: CelestialBody = withDefaults({
+export const LUTETIA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '21 Lutetia',
   shortName: 'Lutetia',
@@ -429,7 +420,7 @@ export const LUTETIA: CelestialBody = withDefaults({
   radius: 49e3, // m
 });
 
-export const IDA: CelestialBody = withDefaults({
+export const IDA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '243 Ida',
   shortName: 'Ida',
@@ -450,7 +441,7 @@ export const IDA: CelestialBody = withDefaults({
   radius: 15.7e3,
 });
 
-export const MATHILDE: CelestialBody = withDefaults({
+export const MATHILDE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '253 Mathilde',
   shortName: 'Mathilde',
@@ -470,7 +461,7 @@ export const MATHILDE: CelestialBody = withDefaults({
   radius: 26.4e3, // m
 });
 
-export const EROS: CelestialBody = withDefaults({
+export const EROS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '433 Eros',
   shortName: 'Eros',
@@ -490,7 +481,7 @@ export const EROS: CelestialBody = withDefaults({
   radius: 8420, // m, average (highly irregular)
 });
 
-export const GASPRA: CelestialBody = withDefaults({
+export const GASPRA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '951 Gaspra',
   shortName: 'Gaspra',
@@ -511,7 +502,7 @@ export const GASPRA: CelestialBody = withDefaults({
   radius: 6.1e3,
 });
 
-export const STEINS: CelestialBody = withDefaults({
+export const STEINS: CelestialBody = celestialBodyWithDefaults({
   id: 'steins',
   type: CelestialBodyType.ASTEROID,
   name: '2867 Šteins',
@@ -533,7 +524,7 @@ export const STEINS: CelestialBody = withDefaults({
   radius: 2.58e3,
 });
 
-export const NEREUS: CelestialBody = withDefaults({
+export const NEREUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '4660 Nereus',
   shortName: 'Nereus',
@@ -557,7 +548,7 @@ export const NEREUS: CelestialBody = withDefaults({
   radius: 165, // m
 });
 
-export const ITOKAWA: CelestialBody = withDefaults({
+export const ITOKAWA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '25143 Itokawa',
   shortName: 'Itokawa',
@@ -578,7 +569,7 @@ export const ITOKAWA: CelestialBody = withDefaults({
   radius: 165,
 });
 
-export const DIDYMOS: CelestialBody = withDefaults({
+export const DIDYMOS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '65803 Didymos',
   shortName: 'Didymos',
@@ -599,7 +590,7 @@ export const DIDYMOS: CelestialBody = withDefaults({
   radius: 382.5,
 });
 
-export const BENNU: CelestialBody = withDefaults({
+export const BENNU: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '101955 Bennu',
   shortName: 'Bennu',
@@ -619,7 +610,7 @@ export const BENNU: CelestialBody = withDefaults({
   radius: 245.03,
 });
 
-export const RYUGU: CelestialBody = withDefaults({
+export const RYUGU: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '162173 Ryugu',
   shortName: 'Ryugu',
@@ -661,7 +652,7 @@ export const ASTEROIDS = [
   RYUGU,
 ];
 
-export const CG67P: CelestialBody = withDefaults({
+export const CG67P: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.COMET,
   name: '67P/Churyumov–Gerasimenko',
   shortName: '67P/C–G',
@@ -684,7 +675,7 @@ export const CG67P: CelestialBody = withDefaults({
   },
 });
 
-export const HALLEY: CelestialBody = withDefaults({
+export const HALLEY: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.COMET,
   name: "Halley's Comet (1P/Halley)",
   shortName: 'Halley',
@@ -703,7 +694,7 @@ export const HALLEY: CelestialBody = withDefaults({
   },
 });
 
-export const HALE_BOPP: CelestialBody = withDefaults({
+export const HALE_BOPP: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.COMET,
   name: 'Hale-Bopp (C/1995 O1)',
   shortName: 'Hale-Bopp',
@@ -724,7 +715,7 @@ export const HALE_BOPP: CelestialBody = withDefaults({
 
 export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
-export const TESLA_ROADSTER: CelestialBody = withDefaults({
+export const TESLA_ROADSTER: CelestialBody = celestialBodyWithDefaults({
   name: "Elon Musk's Tesla Roadster",
   shortName: 'Roadster',
   type: CelestialBodyType.SPACECRAFT,
@@ -747,7 +738,7 @@ export const TESLA_ROADSTER: CelestialBody = withDefaults({
 
 export const SPACECRAFT = [TESLA_ROADSTER];
 
-export const PLUTO: CelestialBody = withDefaults({
+export const PLUTO: CelestialBody = celestialBodyWithDefaults({
   name: '134340 Pluto',
   shortName: 'Pluto',
   type: CelestialBodyType.DWARF_PLANET,
@@ -775,7 +766,7 @@ export const PLUTO: CelestialBody = withDefaults({
 });
 
 // TODO: Charon and Pluto's other moons are inclined relative to Pluto's equator
-export const CHARON: CelestialBody = withDefaults({
+export const CHARON: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Charon',
   influencedBy: [SOL.id, PLUTO.id],
@@ -798,7 +789,7 @@ export const CHARON: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const STYX: CelestialBody = withDefaults({
+export const STYX: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Styx',
   influencedBy: [SOL.id, PLUTO.id],
@@ -821,7 +812,7 @@ export const STYX: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const NIX: CelestialBody = withDefaults({
+export const NIX: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Nix',
   influencedBy: [SOL.id, PLUTO.id],
@@ -840,7 +831,7 @@ export const NIX: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const KERBEROS: CelestialBody = withDefaults({
+export const KERBEROS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Kerberos',
   influencedBy: [SOL.id, PLUTO.id],
@@ -863,7 +854,7 @@ export const KERBEROS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const HYDRA: CelestialBody = withDefaults({
+export const HYDRA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Hydra',
   influencedBy: [SOL.id, PLUTO.id],
@@ -884,7 +875,7 @@ export const HYDRA: CelestialBody = withDefaults({
 
 export const PLUTO_SYSTEM = [PLUTO, CHARON, STYX, NIX, KERBEROS, HYDRA];
 
-export const QUAOAR: CelestialBody = withDefaults({
+export const QUAOAR: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '50000 Quaoar',
   shortName: 'Quaoar',
@@ -904,7 +895,7 @@ export const QUAOAR: CelestialBody = withDefaults({
   radius: 545e3,
 });
 
-export const SEDNA: CelestialBody = withDefaults({
+export const SEDNA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '90377 Sedna',
   shortName: 'Sedna',
@@ -924,7 +915,7 @@ export const SEDNA: CelestialBody = withDefaults({
   radius: 906e3 / 2,
 });
 
-export const ORCUS: CelestialBody = withDefaults({
+export const ORCUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '90482 Orcus',
   shortName: 'Orcus',
@@ -944,7 +935,7 @@ export const ORCUS: CelestialBody = withDefaults({
   radius: 910e3 / 2,
 });
 
-export const ERIS: CelestialBody = withDefaults({
+export const ERIS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136199 Eris',
   shortName: 'Eris',
@@ -964,7 +955,7 @@ export const ERIS: CelestialBody = withDefaults({
   radius: 1163e3,
 });
 
-export const HAUMEA: CelestialBody = withDefaults({
+export const HAUMEA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136108 Haumea',
   shortName: 'Haumea',
@@ -984,7 +975,7 @@ export const HAUMEA: CelestialBody = withDefaults({
   radius: 780e3,
 });
 
-export const MAKEMAKE: CelestialBody = withDefaults({
+export const MAKEMAKE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136472 Makemake',
   shortName: 'Makemake',
@@ -1004,7 +995,7 @@ export const MAKEMAKE: CelestialBody = withDefaults({
   radius: 715e3,
 });
 
-export const ARROKOTH: CelestialBody = withDefaults({
+export const ARROKOTH: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '486958 Arrokoth', // also known as Ultima Thule
   shortName: 'Arrokoth',
@@ -1024,7 +1015,7 @@ export const ARROKOTH: CelestialBody = withDefaults({
   },
 });
 
-export const GONGGONG: CelestialBody = withDefaults({
+export const GONGGONG: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '225088 Gonggong',
   shortName: 'Gonggong',
@@ -1044,7 +1035,7 @@ export const GONGGONG: CelestialBody = withDefaults({
   },
 });
 
-export const VP113: CelestialBody = withDefaults({
+export const VP113: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '2012 VP133',
   influencedBy: [SOL.id],
@@ -1063,7 +1054,7 @@ export const VP113: CelestialBody = withDefaults({
   },
 });
 
-export const LELEAKUHONUA: CelestialBody = withDefaults({
+export const LELEAKUHONUA: CelestialBody = celestialBodyWithDefaults({
   id: 'leleakuhonua',
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '541132 Leleākūhonua',
@@ -1084,7 +1075,7 @@ export const LELEAKUHONUA: CelestialBody = withDefaults({
   },
 });
 
-export const FARFAROUT: CelestialBody = withDefaults({
+export const FARFAROUT: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '2018 AG37',
   shortName: 'FarFarOut',
@@ -1118,7 +1109,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   FARFAROUT,
 ];
 
-export const JUPITER: CelestialBody = withDefaults({
+export const JUPITER: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Jupiter',
   influencedBy: [SOL.id],
@@ -1142,7 +1133,7 @@ export const JUPITER: CelestialBody = withDefaults({
   color: '#e9be76',
 });
 
-export const IO: CelestialBody = withDefaults({
+export const IO: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Io',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1161,7 +1152,7 @@ export const IO: CelestialBody = withDefaults({
   color: '#fcf794',
 });
 
-export const EUROPA: CelestialBody = withDefaults({
+export const EUROPA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Europa',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1187,7 +1178,7 @@ export const EUROPA: CelestialBody = withDefaults({
   ],
 });
 
-export const GANYMEDE: CelestialBody = withDefaults({
+export const GANYMEDE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Ganymede',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1206,7 +1197,7 @@ export const GANYMEDE: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const CALLISTO: CelestialBody = withDefaults({
+export const CALLISTO: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Callisto',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1228,7 +1219,7 @@ export const CALLISTO: CelestialBody = withDefaults({
 // TODO: there are more moons
 export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
 
-export const SATURN: CelestialBody = withDefaults({
+export const SATURN: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Saturn',
   influencedBy: [SOL.id],
@@ -1260,7 +1251,7 @@ export const SATURN: CelestialBody = withDefaults({
   color: '#d7be87',
 });
 
-export const MIMAS: CelestialBody = withDefaults({
+export const MIMAS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Mimas',
   influencedBy: [SOL.id, SATURN.id],
@@ -1279,7 +1270,7 @@ export const MIMAS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const ENCELADUS: CelestialBody = withDefaults({
+export const ENCELADUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Enceladus',
   influencedBy: [SOL.id, SATURN.id],
@@ -1298,7 +1289,7 @@ export const ENCELADUS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const TETHYS: CelestialBody = withDefaults({
+export const TETHYS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Tethys',
   influencedBy: [SOL.id, SATURN.id],
@@ -1317,7 +1308,7 @@ export const TETHYS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const DIONE: CelestialBody = withDefaults({
+export const DIONE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Dione',
   influencedBy: [SOL.id, SATURN.id],
@@ -1336,7 +1327,7 @@ export const DIONE: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const RHEA: CelestialBody = withDefaults({
+export const RHEA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Rhea',
   influencedBy: [SOL.id, SATURN.id],
@@ -1355,7 +1346,7 @@ export const RHEA: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const TITAN: CelestialBody = withDefaults({
+export const TITAN: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Titan',
   influencedBy: [SOL.id, SATURN.id],
@@ -1374,7 +1365,7 @@ export const TITAN: CelestialBody = withDefaults({
   color: '#f1e193',
 });
 
-export const IAPETUS: CelestialBody = withDefaults({
+export const IAPETUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Iapetus',
   influencedBy: [SOL.id, SATURN.id],
@@ -1393,7 +1384,7 @@ export const IAPETUS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const HYPERION: CelestialBody = withDefaults({
+export const HYPERION: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Hyperion',
   influencedBy: [SOL.id, SATURN.id],
@@ -1412,7 +1403,7 @@ export const HYPERION: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const PHOEBE: CelestialBody = withDefaults({
+export const PHOEBE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Phoebe',
   influencedBy: [SOL.id, SATURN.id],
@@ -1437,7 +1428,7 @@ export const PHOEBE: CelestialBody = withDefaults({
 
 export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
 
-export const URANUS: CelestialBody = withDefaults({
+export const URANUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
   influencedBy: [SOL.id],
@@ -1462,7 +1453,7 @@ export const URANUS: CelestialBody = withDefaults({
   // rings: [], // TODO
 });
 
-export const PUCK: CelestialBody = withDefaults({
+export const PUCK: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Puck',
   influencedBy: [SOL.id, URANUS.id],
@@ -1481,7 +1472,7 @@ export const PUCK: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const MIRANDA: CelestialBody = withDefaults({
+export const MIRANDA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Miranda',
   influencedBy: [SOL.id, URANUS.id],
@@ -1500,7 +1491,7 @@ export const MIRANDA: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const ARIEL: CelestialBody = withDefaults({
+export const ARIEL: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Ariel',
   influencedBy: [SOL.id, URANUS.id],
@@ -1519,7 +1510,7 @@ export const ARIEL: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const UMBRIEL: CelestialBody = withDefaults({
+export const UMBRIEL: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Umbriel',
   influencedBy: [SOL.id, URANUS.id],
@@ -1538,7 +1529,7 @@ export const UMBRIEL: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const TITANIA: CelestialBody = withDefaults({
+export const TITANIA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Titania',
   influencedBy: [SOL.id, URANUS.id],
@@ -1557,7 +1548,7 @@ export const TITANIA: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const OBERON: CelestialBody = withDefaults({
+export const OBERON: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Oberon',
   influencedBy: [SOL.id, URANUS.id],
@@ -1578,7 +1569,7 @@ export const OBERON: CelestialBody = withDefaults({
 
 export const URANUS_SYSTEM = [URANUS, PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON];
 
-export const NEPTUNE: CelestialBody = withDefaults({
+export const NEPTUNE: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Neptune',
   influencedBy: [SOL.id],
@@ -1602,7 +1593,7 @@ export const NEPTUNE: CelestialBody = withDefaults({
   color: '#5a7cf6',
 });
 
-export const TRITON: CelestialBody = withDefaults({
+export const TRITON: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Triton',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1625,7 +1616,7 @@ export const TRITON: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const PROTEUS: CelestialBody = withDefaults({
+export const PROTEUS: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Proteus',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1644,7 +1635,7 @@ export const PROTEUS: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const NEREID: CelestialBody = withDefaults({
+export const NEREID: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Nereid',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1663,7 +1654,7 @@ export const NEREID: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const DESPINA: CelestialBody = withDefaults({
+export const DESPINA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Despina',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1682,7 +1673,7 @@ export const DESPINA: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const LARISSA: CelestialBody = withDefaults({
+export const LARISSA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Larissa',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1701,7 +1692,7 @@ export const LARISSA: CelestialBody = withDefaults({
   color: DEFAULT_MOON_COLOR,
 });
 
-export const GALATEA: CelestialBody = withDefaults({
+export const GALATEA: CelestialBody = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Galatea',
   influencedBy: [SOL.id, NEPTUNE.id],

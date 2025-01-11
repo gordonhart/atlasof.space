@@ -58,9 +58,9 @@ export function SolarSystem() {
     });
   }
 
-  function removeBody(name: string) {
-    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.name !== name) }));
-    model.remove(name);
+  function removeBody(id: string) {
+    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
+    model.remove(id);
   }
 
   const resetState = useCallback(() => {

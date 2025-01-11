@@ -8,7 +8,7 @@ import { iconSize } from '../Controls/constants.ts';
 type Props = {
   bodies: Array<CelestialBody>;
   addBody: (body: CelestialBody) => void;
-  removeBody: (name: string) => void;
+  removeBody: (id: string) => void;
 };
 export function AddSmallBodyButton({ bodies, addBody, removeBody }: Props) {
   const [isOpen, { open: onOpen, close: onClose }] = useDisclosure(false);
