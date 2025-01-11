@@ -93,10 +93,8 @@ export function drawLabelAtLocation(
   ctx.restore();
 
   const [oppositeX, oppositeY] = offsets[1];
-  return [
-    [x0, y0],
-    [x0 + oppositeX * xSign, y0 - oppositeY * ySign],
-  ];
+  const oppositeCorner: Point2 = [x0 + oppositeX * xSign, y0 - oppositeY * ySign];
+  return [[x0, y0], oppositeCorner];
 }
 
 export function drawDotAtLocation(

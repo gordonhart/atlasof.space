@@ -27,6 +27,7 @@ export class KeplerianBody extends KinematicBody {
   private readonly axis: AxisIndicator | null = null;
   private readonly dotRadius: number;
   private readonly labelBox = new Box2();
+  private readonly screenPoint = new Vector2(); // reuse for efficiency
 
   private visible: boolean = false;
   private hovered: boolean = false;
@@ -111,12 +112,12 @@ export class KeplerianBody extends KinematicBody {
     }
   }
 
-  isNear([xPx, yPx]: Point2, camera: OrthographicCamera, threshold = 10): [number, boolean] {
+  isNearCursor([xPx, yPx]: Point2, camera: OrthographicCamera, threshold = 10): [number, boolean] {
     const [bodyXpx, bodyYpx] = this.getScreenPosition(camera, this.resolution);
     const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
     const bodyIsNear = distance < threshold;
     // TODO: labels are slightly non-rectangular -- check the actual label polygon if the pointer is within the box?
-    const labelIsNear = this.labelBox.containsPoint(new Vector2(xPx, yPx));
+    const labelIsNear = this.labelBox.containsPoint(this.screenPoint.set(xPx, yPx));
     return [distance, bodyIsNear || labelIsNear];
   }
 
