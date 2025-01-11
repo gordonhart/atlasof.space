@@ -1,6 +1,6 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
@@ -12,7 +12,11 @@ import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
-  const [appState, setAppState] = useState(initialState);
+  const { id } = useParams();
+  const [appState, setAppState] = useState({
+    ...initialState,
+    settings: { ...initialState.settings, center: id ?? null },
+  });
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
   const isSmallDisplay = useIsSmallDisplay();
@@ -24,7 +28,6 @@ export function SolarSystem() {
       setAppState(prev => {
         const updated = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
         const newState = { ...prev, settings: updated };
-        if (newState.settings.center != prev.settings.center) navigate(`/${newState.settings.center}`);
         // set the mutable state ref (accessed by animation callback) on state update
         appStateRef.current = newState;
         return newState;
@@ -32,6 +35,11 @@ export function SolarSystem() {
     },
     [setAppState]
   );
+
+  // sync center back to URL
+  useEffect(() => {
+    navigate(`/${settings.center ?? ''}`);
+  }, [settings.center]);
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
 

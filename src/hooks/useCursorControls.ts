@@ -1,5 +1,4 @@
-import { MouseEvent, PointerEvent, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { MouseEvent, PointerEvent, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { magnitude } from '../lib/physics.ts';
 import { Settings, UpdateSettings } from '../lib/state.ts';
@@ -14,7 +13,6 @@ type DragDetector = {
 };
 
 export function useCursorControls(model: SolarSystemModel | null, settings: Settings, updateSettings: UpdateSettings) {
-  const { id } = useParams();
   const isTouchDevice = useIsTouchDevice();
   const dragDetectorRef = useRef<DragDetector | null>(null);
   const interactPxThreshold = isTouchDevice ? 25 : 10;
@@ -61,14 +59,6 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
       updateSettings({ center: closeBody.body.id });
     }
   }
-
-  useEffect(() => {
-    if (id != null) {
-      console.log('before');
-      updateSettings({ center: id.toLowerCase() });
-      console.log('after');
-    }
-  }, [id]);
 
   return { onPointerDown, onPointerMove, onPointerLeave, onClick };
 }
