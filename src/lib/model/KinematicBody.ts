@@ -1,15 +1,17 @@
-import { Vector3 } from 'three';
+import { OrthographicCamera, Vector2, Vector3 } from 'three';
 import { G } from '../physics.ts';
+import { Point2 } from '../types.ts';
+import { SCALE_FACTOR } from './constants.ts';
 
 export class KinematicBody {
   readonly influencedBy: Array<string>;
   readonly rotationPeriod: number | undefined;
 
-  position: Vector3; // in "real-world" units, i.e. meters
-  velocity: Vector3;
+  readonly position: Vector3; // in "real-world" units, i.e. meters
+  readonly velocity: Vector3;
+  readonly acceleration: Vector3;
   rotation: number;
 
-  private readonly acceleration;
   private readonly tmp; // reuse for memory efficiency
 
   constructor(influencedBy: Array<string>, rotationPeriod: number | undefined, position: Vector3, velocity: Vector3) {
@@ -35,10 +37,17 @@ export class KinematicBody {
         .divideScalar(distance);
       this.acceleration.add(this.tmp);
     });
-    this.velocity.add(this.acceleration.multiplyScalar(dt));
+    this.velocity.add(this.tmp.copy(this.acceleration).multiplyScalar(dt));
     this.position.add(this.tmp.copy(this.velocity).multiplyScalar(dt));
     if (this.rotationPeriod != null) {
       this.rotation = (this.rotation + (360 * dt) / this.rotationPeriod) % 360;
     }
+  }
+
+  getScreenPosition(camera: OrthographicCamera, resolution: Vector2): Point2 {
+    this.tmp.copy(this.position).divideScalar(SCALE_FACTOR).project(camera);
+    const pixelX = ((this.tmp.x + 1) * resolution.x) / 2;
+    const pixelY = ((1 - this.tmp.y) * resolution.y) / 2;
+    return [pixelX, pixelY]; // return pixel values
   }
 }

@@ -4,7 +4,7 @@ import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { GalleryImages } from '../../lib/images.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { Settings } from '../../lib/state.ts';
+import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { FactGrid } from './FactGrid.tsx';
@@ -12,7 +12,7 @@ import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { Gallery } from './Gallery.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
-import { MajorSatellites } from './MajorSatellites.tsx';
+import { MajorMoons } from './MajorMoons.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
@@ -22,7 +22,7 @@ import { Thumbnail } from './Thumbnail.tsx';
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
 };
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
@@ -103,7 +103,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       <Box style={{ justifySelf: 'flex-end' }}>
         {galleryUrls.length > 0 && <Gallery urls={galleryUrls} />}
-        <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
+        <MajorMoons body={body} bodies={bodies} updateSettings={updateSettings} />
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
         {body.type === CelestialBodyType.STAR && (

@@ -1,31 +1,29 @@
 import { memo } from 'react';
-import { Settings } from '../../lib/state.ts';
-import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { CelestialBody, isCelestialBody, isOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here
 type Props = {
-  body?: CelestialBody;
-  regime?: OrbitalRegime;
+  item: CelestialBody | OrbitalRegime;
   settings: Settings;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
   removeBody: (name: string) => void;
 };
 export const FactSheet = memo(function FactSheetComponent({
-  body,
-  regime,
+  item,
   settings,
   updateSettings,
   addBody,
   removeBody,
 }: Props) {
-  return body != null ? (
-    <CelestialBodyFactSheet body={body} bodies={settings.bodies} updateSettings={updateSettings} />
-  ) : regime != null ? (
+  return isCelestialBody(item) ? (
+    <CelestialBodyFactSheet body={item} bodies={settings.bodies} updateSettings={updateSettings} />
+  ) : isOrbitalRegime(item) ? (
     <OrbitalRegimeFactSheet
-      regime={regime}
+      regime={item}
       settings={settings}
       updateSettings={updateSettings}
       addBody={addBody}
