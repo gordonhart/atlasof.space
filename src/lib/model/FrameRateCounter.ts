@@ -1,25 +1,18 @@
 export class FrameRateCounter {
-  private readonly array: Array<number>;
-  private readonly size = 60;
-
-  private oldestIndex = 0;
-  private newestIndex = 0;
-
-  constructor() {
-    this.array = new Array(this.size).fill(performance.now());
-  }
+  private readonly times: Array<number> = [];
+  private readonly maxAgeMillis = 1e3; // expire timestamps older than 1 second
 
   update() {
-    this.newestIndex = (this.newestIndex + 1) % this.size;
-    this.array[this.newestIndex] = performance.now();
-    if (this.newestIndex === this.oldestIndex) {
-      this.oldestIndex = (this.oldestIndex + 1) % this.size;
+    const now = performance.now();
+    this.times.push(now);
+    while (this.times.length > 0 && this.times[0] <= now - this.maxAgeMillis) {
+      this.times.shift();
     }
   }
 
   fps() {
-    const elapsed = this.array[this.newestIndex] - this.array[this.oldestIndex];
-    const frames = this.newestIndex > this.oldestIndex ? this.newestIndex - this.oldestIndex : this.size - 1;
-    return (frames / elapsed) * 1e3;
+    if (this.times.length < 2) return null; // insufficient data
+    const elapsed = this.times[this.times.length - 1] - this.times[0];
+    return Math.max(((this.times.length - 1) / elapsed) * 1e3, 1); // clamp to 1fps minimum
   }
 }

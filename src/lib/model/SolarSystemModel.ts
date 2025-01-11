@@ -108,11 +108,9 @@ export class SolarSystemModel {
 
   update(ctx: CanvasRenderingContext2D, settings: Settings) {
     this.fpsCounter.update();
-    if (settings.play) {
-      const dt = (1 / this.fpsCounter.fps()) * settings.playbackSpeed;
-      console.log(dt);
-      this.incrementKinematics(dt);
-    }
+    const fps = this.fpsCounter.fps();
+    if (fps == null) return; // still initializing
+    if (settings.play) this.incrementKinematics((1 / fps) * settings.playbackSpeed);
     this.updateCenter(settings); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);

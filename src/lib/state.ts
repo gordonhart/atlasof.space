@@ -19,7 +19,7 @@ export type Settings = {
 // these values are readonly; driven by the model
 export type ModelState = {
   time: number; // seconds
-  fps: number;
+  fps: number | null; // null while initializing
   metersPerPx: number; // describes zoom
   vernalEquinox: Point3; // direction of the Vernal Equinox
 };
@@ -55,10 +55,17 @@ export const initialState: AppState = {
   // set by model on update
   model: {
     time: 0,
-    fps: 0,
+    fps: null,
     metersPerPx: 1,
     vernalEquinox: [1, 0, 0],
   },
 };
+
+export function clampSettings({ playbackSpeed, ...settings }: Settings): Settings {
+  return {
+    ...settings,
+    playbackSpeed: Math.min(Math.max(playbackSpeed, -1e8), 1e8),
+  };
+}
 
 export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;

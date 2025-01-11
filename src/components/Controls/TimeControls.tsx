@@ -18,28 +18,28 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
       <Paper radius="md">
         <Stack gap={2} fz="xs">
           <Group gap={8}>
-            <Group justify="flex-end" w={20}>
+            <Group justify="flex-end" w={36}>
               <Text inherit c="dimmed">
-                t
+                date
               </Text>
             </Group>
             <Text inherit>{dateToHumanReadable(date)}</Text>
           </Group>
           <Group gap={8}>
-            <Group justify="flex-end" w={20}>
+            <Group justify="flex-end" w={36}>
               <Text inherit c="dimmed">
-                ∆t
+                speed
               </Text>
             </Group>
-            <Text inherit>x{settings.playbackSpeed}</Text>
+            <Text inherit>{settings.playbackSpeed.toLocaleString()}x</Text>
           </Group>
           <Group gap={8}>
-            <Group justify="flex-end" w={20}>
+            <Group justify="flex-end" w={36}>
               <Text inherit c="dimmed">
                 fps
               </Text>
             </Group>
-            <Text inherit>{model.fps.toFixed(0)}</Text>
+            <Text inherit>{model.fps?.toFixed(0)}</Text>
           </Group>
         </Stack>
       </Paper>
@@ -49,7 +49,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
           <ActionIcon
             onClick={() =>
               updateSettings(({ playbackSpeed, ...prev }) => {
-                const next = playbackSpeed > 0 ? (playbackSpeed <= 1 ? -1 : playbackSpeed / 2) : playbackSpeed * 2;
+                const next = playbackSpeed > 0 ? (playbackSpeed <= 1 ? -1 : playbackSpeed / 10) : playbackSpeed * 10;
                 return { ...prev, playbackSpeed: next };
               })
             }
@@ -66,7 +66,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
           <ActionIcon
             onClick={() => {
               updateSettings(({ playbackSpeed, ...prev }) => {
-                const next = playbackSpeed < 0 ? (playbackSpeed >= -1 ? 1 : playbackSpeed / 2) : playbackSpeed * 2;
+                const next = playbackSpeed < 0 ? (playbackSpeed >= -1 ? 1 : playbackSpeed / 10) : playbackSpeed * 10;
                 return { ...prev, playbackSpeed: next };
               });
             }}
