@@ -19,6 +19,7 @@ export type Settings = {
 // these values are readonly; driven by the model
 export type ModelState = {
   time: number; // seconds
+  fps: number;
   metersPerPx: number; // describes zoom
   vernalEquinox: Point3; // direction of the Vernal Equinox
 };
@@ -54,6 +55,7 @@ export const initialState: AppState = {
   // set by model on update
   model: {
     time: 0,
+    fps: 0,
     metersPerPx: 1,
     vernalEquinox: [1, 0, 0],
   },

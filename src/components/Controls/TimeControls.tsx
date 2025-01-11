@@ -35,6 +35,14 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
             </Group>
             <Text inherit>{pluralize(dt, dtUnits)}</Text>
           </Group>
+          <Group gap={8}>
+            <Group justify="flex-end" w={20}>
+              <Text inherit c="dimmed">
+                fps
+              </Text>
+            </Group>
+            <Text inherit>{model.fps.toFixed(0)}</Text>
+          </Group>
         </Stack>
       </Paper>
 

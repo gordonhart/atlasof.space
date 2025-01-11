@@ -14,6 +14,7 @@ import { notNullish } from '../utils.ts';
 import { isOffScreen } from './canvas.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
+import { FrameRateCounter } from './FrameRateCounter.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { OrbitalRegime } from './OrbitalRegime.ts';
 
@@ -27,6 +28,7 @@ export class SolarSystemModel {
   private readonly lights: Array<Light>;
   private readonly firmament: Firmament;
   private readonly regimes: Array<OrbitalRegime>;
+  private readonly fpsCounter: FrameRateCounter;
   private time: number = 0;
   private bodies: Record<string, KeplerianBody>;
 
@@ -35,6 +37,7 @@ export class SolarSystemModel {
   constructor(container: HTMLElement, settings: Settings) {
     this.scene = new Scene();
     this.resolution = new Vector2(container.clientWidth, container.clientHeight);
+    this.fpsCounter = new FrameRateCounter();
 
     const sunLight = new PointLight(SUNLIGHT_COLOR, 1e5); // high intensity manually tuned
     sunLight.position.set(0, 0, 0);
@@ -97,6 +100,7 @@ export class SolarSystemModel {
   getModelState(): ModelState {
     return {
       time: this.time,
+      fps: this.fpsCounter.fps(),
       metersPerPx: this.getMetersPerPixel(),
       vernalEquinox: this.getVernalEquinox(),
     };
@@ -104,6 +108,7 @@ export class SolarSystemModel {
 
   update(ctx: CanvasRenderingContext2D, settings: Settings) {
     if (settings.play) this.incrementKinematics(settings.dt);
+    this.fpsCounter.update();
     this.updateCenter(settings); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
