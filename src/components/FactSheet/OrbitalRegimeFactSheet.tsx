@@ -9,7 +9,7 @@ import {
   HeliocentricOrbitalRegime,
   OrbitalRegime,
 } from '../../lib/types.ts';
-import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { celestialBodySlug, celestialBodyTypeName } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
@@ -60,8 +60,8 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                 <BodyCard
                   key={`${body.name}-${j}`}
                   body={body}
-                  onClick={() => updateSettings({ center: body.name })}
-                  onHover={hovered => updateSettings({ hover: hovered ? body.name : null })}
+                  onClick={() => updateSettings({ center: celestialBodySlug(body) })}
+                  onHover={hovered => updateSettings({ hover: hovered ? celestialBodySlug(body) : null })}
                 />
               ))}
               {regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (

@@ -1,12 +1,14 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
-import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { ORBITAL_REGIMES, orbitalRegimeSlug } from '../lib/regimes.ts';
 import { initialState, UpdateSettings } from '../lib/state.ts';
 import { CelestialBody, isCelestialBody } from '../lib/types.ts';
+import { celestialBodySlug } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -15,6 +17,7 @@ export function SolarSystem() {
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
   const isSmallDisplay = useIsSmallDisplay();
+  const navigate = useNavigate();
   const { settings } = appState;
 
   const updateSettings: UpdateSettings = useCallback(
@@ -22,6 +25,7 @@ export function SolarSystem() {
       setAppState(prev => {
         const updated = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
         const newState = { ...prev, settings: updated };
+        if (newState.settings.center != prev.settings.center) navigate(`/${newState.settings.center}`);
         // set the mutable state ref (accessed by animation callback) on state update
         appStateRef.current = newState;
         return newState;
@@ -78,8 +82,8 @@ export function SolarSystem() {
   }, [settings.center]);
 
   const focusItem = useMemo(() => {
-    const focusBody = settings.bodies.find(body => body.name === settings.center);
-    const focusRegime = ORBITAL_REGIMES.find(({ name }) => name === settings.center);
+    const focusBody = settings.bodies.find(body => celestialBodySlug(body) === settings.center);
+    const focusRegime = ORBITAL_REGIMES.find(({ name }) => orbitalRegimeSlug(name) === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ASTEROID_COLOR;

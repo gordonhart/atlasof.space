@@ -2,6 +2,7 @@ import { Box2, Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three'
 import { magnitude } from '../physics.ts';
 import { Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
+import { celestialBodySlug } from '../utils.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
 import {
   drawDotAtLocation,
@@ -61,7 +62,7 @@ export class KeplerianBody extends KinematicBody {
     this.ellipse.update(parent?.position ?? null, this.visible && settings.drawOrbit);
 
     // apply hover effects (scale body, bold ellipse, etc.)
-    const thisIsHovered = settings.hover === this.body.name;
+    const thisIsHovered = settings.hover === celestialBodySlug(this.body);
     if (thisIsHovered !== this.hovered) {
       this.sphere.setHover(thisIsHovered);
       this.ellipse.setHover(thisIsHovered);

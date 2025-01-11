@@ -9,5 +9,10 @@ from = '/api/*'
 status = 200
 to = '/.netlify/functions/:splat'
 
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
 [dev]
 port = 19720

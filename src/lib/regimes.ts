@@ -43,3 +43,7 @@ export const ORBITAL_REGIMES: Array<OrbitalRegime> = [
   KUIPER_BELT,
   INNER_OORT_CLOUD,
 ];
+
+export function orbitalRegimeSlug(regime: HeliocentricOrbitalRegime) {
+  return regime.replace(/\s+/g, '-').toLowerCase();
+}

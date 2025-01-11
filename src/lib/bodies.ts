@@ -2,6 +2,7 @@ import { J2000, julianDayToEpoch, Time } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
 import { SBDB_URL } from './sbdb.ts';
 import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
+import { celestialBodySlug } from './utils.ts';
 
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
@@ -38,15 +39,15 @@ export const SOL: CelestialBody = {
     { label: 'temperature (center)', value: '15,700,000 K' },
     { label: 'temperature (corona)', value: '5,000,000 K' },
   ],
-};
+} as const;
 
 export const MERCURY: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Mercury',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.20563,
     semiMajorAxis: 57909050e3, // meters
@@ -68,16 +69,16 @@ export const MERCURY: CelestialBody = {
       value: 'A solar day on Mercury (176 Earth days) is longer than a year (88 Earth days)',
     },
   ],
-};
+} as const;
 
 // TODO: add pseudo-moon Zoozve?
 export const VENUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Venus',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.006772,
     semiMajorAxis: 108208000e3,
@@ -93,15 +94,15 @@ export const VENUS: CelestialBody = {
     siderealPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
   },
   color: '#e6b667',
-};
+} as const;
 
 export const EARTH: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Earth',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.0167086,
     semiMajorAxis: 149597870.7e3, // 1 AU
@@ -117,15 +118,15 @@ export const EARTH: CelestialBody = {
     siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
   },
   color: '#7e87dd',
-};
+} as const;
 
 export const LUNA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Luna (The Moon)',
   shortName: 'Luna',
-  influencedBy: [SOL.name, EARTH.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(EARTH)],
   elements: {
-    wrt: EARTH.name,
+    wrt: celestialBodySlug(EARTH),
     epoch: J2000,
     eccentricity: 0.0549,
     semiMajorAxis: 384400e3,
@@ -141,17 +142,17 @@ export const LUNA: CelestialBody = {
     siderealPeriod: 27.321661 * Time.DAY,
   },
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const EARTH_SYSTEM = [EARTH, LUNA];
 
 export const MARS: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Mars',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.0935,
     semiMajorAxis: 227939366e3,
@@ -167,14 +168,14 @@ export const MARS: CelestialBody = {
     siderealPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
   },
   color: '#c96c3c',
-};
+} as const;
 
 export const PHOBOS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Phobos',
-  influencedBy: [SOL.name, MARS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(MARS)],
   elements: {
-    wrt: MARS.name,
+    wrt: celestialBodySlug(MARS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0151,
     semiMajorAxis: 9376e3,
@@ -190,14 +191,14 @@ export const PHOBOS: CelestialBody = {
   mass: 1.0659e16,
   radius: 11.2667e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const DEIMOS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Deimos',
-  influencedBy: [SOL.name, MARS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(MARS)],
   elements: {
-    wrt: MARS.name,
+    wrt: celestialBodySlug(MARS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.00033,
     semiMajorAxis: 23458e3,
@@ -213,7 +214,7 @@ export const DEIMOS: CelestialBody = {
   mass: 1.4762e15,
   radius: 6.2e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const MARS_SYSTEM = [MARS, PHOBOS, DEIMOS];
 
@@ -223,10 +224,10 @@ export const CERES: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '1 Ceres',
   shortName: 'Ceres',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459600.5'),
     eccentricity: 0.075823,
     semiMajorAxis: 413690250e3,
@@ -242,16 +243,16 @@ export const CERES: CelestialBody = {
   mass: 9.3839e20,
   radius: 966.2e3 / 2,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const PALLAS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '2 Pallas',
   shortName: 'Pallas',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2453300.5'),
     eccentricity: 0.2302,
     semiMajorAxis: 4.14e11,
@@ -263,16 +264,16 @@ export const PALLAS: CelestialBody = {
   mass: 2.04e20,
   radius: 256e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const JUNO: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '3 Juno',
   shortName: 'Juno',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.2562,
     semiMajorAxis: 3.35 * AU, // meters
@@ -284,16 +285,16 @@ export const JUNO: CelestialBody = {
   mass: 2.67e19, // kg
   radius: 127e3, // m
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const VESTA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '4 Vesta',
   shortName: 'Vesta',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2453300.5'),
     eccentricity: 0.0894,
     semiMajorAxis: 2.36 * AU,
@@ -305,16 +306,16 @@ export const VESTA: CelestialBody = {
   mass: 2.590271e20,
   radius: 278.6e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const HEBE: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '6 Hebe',
   shortName: 'Hebe',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.2024234177620576,
@@ -327,16 +328,16 @@ export const HEBE: CelestialBody = {
   mass: 1.24e19,
   radius: 92.59e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const IRIS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '7 Iris',
   shortName: 'Iris',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.2298579625141813,
@@ -349,16 +350,16 @@ export const IRIS: CelestialBody = {
   mass: 13.5e18,
   radius: 99.915e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const HYGIEA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '10 Hygiea',
   shortName: 'Hygiea',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.1125,
     semiMajorAxis: 3.1415 * AU,
@@ -370,16 +371,16 @@ export const HYGIEA: CelestialBody = {
   mass: 8.74e19,
   radius: 215e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const PSYCHE: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '16 Psyche',
   shortName: 'Psyche',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.1341242551713989,
@@ -400,16 +401,16 @@ export const PSYCHE: CelestialBody = {
     { label: 'estimated value', value: 'Estimated $10,000 quadrillion due to size and metallic composition' },
     { label: 'material composition', value: 'Believed to be mainly iron and nickel' },
   ],
-};
+} as const;
 
 export const LUTETIA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '21 Lutetia',
   shortName: 'Lutetia',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.16339,
     semiMajorAxis: 2.435 * 1.496e11, // AU to meters
@@ -425,16 +426,16 @@ export const LUTETIA: CelestialBody = {
   mass: 1.7e18, // kg
   radius: 49e3, // m
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const IDA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '243 Ida',
   shortName: 'Ida',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.04468707145845256,
@@ -447,16 +448,16 @@ export const IDA: CelestialBody = {
   mass: 4.2e16,
   radius: 15.7e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const MATHILDE: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '253 Mathilde',
   shortName: 'Mathilde',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.26492652,
     semiMajorAxis: 2.648402147 * AU, // meters
@@ -468,16 +469,16 @@ export const MATHILDE: CelestialBody = {
   mass: 1.033e17, // kg
   radius: 26.4e3, // m
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const EROS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '433 Eros',
   shortName: 'Eros',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM, // NEA
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.2226,
     semiMajorAxis: 1.4579 * AU, // meters
@@ -489,16 +490,16 @@ export const EROS: CelestialBody = {
   mass: 6.687e15, // kg
   radius: 8420, // m, average (highly irregular)
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const GASPRA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '951 Gaspra',
   shortName: 'Gaspra',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.1732495684718864,
@@ -511,16 +512,16 @@ export const GASPRA: CelestialBody = {
   mass: 2.5e15,
   radius: 6.1e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const STEINS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '2867 Šteins',
   shortName: 'Šteins',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.1455164445582001,
@@ -533,16 +534,16 @@ export const STEINS: CelestialBody = {
   mass: 179840597118453.84, // estimate
   radius: 2.58e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const NEREUS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '4660 Nereus',
   shortName: 'Nereus',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459396.5'),
     eccentricity: 0.36004,
     semiMajorAxis: 1.4889 * AU, // meters
@@ -558,16 +559,16 @@ export const NEREUS: CelestialBody = {
   mass: estimateAsteroidMass(165), // not known
   radius: 165, // m
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const ITOKAWA: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '25143 Itokawa',
   shortName: 'Itokawa',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.28025543912428,
@@ -580,16 +581,16 @@ export const ITOKAWA: CelestialBody = {
   mass: 3.51e10,
   radius: 165,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const DIDYMOS: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '65803 Didymos',
   shortName: 'Didymos',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM, // NEA
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     source: SBDB_URL,
     epoch: julianDayToEpoch('JD2460600.5'),
     eccentricity: 0.3832511742413838,
@@ -602,16 +603,16 @@ export const DIDYMOS: CelestialBody = {
   mass: 5.2e11,
   radius: 382.5,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const BENNU: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '101955 Bennu',
   shortName: 'Bennu',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2455562.5'),
     eccentricity: 0.2038,
     semiMajorAxis: 1.1264 * AU,
@@ -623,16 +624,16 @@ export const BENNU: CelestialBody = {
   mass: 7.329e10,
   radius: 245.03,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const RYUGU: CelestialBody = {
   type: CelestialBodyType.ASTEROID,
   name: '162173 Ryugu',
   shortName: 'Ryugu',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.1902,
     semiMajorAxis: 1.1896 * AU,
@@ -644,7 +645,7 @@ export const RYUGU: CelestialBody = {
   mass: 4.5e11,
   radius: 448,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const ASTEROIDS = [
   CERES,
@@ -672,11 +673,11 @@ export const CG67P: CelestialBody = {
   type: CelestialBodyType.COMET,
   name: '67P/Churyumov–Gerasimenko',
   shortName: '67P/C–G',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   mass: 1e13, // kg
   radius: 2000, // m (average radius based on dimensions)
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.64,
     semiMajorAxis: 3.463 * AU,
@@ -690,17 +691,17 @@ export const CG67P: CelestialBody = {
     siderealPeriod: 12.4 * Time.HOUR,
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const HALLEY: CelestialBody = {
   type: CelestialBodyType.COMET,
   name: "Halley's Comet (1P/Halley)",
   shortName: 'Halley',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   mass: 2.2e14,
   radius: 5.5e3, // average radius based on dimensions
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2474040.5'),
     eccentricity: 0.96658,
     semiMajorAxis: 17.737 * AU,
@@ -710,17 +711,17 @@ export const HALLEY: CelestialBody = {
     meanAnomaly: 0.07323,
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const HALE_BOPP: CelestialBody = {
   type: CelestialBodyType.COMET,
   name: 'Hale-Bopp (C/1995 O1)',
   shortName: 'Hale-Bopp',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   mass: 1.3e19,
   radius: 30e3, // average radius based on dimensions
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459837.5'),
     eccentricity: 0.99498,
     semiMajorAxis: 177.43 * AU,
@@ -730,7 +731,7 @@ export const HALE_BOPP: CelestialBody = {
     meanAnomaly: 3.8784,
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
@@ -738,10 +739,10 @@ export const TESLA_ROADSTER: CelestialBody = {
   name: "Elon Musk's Tesla Roadster",
   shortName: 'Roadster',
   type: CelestialBodyType.SPACECRAFT,
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.25591503690056,
     semiMajorAxis: 1.325313962984 * AU,
@@ -753,7 +754,7 @@ export const TESLA_ROADSTER: CelestialBody = {
   mass: 1300,
   radius: 2,
   color: DEFAULT_SPACECRAFT_COLOR,
-};
+} as const;
 
 export const SPACECRAFT = [TESLA_ROADSTER];
 
@@ -763,10 +764,10 @@ export const PLUTO: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   // TODO: Charon is large enough that Charon and Pluto co-orbit their barycenter; this is not reflected by this
   //  parent-child relationship
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.2488,
     semiMajorAxis: 5906440628e3,
@@ -782,15 +783,15 @@ export const PLUTO: CelestialBody = {
     siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
   },
   color: '#E7C7A4',
-};
+} as const;
 
 // TODO: Charon and Pluto's other moons are inclined relative to Pluto's equator
 export const CHARON: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Charon',
-  influencedBy: [SOL.name, PLUTO.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(PLUTO)],
   elements: {
-    wrt: PLUTO.name,
+    wrt: celestialBodySlug(PLUTO),
     epoch: julianDayToEpoch('JD2452600.5'),
     eccentricity: 0.000161,
     semiMajorAxis: 19595.764e3,
@@ -806,14 +807,14 @@ export const CHARON: CelestialBody = {
     siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
   },
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const STYX: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Styx',
-  influencedBy: [SOL.name, PLUTO.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(PLUTO)],
   elements: {
-    wrt: PLUTO.name,
+    wrt: celestialBodySlug(PLUTO),
     epoch: julianDayToEpoch('JD2455743.5'), // 2011-July-01-UTC
     eccentricity: 0.005787,
     semiMajorAxis: 42656e3,
@@ -829,14 +830,14 @@ export const STYX: CelestialBody = {
     siderealPeriod: 3.24 * Time.DAY,
   },
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const NIX: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Nix',
-  influencedBy: [SOL.name, PLUTO.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(PLUTO)],
   elements: {
-    wrt: PLUTO.name,
+    wrt: celestialBodySlug(PLUTO),
     epoch: julianDayToEpoch('JD2455743.5'), // 2011-July-01-UTC
     eccentricity: 0.002036,
     semiMajorAxis: 48694e3,
@@ -848,14 +849,14 @@ export const NIX: CelestialBody = {
   mass: 2.6e16,
   radius: 35e3 / 2, // not spherical
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const KERBEROS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Kerberos',
-  influencedBy: [SOL.name, PLUTO.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(PLUTO)],
   elements: {
-    wrt: PLUTO.name,
+    wrt: celestialBodySlug(PLUTO),
     epoch: julianDayToEpoch('JD2455743.5'), // 2011-July-01-UTC
     eccentricity: 0.00328,
     semiMajorAxis: 57783e3,
@@ -871,14 +872,14 @@ export const KERBEROS: CelestialBody = {
     siderealPeriod: 5.31 * Time.DAY,
   },
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const HYDRA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Hydra',
-  influencedBy: [SOL.name, PLUTO.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(PLUTO)],
   elements: {
-    wrt: PLUTO.name,
+    wrt: celestialBodySlug(PLUTO),
     epoch: julianDayToEpoch('JD2455743.5'), // 2011-July-01-UTC
     eccentricity: 0.005862,
     semiMajorAxis: 64738e3,
@@ -890,7 +891,7 @@ export const HYDRA: CelestialBody = {
   mass: 3.01e16,
   radius: 19e3, // not spherical
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const PLUTO_SYSTEM = [PLUTO, CHARON, STYX, NIX, KERBEROS, HYDRA];
 
@@ -898,10 +899,10 @@ export const QUAOAR: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '50000 Quaoar',
   shortName: 'Quaoar',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459000.5'),
     eccentricity: 0.04106,
     semiMajorAxis: 43.694 * AU,
@@ -913,16 +914,16 @@ export const QUAOAR: CelestialBody = {
   mass: 1.2e21,
   radius: 545e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const SEDNA: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '90377 Sedna',
   shortName: 'Sedna',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2458900.5'),
     eccentricity: 0.8496,
     semiMajorAxis: 506 * AU,
@@ -934,16 +935,16 @@ export const SEDNA: CelestialBody = {
   mass: 2.5e21, // very rough estimate
   radius: 906e3 / 2,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const ORCUS: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '90482 Orcus',
   shortName: 'Orcus',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459000.5'),
     eccentricity: 0.22701,
     semiMajorAxis: 39.174 * AU,
@@ -955,16 +956,16 @@ export const ORCUS: CelestialBody = {
   mass: 6.348e20, // very rough estimate
   radius: 910e3 / 2,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const ERIS: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '136199 Eris',
   shortName: 'Eris',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459000.5'),
     eccentricity: 0.43607,
     semiMajorAxis: 67.864 * AU,
@@ -976,16 +977,16 @@ export const ERIS: CelestialBody = {
   mass: 1.6466e22,
   radius: 1163e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const HAUMEA: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '136108 Haumea',
   shortName: 'Haumea',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459200.5'),
     eccentricity: 0.19642,
     semiMajorAxis: 43.116 * AU,
@@ -997,16 +998,16 @@ export const HAUMEA: CelestialBody = {
   mass: 4.006e21,
   radius: 780e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const MAKEMAKE: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '136472 Makemake',
   shortName: 'Makemake',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2458900.5'),
     eccentricity: 0.16126,
     semiMajorAxis: 45.43 * AU,
@@ -1018,18 +1019,18 @@ export const MAKEMAKE: CelestialBody = {
   mass: 3.1e21,
   radius: 715e3,
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const ARROKOTH: CelestialBody = {
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '486958 Arrokoth', // also known as Ultima Thule
   shortName: 'Arrokoth',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   mass: 7.485e14, // kg
   radius: 18e3, // m (average radius based on length of 36 km)
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2458600.5'),
     eccentricity: 0.04172,
     semiMajorAxis: 44.581 * AU,
@@ -1039,18 +1040,18 @@ export const ARROKOTH: CelestialBody = {
     meanAnomaly: 316.551, // degrees
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const GONGGONG: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '225088 Gonggong',
   shortName: 'Gonggong',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
   mass: 1.75e21, // kg
   radius: 615e3, // m
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459200.5'),
     eccentricity: 0.49943,
     semiMajorAxis: 67.485 * AU,
@@ -1060,17 +1061,17 @@ export const GONGGONG: CelestialBody = {
     meanAnomaly: 106.496, // degrees
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const VP113: CelestialBody = {
   type: CelestialBodyType.DWARF_PLANET,
   name: '2012 VP133',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: 1e21, // very very rough guess -- not known
   radius: 574e3 / 2, // m
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459800.5'),
     eccentricity: 0.7036,
     semiMajorAxis: 271.5 * AU,
@@ -1080,18 +1081,18 @@ export const VP113: CelestialBody = {
     meanAnomaly: 3.5, // degrees
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const LELEAKUHONUA: CelestialBody = {
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '541132 Leleākūhonua',
   shortName: 'Leleākūhonua',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: 1e20, // unknown, extremely rough guess
   radius: 110e3 / 2,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2459000.5'),
     eccentricity: 0.93997,
     semiMajorAxis: 1085 * AU,
@@ -1101,18 +1102,18 @@ export const LELEAKUHONUA: CelestialBody = {
     meanAnomaly: 359.418, // degrees
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const FARFAROUT: CelestialBody = {
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '2018 AG37',
   shortName: 'FarFarOut',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: estimateAsteroidMass(200e3), // unknown
   radius: 200e3, // estimate
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: julianDayToEpoch('JD2458540.5'),
     eccentricity: 0.655,
     semiMajorAxis: 80.2 * AU,
@@ -1122,7 +1123,7 @@ export const FARFAROUT: CelestialBody = {
     meanAnomaly: 186.9,
   },
   color: DEFAULT_ASTEROID_COLOR,
-};
+} as const;
 
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
@@ -1141,10 +1142,10 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
 export const JUPITER: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Jupiter',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.0489,
     semiMajorAxis: 778340821e3,
@@ -1160,14 +1161,14 @@ export const JUPITER: CelestialBody = {
     siderealPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
   },
   color: '#e9be76',
-};
+} as const;
 
 export const IO: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Io',
-  influencedBy: [SOL.name, JUPITER.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(JUPITER)],
   elements: {
-    wrt: JUPITER.name,
+    wrt: celestialBodySlug(JUPITER),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0041,
     semiMajorAxis: 421800e3,
@@ -1179,14 +1180,14 @@ export const IO: CelestialBody = {
   mass: 8.931938e22,
   radius: 1821.6e3,
   color: '#fcf794',
-};
+} as const;
 
 export const EUROPA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Europa',
-  influencedBy: [SOL.name, JUPITER.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(JUPITER)],
   elements: {
-    wrt: JUPITER.name,
+    wrt: celestialBodySlug(JUPITER),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0094,
     semiMajorAxis: 671100e3,
@@ -1205,14 +1206,14 @@ export const EUROPA: CelestialBody = {
         "Europa's subsurface ocean is believed to contain about twice as much water as all of Earth's oceans, combined",
     },
   ],
-};
+} as const;
 
 export const GANYMEDE: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Ganymede',
-  influencedBy: [SOL.name, JUPITER.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(JUPITER)],
   elements: {
-    wrt: JUPITER.name,
+    wrt: celestialBodySlug(JUPITER),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0013,
     semiMajorAxis: 1070400e3,
@@ -1224,14 +1225,14 @@ export const GANYMEDE: CelestialBody = {
   mass: 1.4819e23,
   radius: 2634.1e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const CALLISTO: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Callisto',
-  influencedBy: [SOL.name, JUPITER.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(JUPITER)],
   elements: {
-    wrt: JUPITER.name,
+    wrt: celestialBodySlug(JUPITER),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0074,
     semiMajorAxis: 1882700e3,
@@ -1243,7 +1244,7 @@ export const CALLISTO: CelestialBody = {
   mass: 1.075938e23,
   radius: 2410.3e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 // TODO: there are more moons
 export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
@@ -1251,10 +1252,10 @@ export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
 export const SATURN: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Saturn',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.0565,
     semiMajorAxis: 1433.53e9,
@@ -1278,14 +1279,14 @@ export const SATURN: CelestialBody = {
     },
   ],
   color: '#d7be87',
-};
+} as const;
 
 export const MIMAS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Mimas',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0196,
     semiMajorAxis: 185540e3,
@@ -1297,14 +1298,14 @@ export const MIMAS: CelestialBody = {
   mass: 3.7493e19,
   radius: 198.2e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const ENCELADUS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Enceladus',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0047,
     semiMajorAxis: 238040e3,
@@ -1316,14 +1317,14 @@ export const ENCELADUS: CelestialBody = {
   mass: 1.08022e20,
   radius: 252.1e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const TETHYS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Tethys',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0001,
     semiMajorAxis: 294670e3,
@@ -1335,14 +1336,14 @@ export const TETHYS: CelestialBody = {
   mass: 6.17449e20,
   radius: 531.1e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const DIONE: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Dione',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0022,
     semiMajorAxis: 377420e3,
@@ -1354,14 +1355,14 @@ export const DIONE: CelestialBody = {
   mass: 1.095452e21,
   radius: 561.4e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const RHEA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Rhea',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.001,
     semiMajorAxis: 527070e3,
@@ -1373,14 +1374,14 @@ export const RHEA: CelestialBody = {
   mass: 2.306518e21,
   radius: 763.8e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const TITAN: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Titan',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0288,
     semiMajorAxis: 1221870e3,
@@ -1392,14 +1393,14 @@ export const TITAN: CelestialBody = {
   mass: 1.3452e23,
   radius: 2574.7e3,
   color: '#f1e193',
-};
+} as const;
 
 export const IAPETUS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Iapetus',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0286,
     semiMajorAxis: 3560820e3,
@@ -1411,14 +1412,14 @@ export const IAPETUS: CelestialBody = {
   mass: 1.805635e21,
   radius: 734.5e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const HYPERION: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Hyperion',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: J2000, // TODO: verify
     eccentricity: 0.1230061,
     semiMajorAxis: 1481009e3,
@@ -1430,14 +1431,14 @@ export const HYPERION: CelestialBody = {
   mass: 5.551e18,
   radius: 135e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const PHOEBE: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Phoebe',
-  influencedBy: [SOL.name, SATURN.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(SATURN)],
   elements: {
-    wrt: SATURN.name,
+    wrt: celestialBodySlug(SATURN),
     epoch: julianDayToEpoch('JD2460000.5'),
     eccentricity: 0.1796752,
     semiMajorAxis: 0.0861776 * AU, // 12960000e3,
@@ -1453,17 +1454,17 @@ export const PHOEBE: CelestialBody = {
   mass: 8.3123e18,
   radius: 106.5e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
 
 export const URANUS: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000,
     eccentricity: 0.04717,
     semiMajorAxis: 19.19126 * AU,
@@ -1480,14 +1481,14 @@ export const URANUS: CelestialBody = {
   },
   color: '#9bcee6',
   // rings: [], // TODO
-};
+} as const;
 
 export const PUCK: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Puck',
-  influencedBy: [SOL.name, URANUS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(URANUS)],
   elements: {
-    wrt: URANUS.name,
+    wrt: celestialBodySlug(URANUS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.00012,
     semiMajorAxis: 86004.444e3,
@@ -1499,14 +1500,14 @@ export const PUCK: CelestialBody = {
   mass: 1.91e18,
   radius: 81e3 / 2,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const MIRANDA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Miranda',
-  influencedBy: [SOL.name, URANUS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(URANUS)],
   elements: {
-    wrt: URANUS.name,
+    wrt: celestialBodySlug(URANUS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0013,
     semiMajorAxis: 129390e3,
@@ -1518,14 +1519,14 @@ export const MIRANDA: CelestialBody = {
   mass: 6.293e19,
   radius: 235.8e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const ARIEL: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Ariel',
-  influencedBy: [SOL.name, URANUS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(URANUS)],
   elements: {
-    wrt: URANUS.name,
+    wrt: celestialBodySlug(URANUS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0012,
     semiMajorAxis: 190900e3,
@@ -1537,14 +1538,14 @@ export const ARIEL: CelestialBody = {
   mass: 1.2331e21,
   radius: 578.9e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const UMBRIEL: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Umbriel',
-  influencedBy: [SOL.name, URANUS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(URANUS)],
   elements: {
-    wrt: URANUS.name,
+    wrt: celestialBodySlug(URANUS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0039,
     semiMajorAxis: 266000e3,
@@ -1556,14 +1557,14 @@ export const UMBRIEL: CelestialBody = {
   mass: 1.2885e21,
   radius: 584.7e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const TITANIA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Titania',
-  influencedBy: [SOL.name, URANUS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(URANUS)],
   elements: {
-    wrt: URANUS.name,
+    wrt: celestialBodySlug(URANUS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0011,
     semiMajorAxis: 435910e3,
@@ -1575,14 +1576,14 @@ export const TITANIA: CelestialBody = {
   mass: 3.455e21,
   radius: 788.4e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const OBERON: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Oberon',
-  influencedBy: [SOL.name, URANUS.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(URANUS)],
   elements: {
-    wrt: URANUS.name,
+    wrt: celestialBodySlug(URANUS),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0014,
     semiMajorAxis: 583520e3,
@@ -1594,17 +1595,17 @@ export const OBERON: CelestialBody = {
   mass: 3.1104e21,
   radius: 761.4e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const URANUS_SYSTEM = [URANUS, PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON];
 
 export const NEPTUNE: CelestialBody = {
   type: CelestialBodyType.PLANET,
   name: 'Neptune',
-  influencedBy: [SOL.name],
+  influencedBy: [celestialBodySlug(SOL)],
   orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
   elements: {
-    wrt: SOL.name,
+    wrt: celestialBodySlug(SOL),
     epoch: J2000, // TODO: verify
     eccentricity: 0.008678,
     semiMajorAxis: 4503443661e3,
@@ -1620,14 +1621,14 @@ export const NEPTUNE: CelestialBody = {
     siderealPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
   },
   color: '#5a7cf6',
-};
+} as const;
 
 export const TRITON: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Triton',
-  influencedBy: [SOL.name, NEPTUNE.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(NEPTUNE)],
   elements: {
-    wrt: NEPTUNE.name,
+    wrt: celestialBodySlug(NEPTUNE),
     epoch: J2000, // TODO: verify
     eccentricity: 0.000016,
     semiMajorAxis: 354759e3,
@@ -1643,14 +1644,14 @@ export const TRITON: CelestialBody = {
     siderealPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
   },
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const PROTEUS: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Proteus',
-  influencedBy: [SOL.name, NEPTUNE.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(NEPTUNE)],
   elements: {
-    wrt: NEPTUNE.name,
+    wrt: celestialBodySlug(NEPTUNE),
     epoch: J2000, // TODO: verify
     eccentricity: 0.0005,
     semiMajorAxis: 117646e3,
@@ -1662,14 +1663,14 @@ export const PROTEUS: CelestialBody = {
   mass: 2.5e19, // wide uncertainty bars
   radius: 209e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const NEREID: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Nereid',
-  influencedBy: [SOL.name, NEPTUNE.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(NEPTUNE)],
   elements: {
-    wrt: NEPTUNE.name,
+    wrt: celestialBodySlug(NEPTUNE),
     epoch: J2000, // TODO: verify
     eccentricity: 0.749,
     semiMajorAxis: 5504000e3,
@@ -1681,14 +1682,14 @@ export const NEREID: CelestialBody = {
   mass: 3.57e19,
   radius: 357e3 / 2,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const DESPINA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Despina',
-  influencedBy: [SOL.name, NEPTUNE.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(NEPTUNE)],
   elements: {
-    wrt: NEPTUNE.name,
+    wrt: celestialBodySlug(NEPTUNE),
     epoch: J2000, // TODO: verify
     eccentricity: 0.00038,
     semiMajorAxis: 52525.95e3,
@@ -1700,14 +1701,14 @@ export const DESPINA: CelestialBody = {
   mass: 1.1e18, // high uncertainty
   radius: 75e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const LARISSA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Larissa',
-  influencedBy: [SOL.name, NEPTUNE.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(NEPTUNE)],
   elements: {
-    wrt: NEPTUNE.name,
+    wrt: celestialBodySlug(NEPTUNE),
     epoch: julianDayToEpoch('JD2447756.5'), // Epoch 18 August 1989
     eccentricity: 0.001393,
     semiMajorAxis: 73548.26e3,
@@ -1719,14 +1720,14 @@ export const LARISSA: CelestialBody = {
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 export const GALATEA: CelestialBody = {
   type: CelestialBodyType.MOON,
   name: 'Galatea',
-  influencedBy: [SOL.name, NEPTUNE.name],
+  influencedBy: [celestialBodySlug(SOL), celestialBodySlug(NEPTUNE)],
   elements: {
-    wrt: NEPTUNE.name,
+    wrt: celestialBodySlug(NEPTUNE),
     epoch: julianDayToEpoch('JD2447756.5'), // Epoch 18 August 1989
     eccentricity: 0.00022,
     semiMajorAxis: 61952.57e3,
@@ -1738,7 +1739,7 @@ export const GALATEA: CelestialBody = {
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
   color: DEFAULT_MOON_COLOR,
-};
+} as const;
 
 // TODO: there are more moons
 export const NEPTUNE_SYSTEM = [NEPTUNE, TRITON, DESPINA, GALATEA, LARISSA, PROTEUS, NEREID];

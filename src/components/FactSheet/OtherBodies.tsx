@@ -2,7 +2,7 @@ import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
-import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { celestialBodySlug, celestialBodyTypeName } from '../../lib/utils.ts';
 import styles from './RelatedBodies.module.css';
 import { Thumbnail } from './Thumbnail.tsx';
 
@@ -33,8 +33,8 @@ export function OtherBodies({ body, bodies, updateSettings }: Props) {
             key={`${relatedBody.name}-${i}`}
             className={styles.LinkPill}
             style={{ cursor: 'pointer' }}
-            onClick={() => updateSettings({ center: relatedBody.name, hover: null })}
-            onMouseEnter={() => updateSettings({ hover: relatedBody.name })}
+            onClick={() => updateSettings({ center: celestialBodySlug(relatedBody), hover: null })}
+            onMouseEnter={() => updateSettings({ hover: celestialBodySlug(relatedBody) })}
             onMouseLeave={() => updateSettings({ hover: null })}
           >
             <Group gap={8} align="center" wrap="nowrap">

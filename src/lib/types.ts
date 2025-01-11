@@ -80,7 +80,7 @@ export type CelestialBody = {
   type: CelestialBodyType;
   name: string;
   shortName?: string;
-  influencedBy: Array<string>; // name of bodies influencing this body's motion
+  influencedBy: Array<string>; // slugs of bodies influencing this body's motion
   orbitalRegime?: HeliocentricOrbitalRegime;
   mass: number; // kg
   radius: number; // m

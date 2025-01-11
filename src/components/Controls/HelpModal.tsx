@@ -36,6 +36,7 @@ import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
+import { celestialBodySlug } from '../../lib/utils.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
 import { iconSize } from './constants.ts';
 
@@ -91,7 +92,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
   const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
   function onCardClick(body: CelestialBody) {
-    updateSettings({ center: body.name });
+    updateSettings({ center: celestialBodySlug(body) });
     onClose();
   }
 
