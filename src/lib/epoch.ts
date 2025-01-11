@@ -5,6 +5,9 @@ export enum Time {
   MINUTE = 60 * SECOND,
   HOUR = 60 * MINUTE,
   DAY = 24 * HOUR,
+  WEEK = 7 * DAY,
+  MONTH = 30.436875 * DAY,
+  YEAR = 365.25 * DAY,
 }
 
 export const J2000: Epoch = {
