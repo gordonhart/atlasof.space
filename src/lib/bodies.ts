@@ -12,11 +12,11 @@ export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-typ
 export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 
 export function withDefaults(
-  body: Omit<CelestialBody, 'id' | 'color'> & { color?: CelestialBody['color'] }
+  body: Omit<CelestialBody, 'id' | 'color'> & { id?: string; color?: CelestialBody['color'] }
 ): CelestialBody {
   return {
     ...body,
-    id: (body.shortName ?? body.name).replace(/\s+/g, '-').toLowerCase(),
+    id: body.id ?? (body.shortName ?? body.name).replace(/\s+/g, '-').toLowerCase(),
     color: body.color ?? DEFAULT_ASTEROID_COLOR,
   };
 }
@@ -512,6 +512,7 @@ export const GASPRA: CelestialBody = withDefaults({
 });
 
 export const STEINS: CelestialBody = withDefaults({
+  id: 'steins',
   type: CelestialBodyType.ASTEROID,
   name: '2867 Šteins',
   shortName: 'Šteins',
@@ -1063,6 +1064,7 @@ export const VP113: CelestialBody = withDefaults({
 });
 
 export const LELEAKUHONUA: CelestialBody = withDefaults({
+  id: 'leleakuhonua',
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '541132 Leleākūhonua',
   shortName: 'Leleākūhonua',
