@@ -59,6 +59,7 @@ export class SolarSystemModel {
     this.controls.minZoom = 1e-3;
     this.controls.maxZoom = 1e4;
     this.controls.zoomToCursor = true;
+    this.controls.listenToKeyEvents(window);
 
     this.bodies = this.createBodies(settings);
     this.firmament = new Firmament(this.resolution);
