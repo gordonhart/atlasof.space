@@ -57,7 +57,7 @@ function getSearch(obj: CelestialBody | OrbitalRegime) {
   if (isOrbitalRegime(obj)) {
     // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
     const orbitalRegimes = Object.values(HeliocentricOrbitalRegime).join(', ');
-    return `the heliocentric orbital regime '${obj.name}' (of the set with ${orbitalRegimes})`;
+    return `the heliocentric orbital regime '${obj.regime}' (of the set with ${orbitalRegimes})`;
   }
   switch (obj.type) {
     case CelestialBodyType.MOON:

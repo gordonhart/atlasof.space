@@ -12,7 +12,7 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/:slug?" element={<SolarSystem />} />
+            <Route path="/:id?" element={<SolarSystem />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

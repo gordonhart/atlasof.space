@@ -61,7 +61,7 @@ export class KeplerianBody extends KinematicBody {
     this.ellipse.update(parent?.position ?? null, this.visible && settings.drawOrbit);
 
     // apply hover effects (scale body, bold ellipse, etc.)
-    const thisIsHovered = settings.hover === this.body.slug;
+    const thisIsHovered = settings.hover === this.body.id;
     if (thisIsHovered !== this.hovered) {
       this.sphere.setHover(thisIsHovered);
       this.ellipse.setHover(thisIsHovered);

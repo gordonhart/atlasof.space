@@ -33,8 +33,8 @@ export function OtherBodies({ body, bodies, updateSettings }: Props) {
             key={`${relatedBody.name}-${i}`}
             className={styles.LinkPill}
             style={{ cursor: 'pointer' }}
-            onClick={() => updateSettings({ center: relatedBody.slug, hover: null })}
-            onMouseEnter={() => updateSettings({ hover: relatedBody.slug })}
+            onClick={() => updateSettings({ center: relatedBody.id, hover: null })}
+            onMouseEnter={() => updateSettings({ hover: relatedBody.id })}
             onMouseLeave={() => updateSettings({ hover: null })}
           >
             <Group gap={8} align="center" wrap="nowrap">

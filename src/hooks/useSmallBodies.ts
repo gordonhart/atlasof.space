@@ -1,5 +1,5 @@
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
-import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
+import { AU, DEFAULT_ASTEROID_COLOR, SOL, withDefaults } from '../lib/bodies.ts';
 import { julianDayToEpoch } from '../lib/epoch.ts';
 import { estimateAsteroidMass } from '../lib/physics.ts';
 import { isNotFound, SBDB_URL, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
@@ -26,14 +26,14 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
   const { elements } = orbit;
   // TODO: are units always km? should account for the reported unit type
   const radius = (Number(phys_par.find(({ name }) => name === 'diameter')?.value ?? 0) / 2) * 1e3;
-  return {
+  return withDefaults({
     type: CelestialBodyType.ASTEROID, // TODO: sometimes comets
     name,
     shortName: object.shortname,
-    influencedBy: [SOL.name],
+    influencedBy: [SOL.id],
     orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
     elements: {
-      wrt: SOL.name,
+      wrt: SOL.id,
       source: SBDB_URL,
       epoch: julianDayToEpoch(`JD${orbit.epoch}`),
       eccentricity: Number(elements.find(({ name }) => name === 'e')?.value),
@@ -46,5 +46,5 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     mass: estimateAsteroidMass(radius),
     radius,
     color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?
-  };
+  });
 }

@@ -2,35 +2,35 @@ import { AU } from './bodies.ts';
 import { OrbitalRegime, HeliocentricOrbitalRegime } from './types.ts';
 
 export const INNER_SYSTEM: OrbitalRegime = {
-  name: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  regime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   min: 0.2 * AU,
   max: 2.2 * AU,
   roundness: 0.1,
 };
 
 export const ASTEROID_BELT: OrbitalRegime = {
-  name: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  regime: HeliocentricOrbitalRegime.ASTEROID_BELT,
   min: 2.0 * AU,
   max: 3.2 * AU,
   roundness: 2,
 };
 
 export const OUTER_SYSTEM: OrbitalRegime = {
-  name: HeliocentricOrbitalRegime.OUTER_SYSTEM,
+  regime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
   min: 3.2 * AU,
   max: 32 * AU,
   roundness: 0.1,
 };
 
 export const KUIPER_BELT: OrbitalRegime = {
-  name: HeliocentricOrbitalRegime.KUIPER_BELT,
+  regime: HeliocentricOrbitalRegime.KUIPER_BELT,
   min: 30 * AU,
   max: 55 * AU,
   roundness: 0.1,
 };
 
 export const INNER_OORT_CLOUD: OrbitalRegime = {
-  name: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  regime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   min: 55 * AU,
   max: 20000 * AU,
   roundness: 0.001, // so huge that rendering as a flat disk is better
@@ -44,6 +44,12 @@ export const ORBITAL_REGIMES: Array<OrbitalRegime> = [
   INNER_OORT_CLOUD,
 ];
 
-export function orbitalRegimeSlug(regime: HeliocentricOrbitalRegime) {
-  return regime.replace(/\s+/g, '-').toLowerCase();
+export function orbitalRegimeDisplayName(regime: HeliocentricOrbitalRegime) {
+  return {
+    [HeliocentricOrbitalRegime.INNER_SYSTEM]: 'Inner System',
+    [HeliocentricOrbitalRegime.ASTEROID_BELT]: 'Asteroid Belt',
+    [HeliocentricOrbitalRegime.OUTER_SYSTEM]: 'Outer System',
+    [HeliocentricOrbitalRegime.KUIPER_BELT]: 'Kuiper Belt',
+    [HeliocentricOrbitalRegime.INNER_OORT_CLOUD]: 'Inner Oort Cloud',
+  }[regime];
 }

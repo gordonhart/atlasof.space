@@ -1,4 +1,3 @@
-export type Slug = string;
 export type Point2 = [number, number];
 export type Point3 = [number, number, number];
 export type CartesianState = {
@@ -17,9 +16,10 @@ export type Epoch = {
   // no time zone necessary; always UTC
 };
 
+export type CelestialBodyId = string;
 export type KeplerianElements = {
   // parent body that these elements are given with respect to, e.g. 'jupiter' for a moon. null for the Sun
-  wrt: Slug | null;
+  wrt: CelestialBodyId | null;
   epoch: Epoch;
   source?: string; // optionally include a citation, link, or blurb about data source
   eccentricity: number; // ratio
@@ -70,19 +70,19 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
 ];
 
 export enum HeliocentricOrbitalRegime {
-  INNER_SYSTEM = 'Inner System',
-  ASTEROID_BELT = 'Asteroid Belt',
-  OUTER_SYSTEM = 'Outer System',
-  KUIPER_BELT = 'Kuiper Belt',
-  INNER_OORT_CLOUD = 'Inner Oort Cloud',
+  INNER_SYSTEM = 'inner-system',
+  ASTEROID_BELT = 'asteroid-belt',
+  OUTER_SYSTEM = 'outer-system',
+  KUIPER_BELT = 'kuiper-belt',
+  INNER_OORT_CLOUD = 'inner-oort-cloud',
 }
 
 export type CelestialBody = {
+  id: CelestialBodyId;
   type: CelestialBodyType;
-  slug: Slug;
   name: string;
   shortName?: string;
-  influencedBy: Array<Slug>; // bodies influencing this body's motion
+  influencedBy: Array<CelestialBodyId>; // bodies influencing this body's motion
   orbitalRegime?: HeliocentricOrbitalRegime;
   mass: number; // kg
   radius: number; // m
@@ -94,7 +94,7 @@ export type CelestialBody = {
 };
 
 export type OrbitalRegime = {
-  name: HeliocentricOrbitalRegime;
+  regime: HeliocentricOrbitalRegime;
   min: number;
   max: number;
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)

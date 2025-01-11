@@ -14,7 +14,7 @@ type DragDetector = {
 };
 
 export function useCursorControls(model: SolarSystemModel | null, settings: Settings, updateSettings: UpdateSettings) {
-  const { slug } = useParams();
+  const { id } = useParams();
   const isTouchDevice = useIsTouchDevice();
   const dragDetectorRef = useRef<DragDetector | null>(null);
   const interactPxThreshold = isTouchDevice ? 25 : 10;
@@ -43,7 +43,7 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
 
     if (model == null) return;
     const closeBody = model.findCloseBody([eventX, eventY], settings, interactPxThreshold);
-    updateSettings({ hover: closeBody != null ? closeBody.body.slug : null });
+    updateSettings({ hover: closeBody != null ? closeBody.body.id : null });
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {
@@ -58,17 +58,17 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
 
     const closeBody = model.findCloseBody(getCursorCoordinates(event), settings, interactPxThreshold);
     if (closeBody != null) {
-      updateSettings({ center: closeBody.body.slug });
+      updateSettings({ center: closeBody.body.id });
     }
   }
 
   useEffect(() => {
-    if (slug != null) {
+    if (id != null) {
       console.log('before');
-      updateSettings({ center: slug.toLowerCase() });
+      updateSettings({ center: id.toLowerCase() });
       console.log('after');
     }
-  }, [slug]);
+  }, [id]);
 
   return { onPointerDown, onPointerMove, onPointerLeave, onClick };
 }

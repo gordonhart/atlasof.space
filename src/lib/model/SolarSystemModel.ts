@@ -125,9 +125,9 @@ export class SolarSystemModel {
   }
 
   add(settings: Settings, body: CelestialBody) {
-    if (Object.keys(this.bodies).some(s => s === body.slug)) return; // already exists, don't re-add
+    if (Object.keys(this.bodies).some(s => s === body.id)) return; // already exists, don't re-add
     const parents = body.influencedBy.map(slug => this.bodies[slug]).filter(notNullish);
-    this.bodies[body.slug] = this.createBodyWithParents(settings, parents, body);
+    this.bodies[body.id] = this.createBodyWithParents(settings, parents, body);
   }
 
   remove(slug: string) {
@@ -194,7 +194,7 @@ export class SolarSystemModel {
         toInitialize.push(body);
         continue;
       }
-      initialState[body.slug] =
+      initialState[body.id] =
         parents.length > 0
           ? this.createBodyWithParents(settings, parents, body)
           : new KeplerianBody(this.scene, this.resolution, settings, null, body, new Vector3(), new Vector3());
@@ -204,7 +204,7 @@ export class SolarSystemModel {
   }
 
   private createBodyWithParents(settings: Settings, parents: Array<KeplerianBody>, body: CelestialBody) {
-    const mainParent = parents.find(p => p.body.slug === body.elements.wrt) ?? null;
+    const mainParent = parents.find(p => p.body.id === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.body?.mass ?? 1;
     const elementsInEpoch =
       mainParent != null ? convertToEpoch(body.elements, mainParentMass, settings.epoch) : body.elements;

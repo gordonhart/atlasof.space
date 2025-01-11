@@ -91,12 +91,12 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
   const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
   function onCardClick(body: CelestialBody) {
-    updateSettings({ center: body.slug });
+    updateSettings({ center: body.id });
     onClose();
   }
 
   const sampleBodyCards = sampleBodies.map(body => (
-    <BodyCard key={body.slug} body={body} onClick={() => onCardClick(body)} />
+    <BodyCard key={body.id} body={body} onClick={() => onCardClick(body)} />
   ));
 
   return (

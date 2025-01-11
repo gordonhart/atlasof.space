@@ -1,6 +1,7 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
+import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
@@ -31,18 +32,18 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   removeBody,
 }: Props) {
   const bodiesInRegimeByType = useMemo(() => {
-    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.name);
+    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.regime);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
     return bodiesInRegime.reduce((acc, body) => {
       acc[body.type].push(body);
       return acc;
     }, types);
-  }, [regime.name, JSON.stringify(settings.bodies)]);
+  }, [regime.regime, JSON.stringify(settings.bodies)]);
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
-        title={regime.name}
+        title={orbitalRegimeDisplayName(regime.regime)}
         subTitle="Orbital Regime"
         color={DEFAULT_ASTEROID_COLOR}
         onClose={() => updateSettings({ center: null })}
@@ -64,7 +65,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                   onHover={hovered => updateSettings({ hover: hovered ? body.slug : null })}
                 />
               ))}
-              {regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
+              {regime.regime === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
                 <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>
