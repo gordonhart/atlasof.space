@@ -11,11 +11,11 @@ import { ORBITAL_REGIMES } from '../regimes.ts';
 import { ModelState, Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
+import { isOffScreen } from './canvas.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
 import { KeplerianBody } from './KeplerianBody.ts';
 import { OrbitalRegime } from './OrbitalRegime.ts';
-import { isOffScreen } from './utils.ts';
 
 export class SolarSystemModel {
   private readonly scene: Scene;
@@ -29,7 +29,6 @@ export class SolarSystemModel {
   private readonly regimes: Array<OrbitalRegime>;
   private time: number = 0;
   private bodies: Record<string, KeplerianBody>;
-  private spacecraft: Spacecraft | null;
 
   private readonly maxSafeDt = Time.MINUTE * 15;
 
@@ -109,7 +108,6 @@ export class SolarSystemModel {
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
     this.regimes.forEach(regime => regime.update(settings));
-    this.spacecraft?.update(this.time, settings);
     Object.values(this.bodies).forEach(body => {
       const parentState = body.body.elements.wrt != null ? this.bodies[body.body.elements.wrt] : undefined;
       body.update(settings, parentState ?? null);
@@ -225,7 +223,6 @@ export class SolarSystemModel {
     // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
     //  opposite algorithm to the one performed during initialization
     const parentStates = map(({ position, body }) => ({ position: position.clone(), mass: body.mass }), this.bodies);
-    this.spacecraft?.increment(Object.values(parentStates), dt);
     Object.values(this.bodies).forEach(body => {
       const parents = body.influencedBy.map(name => parentStates[name]);
       body.increment(parents, dt);

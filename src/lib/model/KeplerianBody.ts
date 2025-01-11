@@ -7,6 +7,7 @@ import {
   drawLabelAtLocation,
   drawOffscreenIndicator,
   getCanvasPixels,
+  isOffScreen,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
 import { HOVER_SCALE_FACTOR } from './constants.ts';
@@ -14,7 +15,6 @@ import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
-import { isOffScreen } from './utils.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody extends KinematicBody {
