@@ -63,7 +63,11 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
   }
 
   useEffect(() => {
-    updateSettings({ center: slug });
+    if (slug != null) {
+      console.log('before');
+      updateSettings({ center: slug.toLowerCase() });
+      console.log('after');
+    }
   }, [slug]);
 
   return { onPointerDown, onPointerMove, onPointerLeave, onClick };

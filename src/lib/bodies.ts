@@ -12,9 +12,11 @@ export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-typ
 export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 
 function withDefaults(body: Omit<CelestialBody, 'slug' | 'color'> & { color?: CelestialBody['color'] }): CelestialBody {
-  const base = body.shortName ?? body.name;
-  const slug = base.replace(/\s+/g, '-').toLowerCase();
-  return { ...body, slug, color: body.color ?? DEFAULT_ASTEROID_COLOR };
+  return {
+    ...body,
+    slug: (body.shortName ?? body.name).replace(/\s+/g, '-').toLowerCase(),
+    color: body.color ?? DEFAULT_ASTEROID_COLOR,
+  };
 }
 
 export const SOL: CelestialBody = withDefaults({
