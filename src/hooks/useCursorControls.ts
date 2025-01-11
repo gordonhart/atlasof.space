@@ -1,7 +1,7 @@
 import { MouseEvent, PointerEvent, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { magnitude } from '../lib/physics.ts';
-import { Settings } from '../lib/state.ts';
+import { Settings, UpdateSettings } from '../lib/state.ts';
 import { Point2 } from '../lib/types.ts';
 import { useIsTouchDevice } from './useIsTouchDevice.ts';
 
@@ -12,11 +12,7 @@ type DragDetector = {
   initial: Point2;
 };
 
-export function useCursorControls(
-  model: SolarSystemModel | null,
-  settings: Settings,
-  updateSettings: (state: Partial<Settings>) => void
-) {
+export function useCursorControls(model: SolarSystemModel | null, settings: Settings, updateSettings: UpdateSettings) {
   const isTouchDevice = useIsTouchDevice();
   const dragDetectorRef = useRef<DragDetector | null>(null);
   const interactPxThreshold = isTouchDevice ? 25 : 10;
@@ -45,7 +41,7 @@ export function useCursorControls(
 
     if (model == null) return;
     const closeBody = model.findCloseBody([eventX, eventY], settings, interactPxThreshold);
-    updateSettings({ hover: closeBody?.body?.name ?? null });
+    updateSettings({ hover: closeBody?.body?.id ?? null });
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {
@@ -60,7 +56,7 @@ export function useCursorControls(
 
     const closeBody = model.findCloseBody(getCursorCoordinates(event), settings, interactPxThreshold);
     if (closeBody != null) {
-      updateSettings({ center: closeBody.body.name });
+      updateSettings({ center: closeBody.body.id });
     }
   }
 

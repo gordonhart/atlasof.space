@@ -1,5 +1,6 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
@@ -11,10 +12,13 @@ import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
-  const [appState, setAppState] = useState(initialState);
+  const { id } = useParams();
+  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: id ?? null } };
+  const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
   const isSmallDisplay = useIsSmallDisplay();
+  const navigate = useNavigate();
   const { settings } = appState;
 
   const updateSettings: UpdateSettings = useCallback(
@@ -30,6 +34,16 @@ export function SolarSystem() {
     [setAppState]
   );
 
+  // sync URL to center
+  useEffect(() => {
+    if (settings.center !== id) updateSettings({ center: id });
+  }, [id]);
+
+  // sync center back to URL when state changes are initiated by non-URL source
+  useEffect(() => {
+    if (settings.center != null && settings.center !== id) navigate(`/${settings.center}`);
+  }, [settings.center]);
+
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
 
   function addBody(body: CelestialBody) {
@@ -39,9 +53,9 @@ export function SolarSystem() {
     });
   }
 
-  function removeBody(name: string) {
-    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.name !== name) }));
-    model.remove(name);
+  function removeBody(id: string) {
+    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
+    model.remove(id);
   }
 
   const resetState = useCallback(() => {
@@ -78,8 +92,8 @@ export function SolarSystem() {
   }, [settings.center]);
 
   const focusItem = useMemo(() => {
-    const focusBody = settings.bodies.find(body => body.name === settings.center);
-    const focusRegime = ORBITAL_REGIMES.find(({ name }) => name === settings.center);
+    const focusBody = settings.bodies.find(body => body.id === settings.center);
+    const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ASTEROID_COLOR;
@@ -112,7 +126,7 @@ export function SolarSystem() {
           }}
         >
           <FactSheet
-            key={focusItem.name} // ensure that the component is rerendered when focus changes
+            key={focusItem.id} // rerender when focus item changes
             item={focusItem}
             settings={settings}
             updateSettings={updateSettings}

@@ -10,7 +10,7 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
-  removeBody: (name: string) => void;
+  removeBody: (id: string) => void;
 };
 export const FactSheet = memo(function FactSheetComponent({
   item,

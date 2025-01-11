@@ -4,7 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { SOL } from '../bodies.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
@@ -126,15 +125,15 @@ export class SolarSystemModel {
   }
 
   add(settings: Settings, body: CelestialBody) {
-    if (Object.keys(this.bodies).some(name => name === body.name)) return; // already exists, don't re-add
-    const parents = body.influencedBy.map(name => this.bodies[name]).filter(notNullish);
-    this.bodies[body.name] = this.createBodyWithParents(settings, parents, body);
+    if (Object.keys(this.bodies).some(s => s === body.id)) return; // already exists, don't re-add
+    const parents = body.influencedBy.map(id => this.bodies[id]).filter(notNullish);
+    this.bodies[body.id] = this.createBodyWithParents(settings, parents, body);
   }
 
-  remove(name: string) {
-    const toRemove: KeplerianBody | undefined = this.bodies[name];
-    if (name == null || toRemove == null) return; // nothing to do
-    delete this.bodies[name];
+  remove(id: string) {
+    const toRemove: KeplerianBody | undefined = this.bodies[id];
+    if (id == null || toRemove == null) return; // nothing to do
+    delete this.bodies[id];
     toRemove.dispose();
   }
 
@@ -190,12 +189,12 @@ export class SolarSystemModel {
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
     while (toInitialize.length > 0) {
       const body = toInitialize.shift()!;
-      const parents = body.influencedBy.map(name => initialState[name]);
+      const parents = body.influencedBy.map(id => initialState[id]);
       if (parents.some(p => p == null)) {
         toInitialize.push(body);
         continue;
       }
-      initialState[body.name] =
+      initialState[body.id] =
         parents.length > 0
           ? this.createBodyWithParents(settings, parents, body)
           : new KeplerianBody(this.scene, this.resolution, settings, null, body, new Vector3(), new Vector3());
@@ -205,7 +204,7 @@ export class SolarSystemModel {
   }
 
   private createBodyWithParents(settings: Settings, parents: Array<KeplerianBody>, body: CelestialBody) {
-    const mainParent = parents.find(p => p.body.name === body.elements.wrt) ?? null;
+    const mainParent = parents.find(p => p.body.id === body.elements.wrt) ?? null;
     const mainParentMass = mainParent?.body?.mass ?? 1;
     const elementsInEpoch =
       mainParent != null ? convertToEpoch(body.elements, mainParentMass, settings.epoch) : body.elements;
@@ -213,7 +212,7 @@ export class SolarSystemModel {
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
     // TODO: conditionally excluding the sun is a little gross
-    const parent = mainParent?.body?.name === SOL.name ? null : mainParent;
+    const parent = mainParent?.body?.type === CelestialBodyType.STAR ? null : mainParent;
     return new KeplerianBody(this.scene, this.resolution, settings, parent, body, position, velocity);
   }
 
@@ -234,7 +233,7 @@ export class SolarSystemModel {
     //  opposite algorithm to the one performed during initialization
     const parentStates = map(({ position, body }) => ({ position: position.clone(), mass: body.mass }), this.bodies);
     Object.values(this.bodies).forEach(body => {
-      const parents = body.influencedBy.map(name => parentStates[name]);
+      const parents = body.influencedBy.map(id => parentStates[id]);
       body.increment(parents, dt);
     });
   }

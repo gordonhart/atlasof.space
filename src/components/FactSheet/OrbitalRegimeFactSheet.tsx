@@ -1,6 +1,7 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
+import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
@@ -21,7 +22,7 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
-  removeBody: (name: string) => void;
+  removeBody: (id: string) => void;
 };
 export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
   regime,
@@ -31,18 +32,18 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   removeBody,
 }: Props) {
   const bodiesInRegimeByType = useMemo(() => {
-    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.name);
+    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.id);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
     return bodiesInRegime.reduce((acc, body) => {
       acc[body.type].push(body);
       return acc;
     }, types);
-  }, [regime.name, JSON.stringify(settings.bodies)]);
+  }, [regime.id, JSON.stringify(settings.bodies)]);
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
-        title={regime.name}
+        title={orbitalRegimeDisplayName(regime.id)}
         subTitle="Orbital Regime"
         color={DEFAULT_ASTEROID_COLOR}
         onClose={() => updateSettings({ center: null })}
@@ -60,11 +61,11 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                 <BodyCard
                   key={`${body.name}-${j}`}
                   body={body}
-                  onClick={() => updateSettings({ center: body.name })}
-                  onHover={hovered => updateSettings({ hover: hovered ? body.name : null })}
+                  onClick={() => updateSettings({ center: body.id })}
+                  onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
                 />
               ))}
-              {regime.name === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
+              {regime.id === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
                 <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>

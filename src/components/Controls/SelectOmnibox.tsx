@@ -3,7 +3,7 @@ import { Spotlight, spotlight } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
-import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
+import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
@@ -39,7 +39,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
                 {celestialBodyTypeDescription(body)}
               </Text>
             }
-            onClick={() => updateSettings(prev => ({ ...prev, center: body.name }))}
+            onClick={() => updateSettings(prev => ({ ...prev, center: body.id }))}
           />
         )),
     [query, JSON.stringify(settings.bodies)]
@@ -48,18 +48,18 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
   const regimeItems = useMemo(
     () =>
       Object.values(ORBITAL_REGIMES)
-        .filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
-        .map(({ name }, i) => (
+        .filter(({ id }) => orbitalRegimeDisplayName(id).toLowerCase().includes(query.toLowerCase()))
+        .map(({ id }, i) => (
           <Spotlight.Action
-            key={`${name}-${i}`}
-            label={name}
+            key={`${id}-${i}`}
+            label={orbitalRegimeDisplayName(id)}
             className={styles.Action}
             rightSection={
               <Text c="dimmed" size="xs">
                 Orbital Regime
               </Text>
             }
-            onClick={() => updateSettings(prev => ({ ...prev, center: name }))}
+            onClick={() => updateSettings(prev => ({ ...prev, center: id }))}
           />
         )),
     [query]

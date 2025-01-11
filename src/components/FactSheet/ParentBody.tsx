@@ -12,7 +12,7 @@ type Props = {
 };
 export function ParentBody({ body, bodies, updateSettings }: Props) {
   const parentBody = useMemo(
-    () => bodies.find(({ type, name }) => type !== CelestialBodyType.STAR && name === body.elements.wrt),
+    () => bodies.find(({ type, id }) => type !== CelestialBodyType.STAR && id === body.elements.wrt),
     [JSON.stringify(body), JSON.stringify(bodies)]
   );
   return parentBody != null ? (
@@ -20,8 +20,8 @@ export function ParentBody({ body, bodies, updateSettings }: Props) {
       <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
       <BodyCard
         body={parentBody}
-        onClick={() => updateSettings({ center: parentBody.name, hover: null })}
-        onHover={hovered => updateSettings({ hover: hovered ? parentBody.name : null })}
+        onClick={() => updateSettings({ center: parentBody.id, hover: null })}
+        onHover={hovered => updateSettings({ hover: hovered ? parentBody.id : null })}
       />
     </Stack>
   ) : (

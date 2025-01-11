@@ -18,7 +18,7 @@ export function MajorSatellites({ body, bodies, updateSettings }: Props) {
     () =>
       bodies.filter(
         ({ type, influencedBy }) =>
-          influencedBy[influencedBy.length - 1]?.includes(body.name) && MAJOR_SATELLITE_TYPES.has(type)
+          influencedBy[influencedBy.length - 1]?.includes(body.id) && MAJOR_SATELLITE_TYPES.has(type)
       ),
     [JSON.stringify(body), bodiesByName]
   );
@@ -37,8 +37,8 @@ export function MajorSatellites({ body, bodies, updateSettings }: Props) {
         <BodyCard
           key={`${satellite.name}-${i}`}
           body={satellite}
-          onClick={() => updateSettings({ center: satellite.name, hover: null })}
-          onHover={hovered => updateSettings({ hover: hovered ? satellite.name : null })}
+          onClick={() => updateSettings({ center: satellite.id, hover: null })}
+          onHover={hovered => updateSettings({ hover: hovered ? satellite.id : null })}
         />
       ))}
     </Stack>

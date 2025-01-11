@@ -1,5 +1,6 @@
 import { Group, Pill } from '@mantine/core';
 import { IconCircleDotFilled } from '@tabler/icons-react';
+import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings } from '../../lib/state.ts';
 import { HeliocentricOrbitalRegime } from '../../lib/types.ts';
 import styles from './RelatedBodies.module.css';
@@ -19,7 +20,7 @@ export function OrbitalRegimePill({ regime, updateSettings }: Props) {
     >
       <Group gap={8} align="center" wrap="nowrap">
         <IconCircleDotFilled size={14} />
-        {regime}
+        {orbitalRegimeDisplayName(regime)}
       </Group>
     </Pill>
   );

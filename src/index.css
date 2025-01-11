@@ -6,5 +6,5 @@
 body {
   color: var(--mantine-color-gray-light-color);
   background-color: var(--mantine-color-black);
-  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }

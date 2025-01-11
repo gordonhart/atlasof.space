@@ -1,4 +1,4 @@
-import { AU } from './bodies.ts';
+import { AU, DEFAULT_ASTEROID_COLOR } from './bodies.ts';
 import { Time } from './epoch.ts';
 import { CelestialBody, CelestialBodyType } from './types.ts';
 
@@ -58,4 +58,18 @@ export function celestialBodyTypeDescription(body: CelestialBody): string {
 
 export function notNullish<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
+}
+
+export function celestialBodyNameToId(name: string, shortName?: string) {
+  return (shortName ?? name).replace(/\s+/g, '-').toLowerCase();
+}
+
+export function celestialBodyWithDefaults(
+  body: Omit<CelestialBody, 'id' | 'color'> & { id?: string; color?: CelestialBody['color'] }
+): CelestialBody {
+  return {
+    ...body,
+    id: body.id ?? celestialBodyNameToId(body.name, body.shortName),
+    color: body.color ?? DEFAULT_ASTEROID_COLOR,
+  };
 }

@@ -3,11 +3,19 @@ command = "yarn build"
 functions = "functions"
 publish = "dist"
 
+[build.environment]
+NODE_VERSION = "20"
+
 [[redirects]]
 force = true
 from = '/api/*'
 status = 200
 to = '/.netlify/functions/:splat'
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
 
 [dev]
 port = 19720
