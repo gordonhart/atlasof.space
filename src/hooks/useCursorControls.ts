@@ -41,7 +41,7 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
 
     if (model == null) return;
     const closeBody = model.findCloseBody([eventX, eventY], settings, interactPxThreshold);
-    updateSettings({ hover: closeBody != null ? closeBody.body.id : null });
+    updateSettings({ hover: closeBody?.body?.id ?? null });
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {

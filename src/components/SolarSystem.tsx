@@ -36,17 +36,12 @@ export function SolarSystem() {
 
   // sync URL to center
   useEffect(() => {
-    if (settings.center !== id) {
-      updateSettings({ center: id });
-    }
+    if (settings.center !== id) updateSettings({ center: id });
   }, [id]);
 
   // sync center back to URL when state changes are initiated by non-URL source
   useEffect(() => {
-    // Skip if the change was due to URL
-    if (settings.center != null && settings.center !== id) {
-      navigate(`/${settings.center}`);
-    }
+    if (settings.center != null && settings.center !== id) navigate(`/${settings.center}`);
   }, [settings.center]);
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
@@ -98,7 +93,7 @@ export function SolarSystem() {
 
   const focusItem = useMemo(() => {
     const focusBody = settings.bodies.find(body => body.id === settings.center);
-    const focusRegime = ORBITAL_REGIMES.find(({ regime }) => regime === settings.center);
+    const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ASTEROID_COLOR;
@@ -131,7 +126,7 @@ export function SolarSystem() {
           }}
         >
           <FactSheet
-            key={isCelestialBody(focusItem) ? focusItem.id : focusItem.regime} // rerender when focus item changes
+            key={focusItem.id} // rerender when focus item changes
             item={focusItem}
             settings={settings}
             updateSettings={updateSettings}

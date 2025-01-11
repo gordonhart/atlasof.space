@@ -94,7 +94,7 @@ export type CelestialBody = {
 };
 
 export type OrbitalRegime = {
-  regime: HeliocentricOrbitalRegime;
+  id: HeliocentricOrbitalRegime;
   min: number;
   max: number;
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
@@ -114,8 +114,8 @@ export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
   return (
     obj != null &&
     typeof obj === 'object' &&
-    'regime' in obj &&
-    typeof obj.regime === 'string' &&
-    Object.values(HeliocentricOrbitalRegime).includes(obj.regime as HeliocentricOrbitalRegime)
+    'id' in obj &&
+    typeof obj.id === 'string' &&
+    Object.values(HeliocentricOrbitalRegime).includes(obj.id as HeliocentricOrbitalRegime)
   );
 }

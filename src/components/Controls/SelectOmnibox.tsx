@@ -48,18 +48,18 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
   const regimeItems = useMemo(
     () =>
       Object.values(ORBITAL_REGIMES)
-        .filter(({ regime }) => orbitalRegimeDisplayName(regime).toLowerCase().includes(query.toLowerCase()))
-        .map(({ regime }, i) => (
+        .filter(({ id }) => orbitalRegimeDisplayName(id).toLowerCase().includes(query.toLowerCase()))
+        .map(({ id }, i) => (
           <Spotlight.Action
-            key={`${regime}-${i}`}
-            label={orbitalRegimeDisplayName(regime)}
+            key={`${id}-${i}`}
+            label={orbitalRegimeDisplayName(id)}
             className={styles.Action}
             rightSection={
               <Text c="dimmed" size="xs">
                 Orbital Regime
               </Text>
             }
-            onClick={() => updateSettings(prev => ({ ...prev, center: regime }))}
+            onClick={() => updateSettings(prev => ({ ...prev, center: id }))}
           />
         )),
     [query]

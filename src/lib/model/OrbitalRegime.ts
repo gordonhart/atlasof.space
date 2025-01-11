@@ -54,9 +54,9 @@ export class OrbitalRegime {
 
   private isVisible(settings: Settings) {
     return (
-      settings.hover === this.regime.regime ||
-      settings.center === this.regime.regime ||
-      settings.visibleRegimes.has(this.regime.regime)
+      settings.hover === this.regime.id ||
+      settings.center === this.regime.id ||
+      settings.visibleRegimes.has(this.regime.id)
     );
   }
 }

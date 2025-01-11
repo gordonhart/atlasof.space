@@ -12,7 +12,7 @@ type Props = {
 };
 export function ParentBody({ body, bodies, updateSettings }: Props) {
   const parentBody = useMemo(
-    () => bodies.find(parent => parent.type !== CelestialBodyType.STAR && parent.id === body.elements.wrt),
+    () => bodies.find(({ type, id }) => type !== CelestialBodyType.STAR && id === body.elements.wrt),
     [JSON.stringify(body), JSON.stringify(bodies)]
   );
   return parentBody != null ? (

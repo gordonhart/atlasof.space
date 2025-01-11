@@ -32,18 +32,18 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   removeBody,
 }: Props) {
   const bodiesInRegimeByType = useMemo(() => {
-    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.regime);
+    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.id);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
     return bodiesInRegime.reduce((acc, body) => {
       acc[body.type].push(body);
       return acc;
     }, types);
-  }, [regime.regime, JSON.stringify(settings.bodies)]);
+  }, [regime.id, JSON.stringify(settings.bodies)]);
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
-        title={orbitalRegimeDisplayName(regime.regime)}
+        title={orbitalRegimeDisplayName(regime.id)}
         subTitle="Orbital Regime"
         color={DEFAULT_ASTEROID_COLOR}
         onClose={() => updateSettings({ center: null })}
@@ -65,7 +65,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                   onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
                 />
               ))}
-              {regime.regime === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
+              {regime.id === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
                 <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>
