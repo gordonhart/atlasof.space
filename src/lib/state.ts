@@ -5,7 +5,7 @@ import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Poi
 export type Settings = {
   epoch: Epoch;
   play: boolean;
-  playbackSpeed: number; // multiplier over real time
+  speed: number; // multiplier over real time
   drawTail: boolean;
   drawOrbit: boolean;
   drawLabel: boolean;
@@ -33,7 +33,7 @@ export const initialState: AppState = {
   settings: {
     epoch: nowEpoch(),
     play: true,
-    playbackSpeed: 1, // real time
+    speed: 1, // real time
     drawTail: false,
     drawOrbit: true,
     drawLabel: true,
@@ -61,10 +61,10 @@ export const initialState: AppState = {
   },
 };
 
-export function clampSettings({ playbackSpeed, ...settings }: Settings): Settings {
+export function clampSettings({ speed, ...settings }: Settings): Settings {
   return {
     ...settings,
-    playbackSpeed: Math.min(Math.max(playbackSpeed, -1e8), 1e8),
+    speed: Math.min(Math.max(speed, -1e8), 1e8),
   };
 }
 

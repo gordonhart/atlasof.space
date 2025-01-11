@@ -110,7 +110,7 @@ export class SolarSystemModel {
     this.fpsCounter.update();
     const fps = this.fpsCounter.fps();
     if (fps == null) return; // still initializing
-    if (settings.play) this.incrementKinematics((1 / fps) * settings.playbackSpeed);
+    if (settings.play) this.incrementKinematics((1 / fps) * settings.speed);
     this.updateCenter(settings); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);

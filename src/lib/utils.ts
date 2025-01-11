@@ -1,21 +1,28 @@
 import { AU } from './bodies.ts';
+import { Time } from './epoch.ts';
 import { CelestialBody, CelestialBodyType } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
-  return n > 1 || n === 0 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
+  const nAbs = Math.abs(n);
+  return nAbs > 1 || nAbs < 1 ? `${n.toLocaleString()} ${unit}s` : `${n.toLocaleString()} ${unit}`;
 }
 
-export function humanTimeUnits(t: number): [number, string] {
-  if (t < 60) {
+export function humanTimeUnits(t: number, includeWeekAndMonth = false): [number, string] {
+  const tAbs = Math.abs(t);
+  if (tAbs < Time.MINUTE) {
     return [t, 'second'];
-  } else if (t < 60 * 60) {
-    return [t / 60, 'minute'];
-  } else if (t < 60 * 60 * 24) {
-    return [t / 60 / 60, 'hour'];
-  } else if (t < 60 * 60 * 24 * 365) {
-    return [t / 60 / 60 / 24, 'day'];
+  } else if (tAbs < Time.HOUR) {
+    return [t / Time.MINUTE, 'minute'];
+  } else if (tAbs < Time.DAY) {
+    return [t / Time.HOUR, 'hour'];
+  } else if (tAbs < (includeWeekAndMonth ? Time.WEEK : Time.YEAR)) {
+    return [t / Time.DAY, 'day'];
+  } else if (includeWeekAndMonth && tAbs < Time.MONTH) {
+    return [t / Time.WEEK, 'week'];
+  } else if (includeWeekAndMonth && tAbs < Time.YEAR) {
+    return [t / Time.MONTH, 'month'];
   } else {
-    return [t / 60 / 60 / 24 / 365, 'year'];
+    return [t / Time.YEAR, 'year'];
   }
 }
 

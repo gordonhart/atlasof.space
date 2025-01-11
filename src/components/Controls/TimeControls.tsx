@@ -1,9 +1,17 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo } from 'react';
-import { dateToHumanReadable, epochToDate } from '../../lib/epoch.ts';
+import { dateToHumanReadable, epochToDate, Time } from '../../lib/epoch.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
+import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
+
+const SPEEDS = [Time.SECOND, Time.MINUTE, Time.HOUR, Time.DAY, Time.WEEK, Time.MONTH, Time.YEAR, Time.YEAR * 3];
+
+function findNextSpeed(cur: number, direction: 'faster' | 'slower') {
+  const speeds = direction === 'faster' ? SPEEDS : [...SPEEDS].reverse();
+  return speeds.find(speed => (direction === 'faster' ? speed > cur : speed < cur)) ?? SPEEDS[SPEEDS.length - 1];
+}
 
 type Props = {
   settings: Settings;
@@ -12,6 +20,7 @@ type Props = {
 };
 export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
+  const [t, tUnits] = humanTimeUnits(settings.speed, true);
 
   return (
     <Stack gap={4}>
@@ -31,27 +40,24 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
                 speed
               </Text>
             </Group>
-            <Text inherit>{settings.playbackSpeed.toLocaleString()}x</Text>
-          </Group>
-          <Group gap={8}>
-            <Group justify="flex-end" w={36}>
-              <Text inherit c="dimmed">
-                fps
-              </Text>
-            </Group>
-            <Text inherit>{model.fps?.toFixed(0)}</Text>
+            <Text inherit>{tUnits === 'second' && t === 1 ? 'realtime' : `${pluralize(t, tUnits)} / second`}</Text>
           </Group>
         </Stack>
       </Paper>
 
       <Group gap={buttonGap} align="flex-end">
-        <Tooltip label="Slow Down">
+        <Tooltip position="right" label="Slow Down">
           <ActionIcon
             onClick={() =>
-              updateSettings(({ playbackSpeed, ...prev }) => {
-                const next = playbackSpeed > 0 ? (playbackSpeed <= 1 ? -1 : playbackSpeed / 10) : playbackSpeed * 10;
-                return { ...prev, playbackSpeed: next };
-              })
+              updateSettings(({ speed, ...prev }) => ({
+                ...prev,
+                speed:
+                  speed > 0
+                    ? speed <= 1
+                      ? -Time.SECOND
+                      : findNextSpeed(speed, 'slower')
+                    : -findNextSpeed(Math.abs(speed), 'faster'),
+              }))
             }
           >
             <IconPlayerTrackPrev size={iconSize} />
@@ -65,10 +71,15 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
         <Tooltip position="right" label="Speed Up">
           <ActionIcon
             onClick={() => {
-              updateSettings(({ playbackSpeed, ...prev }) => {
-                const next = playbackSpeed < 0 ? (playbackSpeed >= -1 ? 1 : playbackSpeed / 10) : playbackSpeed * 10;
-                return { ...prev, playbackSpeed: next };
-              });
+              updateSettings(({ speed, ...prev }) => ({
+                ...prev,
+                speed:
+                  speed < 0
+                    ? speed >= -1
+                      ? Time.SECOND
+                      : -findNextSpeed(Math.abs(speed), 'slower')
+                    : findNextSpeed(speed, 'faster'),
+              }));
             }}
           >
             <IconPlayerTrackNext size={iconSize} />
