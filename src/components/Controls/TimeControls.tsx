@@ -45,7 +45,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
       <Paper radius="md">
         <Stack gap={2} fz="xs">
           <Group gap={8}>
-            <Group justify="flex-end" w={36}>
+            <Group justify="flex-end" w={40}>
               <Text inherit c="dimmed">
                 date
               </Text>
@@ -53,7 +53,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
             <Text inherit>{dateToHumanReadable(date)}</Text>
           </Group>
           <Group gap={8}>
-            <Group justify="flex-end" w={36}>
+            <Group justify="flex-end" w={40}>
               <Text inherit c="dimmed">
                 speed
               </Text>
