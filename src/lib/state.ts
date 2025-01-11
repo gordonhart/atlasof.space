@@ -61,11 +61,4 @@ export const initialState: AppState = {
   },
 };
 
-export function clampSettings({ speed, ...settings }: Settings): Settings {
-  return {
-    ...settings,
-    speed: Math.min(Math.max(speed, -1e8), 1e8),
-  };
-}
-
 export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;

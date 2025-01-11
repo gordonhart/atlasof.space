@@ -7,10 +7,26 @@ import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
 
 const SPEEDS = [Time.SECOND, Time.MINUTE, Time.HOUR, Time.DAY, Time.WEEK, Time.MONTH, Time.YEAR, Time.YEAR * 3];
+const FASTEST_SPEED = SPEEDS[SPEEDS.length - 1];
 
-function findNextSpeed(cur: number, direction: 'faster' | 'slower') {
+function findNextSpeed(speed: number, direction: 'faster' | 'slower') {
   const speeds = direction === 'faster' ? SPEEDS : [...SPEEDS].reverse();
-  return speeds.find(speed => (direction === 'faster' ? speed > cur : speed < cur)) ?? SPEEDS[SPEEDS.length - 1];
+  return speeds.find(s => (direction === 'faster' ? s > speed : s < speed)) ?? FASTEST_SPEED;
+}
+
+function incrementSpeed(speed: number, direction: 'up' | 'down') {
+  const isReverse = speed < 0;
+  return direction === 'down'
+    ? isReverse
+      ? -findNextSpeed(Math.abs(speed), 'faster')
+      : speed <= 1
+        ? -Time.SECOND
+        : findNextSpeed(speed, 'slower')
+    : isReverse
+      ? speed >= -1
+        ? Time.SECOND
+        : -findNextSpeed(Math.abs(speed), 'slower')
+      : findNextSpeed(speed, 'faster');
 }
 
 type Props = {
@@ -22,6 +38,8 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
   const [t, tUnits] = humanTimeUnits(settings.speed, true);
 
+  const slowDownDisabled = settings.speed < 0 && settings.speed <= -FASTEST_SPEED;
+  const speedUpDisabled = settings.speed > 0 && settings.speed >= FASTEST_SPEED;
   return (
     <Stack gap={4}>
       <Paper radius="md">
@@ -46,19 +64,10 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
       </Paper>
 
       <Group gap={buttonGap} align="flex-end">
-        <Tooltip position="right" label="Slow Down">
+        <Tooltip disabled={slowDownDisabled} position="right" label="Slow Down">
           <ActionIcon
-            onClick={() =>
-              updateSettings(({ speed, ...prev }) => ({
-                ...prev,
-                speed:
-                  speed > 0
-                    ? speed <= 1
-                      ? -Time.SECOND
-                      : findNextSpeed(speed, 'slower')
-                    : -findNextSpeed(Math.abs(speed), 'faster'),
-              }))
-            }
+            disabled={slowDownDisabled}
+            onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'down') }))}
           >
             <IconPlayerTrackPrev size={iconSize} />
           </ActionIcon>
@@ -68,19 +77,10 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
             {settings.play ? <IconPlayerStop size={iconSize} /> : <IconPlayerPlay size={iconSize} />}
           </ActionIcon>
         </Tooltip>
-        <Tooltip position="right" label="Speed Up">
+        <Tooltip disabled={speedUpDisabled} position="right" label="Speed Up">
           <ActionIcon
-            onClick={() => {
-              updateSettings(({ speed, ...prev }) => ({
-                ...prev,
-                speed:
-                  speed < 0
-                    ? speed >= -1
-                      ? Time.SECOND
-                      : -findNextSpeed(Math.abs(speed), 'slower')
-                    : findNextSpeed(speed, 'faster'),
-              }));
-            }}
+            disabled={speedUpDisabled}
+            onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'up') }))}
           >
             <IconPlayerTrackNext size={iconSize} />
           </ActionIcon>

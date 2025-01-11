@@ -5,7 +5,7 @@ import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
-import { clampSettings, initialState, UpdateSettings } from '../lib/state.ts';
+import { initialState, UpdateSettings } from '../lib/state.ts';
 import { CelestialBody, isCelestialBody } from '../lib/types.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
@@ -21,7 +21,7 @@ export function SolarSystem() {
     update => {
       setAppState(prev => {
         const updated = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
-        const newState = { ...prev, settings: clampSettings(updated) };
+        const newState = { ...prev, settings: updated };
         // set the mutable state ref (accessed by animation callback) on state update
         appStateRef.current = newState;
         return newState;
