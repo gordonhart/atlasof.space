@@ -1,6 +1,6 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { dateToHumanReadable, epochToDate, Time } from '../../lib/epoch.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
@@ -36,7 +36,7 @@ type Props = {
 };
 export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
-  const [t, tUnits] = humanTimeUnits(settings.speed, true);
+  const [t, tUnits] = useMemo(() => humanTimeUnits(settings.speed, true), [settings.speed]);
 
   const slowDownDisabled = settings.speed < 0 && settings.speed <= -FASTEST_SPEED;
   const speedUpDisabled = settings.speed > 0 && settings.speed >= FASTEST_SPEED;
