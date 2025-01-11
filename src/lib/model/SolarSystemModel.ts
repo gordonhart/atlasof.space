@@ -107,8 +107,12 @@ export class SolarSystemModel {
   }
 
   update(ctx: CanvasRenderingContext2D, settings: Settings) {
-    if (settings.play) this.incrementKinematics(settings.dt);
     this.fpsCounter.update();
+    if (settings.play) {
+      const dt = (1 / this.fpsCounter.fps()) * settings.playbackSpeed;
+      console.log(dt);
+      this.incrementKinematics(dt);
+    }
     this.updateCenter(settings); // NOTE: must happen after kinematics are incremented and before controls are updated
     this.controls.update();
     this.firmament.update(this.camera.position, this.controls.target);
@@ -217,7 +221,7 @@ export class SolarSystemModel {
     // TODO: this algorithm could be improved; 1 hour is not always safe for e.g. LEO satellites of Earth, which have
     //  orbital periods of ~90 minutes. It is also overzealous to subdivide like this for orbits with longer periods
     this.time += dt;
-    const nIterations = Math.ceil(dt / this.maxSafeDt);
+    const nIterations = Math.ceil(Math.abs(dt) / this.maxSafeDt);
     const safeDt = dt / nIterations;
     Array(nIterations)
       .fill(null)
