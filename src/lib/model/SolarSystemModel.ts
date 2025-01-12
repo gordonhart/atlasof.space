@@ -254,7 +254,15 @@ export class SolarSystemModel {
     if (center == null) return;
     const centerBody = this.bodies[center];
     if (centerBody == null) return;
-    this.controls.target.copy(centerBody.position).divideScalar(SCALE_FACTOR);
+    const vector = this.controls.target.clone().multiplyScalar(SCALE_FACTOR).sub(centerBody.position);
+    const distance = vector.length();
+    const metersPerPx = this.getMetersPerPixel();
+    const maxTravel = 0.1 * distance; // travel 10% of the remaining distance each step
+    if (distance < 10 * metersPerPx) {
+      this.controls.target.copy(centerBody.position).divideScalar(SCALE_FACTOR);
+    } else {
+      this.controls.target.add(vector.normalize().multiplyScalar(-maxTravel / SCALE_FACTOR));
+    }
   }
 
   private setupCamera() {
