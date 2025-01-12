@@ -129,11 +129,13 @@ export class KeplerianBody extends KinematicBody {
     return settings.hover === id || settings.center === id || settings.visibleTypes.has(this.body.type);
   }
 
+  // show dot only when the orbit is larger than the dot itself; helps selectively hide moons until zoomed
   private shouldDrawDot(metersPerPx: number) {
     const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
     return this.focused || this.hovered || (this.visible && longAxisPx > this.dotRadius);
   }
 
+  // progressively hide labels as you zoom out, prioritizing certain types (e.g. planets) over others (e.g. asteroids)
   private shouldDrawLabel(metersPerPx: number) {
     const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
     const minLongAxisPx = MIN_ORBIT_PX_LABEL_VISIBLE[this.body.type];
