@@ -100,7 +100,7 @@ export class KeplerianBody extends KinematicBody {
     } else {
       const baseRadius = this.body.radius / metersPerPx;
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
-      if (bodyRadius < this.dotRadius) {
+      if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
         drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
       }
       if (drawLabel && this.shouldDrawLabel(metersPerPx)) {
@@ -127,6 +127,11 @@ export class KeplerianBody extends KinematicBody {
   isVisible(settings: Settings) {
     const id = this.body.id;
     return settings.hover === id || settings.center === id || settings.visibleTypes.has(this.body.type);
+  }
+
+  private shouldDrawDot(metersPerPx: number) {
+    const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
+    return this.focused || this.hovered || (this.visible && longAxisPx > this.dotRadius);
   }
 
   private shouldDrawLabel(metersPerPx: number) {
