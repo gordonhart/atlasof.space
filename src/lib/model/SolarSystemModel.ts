@@ -238,16 +238,14 @@ export class SolarSystemModel {
     });
   }
 
-  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: Settings) {
+  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, center, drawLabel }: Settings) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
     Object.values(this.bodies).forEach(body => {
       body.drawAnnotations(ctx, this.camera, metersPerPx, drawLabel);
     });
-    const hoverBody = this.bodies[hover ?? ''];
-    if (hoverBody != null) {
-      hoverBody.drawAnnotations(ctx, this.camera, metersPerPx);
-    }
+    this.bodies[center ?? '']?.drawAnnotations(ctx, this.camera, metersPerPx);
+    this.bodies[hover ?? '']?.drawAnnotations(ctx, this.camera, metersPerPx);
   }
 
   private updateCenter({ center }: Settings) {
