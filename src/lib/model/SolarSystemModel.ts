@@ -31,6 +31,7 @@ export class SolarSystemModel {
   private time: number = 0;
   private bodies: Record<string, KeplerianBody>;
 
+  private tmp: Vector3 = new Vector3(); // reuse for efficiency
   private lockedCenter: string | null = null;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
@@ -95,8 +96,7 @@ export class SolarSystemModel {
 
   getVernalEquinox(): Point3 {
     // the Vernal Equinox is the direction of +X; find by applying matrix transformations from camera
-    const localX = new Vector3(1, 0, 0); // TODO: no new allocation
-    return localX.applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
+    return this.tmp.set(1, 0, 0).applyMatrix4(this.camera.matrixWorld).sub(this.camera.position).normalize().toArray();
   }
 
   getModelState(): ModelState {
@@ -239,14 +239,25 @@ export class SolarSystemModel {
     });
   }
 
-  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, center, drawLabel }: Settings) {
+  private drawAnnotations(ctx: CanvasRenderingContext2D, settings: Settings) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
-    Object.values(this.bodies).forEach(body => {
-      body.drawAnnotations(ctx, this.camera, metersPerPx, drawLabel);
-    });
-    this.bodies[center ?? '']?.drawAnnotations(ctx, this.camera, metersPerPx);
-    this.bodies[hover ?? '']?.drawAnnotations(ctx, this.camera, metersPerPx);
+    Object.values(this.bodies)
+      .map<[KeplerianBody, number]>(body => {
+        const distance = !body.isVisible(settings)
+          ? -1 // skip invisible bodies
+          : body.body.id === settings.center
+            ? 2 // center body should be drawn near top
+            : body.body.id === settings.hover
+              ? 1 // hover body should be always top
+              : this.tmp.copy(body.position).divideScalar(SCALE_FACTOR).sub(this.camera.position).length(); // use distance to camera
+        return [body, distance];
+      })
+      .filter(([, distance]) => distance > 0)
+      .sort(([, aDistance], [, bDistance]) => bDistance - aDistance)
+      .forEach(([body]) => {
+        body.drawAnnotations(ctx, this.camera, metersPerPx, settings.drawLabel);
+      });
   }
 
   private updateCenter({ center }: Settings) {
