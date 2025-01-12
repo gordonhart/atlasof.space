@@ -28,6 +28,7 @@ export class KeplerianBody extends KinematicBody {
   private readonly dotRadius: number;
   private readonly labelBox = new Box2();
   private readonly screenPoint = new Vector2(); // reuse for efficiency
+  private readonly labelSize: Record<string /* font */, [number, number] /* w, h */> = {}; // cache for efficiency
 
   private visible: boolean = false;
   private hovered: boolean = false;
@@ -90,8 +91,11 @@ export class KeplerianBody extends KinematicBody {
     const label = this.body.shortName ?? this.body.name;
     const fontSize = this.hovered ? '14px' : '12px';
     ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
-    const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
-    const textPx: Point2 = [textWidthPx, textHeightPx];
+    if (this.labelSize[ctx.font] == null) {
+      const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
+      this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
+    }
+    const textPx = this.labelSize[ctx.font];
     const canvasPx = getCanvasPixels(ctx);
 
     // body is off-screen; draw a pointer
