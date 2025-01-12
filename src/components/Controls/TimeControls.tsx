@@ -36,6 +36,7 @@ type Props = {
 };
 export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
+  const dateString = dateToHumanReadable(date);
   const [t, tUnits] = useMemo(() => humanTimeUnits(settings.speed, true), [settings.speed]);
 
   const slowDownDisabled = settings.speed < 0 && settings.speed <= -FASTEST_SPEED;
@@ -50,7 +51,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
                 date
               </Text>
             </Group>
-            <Text inherit>{dateToHumanReadable(date)}</Text>
+            <Text inherit>{dateString}</Text>
           </Group>
           <Group gap={8}>
             <Group justify="flex-end" w={40}>

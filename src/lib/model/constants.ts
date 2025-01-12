@@ -1,4 +1,4 @@
-import { Point3 } from '../types.ts';
+import { CelestialBodyType, Point3 } from '../types.ts';
 
 // units: meters per 3D scene-space unit (not to be confused with pixels)
 export const SCALE_FACTOR = 1e9; // shrink the scene down to work better with Three.js
@@ -10,4 +10,15 @@ export const CAMERA_INIT = {
   up: [0, 0, 1] as Point3, // z-up
   position: [0, 0, 1e6] as Point3, // very high up
   lookAt: [0, 0, 0] as Point3,
+};
+
+export const MIN_ORBIT_PX_LABEL_VISIBLE: Record<CelestialBodyType, number> = {
+  [CelestialBodyType.STAR]: -1, // always visible
+  [CelestialBodyType.PLANET]: 20, // visible unless very small
+  [CelestialBodyType.MOON]: 25,
+  [CelestialBodyType.SPACECRAFT]: 50,
+  [CelestialBodyType.DWARF_PLANET]: 75,
+  [CelestialBodyType.ASTEROID]: 100,
+  [CelestialBodyType.COMET]: 100,
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 100,
 };

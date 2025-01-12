@@ -11,7 +11,7 @@ import {
   isOffScreen,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
-import { HOVER_SCALE_FACTOR } from './constants.ts';
+import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
@@ -31,6 +31,7 @@ export class KeplerianBody extends KinematicBody {
 
   private visible: boolean = false;
   private hovered: boolean = false;
+  private focused: boolean = false;
 
   constructor(
     scene: Scene,
@@ -57,6 +58,7 @@ export class KeplerianBody extends KinematicBody {
 
   update(settings: Settings, parent: this | null) {
     this.visible = this.isVisible(settings);
+    this.focused = settings.center === this.body.id;
     this.sphere.update(this.position, this.rotation, this.visible);
     this.ellipse.update(parent?.position ?? null, this.visible && settings.drawOrbit);
 
@@ -101,7 +103,7 @@ export class KeplerianBody extends KinematicBody {
       if (bodyRadius < this.dotRadius) {
         drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
       }
-      if (drawLabel) {
+      if (drawLabel && this.shouldDrawLabel(metersPerPx)) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;
         const [p0, p1] = drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
         this.labelBox.min.x = Math.min(p0[0], p1[0]);
@@ -125,6 +127,12 @@ export class KeplerianBody extends KinematicBody {
   isVisible(settings: Settings) {
     const id = this.body.id;
     return settings.hover === id || settings.center === id || settings.visibleTypes.has(this.body.type);
+  }
+
+  private shouldDrawLabel(metersPerPx: number) {
+    const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
+    const minLongAxisPx = MIN_ORBIT_PX_LABEL_VISIBLE[this.body.type];
+    return this.focused || this.hovered || (this.visible && longAxisPx > minLongAxisPx);
   }
 
   // TODO: dynamically size by actual radius? log scale between ~1-4?

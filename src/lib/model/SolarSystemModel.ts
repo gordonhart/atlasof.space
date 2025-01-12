@@ -31,6 +31,7 @@ export class SolarSystemModel {
   private time: number = 0;
   private bodies: Record<string, KeplerianBody>;
 
+  private lockedCenter: string | null = null;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
   constructor(container: HTMLElement, settings: Settings) {
@@ -238,30 +239,33 @@ export class SolarSystemModel {
     });
   }
 
-  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, drawLabel }: Settings) {
+  private drawAnnotations(ctx: CanvasRenderingContext2D, { hover, center, drawLabel }: Settings) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
     Object.values(this.bodies).forEach(body => {
       body.drawAnnotations(ctx, this.camera, metersPerPx, drawLabel);
     });
-    const hoverBody = this.bodies[hover ?? ''];
-    if (hoverBody != null) {
-      hoverBody.drawAnnotations(ctx, this.camera, metersPerPx);
-    }
+    this.bodies[center ?? '']?.drawAnnotations(ctx, this.camera, metersPerPx);
+    this.bodies[hover ?? '']?.drawAnnotations(ctx, this.camera, metersPerPx);
   }
 
   private updateCenter({ center }: Settings) {
-    if (center == null) return;
+    this.controls.zoomToCursor = center == null; // when center is set, zoom to body instead of cursor
+    if (center == null) {
+      this.lockedCenter = null;
+      return;
+    }
     const centerBody = this.bodies[center];
     if (centerBody == null) return;
     const vector = this.controls.target.clone().multiplyScalar(SCALE_FACTOR).sub(centerBody.position);
     const distance = vector.length();
     const metersPerPx = this.getMetersPerPixel();
-    const maxTravel = 0.1 * distance; // travel 10% of the remaining distance each step
-    if (distance < 10 * metersPerPx) {
+    const travel = Math.max(5 * metersPerPx, 0.1 * distance); // travel 5px or 10% of the distance each step
+    if (center === this.lockedCenter || distance < travel) {
       this.controls.target.copy(centerBody.position).divideScalar(SCALE_FACTOR);
+      this.lockedCenter = center; // once we've reached the body, "lock" to it to avoid chasing it if it moves quickly
     } else {
-      this.controls.target.add(vector.normalize().multiplyScalar(-maxTravel / SCALE_FACTOR));
+      this.controls.target.add(vector.normalize().multiplyScalar(-travel / SCALE_FACTOR));
     }
   }
 
