@@ -249,6 +249,7 @@ export class SolarSystemModel {
   }
 
   private updateCenter({ center }: Settings) {
+    this.controls.zoomToCursor = center == null;
     if (center == null) return;
     const centerBody = this.bodies[center];
     if (centerBody == null) return;
