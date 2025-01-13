@@ -1,4 +1,4 @@
-import { Point2 } from '../types.ts';
+import { Point2 } from './types.ts';
 
 export const LABEL_FONT_FAMILY = 'Electrolize, sans-serif';
 

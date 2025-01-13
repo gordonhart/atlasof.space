@@ -1,8 +1,4 @@
 import { Box2, Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
-import { magnitude } from '../physics.ts';
-import { Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
-import { AxisIndicator } from './AxisIndicator.ts';
 import {
   drawDotAtLocation,
   drawLabelAtLocation,
@@ -10,7 +6,11 @@ import {
   isLabelFontAvailable,
   isOffScreen,
   LABEL_FONT_FAMILY,
-} from './canvas.ts';
+} from '../canvas.ts';
+import { magnitude } from '../physics.ts';
+import { Settings } from '../state.ts';
+import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
+import { AxisIndicator } from './AxisIndicator.ts';
 import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';

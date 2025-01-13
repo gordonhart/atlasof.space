@@ -61,7 +61,7 @@ export function SolarSystem() {
   function setEpoch(epoch: Epoch) {
     updateSettings(prev => {
       const newSettings = { ...prev, epoch };
-      model.setEpoch(newSettings);
+      model.reset(newSettings, false);
       return newSettings;
     });
   }

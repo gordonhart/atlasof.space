@@ -51,7 +51,6 @@ export function useSolarSystemModel() {
     update: (ctx: CanvasRenderingContext2D, settings: Settings) => modelRef.current?.update(ctx, settings),
     add: (settings: Settings, body: CelestialBody) => modelRef.current?.add(settings, body),
     remove: (id: string) => modelRef.current?.remove(id),
-    setEpoch: (settings: Settings) => modelRef.current?.setEpoch(settings),
-    reset: (settings: Settings) => modelRef.current?.reset(settings),
+    reset: (settings: Settings, viewport = true) => modelRef.current?.reset(settings, viewport),
   };
 }

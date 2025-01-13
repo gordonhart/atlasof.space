@@ -1,8 +1,8 @@
 import { Button, Popover } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { memo, useRef } from 'react';
+import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { dateToEpoch, dateToHumanReadable } from '../../lib/epoch.ts';
-import { LABEL_FONT_FAMILY } from '../../lib/model/canvas.ts';
 import { Epoch } from '../../lib/types.ts';
 
 const JAN_1_1900 = new Date(1900, 0, 1);

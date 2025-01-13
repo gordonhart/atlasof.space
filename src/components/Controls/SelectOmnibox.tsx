@@ -3,7 +3,7 @@ import { Spotlight, spotlight } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
-import { LABEL_FONT_FAMILY } from '../../lib/model/canvas.ts';
+import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';

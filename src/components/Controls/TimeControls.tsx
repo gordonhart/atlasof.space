@@ -1,8 +1,8 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
+import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { epochToDate, Time } from '../../lib/epoch.ts';
-import { LABEL_FONT_FAMILY } from '../../lib/model/canvas.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 import { Epoch } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
