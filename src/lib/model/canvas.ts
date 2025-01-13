@@ -1,6 +1,6 @@
 import { Point2 } from '../types.ts';
 
-export const LABEL_FONT_FAMILY = 'Electrolize, Arial';
+export const LABEL_FONT_FAMILY = 'Electrolize, sans-serif';
 
 export function isOffScreen([xPx, yPx]: Point2, [containerXpx, containerYpx]: Point2, marginPx = 0) {
   return xPx < -marginPx || xPx > containerXpx + marginPx || yPx < -marginPx || yPx > containerYpx + marginPx;

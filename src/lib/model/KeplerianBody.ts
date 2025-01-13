@@ -98,14 +98,19 @@ export class KeplerianBody extends KinematicBody {
     ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
     if (this.labelSize[ctx.font] == null) {
       const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
+      // TODO: if the primary font hasn't been loaded, this will cache the backup font
       this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
     }
     const textPx = this.labelSize[ctx.font];
 
     // body is off-screen; draw a pointer
-    if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
+    const offscreen = isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y]);
+    const shouldDrawDot = this.shouldDrawDot(metersPerPx);
+    if (offscreen && shouldDrawDot) {
+      // TODO: how to always draw moon offscreen indicators underneath parent? better yet, don't draw offscreen
+      //  indicators for moons when the parent isn't visible
       drawOffscreenIndicator(ctx, this.body.color, canvasPx, [bodyXpx, bodyYpx]);
-    } else {
+    } else if (!offscreen) {
       const baseRadius = this.body.radius / metersPerPx;
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
       if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {

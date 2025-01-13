@@ -1,6 +1,7 @@
 import { Box } from '@mantine/core';
 import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
+import { Epoch } from '../../lib/types.ts';
 import { GeneralControls } from './GeneralControls.tsx';
 import { ScaleControls } from './ScaleControls.tsx';
 import { TimeControls } from './TimeControls.tsx';
@@ -11,14 +12,15 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
   model: ModelState;
+  setEpoch: (epoch: Epoch) => void;
   reset: () => void;
 };
-export function Controls({ settings, updateSettings, model, reset }: Props) {
+export function Controls({ settings, updateSettings, model, setEpoch, reset }: Props) {
   const isSmallDisplay = useIsSmallDisplay();
   return (
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
-        <TimeControls settings={settings} updateSettings={updateSettings} model={model} />
+        <TimeControls settings={settings} updateSettings={updateSettings} model={model} setEpoch={setEpoch} />
       </Box>
 
       <Box

@@ -138,6 +138,12 @@ export class SolarSystemModel {
     toRemove.dispose();
   }
 
+  setEpoch(settings: Settings) {
+    this.time = 0;
+    Object.values(this.bodies).forEach(body => body.dispose());
+    this.bodies = this.createBodies(settings);
+  }
+
   reset(settings: Settings) {
     this.time = 0;
     this.setupCamera();

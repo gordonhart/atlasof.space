@@ -1,10 +1,12 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
-import { dateToHumanReadable, epochToDate, Time } from '../../lib/epoch.ts';
+import { epochToDate, Time } from '../../lib/epoch.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
+import { Epoch } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
+import { EpochPopover } from './EpochPopover.tsx';
 
 const SPEEDS = [Time.SECOND, Time.MINUTE, Time.HOUR, Time.DAY, Time.WEEK, Time.MONTH, Time.YEAR, Time.YEAR * 3];
 const FASTEST_SPEED = SPEEDS[SPEEDS.length - 1];
@@ -33,10 +35,11 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
   model: ModelState;
+  setEpoch: (epoch: Epoch) => void;
 };
-export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {
+export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model, setEpoch }: Props) {
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
-  const dateString = dateToHumanReadable(date);
+  const dateRounded = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const [t, tUnits] = useMemo(() => humanTimeUnits(settings.speed, true), [settings.speed]);
 
   const slowDownDisabled = settings.speed < 0 && settings.speed <= -FASTEST_SPEED;
@@ -51,7 +54,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
                 date
               </Text>
             </Group>
-            <Text inherit>{dateString}</Text>
+            <EpochPopover date={dateRounded} setEpoch={setEpoch} />
           </Group>
           <Group gap={8}>
             <Group justify="flex-end" w={40}>

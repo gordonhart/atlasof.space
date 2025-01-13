@@ -910,6 +910,13 @@
     react-textarea-autosize "8.5.5"
     type-fest "^4.27.0"
 
+"@mantine/dates@^7.15.3":
+  version "7.15.3"
+  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-7.15.3.tgz#05c67e97370530c31f5faae50c4086f30977a381"
+  integrity sha512-lv71dcfA8qB43v03cRELC2/G7FQXfAgj0tSMImj2p2FL3PSWWF4WRvW6byiB+hszk4lgooSo7kppzkSMVUlsdA==
+  dependencies:
+    clsx "^2.1.1"
+
 "@mantine/hooks@^7.14.3":
   version "7.14.3"
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.14.3.tgz#26bfbf7d851989be170caaae4189833131a3e28a"
@@ -3937,6 +3944,11 @@ date-time@^3.1.0:
   integrity sha512-uqCUKXE5q1PNBXjPqvwhwJf9SwMoAHBgWJ6DcrnS5o+W2JOiIILl0JEdVD8SGujrNS02GGxgwAg2PN2zONgtjg==
   dependencies:
     time-zone "^1.0.0"
+
+dayjs@^1.11.13:
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
+  integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
 
 debug@2.6.9:
   version "2.6.9"

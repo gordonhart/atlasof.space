@@ -1,4 +1,4 @@
-import { ActionIcon, Button, createTheme, Modal, Paper, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, createTheme, Modal, Paper, Popover, Tooltip } from '@mantine/core';
 
 export const theme = createTheme({
   primaryColor: 'blue',
@@ -13,6 +13,7 @@ export const theme = createTheme({
       },
     }),
     Tooltip: Tooltip.extend({ defaultProps: { fz: 'xs', px: 6, py: 2, openDelay: 400 } }),
+    Popover: Popover.extend({ defaultProps: { transitionProps: { transition: 'fade', duration: 200 } } }),
     Paper: Paper.extend({ defaultProps: { bg: 'transparent', style: { backdropFilter: 'blur(4px)' } } }),
     Modal: Modal.extend({
       defaultProps: {
