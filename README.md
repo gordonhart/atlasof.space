@@ -32,3 +32,11 @@ yarn netlify dev
 - Asteroid fact sheet ([nssdc.gsfc.nasa.gov](https://nssdc.gsfc.nasa.gov/planetary/factsheet/asteroidfact.html))
 - Planet textures ([solarsystemscope.com](https://www.solarsystemscope.com/textures/))
 - Asteroid 3D models ([3d-asteroids.space](https://3d-asteroids.space/asteroids/))
+
+## Development
+
+Infrastructure dependencies:
+
+- [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
+  in [`./functions`](./functions)
+- Bunny.net: CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
