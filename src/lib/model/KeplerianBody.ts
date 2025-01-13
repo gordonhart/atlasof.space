@@ -1,15 +1,16 @@
 import { Box2, Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
-import { magnitude } from '../physics.ts';
-import { Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
-import { AxisIndicator } from './AxisIndicator.ts';
 import {
   drawDotAtLocation,
   drawLabelAtLocation,
   drawOffscreenIndicator,
+  isLabelFontAvailable,
   isOffScreen,
   LABEL_FONT_FAMILY,
-} from './canvas.ts';
+} from '../canvas.ts';
+import { magnitude } from '../physics.ts';
+import { Settings } from '../state.ts';
+import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
+import { AxisIndicator } from './AxisIndicator.ts';
 import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
 import { KinematicBody } from './KinematicBody.ts';
@@ -96,14 +97,18 @@ export class KeplerianBody extends KinematicBody {
     const label = this.body.shortName ?? this.body.name;
     const fontSize = this.hovered ? '14px' : '12px';
     ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
-    if (this.labelSize[ctx.font] == null) {
+    let textPx = this.labelSize[ctx.font];
+    if (textPx == null) {
       const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
-      this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
+      // ensure we are only caching once the primary label font becomes available
+      if (isLabelFontAvailable(ctx)) this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
+      textPx = [textWidthPx, textHeightPx];
     }
-    const textPx = this.labelSize[ctx.font];
 
     // body is off-screen; draw a pointer
     if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
+      // TODO: how to always draw moon offscreen indicators underneath parent? better yet, don't draw offscreen
+      //  indicators for moons when the parent isn't visible
       drawOffscreenIndicator(ctx, this.body.color, canvasPx, [bodyXpx, bodyYpx]);
     } else {
       const baseRadius = this.body.radius / metersPerPx;

@@ -3,6 +3,7 @@ import { Spotlight, spotlight } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
+import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
@@ -28,6 +29,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             key={`${body.name}-${i}`}
             label={body.name}
             className={styles.Action}
+            ff={LABEL_FONT_FAMILY}
             leftSection={
               // TODO: lazy load thumbnails for visible objects only
               <Box miw={24}>
@@ -35,7 +37,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
               </Box>
             }
             rightSection={
-              <Text c="dimmed" size="xs">
+              <Text c="dimmed" size="xs" ff={LABEL_FONT_FAMILY}>
                 {celestialBodyTypeDescription(body)}
               </Text>
             }
@@ -54,8 +56,9 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             key={`${id}-${i}`}
             label={orbitalRegimeDisplayName(id)}
             className={styles.Action}
+            ff={LABEL_FONT_FAMILY}
             rightSection={
-              <Text c="dimmed" size="xs">
+              <Text c="dimmed" size="xs" ff={LABEL_FONT_FAMILY}>
                 Orbital Regime
               </Text>
             }
@@ -92,6 +95,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
         >
           <Spotlight.Search
             placeholder="Enter name..."
+            styles={{ input: { fontFamily: LABEL_FONT_FAMILY } }}
             leftSection={<IconSearch stroke={1.5} />}
             rightSection={
               modifierKey != null ? (
@@ -102,15 +106,17 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             }
           />
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
-            {bodyItems.length + regimeItems.length < 1 && <Spotlight.Empty>Nothing found...</Spotlight.Empty>}
+            {bodyItems.length + regimeItems.length < 1 && (
+              <Spotlight.Empty ff={LABEL_FONT_FAMILY}>Nothing found...</Spotlight.Empty>
+            )}
             {bodyItems.length > 0 && (
-              <Spotlight.ActionsGroup label="Celestial Bodies">
+              <Spotlight.ActionsGroup ff={LABEL_FONT_FAMILY} label="Celestial Bodies">
                 <Box pb="xs" />
                 {bodyItems}
               </Spotlight.ActionsGroup>
             )}
             {regimeItems.length > 0 && (
-              <Spotlight.ActionsGroup label="Orbital Regimes">
+              <Spotlight.ActionsGroup ff={LABEL_FONT_FAMILY} label="Orbital Regimes">
                 <Box pb="xs" />
                 {regimeItems}
               </Spotlight.ActionsGroup>

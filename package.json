@@ -15,6 +15,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.33.1",
     "@mantine/core": "^7.14.3",
+    "@mantine/dates": "^7.15.3",
     "@mantine/hooks": "^7.14.3",
     "@mantine/spotlight": "^7.15.2",
     "@netlify/blobs": "^8.1.0",
@@ -22,6 +23,7 @@
     "@tabler/icons-react": "^3.24.0",
     "@tanstack/react-query": "^5.62.8",
     "@types/ramda": "^0.30.2",
+    "dayjs": "^1.11.13",
     "eslint-plugin-stylelint": "^0.1.1",
     "linkedom": "^0.18.6",
     "prettier": "^3.4.2",

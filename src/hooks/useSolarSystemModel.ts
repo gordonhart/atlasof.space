@@ -42,31 +42,15 @@ export function useSolarSystemModel() {
     initializeCanvas();
   }
 
-  function update(ctx: CanvasRenderingContext2D, settings: Settings) {
-    modelRef.current?.update(ctx, settings);
-  }
-
-  function add(settings: Settings, body: CelestialBody) {
-    modelRef.current?.add(settings, body);
-  }
-
-  function remove(id: string) {
-    modelRef.current?.remove(id);
-  }
-
-  function reset(settings: Settings) {
-    modelRef.current?.reset(settings);
-  }
-
   return {
     containerRef,
     canvasRef,
     modelRef,
     initialize,
-    update,
-    add,
     resize,
-    remove,
-    reset,
+    update: (ctx: CanvasRenderingContext2D, settings: Settings) => modelRef.current?.update(ctx, settings),
+    add: (settings: Settings, body: CelestialBody) => modelRef.current?.add(settings, body),
+    remove: (id: string) => modelRef.current?.remove(id),
+    reset: (settings: Settings, camera = true) => modelRef.current?.reset(settings, camera),
   };
 }

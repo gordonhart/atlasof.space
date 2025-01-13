@@ -4,13 +4,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { getCanvasPixels, isOffScreen } from '../canvas.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
 import { ModelState, Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
-import { getCanvasPixels, isOffScreen } from './canvas.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
 import { FrameRateCounter } from './FrameRateCounter.ts';
@@ -138,10 +138,12 @@ export class SolarSystemModel {
     toRemove.dispose();
   }
 
-  reset(settings: Settings) {
+  reset(settings: Settings, camera = true) {
     this.time = 0;
-    this.setupCamera();
-    this.controls.reset();
+    if (camera) {
+      this.setupCamera();
+      this.controls.reset();
+    }
     Object.values(this.bodies).forEach(body => body.dispose());
     this.bodies = this.createBodies(settings);
   }

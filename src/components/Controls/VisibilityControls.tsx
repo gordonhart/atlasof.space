@@ -1,5 +1,6 @@
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { IconCircle, IconCircleFilled, IconEyeCog } from '@tabler/icons-react';
+import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBodyType, CelestialBodyTypes, HeliocentricOrbitalRegime } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
@@ -49,7 +50,7 @@ export function VisibilityControls({ settings, updateSettings }: Props) {
           <Menu.Item key={regime} onClick={() => toggleVisibleRegime(regime)}>
             <Group gap="xs" align="center">
               {settings.visibleRegimes.has(regime) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
-              {regime}
+              {orbitalRegimeDisplayName(regime)}
             </Group>
           </Menu.Item>
         ))}

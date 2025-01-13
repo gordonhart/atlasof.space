@@ -7,7 +7,7 @@ import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { initialState, UpdateSettings } from '../lib/state.ts';
-import { CelestialBody, isCelestialBody } from '../lib/types.ts';
+import { CelestialBody, Epoch, isCelestialBody } from '../lib/types.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -56,6 +56,14 @@ export function SolarSystem() {
   function removeBody(id: string) {
     updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
     model.remove(id);
+  }
+
+  function setEpoch(epoch: Epoch) {
+    updateSettings(prev => {
+      const newSettings = { ...prev, epoch };
+      model.reset(newSettings, false);
+      return newSettings;
+    });
   }
 
   const resetState = useCallback(() => {
@@ -114,7 +122,13 @@ export function SolarSystem() {
           ref={model.canvasRef}
           style={{ height: '100%', width: '100%', position: 'absolute', pointerEvents: 'none' }}
         />
-        <Controls settings={settings} updateSettings={updateSettings} model={appState.model} reset={resetState} />
+        <Controls
+          settings={settings}
+          updateSettings={updateSettings}
+          model={appState.model}
+          setEpoch={setEpoch}
+          reset={resetState}
+        />
       </Box>
       {focusItem != null && (
         <Box

@@ -1,12 +1,30 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
-import { dateToHumanReadable, epochToDate, Time } from '../../lib/epoch.ts';
+import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
+import { epochToDate, Time } from '../../lib/epoch.ts';
 import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
+import { Epoch } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
+import { EpochPopover } from './EpochPopover.tsx';
 
-const SPEEDS = [Time.SECOND, Time.MINUTE, Time.HOUR, Time.DAY, Time.WEEK, Time.MONTH, Time.YEAR, Time.YEAR * 3];
+const SPEEDS = [
+  Time.SECOND,
+  Time.MINUTE,
+  Time.HOUR,
+  Time.HOUR * 6,
+  Time.HOUR * 12,
+  Time.DAY,
+  Time.DAY * 3,
+  Time.WEEK,
+  Time.MONTH,
+  Time.MONTH * 3,
+  Time.MONTH * 6,
+  Time.YEAR,
+  Time.YEAR * 2,
+  Time.YEAR * 3,
+];
 const FASTEST_SPEED = SPEEDS[SPEEDS.length - 1];
 
 function findNextSpeed(speed: number, direction: 'faster' | 'slower') {
@@ -33,34 +51,23 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
   model: ModelState;
+  setEpoch: (epoch: Epoch) => void;
 };
-export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model }: Props) {
+export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model, setEpoch }: Props) {
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
-  const dateString = dateToHumanReadable(date);
+  const dateRounded = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const [t, tUnits] = useMemo(() => humanTimeUnits(settings.speed, true), [settings.speed]);
 
   const slowDownDisabled = settings.speed < 0 && settings.speed <= -FASTEST_SPEED;
   const speedUpDisabled = settings.speed > 0 && settings.speed >= FASTEST_SPEED;
   return (
-    <Stack gap={4}>
-      <Paper radius="md">
-        <Stack gap={2} fz="xs">
-          <Group gap={8}>
-            <Group justify="flex-end" w={40}>
-              <Text inherit c="dimmed">
-                date
-              </Text>
-            </Group>
-            <Text inherit>{dateString}</Text>
-          </Group>
-          <Group gap={8}>
-            <Group justify="flex-end" w={40}>
-              <Text inherit c="dimmed">
-                speed
-              </Text>
-            </Group>
-            <Text inherit>{tUnits === 'second' && t === 1 ? 'realtime' : `${pluralize(t, tUnits)} / second`}</Text>
-          </Group>
+    <Stack gap={buttonGap}>
+      <Paper pr={buttonGap} py={2} radius="md">
+        <Stack gap={2} align="flex-start" fz="xs">
+          <EpochPopover date={dateRounded} setEpoch={setEpoch} />
+          <Text ml={8} inherit c="dimmed" ff={LABEL_FONT_FAMILY}>
+            {tUnits === 'second' && t === 1 ? 'realtime' : `${pluralize(t, tUnits)} / second`}
+          </Text>
         </Stack>
       </Paper>
 

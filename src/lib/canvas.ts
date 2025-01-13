@@ -1,6 +1,6 @@
-import { Point2 } from '../types.ts';
+import { Point2 } from './types.ts';
 
-export const LABEL_FONT_FAMILY = 'Electrolize, Arial';
+export const LABEL_FONT_FAMILY = 'Electrolize, sans-serif';
 
 export function isOffScreen([xPx, yPx]: Point2, [containerXpx, containerYpx]: Point2, marginPx = 0) {
   return xPx < -marginPx || xPx > containerXpx + marginPx || yPx < -marginPx || yPx > containerYpx + marginPx;
@@ -9,6 +9,17 @@ export function isOffScreen([xPx, yPx]: Point2, [containerXpx, containerYpx]: Po
 export function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
   const dpr = window.devicePixelRatio ?? 1;
   return [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
+}
+
+export function isLabelFontAvailable(ctx: CanvasRenderingContext2D) {
+  const exampleString = 'An Example String';
+  ctx.save();
+  ctx.font = `12px ${LABEL_FONT_FAMILY}`;
+  const primary = ctx.measureText(exampleString);
+  ctx.font = '12px sans-serif';
+  const fallback = ctx.measureText(exampleString);
+  ctx.restore();
+  return primary.width !== fallback.width;
 }
 
 // TODO: corners behave weirdly with this implementation; may want 4 more types for the corners
