@@ -5,5 +5,4 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   assetsInclude: ['assets/*.{png,gif,jpg,ttf}'],
-  build: { sourcemap: true },
 });

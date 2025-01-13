@@ -6,13 +6,6 @@ publish = "dist"
 [build.environment]
 NODE_VERSION = "20"
 
-[build.processing]
-skip_processing = false
-
-[build.processing.js]
-bundle = false
-minify = false
-
 [[redirects]]
 force = true
 from = '/api/*'
