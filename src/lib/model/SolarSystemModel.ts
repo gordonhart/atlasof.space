@@ -138,9 +138,9 @@ export class SolarSystemModel {
     toRemove.dispose();
   }
 
-  reset(settings: Settings, viewport = true) {
+  reset(settings: Settings, camera = true) {
     this.time = 0;
-    if (viewport) {
+    if (camera) {
       this.setupCamera();
       this.controls.reset();
     }

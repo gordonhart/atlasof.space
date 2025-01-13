@@ -106,13 +106,11 @@ export class KeplerianBody extends KinematicBody {
     }
 
     // body is off-screen; draw a pointer
-    const offscreen = isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y]);
-    const shouldDrawDot = this.shouldDrawDot(metersPerPx);
-    if (offscreen && shouldDrawDot) {
+    if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
       // TODO: how to always draw moon offscreen indicators underneath parent? better yet, don't draw offscreen
       //  indicators for moons when the parent isn't visible
       drawOffscreenIndicator(ctx, this.body.color, canvasPx, [bodyXpx, bodyYpx]);
-    } else if (!offscreen) {
+    } else {
       const baseRadius = this.body.radius / metersPerPx;
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
       if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {

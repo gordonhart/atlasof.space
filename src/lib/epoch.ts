@@ -44,10 +44,10 @@ export function epochToDate({ year, month, day, hour, minute, second }: Epoch): 
 
 export function nowEpoch(): Epoch {
   const now = new Date();
-  return dateToEpoch(getJulianDate(now), now);
+  return dateToEpoch(dateToJulianDay(now), now);
 }
 
-function getJulianDate(date: Date): `JD${string}` {
+export function dateToJulianDay(date: Date): `JD${string}` {
   const { year, month: monthIndex, day, hour, minute, second } = dateToEpoch('', date);
   const month = monthIndex + 1; // JavaScript months are 0-based
   const millisecond = date.getUTCMilliseconds();
