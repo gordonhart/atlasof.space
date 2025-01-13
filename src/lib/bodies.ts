@@ -653,6 +653,7 @@ export const ASTEROIDS = [
 ];
 
 export const CG67P: CelestialBody = celestialBodyWithDefaults({
+  id: 'cg67p',
   type: CelestialBodyType.COMET,
   name: '67P/Churyumov–Gerasimenko',
   shortName: '67P/C–G',
