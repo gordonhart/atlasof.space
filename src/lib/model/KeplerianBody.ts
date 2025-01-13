@@ -7,7 +7,6 @@ import {
   drawDotAtLocation,
   drawLabelAtLocation,
   drawOffscreenIndicator,
-  getCanvasPixels,
   isOffScreen,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
@@ -28,6 +27,7 @@ export class KeplerianBody extends KinematicBody {
   private readonly dotRadius: number;
   private readonly labelBox = new Box2();
   private readonly screenPoint = new Vector2(); // reuse for efficiency
+  private readonly labelSize: Record<string /* font */, [number, number] /* w, h */> = {}; // cache for efficiency
 
   private visible: boolean = false;
   private hovered: boolean = false;
@@ -81,7 +81,13 @@ export class KeplerianBody extends KinematicBody {
   }
 
   // draw the dot and label for this body
-  drawAnnotations(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number, drawLabel = true) {
+  drawAnnotations(
+    ctx: CanvasRenderingContext2D,
+    camera: OrthographicCamera,
+    metersPerPx: number,
+    canvasPx: Point2,
+    drawLabel = true
+  ) {
     if (!this.visible) return;
 
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera, this.resolution);
@@ -90,9 +96,11 @@ export class KeplerianBody extends KinematicBody {
     const label = this.body.shortName ?? this.body.name;
     const fontSize = this.hovered ? '14px' : '12px';
     ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
-    const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
-    const textPx: Point2 = [textWidthPx, textHeightPx];
-    const canvasPx = getCanvasPixels(ctx);
+    if (this.labelSize[ctx.font] == null) {
+      const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
+      this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
+    }
+    const textPx = this.labelSize[ctx.font];
 
     // body is off-screen; draw a pointer
     if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
@@ -100,7 +108,7 @@ export class KeplerianBody extends KinematicBody {
     } else {
       const baseRadius = this.body.radius / metersPerPx;
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
-      if (bodyRadius < this.dotRadius) {
+      if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
         drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
       }
       if (drawLabel && this.shouldDrawLabel(metersPerPx)) {
@@ -129,6 +137,14 @@ export class KeplerianBody extends KinematicBody {
     return settings.hover === id || settings.center === id || settings.visibleTypes.has(this.body.type);
   }
 
+  // show dot only when the orbit is larger than the dot itself; helps selectively hide moons until zoomed
+  private shouldDrawDot(metersPerPx: number) {
+    const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
+    const isStar = this.body.type === CelestialBodyType.STAR; // always draw for stars
+    return this.focused || this.hovered || isStar || (this.visible && longAxisPx > this.dotRadius);
+  }
+
+  // progressively hide labels as you zoom out, prioritizing certain types (e.g. planets) over others (e.g. asteroids)
   private shouldDrawLabel(metersPerPx: number) {
     const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
     const minLongAxisPx = MIN_ORBIT_PX_LABEL_VISIBLE[this.body.type];
