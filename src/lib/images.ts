@@ -1,127 +1,133 @@
-import arrokothAnimationSrc from '../../assets/arrokoth-rotation.gif';
-import arrokothSrc from '../../assets/arrokoth-thumb.jpg';
-import bennuLandingSrc from '../../assets/bennu-landing.jpg';
-import bennuRotationSrc from '../../assets/bennu-rotation.gif';
-import bennuSurfaceSrc from '../../assets/bennu-surface.jpg';
-import bennuSrc from '../../assets/bennu-thumb.png';
-import callistoSrc from '../../assets/callisto-thumb.jpg';
-import ceresTextureSrc from '../../assets/ceres-texture.jpg';
-import ceresSrc from '../../assets/ceres-thumb.jpg';
-import cg67pAnimationSrc from '../../assets/cg67p-animation.gif';
-import cg57pSrc from '../../assets/cg67p-thumb.jpg';
-import cg67pThumb2Src from '../../assets/cg67p-thumb2.jpg';
-import cg67pThumb3Src from '../../assets/cg67p-thumb3.jpg';
-import deimosSrc from '../../assets/deimos-thumb.jpg';
-import earthTextureSrc from '../../assets/earth-texture.jpg';
-import earthSrc from '../../assets/earth-thumb.jpg';
-import erosSrc from '../../assets/eros-thumb.jpg';
-import europaSrc from '../../assets/europa-thumb.jpg';
-import farfaroutSrc from '../../assets/farfarout-thumb.gif';
-import firmamentTextureSrc from '../../assets/firmament.jpg';
-import ganymedeSrc from '../../assets/ganymede-thumb.jpg';
-import hygieaSrc from '../../assets/hygiea-thumb.jpg';
-import ioSrc from '../../assets/io-thumb.jpg';
-import junoSrc from '../../assets/juno-thumb.jpg';
-import jupiterTextureSrc from '../../assets/jupiter-texture.jpg';
-import jupiterSrc from '../../assets/jupiter-thumb.jpg';
-import lunaTextureSrc from '../../assets/luna-texture.jpg';
-import lunaSrc from '../../assets/luna-thumb.jpg';
-import lutetiaSrc from '../../assets/lutetia-thumb.jpg';
-import makemakeSrc from '../../assets/makemake-thumb.jpg';
-import marsCuriositySrc from '../../assets/mars-curiosity.jpg';
-import marsKorolevSrc from '../../assets/mars-korolev.jpg';
-import marsTextureSrc from '../../assets/mars-texture.jpg';
-import marsSrc from '../../assets/mars-thumb.jpg';
-import marsVikingSrc from '../../assets/mars-viking.jpg';
-import mathildeSrc from '../../assets/mathilde-thumb.jpg';
-import mercuryTextureSrc from '../../assets/mercury-texture.jpg';
-import mercurySrc from '../../assets/mercury-thumb.jpg';
-import mimasSrc from '../../assets/mimas-thumb.jpg';
-import neptuneTextureSrc from '../../assets/neptune-texture.jpg';
-import neptuneSrc from '../../assets/neptune-thumb.jpg';
-import nereusSrc from '../../assets/nereus-thumb.gif';
-import pallasSrc from '../../assets/pallas-thumb.jpg';
-import phobosSrc from '../../assets/phobos-thumb.jpg';
-import plutoSrc from '../../assets/pluto-thumb.jpg';
-import psycheIllustrationSrc from '../../assets/psyche-illustration.jpg';
-import psycheMissionIllustrationSrc from '../../assets/psyche-mission-illustration.jpg';
-import ryuguRotationSrc from '../../assets/ryugu-rotation.gif';
-import ryuguSurfaceSrc from '../../assets/ryugu-surface.jpg';
-import ryuguSurface2Src from '../../assets/ryugu-surface2.jpg';
-import ryuguSrc from '../../assets/ryugu-thumb.jpg';
-import saturnRingsTextureSrc from '../../assets/saturn-rings-texture.png';
-import saturnTextureSrc from '../../assets/saturn-texture.jpg';
-import saturnSrc from '../../assets/saturn-thumb.jpg';
-import solTextureSrc from '../../assets/sol-texture.jpg';
-import solSrc from '../../assets/sol-thumb.jpg';
-import uranusTextureSrc from '../../assets/uranus-texture.jpg';
-import uranusSrc from '../../assets/uranus-thumb.jpg';
-import venusMagellanSrc from '../../assets/venus-magellan.jpg';
-import venusTextureSrc from '../../assets/venus-texture.jpg';
-import venusSrc from '../../assets/venus-thumb.jpg';
-import venusVeneraSrc from '../../assets/venus-venera.jpg';
-import venusVenera2Src from '../../assets/venus-venera2.jpg';
-import vestaSrc from '../../assets/vesta-thumb.jpg';
+import { map } from 'ramda';
 import * as Bodies from './bodies.ts';
 
+const CDN_URL = 'https://atlasofspace.b-cdn.net';
+const IMAGE_FILENAMES = {
+  arrokothAnimationSrc: 'arrokoth-rotation.gif',
+  arrokothSrc: 'arrokoth-thumb.jpg',
+  bennuLandingSrc: 'bennu-landing.jpg',
+  bennuRotationSrc: 'bennu-rotation.gif',
+  bennuSurfaceSrc: 'bennu-surface.jpg',
+  bennuSrc: 'bennu-thumb.png',
+  callistoSrc: 'callisto-thumb.jpg',
+  ceresTextureSrc: 'ceres-texture.jpg',
+  ceresSrc: 'ceres-thumb.jpg',
+  cg67pAnimationSrc: 'cg67p-animation.gif',
+  cg57pSrc: 'cg67p-thumb.jpg',
+  cg67pThumb2Src: 'cg67p-thumb2.jpg',
+  cg67pThumb3Src: 'cg67p-thumb3.jpg',
+  deimosSrc: 'deimos-thumb.jpg',
+  earthTextureSrc: 'earth-texture.jpg',
+  earthSrc: 'earth-thumb.jpg',
+  erosSrc: 'eros-thumb.jpg',
+  europaSrc: 'europa-thumb.jpg',
+  farfaroutSrc: 'farfarout-thumb.gif',
+  firmamentTextureSrc: 'firmament.jpg',
+  ganymedeSrc: 'ganymede-thumb.jpg',
+  hygieaSrc: 'hygiea-thumb.jpg',
+  ioSrc: 'io-thumb.jpg',
+  junoSrc: 'juno-thumb.jpg',
+  jupiterTextureSrc: 'jupiter-texture.jpg',
+  jupiterSrc: 'jupiter-thumb.jpg',
+  lunaTextureSrc: 'luna-texture.jpg',
+  lunaSrc: 'luna-thumb.jpg',
+  lutetiaSrc: 'lutetia-thumb.jpg',
+  makemakeSrc: 'makemake-thumb.jpg',
+  marsCuriositySrc: 'mars-curiosity.jpg',
+  marsKorolevSrc: 'mars-korolev.jpg',
+  marsTextureSrc: 'mars-texture.jpg',
+  marsSrc: 'mars-thumb.jpg',
+  marsVikingSrc: 'mars-viking.jpg',
+  mathildeSrc: 'mathilde-thumb.jpg',
+  mercuryTextureSrc: 'mercury-texture.jpg',
+  mercurySrc: 'mercury-thumb.jpg',
+  mimasSrc: 'mimas-thumb.jpg',
+  neptuneTextureSrc: 'neptune-texture.jpg',
+  neptuneSrc: 'neptune-thumb.jpg',
+  nereusSrc: 'nereus-thumb.gif',
+  pallasSrc: 'pallas-thumb.jpg',
+  phobosSrc: 'phobos-thumb.jpg',
+  plutoSrc: 'pluto-thumb.jpg',
+  psycheIllustrationSrc: 'psyche-illustration.jpg',
+  psycheMissionIllustrationSrc: 'psyche-mission-illustration.jpg',
+  ryuguRotationSrc: 'ryugu-rotation.gif',
+  ryuguSurfaceSrc: 'ryugu-surface.jpg',
+  ryuguSurface2Src: 'ryugu-surface2.jpg',
+  ryuguSrc: 'ryugu-thumb.jpg',
+  saturnRingsTextureSrc: 'saturn-rings-texture.png',
+  saturnTextureSrc: 'saturn-texture.jpg',
+  saturnSrc: 'saturn-thumb.jpg',
+  solTextureSrc: 'sol-texture.jpg',
+  solSrc: 'sol-thumb.jpg',
+  uranusTextureSrc: 'uranus-texture.jpg',
+  uranusSrc: 'uranus-thumb.jpg',
+  venusMagellanSrc: 'venus-magellan.jpg',
+  venusTextureSrc: 'venus-texture.jpg',
+  venusSrc: 'venus-thumb.jpg',
+  venusVeneraSrc: 'venus-venera.jpg',
+  venusVenera2Src: 'venus-venera2.jpg',
+  vestaSrc: 'vesta-thumb.jpg',
+};
+const IMAGE_URLS = map(filename => `${CDN_URL}/${filename}`, IMAGE_FILENAMES);
+
 export const Thumbnails: Record<string, string> = {
-  [Bodies.SOL.name]: solSrc as string,
-  [Bodies.MERCURY.name]: mercurySrc as string,
-  [Bodies.VENUS.name]: venusSrc as string,
-  [Bodies.EARTH.name]: earthSrc as string,
-  [Bodies.LUNA.name]: lunaSrc as string,
-  [Bodies.MARS.name]: marsSrc as string,
-  [Bodies.PHOBOS.name]: phobosSrc as string,
-  [Bodies.DEIMOS.name]: deimosSrc as string,
-  [Bodies.JUPITER.name]: jupiterSrc as string,
-  [Bodies.IO.name]: ioSrc as string,
-  [Bodies.EUROPA.name]: europaSrc as string,
-  [Bodies.GANYMEDE.name]: ganymedeSrc as string,
-  [Bodies.CALLISTO.name]: callistoSrc as string,
-  [Bodies.SATURN.name]: saturnSrc as string,
-  [Bodies.MIMAS.name]: mimasSrc as string,
-  [Bodies.URANUS.name]: uranusSrc as string,
-  [Bodies.NEPTUNE.name]: neptuneSrc as string,
-  [Bodies.PLUTO.name]: plutoSrc as string,
-  [Bodies.CERES.name]: ceresSrc as string,
-  [Bodies.PALLAS.name]: pallasSrc as string,
-  [Bodies.VESTA.name]: vestaSrc as string,
-  [Bodies.HYGIEA.name]: hygieaSrc as string,
-  [Bodies.JUNO.name]: junoSrc as string,
-  [Bodies.CG67P.name]: cg57pSrc as string,
-  [Bodies.RYUGU.name]: ryuguSrc as string,
-  [Bodies.BENNU.name]: bennuSrc as string,
-  [Bodies.LUTETIA.name]: lutetiaSrc as string,
-  [Bodies.NEREUS.name]: nereusSrc as string,
-  [Bodies.MAKEMAKE.name]: makemakeSrc as string,
-  [Bodies.EROS.name]: erosSrc as string,
-  [Bodies.MATHILDE.name]: mathildeSrc as string,
-  [Bodies.ARROKOTH.name]: arrokothSrc as string,
-  [Bodies.FARFAROUT.name]: farfaroutSrc as string,
+  [Bodies.SOL.name]: IMAGE_URLS.solSrc,
+  [Bodies.MERCURY.name]: IMAGE_URLS.mercurySrc,
+  [Bodies.VENUS.name]: IMAGE_URLS.venusSrc,
+  [Bodies.EARTH.name]: IMAGE_URLS.earthSrc,
+  [Bodies.LUNA.name]: IMAGE_URLS.lunaSrc,
+  [Bodies.MARS.name]: IMAGE_URLS.marsSrc,
+  [Bodies.PHOBOS.name]: IMAGE_URLS.phobosSrc,
+  [Bodies.DEIMOS.name]: IMAGE_URLS.deimosSrc,
+  [Bodies.JUPITER.name]: IMAGE_URLS.jupiterSrc,
+  [Bodies.IO.name]: IMAGE_URLS.ioSrc,
+  [Bodies.EUROPA.name]: IMAGE_URLS.europaSrc,
+  [Bodies.GANYMEDE.name]: IMAGE_URLS.ganymedeSrc,
+  [Bodies.CALLISTO.name]: IMAGE_URLS.callistoSrc,
+  [Bodies.SATURN.name]: IMAGE_URLS.saturnSrc,
+  [Bodies.MIMAS.name]: IMAGE_URLS.mimasSrc,
+  [Bodies.URANUS.name]: IMAGE_URLS.uranusSrc,
+  [Bodies.NEPTUNE.name]: IMAGE_URLS.neptuneSrc,
+  [Bodies.PLUTO.name]: IMAGE_URLS.plutoSrc,
+  [Bodies.CERES.name]: IMAGE_URLS.ceresSrc,
+  [Bodies.PALLAS.name]: IMAGE_URLS.pallasSrc,
+  [Bodies.VESTA.name]: IMAGE_URLS.vestaSrc,
+  [Bodies.HYGIEA.name]: IMAGE_URLS.hygieaSrc,
+  [Bodies.JUNO.name]: IMAGE_URLS.junoSrc,
+  [Bodies.CG67P.name]: IMAGE_URLS.cg57pSrc,
+  [Bodies.RYUGU.name]: IMAGE_URLS.ryuguSrc,
+  [Bodies.BENNU.name]: IMAGE_URLS.bennuSrc,
+  [Bodies.LUTETIA.name]: IMAGE_URLS.lutetiaSrc,
+  [Bodies.NEREUS.name]: IMAGE_URLS.nereusSrc,
+  [Bodies.MAKEMAKE.name]: IMAGE_URLS.makemakeSrc,
+  [Bodies.EROS.name]: IMAGE_URLS.erosSrc,
+  [Bodies.MATHILDE.name]: IMAGE_URLS.mathildeSrc,
+  [Bodies.ARROKOTH.name]: IMAGE_URLS.arrokothSrc,
+  [Bodies.FARFAROUT.name]: IMAGE_URLS.farfaroutSrc,
 } as const;
 
 export const GalleryImages: Record<string, Array<string>> = {
-  [Bodies.MARS.name]: [marsKorolevSrc, marsVikingSrc, marsCuriositySrc] as Array<string>,
-  [Bodies.CG67P.name]: [cg67pAnimationSrc, cg67pThumb2Src, cg67pThumb3Src] as Array<string>,
-  [Bodies.VENUS.name]: [venusVeneraSrc, venusVenera2Src, venusMagellanSrc] as Array<string>,
-  [Bodies.ARROKOTH.name]: [arrokothAnimationSrc] as Array<string>,
-  [Bodies.BENNU.name]: [bennuLandingSrc, bennuRotationSrc, bennuSurfaceSrc] as Array<string>,
-  [Bodies.RYUGU.name]: [ryuguSurfaceSrc, ryuguSurface2Src, ryuguRotationSrc] as Array<string>,
-  [Bodies.PSYCHE.name]: [psycheIllustrationSrc, psycheMissionIllustrationSrc] as Array<string>,
+  [Bodies.MARS.name]: [IMAGE_URLS.marsKorolevSrc, IMAGE_URLS.marsVikingSrc, IMAGE_URLS.marsCuriositySrc],
+  [Bodies.CG67P.name]: [IMAGE_URLS.cg67pAnimationSrc, IMAGE_URLS.cg67pThumb2Src, IMAGE_URLS.cg67pThumb3Src],
+  [Bodies.VENUS.name]: [IMAGE_URLS.venusVeneraSrc, IMAGE_URLS.venusVenera2Src, IMAGE_URLS.venusMagellanSrc],
+  [Bodies.ARROKOTH.name]: [IMAGE_URLS.arrokothAnimationSrc],
+  [Bodies.BENNU.name]: [IMAGE_URLS.bennuLandingSrc, IMAGE_URLS.bennuRotationSrc, IMAGE_URLS.bennuSurfaceSrc],
+  [Bodies.RYUGU.name]: [IMAGE_URLS.ryuguSurfaceSrc, IMAGE_URLS.ryuguSurface2Src, IMAGE_URLS.ryuguRotationSrc],
+  [Bodies.PSYCHE.name]: [IMAGE_URLS.psycheIllustrationSrc, IMAGE_URLS.psycheMissionIllustrationSrc],
 } as const;
 
 export const Textures: Record<string, string> = {
-  FIRMAMENT: firmamentTextureSrc as string,
-  [Bodies.SOL.name]: solTextureSrc as string,
-  [Bodies.MERCURY.name]: mercuryTextureSrc as string,
-  [Bodies.VENUS.name]: venusTextureSrc as string,
-  [Bodies.EARTH.name]: earthTextureSrc as string,
-  [Bodies.LUNA.name]: lunaTextureSrc as string,
-  [Bodies.MARS.name]: marsTextureSrc as string,
-  [Bodies.JUPITER.name]: jupiterTextureSrc as string,
-  [Bodies.SATURN.name]: saturnTextureSrc as string,
-  [Bodies.URANUS.name]: uranusTextureSrc as string,
-  [Bodies.NEPTUNE.name]: neptuneTextureSrc as string,
-  [Bodies.CERES.name]: ceresTextureSrc as string,
-  [Bodies.SATURN.rings![0].name]: saturnRingsTextureSrc as string,
+  FIRMAMENT: IMAGE_URLS.firmamentTextureSrc,
+  [Bodies.SOL.name]: IMAGE_URLS.solTextureSrc,
+  [Bodies.MERCURY.name]: IMAGE_URLS.mercuryTextureSrc,
+  [Bodies.VENUS.name]: IMAGE_URLS.venusTextureSrc,
+  [Bodies.EARTH.name]: IMAGE_URLS.earthTextureSrc,
+  [Bodies.LUNA.name]: IMAGE_URLS.lunaTextureSrc,
+  [Bodies.MARS.name]: IMAGE_URLS.marsTextureSrc,
+  [Bodies.JUPITER.name]: IMAGE_URLS.jupiterTextureSrc,
+  [Bodies.SATURN.name]: IMAGE_URLS.saturnTextureSrc,
+  [Bodies.URANUS.name]: IMAGE_URLS.uranusTextureSrc,
+  [Bodies.NEPTUNE.name]: IMAGE_URLS.neptuneTextureSrc,
+  [Bodies.CERES.name]: IMAGE_URLS.ceresTextureSrc,
+  [Bodies.SATURN.rings![0].name]: IMAGE_URLS.saturnRingsTextureSrc,
 };
