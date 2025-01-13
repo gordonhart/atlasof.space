@@ -10,7 +10,7 @@ import { ORBITAL_REGIMES } from '../regimes.ts';
 import { ModelState, Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
-import { isOffScreen } from './canvas.ts';
+import { getCanvasPixels, isOffScreen } from './canvas.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
 import { FrameRateCounter } from './FrameRateCounter.ts';
@@ -242,6 +242,7 @@ export class SolarSystemModel {
   private drawAnnotations(ctx: CanvasRenderingContext2D, settings: Settings) {
     ctx.clearRect(0, 0, this.resolution.x, this.resolution.y);
     const metersPerPx = this.getMetersPerPixel();
+    const canvasPx = getCanvasPixels(ctx);
     Object.values(this.bodies)
       .map<[KeplerianBody, number]>(body => {
         const distance = !body.isVisible(settings)
@@ -256,7 +257,7 @@ export class SolarSystemModel {
       .filter(([, distance]) => distance > 0)
       .sort(([, aDistance], [, bDistance]) => bDistance - aDistance)
       .forEach(([body]) => {
-        body.drawAnnotations(ctx, this.camera, metersPerPx, settings.drawLabel);
+        body.drawAnnotations(ctx, this.camera, metersPerPx, canvasPx, settings.drawLabel);
       });
   }
 

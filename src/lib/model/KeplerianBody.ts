@@ -7,7 +7,6 @@ import {
   drawDotAtLocation,
   drawLabelAtLocation,
   drawOffscreenIndicator,
-  getCanvasPixels,
   isOffScreen,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
@@ -82,7 +81,13 @@ export class KeplerianBody extends KinematicBody {
   }
 
   // draw the dot and label for this body
-  drawAnnotations(ctx: CanvasRenderingContext2D, camera: OrthographicCamera, metersPerPx: number, drawLabel = true) {
+  drawAnnotations(
+    ctx: CanvasRenderingContext2D,
+    camera: OrthographicCamera,
+    metersPerPx: number,
+    canvasPx: Point2,
+    drawLabel = true
+  ) {
     if (!this.visible) return;
 
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera, this.resolution);
@@ -96,7 +101,6 @@ export class KeplerianBody extends KinematicBody {
       this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
     }
     const textPx = this.labelSize[ctx.font];
-    const canvasPx = getCanvasPixels(ctx);
 
     // body is off-screen; draw a pointer
     if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
