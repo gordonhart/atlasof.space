@@ -11,6 +11,8 @@ export function DirectionIndicator({ vernalEquinox }: Props) {
   const width = iconSize + pad * 2;
   return (
     <Tooltip
+      offset={0}
+      position="bottom-end"
       label={
         <Group gap={4}>
           <Text inherit>Vernal Equinox</Text>
