@@ -11,6 +11,17 @@ export function getCanvasPixels(ctx: CanvasRenderingContext2D): Point2 {
   return [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
 }
 
+export function isLabelFontAvailable(ctx: CanvasRenderingContext2D) {
+  const exampleString = 'An Example String';
+  ctx.save();
+  ctx.font = `12px ${LABEL_FONT_FAMILY}`;
+  const primary = ctx.measureText(exampleString);
+  ctx.font = '12px sans-serif';
+  const fallback = ctx.measureText(exampleString);
+  ctx.restore();
+  return primary.width !== fallback.width;
+}
+
 // TODO: corners behave weirdly with this implementation; may want 4 more types for the corners
 export function drawOffscreenIndicator(
   ctx: CanvasRenderingContext2D,

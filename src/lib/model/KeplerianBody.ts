@@ -7,6 +7,7 @@ import {
   drawDotAtLocation,
   drawLabelAtLocation,
   drawOffscreenIndicator,
+  isLabelFontAvailable,
   isOffScreen,
   LABEL_FONT_FAMILY,
 } from './canvas.ts';
@@ -96,12 +97,13 @@ export class KeplerianBody extends KinematicBody {
     const label = this.body.shortName ?? this.body.name;
     const fontSize = this.hovered ? '14px' : '12px';
     ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
-    if (this.labelSize[ctx.font] == null) {
+    let textPx = this.labelSize[ctx.font];
+    if (textPx == null) {
       const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
-      // TODO: if the primary font hasn't been loaded, this will cache the backup font
-      this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
+      // ensure we are only caching once the primary label font becomes available
+      if (isLabelFontAvailable(ctx)) this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
+      textPx = [textWidthPx, textHeightPx];
     }
-    const textPx = this.labelSize[ctx.font];
 
     // body is off-screen; draw a pointer
     const offscreen = isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y]);
