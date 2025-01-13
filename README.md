@@ -20,7 +20,7 @@ yarn netlify dev
   - [ ] Render 3D models for asteroids
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
-  - [ ] Set URL part for focused planet to enable link sharing
+  - [x] Set URL part for focused planet to enable link sharing
 
 ## Resources
 
@@ -39,4 +39,4 @@ Infrastructure dependencies:
 
 - [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
   in [`./functions`](./functions)
-- Bunny.net: CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
+- [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
