@@ -136,7 +136,8 @@ export class KeplerianBody extends KinematicBody {
   // show dot only when the orbit is larger than the dot itself; helps selectively hide moons until zoomed
   private shouldDrawDot(metersPerPx: number) {
     const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
-    return this.focused || this.hovered || (this.visible && longAxisPx > this.dotRadius);
+    const isStar = this.body.type === CelestialBodyType.STAR; // always draw for stars
+    return this.focused || this.hovered || isStar || (this.visible && longAxisPx > this.dotRadius);
   }
 
   // progressively hide labels as you zoom out, prioritizing certain types (e.g. planets) over others (e.g. asteroids)
