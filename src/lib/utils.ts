@@ -53,7 +53,9 @@ export function celestialBodyTypeName(type: CelestialBodyType, plural = false): 
 
 export function celestialBodyTypeDescription(body: CelestialBody): string {
   const baseName = celestialBodyTypeName(body.type);
-  return body.type !== CelestialBodyType.MOON ? baseName : `${baseName} of ${body.elements.wrt}`;
+  // TODO: this is a hack; shouldn't assume IDs are human-readable. Works for now
+  const parentCapitalized = `${String(body.elements.wrt).charAt(0).toUpperCase()}${String(body.elements.wrt).slice(1)}`;
+  return body.type !== CelestialBodyType.MOON ? baseName : `${baseName} of ${parentCapitalized}`;
 }
 
 export function notNullish<TValue>(value: TValue | null | undefined): value is TValue {

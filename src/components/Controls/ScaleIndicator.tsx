@@ -1,5 +1,6 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
 import { AU } from '../../lib/bodies.ts';
+import { LABEL_FONT_FAMILY } from '../../lib/model/canvas.ts';
 import { ModelState } from '../../lib/state.ts';
 
 type Props = Pick<ModelState, 'metersPerPx'>;
@@ -18,7 +19,7 @@ export function ScaleIndicator({ metersPerPx }: Props) {
     <Paper p={4} bg="transparent" radius="md" style={{ backdropFilter: 'blur(4px)' }}>
       <Stack gap={4} align="flex-end">
         <Box w={scaleWidthM / metersPerPx} h={1} style={{ backgroundColor: 'var(--mantine-color-gray-light-color)' }} />
-        <Text size="xs">
+        <Text size="xs" ff={LABEL_FONT_FAMILY}>
           {scaleDisplay.toLocaleString()} {scaleUnits}
         </Text>
       </Stack>
