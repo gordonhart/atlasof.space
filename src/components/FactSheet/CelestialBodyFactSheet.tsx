@@ -32,7 +32,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
 
-  const parent = bodies.find(({ name }) => name === body.elements.wrt);
+  const parent = bodies.find(({ id }) => id === body.elements.wrt);
   const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);
   const [periodTime, periodUnits] = humanTimeUnits(period);
   const [axisValue, axisUnits] = humanDistanceUnits(elements.semiMajorAxis);
