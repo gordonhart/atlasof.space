@@ -116,7 +116,7 @@ export class KeplerianBody extends KinematicBody {
       if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
         drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
       }
-      if (drawLabel && this.shouldDrawLabel(metersPerPx)) {
+      if ((drawLabel || this.hovered) && this.shouldDrawLabel(metersPerPx)) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;
         const [p0, p1] = drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
         this.labelBox.min.x = Math.min(p0[0], p1[0]);
