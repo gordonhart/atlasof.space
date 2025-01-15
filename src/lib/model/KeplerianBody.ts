@@ -137,6 +137,7 @@ export class KeplerianBody extends KinematicBody {
     const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
     const bodyIsNear = distance < threshold;
     // TODO: labels are slightly non-rectangular -- check the actual label polygon if the pointer is within the box?
+    // TODO: when you hover over a body, its radius grows and the label can be offset -- can lead to flickeriness
     const labelIsNear = includeLabel && this.labelBox.containsPoint(this.screenPoint.set(xPx, yPx));
     return [distance, bodyIsNear || labelIsNear];
   }

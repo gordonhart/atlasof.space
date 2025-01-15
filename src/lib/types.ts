@@ -48,6 +48,12 @@ export type CelestialBodyFact = {
   value: string;
 };
 
+export type CelestialBodyAssets = {
+  thumbnail?: string;
+  texture?: string;
+  gallery?: Array<string>;
+};
+
 export enum CelestialBodyType {
   STAR = 'star',
   PLANET = 'planet',
@@ -90,6 +96,7 @@ export type CelestialBody = {
   rotation?: RotationElements; // leave empty to omit spin
   rings?: Array<Ring>;
   color: `#${string}`; // hex
+  assets?: CelestialBodyAssets;
   facts?: Array<CelestialBodyFact>;
 };
 

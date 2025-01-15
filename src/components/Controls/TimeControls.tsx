@@ -66,7 +66,7 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
         <Stack gap={2} align="flex-start" fz="xs">
           <EpochPopover date={dateRounded} setEpoch={setEpoch} />
           <Text ml={8} inherit c="dimmed" ff={LABEL_FONT_FAMILY}>
-            {tUnits === 'second' && t === 1 ? 'realtime' : `${pluralize(t, tUnits)} / second`}
+            {tUnits === 'second' && t === 1 ? 'speed: realtime' : `${pluralize(t, tUnits)} / second`}
           </Text>
         </Stack>
       </Paper>
