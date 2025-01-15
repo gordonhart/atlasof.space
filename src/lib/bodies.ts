@@ -830,7 +830,7 @@ export const PLUTO = celestialBodyWithDefaults({
 });
 
 // TODO: Charon and Pluto's other moons are inclined relative to Pluto's equator
-export const CHARON: CelestialBody = celestialBodyWithDefaults({
+export const CHARON = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Charon',
   influencedBy: [SOL.id, PLUTO.id],
@@ -851,9 +851,10 @@ export const CHARON: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
   },
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'charon-thumb.jpg' },
 });
 
-export const STYX: CelestialBody = celestialBodyWithDefaults({
+export const STYX = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Styx',
   influencedBy: [SOL.id, PLUTO.id],
@@ -874,6 +875,7 @@ export const STYX: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 3.24 * Time.DAY,
   },
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'styx-thumb.jpg' },
 });
 
 export const NIX: CelestialBody = celestialBodyWithDefaults({
@@ -893,9 +895,10 @@ export const NIX: CelestialBody = celestialBodyWithDefaults({
   mass: 2.6e16,
   radius: 35e3 / 2, // not spherical
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'nix-thumb.jpg' },
 });
 
-export const KERBEROS: CelestialBody = celestialBodyWithDefaults({
+export const KERBEROS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Kerberos',
   influencedBy: [SOL.id, PLUTO.id],
@@ -916,9 +919,10 @@ export const KERBEROS: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 5.31 * Time.DAY,
   },
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'kerberos-thumb.jpg' },
 });
 
-export const HYDRA: CelestialBody = celestialBodyWithDefaults({
+export const HYDRA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Hydra',
   influencedBy: [SOL.id, PLUTO.id],
@@ -935,6 +939,7 @@ export const HYDRA: CelestialBody = celestialBodyWithDefaults({
   mass: 3.01e16,
   radius: 19e3, // not spherical
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'hydra-thumb.jpg' },
 });
 
 export const PLUTO_SYSTEM = [PLUTO, CHARON, STYX, NIX, KERBEROS, HYDRA];
@@ -1710,7 +1715,7 @@ export const NEPTUNE = celestialBodyWithDefaults({
   },
 });
 
-export const TRITON: CelestialBody = celestialBodyWithDefaults({
+export const TRITON = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Triton',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1731,9 +1736,10 @@ export const TRITON: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
   },
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'triton-thumb.jpg' },
 });
 
-export const PROTEUS: CelestialBody = celestialBodyWithDefaults({
+export const PROTEUS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Proteus',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1750,9 +1756,10 @@ export const PROTEUS: CelestialBody = celestialBodyWithDefaults({
   mass: 2.5e19, // wide uncertainty bars
   radius: 209e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'proteus-thumb.jpg' },
 });
 
-export const NEREID: CelestialBody = celestialBodyWithDefaults({
+export const NEREID = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Nereid',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1769,9 +1776,10 @@ export const NEREID: CelestialBody = celestialBodyWithDefaults({
   mass: 3.57e19,
   radius: 357e3 / 2,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'nereid-thumb.jpg' },
 });
 
-export const DESPINA: CelestialBody = celestialBodyWithDefaults({
+export const DESPINA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Despina',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1788,9 +1796,10 @@ export const DESPINA: CelestialBody = celestialBodyWithDefaults({
   mass: 1.1e18, // high uncertainty
   radius: 75e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'despina-thumb.jpg' },
 });
 
-export const LARISSA: CelestialBody = celestialBodyWithDefaults({
+export const LARISSA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Larissa',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1807,9 +1816,10 @@ export const LARISSA: CelestialBody = celestialBodyWithDefaults({
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'larissa-thumb.jpg' },
 });
 
-export const GALATEA: CelestialBody = celestialBodyWithDefaults({
+export const GALATEA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Galatea',
   influencedBy: [SOL.id, NEPTUNE.id],
@@ -1826,6 +1836,7 @@ export const GALATEA: CelestialBody = celestialBodyWithDefaults({
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'galatea-thumb.jpg' },
 });
 
 // TODO: there are more moons
