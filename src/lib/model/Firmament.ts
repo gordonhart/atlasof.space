@@ -12,7 +12,7 @@ import {
 } from 'three';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ECLIPTIC_TILT } from '../bodies.ts';
-import { Textures } from '../images.ts';
+import { FIRMAMENT_TEXTURE_URL } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 import { CAMERA_INIT } from './constants.ts';
 
@@ -30,7 +30,7 @@ export class Firmament {
     this.camera.lookAt(...CAMERA_INIT.lookAt);
 
     const geometry = new SphereGeometry(2e6, 32, 32);
-    const texture = new TextureLoader().load(Textures.FIRMAMENT);
+    const texture = new TextureLoader().load(FIRMAMENT_TEXTURE_URL);
     const material = new MeshBasicMaterial({
       map: texture,
       side: BackSide,

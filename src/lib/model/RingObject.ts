@@ -8,8 +8,9 @@ import {
   Vector2,
   TextureLoader,
   Vector3,
+  MeshBasicMaterial,
+  Color,
 } from 'three';
-import { Textures } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 import { CelestialBody, Ring } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
@@ -35,10 +36,14 @@ export class RingObject {
       uv.setXY(i, (vertex.angle() + Math.PI) / (2 * Math.PI), v);
     }
 
-    // TODO: use body color if no texture is provided
-    const textureLoader = new TextureLoader();
-    const textureMap = textureLoader.load(Textures[ring.name]);
-    const material = new MeshStandardMaterial({ map: textureMap, side: DoubleSide });
+    let material: Material;
+    if (ring.texture != null) {
+      const textureLoader = new TextureLoader();
+      const textureMap = textureLoader.load(ring.texture);
+      material = new MeshStandardMaterial({ map: textureMap, side: DoubleSide });
+    } else {
+      material = new MeshBasicMaterial({ color: new Color(body.color) });
+    }
     this.ring = new Mesh(geometry, material);
     this.ring.rotation.x =
       degreesToRadians(body.elements.inclination) + degreesToRadians(body.rotation?.axialTilt ?? 0);

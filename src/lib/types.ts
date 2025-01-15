@@ -41,11 +41,18 @@ export type Ring = {
   name: string; // name of this ring
   start: number; // meters from the center of the parent
   end: number; // meters from the center of the parent
+  texture?: string;
 };
 
 export type CelestialBodyFact = {
   label: string;
   value: string;
+};
+
+export type CelestialBodyAssets = {
+  thumbnail?: string;
+  texture?: string;
+  gallery?: Array<string>;
 };
 
 export enum CelestialBodyType {
@@ -90,6 +97,7 @@ export type CelestialBody = {
   rotation?: RotationElements; // leave empty to omit spin
   rings?: Array<Ring>;
   color: `#${string}`; // hex
+  assets?: CelestialBodyAssets;
   facts?: Array<CelestialBodyFact>;
 };
 
