@@ -1335,7 +1335,7 @@ export const SATURN = celestialBodyWithDefaults({
       name: 'DCBAF', // represents the main rings, from innermost to outermost
       start: 70000e3, // rough value from Saturn's center for start of D ring
       end: 142000e3, // rough value from Saturn's center for end of F ring
-      thumbnail: 'saturn-rings-texture.png',
+      texture: 'saturn-rings-texture.png',
     },
   ],
   color: '#d7be87',
