@@ -1,6 +1,6 @@
 import { Image } from '@mantine/core';
 import { useState } from 'react';
-import { Thumbnails } from '../../lib/images.ts';
+import { asCdnUrl } from '../../lib/images.ts';
 import { CelestialBody } from '../../lib/types.ts';
 
 type Props = {
@@ -10,7 +10,10 @@ type Props = {
 export function Thumbnail({ body, size }: Props) {
   const { name, type } = body;
   const [isValid, setIsValid] = useState(false);
-  const url = Thumbnails[name] ?? `/api/thumbnail?${new URLSearchParams({ search: `${name} ${type}` })}`;
+  const url =
+    body.assets?.thumbnail != null
+      ? asCdnUrl(body.assets.thumbnail)
+      : `/api/thumbnail?${new URLSearchParams({ search: `${name} ${type}` })}`;
   const validStyle = isValid ? {} : { display: 'none' };
   return (
     <Image

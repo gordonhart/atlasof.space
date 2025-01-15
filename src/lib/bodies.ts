@@ -801,7 +801,7 @@ export const TESLA_ROADSTER: CelestialBody = celestialBodyWithDefaults({
 
 export const SPACECRAFT = [TESLA_ROADSTER];
 
-export const PLUTO: CelestialBody = celestialBodyWithDefaults({
+export const PLUTO = celestialBodyWithDefaults({
   name: '134340 Pluto',
   shortName: 'Pluto',
   type: CelestialBodyType.DWARF_PLANET,
@@ -826,6 +826,7 @@ export const PLUTO: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
   },
   color: '#E7C7A4',
+  assets: { thumbnail: 'pluto-thumb.jpg' },
 });
 
 // TODO: Charon and Pluto's other moons are inclined relative to Pluto's equator
@@ -938,7 +939,7 @@ export const HYDRA: CelestialBody = celestialBodyWithDefaults({
 
 export const PLUTO_SYSTEM = [PLUTO, CHARON, STYX, NIX, KERBEROS, HYDRA];
 
-export const QUAOAR: CelestialBody = celestialBodyWithDefaults({
+export const QUAOAR = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '50000 Quaoar',
   shortName: 'Quaoar',
@@ -956,9 +957,10 @@ export const QUAOAR: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 1.2e21,
   radius: 545e3,
+  assets: { thumbnail: 'quaoar-thumb.jpg' },
 });
 
-export const SEDNA: CelestialBody = celestialBodyWithDefaults({
+export const SEDNA = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '90377 Sedna',
   shortName: 'Sedna',
@@ -976,9 +978,11 @@ export const SEDNA: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 2.5e21, // very rough estimate
   radius: 906e3 / 2,
+  assets: { thumbnail: 'sedna-thumb.jpg' },
+  facts: [{ label: 'class', value: 'sednoid' }],
 });
 
-export const ORCUS: CelestialBody = celestialBodyWithDefaults({
+export const ORCUS = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '90482 Orcus',
   shortName: 'Orcus',
@@ -996,9 +1000,10 @@ export const ORCUS: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 6.348e20, // very rough estimate
   radius: 910e3 / 2,
+  assets: { thumbnail: 'orcus-thumb.gif' },
 });
 
-export const ERIS: CelestialBody = celestialBodyWithDefaults({
+export const ERIS = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136199 Eris',
   shortName: 'Eris',
@@ -1016,9 +1021,10 @@ export const ERIS: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 1.6466e22,
   radius: 1163e3,
+  assets: { thumbnail: 'eris-thumb.jpg' },
 });
 
-export const HAUMEA: CelestialBody = celestialBodyWithDefaults({
+export const HAUMEA = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136108 Haumea',
   shortName: 'Haumea',
@@ -1036,9 +1042,10 @@ export const HAUMEA: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 4.006e21,
   radius: 780e3,
+  assets: { thumbnail: 'haumea-thumb.jpg' },
 });
 
-export const MAKEMAKE: CelestialBody = celestialBodyWithDefaults({
+export const MAKEMAKE = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136472 Makemake',
   shortName: 'Makemake',
@@ -1056,9 +1063,10 @@ export const MAKEMAKE: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 3.1e21,
   radius: 715e3,
+  assets: { thumbnail: 'makemake-thumb.jpg' },
 });
 
-export const ARROKOTH: CelestialBody = celestialBodyWithDefaults({
+export const ARROKOTH = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '486958 Arrokoth', // also known as Ultima Thule
   shortName: 'Arrokoth',
@@ -1076,9 +1084,13 @@ export const ARROKOTH: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 174.418, // degrees
     meanAnomaly: 316.551, // degrees
   },
+  assets: {
+    thumbnail: 'arrokoth-thumb.jpg',
+    gallery: ['arrokoth-rotation.gif'],
+  },
 });
 
-export const GONGGONG: CelestialBody = celestialBodyWithDefaults({
+export const GONGGONG = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '225088 Gonggong',
   shortName: 'Gonggong',
@@ -1096,9 +1108,10 @@ export const GONGGONG: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 207.6675, // degrees
     meanAnomaly: 106.496, // degrees
   },
+  assets: { thumbnail: 'gonggong-thumb.jpg' },
 });
 
-export const VP113: CelestialBody = celestialBodyWithDefaults({
+export const VP113 = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '2012 VP133',
   influencedBy: [SOL.id],
@@ -1115,9 +1128,11 @@ export const VP113: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 293.8, // degrees
     meanAnomaly: 3.5, // degrees
   },
+  assets: { thumbnail: 'vp113-thumb.gif' },
+  facts: [{ label: 'class', value: 'sednoid' }],
 });
 
-export const LELEAKUHONUA: CelestialBody = celestialBodyWithDefaults({
+export const LELEAKUHONUA = celestialBodyWithDefaults({
   id: 'leleakuhonua',
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '541132 Leleākūhonua',
@@ -1136,9 +1151,11 @@ export const LELEAKUHONUA: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 117.778, // degrees
     meanAnomaly: 359.418, // degrees
   },
+  assets: { thumbnail: 'leleakuhonua-thumb.jpg' },
+  facts: [{ label: 'class', value: 'sednoid' }],
 });
 
-export const FARFAROUT: CelestialBody = celestialBodyWithDefaults({
+export const FARFAROUT = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '2018 AG37',
   shortName: 'FarFarOut',
@@ -1156,6 +1173,7 @@ export const FARFAROUT: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 231.9,
     meanAnomaly: 186.9,
   },
+  assets: { thumbnail: 'farfarout-thumb.gif' },
 });
 
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
@@ -1172,7 +1190,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   FARFAROUT,
 ];
 
-export const JUPITER: CelestialBody = celestialBodyWithDefaults({
+export const JUPITER = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Jupiter',
   influencedBy: [SOL.id],
@@ -1194,9 +1212,13 @@ export const JUPITER: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
   },
   color: '#e9be76',
+  assets: {
+    thumbnail: 'jupiter-thumb.jpg',
+    texture: 'jupiter-texture.jpg',
+  },
 });
 
-export const IO: CelestialBody = celestialBodyWithDefaults({
+export const IO = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Io',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1213,9 +1235,10 @@ export const IO: CelestialBody = celestialBodyWithDefaults({
   mass: 8.931938e22,
   radius: 1821.6e3,
   color: '#fcf794',
+  assets: { thumbnail: 'io-thumb.jpg' },
 });
 
-export const EUROPA: CelestialBody = celestialBodyWithDefaults({
+export const EUROPA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Europa',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1232,6 +1255,7 @@ export const EUROPA: CelestialBody = celestialBodyWithDefaults({
   mass: 4.799844e22,
   radius: 1560.8e3,
   color: '#bfcccb',
+  assets: { thumbnail: 'europa-thumb.jpg' },
   facts: [
     {
       label: 'volume of water',
@@ -1241,7 +1265,7 @@ export const EUROPA: CelestialBody = celestialBodyWithDefaults({
   ],
 });
 
-export const GANYMEDE: CelestialBody = celestialBodyWithDefaults({
+export const GANYMEDE = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Ganymede',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1258,9 +1282,10 @@ export const GANYMEDE: CelestialBody = celestialBodyWithDefaults({
   mass: 1.4819e23,
   radius: 2634.1e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'ganymede-thumb.jpg' },
 });
 
-export const CALLISTO: CelestialBody = celestialBodyWithDefaults({
+export const CALLISTO = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Callisto',
   influencedBy: [SOL.id, JUPITER.id],
@@ -1277,12 +1302,13 @@ export const CALLISTO: CelestialBody = celestialBodyWithDefaults({
   mass: 1.075938e23,
   radius: 2410.3e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'callisto-thumb.jpg' },
 });
 
 // TODO: there are more moons
 export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
 
-export const SATURN: CelestialBody = celestialBodyWithDefaults({
+export const SATURN = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Saturn',
   influencedBy: [SOL.id],
@@ -1309,12 +1335,17 @@ export const SATURN: CelestialBody = celestialBodyWithDefaults({
       name: 'DCBAF', // represents the main rings, from innermost to outermost
       start: 70000e3, // rough value from Saturn's center for start of D ring
       end: 142000e3, // rough value from Saturn's center for end of F ring
+      thumbnail: 'saturn-rings-texture.png',
     },
   ],
   color: '#d7be87',
+  assets: {
+    thumbnail: 'saturn-thumb.jpg',
+    texture: 'saturn-texture.jpg',
+  },
 });
 
-export const MIMAS: CelestialBody = celestialBodyWithDefaults({
+export const MIMAS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Mimas',
   influencedBy: [SOL.id, SATURN.id],
@@ -1331,9 +1362,10 @@ export const MIMAS: CelestialBody = celestialBodyWithDefaults({
   mass: 3.7493e19,
   radius: 198.2e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'mimas-thumb.jpg' },
 });
 
-export const ENCELADUS: CelestialBody = celestialBodyWithDefaults({
+export const ENCELADUS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Enceladus',
   influencedBy: [SOL.id, SATURN.id],
@@ -1350,9 +1382,10 @@ export const ENCELADUS: CelestialBody = celestialBodyWithDefaults({
   mass: 1.08022e20,
   radius: 252.1e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'enceladus-thumb.jpg' },
 });
 
-export const TETHYS: CelestialBody = celestialBodyWithDefaults({
+export const TETHYS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Tethys',
   influencedBy: [SOL.id, SATURN.id],
@@ -1369,9 +1402,10 @@ export const TETHYS: CelestialBody = celestialBodyWithDefaults({
   mass: 6.17449e20,
   radius: 531.1e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'tethys-thumb.jpg' },
 });
 
-export const DIONE: CelestialBody = celestialBodyWithDefaults({
+export const DIONE = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Dione',
   influencedBy: [SOL.id, SATURN.id],
@@ -1388,9 +1422,10 @@ export const DIONE: CelestialBody = celestialBodyWithDefaults({
   mass: 1.095452e21,
   radius: 561.4e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'dione-thumb.jpg' },
 });
 
-export const RHEA: CelestialBody = celestialBodyWithDefaults({
+export const RHEA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Rhea',
   influencedBy: [SOL.id, SATURN.id],
@@ -1407,9 +1442,10 @@ export const RHEA: CelestialBody = celestialBodyWithDefaults({
   mass: 2.306518e21,
   radius: 763.8e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'rhea-thumb.jpg' },
 });
 
-export const TITAN: CelestialBody = celestialBodyWithDefaults({
+export const TITAN = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Titan',
   influencedBy: [SOL.id, SATURN.id],
@@ -1426,9 +1462,10 @@ export const TITAN: CelestialBody = celestialBodyWithDefaults({
   mass: 1.3452e23,
   radius: 2574.7e3,
   color: '#f1e193',
+  assets: { thumbnail: 'titan-thumb.jpg' },
 });
 
-export const IAPETUS: CelestialBody = celestialBodyWithDefaults({
+export const IAPETUS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Iapetus',
   influencedBy: [SOL.id, SATURN.id],
@@ -1445,9 +1482,10 @@ export const IAPETUS: CelestialBody = celestialBodyWithDefaults({
   mass: 1.805635e21,
   radius: 734.5e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'iapetus-thumb.jpg' },
 });
 
-export const HYPERION: CelestialBody = celestialBodyWithDefaults({
+export const HYPERION = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Hyperion',
   influencedBy: [SOL.id, SATURN.id],
@@ -1464,9 +1502,10 @@ export const HYPERION: CelestialBody = celestialBodyWithDefaults({
   mass: 5.551e18,
   radius: 135e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'hyperion-thumb.jpg' },
 });
 
-export const PHOEBE: CelestialBody = celestialBodyWithDefaults({
+export const PHOEBE = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Phoebe',
   influencedBy: [SOL.id, SATURN.id],
@@ -1487,11 +1526,12 @@ export const PHOEBE: CelestialBody = celestialBodyWithDefaults({
   mass: 8.3123e18,
   radius: 106.5e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'phoebe-thumb.jpg' },
 });
 
 export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
 
-export const URANUS: CelestialBody = celestialBodyWithDefaults({
+export const URANUS = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
   influencedBy: [SOL.id],
@@ -1514,9 +1554,13 @@ export const URANUS: CelestialBody = celestialBodyWithDefaults({
   },
   color: '#9bcee6',
   // rings: [], // TODO
+  assets: {
+    thumbnail: 'uranus-thumb.jpg',
+    texture: 'uranus-texture.jpg',
+  },
 });
 
-export const PUCK: CelestialBody = celestialBodyWithDefaults({
+export const PUCK = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Puck',
   influencedBy: [SOL.id, URANUS.id],
@@ -1533,9 +1577,10 @@ export const PUCK: CelestialBody = celestialBodyWithDefaults({
   mass: 1.91e18,
   radius: 81e3 / 2,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'puck-thumb.jpg' },
 });
 
-export const MIRANDA: CelestialBody = celestialBodyWithDefaults({
+export const MIRANDA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Miranda',
   influencedBy: [SOL.id, URANUS.id],
@@ -1552,9 +1597,10 @@ export const MIRANDA: CelestialBody = celestialBodyWithDefaults({
   mass: 6.293e19,
   radius: 235.8e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'miranda-thumb.jpg' },
 });
 
-export const ARIEL: CelestialBody = celestialBodyWithDefaults({
+export const ARIEL = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Ariel',
   influencedBy: [SOL.id, URANUS.id],
@@ -1571,9 +1617,10 @@ export const ARIEL: CelestialBody = celestialBodyWithDefaults({
   mass: 1.2331e21,
   radius: 578.9e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'ariel-thumb.jpg' },
 });
 
-export const UMBRIEL: CelestialBody = celestialBodyWithDefaults({
+export const UMBRIEL = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Umbriel',
   influencedBy: [SOL.id, URANUS.id],
@@ -1590,9 +1637,10 @@ export const UMBRIEL: CelestialBody = celestialBodyWithDefaults({
   mass: 1.2885e21,
   radius: 584.7e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'umbriel-thumb.jpg' },
 });
 
-export const TITANIA: CelestialBody = celestialBodyWithDefaults({
+export const TITANIA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Titania',
   influencedBy: [SOL.id, URANUS.id],
@@ -1609,9 +1657,10 @@ export const TITANIA: CelestialBody = celestialBodyWithDefaults({
   mass: 3.455e21,
   radius: 788.4e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'titania-thumb.jpg' },
 });
 
-export const OBERON: CelestialBody = celestialBodyWithDefaults({
+export const OBERON = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Oberon',
   influencedBy: [SOL.id, URANUS.id],
@@ -1628,11 +1677,12 @@ export const OBERON: CelestialBody = celestialBodyWithDefaults({
   mass: 3.1104e21,
   radius: 761.4e3,
   color: DEFAULT_MOON_COLOR,
+  assets: { thumbnail: 'oberon-thumb.jpg' },
 });
 
 export const URANUS_SYSTEM = [URANUS, PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON];
 
-export const NEPTUNE: CelestialBody = celestialBodyWithDefaults({
+export const NEPTUNE = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Neptune',
   influencedBy: [SOL.id],
@@ -1654,6 +1704,10 @@ export const NEPTUNE: CelestialBody = celestialBodyWithDefaults({
     siderealPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
   },
   color: '#5a7cf6',
+  assets: {
+    thumbnail: 'neptune-thumb.jpg',
+    texture: 'neptune-texture.jpg',
+  },
 });
 
 export const TRITON: CelestialBody = celestialBodyWithDefaults({

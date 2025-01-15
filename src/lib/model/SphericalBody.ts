@@ -9,7 +9,7 @@ import {
   TextureLoader,
   Vector3,
 } from 'three';
-import { Textures } from '../images.ts';
+import { asCdnUrl } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 import { CelestialBody, CelestialBodyType } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
@@ -67,12 +67,12 @@ export class SphericalBody {
 
   private getShapeMaterial(): Material {
     const color = new Color(this.body.color);
-    const texture = Textures[this.body.name];
+    const texture = this.body.assets?.texture;
     const emissive = this.body.type === CelestialBodyType.STAR;
 
     if (texture != null) {
       const textureLoader = new TextureLoader();
-      const textureMap = textureLoader.load(texture);
+      const textureMap = textureLoader.load(asCdnUrl(texture));
       if (emissive) {
         // TODO: better parameterization of this?
         return new MeshStandardMaterial({

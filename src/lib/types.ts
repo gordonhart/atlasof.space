@@ -41,6 +41,7 @@ export type Ring = {
   name: string; // name of this ring
   start: number; // meters from the center of the parent
   end: number; // meters from the center of the parent
+  thumbnail?: string;
 };
 
 export type CelestialBodyFact = {

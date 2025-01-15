@@ -2,7 +2,7 @@ import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo, ReactNode } from 'react';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
-import { GalleryImages } from '../../lib/images.ts';
+import { asCdnUrl } from '../../lib/images.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
@@ -67,7 +67,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];
   const factBullets = factsAsBullets(facts);
-  const galleryUrls = GalleryImages[name] ?? [];
+  const galleryUrls = (body.assets?.gallery ?? []).map(asCdnUrl);
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
