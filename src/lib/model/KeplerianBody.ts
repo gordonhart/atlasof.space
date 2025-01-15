@@ -127,12 +127,17 @@ export class KeplerianBody extends KinematicBody {
     }
   }
 
-  isNearCursor([xPx, yPx]: Point2, camera: OrthographicCamera, threshold = 10): [number, boolean] {
+  isNearCursor(
+    [xPx, yPx]: Point2,
+    camera: OrthographicCamera,
+    includeLabel: boolean,
+    threshold = 10
+  ): [number, boolean] {
     const [bodyXpx, bodyYpx] = this.getScreenPosition(camera, this.resolution);
     const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
     const bodyIsNear = distance < threshold;
     // TODO: labels are slightly non-rectangular -- check the actual label polygon if the pointer is within the box?
-    const labelIsNear = this.labelBox.containsPoint(this.screenPoint.set(xPx, yPx));
+    const labelIsNear = includeLabel && this.labelBox.containsPoint(this.screenPoint.set(xPx, yPx));
     return [distance, bodyIsNear || labelIsNear];
   }
 
