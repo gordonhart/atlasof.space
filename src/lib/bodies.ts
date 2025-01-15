@@ -738,7 +738,7 @@ export const CG67P = celestialBodyWithDefaults({
   },
 });
 
-export const HALLEY: CelestialBody = celestialBodyWithDefaults({
+export const HALLEY = celestialBodyWithDefaults({
   type: CelestialBodyType.COMET,
   name: "Halley's Comet (1P/Halley)",
   shortName: 'Halley',
@@ -755,9 +755,10 @@ export const HALLEY: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 112.05,
     meanAnomaly: 0.07323,
   },
+  assets: { thumbnail: 'halley-thumb.jpg' },
 });
 
-export const HALE_BOPP: CelestialBody = celestialBodyWithDefaults({
+export const HALE_BOPP = celestialBodyWithDefaults({
   type: CelestialBodyType.COMET,
   name: 'Hale-Bopp (C/1995 O1)',
   shortName: 'Hale-Bopp',
@@ -774,11 +775,12 @@ export const HALE_BOPP: CelestialBody = celestialBodyWithDefaults({
     argumentOfPeriapsis: 130.41,
     meanAnomaly: 3.8784,
   },
+  assets: { thumbnail: 'hale-bopp-thumb.jpg' },
 });
 
 export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
-export const TESLA_ROADSTER: CelestialBody = celestialBodyWithDefaults({
+export const TESLA_ROADSTER = celestialBodyWithDefaults({
   name: "Elon Musk's Tesla Roadster",
   shortName: 'Roadster',
   type: CelestialBodyType.SPACECRAFT,
@@ -797,6 +799,7 @@ export const TESLA_ROADSTER: CelestialBody = celestialBodyWithDefaults({
   mass: 1300,
   radius: 2,
   color: DEFAULT_SPACECRAFT_COLOR,
+  assets: { thumbnail: 'roadster-thumb.jpg' },
 });
 
 export const SPACECRAFT = [TESLA_ROADSTER];
