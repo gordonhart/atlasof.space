@@ -1,5 +1,6 @@
 import * as Bodies from './bodies.ts';
-import { CelestialBodyId } from './types.ts';
+import * as Regimes from './regimes.ts';
+import { CelestialBodyId, HeliocentricOrbitalRegime } from './types.ts';
 
 const Author = {
   SUAREZ: 'Daniel Suarez',
@@ -8,6 +9,12 @@ const Author = {
   REYNOLDS: 'Alastair Reynolds',
   MCAULEY: 'Paul McAuley',
   LEM: 'Stanisław Lem',
+  CLARKE: 'Arthur C. Clarke',
+  HEINLEIN: 'Robert A. Heinlein',
+  DICK: 'Philip K. Dick',
+  WEIR: 'Andy Weir',
+  BESTER: 'Alfred Bester',
+  CARD: 'Orson Scott Card',
 };
 
 export type Book = {
@@ -16,10 +23,8 @@ export type Book = {
   series?: { name: string; index: number };
   year: number;
   thumbnail?: string;
-  bodies: Array<{
-    id: CelestialBodyId;
-    details?: string;
-  }>;
+  bodies?: Array<{ id: CelestialBodyId; details?: string }>;
+  regimes?: Array<{ id: HeliocentricOrbitalRegime; details?: string }>;
 };
 
 // delta-v duology
@@ -29,6 +34,7 @@ export const DELTA_V: Book = {
   series: { name: 'Delta-v', index: 0 },
   year: 2019,
   bodies: [{ id: Bodies.RYUGU.id }],
+  regimes: [{ id: Regimes.INNER_SYSTEM.id }],
 };
 export const CRITICAL_MASS: Book = {
   title: 'Critical Mass',
@@ -36,6 +42,7 @@ export const CRITICAL_MASS: Book = {
   series: { name: 'Delta-v', index: 1 },
   year: 2023,
   bodies: [{ id: Bodies.RYUGU.id }, { id: Bodies.LUNA.id }],
+  regimes: [{ id: Regimes.INNER_SYSTEM.id }],
 };
 
 // red mars trilogy
@@ -85,6 +92,7 @@ export const PUSHING_ICE: Book = {
   bodies: [
     // { id: Bodies.JANUS.id } // TODO
   ],
+  regimes: [{ id: Regimes.OUTER_SYSTEM.id }],
 };
 export const EVERSION: Book = {
   title: 'Eversion',
@@ -105,6 +113,7 @@ export const PALLAS: Book = {
   author: 'Lisa Kuznak',
   year: 2023,
   bodies: [{ id: Bodies.PALLAS.id }],
+  regimes: [{ id: Regimes.ASTEROID_BELT.id }],
 };
 
 export const THEFT_OF_FIRE: Book = {
@@ -115,6 +124,7 @@ export const THEFT_OF_FIRE: Book = {
     { id: Bodies.SEDNA.id },
     // { id: Bodies.ARACHNE.id }, // TODO
   ],
+  regimes: [{ id: Regimes.ASTEROID_BELT.id }, { id: Regimes.KUIPER_BELT.id }],
 };
 
 // quiet war duology
@@ -135,6 +145,7 @@ export const QUIET_WAR: Book = {
     { id: Bodies.DIONE.id },
     { id: Bodies.TITAN.id },
   ],
+  regimes: [{ id: Regimes.OUTER_SYSTEM.id }],
 };
 export const GARDENS_OF_THE_SUN: Book = {
   title: 'Gardens of the Sun',
@@ -161,6 +172,7 @@ export const GARDENS_OF_THE_SUN: Book = {
     { id: Bodies.PROTEUS.id },
     { id: Bodies.TRITON.id },
   ],
+  regimes: [{ id: Regimes.OUTER_SYSTEM.id }],
 };
 
 export const EUROPA_DEEP: Book = {
@@ -168,6 +180,7 @@ export const EUROPA_DEEP: Book = {
   author: 'Gary Gibson',
   year: 2023,
   bodies: [{ id: Bodies.EUROPA.id }],
+  regimes: [{ id: Regimes.OUTER_SYSTEM.id }],
 };
 
 export const FIASCO: Book = {
@@ -192,6 +205,7 @@ export const SATURN_RUN: Book = {
   author: 'John Sandford, Ctein',
   year: 2015,
   bodies: [{ id: Bodies.SATURN.id }],
+  regimes: [{ id: Regimes.OUTER_SYSTEM.id }],
 };
 
 export const THIN_AIR: Book = {
@@ -216,6 +230,7 @@ export const BLINDSIGHT: Book = {
     // { id: Bodies.BURNS_CAULFIELD.id } // TODO: fictional
     // { id: Bodies.BIG_BEN.id } // TODO: fictional
   ],
+  regimes: [{ id: Regimes.KUIPER_BELT.id }],
 };
 export const ECHOPRAXIA: Book = {
   title: 'Echopraxia',
@@ -224,6 +239,7 @@ export const ECHOPRAXIA: Book = {
   bodies: [
     // { id: Bodies.ICARUS_STATION.id } // TODO: fictional
   ],
+  regimes: [{ id: Regimes.INNER_SYSTEM.id }],
 };
 
 export const NOVA: Book = {
@@ -275,4 +291,90 @@ export const LEVIATHAN_WAKES: Book = {
     { id: Bodies.PHOEBE.id },
     { id: Bodies.TITAN.id },
   ],
+  regimes: [{ id: Regimes.ASTEROID_BELT.id }],
+};
+
+export const FALL_OF_MOONDUST: Book = {
+  title: 'A Fall of Moondust',
+  author: Author.CLARKE,
+  year: 1961,
+  bodies: [{ id: Bodies.LUNA.id }],
+};
+
+export const HARSH_MISTRESS: Book = {
+  title: 'The Moon Is a Harsh Mistress',
+  author: Author.HEINLEIN,
+  year: 1966,
+  bodies: [{ id: Bodies.LUNA.id }],
+};
+
+export const PALMER_ELDRITCH: Book = {
+  title: 'The Three Stigmata of Palmer Eldritch',
+  author: Author.DICK,
+  year: 1965,
+  bodies: [
+    { id: Bodies.LUNA.id },
+    { id: Bodies.MARS.id },
+    { id: Bodies.PLUTO.id }, // TODO: verify
+  ],
+};
+
+export const THE_MARTIAN: Book = {
+  title: 'The Martian',
+  author: Author.WEIR,
+  year: 2011,
+  bodies: [{ id: Bodies.MARS.id }],
+};
+export const ARTEMIS: Book = {
+  title: 'ARTEMIS',
+  author: Author.WEIR,
+  year: 2017,
+  bodies: [{ id: Bodies.LUNA.id }],
+};
+
+export const TIGER_TIGER: Book = {
+  title: 'The Stars My Destination',
+  author: Author.BESTER,
+  year: 1956,
+  bodies: [{ id: Bodies.CERES.id }, { id: Bodies.MARS.id }],
+};
+export const DEMOLISHED_MAN: Book = {
+  title: 'The Demolished Man',
+  author: Author.BESTER,
+  year: 1953,
+  bodies: [],
+};
+
+export const PANDORAS_STAR: Book = {
+  title: "Pandora's Star",
+  author: 'Peter F. Hamilton',
+  year: 2004,
+  bodies: [{ id: Bodies.MARS.id }], // TODO: are there more?
+};
+
+export const SPIN: Book = {
+  title: 'Spin',
+  author: 'Robert Charles Wilson',
+  year: 2005,
+  bodies: [{ id: Bodies.MARS.id }],
+};
+
+export const ENDERS_GAME: Book = {
+  title: "Ender's Game",
+  author: Author.CARD,
+  year: 1985,
+  bodies: [{ id: Bodies.EROS.id }],
+};
+export const EARTH_UNAWARE: Book = {
+  title: 'Earth Unaware',
+  author: Author.CARD,
+  year: 2020,
+  regimes: [{ id: Regimes.KUIPER_BELT.id }],
+};
+
+export const ONE_WAY: Book = {
+  title: 'One Way',
+  author: 'S.J. Morden',
+  year: 2018,
+  bodies: [{ id: Bodies.MARS.id }],
 };
