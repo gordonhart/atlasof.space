@@ -21,7 +21,6 @@ yarn netlify dev
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [x] Set URL part for focused planet to enable link sharing
-  - [ ] Add thumbnails for all bodies to CDN (reduce usage of `/thumbnail` endpoint)
 
 ## Resources
 
