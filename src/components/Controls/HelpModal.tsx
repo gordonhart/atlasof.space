@@ -86,7 +86,7 @@ type Props = {
 };
 export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) {
   const isTouchDevice = useIsTouchDevice();
-  const { s: isSmallDisplay } = useDisplaySize();
+  const { sm: isSmallDisplay } = useDisplaySize();
   const modifierKey = useModifierKey();
   const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
