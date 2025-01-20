@@ -1,6 +1,7 @@
 import { Carousel } from '@mantine/carousel';
 import { Group, Image, Stack, Title } from '@mantine/core';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
+import styles from './Gallery.module.css';
 
 type Props = {
   urls: Array<string>;
@@ -14,14 +15,12 @@ export function Gallery({ urls }: Props) {
     <Image key={i} radius="md" src={image} w={galleryImageWidth} h={galleryImageWidth} />
   ));
   return (
-    <Stack p="md" pr={0} gap="xs">
+    <Stack p="md" gap="xs">
       <Title order={5}>Gallery</Title>
       {isXsDisplay ? (
-        <Carousel slideSize={galleryImageWidth} align="start" slideGap="md" withControls={false} dragFree loop>
+        <Carousel classNames={styles} slidesToScroll={1} slideSize={galleryImageWidth} align="start" slideGap="md" loop>
           {images.map((image, i) => (
-            <Carousel.Slide key={i} pr={i === images.length - 1 ? 'md' : undefined}>
-              {image}
-            </Carousel.Slide>
+            <Carousel.Slide key={i}>{image}</Carousel.Slide>
           ))}
         </Carousel>
       ) : (
