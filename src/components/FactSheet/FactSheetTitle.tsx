@@ -18,7 +18,7 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
       top={0}
       bg="black"
       px="md"
-      py={isSmallDisplay ? 'xs' : 'md'}
+      py={isSmallDisplay ? 8 : 'md'}
       gap="xs"
       justify="space-between"
       wrap="nowrap"
@@ -28,8 +28,10 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
     >
       <Caret position="tl" color={color} />
       <Caret position="br" color={color} />
-      <Group gap="xs" align="baseline">
-        <Title order={2}>{title}</Title>
+      <Group gap={0} align="baseline">
+        <Title order={2} pr="xs">
+          {title}
+        </Title>
         <Title order={6} c="dimmed">
           {subTitle}
         </Title>

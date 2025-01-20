@@ -117,7 +117,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
       }}
     >
       <Stack gap={0} fz="sm" bg="black">
-        <Stack gap={0} pos="sticky" top={0} bg="black">
+        <Stack gap={0} pos="sticky" top={0} bg="black" style={{ zIndex: 10 /* above content */ }}>
           <Group p="md" justify="space-between" align="center" gap="xs">
             <Group gap="xs">
               <IconCircleDot {...iconProps} />
