@@ -31,7 +31,7 @@ import {
   IconZoomScan,
 } from '@tabler/icons-react';
 import { ReactNode, useMemo } from 'react';
-import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { Settings } from '../../lib/state.ts';
@@ -86,7 +86,7 @@ type Props = {
 };
 export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) {
   const isTouchDevice = useIsTouchDevice();
-  const isSmallDisplay = useIsSmallDisplay();
+  const { s: isSmallDisplay } = useDisplaySize();
   const modifierKey = useModifierKey();
   const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
@@ -100,26 +100,35 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
   ));
 
   return (
-    <Modal size="xl" opened={isOpen} onClose={onClose} withCloseButton={false}>
-      <Stack
-        gap={0}
-        fz="sm"
-        bg="black"
-        style={{
+    <Modal
+      size="xl"
+      opened={isOpen}
+      onClose={onClose}
+      withCloseButton={false}
+      styles={{
+        body: {
+          padding: 0,
+        },
+        content: {
           border: '1px solid var(--mantine-color-gray-8)',
           borderRadius: 'var(--mantine-radius-md)',
-        }}
-      >
-        <Group p="md" justify="space-between" align="center" gap="xs">
-          <Group gap="xs">
-            <IconCircleDot {...iconProps} />
-            <Title order={5}>The Atlas of Space</Title>
+          overflow: 'auto',
+        },
+      }}
+    >
+      <Stack gap={0} fz="sm" bg="black">
+        <Stack gap={0} pos="sticky" top={0} bg="black">
+          <Group p="md" justify="space-between" align="center" gap="xs">
+            <Group gap="xs">
+              <IconCircleDot {...iconProps} />
+              <Title order={5}>The Atlas of Space</Title>
+            </Group>
+            <ActionIcon onClick={onClose}>
+              <IconX {...iconProps} />
+            </ActionIcon>
           </Group>
-          <ActionIcon onClick={onClose}>
-            <IconX {...iconProps} />
-          </ActionIcon>
-        </Group>
-        <Divider />
+          <Divider />
+        </Stack>
         <Stack p="md" gap="md">
           <HighlightedText
             segments={[

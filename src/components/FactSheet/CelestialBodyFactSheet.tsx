@@ -1,5 +1,6 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo, ReactNode } from 'react';
+import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { asCdnUrl } from '../../lib/images.ts';
@@ -31,6 +32,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 }: Props) {
   const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
+  const { xs: isXsDisplay } = useDisplaySize();
 
   const parent = bodies.find(({ id }) => id === body.elements.wrt);
   const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);
@@ -79,7 +81,16 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
       />
 
-      <FactSheetSummary obj={body} />
+      {isXsDisplay ? (
+        <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
+          <FactSheetSummary obj={body} />
+          <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
+            <Thumbnail key={body.name} body={body} size={180} />
+          </Box>
+        </Group>
+      ) : (
+        <FactSheetSummary obj={body} />
+      )}
 
       <Stack gap={2} flex={1}>
         <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
@@ -87,9 +98,11 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
             <Title order={5}>Key Facts</Title>
             <FactGrid facts={bullets} />
           </Stack>
-          <Box style={{ flexShrink: 1 }}>
-            <Thumbnail key={body.name} body={body} size={220} />
-          </Box>
+          {!isXsDisplay && (
+            <Box style={{ flexShrink: 1 }}>
+              <Thumbnail key={body.name} body={body} size={220} />
+            </Box>
+          )}
         </Group>
 
         <Box px="md">
