@@ -18,7 +18,7 @@ export function Gallery({ urls }: Props) {
     <Image key={i} radius="md" src={image} w={galleryImageWidth} h={galleryImageWidth} />
   ));
   return (
-    <Stack p="md" gap="xs">
+    <Stack p="md" pt="xl" gap="xs">
       <Title order={5}>Gallery</Title>
       {isXsDisplay ? (
         <Carousel
