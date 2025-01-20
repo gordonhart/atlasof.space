@@ -17,7 +17,7 @@ export function SolarSystem() {
   const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
-  const { s: isSmallDisplay } = useDisplaySize();
+  const { sm: isSmallDisplay } = useDisplaySize();
   const navigate = useNavigate();
   const { settings } = appState;
 

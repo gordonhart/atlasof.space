@@ -11,7 +11,7 @@ type Props = {
   onHover?: (hovered: boolean) => void;
 };
 export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Props) {
-  const { s: isSmallDisplay } = useDisplaySize();
+  const { sm: isSmallDisplay } = useDisplaySize();
   return (
     <Group
       pos="sticky"
@@ -22,7 +22,7 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
       gap="xs"
       justify="space-between"
       wrap="nowrap"
-      style={{ borderBottom: `1px solid ${color}` }}
+      style={{ borderBottom: `1px solid ${color}`, zIndex: 10 /* above gallery images */ }}
       onMouseEnter={onHover != null ? () => onHover(true) : undefined}
       onMouseLeave={onHover != null ? () => onHover(false) : undefined}
     >
