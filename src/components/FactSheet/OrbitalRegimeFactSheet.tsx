@@ -49,7 +49,9 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
         onClose={() => updateSettings({ center: null })}
       />
 
-      <FactSheetSummary obj={regime} />
+      <Box style={{ flexShrink: 0 }}>
+        <FactSheetSummary obj={regime} />
+      </Box>
 
       <Stack p="md" gap="lg" flex={1}>
         {Object.entries(bodiesInRegimeByType)
