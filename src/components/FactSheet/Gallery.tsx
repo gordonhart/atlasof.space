@@ -25,7 +25,7 @@ export function Gallery({ urls }: Props) {
           ))}
         </Carousel>
       ) : (
-        <Group gap={galleryGap} pr="md" maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
+        <Group gap={galleryGap} maw={galleryImageWidth * nPerRow + galleryGap * (nPerRow - 1)}>
           {images}
         </Group>
       )}
