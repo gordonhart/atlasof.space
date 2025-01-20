@@ -9,7 +9,7 @@ type Props = {
 export function FactSheetSummary({ obj }: Props) {
   const { data: summary, isLoading } = useSummaryStream(obj);
   return (
-    <Box pt="md" px="md" mih={77 /* measured height of 3 lines + top padding */} style={{ flexShrink: 0 }}>
+    <Box pt="md" px="md" mih={77 /* measured height of 3 lines + top padding */}>
       <Text size="sm">
         {summary}
         {isLoading && <LoadingCursor />}

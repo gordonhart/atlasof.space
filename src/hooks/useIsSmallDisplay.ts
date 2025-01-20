@@ -1,3 +1,6 @@
 export function useIsSmallDisplay() {
-  return window.innerWidth < 1080;
+  return {
+    s: window.innerWidth < 1080,
+    xs: window.innerWidth < 640,
+  };
 }

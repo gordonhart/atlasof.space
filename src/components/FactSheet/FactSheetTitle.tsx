@@ -11,7 +11,7 @@ type Props = {
   onHover?: (hovered: boolean) => void;
 };
 export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Props) {
-  const isSmallDisplay = useIsSmallDisplay();
+  const { s: isSmallDisplay } = useIsSmallDisplay();
   return (
     <Group
       pos="sticky"
