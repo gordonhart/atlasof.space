@@ -18,7 +18,15 @@ export function Gallery({ urls }: Props) {
     <Stack p="md" gap="xs">
       <Title order={5}>Gallery</Title>
       {isXsDisplay ? (
-        <Carousel classNames={styles} slidesToScroll={1} slideSize={galleryImageWidth} align="start" slideGap="md" loop>
+        <Carousel
+          classNames={styles}
+          slidesToScroll={1}
+          slideSize={galleryImageWidth}
+          align="start"
+          slideGap="md"
+          dragFree
+          loop
+        >
           {images.map((image, i) => (
             <Carousel.Slide key={i}>{image}</Carousel.Slide>
           ))}
