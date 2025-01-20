@@ -11,6 +11,7 @@ import {
   MeshBasicMaterial,
   Color,
 } from 'three';
+import { asCdnUrl } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 import { CelestialBody, Ring } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
@@ -38,8 +39,7 @@ export class RingObject {
 
     let material: Material;
     if (ring.texture != null) {
-      const textureLoader = new TextureLoader();
-      const textureMap = textureLoader.load(ring.texture);
+      const textureMap = new TextureLoader().load(asCdnUrl(ring.texture));
       material = new MeshStandardMaterial({ map: textureMap, side: DoubleSide });
     } else {
       material = new MeshBasicMaterial({ color: new Color(body.color) });

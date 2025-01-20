@@ -71,8 +71,7 @@ export class SphericalBody {
     const emissive = this.body.type === CelestialBodyType.STAR;
 
     if (texture != null) {
-      const textureLoader = new TextureLoader();
-      const textureMap = textureLoader.load(asCdnUrl(texture));
+      const textureMap = new TextureLoader().load(asCdnUrl(texture));
       if (emissive) {
         // TODO: better parameterization of this?
         return new MeshStandardMaterial({
