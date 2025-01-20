@@ -25,6 +25,7 @@
     "@tanstack/react-query": "^5.62.8",
     "@types/ramda": "^0.30.2",
     "dayjs": "^1.11.13",
+    "embla-carousel-autoplay": "^7.1.0",
     "embla-carousel-react": "^7.1.0",
     "eslint-plugin-stylelint": "^0.1.1",
     "linkedom": "^0.18.6",

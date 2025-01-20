@@ -1,5 +1,7 @@
 import { Carousel } from '@mantine/carousel';
 import { Group, Image, Stack, Title } from '@mantine/core';
+import Autoplay from 'embla-carousel-autoplay';
+import { useRef } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import styles from './Gallery.module.css';
 
@@ -8,6 +10,7 @@ type Props = {
 };
 export function Gallery({ urls }: Props) {
   const { xs: isXsDisplay } = useDisplaySize();
+  const autoplay = useRef(Autoplay({ delay: 2000 }));
   const nPerRow = 3;
   const galleryGap = 16;
   const galleryImageWidth = 178;
@@ -22,6 +25,7 @@ export function Gallery({ urls }: Props) {
           classNames={styles}
           slidesToScroll={1}
           slideSize={galleryImageWidth}
+          plugins={[autoplay.current]}
           align="start"
           slideGap="md"
           dragFree
