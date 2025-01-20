@@ -84,7 +84,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       {isXsDisplay ? (
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
           <FactSheetSummary obj={body} />
-          <Box pt="md" px="xs" style={{ flexShrink: 0 }}>
+          <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
             <Thumbnail key={body.name} body={body} size={180} />
           </Box>
         </Group>
