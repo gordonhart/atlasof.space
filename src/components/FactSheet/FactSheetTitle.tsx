@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Group, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { iconSize } from '../Controls/constants.ts';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   onHover?: (hovered: boolean) => void;
 };
 export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Props) {
-  const { s: isSmallDisplay } = useIsSmallDisplay();
+  const { s: isSmallDisplay } = useDisplaySize();
   return (
     <Group
       pos="sticky"

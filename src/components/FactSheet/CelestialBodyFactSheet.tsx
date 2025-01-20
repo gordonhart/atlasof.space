@@ -1,7 +1,7 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo, ReactNode } from 'react';
+import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
-import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
 import { g } from '../../lib/bodies.ts';
 import { asCdnUrl } from '../../lib/images.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -32,7 +32,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 }: Props) {
   const { name, type, mass, radius, elements, rotation } = body;
   const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
-  const { xs: isXsDisplay } = useIsSmallDisplay();
+  const { xs: isXsDisplay } = useDisplaySize();
 
   const parent = bodies.find(({ id }) => id === body.elements.wrt);
   const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);

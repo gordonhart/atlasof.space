@@ -2,7 +2,7 @@ import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
-import { useIsSmallDisplay } from '../hooks/useIsSmallDisplay.ts';
+import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
@@ -17,7 +17,7 @@ export function SolarSystem() {
   const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
-  const { s: isSmallDisplay } = useIsSmallDisplay();
+  const { s: isSmallDisplay } = useDisplaySize();
   const navigate = useNavigate();
   const { settings } = appState;
 

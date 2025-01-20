@@ -31,7 +31,7 @@ import {
   IconZoomScan,
 } from '@tabler/icons-react';
 import { ReactNode, useMemo } from 'react';
-import { useIsSmallDisplay } from '../../hooks/useIsSmallDisplay.ts';
+import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { Settings } from '../../lib/state.ts';
@@ -86,7 +86,7 @@ type Props = {
 };
 export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) {
   const isTouchDevice = useIsTouchDevice();
-  const { s: isSmallDisplay } = useIsSmallDisplay();
+  const { s: isSmallDisplay } = useDisplaySize();
   const modifierKey = useModifierKey();
   const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
