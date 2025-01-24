@@ -1,11 +1,21 @@
 # atlasof.space
 
+![The Atlas of Space](https://atlasofspace.b-cdn.net/atlasofspace.png)
+
+## Development
+
 ```sh
 yarn install
 yarn netlify dev
 ```
 
-## To Do
+Infrastructure dependencies:
+
+- [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
+  in [`./functions`](./functions)
+- [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
+
+### To Do
 
 - Physical modeling:
   - [ ] Add co-orbitals
@@ -21,9 +31,8 @@ yarn netlify dev
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [x] Set URL part for focused planet to enable link sharing
-  - [ ] Add thumbnails for all bodies to CDN (reduce usage of `/thumbnail` endpoint)
 
-## Resources
+### Resources
 
 - Small-body database lookup ([ssd.jpl.nasa.gov](https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html))
   - [API docs](https://ssd-api.jpl.nasa.gov/doc/sbdb.html)
@@ -33,11 +42,3 @@ yarn netlify dev
 - Asteroid fact sheet ([nssdc.gsfc.nasa.gov](https://nssdc.gsfc.nasa.gov/planetary/factsheet/asteroidfact.html))
 - Planet textures ([solarsystemscope.com](https://www.solarsystemscope.com/textures/))
 - Asteroid 3D models ([3d-asteroids.space](https://3d-asteroids.space/asteroids/))
-
-## Development
-
-Infrastructure dependencies:
-
-- [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
-  in [`./functions`](./functions)
-- [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
