@@ -121,7 +121,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
           <Group p="md" justify="space-between" align="center" gap="xs">
             <Group gap="xs">
               <IconCircleDot {...iconProps} />
-              <Title order={5}>The Atlas of Space</Title>
+              <Title order={5}>Atlas of Space</Title>
             </Group>
             <ActionIcon onClick={onClose}>
               <IconX {...iconProps} />

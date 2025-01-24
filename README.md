@@ -1,4 +1,4 @@
-<h1 align="center">The Atlas of Space</h1>
+<h1 align="center">Atlas of Space</h1>
 
 <p align="center">
   <a href="https://atlasof.space">
