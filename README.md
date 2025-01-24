@@ -1,16 +1,16 @@
-<center>
-<h1>The Atlast of Space</h1>
+<p align="center">
+  <h1>The Atlas of Space</h1>
 
-<figure style="text-align: center;">
-  <a href="https://atlasof.space">
-    <img src="https://atlasofspace.b-cdn.net/atlasofspace.png" alt="The Atlas of Space" width="800" />
-  </a>
-  <figcaption>
-The Atlas of Space is an interactive visualization to explore the planets, moons, asteroids, and other objects in the
-Solar System.
-  </figcaption>
-</figure>
-</center>
+  <figure style="text-align: center;">
+    <a href="https://atlasof.space">
+      <img src="https://atlasofspace.b-cdn.net/atlasofspace.png" alt="The Atlas of Space" width="800" />
+    </a>
+    <figcaption>
+  The Atlas of Space is an interactive visualization to explore the planets, moons, asteroids, and other objects in the
+  Solar System.
+    </figcaption>
+  </figure>
+</p>
 
 ## Development
 
