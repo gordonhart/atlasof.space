@@ -4,10 +4,10 @@
   <a href="https://atlasof.space">
     <img src="https://atlasofspace.b-cdn.net/atlasofspace.png" alt="The Atlas of Space" width="800" />
   </a>
-  <small>
-The Atlas of Space is an interactive visualization to explore the planets, moons, asteroids, and other objects in the
-Solar System.
-  </small>
+</p>
+
+<p align="center">
+  <em>The Atlas of Space is an interactive visualization to explore the planets, moons, asteroids, and other objects in the Solar System.</em>
 </p>
 
 ## Development
