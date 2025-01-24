@@ -1,6 +1,6 @@
-<p align="center">
-  <h1>The Atlas of Space</h1>
+<h1 align="center">The Atlas of Space</h1>
 
+<p align="center">
   <figure style="text-align: center;">
     <a href="https://atlasof.space">
       <img src="https://atlasofspace.b-cdn.net/atlasofspace.png" alt="The Atlas of Space" width="800" />
