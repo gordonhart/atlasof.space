@@ -1,4 +1,5 @@
-# The Atlas of Space
+<center>
+<h1>The Atlast of Space</h1>
 
 <figure style="text-align: center;">
   <a href="https://atlasof.space">
@@ -9,6 +10,7 @@ The Atlas of Space is an interactive visualization to explore the planets, moons
 Solar System.
   </figcaption>
 </figure>
+</center>
 
 ## Development
 
