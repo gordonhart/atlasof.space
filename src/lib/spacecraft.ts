@@ -3,20 +3,29 @@ import { CelestialBodyId } from './types.ts';
 
 export type SpacecraftOrganization = {
   name: string;
+  shortName: string;
   thumbnail: string;
 };
 
 export const NASA: SpacecraftOrganization = {
-  name: 'NASA',
+  name: 'National Aeronautics and Space Administration',
+  shortName: 'NASA',
   thumbnail: 'nasa-meatball.svg',
 };
 export const ESA: SpacecraftOrganization = {
-  name: 'ESA',
-  thumbnail: 'TODO', // TODO
+  name: 'European Space Agency',
+  shortName: 'ESA',
+  thumbnail: 'esa-logo.png',
 };
 export const ROSCOSMOS: SpacecraftOrganization = {
-  name: 'Roscosmos',
-  thumbnail: 'TODO', // TODO
+  name: 'State Corporation for Space Activities',
+  shortName: 'Roscosmos',
+  thumbnail: 'roscosmos-logo.png',
+};
+export const JAXA: SpacecraftOrganization = {
+  name: 'Japan Aerospace Exploration Agency',
+  shortName: 'JAXA',
+  thumbnail: 'jaxa-logo.png',
 };
 
 export enum SpacecraftVisitType {
@@ -110,6 +119,27 @@ export const VOYAGER_2: Spacecraft = {
     { id: Bodies.TETHYS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:12:30Z') },
     { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:28:48Z') },
     { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-09-04T01:22:34Z') },
+    {
+      id: Bodies.URANUS.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('1985-11-04T00:00:00Z'),
+      end: new Date('1986-02-25T00:00:00Z'),
+    },
+    { id: Bodies.MIRANDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T16:50:00Z') },
+    { id: Bodies.ARIEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    { id: Bodies.UMBRIEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    { id: Bodies.TITANIA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    { id: Bodies.OBERON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    {
+      id: Bodies.NEPTUNE.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('1989-06-05T00:00:00Z'),
+      end: new Date('1989-10-02T00:00:00Z'),
+    },
+    { id: Bodies.GALATEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:41:00Z') },
+    { id: Bodies.LARISSA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:51:00Z') },
+    { id: Bodies.PROTEUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T05:29:00Z') },
+    { id: Bodies.TRITON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T09:23:00Z') },
   ],
 };
 

@@ -60,7 +60,7 @@ function SpacecraftOrganizationPill({ organization }: SpacecraftOrganizationPill
         <Group w="100%" gap={8} wrap="nowrap">
           <Thumbnail size={14} thumbnail={organization.thumbnail} />
           <Text inherit style={{ display: 'flex', flexShrink: 0 }}>
-            {organization.name}
+            {organization.shortName}
           </Text>
         </Group>
       </Pill>
