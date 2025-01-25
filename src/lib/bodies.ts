@@ -1498,7 +1498,10 @@ export const TITAN = celestialBodyWithDefaults({
   mass: 1.3452e23,
   radius: 2574.7e3,
   color: '#f1e193',
-  assets: { thumbnail: 'titan-thumb.jpg' },
+  assets: {
+    thumbnail: 'titan-thumb.jpg',
+    gallery: [{ filename: 'huygens-descent.mp4' }, { filename: 'huygens.jpg' }],
+  },
 });
 
 export const IAPETUS = celestialBodyWithDefaults({
