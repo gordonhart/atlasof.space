@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://app.netlify.com/sites/atlasofspace/overview">
+  <a href="https://app.netlify.com/sites/atlasofspace/deploys">
     <img alt="Netlify" src="https://img.shields.io/netlify/c6752917-303f-4161-a5bd-de069aa2d9b1?style=flat-square" />
   </a>
   <a href="https://github.com/gordonhart/atlasof.space">
