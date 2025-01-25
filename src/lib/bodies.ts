@@ -14,7 +14,8 @@ export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 
 export const SOL = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,
-  name: 'Sol',
+  name: 'Sol (The Sun)',
+  shortName: 'Sol',
   influencedBy: [],
   elements: {
     wrt: null,
@@ -105,7 +106,13 @@ export const VENUS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'venus-thumb.jpg',
     texture: 'venus-texture.jpg',
-    gallery: ['venus-venera.jpg', 'venus-venera2.jpg', 'venus-magellan.jpg'],
+    gallery: [
+      { filename: 'venus-venera.jpg' },
+      { filename: 'venus-venera2.jpg' },
+      { filename: 'venus-eistla-regio.jpg' },
+      { filename: 'venus-venera3.jpg' },
+      { filename: 'venus-magellan.jpg' },
+    ],
   },
 });
 
@@ -162,6 +169,17 @@ export const LUNA = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'luna-thumb.jpg',
     texture: 'luna-texture.jpg',
+    gallery: [
+      {
+        filename: 'luna-apollo-15.jpg',
+        caption:
+          'Apollo 15 astronaut Jim Irwin stands at the Lunar Rover, with Mt. Hadley as a backdrop, in this image taken by Dave Scott at the end of EVA-1. Newly-processed from NASA Photo ID AS15-86-11603.',
+      },
+      { filename: 'luna-apollo-17.jpg' },
+      { filename: 'luna-change-landing.mp4' },
+      { filename: 'luna-apollo-15-2.jpg' },
+      { filename: 'luna-apollo-11.jpg' },
+    ],
   },
 });
 
@@ -192,7 +210,13 @@ export const MARS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'mars-thumb.jpg',
     texture: 'mars-texture.jpg',
-    gallery: ['mars-korolev.jpg', 'mars-viking.jpg', 'mars-curiosity.jpg'],
+    gallery: [
+      { filename: 'mars-curiosity.jpg' },
+      { filename: 'mars-perseverance.jpg' },
+      { filename: 'mars-ingenuity.mp4' },
+      { filename: 'mars-viking.jpg' },
+      { filename: 'mars-korolev.jpg' },
+    ],
   },
 });
 
@@ -425,7 +449,7 @@ export const PSYCHE = celestialBodyWithDefaults({
   radius: 111.5e3,
   assets: {
     thumbnail: 'psyche-thumb.jpg',
-    gallery: ['psyche-illustration.jpg', 'psyche-mission-illustration.jpg'],
+    gallery: [{ filename: 'psyche-illustration.jpg' }, { filename: 'psyche-mission-illustration.jpg' }],
   },
   facts: [
     {
@@ -660,7 +684,7 @@ export const BENNU: CelestialBody = celestialBodyWithDefaults({
   radius: 245.03,
   assets: {
     thumbnail: 'bennu-thumb.png',
-    gallery: ['bennu-landing.jpg', 'bennu-rotation.gif', 'bennu-surface.jpg'],
+    gallery: [{ filename: 'bennu-landing.jpg' }, { filename: 'bennu-rotation.gif' }, { filename: 'bennu-surface.jpg' }],
   },
 });
 
@@ -684,7 +708,11 @@ export const RYUGU: CelestialBody = celestialBodyWithDefaults({
   radius: 448,
   assets: {
     thumbnail: 'ryugu-thumb.jpg',
-    gallery: ['ryugu-surface.jpg', 'ryugu-surface2.jpg', 'ryugu-rotation.gif'],
+    gallery: [
+      { filename: 'ryugu-surface.jpg' },
+      { filename: 'ryugu-surface2.jpg' },
+      { filename: 'ryugu-rotation.gif' },
+    ],
   },
 });
 
@@ -734,7 +762,7 @@ export const CG67P = celestialBodyWithDefaults({
   },
   assets: {
     thumbnail: 'cg67p-thumb.jpg',
-    gallery: ['cg67p-animation.gif', 'cg67p-thumb2.jpg', 'cg67p-thumb3.jpg'],
+    gallery: [{ filename: 'cg67p-animation.gif' }, { filename: 'cg67p-thumb2.jpg' }, { filename: 'cg67p-thumb3.jpg' }],
   },
 });
 
@@ -1094,7 +1122,7 @@ export const ARROKOTH = celestialBodyWithDefaults({
   },
   assets: {
     thumbnail: 'arrokoth-thumb.jpg',
-    gallery: ['arrokoth-rotation.gif'],
+    gallery: [{ filename: 'arrokoth-rotation.gif' }],
   },
 });
 
@@ -1165,7 +1193,7 @@ export const LELEAKUHONUA = celestialBodyWithDefaults({
 
 export const FARFAROUT = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
-  name: '2018 AG37',
+  name: '2018 AG37 (FarFarOut)',
   shortName: 'FarFarOut',
   influencedBy: [SOL.id],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
@@ -1470,7 +1498,10 @@ export const TITAN = celestialBodyWithDefaults({
   mass: 1.3452e23,
   radius: 2574.7e3,
   color: '#f1e193',
-  assets: { thumbnail: 'titan-thumb.jpg' },
+  assets: {
+    thumbnail: 'titan-thumb.jpg',
+    gallery: [{ filename: 'huygens-descent.mp4' }, { filename: 'huygens.jpg' }],
+  },
 });
 
 export const IAPETUS = celestialBodyWithDefaults({

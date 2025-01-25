@@ -49,10 +49,15 @@ export type CelestialBodyFact = {
   value: string;
 };
 
+export type GalleryAsset = {
+  filename: string;
+  caption?: string;
+};
+
 export type CelestialBodyAssets = {
   thumbnail?: string;
   texture?: string;
-  gallery?: Array<string>;
+  gallery?: Array<GalleryAsset>;
 };
 
 export enum CelestialBodyType {
