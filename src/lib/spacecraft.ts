@@ -113,7 +113,7 @@ export const VOYAGER_2: Spacecraft = {
   power: 470,
   start: new Date('1977-08-20T14:29:00Z'),
   status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'voyager-1.png', // twin spacecraft
+  thumbnail: 'voyager-2.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Voyager_2',
   visited: [
     {
