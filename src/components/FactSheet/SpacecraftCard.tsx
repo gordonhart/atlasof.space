@@ -31,11 +31,13 @@ export function SpacecraftCard({ spacecraft, body }: Props) {
             <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
           </Box>
         )}
-        <Group gap="xs" align="center">
-          <Title order={6}>{spacecraft.name}</Title>
-          <Text c="dimmed" fz="sm" fs="italic">
-            {visitInfo.type}
-          </Text>
+        <Group gap={4} align="center">
+          <Group gap="xs" mr={8}>
+            <Title order={6}>{spacecraft.name}</Title>
+            <Text c="dimmed" fz="sm" fs="italic">
+              {visitInfo.type}
+            </Text>
+          </Group>
           <Group gap="xs" wrap="nowrap">
             <SpacecraftOrganizationPill organization={spacecraft.organization} />
             <SpacecraftStatusPill status={spacecraft.status} />

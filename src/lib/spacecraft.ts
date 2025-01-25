@@ -342,6 +342,24 @@ export const BEPICOLOMBO: Spacecraft = {
   ],
 };
 
+export const MESSENGER: Spacecraft = {
+  name: 'MESSENGER',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 1107.9,
+  power: 450,
+  start: new Date('2004-08-03T06:15:56Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Intentionally crashed into Mercury on April 30th, 2015',
+  },
+  thumbnail: 'messenger-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/MESSENGER',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-06-05T12:00:00Z') },
+    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.ORBITER, start: new Date('2011-03-18T01:00:00Z') },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
   VOYAGER_1,
   VOYAGER_2,
@@ -349,9 +367,9 @@ export const SPACECRAFT: Array<Spacecraft> = [
   CASSINI,
   HUYGENS,
   NEW_HORIZONS,
+  MESSENGER,
   BEPICOLOMBO,
   // PARKER_SOLAR_PROBE,
-  // MESSENGER,
   // SOLAR_ORBITER,
 
   // Mars
