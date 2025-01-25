@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
 import styles from './RelatedBodies.module.css';
-import { Thumbnail } from './Thumbnail.tsx';
 
 const N_RELATED = 6;
 
@@ -39,7 +39,7 @@ export function OtherBodies({ body, bodies, updateSettings }: Props) {
           >
             <Group gap={8} align="center" wrap="nowrap">
               <Box w={thumbnailSize}>
-                <Thumbnail body={relatedBody} size={thumbnailSize} />
+                <CelestialBodyThumbnail body={relatedBody} size={thumbnailSize} />
               </Box>
               {relatedBody.shortName ?? relatedBody.name}
             </Group>
