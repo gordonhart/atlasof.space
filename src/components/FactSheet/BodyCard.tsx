@@ -17,7 +17,6 @@ export function BodyCard({ body, onClick, onHover }: Props) {
       className={styles.Card}
       withBorder
       p="xs"
-      style={{ cursor: 'pointer' }}
       onClick={onClick}
       onMouseEnter={onHover != null ? () => onHover(true) : undefined}
       onMouseLeave={onHover != null ? () => onHover(false) : undefined}
