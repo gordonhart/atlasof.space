@@ -1,3 +1,6 @@
+.Card {
+  cursor: pointer;
+}
 .Card:hover {
   background-color: color-mix(in srgb, var(--mantine-color-gray-9), transparent 50%) !important;
 }

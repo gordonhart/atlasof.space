@@ -4,9 +4,11 @@ import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
+import { SPACECRAFT_BY_BODY_ID } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
+import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
 import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
@@ -17,13 +19,14 @@ import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
 import { ParentBody } from './ParentBody.tsx';
-import { Thumbnail } from './Thumbnail.tsx';
+import { SpacecraftVisits } from './SpacecraftVisits.tsx';
 
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
 };
+
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
   bodies,
@@ -69,6 +72,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   ];
   const factBullets = factsAsBullets(facts);
   const galleryAssets = body.assets?.gallery ?? [];
+  const spacecraftVisited = SPACECRAFT_BY_BODY_ID[body.id] ?? [];
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
@@ -84,7 +88,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
           <FactSheetSummary obj={body} />
           <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
-            <Thumbnail key={body.name} body={body} size={160} />
+            <CelestialBodyThumbnail key={body.name} body={body} size={160} />
           </Box>
         </Group>
       ) : (
@@ -99,7 +103,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
           </Stack>
           {!isXsDisplay && (
             <Box style={{ flexShrink: 1 }}>
-              <Thumbnail key={body.name} body={body} size={220} />
+              <CelestialBodyThumbnail key={body.name} body={body} size={220} />
             </Box>
           )}
         </Group>
@@ -113,10 +117,11 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         </Box>
       </Stack>
 
-      <Box style={{ justifySelf: 'flex-end' }}>
+      <Box pt="md" style={{ justifySelf: 'flex-end' }}>
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
         <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
+        {spacecraftVisited.length > 0 && <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />}
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
         {body.type === CelestialBodyType.STAR && (
           <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />

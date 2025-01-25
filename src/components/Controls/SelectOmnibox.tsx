@@ -8,7 +8,7 @@ import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/regimes.ts'
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
-import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
+import { CelestialBodyThumbnail } from '../FactSheet/CelestialBodyThumbnail.tsx';
 import { iconSize } from './constants.ts';
 import styles from './SelectOmnibox.module.css';
 
@@ -33,7 +33,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             leftSection={
               // TODO: lazy load thumbnails for visible objects only
               <Box miw={24}>
-                <Thumbnail body={body} size={24} />
+                <CelestialBodyThumbnail body={body} size={24} />
               </Box>
             }
             rightSection={

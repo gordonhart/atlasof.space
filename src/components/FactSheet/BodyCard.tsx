@@ -2,8 +2,8 @@ import { Box, Paper, Text, Title } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
+import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
-import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -17,13 +17,12 @@ export function BodyCard({ body, onClick, onHover }: Props) {
       className={styles.Card}
       withBorder
       p="xs"
-      style={{ cursor: 'pointer' }}
       onClick={onClick}
       onMouseEnter={onHover != null ? () => onHover(true) : undefined}
       onMouseLeave={onHover != null ? () => onHover(false) : undefined}
     >
       <Box ml="xs" style={{ float: 'right' }}>
-        <Thumbnail body={body} size={100} />
+        <CelestialBodyThumbnail body={body} size={100} />
       </Box>
       <Title order={6}>{body.name}</Title>
       <Text mt={4} inherit c="dimmed" fz="xs">

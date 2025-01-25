@@ -35,7 +35,7 @@ export function Gallery({ assets }: Props) {
     )
   );
   return (
-    <Stack p="md" pt="xl" gap="xs">
+    <Stack p="md" pt="lg" gap="xs">
       <Title order={5}>Gallery</Title>
       {isXsDisplay || assets.length > 3 ? (
         <Carousel

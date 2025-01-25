@@ -1342,6 +1342,7 @@ export const CALLISTO = celestialBodyWithDefaults({
 });
 
 // TODO: there are more moons
+// TODO: at the very least, Amalthea?
 export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
 
 export const SATURN = celestialBodyWithDefaults({

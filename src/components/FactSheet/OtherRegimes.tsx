@@ -17,7 +17,7 @@ export function OtherRegimes({ regime, updateSettings, title = 'Other Orbital Re
   );
 
   return (
-    <Stack gap="xs" p="md">
+    <Stack gap="xs" p="md" pt="lg">
       <Title order={5}>{title}</Title>
       <Group gap={8}>
         {otherRegimes.map((otherRegime, i) => (
