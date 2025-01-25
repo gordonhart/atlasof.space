@@ -22,7 +22,7 @@
   <a href="https://news.ycombinator.com/item?id=42634787">
     <img alt="View on Hacker News" src="https://img.shields.io/badge/HackerNews-%E2%96%B2770-ff6600?style=flat-square" />
   </a>
-  <a href="https://github.com/gordonhart/atlasof.space/tree/gh/badges?tab=License-1-ov-file">
+  <a href="https://github.com/gordonhart/atlasof.space/tree/trunk?tab=Apache-2.0-1-ov-file">
     <img alt="GitHub License" src="https://img.shields.io/github/license/gordonhart/atlasof.space?style=flat-square">
   </a>
   <a href="https://buymeacoffee.com/atlasofspace">
