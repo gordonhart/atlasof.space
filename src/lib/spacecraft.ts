@@ -452,17 +452,130 @@ export const APOLLO_11: Spacecraft = {
   ],
 };
 
+export const APOLLO_12: Spacecraft = {
+  name: 'Apollo 12',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 49915,
+  start: new Date('1969-11-14T16:22:00Z'),
+  end: new Date('1969-11-24T20:58:24Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-12-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_12',
+  crew: ['Pete Conrad', 'Alan Bean', 'Richard Gordon'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1969-11-19T06:54:35Z'),
+      end: new Date('1969-11-20T14:25:47Z'),
+    },
+  ],
+};
+
+export const APOLLO_13: Spacecraft = {
+  name: 'Apollo 13',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 44069,
+  start: new Date('1970-04-11T19:13:00Z'),
+  end: new Date('1970-04-17T18:07:41Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-13-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_13',
+  crew: ['Jim Lovell', 'Jack Swigert', 'Fred Haise'],
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1970-04-15T00:21:00Z') }],
+};
+
+export const APOLLO_14: Spacecraft = {
+  name: 'Apollo 14',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 46305,
+  start: new Date('1971-01-31T21:03:02Z'),
+  end: new Date('1971-02-09T21:05:02Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-14-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_14',
+  crew: ['Alan Shepard', 'Stuart Roosa', 'Edgar Mitchell'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1971-02-05T09:18:11Z'),
+      end: new Date('1971-02-06T18:48:42Z'),
+    },
+  ],
+};
+
+export const APOLLO_15: Spacecraft = {
+  name: 'Apollo 15',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 48599,
+  start: new Date('1971-07-26T13:34:00Z'),
+  end: new Date('1971-08-07T20:45:53Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-15-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_15',
+  crew: ['David Scott', 'Alfred Worden', 'James Irwin'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1971-07-30T22:16:29Z'),
+      end: new Date('1971-08-02T17:11:23Z'),
+    },
+  ],
+};
+
+export const APOLLO_16: Spacecraft = {
+  name: 'Apollo 16',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 52759,
+  start: new Date('1972-04-16T17:54:00Z'),
+  end: new Date('1972-04-27T19:45:05Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-16-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_16',
+  crew: ['John Young', 'Ken Mattingly', 'Charlie Duke'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1972-04-21T02:23:35Z'),
+      end: new Date('1972-04-24T01:25:47Z'),
+    },
+  ],
+};
+
+export const APOLLO_17: Spacecraft = {
+  name: 'Apollo 17',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 48609,
+  start: new Date('1972-12-07T05:33:00Z'),
+  end: new Date('1972-12-19T19:54:58Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-17-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_17',
+  crew: ['Gene Cernan', 'Ronald Evans', 'Jack Schmitt'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1972-12-10T19:53:55Z'),
+      end: new Date('1972-12-16T23:35:09Z'),
+    },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
   // Luna
   APOLLO_8,
   APOLLO_10,
   APOLLO_11,
-  // APOLLO_12,
-  // APOLLO_13,
-  // APOLLO_14,
-  // APOLLO_15,
-  // APOLLO_16,
-  // APOLLO_17,
+  APOLLO_12,
+  APOLLO_13,
+  APOLLO_14,
+  APOLLO_15,
+  APOLLO_16,
+  APOLLO_17,
 
   // Inner missions
   MESSENGER,
