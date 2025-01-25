@@ -1,7 +1,9 @@
 import { Box, Group, Paper, Pill, Stack, Text, Title, UnstyledButton } from '@mantine/core';
-import { Spacecraft, SpacecraftOrganization } from '../../lib/spacecraft.ts';
+import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { Spacecraft, SPACECRAFT_ORGANIZATIONS, SpacecraftOrganization } from '../../lib/spacecraft.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
+import { LoadingCursor } from './LoadingCursor.tsx';
 import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
@@ -24,29 +26,30 @@ type SpacecraftCardProps = {
   body: CelestialBody;
 };
 function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
+  const { data: summary, isLoading } = useSummaryStream(spacecraft);
   const visitInfo = spacecraft.visited.find(({ id }) => id === body.id)!;
   return (
     <UnstyledButton component="a" href={spacecraft.wiki} target="_blank">
       <Paper className={styles.Card} withBorder p="xs">
-        <Group gap="xs" justify="space-between" align="flex-start">
-          <Stack gap={4} align="flex-start">
-            <Group gap="xs" align="baseline">
-              <Title order={6}>{spacecraft.name}</Title>
-              <SpacecraftOrganizationPill organization={spacecraft.organization} />
-              <Text c="dimmed" fz="sm" fs="italic">
-                {visitInfo.type}
-              </Text>
-            </Group>
-            <Text c="dimmed" fz="xs">
-              Launched in {spacecraft.start.getFullYear()}, visited in {visitInfo.start.getFullYear()}
-            </Text>
-          </Stack>
-          {spacecraft.thumbnail != null && (
-            <Box style={{ flexShrink: 0 }}>
-              <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
-            </Box>
-          )}
+        {spacecraft.thumbnail != null && (
+          <Box ml="xs" style={{ float: 'right' }}>
+            <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
+          </Box>
+        )}
+        <Group gap="xs" align="center">
+          <Title order={6}>{spacecraft.name}</Title>
+          <SpacecraftOrganizationPill organization={spacecraft.organization} />
+          <Text c="dimmed" fz="sm" fs="italic">
+            {visitInfo.type}
+          </Text>
         </Group>
+        <Text mt={4} fz="xs" fs="italic">
+          Launched in {spacecraft.start.getFullYear()}, visited in {visitInfo.start.getFullYear()}
+        </Text>
+        <Text mt={4} c="dimmed" fz="xs">
+          {summary}
+          {isLoading && <LoadingCursor />}
+        </Text>
       </Paper>
     </UnstyledButton>
   );
@@ -56,13 +59,14 @@ type SpacecraftOrganizationPillProps = {
   organization: SpacecraftOrganization;
 };
 function SpacecraftOrganizationPill({ organization }: SpacecraftOrganizationPillProps) {
+  const details = SPACECRAFT_ORGANIZATIONS[organization];
   return (
     <Box style={{ flexShrink: 0 }}>
       <Pill>
         <Group w="100%" gap={8} wrap="nowrap">
-          <Thumbnail size={14} thumbnail={organization.thumbnail} />
+          <Thumbnail size={14} thumbnail={details.thumbnail} />
           <Text inherit style={{ display: 'flex', flexShrink: 0 }}>
-            {organization.shortName}
+            {details.shortName}
           </Text>
         </Group>
       </Pill>

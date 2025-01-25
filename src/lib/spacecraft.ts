@@ -1,31 +1,49 @@
 import * as Bodies from './bodies.ts';
 import { CelestialBodyId } from './types.ts';
 
-export type SpacecraftOrganization = {
+export enum SpacecraftOrganization {
+  NASA = 'NASA',
+  ESA = 'ESA',
+  JAXA = 'JAXA',
+  ROSCOSMOS = 'ROSCOSMOS',
+}
+
+export type SpacecraftOrganizationDetails = {
+  organization: SpacecraftOrganization;
   name: string;
   shortName: string;
   thumbnail: string;
 };
 
-export const NASA: SpacecraftOrganization = {
+const NASA: SpacecraftOrganizationDetails = {
+  organization: SpacecraftOrganization.NASA,
   name: 'National Aeronautics and Space Administration',
   shortName: 'NASA',
   thumbnail: 'nasa-meatball.svg',
 };
-export const ESA: SpacecraftOrganization = {
+const ESA: SpacecraftOrganizationDetails = {
+  organization: SpacecraftOrganization.ESA,
   name: 'European Space Agency',
   shortName: 'ESA',
   thumbnail: 'esa-logo.png',
 };
-export const ROSCOSMOS: SpacecraftOrganization = {
+const ROSCOSMOS: SpacecraftOrganizationDetails = {
+  organization: SpacecraftOrganization.ROSCOSMOS,
   name: 'State Corporation for Space Activities',
   shortName: 'Roscosmos',
   thumbnail: 'roscosmos-logo.png',
 };
-export const JAXA: SpacecraftOrganization = {
+const JAXA: SpacecraftOrganizationDetails = {
+  organization: SpacecraftOrganization.JAXA,
   name: 'Japan Aerospace Exploration Agency',
   shortName: 'JAXA',
   thumbnail: 'jaxa-logo.png',
+};
+export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, SpacecraftOrganizationDetails> = {
+  [SpacecraftOrganization.NASA]: NASA,
+  [SpacecraftOrganization.ESA]: ESA,
+  [SpacecraftOrganization.ROSCOSMOS]: ROSCOSMOS,
+  [SpacecraftOrganization.JAXA]: JAXA,
 };
 
 export enum SpacecraftVisitType {
@@ -56,7 +74,7 @@ export type Spacecraft = {
 
 export const VOYAGER_1: Spacecraft = {
   name: 'Voyager 1',
-  organization: NASA,
+  organization: SpacecraftOrganization.NASA,
   launchMass: 815,
   power: 470,
   start: new Date('1977-09-05T12:56:01Z'),
@@ -81,7 +99,7 @@ export const VOYAGER_1: Spacecraft = {
 
 export const VOYAGER_2: Spacecraft = {
   name: 'Voyager 2',
-  organization: NASA,
+  organization: SpacecraftOrganization.NASA,
   launchMass: 721.9,
   power: 470,
   start: new Date('1977-08-20T14:29:00Z'),
@@ -147,11 +165,11 @@ export const VOYAGER_2: Spacecraft = {
 
 export const CASSINI: Spacecraft = {
   name: 'Cassini',
-  organization: NASA,
+  organization: SpacecraftOrganization.NASA,
   launchMass: 5712,
   power: 885,
   start: new Date('1997-10-15T08:43:00Z'),
-  // thumbnail: TODO
+  thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
   visited: [
     // traveling to Saturn
@@ -180,11 +198,11 @@ export const CASSINI: Spacecraft = {
 
 export const HUYGENS: Spacecraft = {
   name: 'Huygens',
-  organization: ESA,
+  organization: SpacecraftOrganization.ESA,
   launchMass: 320,
   power: 600, // 1800 Wh, estimated battery life of 3 hours
   start: new Date('1997-10-15T08:43:00Z'),
-  // thumbnail: TODO
+  thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
   visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDING, start: new Date('2005-01-14T12:43:00Z') }],
 };
@@ -201,3 +219,15 @@ export const SPACECRAFT_BY_BODY_ID = SPACECRAFT.reduce<Record<CelestialBodyId, A
   },
   {}
 );
+
+export function isSpacecraft(obj: unknown): obj is Spacecraft {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'name' in obj &&
+    typeof obj.name === 'string' &&
+    'organization' in obj &&
+    typeof obj.organization === 'string' &&
+    Object.values(SpacecraftOrganization).includes(obj.organization as SpacecraftOrganization)
+  );
+}
