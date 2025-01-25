@@ -106,7 +106,7 @@ export const VENUS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'venus-thumb.jpg',
     texture: 'venus-texture.jpg',
-    gallery: ['venus-venera.jpg', 'venus-venera2.jpg', 'venus-magellan.jpg'],
+    gallery: [{ filename: 'venus-venera.jpg' }, { filename: 'venus-venera2.jpg' }, { filename: 'venus-magellan.jpg' }],
   },
 });
 
@@ -163,6 +163,7 @@ export const LUNA = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'luna-thumb.jpg',
     texture: 'luna-texture.jpg',
+    gallery: [{ filename: 'luna-change-landing.mp4' }],
   },
 });
 
@@ -193,7 +194,7 @@ export const MARS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'mars-thumb.jpg',
     texture: 'mars-texture.jpg',
-    gallery: ['mars-korolev.jpg', 'mars-viking.jpg', 'mars-curiosity.jpg'],
+    gallery: [{ filename: 'mars-korolev.jpg' }, { filename: 'mars-viking.jpg' }, { filename: 'mars-curiosity.jpg' }],
   },
 });
 
@@ -426,7 +427,7 @@ export const PSYCHE = celestialBodyWithDefaults({
   radius: 111.5e3,
   assets: {
     thumbnail: 'psyche-thumb.jpg',
-    gallery: ['psyche-illustration.jpg', 'psyche-mission-illustration.jpg'],
+    gallery: [{ filename: 'psyche-illustration.jpg' }, { filename: 'psyche-mission-illustration.jpg' }],
   },
   facts: [
     {
@@ -661,7 +662,7 @@ export const BENNU: CelestialBody = celestialBodyWithDefaults({
   radius: 245.03,
   assets: {
     thumbnail: 'bennu-thumb.png',
-    gallery: ['bennu-landing.jpg', 'bennu-rotation.gif', 'bennu-surface.jpg'],
+    gallery: [{ filename: 'bennu-landing.jpg' }, { filename: 'bennu-rotation.gif' }, { filename: 'bennu-surface.jpg' }],
   },
 });
 
@@ -685,7 +686,11 @@ export const RYUGU: CelestialBody = celestialBodyWithDefaults({
   radius: 448,
   assets: {
     thumbnail: 'ryugu-thumb.jpg',
-    gallery: ['ryugu-surface.jpg', 'ryugu-surface2.jpg', 'ryugu-rotation.gif'],
+    gallery: [
+      { filename: 'ryugu-surface.jpg' },
+      { filename: 'ryugu-surface2.jpg' },
+      { filename: 'ryugu-rotation.gif' },
+    ],
   },
 });
 
@@ -735,7 +740,7 @@ export const CG67P = celestialBodyWithDefaults({
   },
   assets: {
     thumbnail: 'cg67p-thumb.jpg',
-    gallery: ['cg67p-animation.gif', 'cg67p-thumb2.jpg', 'cg67p-thumb3.jpg'],
+    gallery: [{ filename: 'cg67p-animation.gif' }, { filename: 'cg67p-thumb2.jpg' }, { filename: 'cg67p-thumb3.jpg' }],
   },
 });
 
@@ -1095,7 +1100,7 @@ export const ARROKOTH = celestialBodyWithDefaults({
   },
   assets: {
     thumbnail: 'arrokoth-thumb.jpg',
-    gallery: ['arrokoth-rotation.gif'],
+    gallery: [{ filename: 'arrokoth-rotation.gif' }],
   },
 });
 
