@@ -47,10 +47,17 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
 };
 
 export enum SpacecraftVisitType {
-  FLYBY = 'flyby',
-  ORBIT = 'orbit',
-  LANDING = 'landing',
-  GRAVITY_ASSIST = 'gravity assist',
+  FLYBY = 'Flyby',
+  ORBIT = 'Orbit',
+  LANDING = 'Landing',
+  ROVER = 'Rover',
+  GRAVITY_ASSIST = 'Gravity Assist',
+}
+
+export enum SpacecraftStatus {
+  OPERATIONAL = 'Operational',
+  DEFUNCT = 'Defunct',
+  CRASHED = 'Crashed',
 }
 
 export type Spacecraft = {
@@ -58,8 +65,9 @@ export type Spacecraft = {
   organization: SpacecraftOrganization;
   launchMass: number; // kg
   power: number; // watts
-  start: Date;
+  start: Date; // TODO: rename to launchDate?
   end?: Date;
+  status: { status: SpacecraftStatus; details?: string };
   thumbnail?: string;
   wiki: string;
   crew?: Array<string>;
@@ -78,6 +86,7 @@ export const VOYAGER_1: Spacecraft = {
   launchMass: 815,
   power: 470,
   start: new Date('1977-09-05T12:56:01Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'voyager-1.png',
   wiki: 'https://en.wikipedia.org/wiki/Voyager_1',
   visited: [
@@ -103,6 +112,7 @@ export const VOYAGER_2: Spacecraft = {
   launchMass: 721.9,
   power: 470,
   start: new Date('1977-08-20T14:29:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'voyager-1.png', // twin spacecraft
   wiki: 'https://en.wikipedia.org/wiki/Voyager_2',
   visited: [
@@ -169,6 +179,10 @@ export const CASSINI: Spacecraft = {
   launchMass: 5712,
   power: 885,
   start: new Date('1997-10-15T08:43:00Z'),
+  status: {
+    status: SpacecraftStatus.CRASHED,
+    details: "Intentionally flown into Saturn's atmosphere on September 15th, 2017",
+  },
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
   visited: [
@@ -202,12 +216,25 @@ export const HUYGENS: Spacecraft = {
   launchMass: 320,
   power: 600, // 1800 Wh, estimated battery life of 3 hours
   start: new Date('1997-10-15T08:43:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
   visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDING, start: new Date('2005-01-14T12:43:00Z') }],
 };
 
-export const SPACECRAFT: Array<Spacecraft> = [VOYAGER_1, VOYAGER_2, CASSINI, HUYGENS];
+export const CURIOSITY: Spacecraft = {
+  name: 'Curiosity',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 899,
+  power: 100,
+  start: new Date('2011-11-26T15:02:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'curiosity-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
+};
+
+export const SPACECRAFT: Array<Spacecraft> = [VOYAGER_1, VOYAGER_2, CASSINI, HUYGENS, CURIOSITY];
 
 // TODO: sort by ascending visit date?
 export const SPACECRAFT_BY_BODY_ID = SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>(

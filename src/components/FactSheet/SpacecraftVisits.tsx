@@ -4,6 +4,7 @@ import { Spacecraft, SPACECRAFT_ORGANIZATIONS, SpacecraftOrganization } from '..
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
 import { LoadingCursor } from './LoadingCursor.tsx';
+import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
@@ -30,7 +31,7 @@ function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
   const visitInfo = spacecraft.visited.find(({ id }) => id === body.id)!;
   return (
     <UnstyledButton component="a" href={spacecraft.wiki} target="_blank">
-      <Paper className={styles.Card} withBorder p="xs">
+      <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }}>
         {spacecraft.thumbnail != null && (
           <Box ml="xs" style={{ float: 'right' }}>
             <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
@@ -38,10 +39,11 @@ function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
         )}
         <Group gap="xs" align="center">
           <Title order={6}>{spacecraft.name}</Title>
-          <SpacecraftOrganizationPill organization={spacecraft.organization} />
           <Text c="dimmed" fz="sm" fs="italic">
             {visitInfo.type}
           </Text>
+          <SpacecraftOrganizationPill organization={spacecraft.organization} />
+          <SpacecraftStatusPill status={spacecraft.status} />
         </Group>
         <Text mt={4} fz="xs" fs="italic">
           Launched in {spacecraft.start.getFullYear()}, visited in {visitInfo.start.getFullYear()}
@@ -63,11 +65,9 @@ function SpacecraftOrganizationPill({ organization }: SpacecraftOrganizationPill
   return (
     <Box style={{ flexShrink: 0 }}>
       <Pill>
-        <Group w="100%" gap={8} wrap="nowrap">
+        <Group gap={8} wrap="nowrap">
           <Thumbnail size={14} thumbnail={details.thumbnail} />
-          <Text inherit style={{ display: 'flex', flexShrink: 0 }}>
-            {details.shortName}
-          </Text>
+          {details.shortName}
         </Group>
       </Pill>
     </Box>
