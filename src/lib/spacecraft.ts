@@ -219,7 +219,7 @@ export const HUYGENS: Spacecraft = {
   launchMass: 320,
   power: 600, // 1800 Wh, estimated battery life of 3 hours
   start: new Date('1997-10-15T08:43:00Z'),
-  status: { status: SpacecraftStatus.DEFUNCT },
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
   visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDER, start: new Date('2005-01-14T12:43:00Z') }],
@@ -298,17 +298,41 @@ export const NEW_HORIZONS: Spacecraft = {
   ],
 };
 
-// export const NEW_HORIZONS: Spacecraft = {}
-// export const PARKER_SOLAR_PROBE: Spacecraft = {}
+export const GALILEO: Spacecraft = {
+  name: 'Galileo',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 2560,
+  power: 570,
+  start: new Date('1989-10-18T16:53:40Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: "Intentionally flown into Jupiter's atmosphere on September 21st, 2003",
+  },
+  thumbnail: 'galileo-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
+  visited: [
+    {
+      id: Bodies.JUPITER.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1995-12-07T12:00:00Z'),
+      end: new Date('2003-09-21T12:00:00Z'),
+    },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1995-12-07T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-06-27T12:00:00Z') },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-12-19T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1997-02-20T12:00:00Z') },
+    // TODO: Amalthea flyby on 2002-11-04
+  ],
+};
 
 export const SPACECRAFT: Array<Spacecraft> = [
   VOYAGER_1,
   VOYAGER_2,
+  GALILEO,
   CASSINI,
   HUYGENS,
   NEW_HORIZONS,
   // PARKER_SOLAR_PROBE,
-  // GALILEO,
   // MESSENGER,
   // BEPICOLOMBO,
   // SOLAR_ORBITER,

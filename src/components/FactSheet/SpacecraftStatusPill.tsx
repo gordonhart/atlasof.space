@@ -9,12 +9,12 @@ type Props = {
 export function SpacecraftStatusPill({ status: { status, details } }: Props) {
   const color =
     status === SpacecraftStatus.OPERATIONAL
-      ? 'green'
+      ? 'var(--mantine-color-green-7)'
       : status === SpacecraftStatus.DECOMMISSIONED
-        ? 'orange'
+        ? 'var(--mantine-color-gray-7)' // TODO: better color?
         : status === SpacecraftStatus.CRASHED
-          ? 'red'
-          : 'gray';
+          ? 'var(--mantine-color-red-7)'
+          : 'var(--mantine-color-gray-7)';
   const PillComponent = (
     <Pill>
       <Group gap={8} wrap="nowrap">
