@@ -26,7 +26,7 @@
     <img alt="GitHub License" src="https://img.shields.io/github/license/gordonhart/atlasof.space?style=flat-square">
   </a>
   <a href="https://buymeacoffee.com/atlasofspace">
-    <img alt="Support" src="https://img.shields.io/badge/Support_%E2%99%A5%EF%B8%8E-purple?style=flat-square">
+    <img alt="Support" src="https://img.shields.io/badge/Support-%E2%99%A5%EF%B8%8E-purple?style=flat-square">
   </a>
 </p>
 
