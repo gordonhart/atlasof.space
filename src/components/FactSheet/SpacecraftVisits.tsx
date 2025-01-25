@@ -41,9 +41,11 @@ function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
               Launched in {spacecraft.start.getFullYear()}, visited in {visitInfo.start.getFullYear()}
             </Text>
           </Stack>
-          <Box style={{ flexShrink: 0 }}>
-            <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
-          </Box>
+          {spacecraft.thumbnail != null && (
+            <Box style={{ flexShrink: 0 }}>
+              <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
+            </Box>
+          )}
         </Group>
       </Paper>
     </UnstyledButton>

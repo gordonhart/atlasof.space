@@ -32,6 +32,7 @@ export enum SpacecraftVisitType {
   FLYBY = 'flyby',
   ORBIT = 'orbit',
   LANDING = 'landing',
+  GRAVITY_ASSIST = 'gravity assist',
 }
 
 export type Spacecraft = {
@@ -41,9 +42,10 @@ export type Spacecraft = {
   power: number; // watts
   start: Date;
   end?: Date;
-  thumbnail: string;
+  thumbnail?: string;
   wiki: string;
   crew?: Array<string>;
+  // TODO: many spacecraft fly by an object multiple times -- is it worth representing that? tons of data to transcribe
   visited: Array<{
     id: CelestialBodyId;
     type: SpacecraftVisitType;
@@ -143,7 +145,51 @@ export const VOYAGER_2: Spacecraft = {
   ],
 };
 
-export const SPACECRAFT: Array<Spacecraft> = [VOYAGER_1, VOYAGER_2];
+export const CASSINI: Spacecraft = {
+  name: 'Cassini',
+  organization: NASA,
+  launchMass: 5712,
+  power: 885,
+  start: new Date('1997-10-15T08:43:00Z'),
+  // thumbnail: TODO
+  wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
+  visited: [
+    // traveling to Saturn
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('1998-04-26T12:00:00Z') },
+    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1999-08-18T03:28:00Z') },
+    // TODO: 2685 Masurksy (asteroid) flyby on 2000-01-23
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2000-12-30T10:05:00Z') },
+    // primary mission
+    {
+      id: Bodies.SATURN.id,
+      type: SpacecraftVisitType.ORBIT,
+      start: new Date('2004-05-18T12:00:00Z'),
+      end: new Date('2017-09-15T11:55:00Z'),
+    },
+    // TODO: Prometheus, Pandora
+    { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-05-27T12:00:00Z') },
+    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-07-02T12:00:00Z') },
+    { id: Bodies.IAPETUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-12-31T18:45:37Z') },
+    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-02-17T12:00:00Z') },
+    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-09-26T12:00:00Z') },
+    // solstice+equinox mission
+    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-11-26T22:37:00Z') },
+    { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-04-07T12:00:00Z') },
+  ],
+};
+
+export const HUYGENS: Spacecraft = {
+  name: 'Huygens',
+  organization: ESA,
+  launchMass: 320,
+  power: 600, // 1800 Wh, estimated battery life of 3 hours
+  start: new Date('1997-10-15T08:43:00Z'),
+  // thumbnail: TODO
+  wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
+  visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDING, start: new Date('2005-01-14T12:43:00Z') }],
+};
+
+export const SPACECRAFT: Array<Spacecraft> = [VOYAGER_1, VOYAGER_2, CASSINI, HUYGENS];
 
 // TODO: sort by ascending visit date?
 export const SPACECRAFT_BY_BODY_ID = SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>(
