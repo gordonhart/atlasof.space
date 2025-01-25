@@ -60,6 +60,7 @@ export enum SpacecraftStatus {
   OPERATIONAL = 'Operational',
   DEFUNCT = 'Defunct',
   DECOMMISSIONED = 'Decommissioned',
+  RETURNED = 'Returned',
   CRASHED = 'Crashed',
 }
 
@@ -397,7 +398,7 @@ export const APOLLO_8: Spacecraft = {
   launchMass: 28870,
   start: new Date('1968-12-21T12:51:00Z'),
   end: new Date('1968-12-27T15:51:42Z'),
-  status: { status: SpacecraftStatus.DECOMMISSIONED },
+  status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-8-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_8',
   crew: ['Frank Borman', 'James Lovell', 'William Anders'],
@@ -417,7 +418,7 @@ export const APOLLO_10: Spacecraft = {
   launchMass: 42775,
   start: new Date('1969-05-18T16:49:00Z'),
   end: new Date('1969-05-26T16:52:23Z'),
-  status: { status: SpacecraftStatus.DECOMMISSIONED },
+  status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-10-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_10',
   crew: ['Thomas Stafford', 'Gene Cernan', 'John Young'],
@@ -431,11 +432,31 @@ export const APOLLO_10: Spacecraft = {
   ],
 };
 
+export const APOLLO_11: Spacecraft = {
+  name: 'Apollo 11',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 49735,
+  start: new Date('1969-07-16T13:32:00Z'),
+  end: new Date('1969-07-24T16:50:35Z'),
+  status: { status: SpacecraftStatus.RETURNED },
+  thumbnail: 'apollo-11-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_11',
+  crew: ['Neil Armstrong', 'Buzz Aldrin', 'Michael Collins'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1969-07-20T20:17:00Z'),
+      end: new Date('1969-07-21T17:54:00Z'),
+    },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
   // Luna
   APOLLO_8,
   APOLLO_10,
-  // APOLLO_11,
+  APOLLO_11,
   // APOLLO_12,
   // APOLLO_13,
   // APOLLO_14,
