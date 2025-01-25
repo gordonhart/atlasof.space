@@ -106,7 +106,13 @@ export const VENUS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'venus-thumb.jpg',
     texture: 'venus-texture.jpg',
-    gallery: [{ filename: 'venus-venera.jpg' }, { filename: 'venus-venera2.jpg' }, { filename: 'venus-magellan.jpg' }],
+    gallery: [
+      { filename: 'venus-venera.jpg' },
+      { filename: 'venus-venera2.jpg' },
+      { filename: 'venus-eistla-regio.jpg' },
+      { filename: 'venus-venera3.jpg' },
+      { filename: 'venus-magellan.jpg' },
+    ],
   },
 });
 
