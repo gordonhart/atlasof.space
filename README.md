@@ -12,6 +12,10 @@
   <a href="https://news.ycombinator.com/item?id=42634787">
     <img alt="View on Hacker News" src="https://img.shields.io/badge/HackerNews-%E2%96%B2770-ff6600?style=flat-square" />
   </a>
+  <img alt="GitHub License" src="https://img.shields.io/github/license/gordonhart/atlasof.space?style=flat-square">
+  <a href="https://buymeacoffee.com/atlasofspace">
+    <img alt="Support" src="https://img.shields.io/badge/Support%E2%99%A5%EF%B8%8E-purple?style=flat-square">
+  </a>
 </p>
 
 <p align="center">
