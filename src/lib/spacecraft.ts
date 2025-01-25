@@ -325,6 +325,23 @@ export const GALILEO: Spacecraft = {
   ],
 };
 
+// TODO: add JAXA's Mio?
+export const BEPICOLOMBO: Spacecraft = {
+  name: 'BepiColombo',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 4100,
+  power: 150,
+  start: new Date('2018-10-20T01:45:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL, details: 'Planned to enter Mercury orbit in November 2026' },
+  thumbnail: 'bepicolombo-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/BepiColombo',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-10-15T03:48:00Z') },
+    // TODO: this start date is a flyby, will enter orbit in 2026
+    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2021-10-01T23:34:41Z') },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
   VOYAGER_1,
   VOYAGER_2,
@@ -332,9 +349,9 @@ export const SPACECRAFT: Array<Spacecraft> = [
   CASSINI,
   HUYGENS,
   NEW_HORIZONS,
+  BEPICOLOMBO,
   // PARKER_SOLAR_PROBE,
   // MESSENGER,
-  // BEPICOLOMBO,
   // SOLAR_ORBITER,
 
   // Mars

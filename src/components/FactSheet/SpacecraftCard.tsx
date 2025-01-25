@@ -36,8 +36,10 @@ export function SpacecraftCard({ spacecraft, body }: Props) {
           <Text c="dimmed" fz="sm" fs="italic">
             {visitInfo.type}
           </Text>
-          <SpacecraftOrganizationPill organization={spacecraft.organization} />
-          <SpacecraftStatusPill status={spacecraft.status} />
+          <Group gap="xs" wrap="nowrap">
+            <SpacecraftOrganizationPill organization={spacecraft.organization} />
+            <SpacecraftStatusPill status={spacecraft.status} />
+          </Group>
         </Group>
         <Text mt={4} fz="xs" fs="italic">
           Launched in {spacecraft.start.getFullYear()}, {visitVerb} in {visitInfo.start.getFullYear()}

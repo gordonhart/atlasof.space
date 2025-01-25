@@ -27,6 +27,7 @@ export function Gallery({ assets }: Props) {
           height={galleryImageWidth}
           controls={false}
           autoPlay
+          playsInline
           loop
         />
       </Stack>
