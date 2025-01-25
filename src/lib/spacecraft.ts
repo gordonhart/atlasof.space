@@ -360,6 +360,37 @@ export const MESSENGER: Spacecraft = {
   ],
 };
 
+export const PARKER_SOLAR_PROBE: Spacecraft = {
+  name: 'Parker Solar Probe',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 685,
+  power: 343,
+  start: new Date('2018-08-12T07:31:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'parker-solar-probe-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
+    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-08-12T07:31:00Z') },
+  ],
+};
+
+export const SOLAR_ORBITER: Spacecraft = {
+  name: 'Solar Orbiter',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 1800,
+  power: 180,
+  start: new Date('2020-02-10T04:03:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'solar-orbiter-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Solar_Orbiter',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-12-27T12:39:00Z') },
+    // TODO: also Earth flyby -- worth including? the list there would be massive
+    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-02-10T04:03:00Z') },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
   VOYAGER_1,
   VOYAGER_2,
@@ -369,8 +400,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   NEW_HORIZONS,
   MESSENGER,
   BEPICOLOMBO,
-  // PARKER_SOLAR_PROBE,
-  // SOLAR_ORBITER,
+  PARKER_SOLAR_PROBE,
+  SOLAR_ORBITER,
 
   // Mars
   CURIOSITY,
