@@ -117,7 +117,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         </Box>
       </Stack>
 
-      <Box style={{ justifySelf: 'flex-end' }}>
+      <Box pt="md" style={{ justifySelf: 'flex-end' }}>
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
         <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />

@@ -31,7 +31,7 @@ export function MajorSatellites({ body, bodies, updateSettings }: Props) {
   const satelliteTypeDisplayName =
     satelliteTypes.size !== 1 ? 'Satellites' : celestialBodyTypeName(satelliteTypes.values().next().value!, true);
   return (
-    <Stack gap="xs" p="md" pt="xl">
+    <Stack gap="xs" p="md" pt="lg">
       <Title order={5}>Major {satelliteTypeDisplayName}</Title>
       {satellites.map((satellite, i) => (
         <BodyCard
