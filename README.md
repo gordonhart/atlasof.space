@@ -28,6 +28,8 @@
   </a>
 </p>
 
+---
+
 ## Development
 
 ```sh
