@@ -46,6 +46,11 @@ export function SpacecraftCard({ spacecraft, body }: Props) {
         <Text mt={4} fz="xs" fs="italic">
           Launched in {spacecraft.start.getFullYear()}, {visitVerb} in {visitInfo.start.getFullYear()}
         </Text>
+        {(spacecraft.crew?.length ?? 0 > 0) && (
+          <Text mt={4} fz="xs">
+            Crewed by {(spacecraft?.crew ?? []).join(', ')}
+          </Text>
+        )}
         <Text mt={4} c="dimmed" fz="xs">
           {summary}
           {isLoading && <LoadingCursor />}

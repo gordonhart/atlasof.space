@@ -67,7 +67,7 @@ export type Spacecraft = {
   name: string;
   organization: SpacecraftOrganization;
   launchMass: number; // kg
-  power: number; // watts
+  power?: number; // watts
   start: Date; // TODO: rename to launchDate?
   end?: Date;
   status: { status: SpacecraftStatus; details?: string };
@@ -391,17 +391,71 @@ export const SOLAR_ORBITER: Spacecraft = {
   ],
 };
 
+export const APOLLO_8: Spacecraft = {
+  name: 'Apollo 8',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 28870,
+  start: new Date('1968-12-21T12:51:00Z'),
+  end: new Date('1968-12-27T15:51:42Z'),
+  status: { status: SpacecraftStatus.DECOMMISSIONED },
+  thumbnail: 'apollo-8-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_8',
+  crew: ['Frank Borman', 'James Lovell', 'William Anders'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1968-12-24T10:03:27Z'),
+      end: new Date('1968-12-25T06:13:40Z'),
+    },
+  ],
+};
+
+export const APOLLO_10: Spacecraft = {
+  name: 'Apollo 10',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 42775,
+  start: new Date('1969-05-18T16:49:00Z'),
+  end: new Date('1969-05-26T16:52:23Z'),
+  status: { status: SpacecraftStatus.DECOMMISSIONED },
+  thumbnail: 'apollo-10-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Apollo_10',
+  crew: ['Thomas Stafford', 'Gene Cernan', 'John Young'],
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1969-05-21T08:44:54Z'),
+      end: new Date('1969-05-24T10:25:29Z'),
+    },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
+  // Luna
+  APOLLO_8,
+  APOLLO_10,
+  // APOLLO_11,
+  // APOLLO_12,
+  // APOLLO_13,
+  // APOLLO_14,
+  // APOLLO_15,
+  // APOLLO_16,
+  // APOLLO_17,
+
+  // Inner missions
+  MESSENGER,
+  PARKER_SOLAR_PROBE,
+  BEPICOLOMBO,
+  SOLAR_ORBITER,
+
+  // Outer missions
   VOYAGER_1,
   VOYAGER_2,
   GALILEO,
   CASSINI,
   HUYGENS,
   NEW_HORIZONS,
-  MESSENGER,
-  BEPICOLOMBO,
-  PARKER_SOLAR_PROBE,
-  SOLAR_ORBITER,
 
   // Mars
   CURIOSITY,
