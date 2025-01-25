@@ -14,7 +14,8 @@ export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 
 export const SOL = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,
-  name: 'Sol',
+  name: 'Sol (The Sun)',
+  shortName: 'Sol',
   influencedBy: [],
   elements: {
     wrt: null,
@@ -1165,7 +1166,7 @@ export const LELEAKUHONUA = celestialBodyWithDefaults({
 
 export const FARFAROUT = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
-  name: '2018 AG37',
+  name: '2018 AG37 (FarFarOut)',
   shortName: 'FarFarOut',
   influencedBy: [SOL.id],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
