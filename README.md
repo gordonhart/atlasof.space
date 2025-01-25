@@ -3,6 +3,18 @@
 </h1>
 
 <p align="center">
+  <a href="https://app.netlify.com/sites/atlasofspace/overview">
+    <img alt="Netlify" src="https://img.shields.io/netlify/c6752917-303f-4161-a5bd-de069aa2d9b1?style=flat-square" />
+  </a>
+  <a href="https://github.com/gordonhart/atlasof.space">
+    <img alt="Github branch status" src="https://img.shields.io/github/checks-status/gordonhart/atlasof.space/trunk?style=flat-square" />
+  </a>
+  <a href="https://news.ycombinator.com/item?id=42634787">
+    <img alt="View on Hacker News" src="https://img.shields.io/badge/HackerNews-%E2%96%B2770-ff6600?style=flat-square" />
+  </a>
+</p>
+
+<p align="center">
   <a href="https://atlasof.space">
     <img src="https://atlasofspace.b-cdn.net/atlasofspace.png" alt="The Atlas of Space" width="800" />
   </a>
@@ -10,18 +22,6 @@
 
 <p align="center">
   <em>The Atlas of Space is an interactive visualization to explore the planets, moons, asteroids, and other objects in the Solar System.</em>
-</p>
-
-<p align="center">
-  <a href="https://app.netlify.com/sites/atlasofspace/overview">
-    <img alt="Netlify" src="https://img.shields.io/netlify/c6752917-303f-4161-a5bd-de069aa2d9b1" />
-  </a>
-  <a href="https://github.com/gordonhart/atlasof.space">
-    <img alt="Github branch status" src="https://img.shields.io/github/checks-status/gordonhart/atlasof.space/trunk" />
-  </a>
-  <a href="https://news.ycombinator.com/item?id=42634787">
-    <img alt="View on Hacker News" src="https://img.shields.io/badge/HackerNews-%E2%96%B2770-ff6600" />
-  </a>
 </p>
 
 ## Development
