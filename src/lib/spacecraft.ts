@@ -265,14 +265,118 @@ export const INGENUITY: Spacecraft = {
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
 };
 
+export const NEW_HORIZONS: Spacecraft = {
+  name: 'New Horizons',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 478,
+  power: 245,
+  start: new Date('2006-01-19T19:00:00Z'),
+  status: {
+    status: SpacecraftStatus.OPERATIONAL,
+    details: 'Currently traveling through the Kuiper belt',
+  },
+  thumbnail: 'new-horizons-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/New_Horizons',
+  visited: [
+    // TODO: flyby of asteroid 132524 APL
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('2007-02-28T12:00:00Z') },
+    // Pluto phase
+    {
+      id: Bodies.PLUTO.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('2015-03-10T12:00:00Z'),
+      end: new Date('2015-07-14T12:00:00Z'),
+    },
+    { id: Bodies.CHARON.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:03:00Z') },
+    { id: Bodies.HYDRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    { id: Bodies.NIX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    { id: Bodies.KERBEROS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    { id: Bodies.STYX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    // Kuiper belt phase
+    { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
+    // TODO: add 15810 Arawn
+  ],
+};
+
+// export const NEW_HORIZONS: Spacecraft = {}
+// export const PARKER_SOLAR_PROBE: Spacecraft = {}
+
 export const SPACECRAFT: Array<Spacecraft> = [
   VOYAGER_1,
   VOYAGER_2,
   CASSINI,
   HUYGENS,
+  NEW_HORIZONS,
+  // PARKER_SOLAR_PROBE,
+  // GALILEO,
+  // MESSENGER,
+  // BEPICOLOMBO,
+  // SOLAR_ORBITER,
+
+  // Mars
   CURIOSITY,
   PERSEVERANCE,
   INGENUITY,
+  // SOJOURNER,
+  // SPIRIT,
+  // OPPORTUNITY,
+  // ZHURONG,
+  // MARS_2,
+  // MARS_3,
+  // MARS_RECONNAISSANCE_ORBITER,
+  // VIKING_1,
+  // VIKING_2,
+  // MARS_PATHFINDER,
+  // PHOENIX,
+  // INSIGHT,
+
+  // Venus
+  // VENERA_1,
+  // MARINER_2,
+  // ZOND_1,
+  // VENERA_2,
+  // VENERA_3,
+  // VENERA_4,
+  // MARINER_5,
+  // VENERA_5,
+  // VENERA_6,
+  // VENERA_7,
+  // VENERA_8,
+  // MARINER_10,
+  // VENERA_9,
+  // VENERA_10,
+  // VENERA_11,
+  // VENERA_12,
+  // PIONEER_VENUS_1,
+  // PIONEER_VENUS_2,
+  // VENERA_13,
+  // VENERA_14,
+  // VENERA_15,
+  // VENERA_16,
+  // VEGA_1,
+  // VEGA_2,
+  // MAGELLAN,
+  // VENUS_EXPRESS,
+  // AKATSUKI,
+  // IKAROS,
+  // SHINEN,
+
+  // Asteroids
+  // PIONEER_10,
+  // NEAR_SHOEMAKER,
+  // DEEP_SPACE_1,
+  // STARDUST,
+  // HAYABUSA,
+  // ROSETTA,
+  // DEEP_IMPACT,
+  // DAWN,
+  // CHANGE_2,
+  // HAYABUSA_2,
+  // OSIRIS_REX,
+  // LUCY,
+  // DART,
+  // PSYCHE,
+  // HERA,
 ];
 
 // TODO: sort by ascending visit date?
