@@ -20,7 +20,7 @@ export function Gallery({ assets }: Props) {
   const galleryImageWidth = 178;
   const assetComponents = assets.map((asset, i) =>
     VIDEO_EXTENSIONS.some(ext => asset.filename.endsWith(ext)) ? (
-      <Stack key={i} align="center" style={{ overflow: 'hidden' }}>
+      <Stack key={i} align="center" style={{ borderRadius: 'var(--mantine-radius-md)', overflow: 'hidden' }}>
         <video
           src={asCdnUrl(asset.filename)}
           width={galleryImageWidth}

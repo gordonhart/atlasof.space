@@ -204,7 +204,13 @@ export const MARS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'mars-thumb.jpg',
     texture: 'mars-texture.jpg',
-    gallery: [{ filename: 'mars-korolev.jpg' }, { filename: 'mars-viking.jpg' }, { filename: 'mars-curiosity.jpg' }],
+    gallery: [
+      { filename: 'mars-curiosity.jpg' },
+      { filename: 'mars-perseverance.jpg' },
+      { filename: 'mars-ingenuity.mp4' },
+      { filename: 'mars-viking.jpg' },
+      { filename: 'mars-korolev.jpg' },
+    ],
   },
 });
 
