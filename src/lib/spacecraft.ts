@@ -46,17 +46,20 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
   [SpacecraftOrganization.JAXA]: JAXA,
 };
 
+// TODO: mixing concerns here -- some are identity-related, others are visit-related
 export enum SpacecraftVisitType {
   FLYBY = 'Flyby',
-  ORBIT = 'Orbit',
-  LANDING = 'Landing',
-  ROVER = 'Rover',
   GRAVITY_ASSIST = 'Gravity Assist',
+  ORBITER = 'Orbiter',
+  LANDER = 'Lander',
+  ROVER = 'Rover',
+  HELICOPTER = 'Helicopter',
 }
 
 export enum SpacecraftStatus {
   OPERATIONAL = 'Operational',
   DEFUNCT = 'Defunct',
+  DECOMMISSIONED = 'Decommissioned',
   CRASHED = 'Crashed',
 }
 
@@ -180,7 +183,7 @@ export const CASSINI: Spacecraft = {
   power: 885,
   start: new Date('1997-10-15T08:43:00Z'),
   status: {
-    status: SpacecraftStatus.CRASHED,
+    status: SpacecraftStatus.DECOMMISSIONED,
     details: "Intentionally flown into Saturn's atmosphere on September 15th, 2017",
   },
   thumbnail: 'cassini-huygens.gif',
@@ -194,7 +197,7 @@ export const CASSINI: Spacecraft = {
     // primary mission
     {
       id: Bodies.SATURN.id,
-      type: SpacecraftVisitType.ORBIT,
+      type: SpacecraftVisitType.ORBITER,
       start: new Date('2004-05-18T12:00:00Z'),
       end: new Date('2017-09-15T11:55:00Z'),
     },
@@ -219,7 +222,7 @@ export const HUYGENS: Spacecraft = {
   status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
-  visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDING, start: new Date('2005-01-14T12:43:00Z') }],
+  visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDER, start: new Date('2005-01-14T12:43:00Z') }],
 };
 
 export const CURIOSITY: Spacecraft = {
@@ -234,7 +237,43 @@ export const CURIOSITY: Spacecraft = {
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
 };
 
-export const SPACECRAFT: Array<Spacecraft> = [VOYAGER_1, VOYAGER_2, CASSINI, HUYGENS, CURIOSITY];
+export const PERSEVERANCE: Spacecraft = {
+  name: 'Perseverance',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 1025,
+  power: 110,
+  start: new Date('2020-07-30T11:50:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'perseverance-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2021-02-18T20:55:00Z') }],
+};
+
+export const INGENUITY: Spacecraft = {
+  name: 'Ingenuity',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 1.8,
+  power: 350,
+  start: new Date('2020-07-30T11:50:00Z'),
+  end: new Date('2024-01-18T12:00:00Z'),
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Retired in 2024 due to sustained rotor damage',
+  },
+  thumbnail: 'ingenuity-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
+};
+
+export const SPACECRAFT: Array<Spacecraft> = [
+  VOYAGER_1,
+  VOYAGER_2,
+  CASSINI,
+  HUYGENS,
+  CURIOSITY,
+  PERSEVERANCE,
+  INGENUITY,
+];
 
 // TODO: sort by ascending visit date?
 export const SPACECRAFT_BY_BODY_ID = SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>(

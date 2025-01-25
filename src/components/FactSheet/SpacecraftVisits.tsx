@@ -1,6 +1,11 @@
 import { Box, Group, Paper, Pill, Stack, Text, Title, UnstyledButton } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
-import { Spacecraft, SPACECRAFT_ORGANIZATIONS, SpacecraftOrganization } from '../../lib/spacecraft.ts';
+import {
+  Spacecraft,
+  SPACECRAFT_ORGANIZATIONS,
+  SpacecraftOrganization,
+  SpacecraftVisitType,
+} from '../../lib/spacecraft.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
 import { LoadingCursor } from './LoadingCursor.tsx';
@@ -29,6 +34,14 @@ type SpacecraftCardProps = {
 function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
   const { data: summary, isLoading } = useSummaryStream(spacecraft);
   const visitInfo = spacecraft.visited.find(({ id }) => id === body.id)!;
+  const visitVerb =
+    visitInfo.type === SpacecraftVisitType.ROVER || visitInfo.type === SpacecraftVisitType.LANDER
+      ? 'landed'
+      : visitInfo.type === SpacecraftVisitType.ORBITER
+        ? 'entered orbit'
+        : visitInfo.type === SpacecraftVisitType.HELICOPTER
+          ? 'started flying'
+          : 'visited';
   return (
     <UnstyledButton component="a" href={spacecraft.wiki} target="_blank">
       <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }}>
@@ -46,7 +59,7 @@ function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
           <SpacecraftStatusPill status={spacecraft.status} />
         </Group>
         <Text mt={4} fz="xs" fs="italic">
-          Launched in {spacecraft.start.getFullYear()}, visited in {visitInfo.start.getFullYear()}
+          Launched in {spacecraft.start.getFullYear()}, {visitVerb} in {visitInfo.start.getFullYear()}
         </Text>
         <Text mt={4} c="dimmed" fz="xs">
           {summary}
@@ -63,13 +76,13 @@ type SpacecraftOrganizationPillProps = {
 function SpacecraftOrganizationPill({ organization }: SpacecraftOrganizationPillProps) {
   const details = SPACECRAFT_ORGANIZATIONS[organization];
   return (
-    <Box style={{ flexShrink: 0 }}>
-      <Pill>
-        <Group gap={8} wrap="nowrap">
+    <Pill>
+      <Group gap={8} wrap="nowrap">
+        <Box w={14}>
           <Thumbnail size={14} thumbnail={details.thumbnail} />
-          {details.shortName}
-        </Group>
-      </Pill>
-    </Box>
+        </Box>
+        {details.shortName}
+      </Group>
+    </Pill>
   );
 }

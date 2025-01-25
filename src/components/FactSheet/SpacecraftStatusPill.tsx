@@ -8,7 +8,13 @@ type Props = {
 };
 export function SpacecraftStatusPill({ status: { status, details } }: Props) {
   const color =
-    status === SpacecraftStatus.OPERATIONAL ? 'green' : status === SpacecraftStatus.CRASHED ? 'orange' : 'gray';
+    status === SpacecraftStatus.OPERATIONAL
+      ? 'green'
+      : status === SpacecraftStatus.DECOMMISSIONED
+        ? 'orange'
+        : status === SpacecraftStatus.CRASHED
+          ? 'red'
+          : 'gray';
   const PillComponent = (
     <Pill>
       <Group gap={8} wrap="nowrap">
