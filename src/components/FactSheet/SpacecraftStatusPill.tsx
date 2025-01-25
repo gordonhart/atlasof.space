@@ -10,10 +10,10 @@ export function SpacecraftStatusPill({ status: { status, details } }: Props) {
   const color =
     status === SpacecraftStatus.OPERATIONAL
       ? 'var(--mantine-color-green-7)'
-      : status === SpacecraftStatus.DECOMMISSIONED
-        ? 'var(--mantine-color-gray-7)' // TODO: better color?
-        : status === SpacecraftStatus.CRASHED
-          ? 'var(--mantine-color-red-7)'
+      : status === SpacecraftStatus.CRASHED
+        ? 'var(--mantine-color-red-7)'
+        : status === SpacecraftStatus.RETURNED
+          ? 'var(--mantine-color-cyan-7)'
           : 'var(--mantine-color-gray-7)';
   const PillComponent = (
     <Pill>
