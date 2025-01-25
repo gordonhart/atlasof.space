@@ -37,7 +37,7 @@ export function Gallery({ assets }: Props) {
   return (
     <Stack p="md" pt="xl" gap="xs">
       <Title order={5}>Gallery</Title>
-      {isXsDisplay ? (
+      {isXsDisplay || assets.length > 3 ? (
         <Carousel
           classNames={styles}
           slidesToScroll={1}

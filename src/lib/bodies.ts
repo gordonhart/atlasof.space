@@ -163,7 +163,17 @@ export const LUNA = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'luna-thumb.jpg',
     texture: 'luna-texture.jpg',
-    gallery: [{ filename: 'luna-change-landing.mp4' }],
+    gallery: [
+      {
+        filename: 'luna-apollo-15.jpg',
+        caption:
+          'Apollo 15 astronaut Jim Irwin stands at the Lunar Rover, with Mt. Hadley as a backdrop, in this image taken by Dave Scott at the end of EVA-1. Newly-processed from NASA Photo ID AS15-86-11603.',
+      },
+      { filename: 'luna-apollo-17.jpg' },
+      { filename: 'luna-change-landing.mp4' },
+      { filename: 'luna-apollo-15-2.jpg' },
+      { filename: 'luna-apollo-11.jpg' },
+    ],
   },
 });
 
