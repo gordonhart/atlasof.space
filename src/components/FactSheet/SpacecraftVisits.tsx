@@ -1,14 +1,10 @@
-import { Box, Group, Paper, Pill, Stack, Text, Title, UnstyledButton } from '@mantine/core';
+import { Box, Group, Paper, Stack, Text, Title, UnstyledButton } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
-import {
-  Spacecraft,
-  SPACECRAFT_ORGANIZATIONS,
-  SpacecraftOrganization,
-  SpacecraftVisitType,
-} from '../../lib/spacecraft.ts';
+import { Spacecraft, SpacecraftVisitType } from '../../lib/spacecraft.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
 import { LoadingCursor } from './LoadingCursor.tsx';
+import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 import { Thumbnail } from './Thumbnail.tsx';
 
@@ -67,22 +63,5 @@ function SpacecraftCard({ spacecraft, body }: SpacecraftCardProps) {
         </Text>
       </Paper>
     </UnstyledButton>
-  );
-}
-
-type SpacecraftOrganizationPillProps = {
-  organization: SpacecraftOrganization;
-};
-function SpacecraftOrganizationPill({ organization }: SpacecraftOrganizationPillProps) {
-  const details = SPACECRAFT_ORGANIZATIONS[organization];
-  return (
-    <Pill>
-      <Group gap={8} wrap="nowrap">
-        <Box w={14}>
-          <Thumbnail size={14} thumbnail={details.thumbnail} />
-        </Box>
-        {details.shortName}
-      </Group>
-    </Pill>
   );
 }
