@@ -1,5 +1,5 @@
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
-import { AU, DEFAULT_ASTEROID_COLOR, SOL } from '../lib/bodies.ts';
+import { AU, SOL } from '../lib/bodies.ts';
 import { julianDayToEpoch } from '../lib/epoch.ts';
 import { estimateAsteroidMass } from '../lib/physics.ts';
 import { isNotFound, SBDB_URL, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
@@ -46,6 +46,5 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     },
     mass: estimateAsteroidMass(radius),
     radius,
-    color: DEFAULT_ASTEROID_COLOR, // TODO: differentiate from existing asteroids?
   });
 }

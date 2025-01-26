@@ -1,5 +1,5 @@
 import { SOLAR_SYSTEM } from './bodies.ts';
-import { nowEpoch } from './epoch.ts';
+import { nowEpoch, Time } from './epoch.ts';
 import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
 
 export type Settings = {
@@ -33,7 +33,7 @@ export const initialState: AppState = {
   settings: {
     epoch: nowEpoch(),
     play: true,
-    speed: 1, // real time
+    speed: Time.DAY, // one day per second to demonstrate motion without touching controls
     drawTail: false,
     drawOrbit: true,
     drawLabel: true,
