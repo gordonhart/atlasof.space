@@ -19,7 +19,7 @@ import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { degreesToRadians, semiMinorAxis } from '../physics.ts';
-import { KeplerianElements } from '../types.ts';
+import { CelestialBody } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
 export class OrbitalEllipse {
@@ -34,10 +34,9 @@ export class OrbitalEllipse {
   constructor(
     scene: Scene,
     resolution: Vector2,
-    elements: KeplerianElements,
+    body: CelestialBody,
     parentPosition: Vector3 | null,
-    bodyPosition: Vector3,
-    color: Color
+    bodyPosition: Vector3
   ) {
     this.scene = scene;
 
@@ -62,7 +61,7 @@ export class OrbitalEllipse {
       longitudeAscending: OmegaDeg,
       argumentOfPeriapsis: omegaDeg,
       inclination: iDeg,
-    } = elements;
+    } = body.elements;
     const a = semiMajorAxis / SCALE_FACTOR;
     const b = semiMinorAxis(a, e);
     const focusDistance = Math.sqrt(a ** 2 - b ** 2);
@@ -90,11 +89,12 @@ export class OrbitalEllipse {
     const ellipseSplinePoints = ellipseSpline.getPoints(this.nPoints * 2); // 2x points for smoother interpolation
 
     const ellipseGeometry = new BufferGeometry().setFromPoints(ellipseSplinePoints);
-    const ellipseMaterial = new LineBasicMaterial({ color });
+    const ellipseMaterial = new LineBasicMaterial({ color: new Color(body.style.bgColor ?? body.style.fgColor) });
     this.ellipse = new Line(ellipseGeometry, ellipseMaterial);
     this.ellipse.renderOrder = 0;
     this.bodyGroup.add(this.ellipse);
 
+    const color = new Color(body.style.fgColor);
     const ellipseHoverGeometry = new LineGeometry().setFromPoints(ellipseSplinePoints);
     const ellipseHoverMaterial = new LineMaterial({ color, linewidth: 2, resolution, depthTest: true });
     this.ellipseHover = new Line2(ellipseHoverGeometry, ellipseHoverMaterial);

@@ -75,6 +75,7 @@ const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } =
   [CelestialBodyType.SPACECRAFT]: '#50C878',
 };
 const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
+  [CelestialBodyType.MOON]: '#888888',
   [CelestialBodyType.ASTEROID]: '#4b4b4b',
   [CelestialBodyType.DWARF_PLANET]: '#80747f',
 };
@@ -86,7 +87,7 @@ export function celestialBodyWithDefaults(
     id: body.id ?? celestialBodyNameToId(body.name, body.shortName),
     style: {
       fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_FG_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
-      bgColor: body.style?.bgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],
+      bgColor: body.style?.bgColor ?? body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],
     },
   };
 }

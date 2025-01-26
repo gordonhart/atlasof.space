@@ -2,6 +2,7 @@ import { Color, Group, Material, Scene, Vector2, Vector3 } from 'three';
 import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { CelestialBody } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
 export class FocalRadius {
@@ -9,7 +10,7 @@ export class FocalRadius {
   private readonly group: Group;
   private readonly line: Line2;
 
-  constructor(scene: Scene, resolution: Vector2, parentPosition: Vector3, bodyPosition: Vector3, color: Color) {
+  constructor(scene: Scene, resolution: Vector2, body: CelestialBody, parentPosition: Vector3, bodyPosition: Vector3) {
     this.scene = scene;
 
     this.group = new Group();
@@ -19,6 +20,7 @@ export class FocalRadius {
     const geometry = new LineGeometry();
     const { x: px, y: py, z: pz } = bodyPosition.clone().sub(parentPosition).divideScalar(SCALE_FACTOR);
     geometry.setPositions([0, 0, 0, px, py, pz]);
+    const color = new Color(body.style.bgColor ?? body.style.fgColor);
     const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true });
     this.line = new Line2(geometry, material);
     this.line.visible = false;

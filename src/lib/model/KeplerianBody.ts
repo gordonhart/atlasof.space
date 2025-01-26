@@ -1,4 +1,4 @@
-import { Box2, Color, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
+import { Box2, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
 import {
   drawDotAtLocation,
   drawLabelAtLocation,
@@ -47,13 +47,12 @@ export class KeplerianBody extends KinematicBody {
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);
-    const color = new Color(body.style.bgColor ?? body.style.fgColor);
-    this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, position, color);
-    this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
+    this.ellipse = new OrbitalEllipse(scene, resolution, body, parent?.position ?? null, position);
+    this.radius = new FocalRadius(scene, resolution, body, parent?.position ?? new Vector3(), position);
     this.sphere = new SphericalBody(scene, body, position);
     this.dotRadius = KeplerianBody.getDotRadius(body);
     if (body.rotation != null) {
-      this.axis = new AxisIndicator(scene, resolution, this.position, body.rotation.axialTilt, body.radius, color);
+      this.axis = new AxisIndicator(scene, resolution, body, this.position);
     }
   }
 
