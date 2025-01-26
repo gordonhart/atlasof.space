@@ -6,7 +6,6 @@ import { celestialBodyWithDefaults } from './utils.ts';
 
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
-export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
 
 export const SOL = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,

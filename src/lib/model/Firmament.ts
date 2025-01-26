@@ -1,5 +1,6 @@
 import {
   BackSide,
+  Euler,
   Material,
   Mesh,
   MeshBasicMaterial,
@@ -11,8 +12,7 @@ import {
   Vector3,
 } from 'three';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ECLIPTIC_TILT } from '../bodies.ts';
-import { FIRMAMENT_TEXTURE_URL } from '../images.ts';
+import { asCdnUrl } from '../images.ts';
 import { degreesToRadians } from '../physics.ts';
 import { CAMERA_INIT } from './constants.ts';
 
@@ -22,25 +22,29 @@ export class Firmament {
   private readonly skybox: Mesh;
   public readonly renderPass: RenderPass;
 
+  private readonly eclipticTiltDegrees = 60;
+  private readonly galacticCenterDegrees = 267;
+  private readonly firmamentFilename = 'milky-way.webp';
+
   constructor(resolution: Vector2) {
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(75, resolution.x / resolution.y, 1, 3e6);
+    this.camera = new PerspectiveCamera(75, resolution.x / resolution.y, 1, 4e6);
     this.camera.up.set(...CAMERA_INIT.up);
     this.camera.position.set(...CAMERA_INIT.position);
     this.camera.lookAt(...CAMERA_INIT.lookAt);
 
     const geometry = new SphereGeometry(2e6, 32, 32);
-    const texture = new TextureLoader().load(FIRMAMENT_TEXTURE_URL);
+    const texture = new TextureLoader().load(asCdnUrl(this.firmamentFilename));
     const material = new MeshBasicMaterial({
       map: texture,
       side: BackSide,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.15,
     });
-    // material.depthTest = false;
     this.skybox = new Mesh(geometry, material);
-    this.skybox.rotateX(Math.PI / 2 - degreesToRadians(ECLIPTIC_TILT));
-    this.skybox.renderOrder = -1;
+    const xRotation = Math.PI / 2 + degreesToRadians(this.eclipticTiltDegrees);
+    const zRotation = degreesToRadians(this.galacticCenterDegrees);
+    this.skybox.setRotationFromEuler(new Euler(xRotation, 0, zRotation, 'ZYX'));
     this.scene.add(this.skybox);
     this.renderPass = new RenderPass(this.scene, this.camera);
   }
