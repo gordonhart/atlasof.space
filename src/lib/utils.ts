@@ -70,7 +70,7 @@ const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type aster
 const DEFAULT_CELESTIAL_BODY_COLOR: { [T in CelestialBodyType]?: `#${string}` } = {
   [CelestialBodyType.MOON]: '#aaaaaa',
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
-  // [CelestialBodyType.DWARF_PLANET]: '#947293',
+  [CelestialBodyType.COMET]: '#51807c',
   [CelestialBodyType.DWARF_PLANET]: '#80747f',
   [CelestialBodyType.SPACECRAFT]: '#50C878',
 };
