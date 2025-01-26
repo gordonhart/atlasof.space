@@ -1,3 +1,4 @@
+import { map } from 'ramda';
 import * as Bodies from './bodies.ts';
 import { CelestialBodyId } from './types.ts';
 
@@ -5,45 +6,30 @@ export enum SpacecraftOrganization {
   NASA = 'NASA',
   ESA = 'ESA',
   JAXA = 'JAXA',
-  ROSCOSMOS = 'ROSCOSMOS',
 }
 
 export type SpacecraftOrganizationDetails = {
-  organization: SpacecraftOrganization;
   name: string;
   shortName: string;
   thumbnail: string;
 };
 
-const NASA: SpacecraftOrganizationDetails = {
-  organization: SpacecraftOrganization.NASA,
-  name: 'National Aeronautics and Space Administration',
-  shortName: 'NASA',
-  thumbnail: 'nasa-meatball.svg',
-};
-const ESA: SpacecraftOrganizationDetails = {
-  organization: SpacecraftOrganization.ESA,
-  name: 'European Space Agency',
-  shortName: 'ESA',
-  thumbnail: 'esa-logo.png',
-};
-const ROSCOSMOS: SpacecraftOrganizationDetails = {
-  organization: SpacecraftOrganization.ROSCOSMOS,
-  name: 'State Corporation for Space Activities',
-  shortName: 'Roscosmos',
-  thumbnail: 'roscosmos-logo.png',
-};
-const JAXA: SpacecraftOrganizationDetails = {
-  organization: SpacecraftOrganization.JAXA,
-  name: 'Japan Aerospace Exploration Agency',
-  shortName: 'JAXA',
-  thumbnail: 'jaxa-logo.png',
-};
 export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, SpacecraftOrganizationDetails> = {
-  [SpacecraftOrganization.NASA]: NASA,
-  [SpacecraftOrganization.ESA]: ESA,
-  [SpacecraftOrganization.ROSCOSMOS]: ROSCOSMOS,
-  [SpacecraftOrganization.JAXA]: JAXA,
+  [SpacecraftOrganization.NASA]: {
+    name: 'National Aeronautics and Space Administration',
+    shortName: 'NASA',
+    thumbnail: 'nasa-meatball.svg',
+  },
+  [SpacecraftOrganization.ESA]: {
+    name: 'European Space Agency',
+    shortName: 'ESA',
+    thumbnail: 'esa-logo.png',
+  },
+  [SpacecraftOrganization.JAXA]: {
+    name: 'Japan Aerospace Exploration Agency',
+    shortName: 'JAXA',
+    thumbnail: 'jaxa-logo.png',
+  },
 };
 
 // TODO: mixing concerns here -- some are identity-related, others are visit-related
@@ -174,6 +160,7 @@ export const VOYAGER_2: Spacecraft = {
     { id: Bodies.LARISSA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:51:00Z') },
     { id: Bodies.PROTEUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T05:29:00Z') },
     { id: Bodies.TRITON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T09:23:00Z') },
+    { id: Bodies.NEREID.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T12:00:00Z') },
   ],
 };
 
@@ -425,6 +412,24 @@ export const PSYCHE: Spacecraft = {
   visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
 };
 
+export const EUROPA_CLIPPER: Spacecraft = {
+  name: 'Europa Clipper',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 6065,
+  power: 600,
+  start: new Date('2024-10-14T16:06:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'europa-clipper-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-01T17:00:00Z') },
+    // some uncertainty here as these are planned dates
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2030-04-11T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') }, // many flybys
+  ],
+};
+
 export const APOLLO_8: Spacecraft = {
   name: 'Apollo 8',
   organization: SpacecraftOrganization.NASA,
@@ -598,6 +603,27 @@ export const APOLLO_17: Spacecraft = {
   ],
 };
 
+export const NEAR_SHOEMAKER: Spacecraft = {
+  name: 'NEAR Shoemaker',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 805,
+  power: 1800,
+  start: new Date('1996-02-17T20:43:27Z'),
+  end: new Date('2001-02-28T00:00:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Soft landed on 433 Eros on February 12th, 2001' },
+  wiki: 'https://en.wikipedia.org/wiki/NEAR_Shoemaker',
+  thumbnail: 'near-shoemaker-thumb.png',
+  visited: [
+    { id: Bodies.MATHILDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1997-06-27T12:56:00Z') },
+    {
+      id: Bodies.EROS.id,
+      type: SpacecraftVisitType.ORBITER, // TODO: also lander, ultimately
+      start: new Date('2000-02-14T15:33:00Z'),
+      end: new Date('2001-02-28T00:00:00Z'),
+    },
+  ],
+};
+
 export const ROSETTA: Spacecraft = {
   name: 'Rosetta',
   organization: SpacecraftOrganization.ESA,
@@ -621,6 +647,33 @@ export const ROSETTA: Spacecraft = {
       type: SpacecraftVisitType.ORBITER,
       start: new Date('2014-08-05T09:06:00Z'),
       end: new Date('2016-09-30T10:39:28Z'),
+    },
+  ],
+};
+
+export const DAWN: Spacecraft = {
+  name: 'Dawn',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 1217.7,
+  power: 10000,
+  start: new Date('2007-09-27T11:34:00Z'),
+  end: new Date('2018-10-30T12:00:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Remains in a stable orbit around Ceres' },
+  wiki: 'https://en.wikipedia.org/wiki/Dawn_(spacecraft)',
+  thumbnail: 'dawn-thumb.png',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2009-02-17T12:00:00Z') },
+    {
+      id: Bodies.VESTA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2011-07-16T12:00:00Z'),
+      end: new Date('2012-09-05T12:00:00Z'),
+    },
+    {
+      id: Bodies.CERES.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2015-03-06T12:00:00Z'),
+      end: new Date('2018-10-30T12:00:00Z'),
     },
   ],
 };
@@ -743,14 +796,15 @@ export const SPACECRAFT: Array<Spacecraft> = [
 
   // Asteroids
   // PIONEER_10,
-  // NEAR_SHOEMAKER,
+  NEAR_SHOEMAKER,
   // DEEP_SPACE_1,
   // STARDUST,
   // HAYABUSA,
   // ROSETTA,
   // DEEP_IMPACT,
-  // DAWN,
   // CHANGE_2,
+  DAWN,
+  ROSETTA,
   HAYABUSA_2,
   OSIRIS_REX,
   // LUCY,
@@ -764,20 +818,20 @@ export const SPACECRAFT: Array<Spacecraft> = [
   GALILEO,
   CASSINI,
   HUYGENS,
-  ROSETTA,
   NEW_HORIZONS,
   JUICE,
+  // JUNO,
+  EUROPA_CLIPPER,
 ];
 
-// TODO: sort by ascending visit date?
-export const SPACECRAFT_BY_BODY_ID = SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>(
-  (acc, spacecraft) => {
+export const SPACECRAFT_BY_BODY_ID = map(
+  spacecraft => spacecraft.sort((a, b) => a.start.getTime() - b.start.getTime()),
+  SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>((acc, spacecraft) => {
     spacecraft.visited.forEach(visited => {
       acc[visited.id] = [...(acc[visited.id] ?? []), spacecraft];
     });
     return acc;
-  },
-  {}
+  }, {})
 );
 
 export function isSpacecraft(obj: unknown): obj is Spacecraft {
