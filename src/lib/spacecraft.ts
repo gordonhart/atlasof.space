@@ -411,6 +411,18 @@ export const JUICE: Spacecraft = {
   ],
 };
 
+export const PSYCHE: Spacecraft = {
+  name: 'Psyche',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 2608,
+  power: 4500,
+  start: new Date('2023-10-13T14:19:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'psyche-spacecraft-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
+  visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
+};
+
 export const APOLLO_8: Spacecraft = {
   name: 'Apollo 8',
   organization: SpacecraftOrganization.NASA,
@@ -741,7 +753,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   OSIRIS_REX,
   // LUCY,
   // DART,
-  // PSYCHE,
+  PSYCHE,
   // HERA,
 
   // Outer missions
