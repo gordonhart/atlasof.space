@@ -79,7 +79,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       <FactSheetTitle
         title={body.name}
         subTitle={celestialBodyTypeDescription(body)}
-        color={body.color}
+        color={body.style.fgColor}
         onClose={() => updateSettings({ center: null })}
         onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
       />

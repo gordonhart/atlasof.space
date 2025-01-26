@@ -1,4 +1,4 @@
-import { Point2 } from './types.ts';
+import { HexColor, Point2 } from './types.ts';
 
 export const LABEL_FONT_FAMILY = 'Electrolize, sans-serif';
 
@@ -25,7 +25,7 @@ export function isLabelFontAvailable(ctx: CanvasRenderingContext2D) {
 // TODO: corners behave weirdly with this implementation; may want 4 more types for the corners
 export function drawOffscreenIndicator(
   ctx: CanvasRenderingContext2D,
-  color: `#${string}`,
+  color: HexColor,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [xPx, yPx]: Point2
 ) {
@@ -58,7 +58,8 @@ export function drawOffscreenIndicator(
 export function drawLabelAtLocation(
   ctx: CanvasRenderingContext2D,
   label: string,
-  color: `#${string}`,
+  textColor: HexColor,
+  strokeColor: HexColor,
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2,
   radius: number
@@ -94,12 +95,12 @@ export function drawLabelAtLocation(
   offsets.forEach(([x, y]) => ctx.lineTo(x0 + x * xSign, y0 - y * ySign));
   ctx.closePath();
   ctx.fillStyle = 'black';
-  ctx.strokeStyle = color;
+  ctx.strokeStyle = strokeColor;
   ctx.fill();
   ctx.stroke();
 
   // draw text
-  ctx.fillStyle = color;
+  ctx.fillStyle = textColor;
   ctx.fillText(label, xIsCloseToRightEdge ? x0 - w : x0 + h / 2, y0 - boxPadPx + (yIsCloseToTopEdge ? h : 0));
   ctx.restore();
 
@@ -110,7 +111,7 @@ export function drawLabelAtLocation(
 
 export function drawDotAtLocation(
   ctx: CanvasRenderingContext2D,
-  color: `#${string}`,
+  color: HexColor,
   [xPx, yPx]: Point2, // centered on this value
   radiusPx: number
 ) {
@@ -124,7 +125,7 @@ export function drawDotAtLocation(
 type CaretType = 'right' | 'left' | 'up' | 'down';
 function drawCaretAtLocation(
   ctx: CanvasRenderingContext2D,
-  color: `#${string}`,
+  color: HexColor,
   [xPx, yPx]: Point2, // centered on this value
   type: CaretType
 ) {

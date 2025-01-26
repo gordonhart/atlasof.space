@@ -42,7 +42,7 @@ export class RingObject {
       const textureMap = new TextureLoader().load(asCdnUrl(ring.texture));
       material = new MeshStandardMaterial({ map: textureMap, side: DoubleSide });
     } else {
-      material = new MeshBasicMaterial({ color: new Color(body.color) });
+      material = new MeshBasicMaterial({ color: new Color(body.style.fgColor) });
     }
     this.ring = new Mesh(geometry, material);
     this.ring.rotation.x =

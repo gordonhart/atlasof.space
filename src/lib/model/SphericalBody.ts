@@ -66,7 +66,7 @@ export class SphericalBody {
   }
 
   private getShapeMaterial(): Material {
-    const color = new Color(this.body.color);
+    const color = new Color(this.body.style.fgColor);
     const texture = this.body.assets?.texture;
     const emissive = this.body.type === CelestialBodyType.STAR;
 

@@ -103,7 +103,7 @@ export function SolarSystem() {
     const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
-  const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ORBITAL_REGIME_COLOR;
+  const focusColor = isCelestialBody(focusItem) ? focusItem.style.fgColor : DEFAULT_ORBITAL_REGIME_COLOR;
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (

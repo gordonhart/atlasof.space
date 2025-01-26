@@ -3,6 +3,7 @@ import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import { degreesToRadians } from '../physics.ts';
+import { CelestialBody } from '../types.ts';
 import { HOVER_SCALE_FACTOR, SCALE_FACTOR } from './constants.ts';
 
 export class AxisIndicator {
@@ -14,19 +15,20 @@ export class AxisIndicator {
   private readonly rotationEuler: Euler;
   private readonly segments: [Vector3, Vector3, Vector3, Vector3];
 
-  constructor(scene: Scene, resolution: Vector2, center: Vector3, axialTilt: number, bodyRadius: number, color: Color) {
+  constructor(scene: Scene, resolution: Vector2, body: CelestialBody, center: Vector3) {
     this.scene = scene;
-    this.bodyRadius = bodyRadius;
+    this.bodyRadius = body.radius;
 
     this.group = new Group();
     this.group.position.copy(center).divideScalar(SCALE_FACTOR);
     this.scene.add(this.group);
 
-    this.rotationEuler = new Euler(degreesToRadians(axialTilt), 0, 0);
+    this.rotationEuler = new Euler(degreesToRadians(body.rotation?.axialTilt ?? 0), 0, 0);
     this.segments = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
 
     const geometry = new LineSegmentsGeometry();
     geometry.setPositions(this.calculatePositions());
+    const color = new Color(body.style.bgColor ?? body.style.fgColor);
     const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true });
     material.depthTest = true;
     this.line = new LineSegments2(geometry, material);

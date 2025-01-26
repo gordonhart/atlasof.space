@@ -6,7 +6,6 @@ import { celestialBodyWithDefaults } from './utils.ts';
 
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
-export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
 
 export const SOL = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,
@@ -29,7 +28,7 @@ export const SOL = celestialBodyWithDefaults({
     axialTilt: 7.25,
     siderealPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
   },
-  color: '#fa0',
+  style: { fgColor: '#fa0' },
   assets: {
     thumbnail: 'sol-thumb.jpg',
     texture: 'sol-texture.jpg',
@@ -63,7 +62,7 @@ export const MERCURY = celestialBodyWithDefaults({
     axialTilt: 0.034,
     siderealPeriod: 58.6467 * Time.DAY,
   },
-  color: '#b3aeae',
+  style: { fgColor: '#b3aeae' },
   assets: {
     thumbnail: 'mercury-thumb.jpg',
     texture: 'mercury-texture.jpg',
@@ -98,7 +97,7 @@ export const VENUS = celestialBodyWithDefaults({
     axialTilt: 2.64, // TODO: retrograde; is this modeled correctly?
     siderealPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
   },
-  color: '#e6b667',
+  style: { fgColor: '#e6b667' },
   assets: {
     thumbnail: 'venus-thumb.jpg',
     texture: 'venus-texture.jpg',
@@ -133,7 +132,7 @@ export const EARTH = celestialBodyWithDefaults({
     axialTilt: -23.4, // TODO: this points it in the right direction -- should all axial tilts be in this direction?
     siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
   },
-  color: '#7e87dd',
+  style: { fgColor: '#7e87dd' },
   assets: {
     thumbnail: 'earth-thumb.jpg',
     texture: 'earth-texture.jpg',
@@ -201,7 +200,7 @@ export const MARS = celestialBodyWithDefaults({
     axialTilt: 25.19,
     siderealPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
   },
-  color: '#c96c3c',
+  style: { fgColor: '#c96c3c' },
   assets: {
     thumbnail: 'mars-thumb.jpg',
     texture: 'mars-texture.jpg',
@@ -870,7 +869,7 @@ export const PLUTO = celestialBodyWithDefaults({
     axialTilt: 122.53,
     siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
   },
-  color: '#E7C7A4',
+  style: { fgColor: '#E7C7A4' },
   assets: { thumbnail: 'pluto-thumb.jpg' },
 });
 
@@ -1256,7 +1255,7 @@ export const JUPITER = celestialBodyWithDefaults({
     axialTilt: 3.13,
     siderealPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
   },
-  color: '#e9be76',
+  style: { fgColor: '#e9be76' },
   assets: {
     thumbnail: 'jupiter-thumb.jpg',
     texture: 'jupiter-texture.jpg',
@@ -1279,7 +1278,7 @@ export const IO = celestialBodyWithDefaults({
   },
   mass: 8.931938e22,
   radius: 1821.6e3,
-  color: '#fcf794',
+  style: { fgColor: '#fcf794' },
   assets: { thumbnail: 'io-thumb.jpg' },
 });
 
@@ -1299,7 +1298,7 @@ export const EUROPA = celestialBodyWithDefaults({
   },
   mass: 4.799844e22,
   radius: 1560.8e3,
-  color: '#bfcccb',
+  style: { fgColor: '#bfcccb' },
   assets: { thumbnail: 'europa-thumb.jpg' },
   facts: [
     {
@@ -1382,7 +1381,7 @@ export const SATURN = celestialBodyWithDefaults({
       texture: 'saturn-rings-texture.png',
     },
   ],
-  color: '#d7be87',
+  style: { fgColor: '#d7be87' },
   assets: {
     thumbnail: 'saturn-thumb.jpg',
     texture: 'saturn-texture.jpg',
@@ -1500,7 +1499,7 @@ export const TITAN = celestialBodyWithDefaults({
   },
   mass: 1.3452e23,
   radius: 2574.7e3,
-  color: '#f1e193',
+  style: { fgColor: '#f1e193' },
   assets: {
     thumbnail: 'titan-thumb.jpg',
     gallery: [{ filename: 'huygens-descent.mp4' }, { filename: 'huygens.jpg' }],
@@ -1591,7 +1590,7 @@ export const URANUS = celestialBodyWithDefaults({
     axialTilt: 82.23, // TODO: retrograde -- modeled correctly?
     siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
   },
-  color: '#9bcee6',
+  style: { fgColor: '#9bcee6' },
   // rings: [], // TODO
   assets: {
     thumbnail: 'uranus-thumb.jpg',
@@ -1736,7 +1735,7 @@ export const NEPTUNE = celestialBodyWithDefaults({
     axialTilt: 28.32,
     siderealPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
   },
-  color: '#5a7cf6',
+  style: { fgColor: '#5a7cf6' },
   assets: {
     thumbnail: 'neptune-thumb.jpg',
     texture: 'neptune-texture.jpg',
