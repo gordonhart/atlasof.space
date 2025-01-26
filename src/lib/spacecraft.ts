@@ -381,6 +381,23 @@ export const SOLAR_ORBITER: Spacecraft = {
   ],
 };
 
+export const JUNO: Spacecraft = {
+  name: 'Juno',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 3625,
+  power: 14000, // at Earth, solar
+  start: new Date('2011-08-05T16:25:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'juno-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Juno_(spacecraft)',
+  visited: [
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2016-07-05T03:53:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-12-26T16:58:59Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-09-29T09:36:00Z') },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-12-14T12:00:00Z') },
+  ],
+};
+
 export const JUICE: Spacecraft = {
   name: 'Jupiter Icy Moons Explorer',
   organization: SpacecraftOrganization.ESA,
@@ -800,7 +817,6 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // DEEP_SPACE_1,
   // STARDUST,
   // HAYABUSA,
-  // ROSETTA,
   // DEEP_IMPACT,
   // CHANGE_2,
   DAWN,
@@ -820,7 +836,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   HUYGENS,
   NEW_HORIZONS,
   JUICE,
-  // JUNO,
+  JUNO,
   EUROPA_CLIPPER,
 ];
 
