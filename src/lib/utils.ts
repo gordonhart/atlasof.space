@@ -1,6 +1,6 @@
 import { AU } from './bodies.ts';
 import { Time } from './epoch.ts';
-import { CelestialBody, CelestialBodyStyle, CelestialBodyType } from './types.ts';
+import { CelestialBody, CelestialBodyStyle, CelestialBodyType, HexColor } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
   const nAbs = Math.abs(n);
@@ -67,24 +67,26 @@ export function celestialBodyNameToId(name: string, shortName?: string) {
 }
 
 const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
-const DEFAULT_ASTEROID_ORBIT_COLOR = '#4b4b4b';
-const DEFAULT_CELESTIAL_BODY_COLOR: { [T in CelestialBodyType]?: `#${string}` } = {
+const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#aaaaaa',
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
   [CelestialBodyType.COMET]: '#51807c',
-  [CelestialBodyType.DWARF_PLANET]: '#80747f',
+  [CelestialBodyType.DWARF_PLANET]: '#998a98',
   [CelestialBodyType.SPACECRAFT]: '#50C878',
+};
+const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
+  [CelestialBodyType.ASTEROID]: '#4b4b4b',
+  [CelestialBodyType.DWARF_PLANET]: '#80747f',
 };
 export function celestialBodyWithDefaults(
   body: Omit<CelestialBody, 'id' | 'style'> & { id?: string; style?: CelestialBodyStyle }
 ): CelestialBody {
-  const asteroidOrbitColor = body.type === CelestialBodyType.ASTEROID ? DEFAULT_ASTEROID_ORBIT_COLOR : undefined;
   return {
     ...body,
     id: body.id ?? celestialBodyNameToId(body.name, body.shortName),
     style: {
-      fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
-      bgColor: body.style?.bgColor ?? asteroidOrbitColor,
+      fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_FG_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
+      bgColor: body.style?.bgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],
     },
   };
 }

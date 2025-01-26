@@ -1,12 +1,13 @@
 import { ActionIcon, Box, Group, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
+import { HexColor } from '../../lib/types.ts';
 import { iconSize } from '../Controls/constants.ts';
 
 type Props = {
   title: string;
   subTitle: string;
-  color: `#${string}`;
+  color: HexColor;
   onClose: () => void;
   onHover?: (hovered: boolean) => void;
 };
