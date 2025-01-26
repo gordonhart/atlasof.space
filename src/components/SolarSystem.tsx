@@ -4,8 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
-import { DEFAULT_ASTEROID_COLOR } from '../lib/bodies.ts';
-import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { DEFAULT_ORBITAL_REGIME_COLOR, ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { initialState, UpdateSettings } from '../lib/state.ts';
 import { CelestialBody, Epoch, isCelestialBody } from '../lib/types.ts';
 import { Controls } from './Controls/Controls.tsx';
@@ -104,7 +103,7 @@ export function SolarSystem() {
     const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
     return focusBody ?? focusRegime;
   }, [settings.center, JSON.stringify(settings.bodies)]);
-  const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ASTEROID_COLOR;
+  const focusColor = isCelestialBody(focusItem) ? focusItem.color : DEFAULT_ORBITAL_REGIME_COLOR;
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (

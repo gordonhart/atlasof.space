@@ -8,10 +8,6 @@ export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
 export const ECLIPTIC_TILT = 60; // degrees of tilt between ecliptic and galactic plane
 
-export const DEFAULT_MOON_COLOR = '#aaaaaa';
-export const DEFAULT_ASTEROID_COLOR = '#6b6b6b'; // dark gray, typical for S-type asteroids
-export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
-
 export const SOL = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,
   name: 'Sol (The Sun)',
@@ -165,7 +161,6 @@ export const LUNA = celestialBodyWithDefaults({
     axialTilt: 6.687,
     siderealPeriod: 27.321661 * Time.DAY,
   },
-  color: DEFAULT_MOON_COLOR,
   assets: {
     thumbnail: 'luna-thumb.jpg',
     texture: 'luna-texture.jpg',
@@ -240,7 +235,6 @@ export const PHOBOS = celestialBodyWithDefaults({
   },
   mass: 1.0659e16,
   radius: 11.2667e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'phobos-thumb.jpg' },
 });
 
@@ -264,7 +258,6 @@ export const DEIMOS = celestialBodyWithDefaults({
   },
   mass: 1.4762e15,
   radius: 6.2e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'deimos-thumb.jpg' },
 });
 
@@ -848,7 +841,6 @@ export const TESLA_ROADSTER = celestialBodyWithDefaults({
   },
   mass: 1300,
   radius: 2,
-  color: DEFAULT_SPACECRAFT_COLOR,
   assets: { thumbnail: 'roadster-thumb.jpg' },
 });
 
@@ -903,7 +895,6 @@ export const CHARON = celestialBodyWithDefaults({
     axialTilt: 0, // TODO: verify -- pretty sure it's not tilted WRT its orbit around Pluto
     siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
   },
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'charon-thumb.jpg' },
 });
 
@@ -927,7 +918,6 @@ export const STYX = celestialBodyWithDefaults({
     axialTilt: 82,
     siderealPeriod: 3.24 * Time.DAY,
   },
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'styx-thumb.jpg' },
 });
 
@@ -947,7 +937,6 @@ export const NIX: CelestialBody = celestialBodyWithDefaults({
   },
   mass: 2.6e16,
   radius: 35e3 / 2, // not spherical
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'nix-thumb.jpg' },
 });
 
@@ -971,7 +960,6 @@ export const KERBEROS = celestialBodyWithDefaults({
     axialTilt: 96, // TODO: verify that this is WRT its own orbit
     siderealPeriod: 5.31 * Time.DAY,
   },
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'kerberos-thumb.jpg' },
 });
 
@@ -991,7 +979,6 @@ export const HYDRA = celestialBodyWithDefaults({
   },
   mass: 3.01e16,
   radius: 19e3, // not spherical
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'hydra-thumb.jpg' },
 });
 
@@ -1339,7 +1326,6 @@ export const GANYMEDE = celestialBodyWithDefaults({
   },
   mass: 1.4819e23,
   radius: 2634.1e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'ganymede-thumb.jpg' },
 });
 
@@ -1359,7 +1345,6 @@ export const CALLISTO = celestialBodyWithDefaults({
   },
   mass: 1.075938e23,
   radius: 2410.3e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'callisto-thumb.jpg' },
 });
 
@@ -1420,7 +1405,6 @@ export const MIMAS = celestialBodyWithDefaults({
   },
   mass: 3.7493e19,
   radius: 198.2e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'mimas-thumb.jpg' },
 });
 
@@ -1440,7 +1424,6 @@ export const ENCELADUS = celestialBodyWithDefaults({
   },
   mass: 1.08022e20,
   radius: 252.1e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'enceladus-thumb.jpg' },
 });
 
@@ -1460,7 +1443,6 @@ export const TETHYS = celestialBodyWithDefaults({
   },
   mass: 6.17449e20,
   radius: 531.1e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'tethys-thumb.jpg' },
 });
 
@@ -1480,7 +1462,6 @@ export const DIONE = celestialBodyWithDefaults({
   },
   mass: 1.095452e21,
   radius: 561.4e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'dione-thumb.jpg' },
 });
 
@@ -1500,7 +1481,6 @@ export const RHEA = celestialBodyWithDefaults({
   },
   mass: 2.306518e21,
   radius: 763.8e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'rhea-thumb.jpg' },
 });
 
@@ -1543,7 +1523,6 @@ export const IAPETUS = celestialBodyWithDefaults({
   },
   mass: 1.805635e21,
   radius: 734.5e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'iapetus-thumb.jpg' },
 });
 
@@ -1563,7 +1542,6 @@ export const HYPERION = celestialBodyWithDefaults({
   },
   mass: 5.551e18,
   radius: 135e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'hyperion-thumb.jpg' },
 });
 
@@ -1587,7 +1565,6 @@ export const PHOEBE = celestialBodyWithDefaults({
   },
   mass: 8.3123e18,
   radius: 106.5e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'phoebe-thumb.jpg' },
 });
 
@@ -1638,7 +1615,6 @@ export const PUCK = celestialBodyWithDefaults({
   },
   mass: 1.91e18,
   radius: 81e3 / 2,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'puck-thumb.jpg' },
 });
 
@@ -1658,7 +1634,6 @@ export const MIRANDA = celestialBodyWithDefaults({
   },
   mass: 6.293e19,
   radius: 235.8e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'miranda-thumb.jpg' },
 });
 
@@ -1678,7 +1653,6 @@ export const ARIEL = celestialBodyWithDefaults({
   },
   mass: 1.2331e21,
   radius: 578.9e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'ariel-thumb.jpg' },
 });
 
@@ -1698,7 +1672,6 @@ export const UMBRIEL = celestialBodyWithDefaults({
   },
   mass: 1.2885e21,
   radius: 584.7e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'umbriel-thumb.jpg' },
 });
 
@@ -1718,7 +1691,6 @@ export const TITANIA = celestialBodyWithDefaults({
   },
   mass: 3.455e21,
   radius: 788.4e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'titania-thumb.jpg' },
 });
 
@@ -1738,7 +1710,6 @@ export const OBERON = celestialBodyWithDefaults({
   },
   mass: 3.1104e21,
   radius: 761.4e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'oberon-thumb.jpg' },
 });
 
@@ -1792,7 +1763,6 @@ export const TRITON = celestialBodyWithDefaults({
     axialTilt: 0,
     siderealPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
   },
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'triton-thumb.jpg' },
 });
 
@@ -1812,7 +1782,6 @@ export const PROTEUS = celestialBodyWithDefaults({
   },
   mass: 2.5e19, // wide uncertainty bars
   radius: 209e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'proteus-thumb.jpg' },
 });
 
@@ -1832,7 +1801,6 @@ export const NEREID = celestialBodyWithDefaults({
   },
   mass: 3.57e19,
   radius: 357e3 / 2,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'nereid-thumb.jpg' },
 });
 
@@ -1852,7 +1820,6 @@ export const DESPINA = celestialBodyWithDefaults({
   },
   mass: 1.1e18, // high uncertainty
   radius: 75e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'despina-thumb.jpg' },
 });
 
@@ -1872,7 +1839,6 @@ export const LARISSA = celestialBodyWithDefaults({
   },
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'larissa-thumb.jpg' },
 });
 
@@ -1892,7 +1858,6 @@ export const GALATEA = celestialBodyWithDefaults({
   },
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
-  color: DEFAULT_MOON_COLOR,
   assets: { thumbnail: 'galatea-thumb.jpg' },
 });
 

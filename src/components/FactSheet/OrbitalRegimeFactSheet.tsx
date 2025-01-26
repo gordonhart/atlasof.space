@@ -1,7 +1,6 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
-import { DEFAULT_ASTEROID_COLOR } from '../../lib/bodies.ts';
-import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
+import { DEFAULT_ORBITAL_REGIME_COLOR, orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
@@ -45,7 +44,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
       <FactSheetTitle
         title={orbitalRegimeDisplayName(regime.id)}
         subTitle="Orbital Regime"
-        color={DEFAULT_ASTEROID_COLOR}
+        color={DEFAULT_ORBITAL_REGIME_COLOR}
         onClose={() => updateSettings({ center: null })}
       />
 
