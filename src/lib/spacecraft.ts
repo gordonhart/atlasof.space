@@ -584,11 +584,39 @@ export const APOLLO_17: Spacecraft = {
   ],
 };
 
+export const ROSETTA: Spacecraft = {
+  name: 'Rosetta',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 3000,
+  power: 850,
+  start: new Date('2004-03-02T07:17:51Z'),
+  end: new Date('2016-09-30T10:39:28Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Intentionally deorbited into Comet 67P in September 2016',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
+  thumbnail: 'rosetta-thumb.png',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
+    { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
+    { id: Bodies.LUTETIA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-07-10T12:00:00Z') },
+    // TODO: include lander?
+    {
+      id: Bodies.CG67P.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2014-08-05T09:06:00Z'),
+      end: new Date('2016-09-30T10:39:28Z'),
+    },
+  ],
+};
+
 // TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
 export const HAYABUSA_2: Spacecraft = {
   name: 'Hayabusa2',
   organization: SpacecraftOrganization.JAXA,
   launchMass: 600,
+  power: 2600,
   start: new Date('2014-12-03T04:22:04Z'),
   end: new Date('2020-12-05T12:00:00Z'),
   status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
@@ -601,6 +629,7 @@ export const OSIRIS_REX: Spacecraft = {
   name: 'OSIRIS-REx',
   organization: SpacecraftOrganization.NASA,
   launchMass: 2110,
+  power: 3000,
   start: new Date('2016-09-08T23:05:00Z'),
   end: new Date('2023-09-24T14:52:00Z'),
   status: {
@@ -721,6 +750,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   GALILEO,
   CASSINI,
   HUYGENS,
+  ROSETTA,
   NEW_HORIZONS,
   JUICE,
 ];
