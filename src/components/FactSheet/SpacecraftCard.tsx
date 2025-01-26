@@ -15,14 +15,16 @@ type Props = {
 export function SpacecraftCard({ spacecraft, body }: Props) {
   const { data: summary, isLoading } = useSummaryStream(spacecraft);
   const visitInfo = spacecraft.visited.find(({ id }) => id === body.id)!;
+  const visitPastTense = visitInfo.start < new Date();
+  // prettier-ignore
   const visitVerb =
     visitInfo.type === SpacecraftVisitType.ROVER || visitInfo.type === SpacecraftVisitType.LANDER
-      ? 'landed'
+      ? (visitPastTense ? 'landed' : 'planning to land')
       : visitInfo.type === SpacecraftVisitType.ORBITER
-        ? 'entered orbit'
+        ? (visitPastTense ? 'entered orbit' : 'planning to orbit')
         : visitInfo.type === SpacecraftVisitType.HELICOPTER
-          ? 'started flying'
-          : 'visited';
+          ? (visitPastTense ? 'started flying' : 'planning to start flying')
+          : (visitPastTense ? 'visited' : 'planning to visit');
   return (
     <UnstyledButton component="a" href={spacecraft.wiki} target="_blank">
       <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }}>

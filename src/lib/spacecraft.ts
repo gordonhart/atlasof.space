@@ -312,6 +312,8 @@ export const GALILEO: Spacecraft = {
   thumbnail: 'galileo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
   visited: [
+    { id: Bodies.GASPRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1991-10-29T12:00:00Z') },
+    { id: Bodies.IDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1993-08-28T12:00:00Z') },
     {
       id: Bodies.JUPITER.id,
       type: SpacecraftVisitType.ORBITER,
@@ -390,6 +392,37 @@ export const SOLAR_ORBITER: Spacecraft = {
     // TODO: also Earth flyby -- worth including? the list there would be massive
     { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-02-10T04:03:00Z') },
   ],
+};
+
+export const JUICE: Spacecraft = {
+  name: 'Jupiter Icy Moons Explorer',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 6070,
+  power: 850,
+  start: new Date('2023-04-14T12:14:36Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'juice-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
+  visited: [
+    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2031-07-15T12:00:00Z') },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-01-15T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
+  ],
+};
+
+export const PSYCHE: Spacecraft = {
+  name: 'Psyche',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 2608,
+  power: 4500,
+  start: new Date('2023-10-13T14:19:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'psyche-spacecraft-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
+  visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
 };
 
 export const APOLLO_8: Spacecraft = {
@@ -565,48 +598,76 @@ export const APOLLO_17: Spacecraft = {
   ],
 };
 
-export const SPACECRAFT: Array<Spacecraft> = [
-  // Luna
-  APOLLO_8,
-  APOLLO_10,
-  APOLLO_11,
-  APOLLO_12,
-  APOLLO_13,
-  APOLLO_14,
-  APOLLO_15,
-  APOLLO_16,
-  APOLLO_17,
+export const ROSETTA: Spacecraft = {
+  name: 'Rosetta',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 3000,
+  power: 850,
+  start: new Date('2004-03-02T07:17:51Z'),
+  end: new Date('2016-09-30T10:39:28Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Intentionally deorbited into Comet 67P in September 2016',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
+  thumbnail: 'rosetta-thumb.png',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
+    { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
+    { id: Bodies.LUTETIA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-07-10T12:00:00Z') },
+    // TODO: include lander?
+    {
+      id: Bodies.CG67P.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2014-08-05T09:06:00Z'),
+      end: new Date('2016-09-30T10:39:28Z'),
+    },
+  ],
+};
 
+// TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
+export const HAYABUSA_2: Spacecraft = {
+  name: 'Hayabusa2',
+  organization: SpacecraftOrganization.JAXA,
+  launchMass: 600,
+  power: 2600,
+  start: new Date('2014-12-03T04:22:04Z'),
+  end: new Date('2020-12-05T12:00:00Z'),
+  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
+  wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
+  thumbnail: 'hayabusa-2-thumb.jpg',
+  visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
+};
+
+export const OSIRIS_REX: Spacecraft = {
+  name: 'OSIRIS-REx',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 2110,
+  power: 3000,
+  start: new Date('2016-09-08T23:05:00Z'),
+  end: new Date('2023-09-24T14:52:00Z'),
+  status: {
+    status: SpacecraftStatus.RETURNED,
+    details: 'Capsule returned to Earth with 121.6 grams of material from Bennu',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/OSIRIS-REx',
+  thumbnail: 'osiris-rex-thumb.png',
+  visited: [
+    {
+      id: Bodies.BENNU.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2018-12-03T12:00:00Z'),
+      end: new Date('2021-05-10T12:00:00Z'),
+    },
+  ],
+};
+
+export const SPACECRAFT: Array<Spacecraft> = [
   // Inner missions
   MESSENGER,
   PARKER_SOLAR_PROBE,
   BEPICOLOMBO,
   SOLAR_ORBITER,
-
-  // Outer missions
-  VOYAGER_1,
-  VOYAGER_2,
-  GALILEO,
-  CASSINI,
-  HUYGENS,
-  NEW_HORIZONS,
-
-  // Mars
-  CURIOSITY,
-  PERSEVERANCE,
-  INGENUITY,
-  // SOJOURNER,
-  // SPIRIT,
-  // OPPORTUNITY,
-  // ZHURONG,
-  // MARS_2,
-  // MARS_3,
-  // MARS_RECONNAISSANCE_ORBITER,
-  // VIKING_1,
-  // VIKING_2,
-  // MARS_PATHFINDER,
-  // PHOENIX,
-  // INSIGHT,
 
   // Venus
   // VENERA_1,
@@ -639,6 +700,47 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // IKAROS,
   // SHINEN,
 
+  // Luna
+  // LUNA_1,
+  // PIONEER_4,
+  // LUNA_2,
+  // LUNA_3,
+  // RANGER_7,
+  // RANGER_8,
+  // RANGER_9,
+  // ZOND_3,
+  // LUNA_9,
+  // SURVEYOR_1,
+  // LUNAR_ORBITER_1,
+  // LUNA_11,
+  // TODO: there are an insane number of missions, 100+ successful that are worth noting
+  APOLLO_8,
+  APOLLO_10,
+  APOLLO_11,
+  APOLLO_12,
+  APOLLO_13,
+  APOLLO_14,
+  APOLLO_15,
+  APOLLO_16,
+  APOLLO_17,
+
+  // Mars
+  CURIOSITY,
+  PERSEVERANCE,
+  INGENUITY,
+  // SOJOURNER,
+  // SPIRIT,
+  // OPPORTUNITY,
+  // ZHURONG,
+  // MARS_2,
+  // MARS_3,
+  // MARS_RECONNAISSANCE_ORBITER,
+  // VIKING_1,
+  // VIKING_2,
+  // MARS_PATHFINDER,
+  // PHOENIX,
+  // INSIGHT,
+
   // Asteroids
   // PIONEER_10,
   // NEAR_SHOEMAKER,
@@ -649,12 +751,22 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // DEEP_IMPACT,
   // DAWN,
   // CHANGE_2,
-  // HAYABUSA_2,
-  // OSIRIS_REX,
+  HAYABUSA_2,
+  OSIRIS_REX,
   // LUCY,
   // DART,
-  // PSYCHE,
+  PSYCHE,
   // HERA,
+
+  // Outer missions
+  VOYAGER_1,
+  VOYAGER_2,
+  GALILEO,
+  CASSINI,
+  HUYGENS,
+  ROSETTA,
+  NEW_HORIZONS,
+  JUICE,
 ];
 
 // TODO: sort by ascending visit date?
