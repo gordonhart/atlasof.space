@@ -392,6 +392,25 @@ export const SOLAR_ORBITER: Spacecraft = {
   ],
 };
 
+export const JUICE: Spacecraft = {
+  name: 'Jupiter Icy Moons Explorer (Juice)',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 6070,
+  power: 850,
+  start: new Date('2023-04-14T12:14:36Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'juice-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
+  visited: [
+    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2031-07-15T12:00:00Z') },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-01-15T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
+  ],
+};
+
 export const APOLLO_8: Spacecraft = {
   name: 'Apollo 8',
   organization: SpacecraftOrganization.NASA,
@@ -566,47 +585,11 @@ export const APOLLO_17: Spacecraft = {
 };
 
 export const SPACECRAFT: Array<Spacecraft> = [
-  // Luna
-  APOLLO_8,
-  APOLLO_10,
-  APOLLO_11,
-  APOLLO_12,
-  APOLLO_13,
-  APOLLO_14,
-  APOLLO_15,
-  APOLLO_16,
-  APOLLO_17,
-
   // Inner missions
   MESSENGER,
   PARKER_SOLAR_PROBE,
   BEPICOLOMBO,
   SOLAR_ORBITER,
-
-  // Outer missions
-  VOYAGER_1,
-  VOYAGER_2,
-  GALILEO,
-  CASSINI,
-  HUYGENS,
-  NEW_HORIZONS,
-
-  // Mars
-  CURIOSITY,
-  PERSEVERANCE,
-  INGENUITY,
-  // SOJOURNER,
-  // SPIRIT,
-  // OPPORTUNITY,
-  // ZHURONG,
-  // MARS_2,
-  // MARS_3,
-  // MARS_RECONNAISSANCE_ORBITER,
-  // VIKING_1,
-  // VIKING_2,
-  // MARS_PATHFINDER,
-  // PHOENIX,
-  // INSIGHT,
 
   // Venus
   // VENERA_1,
@@ -639,6 +622,47 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // IKAROS,
   // SHINEN,
 
+  // Luna
+  // LUNA_1,
+  // PIONEER_4,
+  // LUNA_2,
+  // LUNA_3,
+  // RANGER_7,
+  // RANGER_8,
+  // RANGER_9,
+  // ZOND_3,
+  // LUNA_9,
+  // SURVEYOR_1,
+  // LUNAR_ORBITER_1,
+  // LUNA_11,
+  // TODO: there are an insane number of missions, 100+ successful that are worth noting
+  APOLLO_8,
+  APOLLO_10,
+  APOLLO_11,
+  APOLLO_12,
+  APOLLO_13,
+  APOLLO_14,
+  APOLLO_15,
+  APOLLO_16,
+  APOLLO_17,
+
+  // Mars
+  CURIOSITY,
+  PERSEVERANCE,
+  INGENUITY,
+  // SOJOURNER,
+  // SPIRIT,
+  // OPPORTUNITY,
+  // ZHURONG,
+  // MARS_2,
+  // MARS_3,
+  // MARS_RECONNAISSANCE_ORBITER,
+  // VIKING_1,
+  // VIKING_2,
+  // MARS_PATHFINDER,
+  // PHOENIX,
+  // INSIGHT,
+
   // Asteroids
   // PIONEER_10,
   // NEAR_SHOEMAKER,
@@ -655,6 +679,15 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // DART,
   // PSYCHE,
   // HERA,
+
+  // Outer missions
+  VOYAGER_1,
+  VOYAGER_2,
+  GALILEO,
+  CASSINI,
+  HUYGENS,
+  NEW_HORIZONS,
+  JUICE,
 ];
 
 // TODO: sort by ascending visit date?
