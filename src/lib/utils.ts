@@ -77,7 +77,7 @@ const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } =
 const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#888888',
   [CelestialBodyType.ASTEROID]: '#4b4b4b',
-  [CelestialBodyType.DWARF_PLANET]: '#80747f',
+  [CelestialBodyType.DWARF_PLANET]: '#6e636d',
 };
 export function celestialBodyWithDefaults(
   body: Omit<CelestialBody, 'id' | 'style'> & { id?: string; style?: CelestialBodyStyle }
