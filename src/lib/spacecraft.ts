@@ -312,6 +312,8 @@ export const GALILEO: Spacecraft = {
   thumbnail: 'galileo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
   visited: [
+    { id: Bodies.GASPRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1991-10-29T12:00:00Z') },
+    { id: Bodies.IDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1993-08-28T12:00:00Z') },
     {
       id: Bodies.JUPITER.id,
       type: SpacecraftVisitType.ORBITER,
