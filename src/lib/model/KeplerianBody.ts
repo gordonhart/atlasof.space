@@ -47,7 +47,7 @@ export class KeplerianBody extends KinematicBody {
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);
-    const color = new Color(body.color);
+    const color = new Color(body.style.bgColor ?? body.style.fgColor);
     this.ellipse = new OrbitalEllipse(scene, resolution, body.elements, parent?.position ?? null, position, color);
     this.radius = new FocalRadius(scene, resolution, parent?.position ?? new Vector3(), position, color);
     this.sphere = new SphericalBody(scene, body, position);
@@ -92,7 +92,7 @@ export class KeplerianBody extends KinematicBody {
     if (!this.visible) return;
 
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera, this.resolution);
-    const bodyYpx = this.resolution.y - bodyYpxInverted;
+    const bodyPx: Point2 = [bodyXpx, this.resolution.y - bodyYpxInverted];
 
     const label = this.body.shortName ?? this.body.name;
     const fontSize = this.hovered ? '14px' : '12px';
@@ -105,20 +105,23 @@ export class KeplerianBody extends KinematicBody {
       textPx = [textWidthPx, textHeightPx];
     }
 
+    const textColor = this.body.style.fgColor;
+    const strokeColor = this.body.style.bgColor ?? this.body.style.fgColor;
+
     // body is off-screen; draw a pointer
-    if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y])) {
+    if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
       // TODO: how to always draw moon offscreen indicators underneath parent? better yet, don't draw offscreen
       //  indicators for moons when the parent isn't visible
-      drawOffscreenIndicator(ctx, this.body.color, canvasPx, [bodyXpx, bodyYpx]);
+      drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
     } else {
       const baseRadius = this.body.radius / metersPerPx;
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
       if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
-        drawDotAtLocation(ctx, this.body.color, [bodyXpx, bodyYpx], this.dotRadius);
+        drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
       }
       if ((drawLabel || this.hovered) && this.shouldDrawLabel(metersPerPx)) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;
-        const [p0, p1] = drawLabelAtLocation(ctx, label, this.body.color, [bodyXpx, bodyYpx], textPx, labelRadius);
+        const [p0, p1] = drawLabelAtLocation(ctx, label, textColor, strokeColor, bodyPx, textPx, labelRadius);
         this.labelBox.min.x = Math.min(p0[0], p1[0]);
         this.labelBox.min.y = Math.min(p0[1], p1[1]);
         this.labelBox.max.x = Math.max(p0[0], p1[0]);

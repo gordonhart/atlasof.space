@@ -58,7 +58,8 @@ export function drawOffscreenIndicator(
 export function drawLabelAtLocation(
   ctx: CanvasRenderingContext2D,
   label: string,
-  color: `#${string}`,
+  textColor: `#${string}`,
+  strokeColor: `#${string}`,
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2,
   radius: number
@@ -94,12 +95,12 @@ export function drawLabelAtLocation(
   offsets.forEach(([x, y]) => ctx.lineTo(x0 + x * xSign, y0 - y * ySign));
   ctx.closePath();
   ctx.fillStyle = 'black';
-  ctx.strokeStyle = color;
+  ctx.strokeStyle = strokeColor;
   ctx.fill();
   ctx.stroke();
 
   // draw text
-  ctx.fillStyle = color;
+  ctx.fillStyle = textColor;
   ctx.fillText(label, xIsCloseToRightEdge ? x0 - w : x0 + h / 2, y0 - boxPadPx + (yIsCloseToTopEdge ? h : 0));
   ctx.restore();
 

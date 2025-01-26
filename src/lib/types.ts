@@ -89,6 +89,12 @@ export enum HeliocentricOrbitalRegime {
   INNER_OORT_CLOUD = 'inner-oort-cloud',
 }
 
+export type HexColor = `#${string}`;
+export type CelestialBodyStyle = {
+  fgColor: HexColor; // main color for the body
+  bgColor?: HexColor; // when absent, use fgColor -- used for orbit ellipses and other "background" elements
+};
+
 export type CelestialBody = {
   id: CelestialBodyId;
   type: CelestialBodyType;
@@ -101,7 +107,7 @@ export type CelestialBody = {
   elements: KeplerianElements;
   rotation?: RotationElements; // leave empty to omit spin
   rings?: Array<Ring>;
-  color: `#${string}`; // hex
+  style: CelestialBodyStyle;
   assets?: CelestialBodyAssets;
   facts?: Array<CelestialBodyFact>;
 };
