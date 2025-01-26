@@ -595,6 +595,27 @@ export const STEINS = celestialBodyWithDefaults({
   assets: { thumbnail: 'steins-thumb.jpg' },
 });
 
+export const TOUTATIS = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '4179 Toutatis',
+  shortName: 'Toutatis',
+  influencedBy: [SOL.id],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2454797.5'),
+    eccentricity: 0.6288,
+    semiMajorAxis: 2.5321 * AU,
+    inclination: 0.446,
+    longitudeAscending: 124.3,
+    argumentOfPeriapsis: 278.75,
+    meanAnomaly: 5.122,
+  },
+  mass: 1.9e13,
+  radius: 1.225e3,
+  assets: { thumbnail: 'toutatis-thumb.jpg' },
+});
+
 export const NEREUS = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '4660 Nereus',
@@ -731,6 +752,7 @@ export const ASTEROIDS = [
   EROS,
   GASPRA,
   STEINS,
+  TOUTATIS,
   NEREUS,
   ITOKAWA,
   DIDYMOS,

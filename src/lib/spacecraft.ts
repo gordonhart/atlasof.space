@@ -6,6 +6,7 @@ export enum SpacecraftOrganization {
   NASA = 'NASA',
   ESA = 'ESA',
   JAXA = 'JAXA',
+  CNSA = 'CNSA',
 }
 
 export type SpacecraftOrganizationDetails = {
@@ -29,6 +30,11 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
     name: 'Japan Aerospace Exploration Agency',
     shortName: 'JAXA',
     thumbnail: 'jaxa-logo.png',
+  },
+  [SpacecraftOrganization.CNSA]: {
+    name: 'China National Space Administration',
+    shortName: 'CNSA',
+    thumbnail: 'cnsa-logo.svg',
   },
 };
 
@@ -695,6 +701,25 @@ export const DAWN: Spacecraft = {
   ],
 };
 
+export const CHANGE_2: Spacecraft = {
+  name: "Chang'e 2",
+  organization: SpacecraftOrganization.CNSA,
+  launchMass: 2480,
+  start: new Date('2010-10-01T10:59:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: "Drifting out beyond Earth's orbit" },
+  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_2',
+  thumbnail: 'change-2-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2010-10-06T03:06:00Z'),
+      end: new Date('2011-06-08T12:00:00Z'),
+    },
+    { id: Bodies.TOUTATIS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2012-12-13T08:30:00Z') },
+  ],
+};
+
 // TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
 export const HAYABUSA_2: Spacecraft = {
   name: 'Hayabusa2',
@@ -818,8 +843,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // STARDUST,
   // HAYABUSA,
   // DEEP_IMPACT,
-  // CHANGE_2,
   DAWN,
+  CHANGE_2,
   ROSETTA,
   HAYABUSA_2,
   OSIRIS_REX,
