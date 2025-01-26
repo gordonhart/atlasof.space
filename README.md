@@ -66,7 +66,7 @@ Infrastructure dependencies:
   - [ ] Use ephemeris data for modeling
 - Scene rendering:
   - [ ] Examine render settings, see if visuals can be improved
-    - [ ] Fix sporadic black blocks rendering around focus body
+    - [x] Fix sporadic black blocks rendering around focus body
   - [ ] Fix alignment between planet and ellipse
   - [ ] Render 3D models for asteroids
 - General:
