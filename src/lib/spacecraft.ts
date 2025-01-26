@@ -393,7 +393,7 @@ export const SOLAR_ORBITER: Spacecraft = {
 };
 
 export const JUICE: Spacecraft = {
-  name: 'Jupiter Icy Moons Explorer (Juice)',
+  name: 'Jupiter Icy Moons Explorer',
   organization: SpacecraftOrganization.ESA,
   launchMass: 6070,
   power: 850,
@@ -584,6 +584,41 @@ export const APOLLO_17: Spacecraft = {
   ],
 };
 
+// TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
+export const HAYABUSA_2: Spacecraft = {
+  name: 'Hayabusa2',
+  organization: SpacecraftOrganization.JAXA,
+  launchMass: 600,
+  start: new Date('2014-12-03T04:22:04Z'),
+  end: new Date('2020-12-05T12:00:00Z'),
+  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
+  wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
+  thumbnail: 'hayabusa-2-thumb.jpg',
+  visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
+};
+
+export const OSIRIS_REX: Spacecraft = {
+  name: 'OSIRIS-REx',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 2110,
+  start: new Date('2016-09-08T23:05:00Z'),
+  end: new Date('2023-09-24T14:52:00Z'),
+  status: {
+    status: SpacecraftStatus.RETURNED,
+    details: 'Capsule returned to Earth with 121.6 grams of material from Bennu',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/OSIRIS-REx',
+  thumbnail: 'osiris-rex-thumb.png',
+  visited: [
+    {
+      id: Bodies.BENNU.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2018-12-03T12:00:00Z'),
+      end: new Date('2021-05-10T12:00:00Z'),
+    },
+  ],
+};
+
 export const SPACECRAFT: Array<Spacecraft> = [
   // Inner missions
   MESSENGER,
@@ -673,8 +708,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // DEEP_IMPACT,
   // DAWN,
   // CHANGE_2,
-  // HAYABUSA_2,
-  // OSIRIS_REX,
+  HAYABUSA_2,
+  OSIRIS_REX,
   // LUCY,
   // DART,
   // PSYCHE,
