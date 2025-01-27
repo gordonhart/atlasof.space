@@ -154,7 +154,7 @@ export function convertToEpoch(elements: KeplerianElements, parentMass: number, 
   const newM = elements.meanAnomaly + radiansToDegrees(n * dt); // update mean anomaly
   const rotationInEpoch =
     rotation != null && rotation.initialRotation != null
-      ? { ...rotation, initialRotation: normalizeRotation(rotation.initialRotation + rotation.siderealPeriod * dt) }
+      ? { ...rotation, initialRotation: normalizeRotation(rotation.initialRotation + dt / rotation.siderealPeriod) }
       : undefined;
   return { ...elements, epoch, meanAnomaly: normalizeRotation(newM), rotation: rotationInEpoch };
 }
