@@ -159,6 +159,7 @@ export const LUNA = celestialBodyWithDefaults({
   rotation: {
     axialTilt: 6.687,
     siderealPeriod: 27.321661 * Time.DAY,
+    initialRotation: 110, // tuned to have the near side facing Earth
   },
   assets: {
     thumbnail: 'luna-thumb.jpg',

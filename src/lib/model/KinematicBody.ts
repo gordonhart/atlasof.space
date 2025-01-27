@@ -1,6 +1,6 @@
 import { OrthographicCamera, Vector2, Vector3 } from 'three';
 import { G } from '../physics.ts';
-import { Point2 } from '../types.ts';
+import { Point2, RotationElements } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
 export class KinematicBody {
@@ -14,12 +14,17 @@ export class KinematicBody {
 
   private readonly tmp; // reuse for memory efficiency
 
-  constructor(influencedBy: Array<string>, rotationPeriod: number | undefined, position: Vector3, velocity: Vector3) {
+  constructor(
+    influencedBy: Array<string>,
+    position: Vector3,
+    velocity: Vector3,
+    rotation?: RotationElements | undefined
+  ) {
     this.influencedBy = influencedBy;
-    this.rotationPeriod = rotationPeriod;
+    this.rotationPeriod = rotation?.siderealPeriod;
     this.position = position.clone();
     this.velocity = velocity.clone();
-    this.rotation = 0; // TODO: initial state? hard to find
+    this.rotation = rotation?.initialRotation ?? 0;
     this.acceleration = new Vector3();
     this.tmp = new Vector3();
   }

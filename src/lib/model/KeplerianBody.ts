@@ -43,7 +43,7 @@ export class KeplerianBody extends KinematicBody {
     position: Vector3,
     velocity: Vector3
   ) {
-    super(body.influencedBy, body.rotation?.siderealPeriod, position, velocity);
+    super(body.influencedBy, position, velocity, body.rotation);
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);

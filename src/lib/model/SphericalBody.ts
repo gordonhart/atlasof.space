@@ -73,8 +73,6 @@ export class SphericalBody {
     this.hasLoadedTexture = true;
     const textureMap = new TextureLoader().load(asCdnUrl(texture));
     const emissive = this.body.type === CelestialBodyType.STAR;
-    // TODO: this doesn't load the material with the correct orientation; need to fix somehow. specifically visible for
-    //  Luna where a the near side should always be facing Earth
     if (emissive) {
       // TODO: better parameterization of this?
       this.sphere.material = new MeshStandardMaterial({
