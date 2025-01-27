@@ -118,7 +118,7 @@ export class KeplerianBody extends KinematicBody {
       if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
         drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
       } else {
-        this.sphere.loadTexture();
+        this.sphere.ensureTextureLoaded(); // since the body is visible, ensure that its texture is loaded
       }
       if ((drawLabel || this.hovered) && this.shouldDrawLabel(metersPerPx)) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;

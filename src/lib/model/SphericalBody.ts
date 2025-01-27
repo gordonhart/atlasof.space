@@ -67,7 +67,7 @@ export class SphericalBody {
     this.rings.forEach(ring => ring.dispose());
   }
 
-  loadTexture() {
+  ensureTextureLoaded() {
     const texture = this.body.assets?.texture;
     if (texture == null || this.hasLoadedTexture) return;
     this.hasLoadedTexture = true;
