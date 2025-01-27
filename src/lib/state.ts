@@ -32,7 +32,7 @@ export type AppState = {
 export const initialState: AppState = {
   settings: {
     epoch: nowEpoch(),
-    play: true,
+    play: false,
     speed: Time.DAY, // one day per second to demonstrate motion without touching controls
     drawTail: false,
     drawOrbit: true,

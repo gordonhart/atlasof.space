@@ -131,6 +131,7 @@ export const EARTH = celestialBodyWithDefaults({
   rotation: {
     axialTilt: -23.4, // TODO: this points it in the right direction -- should all axial tilts be in this direction?
     siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
+    initialRotation: -15, // tune to align with real rotation
   },
   style: { fgColor: '#7e87dd' },
   assets: {
