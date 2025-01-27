@@ -22,6 +22,7 @@ export class SphericalBody {
   private readonly rings: Array<RingObject>;
 
   private readonly spherePoints: number = 144;
+  private hasLoadedTexture = false;
 
   constructor(scene: Scene, body: CelestialBody, position: Vector3) {
     this.scene = scene;
@@ -29,7 +30,8 @@ export class SphericalBody {
 
     const positionScaled = position.clone().divideScalar(SCALE_FACTOR);
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-    const sphereMaterial = this.getShapeMaterial();
+    const color = new Color(this.body.style.fgColor);
+    const sphereMaterial = new MeshBasicMaterial({ color }); // defer loading of texture until sufficiently zoomed in
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
     const inclination = degreesToRadians(body.elements.inclination);
     const axialTilt = body.rotation != null ? degreesToRadians(body.rotation.axialTilt) : 0;
@@ -63,6 +65,13 @@ export class SphericalBody {
     (this.sphere.material as Material).dispose();
     this.scene.remove(this.sphere);
     this.rings.forEach(ring => ring.dispose());
+  }
+
+  loadTexture() {
+    const texture = this.body.assets?.texture;
+    if (texture == null || this.hasLoadedTexture) return;
+    this.hasLoadedTexture = true;
+    this.sphere.material = this.getShapeMaterial();
   }
 
   private getShapeMaterial(): Material {

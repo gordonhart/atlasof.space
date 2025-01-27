@@ -69,6 +69,8 @@ Infrastructure dependencies:
     - [x] Fix sporadic black blocks rendering around focus body
   - [ ] Fix alignment between planet and ellipse
   - [ ] Render 3D models for asteroids
+  - [ ] Improve offscreen indicator rendering for moons when the main planet is not visible
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [x] Set URL part for focused planet to enable link sharing
+  - [ ] Defer loading of planet textures until sufficiently zoomed in
