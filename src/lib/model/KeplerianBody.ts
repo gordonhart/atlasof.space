@@ -43,7 +43,7 @@ export class KeplerianBody extends KinematicBody {
     position: Vector3,
     velocity: Vector3
   ) {
-    super(body.influencedBy, position, velocity, body.rotation);
+    super(body.influencedBy, position, velocity, body.elements.rotation);
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);
@@ -51,7 +51,7 @@ export class KeplerianBody extends KinematicBody {
     this.radius = new FocalRadius(scene, resolution, body, parent?.position ?? new Vector3(), position);
     this.sphere = new SphericalBody(scene, body, position);
     this.dotRadius = KeplerianBody.getDotRadius(body);
-    if (body.rotation != null) {
+    if (body.elements.rotation != null) {
       this.axis = new AxisIndicator(scene, resolution, body, this.position);
     }
   }

@@ -21,13 +21,13 @@ export const SOL = celestialBodyWithDefaults({
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
+    rotation: {
+      axialTilt: 7.25,
+      siderealPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
+    },
   },
   mass: 1.9885e30,
   radius: 6.957e8,
-  rotation: {
-    axialTilt: 7.25,
-    siderealPeriod: 609.12 * Time.HOUR, // 609 hours at 16º latitude; true period varies by latitude
-  },
   style: { fgColor: '#fa0' },
   assets: {
     thumbnail: 'sol-thumb.jpg',
@@ -55,13 +55,13 @@ export const MERCURY = celestialBodyWithDefaults({
     longitudeAscending: 48.331, // degrees
     argumentOfPeriapsis: 29.124, // degrees
     meanAnomaly: 174.796, // degrees
+    rotation: {
+      axialTilt: 0.034,
+      siderealPeriod: 58.6467 * Time.DAY,
+    },
   },
   mass: 3.3011e23,
   radius: 2439.7e3,
-  rotation: {
-    axialTilt: 0.034,
-    siderealPeriod: 58.6467 * Time.DAY,
-  },
   style: { fgColor: '#b3aeae' },
   assets: {
     thumbnail: 'mercury-thumb.jpg',
@@ -90,13 +90,13 @@ export const VENUS = celestialBodyWithDefaults({
     longitudeAscending: 76.6799,
     argumentOfPeriapsis: 54.884,
     meanAnomaly: 50.115,
+    rotation: {
+      axialTilt: 2.64, // TODO: retrograde; is this modeled correctly?
+      siderealPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
+    },
   },
   mass: 4.8675e24,
   radius: 6051.8e3,
-  rotation: {
-    axialTilt: 2.64, // TODO: retrograde; is this modeled correctly?
-    siderealPeriod: -243.02 * Time.DAY, // negative for retrograde rotation
-  },
   style: { fgColor: '#e6b667' },
   assets: {
     thumbnail: 'venus-thumb.jpg',
@@ -125,14 +125,14 @@ export const EARTH = celestialBodyWithDefaults({
     longitudeAscending: -11.26064,
     argumentOfPeriapsis: 114.20783,
     meanAnomaly: 358.617,
+    rotation: {
+      axialTilt: -23.4, // TODO: this points it in the right direction -- should all axial tilts be in this direction?
+      siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
+      initialRotation: -15, // tune to align with real rotation
+    },
   },
   mass: 5.972168e24,
   radius: 6371e3,
-  rotation: {
-    axialTilt: -23.4, // TODO: this points it in the right direction -- should all axial tilts be in this direction?
-    siderealPeriod: 23 * Time.HOUR + 56 * Time.MINUTE + 4.1, // 23h 56 m 4.100s
-    initialRotation: -15, // tune to align with real rotation
-  },
   style: { fgColor: '#7e87dd' },
   assets: {
     thumbnail: 'earth-thumb.jpg',
@@ -154,14 +154,14 @@ export const LUNA = celestialBodyWithDefaults({
     longitudeAscending: 125.08,
     argumentOfPeriapsis: 318.15,
     meanAnomaly: 0, // TODO: find
+    rotation: {
+      axialTilt: 6.687,
+      siderealPeriod: 27.321661 * Time.DAY,
+      initialRotation: 180, // tuned to have the near side facing Earth
+    },
   },
   mass: 7.342e22,
   radius: 1737.4e3,
-  rotation: {
-    axialTilt: 6.687,
-    siderealPeriod: 27.321661 * Time.DAY,
-    initialRotation: 110, // tuned to have the near side facing Earth
-  },
   assets: {
     thumbnail: 'luna-thumb.jpg',
     texture: 'luna-texture.jpg',
@@ -195,13 +195,13 @@ export const MARS = celestialBodyWithDefaults({
     longitudeAscending: 49.57854,
     argumentOfPeriapsis: 286.502,
     meanAnomaly: 19.412,
+    rotation: {
+      axialTilt: 25.19,
+      siderealPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
+    },
   },
   mass: 6.4171e23,
   radius: 3389.5e3,
-  rotation: {
-    axialTilt: 25.19,
-    siderealPeriod: Time.DAY + 37 * Time.MINUTE + 22.66, // 24 hr 37 min 22.66 sec
-  },
   style: { fgColor: '#c96c3c' },
   assets: {
     thumbnail: 'mars-thumb.jpg',
@@ -225,14 +225,14 @@ export const PHOBOS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0151,
     semiMajorAxis: 9376e3,
-    inclination: 1.093 + MARS.rotation!.axialTilt,
+    inclination: 1.093 + MARS.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
-  },
-  rotation: {
-    axialTilt: 0,
-    siderealPeriod: 7 * Time.HOUR + 39 * Time.MINUTE + 12, // synchronous
+    rotation: {
+      axialTilt: 0,
+      siderealPeriod: 7 * Time.HOUR + 39 * Time.MINUTE + 12, // synchronous
+    },
   },
   mass: 1.0659e16,
   radius: 11.2667e3,
@@ -248,14 +248,14 @@ export const DEIMOS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.00033,
     semiMajorAxis: 23458e3,
-    inclination: 0.93 + MARS.rotation!.axialTilt,
+    inclination: 0.93 + MARS.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
-  },
-  rotation: {
-    axialTilt: 0,
-    siderealPeriod: 30.312 * Time.HOUR, // synchronous
+    rotation: {
+      axialTilt: 0,
+      siderealPeriod: 30.312 * Time.HOUR, // synchronous
+    },
   },
   mass: 1.4762e15,
   radius: 6.2e3,
@@ -281,10 +281,10 @@ export const CERES = celestialBodyWithDefaults({
     longitudeAscending: 80.305,
     argumentOfPeriapsis: 73.597,
     meanAnomaly: 291.4,
-  },
-  rotation: {
-    axialTilt: 4,
-    siderealPeriod: 9.07417 * Time.HOUR,
+    rotation: {
+      axialTilt: 4,
+      siderealPeriod: 9.07417 * Time.HOUR,
+    },
   },
   mass: 9.3839e20,
   radius: 966.2e3 / 2,
@@ -470,10 +470,10 @@ export const LUTETIA = celestialBodyWithDefaults({
     longitudeAscending: 80.867, // degrees
     argumentOfPeriapsis: 249.997, // degrees
     meanAnomaly: 87.976, // degrees
-  },
-  rotation: {
-    axialTilt: 96,
-    siderealPeriod: 8.1655 * Time.HOUR,
+    rotation: {
+      axialTilt: 96,
+      siderealPeriod: 8.1655 * Time.HOUR,
+    },
   },
   mass: 1.7e18, // kg
   radius: 49e3, // m
@@ -625,10 +625,10 @@ export const NEREUS = celestialBodyWithDefaults({
     longitudeAscending: 314.41, // degrees
     argumentOfPeriapsis: 158.12, // degrees
     meanAnomaly: 0, // degrees (value at epoch)
-  },
-  rotation: {
-    axialTilt: 0, // TODO: find
-    siderealPeriod: 15.16 * Time.HOUR,
+    rotation: {
+      axialTilt: 0, // TODO: find
+      siderealPeriod: 15.16 * Time.HOUR,
+    },
   },
   mass: estimateAsteroidMass(165), // not known
   radius: 165, // m
@@ -771,10 +771,10 @@ export const CG67P = celestialBodyWithDefaults({
     longitudeAscending: 50.19, // degrees
     argumentOfPeriapsis: 12.78, // degrees
     meanAnomaly: 0, // degrees (value at perihelion)
-  },
-  rotation: {
-    axialTilt: 52,
-    siderealPeriod: 12.4 * Time.HOUR,
+    rotation: {
+      axialTilt: 52,
+      siderealPeriod: 12.4 * Time.HOUR,
+    },
   },
   assets: {
     thumbnail: 'cg67p-thumb.jpg',
@@ -864,13 +864,13 @@ export const PLUTO = celestialBodyWithDefaults({
     longitudeAscending: 110.299,
     argumentOfPeriapsis: 113.834,
     meanAnomaly: 14.53,
+    rotation: {
+      axialTilt: 122.53,
+      siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
+    },
   },
   mass: 1.3025e22,
   radius: 1188.3e3,
-  rotation: {
-    axialTilt: 122.53,
-    siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17.6 * Time.MINUTE, // - 6 days 9 hr 17.6 min (sideways)
-  },
   style: { fgColor: '#E7C7A4' },
   assets: { thumbnail: 'pluto-thumb.jpg' },
 });
@@ -889,13 +889,13 @@ export const CHARON = celestialBodyWithDefaults({
     longitudeAscending: 223.046,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0, // TODO: find
+    rotation: {
+      axialTilt: 0, // TODO: verify -- pretty sure it's not tilted WRT its orbit around Pluto
+      siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
+    },
   },
   mass: 1.586e21,
   radius: 606e3,
-  rotation: {
-    axialTilt: 0, // TODO: verify -- pretty sure it's not tilted WRT its orbit around Pluto
-    siderealPeriod: 6 * Time.DAY + 9 * Time.HOUR + 17 * Time.MINUTE + 35.89, // mutually tidally locked w/ pluto
-  },
   assets: { thumbnail: 'charon-thumb.jpg' },
 });
 
@@ -912,13 +912,13 @@ export const STYX = celestialBodyWithDefaults({
     longitudeAscending: 183.4,
     argumentOfPeriapsis: 296.1,
     meanAnomaly: 0, // TODO
+    rotation: {
+      axialTilt: 82,
+      siderealPeriod: 3.24 * Time.DAY,
+    },
   },
   mass: 7.5e15,
   radius: 12e3 / 2, // rough; not spherical
-  rotation: {
-    axialTilt: 82,
-    siderealPeriod: 3.24 * Time.DAY,
-  },
   assets: { thumbnail: 'styx-thumb.jpg' },
 });
 
@@ -954,13 +954,13 @@ export const KERBEROS = celestialBodyWithDefaults({
     longitudeAscending: 225.2,
     argumentOfPeriapsis: 187.6,
     meanAnomaly: 0, // TODO
+    rotation: {
+      axialTilt: 96, // TODO: verify that this is WRT its own orbit
+      siderealPeriod: 5.31 * Time.DAY,
+    },
   },
   mass: 1.65e16,
   radius: 12e3 / 2, // not spherical
-  rotation: {
-    axialTilt: 96, // TODO: verify that this is WRT its own orbit
-    siderealPeriod: 5.31 * Time.DAY,
-  },
   assets: { thumbnail: 'kerberos-thumb.jpg' },
 });
 
@@ -1250,13 +1250,13 @@ export const JUPITER = celestialBodyWithDefaults({
     longitudeAscending: 100.464,
     argumentOfPeriapsis: 273.867,
     meanAnomaly: 20.02,
+    rotation: {
+      axialTilt: 3.13,
+      siderealPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
+    },
   },
   mass: 1.8982e27,
   radius: 69911e3,
-  rotation: {
-    axialTilt: 3.13,
-    siderealPeriod: 9 * Time.HOUR + 55 * Time.MINUTE + 30, // 9 hr 55 min 30 sec
-  },
   style: { fgColor: '#e9be76' },
   assets: {
     thumbnail: 'jupiter-thumb.jpg',
@@ -1273,7 +1273,7 @@ export const IO = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0041,
     semiMajorAxis: 421800e3,
-    inclination: 0.05 + JUPITER.rotation!.axialTilt,
+    inclination: 0.05 + JUPITER.elements.rotation!.axialTilt,
     longitudeAscending: 0, // approximate
     argumentOfPeriapsis: 0, // approximated for circular orbits
     meanAnomaly: 0,
@@ -1293,7 +1293,7 @@ export const EUROPA = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0094,
     semiMajorAxis: 671100e3,
-    inclination: 0.466 + JUPITER.rotation!.axialTilt,
+    inclination: 0.466 + JUPITER.elements.rotation!.axialTilt,
     longitudeAscending: 0, // approximate
     argumentOfPeriapsis: 0, // approximated for circular orbits
     meanAnomaly: 0,
@@ -1320,7 +1320,7 @@ export const GANYMEDE = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0013,
     semiMajorAxis: 1070400e3,
-    inclination: 0.177 + JUPITER.rotation!.axialTilt,
+    inclination: 0.177 + JUPITER.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1367,13 +1367,13 @@ export const SATURN = celestialBodyWithDefaults({
     longitudeAscending: 113.665,
     argumentOfPeriapsis: 339.392,
     meanAnomaly: 317.02,
+    rotation: {
+      axialTilt: 26.73,
+      siderealPeriod: 10 * Time.HOUR + 32 * Time.MINUTE + 35, // 10 hr 32 min 35 sec
+    },
   },
   mass: 5.6834e26,
   radius: 58232e3,
-  rotation: {
-    axialTilt: 26.73,
-    siderealPeriod: 10 * Time.HOUR + 32 * Time.MINUTE + 35, // 10 hr 32 min 35 sec
-  },
   rings: [
     // TODO: separate ring objects for different bands? only have one texture for now
     {
@@ -1399,7 +1399,7 @@ export const MIMAS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0196,
     semiMajorAxis: 185540e3,
-    inclination: 1.574 + SATURN.rotation!.axialTilt,
+    inclination: 1.574 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1418,7 +1418,7 @@ export const ENCELADUS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0047,
     semiMajorAxis: 238040e3,
-    inclination: 0.009 + SATURN.rotation!.axialTilt,
+    inclination: 0.009 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1437,7 +1437,7 @@ export const TETHYS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0001,
     semiMajorAxis: 294670e3,
-    inclination: 1.091 + SATURN.rotation!.axialTilt,
+    inclination: 1.091 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1456,7 +1456,7 @@ export const DIONE = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0022,
     semiMajorAxis: 377420e3,
-    inclination: 0.028 + SATURN.rotation!.axialTilt,
+    inclination: 0.028 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1475,7 +1475,7 @@ export const RHEA = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.001,
     semiMajorAxis: 527070e3,
-    inclination: 0.345 + SATURN.rotation!.axialTilt,
+    inclination: 0.345 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1494,7 +1494,7 @@ export const TITAN = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0288,
     semiMajorAxis: 1221870e3,
-    inclination: 0.34854 + SATURN.rotation!.axialTilt,
+    inclination: 0.34854 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1517,7 +1517,7 @@ export const IAPETUS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0286,
     semiMajorAxis: 3560820e3,
-    inclination: 15.47 + SATURN.rotation!.axialTilt,
+    inclination: 15.47 + SATURN.elements.rotation!.axialTilt,
     longitudeAscending: 0,
     argumentOfPeriapsis: 0,
     meanAnomaly: 0,
@@ -1536,7 +1536,7 @@ export const HYPERION = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.1230061,
     semiMajorAxis: 1481009e3,
-    inclination: 0.43 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator
+    inclination: 0.43 + SATURN.elements.rotation!.axialTilt, // 0.43ª relative to saturn's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1555,14 +1555,14 @@ export const PHOEBE = celestialBodyWithDefaults({
     epoch: julianDayToEpoch('JD2460000.5'),
     eccentricity: 0.1796752,
     semiMajorAxis: 0.0861776 * AU, // 12960000e3,
-    inclination: 151.78 + SATURN.rotation!.axialTilt, // 0.43ª relative to saturn's equator
+    inclination: 151.78 + SATURN.elements.rotation!.axialTilt, // 0.43ª relative to saturn's equator
     longitudeAscending: 269.35082,
     argumentOfPeriapsis: 15.26338,
     meanAnomaly: 174.44144,
-  },
-  rotation: {
-    axialTilt: 152.14,
-    siderealPeriod: 9.2735 * Time.HOUR,
+    rotation: {
+      axialTilt: 152.14,
+      siderealPeriod: 9.2735 * Time.HOUR,
+    },
   },
   mass: 8.3123e18,
   radius: 106.5e3,
@@ -1585,13 +1585,13 @@ export const URANUS = celestialBodyWithDefaults({
     longitudeAscending: 74.006,
     argumentOfPeriapsis: 96.998857,
     meanAnomaly: 142.2386,
+    rotation: {
+      axialTilt: 82.23, // TODO: retrograde -- modeled correctly?
+      siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
+    },
   },
   mass: 8.681e25,
   radius: 25362e3,
-  rotation: {
-    axialTilt: 82.23, // TODO: retrograde -- modeled correctly?
-    siderealPeriod: -17 * Time.HOUR + 14 * Time.MINUTE + 24, // -17 hr 14 min 24 sec
-  },
   style: { fgColor: '#9bcee6' },
   // rings: [], // TODO
   assets: {
@@ -1609,7 +1609,7 @@ export const PUCK = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.00012,
     semiMajorAxis: 86004.444e3,
-    inclination: 0.31921 + URANUS.rotation!.axialTilt, // inclination WRT Uranus's equator; offset by axial tilt
+    inclination: 0.31921 + URANUS.elements.rotation!.axialTilt, // inclination WRT Uranus's equator; offset by axial tilt
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1628,7 +1628,7 @@ export const MIRANDA = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0013,
     semiMajorAxis: 129390e3,
-    inclination: 4.232 + URANUS.rotation!.axialTilt, // to Uranus's equator
+    inclination: 4.232 + URANUS.elements.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1647,7 +1647,7 @@ export const ARIEL = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0012,
     semiMajorAxis: 190900e3,
-    inclination: 0.26 + URANUS.rotation!.axialTilt, // to Uranus's equator
+    inclination: 0.26 + URANUS.elements.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1666,7 +1666,7 @@ export const UMBRIEL = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0039,
     semiMajorAxis: 266000e3,
-    inclination: 0.128 + URANUS.rotation!.axialTilt, // to Uranus's equator
+    inclination: 0.128 + URANUS.elements.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1685,7 +1685,7 @@ export const TITANIA = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0011,
     semiMajorAxis: 435910e3,
-    inclination: 0.34 + URANUS.rotation!.axialTilt, // inclination WRT Uranus's equator; offset by axial tilt
+    inclination: 0.34 + URANUS.elements.rotation!.axialTilt, // inclination WRT Uranus's equator; offset by axial tilt
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1704,7 +1704,7 @@ export const OBERON = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0014,
     semiMajorAxis: 583520e3,
-    inclination: 0.058 + URANUS.rotation!.axialTilt, // to Uranus's equator
+    inclination: 0.058 + URANUS.elements.rotation!.axialTilt, // to Uranus's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1730,13 +1730,13 @@ export const NEPTUNE = celestialBodyWithDefaults({
     longitudeAscending: 131.783,
     argumentOfPeriapsis: 273.187,
     meanAnomaly: 259.883,
+    rotation: {
+      axialTilt: 28.32,
+      siderealPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
+    },
   },
   mass: 1.02409e26,
   radius: 24622e3,
-  rotation: {
-    axialTilt: 28.32,
-    siderealPeriod: 16 * Time.HOUR + 6.6 * Time.MINUTE, // 16 hr 6.6 min
-  },
   style: { fgColor: '#5a7cf6' },
   assets: {
     thumbnail: 'neptune-thumb.jpg',
@@ -1757,13 +1757,13 @@ export const TRITON = celestialBodyWithDefaults({
     longitudeAscending: 177.70910343, // TODO: some uncertainty with these two values
     argumentOfPeriapsis: 260.64357,
     meanAnomaly: 0,
+    rotation: {
+      axialTilt: 0,
+      siderealPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
+    },
   },
   mass: 2.1389e22,
   radius: 1353.4e3,
-  rotation: {
-    axialTilt: 0,
-    siderealPeriod: 5 * Time.DAY + 21 * Time.HOUR + 2 * Time.MINUTE + 53, // 5 d, 21 h, 2 min, 53 s
-  },
   assets: { thumbnail: 'triton-thumb.jpg' },
 });
 
@@ -1776,7 +1776,7 @@ export const PROTEUS = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.0005,
     semiMajorAxis: 117646e3,
-    inclination: 0.524 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
+    inclination: 0.524 + NEPTUNE.elements.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1814,7 +1814,7 @@ export const DESPINA = celestialBodyWithDefaults({
     epoch: J2000, // TODO: verify
     eccentricity: 0.00038,
     semiMajorAxis: 52525.95e3,
-    inclination: 0.216 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
+    inclination: 0.216 + NEPTUNE.elements.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1833,7 +1833,7 @@ export const LARISSA = celestialBodyWithDefaults({
     epoch: julianDayToEpoch('JD2447756.5'), // Epoch 18 August 1989
     eccentricity: 0.001393,
     semiMajorAxis: 73548.26e3,
-    inclination: 0.251 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
+    inclination: 0.251 + NEPTUNE.elements.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO
@@ -1852,7 +1852,7 @@ export const GALATEA = celestialBodyWithDefaults({
     epoch: julianDayToEpoch('JD2447756.5'), // Epoch 18 August 1989
     eccentricity: 0.00022,
     semiMajorAxis: 61952.57e3,
-    inclination: 0.052 + NEPTUNE.rotation!.axialTilt, // to Neptune's equator
+    inclination: 0.052 + NEPTUNE.elements.rotation!.axialTilt, // to Neptune's equator
     longitudeAscending: 0, // TODO
     argumentOfPeriapsis: 0, // TODO
     meanAnomaly: 0, // TODO

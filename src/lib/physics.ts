@@ -143,10 +143,18 @@ export function keplerianToCartesian(
   return { position: positionInertial, velocity: velocityInertial };
 }
 
-export function convertToEpoch(elements: KeplerianElements, parentMass: number, epoch: Epoch) {
-  const { semiMajorAxis: a } = elements;
+function normalizeRotation(rotation: number) {
+  return ((rotation % 360) + 360) % 360; // Normalize to [0, 360)
+}
+
+export function convertToEpoch(elements: KeplerianElements, parentMass: number, epoch: Epoch): KeplerianElements {
+  const { semiMajorAxis: a, rotation } = elements;
   const dt = (Number(epochToDate(epoch)) - Number(epochToDate(elements.epoch))) / 1000; // dt in seconds
   const n = Math.sqrt((G * parentMass) / a / a / a); // calculate mean motion
   const newM = elements.meanAnomaly + radiansToDegrees(n * dt); // update mean anomaly
-  return { ...elements, epoch, meanAnomaly: ((newM % 360) + 360) % 360 }; // Normalize mean anomaly to [0, 360)
+  const rotationInEpoch =
+    rotation != null && rotation.initialRotation != null
+      ? { ...rotation, initialRotation: normalizeRotation(rotation.initialRotation + rotation.siderealPeriod * dt) }
+      : undefined;
+  return { ...elements, epoch, meanAnomaly: normalizeRotation(newM), rotation: rotationInEpoch };
 }

@@ -23,7 +23,7 @@ export class AxisIndicator {
     this.group.position.copy(center).divideScalar(SCALE_FACTOR);
     this.scene.add(this.group);
 
-    this.rotationEuler = new Euler(degreesToRadians(body.rotation?.axialTilt ?? 0), 0, 0);
+    this.rotationEuler = new Euler(degreesToRadians(body.elements.rotation?.axialTilt ?? 0), 0, 0);
     this.segments = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
 
     const geometry = new LineSegmentsGeometry();

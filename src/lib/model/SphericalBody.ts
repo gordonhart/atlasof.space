@@ -34,7 +34,7 @@ export class SphericalBody {
     const sphereMaterial = new MeshBasicMaterial({ color }); // defer loading of texture until sufficiently zoomed in
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
     const inclination = degreesToRadians(body.elements.inclination);
-    const axialTilt = body.rotation != null ? degreesToRadians(body.rotation.axialTilt) : 0;
+    const axialTilt = body.elements.rotation != null ? degreesToRadians(body.elements.rotation.axialTilt) : 0;
     this.sphere.rotation.x = Math.PI / 2 + inclination + axialTilt;
     this.sphere.position.set(positionScaled.x, positionScaled.y, positionScaled.z);
     this.sphere.renderOrder = 1;
