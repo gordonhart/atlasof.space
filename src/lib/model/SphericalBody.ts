@@ -71,28 +71,19 @@ export class SphericalBody {
     const texture = this.body.assets?.texture;
     if (texture == null || this.hasLoadedTexture) return;
     this.hasLoadedTexture = true;
-    this.sphere.material = this.getShapeMaterial();
-  }
-
-  private getShapeMaterial(): Material {
-    const color = new Color(this.body.style.fgColor);
-    const texture = this.body.assets?.texture;
+    const textureMap = new TextureLoader().load(asCdnUrl(texture));
     const emissive = this.body.type === CelestialBodyType.STAR;
-
-    if (texture != null) {
-      const textureMap = new TextureLoader().load(asCdnUrl(texture));
-      if (emissive) {
-        // TODO: better parameterization of this?
-        return new MeshStandardMaterial({
-          map: textureMap,
-          emissive: color, // Emissive color (same as base for glow)
-          emissiveIntensity: 0.5, // Intensity of the emissive glow
-          roughness: 0.2, // Lower roughness for more shine
-          metalness: 0.1, // Lower metalness for less reflection
-        });
-      }
-      return new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
+    if (emissive) {
+      // TODO: better parameterization of this?
+      this.sphere.material = new MeshStandardMaterial({
+        map: textureMap,
+        emissive: new Color(this.body.style.fgColor), // Emissive color (same as base for glow)
+        emissiveIntensity: 0.5, // Intensity of the emissive glow
+        roughness: 0.2, // Lower roughness for more shine
+        metalness: 0.1, // Lower metalness for less reflection
+      });
+    } else {
+      this.sphere.material = new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
     }
-    return new MeshBasicMaterial({ color });
   }
 }
