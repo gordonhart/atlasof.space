@@ -73,4 +73,3 @@ Infrastructure dependencies:
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [x] Set URL part for focused planet to enable link sharing
-  - [ ] Defer loading of planet textures until sufficiently zoomed in
