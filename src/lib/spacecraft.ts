@@ -40,12 +40,13 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
 
 // TODO: mixing concerns here -- some are identity-related, others are visit-related
 export enum SpacecraftVisitType {
+  // order by descending degree of involvement
+  HELICOPTER = 'Helicopter',
+  ROVER = 'Rover',
+  LANDER = 'Lander',
+  ORBITER = 'Orbiter',
   FLYBY = 'Flyby',
   GRAVITY_ASSIST = 'Gravity Assist',
-  ORBITER = 'Orbiter',
-  LANDER = 'Lander',
-  ROVER = 'Rover',
-  HELICOPTER = 'Helicopter',
 }
 
 export enum SpacecraftStatus {

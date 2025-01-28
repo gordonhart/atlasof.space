@@ -28,6 +28,8 @@ export function SpacecraftVisits({ spacecraft, body }: Props) {
     return type != null && visibleTypes.has(type);
   });
 
+  // ensure consistent order by descending degree of involvement
+  const visitTypesDisplay = Object.values(SpacecraftVisitType).filter(t => visitTypesSet.has(t));
   return (
     <Stack gap="xs" p="md" pt="lg">
       <Group gap={4}>
@@ -35,7 +37,7 @@ export function SpacecraftVisits({ spacecraft, body }: Props) {
           Spacecraft Visits
         </Title>
         <Group gap={0}>
-          {[...visitTypesSet].map(type => (
+          {visitTypesDisplay.map(type => (
             <Chip
               key={type}
               style={{
