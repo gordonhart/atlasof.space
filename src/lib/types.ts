@@ -36,6 +36,7 @@ export type KeplerianElements = {
   argumentOfPeriapsis: number; // degrees
   // true anomaly is almost never provided; derive from mean anomaly + eccentricity
   meanAnomaly: number; // degrees
+  // include rotation with orbital elements because initialRotation is epoch-dependent
   rotation?: RotationElements; // leave empty to omit spin
 };
 
