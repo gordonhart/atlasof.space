@@ -22,6 +22,7 @@ export class SphericalBody {
   private readonly rings: Array<RingObject>;
 
   private readonly spherePoints: number = 144;
+  private hasLoadedTexture = false;
 
   constructor(scene: Scene, body: CelestialBody, position: Vector3) {
     this.scene = scene;
@@ -29,10 +30,11 @@ export class SphericalBody {
 
     const positionScaled = position.clone().divideScalar(SCALE_FACTOR);
     const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
-    const sphereMaterial = this.getShapeMaterial();
+    const color = new Color(this.body.style.fgColor);
+    const sphereMaterial = new MeshBasicMaterial({ color }); // defer loading of texture until sufficiently zoomed in
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);
     const inclination = degreesToRadians(body.elements.inclination);
-    const axialTilt = body.rotation != null ? degreesToRadians(body.rotation.axialTilt) : 0;
+    const axialTilt = body.elements.rotation != null ? degreesToRadians(body.elements.rotation.axialTilt) : 0;
     this.sphere.rotation.x = Math.PI / 2 + inclination + axialTilt;
     this.sphere.position.set(positionScaled.x, positionScaled.y, positionScaled.z);
     this.sphere.renderOrder = 1;
@@ -65,25 +67,23 @@ export class SphericalBody {
     this.rings.forEach(ring => ring.dispose());
   }
 
-  private getShapeMaterial(): Material {
-    const color = new Color(this.body.style.fgColor);
+  ensureTextureLoaded() {
     const texture = this.body.assets?.texture;
+    if (texture == null || this.hasLoadedTexture) return;
+    this.hasLoadedTexture = true;
+    const textureMap = new TextureLoader().load(asCdnUrl(texture));
     const emissive = this.body.type === CelestialBodyType.STAR;
-
-    if (texture != null) {
-      const textureMap = new TextureLoader().load(asCdnUrl(texture));
-      if (emissive) {
-        // TODO: better parameterization of this?
-        return new MeshStandardMaterial({
-          map: textureMap,
-          emissive: color, // Emissive color (same as base for glow)
-          emissiveIntensity: 0.5, // Intensity of the emissive glow
-          roughness: 0.2, // Lower roughness for more shine
-          metalness: 0.1, // Lower metalness for less reflection
-        });
-      }
-      return new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
+    if (emissive) {
+      // TODO: better parameterization of this?
+      this.sphere.material = new MeshStandardMaterial({
+        map: textureMap,
+        emissive: new Color(this.body.style.fgColor), // Emissive color (same as base for glow)
+        emissiveIntensity: 0.5, // Intensity of the emissive glow
+        roughness: 0.2, // Lower roughness for more shine
+        metalness: 0.1, // Lower metalness for less reflection
+      });
+    } else {
+      this.sphere.material = new MeshStandardMaterial({ map: textureMap, metalness: 0, roughness: 1 });
     }
-    return new MeshBasicMaterial({ color });
   }
 }

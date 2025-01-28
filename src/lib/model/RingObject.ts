@@ -46,7 +46,7 @@ export class RingObject {
     }
     this.ring = new Mesh(geometry, material);
     this.ring.rotation.x =
-      degreesToRadians(body.elements.inclination) + degreesToRadians(body.rotation?.axialTilt ?? 0);
+      degreesToRadians(body.elements.inclination) + degreesToRadians(body.elements.rotation?.axialTilt ?? 0);
     this.ring.position.copy(position).divideScalar(SCALE_FACTOR);
     scene.add(this.ring);
   }

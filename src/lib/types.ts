@@ -17,6 +17,13 @@ export type Epoch = {
 };
 
 export type CelestialBodyId = string;
+
+export type RotationElements = {
+  axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
+  siderealPeriod: number; // seconds
+  initialRotation?: number;
+};
+
 export type KeplerianElements = {
   // parent body that these elements are given with respect to, e.g. 'jupiter' for a moon. null for the Sun
   wrt: CelestialBodyId | null;
@@ -29,12 +36,8 @@ export type KeplerianElements = {
   argumentOfPeriapsis: number; // degrees
   // true anomaly is almost never provided; derive from mean anomaly + eccentricity
   meanAnomaly: number; // degrees
-};
-
-export type RotationElements = {
-  // TODO: initial rotation?
-  axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
-  siderealPeriod: number; // seconds
+  // include rotation with orbital elements because initialRotation is epoch-dependent
+  rotation?: RotationElements; // leave empty to omit spin
 };
 
 export type Ring = {
@@ -105,7 +108,6 @@ export type CelestialBody = {
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;
-  rotation?: RotationElements; // leave empty to omit spin
   rings?: Array<Ring>;
   style: CelestialBodyStyle;
   assets?: CelestialBodyAssets;

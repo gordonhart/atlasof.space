@@ -43,7 +43,7 @@ export class KeplerianBody extends KinematicBody {
     position: Vector3,
     velocity: Vector3
   ) {
-    super(body.influencedBy, body.rotation?.siderealPeriod, position, velocity);
+    super(body.influencedBy, position, velocity, body.elements.rotation);
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);
@@ -51,7 +51,7 @@ export class KeplerianBody extends KinematicBody {
     this.radius = new FocalRadius(scene, resolution, body, parent?.position ?? new Vector3(), position);
     this.sphere = new SphericalBody(scene, body, position);
     this.dotRadius = KeplerianBody.getDotRadius(body);
-    if (body.rotation != null) {
+    if (body.elements.rotation != null) {
       this.axis = new AxisIndicator(scene, resolution, body, this.position);
     }
   }
@@ -117,6 +117,8 @@ export class KeplerianBody extends KinematicBody {
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
       if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
         drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
+      } else {
+        this.sphere.ensureTextureLoaded(); // since the body is visible, ensure that its texture is loaded
       }
       if ((drawLabel || this.hovered) && this.shouldDrawLabel(metersPerPx)) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;

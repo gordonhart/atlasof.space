@@ -32,30 +32,29 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   bodies,
   updateSettings,
 }: Props) {
-  const { name, type, mass, radius, elements, rotation } = body;
-  const { data: facts, isLoading } = useFactsStream(`${name}+${type}`);
+  const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
+  const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
+  const { data: extraFacts, isLoading } = useFactsStream(`${name}+${type}`);
   const { xs: isXsDisplay } = useDisplaySize();
 
-  const parent = bodies.find(({ id }) => id === body.elements.wrt);
-  const period = orbitalPeriod(elements.semiMajorAxis, parent?.mass ?? 1);
+  const parent = bodies.find(({ id }) => id === wrt);
+  const period = orbitalPeriod(semiMajorAxis, parent?.mass ?? 1);
   const [periodTime, periodUnits] = humanTimeUnits(period);
-  const [axisValue, axisUnits] = humanDistanceUnits(elements.semiMajorAxis);
+  const [axisValue, axisUnits] = humanDistanceUnits(semiMajorAxis);
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
-    body.orbitalRegime != null ? (
-      <OrbitalRegimePill regime={body.orbitalRegime} updateSettings={updateSettings} />
-    ) : undefined;
+    orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
     // prettier-ignore
-    ...(body.type !== CelestialBodyType.STAR ? [
+    ...(type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
-      { label: 'eccentricity', value: elements.eccentricity.toLocaleString() },
-      { label: 'inclination', value: `${elements.inclination.toLocaleString()}º` },
-      { label: 'longitude of the ascending node', value: `${elements.longitudeAscending.toLocaleString()}º` },
-      { label: 'argument of periapsis', value: `${elements.argumentOfPeriapsis.toLocaleString()}º` },
+      { label: 'eccentricity', value: eccentricity.toLocaleString() },
+      { label: 'inclination', value: `${inclination.toLocaleString()}º` },
+      { label: 'longitude of the ascending node', value: `${longitudeAscending.toLocaleString()}º` },
+      { label: 'argument of periapsis', value: `${argumentOfPeriapsis.toLocaleString()}º` },
     ] : []),
     ...(parent != null ? [{ label: 'orbital period', value: pluralize(periodTime, periodUnits) }] : []),
     // prettier-ignore
@@ -67,28 +66,28 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
     ] : []),
     { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
-    ...(body.facts ?? []),
+    ...(facts ?? []),
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];
-  const factBullets = factsAsBullets(facts);
-  const galleryAssets = body.assets?.gallery ?? [];
-  const spacecraftVisited = SPACECRAFT_BY_BODY_ID[body.id] ?? [];
+  const factBullets = factsAsBullets(extraFacts);
+  const galleryAssets = assets?.gallery ?? [];
+  const spacecraftVisited = SPACECRAFT_BY_BODY_ID[id] ?? [];
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
-        title={body.name}
+        title={name}
         subTitle={celestialBodyTypeDescription(body)}
-        color={body.style.fgColor}
+        color={style.fgColor}
         onClose={() => updateSettings({ center: null })}
-        onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
+        onHover={hovered => updateSettings({ hover: hovered ? id : null })}
       />
 
       {isXsDisplay ? (
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
           <FactSheetSummary obj={body} />
           <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
-            <CelestialBodyThumbnail key={body.name} body={body} size={160} />
+            <CelestialBodyThumbnail key={name} body={body} size={160} />
           </Box>
         </Group>
       ) : (
@@ -103,7 +102,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
           </Stack>
           {!isXsDisplay && (
             <Box style={{ flexShrink: 1 }}>
-              <CelestialBodyThumbnail key={body.name} body={body} size={220} />
+              <CelestialBodyThumbnail key={name} body={body} size={220} />
             </Box>
           )}
         </Group>
@@ -123,9 +122,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
         {spacecraftVisited.length > 0 && <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />}
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
-        {body.type === CelestialBodyType.STAR && (
-          <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />
-        )}
+        {type === CelestialBodyType.STAR && <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />}
       </Box>
     </Stack>
   );
