@@ -405,6 +405,24 @@ export const VENERA_7: Spacecraft = {
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
 };
 
+export const VENUS_EXPRESS: Spacecraft = {
+  name: 'Venus Express',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 1270,
+  start: new Date('2005-11-09T03:33:34Z'),
+  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
+  thumbnail: 'venus-express-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Venus_Express',
+  visited: [
+    {
+      id: Bodies.VENUS.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2006-04-11T12:00:00Z'),
+      end: new Date('2015-01-15T15:01:55Z'),
+    },
+  ],
+};
+
 export const JUNO: Spacecraft = {
   name: 'Juno',
   organization: SpacecraftOrganization.NASA,
@@ -869,7 +887,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // VEGA_1,
   // VEGA_2,
   // MAGELLAN,
-  // VENUS_EXPRESS,
+  VENUS_EXPRESS,
   // AKATSUKI,
   // IKAROS,
   // SHINEN,
