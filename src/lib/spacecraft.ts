@@ -424,6 +424,22 @@ export const JUICE: Spacecraft = {
   ],
 };
 
+export const LUCY: Spacecraft = {
+  name: 'Lucy',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 1550,
+  power: 504,
+  start: new Date('2021-10-16T09:34:02Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'lucy-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Lucy_(spacecraft)',
+  visited: [
+    { id: Bodies.DINKINESH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2023-11-01T12:00:00Z') },
+    // TODO: 52246 Donaldjohanson flyby
+    // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
+  ],
+};
+
 export const DART: Spacecraft = {
   name: 'Double Asteroid Redirect Test (DART)',
   organization: SpacecraftOrganization.NASA,
@@ -875,7 +891,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   ROSETTA,
   HAYABUSA_2,
   OSIRIS_REX,
-  // LUCY,
+  LUCY,
   DART,
   PSYCHE,
   HERA,
