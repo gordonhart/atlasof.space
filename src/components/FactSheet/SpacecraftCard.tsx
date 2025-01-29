@@ -21,7 +21,7 @@ export function SpacecraftCard({ spacecraft, body }: Props) {
     visitInfo.type === SpacecraftVisitType.ROVER || visitInfo.type === SpacecraftVisitType.LANDER
       ? (visitPastTense ? 'landed' : 'planning to land')
       : visitInfo.type === SpacecraftVisitType.ORBITER
-        ? (visitPastTense ? 'entered orbit' : 'planning to orbit')
+        ? (visitPastTense ? 'entered orbit' : 'planning to enter orbit')
         : visitInfo.type === SpacecraftVisitType.HELICOPTER
           ? (visitPastTense ? 'started flying' : 'planning to start flying')
           : (visitPastTense ? 'visited' : 'planning to visit');

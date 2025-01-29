@@ -679,7 +679,7 @@ export const DIDYMOS = celestialBodyWithDefaults({
   assets: { thumbnail: 'didymos-thumb.jpg' },
 });
 
-export const BENNU: CelestialBody = celestialBodyWithDefaults({
+export const BENNU = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '101955 Bennu',
   shortName: 'Bennu',
@@ -693,7 +693,7 @@ export const BENNU: CelestialBody = celestialBodyWithDefaults({
     inclination: 6.0349,
     longitudeAscending: 2.0609,
     argumentOfPeriapsis: 66.2231,
-    meanAnomaly: 0,
+    meanAnomaly: 101.7039,
   },
   mass: 7.329e10,
   radius: 245.03,
@@ -703,7 +703,30 @@ export const BENNU: CelestialBody = celestialBodyWithDefaults({
   },
 });
 
-export const RYUGU: CelestialBody = celestialBodyWithDefaults({
+export const DINKINESH = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '152830 Dinkinesh',
+  shortName: 'Dinkinesh',
+  influencedBy: [SOL.id],
+  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2460000.5'),
+    eccentricity: 0.112,
+    semiMajorAxis: 2.191 * AU,
+    inclination: 2.094,
+    longitudeAscending: 21.38,
+    argumentOfPeriapsis: 66.711,
+    meanAnomaly: 25.239,
+  },
+  mass: estimateAsteroidMass(395),
+  radius: 395,
+  assets: {
+    thumbnail: 'dinkinesh-thumb.png',
+  },
+});
+
+export const RYUGU = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '162173 Ryugu',
   shortName: 'Ryugu',
@@ -711,13 +734,13 @@ export const RYUGU: CelestialBody = celestialBodyWithDefaults({
   orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
-    epoch: J2000, // TODO: verify
+    epoch: julianDayToEpoch('JD2455907.5'),
     eccentricity: 0.1902,
     semiMajorAxis: 1.1896 * AU,
     inclination: 5.8837,
     longitudeAscending: 251.62,
     argumentOfPeriapsis: 211.43,
-    meanAnomaly: 0,
+    meanAnomaly: 3.9832,
   },
   mass: 4.5e11,
   radius: 448,
@@ -751,6 +774,7 @@ export const ASTEROIDS = [
   ITOKAWA,
   DIDYMOS,
   BENNU,
+  DINKINESH,
   RYUGU,
 ];
 
@@ -764,13 +788,13 @@ export const CG67P = celestialBodyWithDefaults({
   radius: 2000, // m (average radius based on dimensions)
   elements: {
     wrt: SOL.id,
-    epoch: J2000, // TODO: verify
-    eccentricity: 0.64,
-    semiMajorAxis: 3.463 * AU,
-    inclination: 7.04, // degrees
-    longitudeAscending: 50.19, // degrees
-    argumentOfPeriapsis: 12.78, // degrees
-    meanAnomaly: 0, // degrees (value at perihelion)
+    epoch: julianDayToEpoch('JD2460000.5'),
+    eccentricity: 0.64989,
+    semiMajorAxis: 3.457 * AU,
+    inclination: 3.8719,
+    longitudeAscending: 36.33,
+    argumentOfPeriapsis: 22.15,
+    meanAnomaly: 73.57,
     rotation: {
       axialTilt: 52,
       siderealPeriod: 12.4 * Time.HOUR,
@@ -922,7 +946,7 @@ export const STYX = celestialBodyWithDefaults({
   assets: { thumbnail: 'styx-thumb.jpg' },
 });
 
-export const NIX: CelestialBody = celestialBodyWithDefaults({
+export const NIX = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Nix',
   influencedBy: [SOL.id, PLUTO.id],

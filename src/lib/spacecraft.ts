@@ -4,6 +4,7 @@ import { CelestialBodyId } from './types.ts';
 
 export enum SpacecraftOrganization {
   NASA = 'NASA',
+  USSR = 'USSR',
   ESA = 'ESA',
   JAXA = 'JAXA',
   CNSA = 'CNSA',
@@ -20,6 +21,11 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
     name: 'National Aeronautics and Space Administration',
     shortName: 'NASA',
     thumbnail: 'nasa-meatball.svg',
+  },
+  [SpacecraftOrganization.USSR]: {
+    name: 'Union of Soviet Socialist Republics',
+    shortName: 'USSR',
+    thumbnail: 'ussr-logo.svg',
   },
   [SpacecraftOrganization.ESA]: {
     name: 'European Space Agency',
@@ -46,6 +52,7 @@ export enum SpacecraftVisitType {
   LANDER = 'Lander',
   ROVER = 'Rover',
   HELICOPTER = 'Helicopter',
+  IMPACTOR = 'Impactor',
 }
 
 export enum SpacecraftStatus {
@@ -178,7 +185,7 @@ export const CASSINI: Spacecraft = {
   start: new Date('1997-10-15T08:43:00Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Intentionally flown into Saturn's atmosphere on September 15th, 2017",
+    details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
   },
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
@@ -300,7 +307,7 @@ export const GALILEO: Spacecraft = {
   start: new Date('1989-10-18T16:53:40Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Intentionally flown into Jupiter's atmosphere on September 21st, 2003",
+    details: "Intentionally flown into Jupiter's atmosphere on September 21, 2003",
   },
   thumbnail: 'galileo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
@@ -387,6 +394,17 @@ export const SOLAR_ORBITER: Spacecraft = {
   ],
 };
 
+export const VENERA_7: Spacecraft = {
+  name: 'Venera 7',
+  organization: SpacecraftOrganization.USSR,
+  launchMass: 1180,
+  start: new Date('1970-08-17T05:38:22Z'),
+  status: { status: SpacecraftStatus.DEFUNCT },
+  thumbnail: 'venera-7-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Venera_7',
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
+};
+
 export const JUNO: Spacecraft = {
   name: 'Juno',
   organization: SpacecraftOrganization.NASA,
@@ -423,6 +441,34 @@ export const JUICE: Spacecraft = {
   ],
 };
 
+export const LUCY: Spacecraft = {
+  name: 'Lucy',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 1550,
+  power: 504,
+  start: new Date('2021-10-16T09:34:02Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'lucy-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Lucy_(spacecraft)',
+  visited: [
+    { id: Bodies.DINKINESH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2023-11-01T12:00:00Z') },
+    // TODO: 52246 Donaldjohanson flyby
+    // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
+  ],
+};
+
+export const DART: Spacecraft = {
+  name: 'Double Asteroid Redirect Test (DART)',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 610,
+  power: 6600,
+  start: new Date('2021-11-24T06:21:02Z'),
+  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
+  thumbnail: 'dart-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
+  visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
+};
+
 export const PSYCHE: Spacecraft = {
   name: 'Psyche',
   organization: SpacecraftOrganization.NASA,
@@ -433,6 +479,20 @@ export const PSYCHE: Spacecraft = {
   thumbnail: 'psyche-spacecraft-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
   visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
+};
+
+export const HERA: Spacecraft = {
+  name: 'Hera',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 1128,
+  start: new Date('2024-10-07T14:52:11Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'hera-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-15T12:00:00Z') },
+    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
+  ],
 };
 
 export const EUROPA_CLIPPER: Spacecraft = {
@@ -626,6 +686,25 @@ export const APOLLO_17: Spacecraft = {
   ],
 };
 
+export const PIONEER_10: Spacecraft = {
+  name: 'Pioneer 10',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 258,
+  power: 155,
+  start: new Date('1972-03-03T01:49:04Z'),
+  end: new Date('2003-01-23T12:00:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting out beyond the Kuiper Belt' },
+  wiki: 'https://en.wikipedia.org/wiki/Pioneer_10',
+  thumbnail: 'pioneer-10-thumb.jpg',
+  visited: [
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T12:26:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T13:56:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T19:26:00Z') },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T22:56:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-04T02:26:00Z') },
+  ],
+};
+
 export const NEAR_SHOEMAKER: Spacecraft = {
   name: 'NEAR Shoemaker',
   organization: SpacecraftOrganization.NASA,
@@ -633,7 +712,7 @@ export const NEAR_SHOEMAKER: Spacecraft = {
   power: 1800,
   start: new Date('1996-02-17T20:43:27Z'),
   end: new Date('2001-02-28T00:00:00Z'),
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Soft landed on 433 Eros on February 12th, 2001' },
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Soft landed on 433 Eros on February 12, 2001' },
   wiki: 'https://en.wikipedia.org/wiki/NEAR_Shoemaker',
   thumbnail: 'near-shoemaker-thumb.png',
   visited: [
@@ -774,7 +853,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // MARINER_5,
   // VENERA_5,
   // VENERA_6,
-  // VENERA_7,
+  VENERA_7,
   // VENERA_8,
   // MARINER_10,
   // VENERA_9,
@@ -837,7 +916,6 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // INSIGHT,
 
   // Asteroids
-  // PIONEER_10,
   NEAR_SHOEMAKER,
   // DEEP_SPACE_1,
   // STARDUST,
@@ -848,12 +926,13 @@ export const SPACECRAFT: Array<Spacecraft> = [
   ROSETTA,
   HAYABUSA_2,
   OSIRIS_REX,
-  // LUCY,
-  // DART,
+  LUCY,
+  DART,
   PSYCHE,
-  // HERA,
+  HERA,
 
   // Outer missions
+  PIONEER_10,
   VOYAGER_1,
   VOYAGER_2,
   GALILEO,
