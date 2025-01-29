@@ -448,6 +448,20 @@ export const PSYCHE: Spacecraft = {
   visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
 };
 
+export const HERA: Spacecraft = {
+  name: 'Hera',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 1128,
+  start: new Date('2024-10-07T14:52:11Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'hera-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-15T12:00:00Z') },
+    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
+  ],
+};
+
 export const EUROPA_CLIPPER: Spacecraft = {
   name: 'Europa Clipper',
   organization: SpacecraftOrganization.NASA,
@@ -864,7 +878,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // LUCY,
   DART,
   PSYCHE,
-  // HERA,
+  HERA,
 
   // Outer missions
   VOYAGER_1,
