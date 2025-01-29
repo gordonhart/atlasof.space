@@ -70,6 +70,7 @@ export type Spacecraft = {
   power?: number; // watts
   start: Date; // TODO: rename to launchDate?
   end?: Date;
+  cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
   status: { status: SpacecraftStatus; details?: string };
   thumbnail?: string;
   wiki: string;
@@ -784,6 +785,25 @@ export const ROSETTA: Spacecraft = {
   ],
 };
 
+export const HAYABUSA: Spacecraft = {
+  name: 'Hayabusa',
+  organization: SpacecraftOrganization.JAXA,
+  launchMass: 510,
+  start: new Date('2003-05-09T04:29:25Z'),
+  end: new Date('2010-06-13T14:12:00Z'),
+  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with samples of Itokawa in 2010' },
+  wiki: 'https://en.wikipedia.org/wiki/Hayabusa',
+  thumbnail: 'hayabusa-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.ITOKAWA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2005-11-19T21:30:00Z'),
+      end: new Date('2005-11-19T21:58:00Z'),
+    },
+  ],
+};
+
 export const DAWN: Spacecraft = {
   name: 'Dawn',
   organization: SpacecraftOrganization.NASA,
@@ -951,7 +971,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   NEAR_SHOEMAKER,
   // DEEP_SPACE_1,
   // STARDUST,
-  // HAYABUSA,
+  HAYABUSA,
   // DEEP_IMPACT,
   DAWN,
   CHANGE_2,

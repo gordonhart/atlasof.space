@@ -73,3 +73,5 @@ Infrastructure dependencies:
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [x] Set URL part for focused planet to enable link sharing
+  - [ ] Add fact sheet for spacecraft
+  - [ ] Add fact sheet for organization, listing spacecraft
