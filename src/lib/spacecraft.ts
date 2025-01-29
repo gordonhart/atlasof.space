@@ -46,6 +46,7 @@ export enum SpacecraftVisitType {
   LANDER = 'Lander',
   ROVER = 'Rover',
   HELICOPTER = 'Helicopter',
+  IMPACTOR = 'Impactor',
 }
 
 export enum SpacecraftStatus {
@@ -178,7 +179,7 @@ export const CASSINI: Spacecraft = {
   start: new Date('1997-10-15T08:43:00Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Intentionally flown into Saturn's atmosphere on September 15th, 2017",
+    details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
   },
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
@@ -300,7 +301,7 @@ export const GALILEO: Spacecraft = {
   start: new Date('1989-10-18T16:53:40Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Intentionally flown into Jupiter's atmosphere on September 21st, 2003",
+    details: "Intentionally flown into Jupiter's atmosphere on September 21, 2003",
   },
   thumbnail: 'galileo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
@@ -421,6 +422,18 @@ export const JUICE: Spacecraft = {
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
     { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
   ],
+};
+
+export const DART: Spacecraft = {
+  name: 'Double Asteroid Redirect Test (DART)',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 610,
+  power: 6600,
+  start: new Date('2021-11-24T06:21:02Z'),
+  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
+  thumbnail: 'dart-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
+  visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
 };
 
 export const PSYCHE: Spacecraft = {
@@ -633,7 +646,7 @@ export const NEAR_SHOEMAKER: Spacecraft = {
   power: 1800,
   start: new Date('1996-02-17T20:43:27Z'),
   end: new Date('2001-02-28T00:00:00Z'),
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Soft landed on 433 Eros on February 12th, 2001' },
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Soft landed on 433 Eros on February 12, 2001' },
   wiki: 'https://en.wikipedia.org/wiki/NEAR_Shoemaker',
   thumbnail: 'near-shoemaker-thumb.png',
   visited: [
@@ -849,7 +862,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   HAYABUSA_2,
   OSIRIS_REX,
   // LUCY,
-  // DART,
+  DART,
   PSYCHE,
   // HERA,
 
