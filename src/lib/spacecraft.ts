@@ -669,6 +669,25 @@ export const APOLLO_17: Spacecraft = {
   ],
 };
 
+export const PIONEER_10: Spacecraft = {
+  name: 'Pioneer 10',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 258,
+  power: 155,
+  start: new Date('1972-03-03T01:49:04Z'),
+  end: new Date('2003-01-23T12:00:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting out beyond the Kuiper Belt' },
+  wiki: 'https://en.wikipedia.org/wiki/Pioneer_10',
+  thumbnail: 'pioneer-10-thumb.jpg',
+  visited: [
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T12:26:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T13:56:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T19:26:00Z') },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T22:56:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-04T02:26:00Z') },
+  ],
+};
+
 export const NEAR_SHOEMAKER: Spacecraft = {
   name: 'NEAR Shoemaker',
   organization: SpacecraftOrganization.NASA,
@@ -880,7 +899,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // INSIGHT,
 
   // Asteroids
-  // PIONEER_10,
+  PIONEER_10,
   NEAR_SHOEMAKER,
   // DEEP_SPACE_1,
   // STARDUST,
