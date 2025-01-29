@@ -4,6 +4,7 @@ import { CelestialBodyId } from './types.ts';
 
 export enum SpacecraftOrganization {
   NASA = 'NASA',
+  USSR = 'USSR',
   ESA = 'ESA',
   JAXA = 'JAXA',
   CNSA = 'CNSA',
@@ -20,6 +21,11 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
     name: 'National Aeronautics and Space Administration',
     shortName: 'NASA',
     thumbnail: 'nasa-meatball.svg',
+  },
+  [SpacecraftOrganization.USSR]: {
+    name: 'Union of Soviet Socialist Republics',
+    shortName: 'USSR',
+    thumbnail: 'ussr-logo.svg',
   },
   [SpacecraftOrganization.ESA]: {
     name: 'European Space Agency',
@@ -386,6 +392,17 @@ export const SOLAR_ORBITER: Spacecraft = {
     // TODO: also Earth flyby -- worth including? the list there would be massive
     { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-02-10T04:03:00Z') },
   ],
+};
+
+export const VENERA_7: Spacecraft = {
+  name: 'Venera 7',
+  organization: SpacecraftOrganization.USSR,
+  launchMass: 1180,
+  start: new Date('1970-08-17T05:38:22Z'),
+  status: { status: SpacecraftStatus.DEFUNCT },
+  thumbnail: 'venera-7-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Venera_7',
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
 };
 
 export const JUNO: Spacecraft = {
@@ -836,7 +853,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // MARINER_5,
   // VENERA_5,
   // VENERA_6,
-  // VENERA_7,
+  VENERA_7,
   // VENERA_8,
   // MARINER_10,
   // VENERA_9,
@@ -899,7 +916,6 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // INSIGHT,
 
   // Asteroids
-  PIONEER_10,
   NEAR_SHOEMAKER,
   // DEEP_SPACE_1,
   // STARDUST,
@@ -916,6 +932,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   HERA,
 
   // Outer missions
+  PIONEER_10,
   VOYAGER_1,
   VOYAGER_2,
   GALILEO,
