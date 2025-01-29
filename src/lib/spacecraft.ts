@@ -394,6 +394,18 @@ export const SOLAR_ORBITER: Spacecraft = {
   ],
 };
 
+export const MARINER_2: Spacecraft = {
+  name: Bodies.MARINER_2.name,
+  organization: SpacecraftOrganization.NASA,
+  launchMass: Bodies.MARINER_2.mass,
+  power: 220,
+  start: new Date('1962-08-27T06:53:14Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
+  wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
+  thumbnail: Bodies.MARINER_2.assets!.thumbnail,
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
+};
+
 export const VENERA_7: Spacecraft = {
   name: 'Venera 7',
   organization: SpacecraftOrganization.USSR,
@@ -409,6 +421,7 @@ export const VENUS_EXPRESS: Spacecraft = {
   name: 'Venus Express',
   organization: SpacecraftOrganization.ESA,
   launchMass: 1270,
+  power: 1100,
   start: new Date('2005-11-09T03:33:34Z'),
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
   thumbnail: 'venus-express-thumb.jpg',
@@ -798,6 +811,7 @@ export const DAWN: Spacecraft = {
   ],
 };
 
+// TODO: this is in a heliocentric orbit -- find the parameters and add as a body
 export const CHANGE_2: Spacecraft = {
   name: "Chang'e 2",
   organization: SpacecraftOrganization.CNSA,
@@ -863,7 +877,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
 
   // Venus
   // VENERA_1,
-  // MARINER_2,
+  MARINER_2,
   // ZOND_1,
   // VENERA_2,
   // VENERA_3,

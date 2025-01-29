@@ -848,6 +848,26 @@ export const HALE_BOPP = celestialBodyWithDefaults({
 
 export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
 
+export const MARINER_2 = celestialBodyWithDefaults({
+  name: 'Mariner 2',
+  type: CelestialBodyType.SPACECRAFT,
+  influencedBy: [SOL.id],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD'),
+    eccentricity: 0.16278,
+    semiMajorAxis: 0.86 * AU,
+    inclination: 0,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 203.6,
+  radius: 3, // TODO: find real dimensions? not important
+  assets: { thumbnail: 'mariner-2-thumb.jpg' },
+});
+
 export const TESLA_ROADSTER = celestialBodyWithDefaults({
   name: "Elon Musk's Tesla Roadster",
   shortName: 'Roadster',
@@ -869,7 +889,7 @@ export const TESLA_ROADSTER = celestialBodyWithDefaults({
   assets: { thumbnail: 'roadster-thumb.jpg' },
 });
 
-export const SPACECRAFT = [TESLA_ROADSTER];
+export const SPACECRAFT = [MARINER_2, TESLA_ROADSTER];
 
 export const PLUTO = celestialBodyWithDefaults({
   name: '134340 Pluto',
