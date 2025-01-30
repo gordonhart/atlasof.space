@@ -1,15 +1,15 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { dateToHumanReadable } from '../../lib/epoch.ts';
 import { Spacecraft } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody, CelestialBodyId, CelestialBodyType } from '../../lib/types.ts';
-import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR, notNullish } from '../../lib/utils.ts';
-import { BodyCard } from './BodyCard.tsx';
+import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
+import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR } from '../../lib/utils.ts';
 import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { MissionTimeline } from './MissionTimeline.tsx';
 import { OtherSpacecraft } from './OtherSpacecraft.tsx';
 import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
@@ -23,10 +23,6 @@ type Props = {
 };
 export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraft, bodies, updateSettings }: Props) {
   const { xs: isXsDisplay } = useDisplaySize();
-  const bodyById = useMemo(
-    () => bodies.reduce<Record<CelestialBodyId, CelestialBody>>((acc, body) => ({ ...acc, [body.id]: body }), {}),
-    [JSON.stringify(bodies)]
-  );
 
   const bullets = [
     { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
@@ -39,7 +35,6 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
   ];
 
-  const visitedBodies = spacecraft.visited.map(({ id }) => bodyById[id]).filter(notNullish);
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
@@ -74,17 +69,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
           )}
         </Group>
 
-        <Stack gap="xs" p="md" pt="lg">
-          <Title order={5}>Mission Timeline</Title>
-          {visitedBodies.map((body, i) => (
-            <BodyCard
-              key={`${body.name}-${i}`}
-              body={body}
-              onClick={() => updateSettings({ center: body.id, hover: null })}
-              onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
-            />
-          ))}
-        </Stack>
+        <MissionTimeline spacecraft={spacecraft} bodies={bodies} updateSettings={updateSettings} />
       </Stack>
 
       <Box pt="md" style={{ justifySelf: 'flex-end' }}>

@@ -65,6 +65,15 @@ export enum SpacecraftStatus {
 }
 
 export type SpacecraftId = string;
+
+// TODO: many spacecraft fly by an object multiple times -- is it worth representing that? tons of data to transcribe
+export type SpacecraftVisit = {
+  id: CelestialBodyId;
+  type: SpacecraftVisitType;
+  start: Date;
+  end?: Date;
+};
+
 export type Spacecraft = {
   id: SpacecraftId;
   name: string;
@@ -78,13 +87,7 @@ export type Spacecraft = {
   thumbnail?: string;
   wiki: string;
   crew?: Array<string>;
-  // TODO: many spacecraft fly by an object multiple times -- is it worth representing that? tons of data to transcribe
-  visited: Array<{
-    id: CelestialBodyId;
-    type: SpacecraftVisitType;
-    start: Date;
-    end?: Date;
-  }>;
+  visited: Array<SpacecraftVisit>;
 };
 
 function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {

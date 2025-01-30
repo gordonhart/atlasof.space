@@ -12,9 +12,13 @@ import {
 import { celestialBodyTypeName } from '../lib/utils.ts';
 
 export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft) {
-  const [isStreaming, setIsStreaming] = useState(false);
   const search = useMemo(() => getSearch(obj), [JSON.stringify(obj)]);
+  return useSummaryStreamRaw(search);
+}
 
+// TODO: naming
+export function useSummaryStreamRaw(search: string) {
+  const [isStreaming, setIsStreaming] = useState(false);
   const queryClient = useQueryClient();
   const queryKey = ['GET', 'facts', search];
 
