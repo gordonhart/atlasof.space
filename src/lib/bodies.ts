@@ -635,6 +635,27 @@ export const NEREUS = celestialBodyWithDefaults({
   assets: { thumbnail: 'nereus-thumb.gif' },
 });
 
+export const BRAILLE = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '9969 Braille',
+  shortName: 'Braille',
+  influencedBy: [SOL.id],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2458000.5'),
+    eccentricity: 0.4334,
+    semiMajorAxis: 2.341 * AU,
+    inclination: 28.999,
+    longitudeAscending: 241.95,
+    argumentOfPeriapsis: 356.11,
+    meanAnomaly: 16.88,
+  },
+  mass: 7.8e12,
+  radius: 800, // m
+  assets: { thumbnail: 'braille-thumb.jpg' },
+});
+
 export const ITOKAWA = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '25143 Itokawa',
@@ -771,6 +792,7 @@ export const ASTEROIDS = [
   STEINS,
   TOUTATIS,
   NEREUS,
+  BRAILLE,
   ITOKAWA,
   DIDYMOS,
   BENNU,
@@ -846,7 +868,27 @@ export const HALE_BOPP = celestialBodyWithDefaults({
   assets: { thumbnail: 'hale-bopp-thumb.jpg' },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
+export const BORRELLY = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: "Borrelly's Comet (19P/Borrelly)",
+  shortName: 'Borrelly',
+  influencedBy: [SOL.id],
+  mass: 2e13,
+  radius: 2.4e3,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2459279.5'),
+    eccentricity: 0.6379142835777641,
+    semiMajorAxis: 3.606964684326838 * AU,
+    inclination: 29.3186623395529,
+    longitudeAscending: 74.30084258786506,
+    argumentOfPeriapsis: 351.8616063839783,
+    meanAnomaly: 312.1229200779977,
+  },
+  assets: { thumbnail: 'borrelly-thumb.jpg' },
+});
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY];
 
 export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',

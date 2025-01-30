@@ -66,12 +66,12 @@ Infrastructure dependencies:
   - [ ] Use ephemeris data for modeling
 - Scene rendering:
   - [ ] Examine render settings, see if visuals can be improved
-    - [x] Fix sporadic black blocks rendering around focus body
   - [ ] Fix alignment between planet and ellipse
   - [ ] Render 3D models for asteroids
   - [ ] Improve offscreen indicator rendering for moons when the main planet is not visible
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
-  - [x] Set URL part for focused planet to enable link sharing
   - [ ] Add fact sheet for spacecraft
+    - [ ] Set spacecraft ID as URL part for deep linking
   - [ ] Add fact sheet for organization, listing spacecraft
+  - [ ] Add differentiated default colors for TNOs
