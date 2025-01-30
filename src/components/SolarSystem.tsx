@@ -100,6 +100,7 @@ export function SolarSystem() {
     model.resize();
   }, [settings.center]);
 
+  // TODO: some spacecraft share names with celestial bodies -- e.g. Psyche, Mariner 2 -- need to disambiguate
   const focusItem = useMemo(() => {
     const focusBody = settings.bodies.find(body => body.id === settings.center);
     const focusSpacecraft = SPACECRAFT.find(({ id }) => id === settings.center);

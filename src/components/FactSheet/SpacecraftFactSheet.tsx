@@ -1,4 +1,4 @@
-import { Anchor, Box, Group, Stack, Title } from '@mantine/core';
+import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { dateToHumanReadable } from '../../lib/epoch.ts';
@@ -10,9 +10,11 @@ import { BodyCard } from './BodyCard.tsx';
 import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { OtherSpacecraft } from './OtherSpacecraft.tsx';
 import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 import { Thumbnail } from './Thumbnail.tsx';
+import { WikiLinkPill } from './WikiLinkPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
@@ -30,17 +32,11 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
     { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
     { label: 'launch date', value: dateToHumanReadable(spacecraft.start) },
+    ...(spacecraft.end != null ? [{ label: 'mission end date', value: dateToHumanReadable(spacecraft.end) }] : []),
     { label: 'launch mass', value: `${spacecraft.launchMass.toLocaleString()} kg` },
     ...(spacecraft.power != null ? [{ label: 'power', value: `${spacecraft.power.toLocaleString()} watts` }] : []),
     { label: 'status', value: <SpacecraftStatusPill status={spacecraft.status} /> },
-    {
-      label: 'learn more',
-      value: (
-        <Anchor inherit href={spacecraft.wiki} target="_blank">
-          Wikipedia
-        </Anchor>
-      ),
-    },
+    { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
   ];
 
   const visitedBodies = spacecraft.visited.map(({ id }) => bodyById[id]).filter(notNullish);
@@ -90,6 +86,10 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
           ))}
         </Stack>
       </Stack>
+
+      <Box pt="md" style={{ justifySelf: 'flex-end' }}>
+        <OtherSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
+      </Box>
     </Stack>
   );
 });
