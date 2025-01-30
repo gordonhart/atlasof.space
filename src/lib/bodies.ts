@@ -907,7 +907,10 @@ export const MARINER_2 = celestialBodyWithDefaults({
   },
   mass: 203.6,
   radius: 3, // TODO: find real dimensions? not important
-  assets: { thumbnail: 'mariner-2-thumb.jpg' },
+  assets: {
+    thumbnail: 'mariner-2-thumb.jpg',
+    search: 'Mariner 2',
+  },
 });
 
 export const TESLA_ROADSTER = celestialBodyWithDefaults({
@@ -1245,7 +1248,7 @@ export const GONGGONG = celestialBodyWithDefaults({
 
 export const VP113 = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
-  name: '2012 VP133',
+  name: '2012 VP113',
   influencedBy: [SOL.id],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: 1e21, // very very rough guess -- not known
@@ -1260,7 +1263,7 @@ export const VP113 = celestialBodyWithDefaults({
     argumentOfPeriapsis: 293.8, // degrees
     meanAnomaly: 3.5, // degrees
   },
-  assets: { thumbnail: 'vp113-thumb.gif' },
+  assets: { thumbnail: 'vp113-thumb.gif', search: '2012 VP113' },
   facts: [{ label: 'class', value: 'sednoid' }],
 });
 

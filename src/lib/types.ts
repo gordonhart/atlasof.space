@@ -61,6 +61,7 @@ export type CelestialBodyAssets = {
   thumbnail?: string;
   texture?: string;
   gallery?: Array<GalleryAsset>;
+  search?: string; // optionally specify slug to search wikidata, overriding default ${name}+${type}
 };
 
 export enum CelestialBodyType {

@@ -34,7 +34,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 }: Props) {
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
   const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
-  const { data: extraFacts, isLoading } = useFactsStream(`${name}+${type}`);
+  const { data: extraFacts, isLoading } = useFactsStream(assets?.search ?? `${name}+${type}`);
   const { xs: isXsDisplay } = useDisplaySize();
 
   const parent = bodies.find(({ id }) => id === wrt);
