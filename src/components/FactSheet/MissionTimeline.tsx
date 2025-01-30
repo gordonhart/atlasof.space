@@ -1,7 +1,7 @@
 import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import { useEffect, useMemo, useRef } from 'react';
-import { useSummaryStreamRaw } from '../../hooks/useSummaryStream.ts';
+import { useSpacecraftVisitSummaryStream } from '../../hooks/useSpacecraftVisitSummaryStream.ts';
 import { Spacecraft, SpacecraftVisit } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyId } from '../../lib/types.ts';
@@ -74,9 +74,7 @@ type MissionVisitCardProps = {
 function MissionVisitCard({ body, spacecraft, visit, updateSettings }: MissionVisitCardProps) {
   // TODO: this probably needs a dedicated endpoint with different example prompts -- the summary stream endpoint is too
   //  focused on summarizing an entity, rather than an event
-  const { data: summary, isLoading } = useSummaryStreamRaw(
-    `the encounter between the spacecraft ${spacecraft.name} and ${body.name}`
-  );
+  const { data: summary, isLoading } = useSpacecraftVisitSummaryStream(spacecraft, body, visit);
   return (
     <Paper
       className={styles.Card}
