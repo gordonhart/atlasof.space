@@ -26,7 +26,6 @@ type Props = {
   bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
 };
-
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
   bodies,

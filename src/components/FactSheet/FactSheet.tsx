@@ -14,7 +14,6 @@ type Props = {
   addBody: (body: CelestialBody) => void;
   removeBody: (id: string) => void;
 };
-
 export const FactSheet = memo(function FactSheetComponent({
   item,
   settings,
@@ -22,18 +21,13 @@ export const FactSheet = memo(function FactSheetComponent({
   addBody,
   removeBody,
 }: Props) {
+  const props = { bodies: settings.bodies, updateSettings };
   return isCelestialBody(item) ? (
-    <CelestialBodyFactSheet body={item} bodies={settings.bodies} updateSettings={updateSettings} />
+    <CelestialBodyFactSheet body={item} {...props} />
   ) : isOrbitalRegime(item) ? (
-    <OrbitalRegimeFactSheet
-      regime={item}
-      settings={settings}
-      updateSettings={updateSettings}
-      addBody={addBody}
-      removeBody={removeBody}
-    />
+    <OrbitalRegimeFactSheet regime={item} addBody={addBody} removeBody={removeBody} {...props} />
   ) : isSpacecraft(item) ? (
-    <SpacecraftFactSheet spacecraft={item} updateSettings={updateSettings} />
+    <SpacecraftFactSheet spacecraft={item} {...props} />
   ) : (
     <></>
   );

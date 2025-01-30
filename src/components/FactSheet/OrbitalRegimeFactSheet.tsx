@@ -1,7 +1,7 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
-import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
   CelestialBodyType,
@@ -18,26 +18,26 @@ import { OtherRegimes } from './OtherRegimes.tsx';
 
 type Props = {
   regime: OrbitalRegime;
-  settings: Settings;
+  bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
   removeBody: (id: string) => void;
 };
 export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
   regime,
-  settings,
+  bodies,
   updateSettings,
   addBody,
   removeBody,
 }: Props) {
   const bodiesInRegimeByType = useMemo(() => {
-    const bodiesInRegime = settings.bodies.filter(body => body.orbitalRegime === regime.id);
+    const bodiesInRegime = bodies.filter(body => body.orbitalRegime === regime.id);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
     return bodiesInRegime.reduce((acc, body) => {
       acc[body.type].push(body);
       return acc;
     }, types);
-  }, [regime.id, JSON.stringify(settings.bodies)]);
+  }, [regime.id, JSON.stringify(bodies)]);
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
@@ -67,7 +67,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                 />
               ))}
               {regime.id === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
-                <AddSmallBodyButton bodies={settings.bodies} addBody={addBody} removeBody={removeBody} />
+                <AddSmallBodyButton bodies={bodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>
           ))}
