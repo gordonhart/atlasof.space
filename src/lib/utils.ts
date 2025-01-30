@@ -62,7 +62,7 @@ export function notNullish<TValue>(value: TValue | null | undefined): value is T
   return value !== null && value !== undefined;
 }
 
-export function celestialBodyNameToId(name: string, shortName?: string) {
+export function nameToId(name: string, shortName?: string) {
   return (shortName ?? name).replace(/\s+/g, '-').toLowerCase();
 }
 
@@ -84,7 +84,7 @@ export function celestialBodyWithDefaults(
 ): CelestialBody {
   return {
     ...body,
-    id: body.id ?? celestialBodyNameToId(body.name, body.shortName),
+    id: body.id ?? nameToId(body.name, body.shortName),
     style: {
       fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_FG_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
       bgColor: body.style?.bgColor ?? body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],

@@ -635,6 +635,27 @@ export const NEREUS = celestialBodyWithDefaults({
   assets: { thumbnail: 'nereus-thumb.gif' },
 });
 
+export const BRAILLE = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '9969 Braille',
+  shortName: 'Braille',
+  influencedBy: [SOL.id],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2458000.5'),
+    eccentricity: 0.4334,
+    semiMajorAxis: 2.341 * AU,
+    inclination: 28.999,
+    longitudeAscending: 241.95,
+    argumentOfPeriapsis: 356.11,
+    meanAnomaly: 16.88,
+  },
+  mass: 7.8e12,
+  radius: 800, // m
+  assets: { thumbnail: 'braille-thumb.jpg' },
+});
+
 export const ITOKAWA = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '25143 Itokawa',
@@ -771,6 +792,7 @@ export const ASTEROIDS = [
   STEINS,
   TOUTATIS,
   NEREUS,
+  BRAILLE,
   ITOKAWA,
   DIDYMOS,
   BENNU,
@@ -846,7 +868,50 @@ export const HALE_BOPP = celestialBodyWithDefaults({
   assets: { thumbnail: 'hale-bopp-thumb.jpg' },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP];
+export const BORRELLY = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: "Borrelly's Comet (19P/Borrelly)",
+  shortName: 'Borrelly',
+  influencedBy: [SOL.id],
+  mass: 2e13,
+  radius: 2.4e3,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2459279.5'),
+    eccentricity: 0.6379142835777641,
+    semiMajorAxis: 3.606964684326838 * AU,
+    inclination: 29.3186623395529,
+    longitudeAscending: 74.30084258786506,
+    argumentOfPeriapsis: 351.8616063839783,
+    meanAnomaly: 312.1229200779977,
+  },
+  assets: { thumbnail: 'borrelly-thumb.jpg' },
+});
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY];
+
+export const MARINER_2 = celestialBodyWithDefaults({
+  name: 'Mariner 2',
+  type: CelestialBodyType.SPACECRAFT,
+  influencedBy: [SOL.id],
+  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD'),
+    eccentricity: 0.16278,
+    semiMajorAxis: 0.86 * AU,
+    inclination: 0,
+    longitudeAscending: 0,
+    argumentOfPeriapsis: 0, // TODO
+    meanAnomaly: 0, // TODO
+  },
+  mass: 203.6,
+  radius: 3, // TODO: find real dimensions? not important
+  assets: {
+    thumbnail: 'mariner-2-thumb.jpg',
+    search: 'Mariner 2',
+  },
+});
 
 export const TESLA_ROADSTER = celestialBodyWithDefaults({
   name: "Elon Musk's Tesla Roadster",
@@ -869,7 +934,7 @@ export const TESLA_ROADSTER = celestialBodyWithDefaults({
   assets: { thumbnail: 'roadster-thumb.jpg' },
 });
 
-export const SPACECRAFT = [TESLA_ROADSTER];
+export const SPACECRAFT = [MARINER_2, TESLA_ROADSTER];
 
 export const PLUTO = celestialBodyWithDefaults({
   name: '134340 Pluto',
@@ -1183,7 +1248,7 @@ export const GONGGONG = celestialBodyWithDefaults({
 
 export const VP113 = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
-  name: '2012 VP133',
+  name: '2012 VP113',
   influencedBy: [SOL.id],
   orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
   mass: 1e21, // very very rough guess -- not known
@@ -1198,7 +1263,7 @@ export const VP113 = celestialBodyWithDefaults({
     argumentOfPeriapsis: 293.8, // degrees
     meanAnomaly: 3.5, // degrees
   },
-  assets: { thumbnail: 'vp113-thumb.gif' },
+  assets: { thumbnail: 'vp113-thumb.gif', search: '2012 VP113' },
   facts: [{ label: 'class', value: 'sednoid' }],
 });
 

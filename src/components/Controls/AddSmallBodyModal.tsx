@@ -19,7 +19,7 @@ import { useEffect, useMemo } from 'react';
 import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
 import { ASTEROIDS } from '../../lib/bodies.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
-import { celestialBodyNameToId, notNullish } from '../../lib/utils.ts';
+import { nameToId, notNullish } from '../../lib/utils.ts';
 
 // TODO: load from data; full list is ~1.5M, should at least include a few thousand
 // prettier-ignore
@@ -95,7 +95,7 @@ const bodies = [
 const presetAsteroidIdByName = Object.fromEntries(ASTEROIDS.map(({ name, id }) => [name, id]));
 const treeData = bodies.reduce<Array<TreeNodeData>>((acc, name, i) => {
   const label = `${i + 1} - ${i + 10}`;
-  const id = presetAsteroidIdByName[name] ?? celestialBodyNameToId(name);
+  const id = presetAsteroidIdByName[name] ?? nameToId(name);
   const nodeData = { label: name, value: `${label}/${name}`, nodeProps: { id } };
   if (i % 10 === 0) {
     acc.push({ label, value: label, children: [nodeData] });

@@ -1,6 +1,7 @@
 import { map } from 'ramda';
 import * as Bodies from './bodies.ts';
 import { CelestialBodyId } from './types.ts';
+import { nameToId } from './utils.ts';
 
 export enum SpacecraftOrganization {
   NASA = 'NASA',
@@ -63,13 +64,16 @@ export enum SpacecraftStatus {
   CRASHED = 'Crashed',
 }
 
+export type SpacecraftId = string;
 export type Spacecraft = {
+  id: SpacecraftId;
   name: string;
   organization: SpacecraftOrganization;
   launchMass: number; // kg
   power?: number; // watts
   start: Date; // TODO: rename to launchDate?
   end?: Date;
+  cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
   status: { status: SpacecraftStatus; details?: string };
   thumbnail?: string;
   wiki: string;
@@ -83,7 +87,11 @@ export type Spacecraft = {
   }>;
 };
 
-export const VOYAGER_1: Spacecraft = {
+function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
+  return { ...spacecraft, id: nameToId(spacecraft.name) };
+}
+
+export const VOYAGER_1 = spacecraftWithDefaults({
   name: 'Voyager 1',
   organization: SpacecraftOrganization.NASA,
   launchMass: 815,
@@ -107,9 +115,9 @@ export const VOYAGER_1: Spacecraft = {
     { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T06:21:00Z') },
     { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T16:44:00Z') },
   ],
-};
+});
 
-export const VOYAGER_2: Spacecraft = {
+export const VOYAGER_2 = spacecraftWithDefaults({
   name: 'Voyager 2',
   organization: SpacecraftOrganization.NASA,
   launchMass: 721.9,
@@ -175,9 +183,9 @@ export const VOYAGER_2: Spacecraft = {
     { id: Bodies.TRITON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T09:23:00Z') },
     { id: Bodies.NEREID.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T12:00:00Z') },
   ],
-};
+});
 
-export const CASSINI: Spacecraft = {
+export const CASSINI = spacecraftWithDefaults({
   name: 'Cassini',
   organization: SpacecraftOrganization.NASA,
   launchMass: 5712,
@@ -212,9 +220,9 @@ export const CASSINI: Spacecraft = {
     { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-11-26T22:37:00Z') },
     { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-04-07T12:00:00Z') },
   ],
-};
+});
 
-export const HUYGENS: Spacecraft = {
+export const HUYGENS = spacecraftWithDefaults({
   name: 'Huygens',
   organization: SpacecraftOrganization.ESA,
   launchMass: 320,
@@ -224,9 +232,9 @@ export const HUYGENS: Spacecraft = {
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
   visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDER, start: new Date('2005-01-14T12:43:00Z') }],
-};
+});
 
-export const CURIOSITY: Spacecraft = {
+export const CURIOSITY = spacecraftWithDefaults({
   name: 'Curiosity',
   organization: SpacecraftOrganization.NASA,
   launchMass: 899,
@@ -236,9 +244,9 @@ export const CURIOSITY: Spacecraft = {
   thumbnail: 'curiosity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
-};
+});
 
-export const PERSEVERANCE: Spacecraft = {
+export const PERSEVERANCE = spacecraftWithDefaults({
   name: 'Perseverance',
   organization: SpacecraftOrganization.NASA,
   launchMass: 1025,
@@ -248,9 +256,9 @@ export const PERSEVERANCE: Spacecraft = {
   thumbnail: 'perseverance-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2021-02-18T20:55:00Z') }],
-};
+});
 
-export const INGENUITY: Spacecraft = {
+export const INGENUITY = spacecraftWithDefaults({
   name: 'Ingenuity',
   organization: SpacecraftOrganization.NASA,
   launchMass: 1.8,
@@ -264,9 +272,9 @@ export const INGENUITY: Spacecraft = {
   thumbnail: 'ingenuity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
-};
+});
 
-export const NEW_HORIZONS: Spacecraft = {
+export const NEW_HORIZONS = spacecraftWithDefaults({
   name: 'New Horizons',
   organization: SpacecraftOrganization.NASA,
   launchMass: 478,
@@ -297,9 +305,9 @@ export const NEW_HORIZONS: Spacecraft = {
     { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
     // TODO: add 15810 Arawn
   ],
-};
+});
 
-export const GALILEO: Spacecraft = {
+export const GALILEO = spacecraftWithDefaults({
   name: 'Galileo',
   organization: SpacecraftOrganization.NASA,
   launchMass: 2560,
@@ -326,10 +334,10 @@ export const GALILEO: Spacecraft = {
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1997-02-20T12:00:00Z') },
     // TODO: Amalthea flyby on 2002-11-04
   ],
-};
+});
 
 // TODO: add JAXA's Mio?
-export const BEPICOLOMBO: Spacecraft = {
+export const BEPICOLOMBO = spacecraftWithDefaults({
   name: 'BepiColombo',
   organization: SpacecraftOrganization.ESA,
   launchMass: 4100,
@@ -343,9 +351,9 @@ export const BEPICOLOMBO: Spacecraft = {
     // TODO: this start date is a flyby, will enter orbit in 2026
     { id: Bodies.MERCURY.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2021-10-01T23:34:41Z') },
   ],
-};
+});
 
-export const MESSENGER: Spacecraft = {
+export const MESSENGER = spacecraftWithDefaults({
   name: 'MESSENGER',
   organization: SpacecraftOrganization.NASA,
   launchMass: 1107.9,
@@ -361,9 +369,9 @@ export const MESSENGER: Spacecraft = {
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-06-05T12:00:00Z') },
     { id: Bodies.MERCURY.id, type: SpacecraftVisitType.ORBITER, start: new Date('2011-03-18T01:00:00Z') },
   ],
-};
+});
 
-export const PARKER_SOLAR_PROBE: Spacecraft = {
+export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
   name: 'Parker Solar Probe',
   organization: SpacecraftOrganization.NASA,
   launchMass: 685,
@@ -376,9 +384,9 @@ export const PARKER_SOLAR_PROBE: Spacecraft = {
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
     { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-08-12T07:31:00Z') },
   ],
-};
+});
 
-export const SOLAR_ORBITER: Spacecraft = {
+export const SOLAR_ORBITER = spacecraftWithDefaults({
   name: 'Solar Orbiter',
   organization: SpacecraftOrganization.ESA,
   launchMass: 1800,
@@ -392,9 +400,21 @@ export const SOLAR_ORBITER: Spacecraft = {
     // TODO: also Earth flyby -- worth including? the list there would be massive
     { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-02-10T04:03:00Z') },
   ],
-};
+});
 
-export const VENERA_7: Spacecraft = {
+export const MARINER_2 = spacecraftWithDefaults({
+  name: Bodies.MARINER_2.name,
+  organization: SpacecraftOrganization.NASA,
+  launchMass: Bodies.MARINER_2.mass,
+  power: 220,
+  start: new Date('1962-08-27T06:53:14Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
+  wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
+  thumbnail: Bodies.MARINER_2.assets!.thumbnail,
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
+});
+
+export const VENERA_7 = spacecraftWithDefaults({
   name: 'Venera 7',
   organization: SpacecraftOrganization.USSR,
   launchMass: 1180,
@@ -403,9 +423,28 @@ export const VENERA_7: Spacecraft = {
   thumbnail: 'venera-7-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venera_7',
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
-};
+});
 
-export const JUNO: Spacecraft = {
+export const VENUS_EXPRESS = spacecraftWithDefaults({
+  name: 'Venus Express',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 1270,
+  power: 1100,
+  start: new Date('2005-11-09T03:33:34Z'),
+  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
+  thumbnail: 'venus-express-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Venus_Express',
+  visited: [
+    {
+      id: Bodies.VENUS.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2006-04-11T12:00:00Z'),
+      end: new Date('2015-01-15T15:01:55Z'),
+    },
+  ],
+});
+
+export const JUNO = spacecraftWithDefaults({
   name: 'Juno',
   organization: SpacecraftOrganization.NASA,
   launchMass: 3625,
@@ -420,9 +459,9 @@ export const JUNO: Spacecraft = {
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-09-29T09:36:00Z') },
     { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-12-14T12:00:00Z') },
   ],
-};
+});
 
-export const JUICE: Spacecraft = {
+export const JUICE = spacecraftWithDefaults({
   name: 'Jupiter Icy Moons Explorer',
   organization: SpacecraftOrganization.ESA,
   launchMass: 6070,
@@ -439,9 +478,9 @@ export const JUICE: Spacecraft = {
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
     { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
   ],
-};
+});
 
-export const LUCY: Spacecraft = {
+export const LUCY = spacecraftWithDefaults({
   name: 'Lucy',
   organization: SpacecraftOrganization.NASA,
   launchMass: 1550,
@@ -455,9 +494,9 @@ export const LUCY: Spacecraft = {
     // TODO: 52246 Donaldjohanson flyby
     // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
   ],
-};
+});
 
-export const DART: Spacecraft = {
+export const DART = spacecraftWithDefaults({
   name: 'Double Asteroid Redirect Test (DART)',
   organization: SpacecraftOrganization.NASA,
   launchMass: 610,
@@ -467,9 +506,9 @@ export const DART: Spacecraft = {
   thumbnail: 'dart-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
   visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
-};
+});
 
-export const PSYCHE: Spacecraft = {
+export const PSYCHE = spacecraftWithDefaults({
   name: 'Psyche',
   organization: SpacecraftOrganization.NASA,
   launchMass: 2608,
@@ -479,9 +518,9 @@ export const PSYCHE: Spacecraft = {
   thumbnail: 'psyche-spacecraft-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
   visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
-};
+});
 
-export const HERA: Spacecraft = {
+export const HERA = spacecraftWithDefaults({
   name: 'Hera',
   organization: SpacecraftOrganization.ESA,
   launchMass: 1128,
@@ -493,9 +532,9 @@ export const HERA: Spacecraft = {
     { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-15T12:00:00Z') },
     { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
   ],
-};
+});
 
-export const EUROPA_CLIPPER: Spacecraft = {
+export const EUROPA_CLIPPER = spacecraftWithDefaults({
   name: 'Europa Clipper',
   organization: SpacecraftOrganization.NASA,
   launchMass: 6065,
@@ -511,9 +550,9 @@ export const EUROPA_CLIPPER: Spacecraft = {
     { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') },
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') }, // many flybys
   ],
-};
+});
 
-export const APOLLO_8: Spacecraft = {
+export const APOLLO_8 = spacecraftWithDefaults({
   name: 'Apollo 8',
   organization: SpacecraftOrganization.NASA,
   launchMass: 28870,
@@ -531,9 +570,9 @@ export const APOLLO_8: Spacecraft = {
       end: new Date('1968-12-25T06:13:40Z'),
     },
   ],
-};
+});
 
-export const APOLLO_10: Spacecraft = {
+export const APOLLO_10 = spacecraftWithDefaults({
   name: 'Apollo 10',
   organization: SpacecraftOrganization.NASA,
   launchMass: 42775,
@@ -551,9 +590,9 @@ export const APOLLO_10: Spacecraft = {
       end: new Date('1969-05-24T10:25:29Z'),
     },
   ],
-};
+});
 
-export const APOLLO_11: Spacecraft = {
+export const APOLLO_11 = spacecraftWithDefaults({
   name: 'Apollo 11',
   organization: SpacecraftOrganization.NASA,
   launchMass: 49735,
@@ -571,9 +610,9 @@ export const APOLLO_11: Spacecraft = {
       end: new Date('1969-07-21T17:54:00Z'),
     },
   ],
-};
+});
 
-export const APOLLO_12: Spacecraft = {
+export const APOLLO_12 = spacecraftWithDefaults({
   name: 'Apollo 12',
   organization: SpacecraftOrganization.NASA,
   launchMass: 49915,
@@ -591,9 +630,9 @@ export const APOLLO_12: Spacecraft = {
       end: new Date('1969-11-20T14:25:47Z'),
     },
   ],
-};
+});
 
-export const APOLLO_13: Spacecraft = {
+export const APOLLO_13 = spacecraftWithDefaults({
   name: 'Apollo 13',
   organization: SpacecraftOrganization.NASA,
   launchMass: 44069,
@@ -604,9 +643,9 @@ export const APOLLO_13: Spacecraft = {
   wiki: 'https://en.wikipedia.org/wiki/Apollo_13',
   crew: ['Jim Lovell', 'Jack Swigert', 'Fred Haise'],
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1970-04-15T00:21:00Z') }],
-};
+});
 
-export const APOLLO_14: Spacecraft = {
+export const APOLLO_14 = spacecraftWithDefaults({
   name: 'Apollo 14',
   organization: SpacecraftOrganization.NASA,
   launchMass: 46305,
@@ -624,9 +663,9 @@ export const APOLLO_14: Spacecraft = {
       end: new Date('1971-02-06T18:48:42Z'),
     },
   ],
-};
+});
 
-export const APOLLO_15: Spacecraft = {
+export const APOLLO_15 = spacecraftWithDefaults({
   name: 'Apollo 15',
   organization: SpacecraftOrganization.NASA,
   launchMass: 48599,
@@ -644,9 +683,9 @@ export const APOLLO_15: Spacecraft = {
       end: new Date('1971-08-02T17:11:23Z'),
     },
   ],
-};
+});
 
-export const APOLLO_16: Spacecraft = {
+export const APOLLO_16 = spacecraftWithDefaults({
   name: 'Apollo 16',
   organization: SpacecraftOrganization.NASA,
   launchMass: 52759,
@@ -664,9 +703,9 @@ export const APOLLO_16: Spacecraft = {
       end: new Date('1972-04-24T01:25:47Z'),
     },
   ],
-};
+});
 
-export const APOLLO_17: Spacecraft = {
+export const APOLLO_17 = spacecraftWithDefaults({
   name: 'Apollo 17',
   organization: SpacecraftOrganization.NASA,
   launchMass: 48609,
@@ -684,9 +723,9 @@ export const APOLLO_17: Spacecraft = {
       end: new Date('1972-12-16T23:35:09Z'),
     },
   ],
-};
+});
 
-export const PIONEER_10: Spacecraft = {
+export const PIONEER_10 = spacecraftWithDefaults({
   name: 'Pioneer 10',
   organization: SpacecraftOrganization.NASA,
   launchMass: 258,
@@ -703,9 +742,9 @@ export const PIONEER_10: Spacecraft = {
     { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T22:56:00Z') },
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-04T02:26:00Z') },
   ],
-};
+});
 
-export const NEAR_SHOEMAKER: Spacecraft = {
+export const NEAR_SHOEMAKER = spacecraftWithDefaults({
   name: 'NEAR Shoemaker',
   organization: SpacecraftOrganization.NASA,
   launchMass: 805,
@@ -724,9 +763,24 @@ export const NEAR_SHOEMAKER: Spacecraft = {
       end: new Date('2001-02-28T00:00:00Z'),
     },
   ],
-};
+});
 
-export const ROSETTA: Spacecraft = {
+export const DEEP_SPACE_1 = spacecraftWithDefaults({
+  name: 'Deep Space 1',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 486,
+  power: 2500,
+  start: new Date('1998-10-24T12:08:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
+  wiki: 'https://en.wikipedia.org/wiki/Deep_Space_1',
+  thumbnail: 'deep-space-1-thumb.png',
+  visited: [
+    { id: Bodies.BRAILLE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1999-07-29T04:46:00Z') },
+    { id: Bodies.BORRELLY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2001-09-22T22:29:33Z') },
+  ],
+});
+
+export const ROSETTA = spacecraftWithDefaults({
   name: 'Rosetta',
   organization: SpacecraftOrganization.ESA,
   launchMass: 3000,
@@ -751,9 +805,28 @@ export const ROSETTA: Spacecraft = {
       end: new Date('2016-09-30T10:39:28Z'),
     },
   ],
-};
+});
 
-export const DAWN: Spacecraft = {
+export const HAYABUSA = spacecraftWithDefaults({
+  name: 'Hayabusa',
+  organization: SpacecraftOrganization.JAXA,
+  launchMass: 510,
+  start: new Date('2003-05-09T04:29:25Z'),
+  end: new Date('2010-06-13T14:12:00Z'),
+  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with samples of Itokawa in 2010' },
+  wiki: 'https://en.wikipedia.org/wiki/Hayabusa',
+  thumbnail: 'hayabusa-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.ITOKAWA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2005-11-19T21:30:00Z'),
+      end: new Date('2005-11-19T21:58:00Z'),
+    },
+  ],
+});
+
+export const DAWN = spacecraftWithDefaults({
   name: 'Dawn',
   organization: SpacecraftOrganization.NASA,
   launchMass: 1217.7,
@@ -778,9 +851,10 @@ export const DAWN: Spacecraft = {
       end: new Date('2018-10-30T12:00:00Z'),
     },
   ],
-};
+});
 
-export const CHANGE_2: Spacecraft = {
+// TODO: this is in a heliocentric orbit -- find the parameters and add as a body
+export const CHANGE_2 = spacecraftWithDefaults({
   name: "Chang'e 2",
   organization: SpacecraftOrganization.CNSA,
   launchMass: 2480,
@@ -797,10 +871,10 @@ export const CHANGE_2: Spacecraft = {
     },
     { id: Bodies.TOUTATIS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2012-12-13T08:30:00Z') },
   ],
-};
+});
 
 // TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
-export const HAYABUSA_2: Spacecraft = {
+export const HAYABUSA_2 = spacecraftWithDefaults({
   name: 'Hayabusa2',
   organization: SpacecraftOrganization.JAXA,
   launchMass: 600,
@@ -811,9 +885,9 @@ export const HAYABUSA_2: Spacecraft = {
   wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
   thumbnail: 'hayabusa-2-thumb.jpg',
   visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
-};
+});
 
-export const OSIRIS_REX: Spacecraft = {
+export const OSIRIS_REX = spacecraftWithDefaults({
   name: 'OSIRIS-REx',
   organization: SpacecraftOrganization.NASA,
   launchMass: 2110,
@@ -834,7 +908,7 @@ export const OSIRIS_REX: Spacecraft = {
       end: new Date('2021-05-10T12:00:00Z'),
     },
   ],
-};
+});
 
 export const SPACECRAFT: Array<Spacecraft> = [
   // Inner missions
@@ -845,7 +919,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
 
   // Venus
   // VENERA_1,
-  // MARINER_2,
+  MARINER_2,
   // ZOND_1,
   // VENERA_2,
   // VENERA_3,
@@ -869,7 +943,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // VEGA_1,
   // VEGA_2,
   // MAGELLAN,
-  // VENUS_EXPRESS,
+  VENUS_EXPRESS,
   // AKATSUKI,
   // IKAROS,
   // SHINEN,
@@ -917,9 +991,9 @@ export const SPACECRAFT: Array<Spacecraft> = [
 
   // Asteroids
   NEAR_SHOEMAKER,
-  // DEEP_SPACE_1,
+  DEEP_SPACE_1,
   // STARDUST,
-  // HAYABUSA,
+  HAYABUSA,
   // DEEP_IMPACT,
   DAWN,
   CHANGE_2,
