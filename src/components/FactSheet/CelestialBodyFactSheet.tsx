@@ -120,7 +120,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
         <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
-        {spacecraftVisited.length > 0 && <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />}
+        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} updateSettings={updateSettings} />
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
         {type === CelestialBodyType.STAR && <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />}
       </Box>

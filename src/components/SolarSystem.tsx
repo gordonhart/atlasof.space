@@ -4,9 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
-import { DEFAULT_ORBITAL_REGIME_COLOR, ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { isSpacecraft, SPACECRAFT } from '../lib/spacecraft.ts';
 import { initialState, UpdateSettings } from '../lib/state.ts';
 import { CelestialBody, Epoch, isCelestialBody } from '../lib/types.ts';
+import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -100,10 +102,15 @@ export function SolarSystem() {
 
   const focusItem = useMemo(() => {
     const focusBody = settings.bodies.find(body => body.id === settings.center);
+    const focusSpacecraft = SPACECRAFT.find(({ id }) => id === settings.center);
     const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
-    return focusBody ?? focusRegime;
+    return focusBody ?? focusRegime ?? focusSpacecraft;
   }, [settings.center, JSON.stringify(settings.bodies)]);
-  const focusColor = isCelestialBody(focusItem) ? focusItem.style.fgColor : DEFAULT_ORBITAL_REGIME_COLOR;
+  const focusColor = isCelestialBody(focusItem)
+    ? focusItem.style.fgColor
+    : isSpacecraft(focusItem)
+      ? DEFAULT_SPACECRAFT_COLOR
+      : DEFAULT_ASTEROID_COLOR;
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (

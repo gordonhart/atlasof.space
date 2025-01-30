@@ -66,13 +66,14 @@ export function nameToId(name: string, shortName?: string) {
   return (shortName ?? name).replace(/\s+/g, '-').toLowerCase();
 }
 
-const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#aaaaaa',
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
   [CelestialBodyType.COMET]: '#51807c',
   [CelestialBodyType.DWARF_PLANET]: '#998a98',
-  [CelestialBodyType.SPACECRAFT]: '#50C878',
+  [CelestialBodyType.SPACECRAFT]: DEFAULT_SPACECRAFT_COLOR,
 };
 const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#888888',

@@ -1,8 +1,6 @@
 import { AU } from './bodies.ts';
 import { OrbitalRegime, HeliocentricOrbitalRegime } from './types.ts';
 
-export const DEFAULT_ORBITAL_REGIME_COLOR = '#6b6b6b'; // dark gray, matches default asteroid color currently
-
 export const INNER_SYSTEM: OrbitalRegime = {
   id: HeliocentricOrbitalRegime.INNER_SYSTEM,
   min: 0.2 * AU,

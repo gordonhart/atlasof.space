@@ -1,6 +1,6 @@
 import { Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
-import { Settings } from '../../lib/state.ts';
+import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { BodyCard } from './BodyCard.tsx';
@@ -10,7 +10,7 @@ const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyTy
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
 };
 export function MajorSatellites({ body, bodies, updateSettings }: Props) {
   const bodiesByName = useMemo(() => Object.fromEntries(bodies.map(b => [b.name, b])), [JSON.stringify(bodies)]);
