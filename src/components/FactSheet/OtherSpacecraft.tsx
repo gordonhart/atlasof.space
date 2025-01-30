@@ -4,12 +4,20 @@ import { SPACECRAFT, Spacecraft } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { SpacecraftPill } from './SpacecraftPill.tsx';
 
+const N_RELATED = 4;
+
 type Props = {
   spacecraft: Spacecraft;
   updateSettings: UpdateSettings;
 };
 export function OtherSpacecraft({ spacecraft, updateSettings }: Props) {
-  const otherSpacecraft = useMemo(() => SPACECRAFT.filter(({ id }) => id !== spacecraft.id), [spacecraft.id]);
+  const otherSpacecraft = useMemo(() => {
+    const otherSpacecraft = SPACECRAFT.filter(({ id }) => id !== spacecraft.id);
+    const spacecraftIndex = SPACECRAFT.findIndex(({ id }) => id === spacecraft.id);
+    const nAbove = otherSpacecraft.length - spacecraftIndex;
+    const startIndex = Math.max(0, spacecraftIndex - Math.max(N_RELATED / 2, N_RELATED - nAbove));
+    return otherSpacecraft.slice(startIndex, startIndex + N_RELATED);
+  }, [spacecraft.id]);
 
   return (
     <Stack gap="xs" p="md" pt="lg">

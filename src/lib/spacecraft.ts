@@ -359,6 +359,7 @@ export const MESSENGER = spacecraftWithDefaults({
   launchMass: 1107.9,
   power: 450,
   start: new Date('2004-08-03T06:15:56Z'),
+  end: new Date('2015-04-30T19:26:00Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
     details: 'Intentionally crashed into Mercury on April 30th, 2015',
