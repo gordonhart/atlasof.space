@@ -1,7 +1,7 @@
 import { Group, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
-import { SPACECRAFT, Spacecraft } from '../../lib/spacecraft.ts';
-import { UpdateSettings } from '../../lib/state.ts';
+import { SPACECRAFT, Spacecraft } from '../../../lib/spacecraft.ts';
+import { UpdateSettings } from '../../../lib/state.ts';
 import { SpacecraftPill } from './SpacecraftPill.tsx';
 
 const N_RELATED = 7;

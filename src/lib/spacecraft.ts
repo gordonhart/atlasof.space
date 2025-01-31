@@ -331,6 +331,7 @@ export const GALILEO = spacecraftWithDefaults({
   launchMass: 2560,
   power: 570,
   start: new Date('1989-10-18T16:53:40Z'),
+  end: new Date('2003-09-21T18:57:18Z'),
   focusId: Bodies.JUPITER.id,
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
@@ -436,6 +437,7 @@ export const MARINER_2 = spacecraftWithDefaults({
   launchMass: Bodies.MARINER_2.mass,
   power: 220,
   start: new Date('1962-08-27T06:53:14Z'),
+  end: new Date('1963-01-03T07:00:00Z'),
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
   wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
   thumbnail: Bodies.MARINER_2.assets!.thumbnail,
@@ -447,6 +449,7 @@ export const VENERA_7 = spacecraftWithDefaults({
   organization: SpacecraftOrganization.USSR,
   launchMass: 1180,
   start: new Date('1970-08-17T05:38:22Z'),
+  end: new Date('1970-12-15T06:00:00Z'),
   focusId: Bodies.VENUS.id,
   status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'venera-7-thumb.jpg',
@@ -460,6 +463,7 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
   launchMass: 1270,
   power: 1100,
   start: new Date('2005-11-09T03:33:34Z'),
+  end: new Date('2015-01-18T15:01:55Z'),
   focusId: Bodies.VENUS.id,
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
   thumbnail: 'venus-express-thumb.jpg',
@@ -535,6 +539,7 @@ export const DART = spacecraftWithDefaults({
   launchMass: 610,
   power: 6600,
   start: new Date('2021-11-24T06:21:02Z'),
+  end: new Date('2022-09-26T23:14:00Z'),
   focusId: Bodies.DIDYMOS.id,
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
   thumbnail: 'dart-thumb.png',
@@ -1070,7 +1075,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   JUICE,
   JUNO,
   EUROPA_CLIPPER,
-];
+].sort((a, b) => a.start.getTime() - b.start.getTime());
 
 export const SPACECRAFT_BY_BODY_ID = map(
   spacecraft => spacecraft.sort((a, b) => a.start.getTime() - b.start.getTime()),

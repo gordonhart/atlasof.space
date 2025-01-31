@@ -1,8 +1,8 @@
 import { Box, Group, Pill } from '@mantine/core';
-import { Spacecraft } from '../../lib/spacecraft.ts';
-import { UpdateSettings } from '../../lib/state.ts';
-import styles from './RelatedBodies.module.css';
-import { Thumbnail } from './Thumbnail.tsx';
+import { Spacecraft } from '../../../lib/spacecraft.ts';
+import { UpdateSettings } from '../../../lib/state.ts';
+import styles from '../RelatedBodies.module.css';
+import { Thumbnail } from '../Thumbnail.tsx';
 
 type Props = {
   spacecraft: Spacecraft;

@@ -1,18 +1,20 @@
 import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
-import { useEffect, useMemo, useRef } from 'react';
-import { useSpacecraftVisitSummaryStream } from '../../hooks/useSpacecraftVisitSummaryStream.ts';
-import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
-import { datetimeToHumanReadable } from '../../lib/epoch.ts';
-import { Spacecraft, SpacecraftVisit } from '../../lib/spacecraft.ts';
-import { UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody, CelestialBodyId, Point2 } from '../../lib/types.ts';
-import { DEFAULT_SPACECRAFT_COLOR, notNullish } from '../../lib/utils.ts';
-import styles from './BodyCard.module.css';
-import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
-import { LoadingCursor } from './LoadingCursor.tsx';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { LABEL_FONT_FAMILY } from '../../../lib/canvas.ts';
+import { datetimeToHumanReadable } from '../../../lib/epoch.ts';
+import { Spacecraft } from '../../../lib/spacecraft.ts';
+import { UpdateSettings } from '../../../lib/state.ts';
+import { CelestialBody, CelestialBodyId, Point2 } from '../../../lib/types.ts';
+import { DEFAULT_SPACECRAFT_COLOR, notNullish } from '../../../lib/utils.ts';
+import { MissionTimelineCard } from './MissionTimelineCard.tsx';
+import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 
 const TIMELINE_WIDTH = 100;
+enum TimelineCap {
+  START = 'timeline-start',
+  END = 'timeline-end',
+}
 
 type Props = {
   spacecraft: Spacecraft;
@@ -26,6 +28,7 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
   const launchRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<Array<HTMLDivElement>>([]);
   const endRef = useRef<HTMLDivElement | null>(null);
+  const [hoverCap, setHoverCap] = useState<TimelineCap | null>(null);
 
   const bodyById = useMemo(
     () => bodies.reduce<Record<CelestialBodyId, CelestialBody>>((acc, body) => ({ ...acc, [body.id]: body }), {}),
@@ -55,7 +58,8 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
     const containerTop = containerRect.top;
 
     const { height, top } = launchRef.current.getBoundingClientRect();
-    const launchItem = { height, top: top - containerTop, date: spacecraft.start, hover: false };
+    const isHovered = hoverCap === TimelineCap.START;
+    const launchItem = { height, top: top - containerTop, date: spacecraft.start, hover: isHovered };
     const cardItems = cardRefs.current.map((card, i) => {
       const { height, top } = card.getBoundingClientRect();
       const visit = spacecraft.visited[i];
@@ -64,21 +68,31 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
     const timelineItems = [launchItem, ...cardItems];
     if (endRef.current != null && spacecraft.end != null) {
       const { height, top } = endRef.current.getBoundingClientRect();
-      timelineItems.push({ height, top: top - containerTop, date: spacecraft.end, hover: false });
+      const isHovered = hoverCap === TimelineCap.END;
+      timelineItems.push({ height, top: top - containerTop, date: spacecraft.end, hover: isHovered });
     }
 
     renderTimeline(ctx, timelineItems, spacecraft.start, spacecraft.end);
-  }, [visitedBodies, height, hover]);
+  }, [visitedBodies, height, hover, hoverCap]);
 
   return (
     <Stack gap="xs" p="md" pt="lg">
-      <Title order={5}>Mission Timeline</Title>
+      <Group gap="xs">
+        <Title order={5}>Mission Timeline</Title>
+        <SpacecraftStatusPill status={spacecraft.status} />
+      </Group>
       <Group gap={0} wrap="nowrap" flex={1}>
         <Box w={TIMELINE_WIDTH} h="100%" style={{ flexShrink: 0 }}>
           <canvas ref={canvasRef} style={{ height: '100%', width: TIMELINE_WIDTH }} />
         </Box>
         <Stack ref={timelineRef} gap="xs" flex={1}>
-          <Paper ref={launchRef} p="xs" withBorder>
+          <Paper
+            ref={launchRef}
+            p="xs"
+            withBorder
+            onMouseEnter={() => setHoverCap(TimelineCap.START)}
+            onMouseLeave={() => setHoverCap(null)}
+          >
             {/* TODO: include information about launch (location, vehicle)? */}
             <Group gap="xs" align="baseline">
               <Title order={6}>Launch</Title>
@@ -99,18 +113,29 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
                   cardRefs.current[i] = el;
                 }}
               >
-                <MissionVisitCard body={body} spacecraft={spacecraft} visit={visit} updateSettings={updateSettings} />
+                <MissionTimelineCard
+                  body={body}
+                  spacecraft={spacecraft}
+                  visit={visit}
+                  updateSettings={updateSettings}
+                />
               </Box>
             );
           })}
 
           {spacecraft.end != null && (
             // TODO: include a blurb about how the mission ended?
-            <Paper ref={endRef} p="xs" withBorder>
+            <Paper
+              ref={endRef}
+              p="xs"
+              withBorder
+              onMouseEnter={() => setHoverCap(TimelineCap.END)}
+              onMouseLeave={() => setHoverCap(null)}
+            >
               <Group gap="xs" align="baseline">
                 <Title order={6}>{spacecraft.status.status ?? 'Mission End'}</Title>
                 <Text c="dimmed" fz="xs">
-                  {datetimeToHumanReadable(spacecraft.start)}
+                  {datetimeToHumanReadable(spacecraft.end)}
                 </Text>
               </Group>
             </Paper>
@@ -118,43 +143,6 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
         </Stack>
       </Group>
     </Stack>
-  );
-}
-
-type MissionVisitCardProps = {
-  body: CelestialBody;
-  spacecraft: Spacecraft;
-  visit: SpacecraftVisit;
-  updateSettings: UpdateSettings;
-};
-function MissionVisitCard({ body, spacecraft, visit, updateSettings }: MissionVisitCardProps) {
-  // TODO: this probably needs a dedicated endpoint with different example prompts -- the summary stream endpoint is too
-  //  focused on summarizing an entity, rather than an event
-  const { data: summary, isLoading } = useSpacecraftVisitSummaryStream(spacecraft, body, visit);
-  return (
-    <Paper
-      className={styles.Card}
-      withBorder
-      p="xs"
-      onClick={() => updateSettings({ center: body.id, hover: null })}
-      onMouseEnter={() => updateSettings({ hover: body.id })}
-      onMouseLeave={() => updateSettings({ hover: null })}
-      style={{ overflow: 'auto' }}
-    >
-      <Box ml="xs" style={{ float: 'right' }}>
-        <CelestialBodyThumbnail body={body} size={100} />
-      </Box>
-      <Group gap="xs" align="baseline">
-        <Title order={6}>{body.name}</Title>
-        <Text c="dimmed" fs="italic" fz="sm">
-          {visit.type}
-        </Text>
-      </Group>
-      <Text mt={4} inherit c="dimmed" fz="xs">
-        {summary}
-        {isLoading && <LoadingCursor />}
-      </Text>
-    </Paper>
   );
 }
 
@@ -170,7 +158,9 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
   const durationMillis = endMillis - startMillis;
   const dpr = window.devicePixelRatio || 1;
   const dotRadius = 6;
-  const millisPerPx = durationMillis / (ctx.canvas.height / dpr - dotRadius * 2);
+  const timelineHeight = ctx.canvas.height / dpr;
+  const isOngoing = end == null;
+  const millisPerPx = durationMillis / (timelineHeight - dotRadius * (isOngoing ? 4 : 2));
 
   const baseColor = '#828282';
   const accentColor = DEFAULT_SPACECRAFT_COLOR;
@@ -181,9 +171,9 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
   ctx.lineWidth = 1;
   ctx.strokeStyle = baseColor;
 
-  ctx.clearRect(0, 0, TIMELINE_WIDTH, ctx.canvas.height);
+  ctx.clearRect(0, 0, TIMELINE_WIDTH, timelineHeight);
   ctx.moveTo(timelineLeft, 0);
-  ctx.lineTo(timelineLeft, ctx.canvas.height);
+  ctx.lineTo(timelineLeft, timelineHeight);
   ctx.stroke();
 
   // TODO: more advanced logic to figure out the smallest number of lanes necessary to avoid overlaps
@@ -195,15 +185,15 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
   function drawConnector({ top, height, date, hover }: TimelineItem, i: number) {
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
+    // TODO: the lane behavior here can be dramatically improved
     const laneX = lanesGutter + (i >= nLanes ? nLanes - (i % nLanes) : i) * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;
     const nKinks = Math.abs(itemY - timelineY) < 2 * dotRadius ? 1 : 2;
 
+    ctx.beginPath();
     ctx.strokeStyle = hover ? accentColor : baseColor;
     ctx.fillStyle = hover ? accentColor : '#000000';
-
-    ctx.beginPath();
     ctx.moveTo(timelineLeft, timelineY);
     ctx.lineTo(timelineLeft + laneX - dotRadius, timelineY);
     if (nKinks === 1) {
@@ -215,6 +205,7 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
     }
     ctx.lineTo(TIMELINE_WIDTH, itemY);
     ctx.stroke();
+    ctx.closePath();
 
     ctx.strokeStyle = accentColor;
     drawDiamond(ctx, [timelineLeft, timelineY], dotRadius);
@@ -228,7 +219,19 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
     }
   }
 
+  function drawOngoingEndCap() {
+    ctx.fillStyle = baseColor;
+    ctx.beginPath();
+    ctx.moveTo(timelineLeft, timelineHeight);
+    ctx.lineTo(timelineLeft - dotRadius / Math.sqrt(2), timelineHeight - dotRadius);
+    ctx.lineTo(timelineLeft + dotRadius / Math.sqrt(2), timelineHeight - dotRadius);
+    ctx.lineTo(timelineLeft, timelineHeight);
+    ctx.fill();
+    ctx.closePath();
+  }
+
   items.forEach((visit, i) => drawConnector(visit, i));
+  if (isOngoing) drawOngoingEndCap();
   items
     .filter(({ hover }) => hover)
     .forEach(visit => {
@@ -246,4 +249,5 @@ function drawDiamond(ctx: CanvasRenderingContext2D, [centerX, centerY]: Point2, 
   ctx.lineTo(centerX, centerY + radius);
   ctx.fill();
   ctx.stroke();
+  ctx.closePath();
 }

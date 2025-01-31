@@ -1,12 +1,12 @@
 import { Box, Group, Paper, Text, Title } from '@mantine/core';
-import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
-import { Spacecraft, SpacecraftVisitType } from '../../lib/spacecraft.ts';
-import { CelestialBody } from '../../lib/types.ts';
-import styles from './BodyCard.module.css';
-import { LoadingCursor } from './LoadingCursor.tsx';
+import { useSummaryStream } from '../../../hooks/useSummaryStream.ts';
+import { Spacecraft, SpacecraftVisitType } from '../../../lib/spacecraft.ts';
+import { CelestialBody } from '../../../lib/types.ts';
+import styles from '../BodyCard.module.css';
+import { LoadingCursor } from '../LoadingCursor.tsx';
+import { Thumbnail } from '../Thumbnail.tsx';
 import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
-import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
   spacecraft: Spacecraft;

@@ -4,7 +4,7 @@ import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, isCelestialBody, isOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
-import { SpacecraftFactSheet } from './SpacecraftFactSheet.tsx';
+import { SpacecraftFactSheet } from './Spacecraft/SpacecraftFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here
 type Props = {

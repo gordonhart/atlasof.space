@@ -71,7 +71,7 @@ Infrastructure dependencies:
   - [ ] Improve offscreen indicator rendering for moons when the main planet is not visible
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
-  - [ ] Add fact sheet for spacecraft
-    - [ ] Set spacecraft ID as URL part for deep linking
+  - [x] Add fact sheet for spacecraft
+    - [x] Set spacecraft ID as URL part for deep linking
   - [ ] Add fact sheet for organization, listing spacecraft
   - [ ] Add differentiated default colors for TNOs

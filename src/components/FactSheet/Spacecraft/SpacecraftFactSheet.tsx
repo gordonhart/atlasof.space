@@ -1,20 +1,19 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo } from 'react';
-import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
-import { dateToISO } from '../../lib/epoch.ts';
-import { Spacecraft } from '../../lib/spacecraft.ts';
-import { UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
-import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR } from '../../lib/utils.ts';
-import { FactGrid } from './FactGrid.tsx';
-import { FactSheetSummary } from './FactSheetSummary.tsx';
-import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { useDisplaySize } from '../../../hooks/useDisplaySize.ts';
+import { dateToISO } from '../../../lib/epoch.ts';
+import { Spacecraft } from '../../../lib/spacecraft.ts';
+import { UpdateSettings } from '../../../lib/state.ts';
+import { CelestialBody, CelestialBodyType } from '../../../lib/types.ts';
+import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR } from '../../../lib/utils.ts';
+import { FactGrid } from '../FactGrid.tsx';
+import { FactSheetSummary } from '../FactSheetSummary.tsx';
+import { FactSheetTitle } from '../FactSheetTitle.tsx';
+import { Thumbnail } from '../Thumbnail.tsx';
+import { WikiLinkPill } from '../WikiLinkPill.tsx';
 import { MissionTimeline } from './MissionTimeline.tsx';
 import { OtherSpacecraft } from './OtherSpacecraft.tsx';
 import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
-import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
-import { Thumbnail } from './Thumbnail.tsx';
-import { WikiLinkPill } from './WikiLinkPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
@@ -32,13 +31,12 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
 
   const bullets = [
     { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
+    { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
     { label: 'launch date', value: dateToISO(spacecraft.start) },
     ...(spacecraft.end != null ? [{ label: 'mission end date', value: dateToISO(spacecraft.end) }] : []),
     { label: 'launch mass', value: `${spacecraft.launchMass.toLocaleString()} kg` },
     ...(spacecraft.power != null ? [{ label: 'power', value: `${spacecraft.power.toLocaleString()} watts` }] : []),
-    { label: 'status', value: <SpacecraftStatusPill status={spacecraft.status} /> },
-    { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
   ];
 
   return (
