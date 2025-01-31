@@ -195,6 +195,7 @@ export const CASSINI = spacecraftWithDefaults({
   launchMass: 5712,
   power: 885,
   start: new Date('1997-10-15T08:43:00Z'),
+  end: new Date('2017-09-15T11:55:00Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
     details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
@@ -404,7 +405,11 @@ export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
   wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
   visited: [
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
-    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-08-12T07:31:00Z') },
+    {
+      id: Bodies.SOL.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2018-11-06T03:27:00Z'), // first perihelion
+    },
   ],
 });
 
@@ -904,6 +909,7 @@ export const CHANGE_2 = spacecraftWithDefaults({
   organization: SpacecraftOrganization.CNSA,
   launchMass: 2480,
   start: new Date('2010-10-01T10:59:00Z'),
+  end: new Date(2014, 6, 1),
   status: { status: SpacecraftStatus.DEFUNCT, details: "Drifting out beyond Earth's orbit" },
   wiki: 'https://en.wikipedia.org/wiki/Chang%27e_2',
   thumbnail: 'change-2-thumb.jpg',

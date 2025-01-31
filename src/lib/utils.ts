@@ -63,7 +63,7 @@ export function notNullish<TValue>(value: TValue | null | undefined): value is T
 }
 
 export function nameToId(name: string, shortName?: string) {
-  return (shortName ?? name).replace(/\s+/g, '-').toLowerCase();
+  return (shortName ?? name).replace(/\s+/g, '-').replace(/'/g, '-').toLowerCase();
 }
 
 export const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids

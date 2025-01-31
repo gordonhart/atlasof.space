@@ -139,7 +139,7 @@ export function SolarSystem() {
       </Box>
       {focusItem != null && (
         <Box
-          h={isSmallDisplay ? '50dvh' : '100dvh'}
+          h={isSmallDisplay ? '60dvh' : '100dvh'}
           w={isSmallDisplay ? undefined : 600}
           style={{
             borderLeft: isSmallDisplay ? undefined : `1px solid ${focusColor}`,
