@@ -818,6 +818,7 @@ export const DEEP_SPACE_1 = spacecraftWithDefaults({
   launchMass: 486,
   power: 2500,
   start: new Date('1998-10-24T12:08:00Z'),
+  end: new Date('2001-12-18T20:00:00Z'),
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Space_1',
   thumbnail: 'deep-space-1-thumb.png',

@@ -1,7 +1,7 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
-import { dateToHumanReadable } from '../../lib/epoch.ts';
+import { dateToISO } from '../../lib/epoch.ts';
 import { Spacecraft } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
@@ -19,16 +19,22 @@ import { WikiLinkPill } from './WikiLinkPill.tsx';
 type Props = {
   spacecraft: Spacecraft;
   bodies: Array<CelestialBody>;
+  hover: string | null;
   updateSettings: UpdateSettings;
 };
-export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraft, bodies, updateSettings }: Props) {
+export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
+  spacecraft,
+  bodies,
+  hover,
+  updateSettings,
+}: Props) {
   const { xs: isXsDisplay } = useDisplaySize();
 
   const bullets = [
     { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
-    { label: 'launch date', value: dateToHumanReadable(spacecraft.start) },
-    ...(spacecraft.end != null ? [{ label: 'mission end date', value: dateToHumanReadable(spacecraft.end) }] : []),
+    { label: 'launch date', value: dateToISO(spacecraft.start) },
+    ...(spacecraft.end != null ? [{ label: 'mission end date', value: dateToISO(spacecraft.end) }] : []),
     { label: 'launch mass', value: `${spacecraft.launchMass.toLocaleString()} kg` },
     ...(spacecraft.power != null ? [{ label: 'power', value: `${spacecraft.power.toLocaleString()} watts` }] : []),
     { label: 'status', value: <SpacecraftStatusPill status={spacecraft.status} /> },
@@ -69,7 +75,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
           )}
         </Group>
 
-        <MissionTimeline spacecraft={spacecraft} bodies={bodies} updateSettings={updateSettings} />
+        <MissionTimeline spacecraft={spacecraft} bodies={bodies} hover={hover} updateSettings={updateSettings} />
       </Stack>
 
       <Box pt="md" style={{ justifySelf: 'flex-end' }}>

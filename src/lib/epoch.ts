@@ -63,6 +63,19 @@ export function dateToJulianDay(date: Date): `JD${string}` {
   return `JD${jd}`;
 }
 
-export function dateToHumanReadable(date: Date): string {
+export function dateToISO(date: Date): string {
   return date.toISOString().split('T')[0];
+}
+
+export function datetimeToHumanReadable(date: Date): string {
+  const datePart = date.toLocaleString('en-US', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false, // use 24-hour format
+  });
+  return `${datePart} UTC`;
 }

@@ -27,7 +27,7 @@ export const FactSheet = memo(function FactSheetComponent({
   ) : isOrbitalRegime(item) ? (
     <OrbitalRegimeFactSheet regime={item} addBody={addBody} removeBody={removeBody} {...props} />
   ) : isSpacecraft(item) ? (
-    <SpacecraftFactSheet spacecraft={item} {...props} />
+    <SpacecraftFactSheet spacecraft={item} hover={settings.hover} {...props} />
   ) : (
     <></>
   );

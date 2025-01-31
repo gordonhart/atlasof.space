@@ -4,7 +4,7 @@ import { SPACECRAFT, Spacecraft } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { SpacecraftPill } from './SpacecraftPill.tsx';
 
-const N_RELATED = 4;
+const N_RELATED = 7;
 
 type Props = {
   spacecraft: Spacecraft;
