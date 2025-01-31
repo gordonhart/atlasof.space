@@ -64,7 +64,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
         <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
-            <FactGrid facts={bullets} />
+            <FactGrid facts={bullets} keysWidth={120} />
           </Stack>
           {!isXsDisplay && (
             <Box style={{ flexShrink: 1 }}>

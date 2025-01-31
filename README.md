@@ -44,6 +44,7 @@ Infrastructure dependencies:
 - [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
   in [`./functions`](./functions)
 - [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
+- [Anthropic API](https://docs.anthropic.com): generate grounded facts and summaries via server-side functions
 
 ### Resources
 

@@ -28,8 +28,10 @@ export function MissionTimelineCard({ body, spacecraft, visit, updateSettings }:
       <Box ml="xs" style={{ float: 'right' }}>
         <CelestialBodyThumbnail body={body} size={100} />
       </Box>
-      <Group gap="xs" align="baseline">
-        <Title order={6}>{body.name}</Title>
+      <Group gap={0} align="baseline">
+        <Title order={6} mr="xs">
+          {body.name}
+        </Title>
         <Text c="dimmed" fs="italic" fz="sm">
           {visit.type}
         </Text>
