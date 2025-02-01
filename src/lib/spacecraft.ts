@@ -373,9 +373,9 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   thumbnail: 'solar-orbiter-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Solar_Orbiter',
   visited: [
+    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-06-15T12:00:00Z') },
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-12-27T12:39:00Z') },
     // TODO: also Earth flyby -- worth including? the list there would be massive
-    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-02-10T04:03:00Z') },
   ],
 });
 

@@ -33,7 +33,9 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
     { label: 'launched', value: dateToISO(spacecraft.start) },
-    ...(spacecraft.end != null ? [{ label: 'mission end', value: dateToISO(spacecraft.end) }] : []),
+    ...(spacecraft.end != null
+      ? [{ label: spacecraft.status.status.toLowerCase(), value: dateToISO(spacecraft.end) }]
+      : []),
     { label: 'launch mass', value: `${spacecraft.launchMass.toLocaleString()} kg` },
     ...(spacecraft.power != null ? [{ label: 'power', value: `${spacecraft.power.toLocaleString()} watts` }] : []),
   ];
