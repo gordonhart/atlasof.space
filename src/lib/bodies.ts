@@ -1969,5 +1969,5 @@ export const SOLAR_SYSTEM = [
   ...ASTEROIDS,
   ...COMETS,
   ...TRANS_NEPTUNIAN_OBJECTS,
-  ...SPACECRAFT,
+  // ...SPACECRAFT, // TODO: remove these entirely? clash with new spacecraft definitions
 ];

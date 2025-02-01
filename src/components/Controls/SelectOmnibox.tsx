@@ -136,7 +136,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             }
           />
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
-            {bodyItems.length + regimeItems.length < 1 && (
+            {bodyItems.length + spacecraftItems.length + regimeItems.length < 1 && (
               <Spotlight.Empty ff={LABEL_FONT_FAMILY}>Nothing found...</Spotlight.Empty>
             )}
             {bodyItems.length > 0 && (
