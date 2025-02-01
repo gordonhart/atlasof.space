@@ -108,10 +108,9 @@ export class KeplerianBody extends KinematicBody {
     const textColor = this.body.style.fgColor;
     const strokeColor = this.body.style.bgColor ?? this.body.style.fgColor;
 
-    // body is off-screen; draw a pointer
+    // body is off-screen; draw a pointer if the screen is larger than xs (mobile)
     if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
-      // TODO: how to always draw moon offscreen indicators underneath parent? better yet, don't draw offscreen
-      //  indicators for moons when the parent isn't visible
+      // TODO: don't draw offscreen indicators for moons when the parent isn't visible
       if (!isXs()) {
         drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
       }
