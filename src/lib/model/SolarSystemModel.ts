@@ -10,7 +10,7 @@ import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
 import { SPACECRAFT_BY_ID } from '../spacecraft.ts';
 import { ModelState, Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, isSpacecraftId, Point2, Point3 } from '../types.ts';
+import { CelestialBody, CelestialBodyType, isCelestialBodyId, isSpacecraftId, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
@@ -267,8 +267,11 @@ export class SolarSystemModel {
 
   private updateCenter(settings: Settings) {
     // special handling for spacecraft -- center on the specified focusId when present
-    const spacecraftCenter = isSpacecraftId(settings.center) ? SPACECRAFT_BY_ID[settings.center]?.focusId : undefined;
-    const center = spacecraftCenter ?? settings.center;
+    const center = isSpacecraftId(settings.center)
+      ? SPACECRAFT_BY_ID[settings.center]?.focusId
+      : isCelestialBodyId(settings.center)
+        ? settings.center
+        : undefined;
     this.controls.zoomToCursor = center == null; // when center is set, zoom to body instead of cursor
     if (center == null) {
       this.lockedCenter = null;

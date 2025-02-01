@@ -8,6 +8,7 @@ import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR } from '../../../lib/ut
 import { FactGrid } from '../FactGrid.tsx';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
 import { FactSheetTitle } from '../FactSheetTitle.tsx';
+import { OrbitalRegimePill } from '../OrbitalRegimePill.tsx';
 import { Thumbnail } from '../Thumbnail.tsx';
 import { WikiLinkPill } from '../WikiLinkPill.tsx';
 import { MissionTimeline } from './MissionTimeline.tsx';
@@ -28,8 +29,20 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
 }: Props) {
   const padding = useFactSheetPadding();
 
+  const orbitalRegimes = (
+    <Group gap={4}>
+      {spacecraft.orbitalRegimes?.map(regime => (
+        <OrbitalRegimePill key={regime} regime={regime} updateSettings={updateSettings} />
+      ))}
+    </Group>
+  );
+  const orbitalRegimeBullet =
+    spacecraft.orbitalRegimes != null && (spacecraft.orbitalRegimes?.length ?? 0) > 0
+      ? { label: `orbital regime${spacecraft.orbitalRegimes.length > 1 ? 's' : ''}`, value: orbitalRegimes }
+      : null;
   const bullets = [
     { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
+    ...(orbitalRegimeBullet != null ? [orbitalRegimeBullet] : []),
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
     { label: 'launched', value: dateToISO(spacecraft.start) },
