@@ -20,7 +20,7 @@ export function SpacecraftPill({ spacecraft, updateSettings }: Props) {
     >
       <Group gap={8} align="center" wrap="nowrap">
         <Box w={thumbnailSize}>
-          <Thumbnail thumbnail={spacecraft.thumbnail} size={thumbnailSize} />
+          <Thumbnail thumbnail={spacecraft.thumbnail} size={thumbnailSize} radius="xs" />
         </Box>
         {spacecraft.name}
       </Group>
