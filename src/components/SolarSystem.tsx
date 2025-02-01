@@ -1,38 +1,21 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
+import { useUrlState } from '../hooks/useUrlState.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { SPACECRAFT } from '../lib/spacecraft.ts';
 import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
-import {
-  asCelestialBodyId,
-  asOrbitalRegimeId,
-  asSpacecraftId,
-  CelestialBody,
-  Epoch,
-  OrbitalRegimeId,
-  isCelestialBody,
-  isSpacecraft,
-} from '../lib/types.ts';
+import { CelestialBody, Epoch, isCelestialBody, isSpacecraft } from '../lib/types.ts';
 import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
-  const { bodyId, regimeId, spacecraftId } = useParams();
-  // TODO: move this to a url state util?
-  const center =
-    bodyId != null
-      ? asCelestialBodyId(bodyId)
-      : regimeId != null
-        ? asOrbitalRegimeId(regimeId as OrbitalRegimeId)
-        : spacecraftId != null
-          ? asSpacecraftId(spacecraftId)
-          : null;
-  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center } };
+  const { center: urlCenter } = useUrlState();
+  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
   const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
@@ -55,13 +38,13 @@ export function SolarSystem() {
 
   // sync URL to center
   useEffect(() => {
-    if (settings.center !== center) updateSettings({ center });
-  }, [center]);
+    if (settings.center !== urlCenter) updateSettings({ center: urlCenter });
+  }, [urlCenter]);
 
   // sync center back to URL when state changes are initiated by non-URL source
   useEffect(() => {
     // TODO: this doesn't work for clearing the center from the URL
-    if (settings.center != null && settings.center !== center) navigate(itemIdAsRoute(settings.center));
+    if (settings.center !== urlCenter) navigate(itemIdAsRoute(settings.center));
   }, [settings.center]);
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
