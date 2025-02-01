@@ -1,8 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { readStreamResponse } from '../lib/functions.ts';
-import { Spacecraft, SpacecraftVisit } from '../lib/spacecraft.ts';
-import { CelestialBody } from '../lib/types.ts';
+import { CelestialBody, Spacecraft, SpacecraftVisit } from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
 
 export function useSpacecraftVisitSummaryStream(spacecraft: Spacecraft, body: CelestialBody, visit: SpacecraftVisit) {

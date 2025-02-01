@@ -1,6 +1,13 @@
 import { AU } from './bodies.ts';
 import { Time } from './epoch.ts';
-import { CelestialBody, CelestialBodyStyle, CelestialBodyType, HexColor } from './types.ts';
+import {
+  asCelestialBodyId,
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyStyle,
+  CelestialBodyType,
+  HexColor,
+} from './types.ts';
 
 export function pluralize(n: number, unit: string) {
   const nAbs = Math.abs(n);
@@ -81,11 +88,11 @@ const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } =
   [CelestialBodyType.DWARF_PLANET]: '#6e636d',
 };
 export function celestialBodyWithDefaults(
-  body: Omit<CelestialBody, 'id' | 'style'> & { id?: string; style?: CelestialBodyStyle }
+  body: Omit<CelestialBody, 'id' | 'style'> & { id?: CelestialBodyId; style?: CelestialBodyStyle }
 ): CelestialBody {
   return {
     ...body,
-    id: body.id ?? nameToId(body.name, body.shortName),
+    id: body.id ?? asCelestialBodyId(nameToId(body.name, body.shortName)),
     style: {
       fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_FG_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
       bgColor: body.style?.bgColor ?? body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],

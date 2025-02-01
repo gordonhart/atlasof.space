@@ -1,36 +1,16 @@
 import { SOLAR_SYSTEM } from './bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
-import { SpacecraftId } from './spacecraft.ts';
 import {
   CelestialBody,
   CelestialBodyId,
   CelestialBodyType,
   Epoch,
-  HeliocentricOrbitalRegime,
+  OrbitalRegimeId,
   Point3,
+  SpacecraftId,
 } from './types.ts';
 
-type ActiveItemType = 'body' | 'regime' | 'spacecraft';
-type ActiveItemId = `${ActiveItemType}/${string}`;
-
-export function asActiveBody(id: CelestialBodyId): ActiveItemId {
-  return `body/${id}`;
-}
-export function asActiveRegime(regime: HeliocentricOrbitalRegime): ActiveItemId {
-  return `regime/${regime}`;
-}
-export function asActiveSpacecraft(id: SpacecraftId): ActiveItemId {
-  return `spacecraft/${id}`;
-}
-export function isActiveBody(id: CelestialBodyId, activeItem: ActiveItemId | null): boolean {
-  return asActiveBody(id) === activeItem;
-}
-export function isActiveRegime(regime: HeliocentricOrbitalRegime, activeItem: ActiveItemId | null): boolean {
-  return asActiveRegime(regime) === activeItem;
-}
-export function isActiveSpacecraft(id: SpacecraftId, activeItem: ActiveItemId | null): boolean {
-  return asActiveSpacecraft(id) === activeItem;
-}
+type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId;
 
 export type Settings = {
   epoch: Epoch;
@@ -38,11 +18,11 @@ export type Settings = {
   speed: number; // multiplier over real time
   drawOrbit: boolean;
   drawLabel: boolean;
-  focus: ActiveItemId | null; // clicked item, i.e. fact sheet is open
-  center: ActiveItemId | null; // center of visualization
-  hover: ActiveItemId | null; // mouse hovered item
+  focus: ItemId | null; // clicked item, i.e. fact sheet is open
+  center: ItemId | null; // center of visualization
+  hover: ItemId | null; // mouse hovered item
   visibleTypes: Set<CelestialBodyType>;
-  visibleRegimes: Set<HeliocentricOrbitalRegime>;
+  visibleRegimes: Set<OrbitalRegimeId>;
   bodies: Array<CelestialBody>;
 };
 

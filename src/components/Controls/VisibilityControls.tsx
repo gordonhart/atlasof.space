@@ -2,7 +2,12 @@ import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { IconCircle, IconCircleFilled, IconEyeCog } from '@tabler/icons-react';
 import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
-import { CelestialBodyType, CelestialBodyTypes, HeliocentricOrbitalRegime } from '../../lib/types.ts';
+import {
+  asOrbitalRegimeId,
+  CelestialBodyType,
+  CelestialBodyTypes,
+  HeliocentricOrbitalRegime,
+} from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { iconSize } from './constants.ts';
 
@@ -19,9 +24,10 @@ export function VisibilityControls({ settings, updateSettings }: Props) {
   }
 
   function toggleVisibleRegime(regime: HeliocentricOrbitalRegime) {
-    const newVisibleRegimes = settings.visibleRegimes.has(regime)
-      ? new Set([...settings.visibleRegimes].filter(t => t !== regime))
-      : new Set([...settings.visibleRegimes, regime]);
+    const regimeId = asOrbitalRegimeId(regime);
+    const newVisibleRegimes = settings.visibleRegimes.has(regimeId)
+      ? new Set([...settings.visibleRegimes].filter(t => t !== regimeId))
+      : new Set([...settings.visibleRegimes, regimeId]);
     updateSettings({ visibleRegimes: newVisibleRegimes });
   }
 
@@ -49,7 +55,11 @@ export function VisibilityControls({ settings, updateSettings }: Props) {
         {Object.values(HeliocentricOrbitalRegime).map(regime => (
           <Menu.Item key={regime} onClick={() => toggleVisibleRegime(regime)}>
             <Group gap="xs" align="center">
-              {settings.visibleRegimes.has(regime) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+              {settings.visibleRegimes.has(asOrbitalRegimeId(regime)) ? (
+                <IconCircleFilled size={14} />
+              ) : (
+                <IconCircle size={14} />
+              )}
               {orbitalRegimeDisplayName(regime)}
             </Group>
           </Menu.Item>

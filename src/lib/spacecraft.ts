@@ -1,21 +1,15 @@
 import { map } from 'ramda';
 import * as Bodies from './bodies.ts';
-import { CelestialBodyId } from './types.ts';
+import {
+  CelestialBodyId,
+  Spacecraft,
+  SpacecraftId,
+  SpacecraftOrganization,
+  SpacecraftOrganizationDetails,
+  SpacecraftStatus,
+  SpacecraftVisitType,
+} from './types.ts';
 import { nameToId } from './utils.ts';
-
-export enum SpacecraftOrganization {
-  NASA = 'NASA',
-  USSR = 'USSR',
-  ESA = 'ESA',
-  JAXA = 'JAXA',
-  CNSA = 'CNSA',
-}
-
-export type SpacecraftOrganizationDetails = {
-  name: string;
-  shortName: string;
-  thumbnail: string;
-};
 
 export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, SpacecraftOrganizationDetails> = {
   [SpacecraftOrganization.NASA]: {
@@ -45,54 +39,8 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
   },
 };
 
-// TODO: mixing concerns here -- some are identity-related, others are visit-related
-export enum SpacecraftVisitType {
-  FLYBY = 'Flyby',
-  GRAVITY_ASSIST = 'Gravity Assist',
-  ORBITER = 'Orbiter',
-  LANDER = 'Lander',
-  ROVER = 'Rover',
-  HELICOPTER = 'Helicopter',
-  IMPACTOR = 'Impactor',
-}
-
-export enum SpacecraftStatus {
-  OPERATIONAL = 'Operational',
-  DEFUNCT = 'Defunct',
-  DECOMMISSIONED = 'Decommissioned',
-  RETURNED = 'Returned',
-  CRASHED = 'Crashed',
-}
-
-export type SpacecraftId = string;
-
-// TODO: many spacecraft fly by an object multiple times -- is it worth representing that? tons of data to transcribe
-export type SpacecraftVisit = {
-  id: CelestialBodyId;
-  type: SpacecraftVisitType;
-  start: Date;
-  end?: Date;
-};
-
-export type Spacecraft = {
-  id: SpacecraftId;
-  name: string;
-  organization: SpacecraftOrganization;
-  launchMass: number; // kg
-  power?: number; // watts
-  start: Date; // TODO: rename to launchDate?
-  end?: Date;
-  focusId?: CelestialBodyId; // center visualization on this body, if specified
-  cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
-  status: { status: SpacecraftStatus; details?: string };
-  thumbnail?: string;
-  wiki: string;
-  crew?: Array<string>;
-  visited: Array<SpacecraftVisit>;
-};
-
 function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
-  return { ...spacecraft, id: nameToId(spacecraft.name) };
+  return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
 }
 
 export const VOYAGER_1 = spacecraftWithDefaults({
@@ -1086,15 +1034,3 @@ export const SPACECRAFT_BY_BODY_ID = map(
     return acc;
   }, {})
 );
-
-export function isSpacecraft(obj: unknown): obj is Spacecraft {
-  return (
-    obj != null &&
-    typeof obj === 'object' &&
-    'name' in obj &&
-    typeof obj.name === 'string' &&
-    'organization' in obj &&
-    typeof obj.organization === 'string' &&
-    Object.values(SpacecraftOrganization).includes(obj.organization as SpacecraftOrganization)
-  );
-}

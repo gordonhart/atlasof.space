@@ -2,13 +2,15 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { readStreamResponse } from '../lib/functions.ts';
 import { orbitalRegimeDisplayName } from '../lib/regimes.ts';
-import { isSpacecraft, Spacecraft, SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
 import {
   CelestialBody,
   CelestialBodyType,
   HeliocentricOrbitalRegime,
   isOrbitalRegime,
+  isSpacecraft,
   OrbitalRegime,
+  Spacecraft,
 } from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
 

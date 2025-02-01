@@ -1,7 +1,6 @@
 import { Stack, Title } from '@mantine/core';
-import { Spacecraft } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody } from '../../lib/types.ts';
+import { CelestialBody, Spacecraft } from '../../lib/types.ts';
 import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
 
 type Props = {

@@ -5,18 +5,18 @@ import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
-import { isSpacecraft, SPACECRAFT } from '../lib/spacecraft.ts';
+import { SPACECRAFT } from '../lib/spacecraft.ts';
+import { initialState, UpdateSettings } from '../lib/state.ts';
 import {
-  asActiveBody,
-  asActiveRegime,
-  asActiveSpacecraft,
-  initialState,
-  isActiveBody,
-  isActiveRegime,
-  isActiveSpacecraft,
-  UpdateSettings,
-} from '../lib/state.ts';
-import { CelestialBody, Epoch, HeliocentricOrbitalRegime, isCelestialBody } from '../lib/types.ts';
+  asCelestialBodyId,
+  asOrbitalRegimeId,
+  asSpacecraftId,
+  CelestialBody,
+  Epoch,
+  HeliocentricOrbitalRegime,
+  isCelestialBody,
+  isSpacecraft,
+} from '../lib/types.ts';
 import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
@@ -26,11 +26,11 @@ export function SolarSystem() {
   // TODO: move this to a url state util?
   const center =
     bodyId != null
-      ? asActiveBody(bodyId)
+      ? asCelestialBodyId(bodyId)
       : regimeId != null
-        ? asActiveRegime(regimeId as HeliocentricOrbitalRegime)
+        ? asOrbitalRegimeId(regimeId as HeliocentricOrbitalRegime)
         : spacecraftId != null
-          ? asActiveSpacecraft(spacecraftId)
+          ? asSpacecraftId(spacecraftId)
           : null;
   const urlInitialState = { ...initialState, settings: { ...initialState.settings, center } };
   const [appState, setAppState] = useState(urlInitialState);
@@ -121,9 +121,9 @@ export function SolarSystem() {
 
   // TODO: some spacecraft share names with celestial bodies -- e.g. Psyche, Mariner 2 -- need to disambiguate
   const focusItem = useMemo(() => {
-    const focusBody = settings.bodies.find(body => isActiveBody(body.id, settings.center));
-    const focusSpacecraft = SPACECRAFT.find(({ id }) => isActiveSpacecraft(id, settings.center));
-    const focusRegime = ORBITAL_REGIMES.find(({ id }) => isActiveRegime(id, settings.center));
+    const focusBody = settings.bodies.find(({ id }) => id === settings.center);
+    const focusSpacecraft = SPACECRAFT.find(({ id }) => id === settings.center);
+    const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
     return focusBody ?? focusRegime ?? focusSpacecraft;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem)

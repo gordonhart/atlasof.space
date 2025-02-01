@@ -1,7 +1,6 @@
 import { Box, Text } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
-import { Spacecraft } from '../../lib/spacecraft.ts';
-import { CelestialBody, OrbitalRegime } from '../../lib/types.ts';
+import { CelestialBody, OrbitalRegime, Spacecraft } from '../../lib/types.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 
 type Props = {
