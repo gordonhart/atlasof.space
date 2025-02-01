@@ -8,7 +8,7 @@ import { getCanvasPixels, isOffScreen } from '../canvas.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
-import { ModelState, Settings } from '../state.ts';
+import { isActiveBody, ModelState, Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, Point2, Point3 } from '../types.ts';
 import { notNullish } from '../utils.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
@@ -250,9 +250,9 @@ export class SolarSystemModel {
       .map<[KeplerianBody, number]>(body => {
         const distance = !body.isVisible(settings)
           ? -1 // skip invisible bodies
-          : body.body.id === settings.center
+          : isActiveBody(body.body.id, settings.center)
             ? 2 // center body should be drawn near top
-            : body.body.id === settings.hover
+            : isActiveBody(body.body.id, settings.hover)
               ? 1 // hover body should be always top
               : this.tmp.copy(body.position).divideScalar(SCALE_FACTOR).sub(this.camera.position).length(); // use distance to camera
         return [body, distance];

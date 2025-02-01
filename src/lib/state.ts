@@ -1,16 +1,46 @@
 import { SOLAR_SYSTEM } from './bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
-import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
+import { SpacecraftId } from './spacecraft.ts';
+import {
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyType,
+  Epoch,
+  HeliocentricOrbitalRegime,
+  Point3,
+} from './types.ts';
+
+type ActiveItemType = 'body' | 'regime' | 'spacecraft';
+type ActiveItemId = `${ActiveItemType}/${string}`;
+
+export function asActiveBody(id: CelestialBodyId): ActiveItemId {
+  return `body/${id}`;
+}
+export function asActiveRegime(regime: HeliocentricOrbitalRegime): ActiveItemId {
+  return `regime/${regime}`;
+}
+export function asActiveSpacecraft(id: SpacecraftId): ActiveItemId {
+  return `spacecraft/${id}`;
+}
+export function isActiveBody(id: CelestialBodyId, activeItem: ActiveItemId | null): boolean {
+  return asActiveBody(id) === activeItem;
+}
+export function isActiveRegime(regime: HeliocentricOrbitalRegime, activeItem: ActiveItemId | null): boolean {
+  return asActiveRegime(regime) === activeItem;
+}
+export function isActiveSpacecraft(id: SpacecraftId, activeItem: ActiveItemId | null): boolean {
+  return asActiveSpacecraft(id) === activeItem;
+}
 
 export type Settings = {
   epoch: Epoch;
   play: boolean;
   speed: number; // multiplier over real time
-  drawTail: boolean;
   drawOrbit: boolean;
   drawLabel: boolean;
-  center: string | null; // name of body or orbital regime centering visualization (focused)
-  hover: string | null; // name of hovered body/regime
+  focus: ActiveItemId | null; // clicked item, i.e. fact sheet is open
+  center: ActiveItemId | null; // center of visualization
+  hover: ActiveItemId | null; // mouse hovered item
   visibleTypes: Set<CelestialBodyType>;
   visibleRegimes: Set<HeliocentricOrbitalRegime>;
   bodies: Array<CelestialBody>;
@@ -34,9 +64,9 @@ export const initialState: AppState = {
     epoch: nowEpoch(),
     play: true,
     speed: Time.DAY, // one day per second to demonstrate motion without touching controls
-    drawTail: false,
     drawOrbit: true,
     drawLabel: true,
+    focus: null,
     center: null,
     hover: null,
     visibleTypes: new Set([
