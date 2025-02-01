@@ -12,13 +12,21 @@ import {
 
 type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId;
 
+export function itemIdAsRoute(itemId: ItemId | null) {
+  if (itemId == null) return '/';
+  const [type, id] = itemId.split('/', 2);
+  if (type === 'body') return `/${id}`;
+  if (type === 'regime') return `/regime/${id}`;
+  if (type === 'spacecraft') return `/spacecraft/${id}`;
+  return '/'; // fallback, shouldn't get here
+}
+
 export type Settings = {
   epoch: Epoch;
   play: boolean;
   speed: number; // multiplier over real time
   drawOrbit: boolean;
   drawLabel: boolean;
-  focus: ItemId | null; // clicked item, i.e. fact sheet is open
   center: ItemId | null; // center of visualization
   hover: ItemId | null; // mouse hovered item
   visibleTypes: Set<CelestialBodyType>;
@@ -46,7 +54,6 @@ export const initialState: AppState = {
     speed: Time.DAY, // one day per second to demonstrate motion without touching controls
     drawOrbit: true,
     drawLabel: true,
-    focus: null,
     center: null,
     hover: null,
     visibleTypes: new Set([

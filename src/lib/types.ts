@@ -192,6 +192,16 @@ export function asSpacecraftId(slug: string): SpacecraftId {
   return `spacecraft/${slug}`;
 }
 
+export function isCelestialBodyId(id: unknown): id is CelestialBodyId {
+  return id != null && typeof id === 'string' && id.startsWith('body/');
+}
+export function isOrbitalRegimeId(id: unknown): id is OrbitalRegimeId {
+  return id != null && typeof id === 'string' && id.startsWith('regime/');
+}
+export function isSpacecraftId(id: unknown): id is SpacecraftId {
+  return id != null && typeof id === 'string' && id.startsWith('spacecraft/');
+}
+
 export function isCelestialBody(obj: unknown): obj is CelestialBody {
   return (
     obj != null &&
@@ -201,7 +211,6 @@ export function isCelestialBody(obj: unknown): obj is CelestialBody {
     CelestialBodyTypes.includes(obj.type as CelestialBodyType)
   );
 }
-
 export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
   return (
     obj != null &&
@@ -211,7 +220,6 @@ export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
     Object.values(OrbitalRegimeId).includes(obj.id as OrbitalRegimeId)
   );
 }
-
 export function isSpacecraft(obj: unknown): obj is Spacecraft {
   return (
     obj != null &&

@@ -6,7 +6,7 @@ import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { SPACECRAFT } from '../lib/spacecraft.ts';
-import { initialState, UpdateSettings } from '../lib/state.ts';
+import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
 import {
   asCelestialBodyId,
   asOrbitalRegimeId,
@@ -61,7 +61,7 @@ export function SolarSystem() {
   // sync center back to URL when state changes are initiated by non-URL source
   useEffect(() => {
     // TODO: this doesn't work for clearing the center from the URL
-    if (settings.center != null && settings.center !== center) navigate(`/${settings.center}`);
+    if (settings.center != null && settings.center !== center) navigate(itemIdAsRoute(settings.center));
   }, [settings.center]);
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);

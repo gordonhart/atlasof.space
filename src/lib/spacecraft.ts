@@ -1034,3 +1034,8 @@ export const SPACECRAFT_BY_BODY_ID = map(
     return acc;
   }, {})
 );
+
+export const SPACECRAFT_BY_ID = SPACECRAFT.reduce<Record<SpacecraftId, Spacecraft>>((acc, spacecraft) => {
+  acc[spacecraft.id] = spacecraft;
+  return acc;
+}, {});
