@@ -53,7 +53,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       {isXsDisplay ? (
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
           <FactSheetSummary obj={spacecraft} />
-          <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
+          <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
             <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={160} />
           </Box>
         </Group>

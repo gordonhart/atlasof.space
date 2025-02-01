@@ -77,7 +77,7 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
   }, [visitedBodies, height, hover, hoverCap]);
 
   return (
-    <Stack gap="xs" {...padding}>
+    <Stack {...padding}>
       <Group gap="xs">
         <Title order={5}>Mission Timeline</Title>
         <SpacecraftStatusPill status={spacecraft.status} />
@@ -184,14 +184,14 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
   // TODO: more advanced logic to figure out the smallest number of lanes necessary to avoid overlaps
   const nLanes = Math.ceil(items.length / 2);
   const laneGutter = 20;
-  const laneWidth = (TIMELINE_WIDTH - 2 * laneGutter - timelineLeft) / (nLanes - 1);
+  const laneWidth = (TIMELINE_WIDTH - 2 * laneGutter - timelineLeft) / Math.max(nLanes - 1, 1);
   const drawnLabels = new Set();
 
   function drawConnector({ top, height, date, hover }: TimelineItem, i: number) {
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneIndex = Math.min(i, 2 * (nLanes - 1) - i);
+    const laneIndex = Math.max(Math.min(i, 2 * (nLanes - 1) - i), 0);
     const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;
