@@ -177,15 +177,16 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
 
   // TODO: more advanced logic to figure out the smallest number of lanes necessary to avoid overlaps
   const nLanes = Math.ceil(items.length / 2);
-  const lanesGutter = 20;
-  const laneWidth = (TIMELINE_WIDTH - 2 * lanesGutter - timelineLeft) / nLanes;
+  const laneGutter = 20;
+  const laneWidth = (TIMELINE_WIDTH - 2 * laneGutter - timelineLeft) / (nLanes - 1);
   const drawnLabels = new Set();
 
   function drawConnector({ top, height, date, hover }: TimelineItem, i: number) {
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneX = lanesGutter + (i >= nLanes ? nLanes - (i % nLanes) : i) * laneWidth;
+    const laneIndex = i < nLanes ? nLanes - i : i % nLanes;
+    const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;
     const nKinks = Math.abs(itemY - timelineY) < 2 * dotRadius ? 1 : 2;
