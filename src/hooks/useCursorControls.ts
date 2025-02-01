@@ -26,6 +26,10 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
     dragDetectorRef.current = { dragged: false, initial: getCursorCoordinates(event) };
   }
 
+  function onPointerUp() {
+    dragDetectorRef.current = null;
+  }
+
   function onPointerLeave() {
     dragDetectorRef.current = null;
   }
@@ -61,5 +65,5 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
     }
   }
 
-  return { onPointerDown, onPointerMove, onPointerLeave, onClick };
+  return { onPointerDown, onPointerUp, onPointerMove, onPointerLeave, onClick };
 }
