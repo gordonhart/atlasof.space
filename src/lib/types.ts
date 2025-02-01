@@ -85,14 +85,13 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.SPACECRAFT,
 ];
 
-export enum HeliocentricOrbitalRegime {
-  INNER_SYSTEM = 'inner-system',
-  ASTEROID_BELT = 'asteroid-belt',
-  OUTER_SYSTEM = 'outer-system',
-  KUIPER_BELT = 'kuiper-belt',
-  INNER_OORT_CLOUD = 'inner-oort-cloud',
+export enum OrbitalRegimeId {
+  INNER_SYSTEM = 'regime/inner-system',
+  ASTEROID_BELT = 'regime/asteroid-belt',
+  OUTER_SYSTEM = 'regime/outer-system',
+  KUIPER_BELT = 'regime/kuiper-belt',
+  INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
 }
-export type OrbitalRegimeId = `regime/${HeliocentricOrbitalRegime}`;
 
 export type HexColor = `#${string}`;
 export type CelestialBodyStyle = {
@@ -186,8 +185,8 @@ export type Spacecraft = {
 export function asCelestialBodyId(slug: string): CelestialBodyId {
   return `body/${slug}`;
 }
-export function asOrbitalRegimeId(regime: HeliocentricOrbitalRegime): OrbitalRegimeId {
-  return `regime/${regime}`;
+export function asOrbitalRegimeId(slug: string): OrbitalRegimeId {
+  return `regime/${slug}` as OrbitalRegimeId;
 }
 export function asSpacecraftId(slug: string): SpacecraftId {
   return `spacecraft/${slug}`;
@@ -209,7 +208,7 @@ export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
     typeof obj === 'object' &&
     'id' in obj &&
     typeof obj.id === 'string' &&
-    Object.values(HeliocentricOrbitalRegime).includes(obj.id as HeliocentricOrbitalRegime)
+    Object.values(OrbitalRegimeId).includes(obj.id as OrbitalRegimeId)
   );
 }
 

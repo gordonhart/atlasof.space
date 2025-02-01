@@ -13,7 +13,7 @@ import {
   asSpacecraftId,
   CelestialBody,
   Epoch,
-  HeliocentricOrbitalRegime,
+  OrbitalRegimeId,
   isCelestialBody,
   isSpacecraft,
 } from '../lib/types.ts';
@@ -28,7 +28,7 @@ export function SolarSystem() {
     bodyId != null
       ? asCelestialBodyId(bodyId)
       : regimeId != null
-        ? asOrbitalRegimeId(regimeId as HeliocentricOrbitalRegime)
+        ? asOrbitalRegimeId(regimeId as OrbitalRegimeId)
         : spacecraftId != null
           ? asSpacecraftId(spacecraftId)
           : null;

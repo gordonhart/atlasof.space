@@ -6,7 +6,7 @@ import {
   CelestialBody,
   CelestialBodyType,
   CelestialBodyTypes,
-  HeliocentricOrbitalRegime,
+  OrbitalRegimeId,
   OrbitalRegime,
 } from '../../lib/types.ts';
 import { celestialBodyTypeName, DEFAULT_ASTEROID_COLOR } from '../../lib/utils.ts';
@@ -66,7 +66,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                   onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
                 />
               ))}
-              {regime.id === HeliocentricOrbitalRegime.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
+              {regime.id === OrbitalRegimeId.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
                 <AddSmallBodyButton bodies={bodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>

@@ -6,7 +6,7 @@ import { SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
 import {
   CelestialBody,
   CelestialBodyType,
-  HeliocentricOrbitalRegime,
+  OrbitalRegimeId,
   isOrbitalRegime,
   isSpacecraft,
   OrbitalRegime,
@@ -36,7 +36,7 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft
 function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft) {
   if (isOrbitalRegime(obj)) {
     // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
-    const orbitalRegimes = Object.values(HeliocentricOrbitalRegime).map(orbitalRegimeDisplayName).join(', ');
+    const orbitalRegimes = Object.values(OrbitalRegimeId).map(orbitalRegimeDisplayName).join(', ');
     return `the heliocentric orbital regime '${orbitalRegimeDisplayName(obj.id)}' (of the set with ${orbitalRegimes})`;
   }
   if (isSpacecraft(obj)) {
