@@ -1,7 +1,13 @@
 import { memo } from 'react';
-import { isSpacecraft, Spacecraft } from '../../lib/spacecraft.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody, isCelestialBody, isOrbitalRegime, OrbitalRegime } from '../../lib/types.ts';
+import {
+  CelestialBody,
+  isCelestialBody,
+  isOrbitalRegime,
+  isSpacecraft,
+  OrbitalRegime,
+  Spacecraft,
+} from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
 import { SpacecraftFactSheet } from './Spacecraft/SpacecraftFactSheet.tsx';

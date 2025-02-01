@@ -1,8 +1,7 @@
 import { Box, Group, Paper, Text, Title } from '@mantine/core';
 import { useSpacecraftVisitSummaryStream } from '../../../hooks/useSpacecraftVisitSummaryStream.ts';
-import { Spacecraft, SpacecraftVisit } from '../../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
-import { CelestialBody } from '../../../lib/types.ts';
+import { CelestialBody, Spacecraft, SpacecraftVisit } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
 import { CelestialBodyThumbnail } from '../CelestialBodyThumbnail.tsx';
 import { LoadingCursor } from '../LoadingCursor.tsx';

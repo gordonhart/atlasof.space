@@ -1,5 +1,6 @@
 import { Box, Group, Pill } from '@mantine/core';
-import { SPACECRAFT_ORGANIZATIONS, SpacecraftOrganization } from '../../../lib/spacecraft.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/spacecraft.ts';
+import { SpacecraftOrganization } from '../../../lib/types.ts';
 import { Thumbnail } from '../Thumbnail.tsx';
 
 type Props = {

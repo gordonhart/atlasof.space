@@ -1,18 +1,36 @@
 import { SOLAR_SYSTEM } from './bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
-import { CelestialBody, CelestialBodyType, Epoch, HeliocentricOrbitalRegime, Point3 } from './types.ts';
+import {
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyType,
+  Epoch,
+  OrbitalRegimeId,
+  Point3,
+  SpacecraftId,
+} from './types.ts';
+
+type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId;
+
+export function itemIdAsRoute(itemId: ItemId | null) {
+  if (itemId == null) return '/';
+  const [type, id] = itemId.split('/', 2);
+  if (type === 'body') return `/${id}`;
+  if (type === 'regime') return `/regime/${id}`;
+  if (type === 'spacecraft') return `/spacecraft/${id}`;
+  return '/'; // fallback, shouldn't get here
+}
 
 export type Settings = {
   epoch: Epoch;
   play: boolean;
   speed: number; // multiplier over real time
-  drawTail: boolean;
   drawOrbit: boolean;
   drawLabel: boolean;
-  center: string | null; // name of body or orbital regime centering visualization (focused)
-  hover: string | null; // name of hovered body/regime
+  center: ItemId | null; // center of visualization
+  hover: ItemId | null; // mouse hovered item
   visibleTypes: Set<CelestialBodyType>;
-  visibleRegimes: Set<HeliocentricOrbitalRegime>;
+  visibleRegimes: Set<OrbitalRegimeId>;
   bodies: Array<CelestialBody>;
 };
 
@@ -34,7 +52,6 @@ export const initialState: AppState = {
     epoch: nowEpoch(),
     play: true,
     speed: Time.DAY, // one day per second to demonstrate motion without touching controls
-    drawTail: false,
     drawOrbit: true,
     drawLabel: true,
     center: null,

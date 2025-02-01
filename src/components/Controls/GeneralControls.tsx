@@ -29,14 +29,6 @@ export const GeneralControls = memo(function GeneralControlsComponent({ settings
         </ActionIcon>
       </Tooltip>
 
-      {/* TODO: implement for 3D
-      <Tooltip position="left" label={`${state.drawTail ? 'Hide' : 'Show'} Tails`}>
-        <ActionIcon onClick={() => updateState({ drawTail: !state.drawTail })}>
-          <IconMeteorFilled size={iconSize} />
-        </ActionIcon>
-      </Tooltip>
-      */}
-
       <VisibilityControls settings={settings} updateSettings={updateSettings} />
 
       <Tooltip position="top" label="Reset">

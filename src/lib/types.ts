@@ -16,7 +16,7 @@ export type Epoch = {
   // no time zone necessary; always UTC
 };
 
-export type CelestialBodyId = string;
+export type CelestialBodyId = `body/${string}`;
 
 export type RotationElements = {
   axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
@@ -85,12 +85,12 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
   CelestialBodyType.SPACECRAFT,
 ];
 
-export enum HeliocentricOrbitalRegime {
-  INNER_SYSTEM = 'inner-system',
-  ASTEROID_BELT = 'asteroid-belt',
-  OUTER_SYSTEM = 'outer-system',
-  KUIPER_BELT = 'kuiper-belt',
-  INNER_OORT_CLOUD = 'inner-oort-cloud',
+export enum OrbitalRegimeId {
+  INNER_SYSTEM = 'regime/inner-system',
+  ASTEROID_BELT = 'regime/asteroid-belt',
+  OUTER_SYSTEM = 'regime/outer-system',
+  KUIPER_BELT = 'regime/kuiper-belt',
+  INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
 }
 
 export type HexColor = `#${string}`;
@@ -105,7 +105,7 @@ export type CelestialBody = {
   name: string;
   shortName?: string;
   influencedBy: Array<CelestialBodyId>; // bodies influencing this body's motion
-  orbitalRegime?: HeliocentricOrbitalRegime;
+  orbitalRegime?: OrbitalRegimeId;
   mass: number; // kg
   radius: number; // m
   elements: KeplerianElements;
@@ -116,11 +116,91 @@ export type CelestialBody = {
 };
 
 export type OrbitalRegime = {
-  id: HeliocentricOrbitalRegime;
+  id: OrbitalRegimeId;
   min: number;
   max: number;
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
 };
+
+export enum SpacecraftOrganization {
+  NASA = 'NASA',
+  USSR = 'USSR',
+  ESA = 'ESA',
+  JAXA = 'JAXA',
+  CNSA = 'CNSA',
+}
+
+export type SpacecraftOrganizationDetails = {
+  name: string;
+  shortName: string;
+  thumbnail: string;
+};
+
+// TODO: mixing concerns here -- some are identity-related, others are visit-related
+export enum SpacecraftVisitType {
+  FLYBY = 'Flyby',
+  GRAVITY_ASSIST = 'Gravity Assist',
+  ORBITER = 'Orbiter',
+  LANDER = 'Lander',
+  ROVER = 'Rover',
+  HELICOPTER = 'Helicopter',
+  IMPACTOR = 'Impactor',
+}
+
+export enum SpacecraftStatus {
+  OPERATIONAL = 'Operational',
+  DEFUNCT = 'Defunct',
+  DECOMMISSIONED = 'Decommissioned',
+  RETURNED = 'Returned',
+  CRASHED = 'Crashed',
+}
+
+export type SpacecraftId = `spacecraft/${string}`;
+
+// TODO: many spacecraft fly by an object multiple times -- is it worth representing that? tons of data to transcribe
+export type SpacecraftVisit = {
+  id: CelestialBodyId;
+  type: SpacecraftVisitType;
+  start: Date;
+  end?: Date;
+};
+
+export type Spacecraft = {
+  id: SpacecraftId;
+  name: string;
+  organization: SpacecraftOrganization;
+  launchMass: number; // kg
+  power?: number; // watts
+  start: Date; // TODO: rename to launchDate?
+  end?: Date;
+  focusId?: CelestialBodyId; // center visualization on this body, if specified
+  cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
+  status: { status: SpacecraftStatus; details?: string };
+  thumbnail?: string;
+  wiki: string;
+  crew?: Array<string>;
+  visited: Array<SpacecraftVisit>;
+};
+
+export function asCelestialBodyId(slug: string): CelestialBodyId {
+  return `body/${slug}`;
+}
+export function asOrbitalRegimeId(slug: string): OrbitalRegimeId {
+  return `regime/${slug}` as OrbitalRegimeId;
+}
+export function asSpacecraftId(slug: string): SpacecraftId {
+  return `spacecraft/${slug}`;
+}
+
+export function isCelestialBodyId(id: unknown): id is CelestialBodyId {
+  return id != null && typeof id === 'string' && id.startsWith('body/');
+}
+export function isOrbitalRegimeId(id: unknown): id is OrbitalRegimeId {
+  return id != null && typeof id === 'string' && id.startsWith('regime/');
+}
+export function isSpacecraftId(id: unknown): id is SpacecraftId {
+  return id != null && typeof id === 'string' && id.startsWith('spacecraft/');
+}
 
 export function isCelestialBody(obj: unknown): obj is CelestialBody {
   return (
@@ -131,13 +211,23 @@ export function isCelestialBody(obj: unknown): obj is CelestialBody {
     CelestialBodyTypes.includes(obj.type as CelestialBodyType)
   );
 }
-
 export function isOrbitalRegime(obj: unknown): obj is OrbitalRegime {
   return (
     obj != null &&
     typeof obj === 'object' &&
     'id' in obj &&
     typeof obj.id === 'string' &&
-    Object.values(HeliocentricOrbitalRegime).includes(obj.id as HeliocentricOrbitalRegime)
+    Object.values(OrbitalRegimeId).includes(obj.id as OrbitalRegimeId)
+  );
+}
+export function isSpacecraft(obj: unknown): obj is Spacecraft {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'name' in obj &&
+    typeof obj.name === 'string' &&
+    'organization' in obj &&
+    typeof obj.organization === 'string' &&
+    Object.values(SpacecraftOrganization).includes(obj.organization as SpacecraftOrganization)
   );
 }

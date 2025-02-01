@@ -3,7 +3,7 @@ import { AU, SOL } from '../lib/bodies.ts';
 import { julianDayToEpoch } from '../lib/epoch.ts';
 import { estimateAsteroidMass } from '../lib/physics.ts';
 import { isNotFound, SBDB_URL, SmallBodyNotFound, SmallBodyResponse } from '../lib/sbdb.ts';
-import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from '../lib/types.ts';
+import { CelestialBody, CelestialBodyType, OrbitalRegimeId } from '../lib/types.ts';
 import { celestialBodyWithDefaults } from '../lib/utils.ts';
 
 export function useSmallBodies(names: Array<string>) {
@@ -32,7 +32,7 @@ async function fetchSmallBodyData(name: string): Promise<CelestialBody | null> {
     name,
     shortName: object.shortname,
     influencedBy: [SOL.id],
-    orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+    orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
     elements: {
       wrt: SOL.id,
       source: SBDB_URL,
