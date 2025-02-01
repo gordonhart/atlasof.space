@@ -8,7 +8,15 @@ import { useUrlState } from '../hooks/useUrlState.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
 import { SPACECRAFT } from '../lib/spacecraft.ts';
 import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
-import { CelestialBody, Epoch, isCelestialBody, isSpacecraft } from '../lib/types.ts';
+import {
+  CelestialBody,
+  Epoch,
+  isCelestialBody,
+  isCelestialBodyId,
+  isOrbitalRegimeId,
+  isSpacecraft,
+  isSpacecraftId,
+} from '../lib/types.ts';
 import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
@@ -102,12 +110,14 @@ export function SolarSystem() {
     model.resize();
   }, [settings.center]);
 
-  // TODO: some spacecraft share names with celestial bodies -- e.g. Psyche, Mariner 2 -- need to disambiguate
   const focusItem = useMemo(() => {
-    const focusBody = settings.bodies.find(({ id }) => id === settings.center);
-    const focusSpacecraft = SPACECRAFT.find(({ id }) => id === settings.center);
-    const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
-    return focusBody ?? focusRegime ?? focusSpacecraft;
+    return isCelestialBodyId(settings.center)
+      ? settings.bodies.find(({ id }) => id === settings.center)
+      : isOrbitalRegimeId(settings.center)
+        ? ORBITAL_REGIMES.find(({ id }) => id === settings.center)
+        : isSpacecraftId(settings.center)
+          ? SPACECRAFT.find(({ id }) => id === settings.center)
+          : undefined;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem)
     ? focusItem.style.fgColor
