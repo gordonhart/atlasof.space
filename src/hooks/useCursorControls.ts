@@ -56,6 +56,7 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
 
     const closeBody = model.findCloseBody(getCursorCoordinates(event), settings, interactPxThreshold);
     if (closeBody != null) {
+      dragDetectorRef.current = null;
       updateSettings({ center: closeBody.body.id });
     }
   }
