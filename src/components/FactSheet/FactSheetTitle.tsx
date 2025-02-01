@@ -1,6 +1,7 @@
 import { ActionIcon, Box, Group, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { HexColor } from '../../lib/types.ts';
 import { iconSize } from '../Controls/constants.ts';
 
@@ -12,13 +13,14 @@ type Props = {
   onHover?: (hovered: boolean) => void;
 };
 export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Props) {
+  const padding = useFactSheetPadding();
   const { sm: isSmallDisplay } = useDisplaySize();
   return (
     <Group
       pos="sticky"
       top={0}
       bg="black"
-      px="md"
+      px={padding.px}
       py={isSmallDisplay ? 8 : 'md'}
       gap="xs"
       justify="space-between"

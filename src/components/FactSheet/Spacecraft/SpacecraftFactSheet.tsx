@@ -1,6 +1,7 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo } from 'react';
 import { useDisplaySize } from '../../../hooks/useDisplaySize.ts';
+import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
@@ -26,6 +27,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
   hover,
   updateSettings,
 }: Props) {
+  const padding = useFactSheetPadding();
   const { xs: isXsDisplay } = useDisplaySize();
 
   const bullets = [
@@ -60,7 +62,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       )}
 
       <Stack gap={2} flex={1}>
-        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
+        <Group {...padding} gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
             <FactGrid facts={bullets} keysWidth={120} />
@@ -75,7 +77,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
         <MissionTimeline spacecraft={spacecraft} bodies={bodies} hover={hover} updateSettings={updateSettings} />
       </Stack>
 
-      <Box pt="md" style={{ justifySelf: 'flex-end' }}>
+      <Box style={{ justifySelf: 'flex-end' }}>
         <OtherSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
       </Box>
     </Stack>

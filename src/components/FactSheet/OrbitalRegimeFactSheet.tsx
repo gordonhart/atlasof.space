@@ -1,5 +1,6 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import {
@@ -30,6 +31,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   addBody,
   removeBody,
 }: Props) {
+  const padding = useFactSheetPadding();
   const bodiesInRegimeByType = useMemo(() => {
     const bodiesInRegime = bodies.filter(body => body.orbitalRegime === regime.id);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
@@ -52,7 +54,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
         <FactSheetSummary obj={regime} />
       </Box>
 
-      <Stack p="md" gap="lg" flex={1}>
+      <Stack px={padding.px} py={padding.py} gap="xl" flex={1}>
         {Object.entries(bodiesInRegimeByType)
           .filter(([, bodies]) => bodies.length > 0)
           .map(([type, bodies], i) => (

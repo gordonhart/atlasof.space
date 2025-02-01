@@ -1,4 +1,5 @@
 import { Stack, Title } from '@mantine/core';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, Spacecraft } from '../../lib/types.ts';
 import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
@@ -9,8 +10,9 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function SpacecraftVisits({ spacecraft, body, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
   return spacecraft.length > 0 ? (
-    <Stack gap="xs" p="md" pt="lg">
+    <Stack gap="xs" {...padding}>
       <Title order={5}>Spacecraft Visits</Title>
       {spacecraft.map((s, i) => (
         <SpacecraftCard
