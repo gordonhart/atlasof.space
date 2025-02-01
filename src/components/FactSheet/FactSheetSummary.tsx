@@ -11,7 +11,7 @@ export function FactSheetSummary({ obj }: Props) {
   const padding = useFactSheetPadding();
   const { data: summary, isLoading } = useSummaryStream(obj);
   return (
-    <Box px={padding.px} pt={padding.px} pb={padding.py} mih={77 /* measured height of 3 lines + top padding */}>
+    <Box px={padding.px} py={padding.px} mih={77 /* measured height of 3 lines + top padding */}>
       <Text size="sm">
         {summary}
         {isLoading && <LoadingCursor />}
