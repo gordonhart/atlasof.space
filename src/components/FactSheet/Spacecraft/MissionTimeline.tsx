@@ -185,7 +185,7 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneIndex = i < nLanes ? nLanes - i : i % nLanes;
+    const laneIndex = Math.min(i, 2 * (nLanes - 1) - i);
     const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;

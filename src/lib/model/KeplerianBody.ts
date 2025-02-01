@@ -1,4 +1,5 @@
 import { Box2, OrthographicCamera, Scene, Vector2, Vector3 } from 'three';
+import { isXs } from '../../hooks/useDisplaySize.ts';
 import {
   drawDotAtLocation,
   drawLabelAtLocation,
@@ -111,7 +112,9 @@ export class KeplerianBody extends KinematicBody {
     if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
       // TODO: how to always draw moon offscreen indicators underneath parent? better yet, don't draw offscreen
       //  indicators for moons when the parent isn't visible
-      drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
+      if (!isXs()) {
+        drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
+      }
     } else {
       const baseRadius = this.body.radius / metersPerPx;
       const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
