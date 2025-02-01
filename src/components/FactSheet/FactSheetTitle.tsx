@@ -14,7 +14,7 @@ type Props = {
 };
 export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Props) {
   const padding = useFactSheetPadding();
-  const { sm: isSmallDisplay } = useDisplaySize();
+  const { xs: isXsDisplay, sm: isSmallDisplay } = useDisplaySize();
   return (
     <Group
       pos="sticky"
@@ -32,7 +32,7 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
       <Caret position="tl" color={color} />
       <Caret position="br" color={color} />
       <Group gap={0} align="baseline">
-        <Title order={2} pr="xs">
+        <Title order={isXsDisplay ? 3 : 2} pr="xs">
           {title}
         </Title>
         <Title order={6} c="dimmed">
