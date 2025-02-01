@@ -5,12 +5,16 @@ import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/regimes.ts';
+import { SPACECRAFT } from '../../lib/spacecraft.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from '../FactSheet/CelestialBodyThumbnail.tsx';
+import { Thumbnail } from '../FactSheet/Thumbnail.tsx';
 import { iconSize } from './constants.ts';
 import styles from './SelectOmnibox.module.css';
+
+const THUMBNAIL_SIZE = 24;
 
 type Props = {
   settings: Settings;
@@ -32,8 +36,8 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             ff={LABEL_FONT_FAMILY}
             leftSection={
               // TODO: lazy load thumbnails for visible objects only
-              <Box miw={24}>
-                <CelestialBodyThumbnail body={body} size={24} />
+              <Box miw={THUMBNAIL_SIZE}>
+                <CelestialBodyThumbnail body={body} size={THUMBNAIL_SIZE} radius="sm" />
               </Box>
             }
             rightSection={
@@ -44,6 +48,32 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             onClick={() => updateSettings(prev => ({ ...prev, center: body.id }))}
           />
         )),
+    [query, JSON.stringify(settings.bodies)]
+  );
+
+  const spacecraftItems = useMemo(
+    () =>
+      SPACECRAFT.filter(({ name }) => query.length === 0 || name.toLowerCase().includes(query.toLowerCase())).map(
+        (spacecraft, i) => (
+          <Spotlight.Action
+            key={`${spacecraft.name}-${i}`}
+            label={spacecraft.name}
+            className={styles.Action}
+            ff={LABEL_FONT_FAMILY}
+            leftSection={
+              <Box miw={THUMBNAIL_SIZE}>
+                <Thumbnail thumbnail={spacecraft.thumbnail} size={THUMBNAIL_SIZE} radius="sm" />
+              </Box>
+            }
+            rightSection={
+              <Text c="dimmed" size="xs" ff={LABEL_FONT_FAMILY}>
+                {spacecraft.organization} Spacecraft
+              </Text>
+            }
+            onClick={() => updateSettings(prev => ({ ...prev, center: spacecraft.id }))}
+          />
+        )
+      ),
     [query, JSON.stringify(settings.bodies)]
   );
 
@@ -106,13 +136,19 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             }
           />
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
-            {bodyItems.length + regimeItems.length < 1 && (
+            {bodyItems.length + spacecraftItems.length + regimeItems.length < 1 && (
               <Spotlight.Empty ff={LABEL_FONT_FAMILY}>Nothing found...</Spotlight.Empty>
             )}
             {bodyItems.length > 0 && (
               <Spotlight.ActionsGroup ff={LABEL_FONT_FAMILY} label="Celestial Bodies">
                 <Box pb="xs" />
                 {bodyItems}
+              </Spotlight.ActionsGroup>
+            )}
+            {spacecraftItems.length > 0 && (
+              <Spotlight.ActionsGroup ff={LABEL_FONT_FAMILY} label="Spacecraft">
+                <Box pb="xs" />
+                {spacecraftItems}
               </Spotlight.ActionsGroup>
             )}
             {regimeItems.length > 0 && (

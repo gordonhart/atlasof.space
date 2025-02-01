@@ -1,6 +1,13 @@
 import { AU } from './bodies.ts';
 import { Time } from './epoch.ts';
-import { CelestialBody, CelestialBodyStyle, CelestialBodyType, HexColor } from './types.ts';
+import {
+  asCelestialBodyId,
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyStyle,
+  CelestialBodyType,
+  HexColor,
+} from './types.ts';
 
 export function pluralize(n: number, unit: string) {
   const nAbs = Math.abs(n);
@@ -63,16 +70,17 @@ export function notNullish<TValue>(value: TValue | null | undefined): value is T
 }
 
 export function nameToId(name: string, shortName?: string) {
-  return (shortName ?? name).replace(/\s+/g, '-').toLowerCase();
+  return (shortName ?? name).replace(/\s+/g, '-').replace(/'/g, '-').toLowerCase();
 }
 
-const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#aaaaaa',
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
   [CelestialBodyType.COMET]: '#51807c',
   [CelestialBodyType.DWARF_PLANET]: '#998a98',
-  [CelestialBodyType.SPACECRAFT]: '#50C878',
+  [CelestialBodyType.SPACECRAFT]: DEFAULT_SPACECRAFT_COLOR,
 };
 const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#888888',
@@ -80,11 +88,11 @@ const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } =
   [CelestialBodyType.DWARF_PLANET]: '#6e636d',
 };
 export function celestialBodyWithDefaults(
-  body: Omit<CelestialBody, 'id' | 'style'> & { id?: string; style?: CelestialBodyStyle }
+  body: Omit<CelestialBody, 'id' | 'style'> & { id?: CelestialBodyId; style?: CelestialBodyStyle }
 ): CelestialBody {
   return {
     ...body,
-    id: body.id ?? nameToId(body.name, body.shortName),
+    id: body.id ?? asCelestialBodyId(nameToId(body.name, body.shortName)),
     style: {
       fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_FG_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
       bgColor: body.style?.bgColor ?? body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],

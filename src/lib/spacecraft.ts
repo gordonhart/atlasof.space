@@ -1,21 +1,15 @@
 import { map } from 'ramda';
 import * as Bodies from './bodies.ts';
-import { CelestialBodyId } from './types.ts';
+import {
+  CelestialBodyId,
+  Spacecraft,
+  SpacecraftId,
+  SpacecraftOrganization,
+  SpacecraftOrganizationDetails,
+  SpacecraftStatus,
+  SpacecraftVisitType,
+} from './types.ts';
 import { nameToId } from './utils.ts';
-
-export enum SpacecraftOrganization {
-  NASA = 'NASA',
-  USSR = 'USSR',
-  ESA = 'ESA',
-  JAXA = 'JAXA',
-  CNSA = 'CNSA',
-}
-
-export type SpacecraftOrganizationDetails = {
-  name: string;
-  shortName: string;
-  thumbnail: string;
-};
 
 export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, SpacecraftOrganizationDetails> = {
   [SpacecraftOrganization.NASA]: {
@@ -45,50 +39,8 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
   },
 };
 
-// TODO: mixing concerns here -- some are identity-related, others are visit-related
-export enum SpacecraftVisitType {
-  FLYBY = 'Flyby',
-  GRAVITY_ASSIST = 'Gravity Assist',
-  ORBITER = 'Orbiter',
-  LANDER = 'Lander',
-  ROVER = 'Rover',
-  HELICOPTER = 'Helicopter',
-  IMPACTOR = 'Impactor',
-}
-
-export enum SpacecraftStatus {
-  OPERATIONAL = 'Operational',
-  DEFUNCT = 'Defunct',
-  DECOMMISSIONED = 'Decommissioned',
-  RETURNED = 'Returned',
-  CRASHED = 'Crashed',
-}
-
-export type SpacecraftId = string;
-export type Spacecraft = {
-  id: SpacecraftId;
-  name: string;
-  organization: SpacecraftOrganization;
-  launchMass: number; // kg
-  power?: number; // watts
-  start: Date; // TODO: rename to launchDate?
-  end?: Date;
-  cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
-  status: { status: SpacecraftStatus; details?: string };
-  thumbnail?: string;
-  wiki: string;
-  crew?: Array<string>;
-  // TODO: many spacecraft fly by an object multiple times -- is it worth representing that? tons of data to transcribe
-  visited: Array<{
-    id: CelestialBodyId;
-    type: SpacecraftVisitType;
-    start: Date;
-    end?: Date;
-  }>;
-};
-
 function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
-  return { ...spacecraft, id: nameToId(spacecraft.name) };
+  return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
 }
 
 export const VOYAGER_1 = spacecraftWithDefaults({
@@ -191,10 +143,12 @@ export const CASSINI = spacecraftWithDefaults({
   launchMass: 5712,
   power: 885,
   start: new Date('1997-10-15T08:43:00Z'),
+  end: new Date('2017-09-15T11:55:00Z'),
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
     details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
   },
+  focusId: Bodies.SATURN.id,
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
   visited: [
@@ -228,10 +182,19 @@ export const HUYGENS = spacecraftWithDefaults({
   launchMass: 320,
   power: 600, // 1800 Wh, estimated battery life of 3 hours
   start: new Date('1997-10-15T08:43:00Z'),
+  end: new Date('2005-01-14T13:37:00Z'),
+  focusId: Bodies.TITAN.id,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
-  visited: [{ id: Bodies.TITAN.id, type: SpacecraftVisitType.LANDER, start: new Date('2005-01-14T12:43:00Z') }],
+  visited: [
+    {
+      id: Bodies.TITAN.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2005-01-14T12:43:00Z'),
+      end: new Date('2005-01-14T13:37:00Z'),
+    },
+  ],
 });
 
 export const CURIOSITY = spacecraftWithDefaults({
@@ -240,6 +203,7 @@ export const CURIOSITY = spacecraftWithDefaults({
   launchMass: 899,
   power: 100,
   start: new Date('2011-11-26T15:02:00Z'),
+  focusId: Bodies.MARS.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'curiosity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
@@ -252,6 +216,7 @@ export const PERSEVERANCE = spacecraftWithDefaults({
   launchMass: 1025,
   power: 110,
   start: new Date('2020-07-30T11:50:00Z'),
+  focusId: Bodies.MARS.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'perseverance-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
@@ -265,6 +230,7 @@ export const INGENUITY = spacecraftWithDefaults({
   power: 350,
   start: new Date('2020-07-30T11:50:00Z'),
   end: new Date('2024-01-18T12:00:00Z'),
+  focusId: Bodies.MARS.id,
   status: {
     status: SpacecraftStatus.DEFUNCT,
     details: 'Retired in 2024 due to sustained rotor damage',
@@ -313,6 +279,8 @@ export const GALILEO = spacecraftWithDefaults({
   launchMass: 2560,
   power: 570,
   start: new Date('1989-10-18T16:53:40Z'),
+  end: new Date('2003-09-21T18:57:18Z'),
+  focusId: Bodies.JUPITER.id,
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
     details: "Intentionally flown into Jupiter's atmosphere on September 21, 2003",
@@ -343,6 +311,7 @@ export const BEPICOLOMBO = spacecraftWithDefaults({
   launchMass: 4100,
   power: 150,
   start: new Date('2018-10-20T01:45:00Z'),
+  focusId: Bodies.MERCURY.id,
   status: { status: SpacecraftStatus.OPERATIONAL, details: 'Planned to enter Mercury orbit in November 2026' },
   thumbnail: 'bepicolombo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/BepiColombo',
@@ -359,6 +328,8 @@ export const MESSENGER = spacecraftWithDefaults({
   launchMass: 1107.9,
   power: 450,
   start: new Date('2004-08-03T06:15:56Z'),
+  end: new Date('2015-04-30T19:26:00Z'),
+  focusId: Bodies.MERCURY.id,
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
     details: 'Intentionally crashed into Mercury on April 30th, 2015',
@@ -377,12 +348,17 @@ export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
   launchMass: 685,
   power: 343,
   start: new Date('2018-08-12T07:31:00Z'),
+  focusId: Bodies.SOL.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'parker-solar-probe-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
   visited: [
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
-    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-08-12T07:31:00Z') },
+    {
+      id: Bodies.SOL.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2018-11-06T03:27:00Z'), // first perihelion
+    },
   ],
 });
 
@@ -392,6 +368,7 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   launchMass: 1800,
   power: 180,
   start: new Date('2020-02-10T04:03:00Z'),
+  focusId: Bodies.SOL.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'solar-orbiter-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Solar_Orbiter',
@@ -408,6 +385,7 @@ export const MARINER_2 = spacecraftWithDefaults({
   launchMass: Bodies.MARINER_2.mass,
   power: 220,
   start: new Date('1962-08-27T06:53:14Z'),
+  end: new Date('1963-01-03T07:00:00Z'),
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
   wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
   thumbnail: Bodies.MARINER_2.assets!.thumbnail,
@@ -419,6 +397,8 @@ export const VENERA_7 = spacecraftWithDefaults({
   organization: SpacecraftOrganization.USSR,
   launchMass: 1180,
   start: new Date('1970-08-17T05:38:22Z'),
+  end: new Date('1970-12-15T06:00:00Z'),
+  focusId: Bodies.VENUS.id,
   status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'venera-7-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venera_7',
@@ -431,6 +411,8 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
   launchMass: 1270,
   power: 1100,
   start: new Date('2005-11-09T03:33:34Z'),
+  end: new Date('2015-01-18T15:01:55Z'),
+  focusId: Bodies.VENUS.id,
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
   thumbnail: 'venus-express-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venus_Express',
@@ -450,6 +432,7 @@ export const JUNO = spacecraftWithDefaults({
   launchMass: 3625,
   power: 14000, // at Earth, solar
   start: new Date('2011-08-05T16:25:00Z'),
+  focusId: Bodies.JUPITER.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'juno-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Juno_(spacecraft)',
@@ -467,6 +450,7 @@ export const JUICE = spacecraftWithDefaults({
   launchMass: 6070,
   power: 850,
   start: new Date('2023-04-14T12:14:36Z'),
+  focusId: Bodies.JUPITER.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'juice-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
@@ -486,6 +470,7 @@ export const LUCY = spacecraftWithDefaults({
   launchMass: 1550,
   power: 504,
   start: new Date('2021-10-16T09:34:02Z'),
+  focusId: Bodies.JUPITER.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'lucy-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Lucy_(spacecraft)',
@@ -502,6 +487,8 @@ export const DART = spacecraftWithDefaults({
   launchMass: 610,
   power: 6600,
   start: new Date('2021-11-24T06:21:02Z'),
+  end: new Date('2022-09-26T23:14:00Z'),
+  focusId: Bodies.DIDYMOS.id,
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
   thumbnail: 'dart-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
@@ -514,6 +501,7 @@ export const PSYCHE = spacecraftWithDefaults({
   launchMass: 2608,
   power: 4500,
   start: new Date('2023-10-13T14:19:00Z'),
+  focusId: Bodies.PSYCHE.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'psyche-spacecraft-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
@@ -525,6 +513,7 @@ export const HERA = spacecraftWithDefaults({
   organization: SpacecraftOrganization.ESA,
   launchMass: 1128,
   start: new Date('2024-10-07T14:52:11Z'),
+  focusId: Bodies.DIDYMOS.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'hera-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
@@ -540,6 +529,7 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
   launchMass: 6065,
   power: 600,
   start: new Date('2024-10-14T16:06:00Z'),
+  focusId: Bodies.JUPITER.id,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'europa-clipper-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
@@ -558,6 +548,7 @@ export const APOLLO_8 = spacecraftWithDefaults({
   launchMass: 28870,
   start: new Date('1968-12-21T12:51:00Z'),
   end: new Date('1968-12-27T15:51:42Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-8-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_8',
@@ -578,6 +569,7 @@ export const APOLLO_10 = spacecraftWithDefaults({
   launchMass: 42775,
   start: new Date('1969-05-18T16:49:00Z'),
   end: new Date('1969-05-26T16:52:23Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-10-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_10',
@@ -598,6 +590,7 @@ export const APOLLO_11 = spacecraftWithDefaults({
   launchMass: 49735,
   start: new Date('1969-07-16T13:32:00Z'),
   end: new Date('1969-07-24T16:50:35Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-11-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_11',
@@ -618,6 +611,7 @@ export const APOLLO_12 = spacecraftWithDefaults({
   launchMass: 49915,
   start: new Date('1969-11-14T16:22:00Z'),
   end: new Date('1969-11-24T20:58:24Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-12-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_12',
@@ -638,6 +632,7 @@ export const APOLLO_13 = spacecraftWithDefaults({
   launchMass: 44069,
   start: new Date('1970-04-11T19:13:00Z'),
   end: new Date('1970-04-17T18:07:41Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-13-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_13',
@@ -651,6 +646,7 @@ export const APOLLO_14 = spacecraftWithDefaults({
   launchMass: 46305,
   start: new Date('1971-01-31T21:03:02Z'),
   end: new Date('1971-02-09T21:05:02Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-14-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_14',
@@ -671,6 +667,7 @@ export const APOLLO_15 = spacecraftWithDefaults({
   launchMass: 48599,
   start: new Date('1971-07-26T13:34:00Z'),
   end: new Date('1971-08-07T20:45:53Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-15-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_15',
@@ -691,6 +688,7 @@ export const APOLLO_16 = spacecraftWithDefaults({
   launchMass: 52759,
   start: new Date('1972-04-16T17:54:00Z'),
   end: new Date('1972-04-27T19:45:05Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-16-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_16',
@@ -711,6 +709,7 @@ export const APOLLO_17 = spacecraftWithDefaults({
   launchMass: 48609,
   start: new Date('1972-12-07T05:33:00Z'),
   end: new Date('1972-12-19T19:54:58Z'),
+  focusId: Bodies.LUNA.id,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-17-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_17',
@@ -751,6 +750,7 @@ export const NEAR_SHOEMAKER = spacecraftWithDefaults({
   power: 1800,
   start: new Date('1996-02-17T20:43:27Z'),
   end: new Date('2001-02-28T00:00:00Z'),
+  focusId: Bodies.EROS.id,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Soft landed on 433 Eros on February 12, 2001' },
   wiki: 'https://en.wikipedia.org/wiki/NEAR_Shoemaker',
   thumbnail: 'near-shoemaker-thumb.png',
@@ -771,6 +771,7 @@ export const DEEP_SPACE_1 = spacecraftWithDefaults({
   launchMass: 486,
   power: 2500,
   start: new Date('1998-10-24T12:08:00Z'),
+  end: new Date('2001-12-18T20:00:00Z'),
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Space_1',
   thumbnail: 'deep-space-1-thumb.png',
@@ -787,6 +788,7 @@ export const ROSETTA = spacecraftWithDefaults({
   power: 850,
   start: new Date('2004-03-02T07:17:51Z'),
   end: new Date('2016-09-30T10:39:28Z'),
+  focusId: Bodies.CG67P.id,
   status: {
     status: SpacecraftStatus.DECOMMISSIONED,
     details: 'Intentionally deorbited into Comet 67P in September 2016',
@@ -813,6 +815,7 @@ export const HAYABUSA = spacecraftWithDefaults({
   launchMass: 510,
   start: new Date('2003-05-09T04:29:25Z'),
   end: new Date('2010-06-13T14:12:00Z'),
+  focusId: Bodies.ITOKAWA.id,
   status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with samples of Itokawa in 2010' },
   wiki: 'https://en.wikipedia.org/wiki/Hayabusa',
   thumbnail: 'hayabusa-thumb.jpg',
@@ -833,6 +836,7 @@ export const DAWN = spacecraftWithDefaults({
   power: 10000,
   start: new Date('2007-09-27T11:34:00Z'),
   end: new Date('2018-10-30T12:00:00Z'),
+  focusId: Bodies.CERES.id,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Remains in a stable orbit around Ceres' },
   wiki: 'https://en.wikipedia.org/wiki/Dawn_(spacecraft)',
   thumbnail: 'dawn-thumb.png',
@@ -859,6 +863,7 @@ export const CHANGE_2 = spacecraftWithDefaults({
   organization: SpacecraftOrganization.CNSA,
   launchMass: 2480,
   start: new Date('2010-10-01T10:59:00Z'),
+  end: new Date(2014, 6, 1),
   status: { status: SpacecraftStatus.DEFUNCT, details: "Drifting out beyond Earth's orbit" },
   wiki: 'https://en.wikipedia.org/wiki/Chang%27e_2',
   thumbnail: 'change-2-thumb.jpg',
@@ -881,6 +886,7 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
   power: 2600,
   start: new Date('2014-12-03T04:22:04Z'),
   end: new Date('2020-12-05T12:00:00Z'),
+  focusId: Bodies.RYUGU.id,
   status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
   wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
   thumbnail: 'hayabusa-2-thumb.jpg',
@@ -894,6 +900,7 @@ export const OSIRIS_REX = spacecraftWithDefaults({
   power: 3000,
   start: new Date('2016-09-08T23:05:00Z'),
   end: new Date('2023-09-24T14:52:00Z'),
+  focusId: Bodies.BENNU.id,
   status: {
     status: SpacecraftStatus.RETURNED,
     details: 'Capsule returned to Earth with 121.6 grams of material from Bennu',
@@ -1016,7 +1023,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   JUICE,
   JUNO,
   EUROPA_CLIPPER,
-];
+].sort((a, b) => a.start.getTime() - b.start.getTime());
 
 export const SPACECRAFT_BY_BODY_ID = map(
   spacecraft => spacecraft.sort((a, b) => a.start.getTime() - b.start.getTime()),
@@ -1028,14 +1035,7 @@ export const SPACECRAFT_BY_BODY_ID = map(
   }, {})
 );
 
-export function isSpacecraft(obj: unknown): obj is Spacecraft {
-  return (
-    obj != null &&
-    typeof obj === 'object' &&
-    'name' in obj &&
-    typeof obj.name === 'string' &&
-    'organization' in obj &&
-    typeof obj.organization === 'string' &&
-    Object.values(SpacecraftOrganization).includes(obj.organization as SpacecraftOrganization)
-  );
-}
+export const SPACECRAFT_BY_ID = SPACECRAFT.reduce<Record<SpacecraftId, Spacecraft>>((acc, spacecraft) => {
+  acc[spacecraft.id] = spacecraft;
+  return acc;
+}, {});

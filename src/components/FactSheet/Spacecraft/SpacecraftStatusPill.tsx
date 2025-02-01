@@ -1,6 +1,6 @@
 import { Group, Pill, Tooltip } from '@mantine/core';
 import { IconCircleFilled } from '@tabler/icons-react';
-import { Spacecraft, SpacecraftStatus } from '../../lib/spacecraft.ts';
+import { Spacecraft, SpacecraftStatus } from '../../../lib/types.ts';
 import styles from './SpacecraftStatusPill.module.css';
 
 type Props = {

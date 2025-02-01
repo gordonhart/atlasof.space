@@ -1,13 +1,13 @@
 import { Group, Pill } from '@mantine/core';
 import { IconCircleDotFilled } from '@tabler/icons-react';
 import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
-import { Settings } from '../../lib/state.ts';
-import { HeliocentricOrbitalRegime } from '../../lib/types.ts';
+import { UpdateSettings } from '../../lib/state.ts';
+import { OrbitalRegimeId } from '../../lib/types.ts';
 import styles from './RelatedBodies.module.css';
 
 type Props = {
-  regime: HeliocentricOrbitalRegime;
-  updateSettings: (update: Partial<Settings>) => void;
+  regime: OrbitalRegimeId;
+  updateSettings: UpdateSettings;
 };
 export function OrbitalRegimePill({ regime, updateSettings }: Props) {
   return (

@@ -1,13 +1,13 @@
 import { Group, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
-import { Settings } from '../../lib/state.ts';
+import { UpdateSettings } from '../../lib/state.ts';
 import { OrbitalRegime } from '../../lib/types.ts';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 
 type Props = {
   regime?: OrbitalRegime;
-  updateSettings: (update: Partial<Settings>) => void;
+  updateSettings: UpdateSettings;
   title?: string;
 };
 export function OtherRegimes({ regime, updateSettings, title = 'Other Orbital Regimes' }: Props) {

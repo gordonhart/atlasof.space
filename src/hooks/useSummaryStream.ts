@@ -1,53 +1,31 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import { readStreamResponse } from '../lib/functions.ts';
 import { orbitalRegimeDisplayName } from '../lib/regimes.ts';
-import { isSpacecraft, Spacecraft, SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
 import {
   CelestialBody,
   CelestialBodyType,
-  HeliocentricOrbitalRegime,
+  OrbitalRegimeId,
   isOrbitalRegime,
+  isSpacecraft,
   OrbitalRegime,
+  Spacecraft,
 } from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
 
 export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft) {
-  const [isStreaming, setIsStreaming] = useState(false);
   const search = useMemo(() => getSearch(obj), [JSON.stringify(obj)]);
-
+  const [isStreaming, setIsStreaming] = useState(false);
   const queryClient = useQueryClient();
   const queryKey = ['GET', 'facts', search];
 
-  // TODO: dedupe logic with useFactsStream
   const query = useQuery({
     queryKey,
     queryFn: async ({ signal }) => {
-      setIsStreaming(true);
       const response = await fetch(`/api/summary?search=${encodeURIComponent(search)}`, { signal });
-      const reader = response.body?.getReader();
-      if (reader == null) return '';
-      let out = '';
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const messages = buffer.split('\n\n'); // Process complete SSE messages
-        buffer = messages.pop() || ''; // Keep incomplete chunk in buffer
-        for (const message of messages) {
-          if (message.startsWith('data: ')) {
-            const data = JSON.parse(message.slice(6));
-            out = `${out}${data.content}`;
-            queryClient.setQueryData<string>(queryKey, out);
-          }
-        }
-      }
-
-      // TODO: error handling..? don't want failures to look like infinite loads
-      setIsStreaming(false);
-      return out;
+      const setData = (data: string) => queryClient.setQueryData<string>(queryKey, data);
+      return await readStreamResponse(response, setIsStreaming, setData);
     },
     staleTime: Infinity,
   });
@@ -58,7 +36,7 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft
 function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft) {
   if (isOrbitalRegime(obj)) {
     // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
-    const orbitalRegimes = Object.values(HeliocentricOrbitalRegime).map(orbitalRegimeDisplayName).join(', ');
+    const orbitalRegimes = Object.values(OrbitalRegimeId).map(orbitalRegimeDisplayName).join(', ');
     return `the heliocentric orbital regime '${orbitalRegimeDisplayName(obj.id)}' (of the set with ${orbitalRegimes})`;
   }
   if (isSpacecraft(obj)) {

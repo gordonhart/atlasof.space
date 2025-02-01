@@ -44,6 +44,7 @@ Infrastructure dependencies:
 - [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
   in [`./functions`](./functions)
 - [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
+- [Anthropic API](https://docs.anthropic.com): generate grounded facts and summaries via server-side functions
 
 ### Resources
 
@@ -71,7 +72,7 @@ Infrastructure dependencies:
   - [ ] Improve offscreen indicator rendering for moons when the main planet is not visible
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
-  - [ ] Add fact sheet for spacecraft
-    - [ ] Set spacecraft ID as URL part for deep linking
+  - [x] Add fact sheet for spacecraft
+    - [x] Set spacecraft ID as URL part for deep linking
   - [ ] Add fact sheet for organization, listing spacecraft
   - [ ] Add differentiated default colors for TNOs

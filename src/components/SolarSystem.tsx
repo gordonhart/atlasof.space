@@ -1,18 +1,29 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
-import { DEFAULT_ORBITAL_REGIME_COLOR, ORBITAL_REGIMES } from '../lib/regimes.ts';
-import { initialState, UpdateSettings } from '../lib/state.ts';
-import { CelestialBody, Epoch, isCelestialBody } from '../lib/types.ts';
+import { useUrlState } from '../hooks/useUrlState.ts';
+import { ORBITAL_REGIMES } from '../lib/regimes.ts';
+import { SPACECRAFT } from '../lib/spacecraft.ts';
+import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
+import {
+  CelestialBody,
+  Epoch,
+  isCelestialBody,
+  isCelestialBodyId,
+  isOrbitalRegimeId,
+  isSpacecraft,
+  isSpacecraftId,
+} from '../lib/types.ts';
+import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
-  const { id } = useParams();
-  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: id ?? null } };
+  const { center: urlCenter } = useUrlState();
+  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
   const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
   const model = useSolarSystemModel();
@@ -35,12 +46,12 @@ export function SolarSystem() {
 
   // sync URL to center
   useEffect(() => {
-    if (settings.center !== id) updateSettings({ center: id });
-  }, [id]);
+    if (settings.center !== urlCenter) updateSettings({ center: urlCenter });
+  }, [urlCenter]);
 
   // sync center back to URL when state changes are initiated by non-URL source
   useEffect(() => {
-    if (settings.center != null && settings.center !== id) navigate(`/${settings.center}`);
+    if (settings.center !== urlCenter) navigate(itemIdAsRoute(settings.center));
   }, [settings.center]);
 
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
@@ -99,11 +110,19 @@ export function SolarSystem() {
   }, [settings.center]);
 
   const focusItem = useMemo(() => {
-    const focusBody = settings.bodies.find(body => body.id === settings.center);
-    const focusRegime = ORBITAL_REGIMES.find(({ id }) => id === settings.center);
-    return focusBody ?? focusRegime;
+    return isCelestialBodyId(settings.center)
+      ? settings.bodies.find(({ id }) => id === settings.center)
+      : isOrbitalRegimeId(settings.center)
+        ? ORBITAL_REGIMES.find(({ id }) => id === settings.center)
+        : isSpacecraftId(settings.center)
+          ? SPACECRAFT.find(({ id }) => id === settings.center)
+          : undefined;
   }, [settings.center, JSON.stringify(settings.bodies)]);
-  const focusColor = isCelestialBody(focusItem) ? focusItem.style.fgColor : DEFAULT_ORBITAL_REGIME_COLOR;
+  const focusColor = isCelestialBody(focusItem)
+    ? focusItem.style.fgColor
+    : isSpacecraft(focusItem)
+      ? DEFAULT_SPACECRAFT_COLOR
+      : DEFAULT_ASTEROID_COLOR;
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
@@ -131,7 +150,7 @@ export function SolarSystem() {
       </Box>
       {focusItem != null && (
         <Box
-          h={isSmallDisplay ? '50dvh' : '100dvh'}
+          h={isSmallDisplay ? '60dvh' : '100dvh'}
           w={isSmallDisplay ? undefined : 600}
           style={{
             borderLeft: isSmallDisplay ? undefined : `1px solid ${focusColor}`,

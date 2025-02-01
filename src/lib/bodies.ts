@@ -1,7 +1,7 @@
 import { J2000, julianDayToEpoch, Time } from './epoch.ts';
 import { estimateAsteroidMass } from './physics.ts';
 import { SBDB_URL } from './sbdb.ts';
-import { CelestialBody, CelestialBodyType, HeliocentricOrbitalRegime } from './types.ts';
+import { asCelestialBodyId, CelestialBody, CelestialBodyType, OrbitalRegimeId } from './types.ts';
 import { celestialBodyWithDefaults } from './utils.ts';
 
 export const AU = 1.495978707e11; // meters;
@@ -45,7 +45,7 @@ export const MERCURY = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Mercury',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -80,7 +80,7 @@ export const VENUS = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Venus',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -115,7 +115,7 @@ export const EARTH = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Earth',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -185,7 +185,7 @@ export const MARS = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Mars',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -271,7 +271,7 @@ export const CERES = celestialBodyWithDefaults({
   name: '1 Ceres',
   shortName: 'Ceres',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2459600.5'),
@@ -299,7 +299,7 @@ export const PALLAS = celestialBodyWithDefaults({
   name: '2 Pallas',
   shortName: 'Pallas',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2453300.5'),
@@ -320,7 +320,7 @@ export const JUNO = celestialBodyWithDefaults({
   name: '3 Juno',
   shortName: 'Juno',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: J2000, // TODO: verify
@@ -341,7 +341,7 @@ export const VESTA = celestialBodyWithDefaults({
   name: '4 Vesta',
   shortName: 'Vesta',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2453300.5'),
@@ -362,7 +362,7 @@ export const HEBE = celestialBodyWithDefaults({
   name: '6 Hebe',
   shortName: 'Hebe',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -384,7 +384,7 @@ export const IRIS = celestialBodyWithDefaults({
   name: '7 Iris',
   shortName: 'Iris',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -406,7 +406,7 @@ export const HYGIEA = celestialBodyWithDefaults({
   name: '10 Hygiea',
   shortName: 'Hygiea',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: J2000, // TODO: verify
@@ -427,7 +427,7 @@ export const PSYCHE = celestialBodyWithDefaults({
   name: '16 Psyche',
   shortName: 'Psyche',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -460,7 +460,7 @@ export const LUTETIA = celestialBodyWithDefaults({
   name: '21 Lutetia',
   shortName: 'Lutetia',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: J2000, // TODO: verify
@@ -485,7 +485,7 @@ export const IDA = celestialBodyWithDefaults({
   name: '243 Ida',
   shortName: 'Ida',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -507,7 +507,7 @@ export const MATHILDE = celestialBodyWithDefaults({
   name: '253 Mathilde',
   shortName: 'Mathilde',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: J2000, // TODO: verify
@@ -528,7 +528,7 @@ export const EROS = celestialBodyWithDefaults({
   name: '433 Eros',
   shortName: 'Eros',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM, // NEA
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM, // NEA
   elements: {
     wrt: SOL.id,
     epoch: J2000, // TODO: verify
@@ -549,7 +549,7 @@ export const GASPRA = celestialBodyWithDefaults({
   name: '951 Gaspra',
   shortName: 'Gaspra',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -567,12 +567,12 @@ export const GASPRA = celestialBodyWithDefaults({
 });
 
 export const STEINS = celestialBodyWithDefaults({
-  id: 'steins',
+  id: asCelestialBodyId('steins'),
   type: CelestialBodyType.ASTEROID,
   name: '2867 Šteins',
   shortName: 'Šteins',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -594,7 +594,7 @@ export const TOUTATIS = celestialBodyWithDefaults({
   name: '4179 Toutatis',
   shortName: 'Toutatis',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2454797.5'),
@@ -615,7 +615,7 @@ export const NEREUS = celestialBodyWithDefaults({
   name: '4660 Nereus',
   shortName: 'Nereus',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2459396.5'),
@@ -640,7 +640,7 @@ export const BRAILLE = celestialBodyWithDefaults({
   name: '9969 Braille',
   shortName: 'Braille',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2458000.5'),
@@ -661,7 +661,7 @@ export const ITOKAWA = celestialBodyWithDefaults({
   name: '25143 Itokawa',
   shortName: 'Itokawa',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -683,7 +683,7 @@ export const DIDYMOS = celestialBodyWithDefaults({
   name: '65803 Didymos',
   shortName: 'Didymos',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM, // NEA
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM, // NEA
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
@@ -705,7 +705,7 @@ export const BENNU = celestialBodyWithDefaults({
   name: '101955 Bennu',
   shortName: 'Bennu',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2455562.5'),
@@ -729,7 +729,7 @@ export const DINKINESH = celestialBodyWithDefaults({
   name: '152830 Dinkinesh',
   shortName: 'Dinkinesh',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.ASTEROID_BELT,
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2460000.5'),
@@ -752,7 +752,7 @@ export const RYUGU = celestialBodyWithDefaults({
   name: '162173 Ryugu',
   shortName: 'Ryugu',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2455907.5'),
@@ -801,7 +801,7 @@ export const ASTEROIDS = [
 ];
 
 export const CG67P = celestialBodyWithDefaults({
-  id: 'cg67p',
+  id: asCelestialBodyId('cg67p'),
   type: CelestialBodyType.COMET,
   name: '67P/Churyumov–Gerasimenko',
   shortName: '67P/C–G',
@@ -894,7 +894,7 @@ export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',
   type: CelestialBodyType.SPACECRAFT,
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD'),
@@ -918,7 +918,7 @@ export const TESLA_ROADSTER = celestialBodyWithDefaults({
   shortName: 'Roadster',
   type: CelestialBodyType.SPACECRAFT,
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.INNER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -943,7 +943,7 @@ export const PLUTO = celestialBodyWithDefaults({
   // TODO: Charon is large enough that Charon and Pluto co-orbit their barycenter; this is not reflected by this
   //  parent-child relationship
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -1079,7 +1079,7 @@ export const QUAOAR = celestialBodyWithDefaults({
   name: '50000 Quaoar',
   shortName: 'Quaoar',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2459000.5'),
@@ -1100,7 +1100,7 @@ export const SEDNA = celestialBodyWithDefaults({
   name: '90377 Sedna',
   shortName: 'Sedna',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  orbitalRegime: OrbitalRegimeId.INNER_OORT_CLOUD,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2458900.5'),
@@ -1122,7 +1122,7 @@ export const ORCUS = celestialBodyWithDefaults({
   name: '90482 Orcus',
   shortName: 'Orcus',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2459000.5'),
@@ -1143,7 +1143,7 @@ export const ERIS = celestialBodyWithDefaults({
   name: '136199 Eris',
   shortName: 'Eris',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2459000.5'),
@@ -1164,7 +1164,7 @@ export const HAUMEA = celestialBodyWithDefaults({
   name: '136108 Haumea',
   shortName: 'Haumea',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2459200.5'),
@@ -1185,7 +1185,7 @@ export const MAKEMAKE = celestialBodyWithDefaults({
   name: '136472 Makemake',
   shortName: 'Makemake',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   elements: {
     wrt: SOL.id,
     epoch: julianDayToEpoch('JD2458900.5'),
@@ -1206,7 +1206,7 @@ export const ARROKOTH = celestialBodyWithDefaults({
   name: '486958 Arrokoth', // also known as Ultima Thule
   shortName: 'Arrokoth',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   mass: 7.485e14, // kg
   radius: 18e3, // m (average radius based on length of 36 km)
   elements: {
@@ -1230,7 +1230,7 @@ export const GONGGONG = celestialBodyWithDefaults({
   name: '225088 Gonggong',
   shortName: 'Gonggong',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.KUIPER_BELT,
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
   mass: 1.75e21, // kg
   radius: 615e3, // m
   elements: {
@@ -1250,7 +1250,7 @@ export const VP113 = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '2012 VP113',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  orbitalRegime: OrbitalRegimeId.INNER_OORT_CLOUD,
   mass: 1e21, // very very rough guess -- not known
   radius: 574e3 / 2, // m
   elements: {
@@ -1268,12 +1268,12 @@ export const VP113 = celestialBodyWithDefaults({
 });
 
 export const LELEAKUHONUA = celestialBodyWithDefaults({
-  id: 'leleakuhonua',
+  id: asCelestialBodyId('leleakuhonua'),
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '541132 Leleākūhonua',
   shortName: 'Leleākūhonua',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  orbitalRegime: OrbitalRegimeId.INNER_OORT_CLOUD,
   mass: 1e20, // unknown, extremely rough guess
   radius: 110e3 / 2,
   elements: {
@@ -1295,7 +1295,7 @@ export const FARFAROUT = celestialBodyWithDefaults({
   name: '2018 AG37 (FarFarOut)',
   shortName: 'FarFarOut',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.INNER_OORT_CLOUD,
+  orbitalRegime: OrbitalRegimeId.INNER_OORT_CLOUD,
   mass: estimateAsteroidMass(200e3), // unknown
   radius: 200e3, // estimate
   elements: {
@@ -1329,7 +1329,7 @@ export const JUPITER = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Jupiter',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -1446,7 +1446,7 @@ export const SATURN = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Saturn',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -1664,7 +1664,7 @@ export const URANUS = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Uranus',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000,
@@ -1809,7 +1809,7 @@ export const NEPTUNE = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,
   name: 'Neptune',
   influencedBy: [SOL.id],
-  orbitalRegime: HeliocentricOrbitalRegime.OUTER_SYSTEM,
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
   elements: {
     wrt: SOL.id,
     epoch: J2000, // TODO: verify
@@ -1969,5 +1969,5 @@ export const SOLAR_SYSTEM = [
   ...ASTEROIDS,
   ...COMETS,
   ...TRANS_NEPTUNIAN_OBJECTS,
-  ...SPACECRAFT,
+  // ...SPACECRAFT, // TODO: remove these entirely? clash with new spacecraft definitions
 ];
