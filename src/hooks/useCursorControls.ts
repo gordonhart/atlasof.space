@@ -39,7 +39,7 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
       dragDetectorRef.current = { ...dragDetector, dragged: dragDetector.dragged || distance > DRAG_PX_THRESHOLD };
     }
 
-    if (model == null) return;
+    if (model == null || dragDetectorRef.current?.dragged) return;
     const closeBody = model.findCloseBody([eventX, eventY], settings, interactPxThreshold);
     updateSettings({ hover: closeBody?.body?.id ?? null });
   }

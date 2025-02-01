@@ -1,6 +1,6 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo } from 'react';
-import { useDisplaySize } from '../../../hooks/useDisplaySize.ts';
+import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
@@ -26,14 +26,16 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
   hover,
   updateSettings,
 }: Props) {
-  const { xs: isXsDisplay } = useDisplaySize();
+  const padding = useFactSheetPadding();
 
   const bullets = [
     { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
-    { label: 'launch date', value: dateToISO(spacecraft.start) },
-    ...(spacecraft.end != null ? [{ label: 'mission end date', value: dateToISO(spacecraft.end) }] : []),
+    { label: 'launched', value: dateToISO(spacecraft.start) },
+    ...(spacecraft.end != null
+      ? [{ label: spacecraft.status.status.toLowerCase(), value: dateToISO(spacecraft.end) }]
+      : []),
     { label: 'launch mass', value: `${spacecraft.launchMass.toLocaleString()} kg` },
     ...(spacecraft.power != null ? [{ label: 'power', value: `${spacecraft.power.toLocaleString()} watts` }] : []),
   ];
@@ -48,34 +50,25 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
         onHover={hovered => updateSettings({ hover: hovered ? spacecraft.id : null })}
       />
 
-      {isXsDisplay ? (
-        <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
-          <FactSheetSummary obj={spacecraft} />
-          <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
-            <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={160} />
-          </Box>
-        </Group>
-      ) : (
+      <Box>
         <FactSheetSummary obj={spacecraft} />
-      )}
+      </Box>
 
       <Stack gap={2} flex={1}>
-        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
+        <Group {...padding} gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
             <FactGrid facts={bullets} keysWidth={120} />
           </Stack>
-          {!isXsDisplay && (
-            <Box style={{ flexShrink: 1 }}>
-              <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={220} />
-            </Box>
-          )}
+          <Box style={{ flexShrink: 1 }}>
+            <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={220} />
+          </Box>
         </Group>
 
         <MissionTimeline spacecraft={spacecraft} bodies={bodies} hover={hover} updateSettings={updateSettings} />
       </Stack>
 
-      <Box pt="md" style={{ justifySelf: 'flex-end' }}>
+      <Box style={{ justifySelf: 'flex-end' }}>
         <OtherSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
       </Box>
     </Stack>

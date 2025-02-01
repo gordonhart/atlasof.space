@@ -1,5 +1,6 @@
 import { Group, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { SPACECRAFT } from '../../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { Spacecraft } from '../../../lib/types.ts';
@@ -12,6 +13,7 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function OtherSpacecraft({ spacecraft, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
   const otherSpacecraft = useMemo(() => {
     const otherSpacecraft = SPACECRAFT.filter(({ id }) => id !== spacecraft.id);
     const spacecraftIndex = SPACECRAFT.findIndex(({ id }) => id === spacecraft.id);
@@ -21,7 +23,7 @@ export function OtherSpacecraft({ spacecraft, updateSettings }: Props) {
   }, [spacecraft.id]);
 
   return (
-    <Stack gap="xs" p="md" pt="lg">
+    <Stack {...padding}>
       <Title order={5}>Other Spacecraft</Title>
       <Group gap={8}>
         {otherSpacecraft.map((otherSpacecraft, i) => (

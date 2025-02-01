@@ -1,10 +1,14 @@
+import { useViewportSize } from '@mantine/hooks';
+
 export function useDisplaySize() {
-  return { sm: isSm(), xs: isXs() };
+  const size = useViewportSize();
+  const width = Math.max(size.width, window.innerWidth); // useViewportSize can return 0 briefly, apply max to deflicker
+  return { sm: isSm(width), xs: isXs(width) };
 }
 
-export function isXs() {
-  return window.innerWidth < 640;
+export function isXs(width: number) {
+  return width < 640;
 }
-export function isSm() {
-  return window.innerWidth < 1080;
+export function isSm(width: number) {
+  return width < 1080;
 }

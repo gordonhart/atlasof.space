@@ -1,6 +1,7 @@
 import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { LABEL_FONT_FAMILY } from '../../../lib/canvas.ts';
 import { datetimeToHumanReadable } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
@@ -9,7 +10,7 @@ import { DEFAULT_SPACECRAFT_COLOR, notNullish } from '../../../lib/utils.ts';
 import { MissionTimelineCard } from './MissionTimelineCard.tsx';
 import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 
-const TIMELINE_WIDTH = 100;
+const TIMELINE_WIDTH = 110;
 enum TimelineCap {
   START = 'timeline-start',
   END = 'timeline-end',
@@ -22,6 +23,7 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
   const { ref: timelineRef, height } = useElementSize();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const launchRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +77,7 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
   }, [visitedBodies, height, hover, hoverCap]);
 
   return (
-    <Stack gap="xs" p="md" pt="lg">
+    <Stack {...padding}>
       <Group gap="xs">
         <Title order={5}>Mission Timeline</Title>
         <SpacecraftStatusPill status={spacecraft.status} />
@@ -93,8 +95,10 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
             onMouseLeave={() => setHoverCap(null)}
           >
             {/* TODO: include information about launch (location, vehicle)? */}
-            <Group gap="xs" align="baseline">
-              <Title order={6}>Launch</Title>
+            <Group gap={0} align="baseline">
+              <Title order={6} mr="xs">
+                Launched
+              </Title>
               <Text c="dimmed" fz="xs">
                 {datetimeToHumanReadable(spacecraft.start)}
               </Text>
@@ -131,8 +135,10 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
               onMouseEnter={() => setHoverCap(TimelineCap.END)}
               onMouseLeave={() => setHoverCap(null)}
             >
-              <Group gap="xs" align="baseline">
-                <Title order={6}>{spacecraft.status.status ?? 'Mission End'}</Title>
+              <Group gap={0} align="baseline">
+                <Title order={6} mr="xs">
+                  {spacecraft.status.status ?? 'Mission End'}
+                </Title>
                 <Text c="dimmed" fz="xs">
                   {datetimeToHumanReadable(spacecraft.end)}
                 </Text>
@@ -166,7 +172,7 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
 
   ctx.font = `12px ${LABEL_FONT_FAMILY}`;
   const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText('0000');
-  const timelineLeft = dotRadius + 1 + textWidthPx;
+  const timelineLeft = dotRadius * 2 + 1 + textWidthPx;
   ctx.lineWidth = 1;
   ctx.strokeStyle = baseColor;
 
@@ -178,14 +184,14 @@ function renderTimeline(ctx: CanvasRenderingContext2D, items: Array<TimelineItem
   // TODO: more advanced logic to figure out the smallest number of lanes necessary to avoid overlaps
   const nLanes = Math.ceil(items.length / 2);
   const laneGutter = 20;
-  const laneWidth = (TIMELINE_WIDTH - 2 * laneGutter - timelineLeft) / (nLanes - 1);
+  const laneWidth = (TIMELINE_WIDTH - 2 * laneGutter - timelineLeft) / Math.max(nLanes - 1, 1);
   const drawnLabels = new Set();
 
   function drawConnector({ top, height, date, hover }: TimelineItem, i: number) {
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneIndex = Math.min(i, 2 * (nLanes - 1) - i);
+    const laneIndex = Math.max(Math.min(i, 2 * (nLanes - 1) - i), 0);
     const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;

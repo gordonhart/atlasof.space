@@ -1,5 +1,6 @@
 import { Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
@@ -13,6 +14,7 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function MajorSatellites({ body, bodies, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
   const bodiesByName = useMemo(() => Object.fromEntries(bodies.map(b => [b.name, b])), [JSON.stringify(bodies)]);
   const satellites = useMemo(
     () =>
@@ -31,7 +33,7 @@ export function MajorSatellites({ body, bodies, updateSettings }: Props) {
   const satelliteTypeDisplayName =
     satelliteTypes.size !== 1 ? 'Satellites' : celestialBodyTypeName(satelliteTypes.values().next().value!, true);
   return (
-    <Stack gap="xs" p="md" pt="lg">
+    <Stack gap="xs" {...padding}>
       <Title order={5}>Major {satelliteTypeDisplayName}</Title>
       {satellites.map((satellite, i) => (
         <BodyCard

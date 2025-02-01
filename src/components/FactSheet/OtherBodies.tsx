@@ -1,5 +1,6 @@
 import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
@@ -14,6 +15,7 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function OtherBodies({ body, bodies, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
   const otherBodies: Array<CelestialBody> = useMemo(() => {
     const bodiesOfType = bodies.filter(({ type }) => type === body.type);
     const bodyIndex = bodiesOfType.findIndex(({ name }) => name === body.name);
@@ -25,7 +27,7 @@ export function OtherBodies({ body, bodies, updateSettings }: Props) {
 
   const thumbnailSize = 14;
   return otherBodies.length > 0 ? (
-    <Stack gap="xs" p="md" pt="lg">
+    <Stack gap="xs" {...padding}>
       <Title order={5}>Other {celestialBodyTypeName(body.type, true)}</Title>
       <Group gap={8}>
         {otherBodies.map((relatedBody, i) => (

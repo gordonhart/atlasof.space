@@ -1,6 +1,7 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo, ReactNode } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
@@ -34,6 +35,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
   const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
   const { data: extraFacts, isLoading } = useFactsStream(assets?.search ?? `${name}+${type}`);
+  const padding = useFactSheetPadding();
   const { xs: isXsDisplay } = useDisplaySize();
 
   const parent = bodies.find(({ id }) => id === wrt);
@@ -85,7 +87,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       {isXsDisplay ? (
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
           <FactSheetSummary obj={body} />
-          <Box pt="md" pr="md" style={{ flexShrink: 0 }}>
+          <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
             <CelestialBodyThumbnail key={name} body={body} size={160} />
           </Box>
         </Group>
@@ -94,7 +96,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       )}
 
       <Stack gap={2} flex={1}>
-        <Group pt="xl" px="md" gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
+        <Group pt={padding.pt} px={padding.px} gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap="xs">
             <Title order={5}>Key Facts</Title>
             <FactGrid facts={bullets} />
@@ -106,7 +108,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
           )}
         </Group>
 
-        <Box px="md">
+        <Box px={padding.px}>
           {isLoading && factBullets.length === 0 ? (
             <LoadingCursor />
           ) : (
