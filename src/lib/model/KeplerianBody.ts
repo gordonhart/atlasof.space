@@ -111,7 +111,7 @@ export class KeplerianBody extends KinematicBody {
     // body is off-screen; draw a pointer if the screen is larger than xs (mobile)
     if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
       // TODO: don't draw offscreen indicators for moons when the parent isn't visible
-      if (!isXs()) {
+      if (!isXs(window.innerWidth)) {
         drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
       }
     } else {

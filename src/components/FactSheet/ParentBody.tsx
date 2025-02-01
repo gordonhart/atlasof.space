@@ -1,5 +1,6 @@
 import { Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
@@ -11,12 +12,13 @@ type Props = {
   updateSettings: (update: Partial<Settings>) => void;
 };
 export function ParentBody({ body, bodies, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
   const parentBody = useMemo(
     () => bodies.find(({ type, id }) => type !== CelestialBodyType.STAR && id === body.elements.wrt),
     [JSON.stringify(body), JSON.stringify(bodies)]
   );
   return parentBody != null ? (
-    <Stack gap="xs" p="md" pt="lg">
+    <Stack gap="xs" {...padding}>
       <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
       <BodyCard
         body={parentBody}
