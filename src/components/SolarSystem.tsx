@@ -51,7 +51,6 @@ export function SolarSystem() {
 
   // sync center back to URL when state changes are initiated by non-URL source
   useEffect(() => {
-    // TODO: this doesn't work for clearing the center from the URL
     if (settings.center !== urlCenter) navigate(itemIdAsRoute(settings.center));
   }, [settings.center]);
 
