@@ -7,6 +7,8 @@ import {
   CelestialBodyStyle,
   CelestialBodyType,
   HexColor,
+  Spacecraft,
+  SpacecraftId,
 } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
@@ -80,12 +82,14 @@ const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } =
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
   [CelestialBodyType.COMET]: '#51807c',
   [CelestialBodyType.DWARF_PLANET]: '#998a98',
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#7b739e',
   [CelestialBodyType.SPACECRAFT]: DEFAULT_SPACECRAFT_COLOR,
 };
 const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#888888',
   [CelestialBodyType.ASTEROID]: '#4b4b4b',
   [CelestialBodyType.DWARF_PLANET]: '#6e636d',
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#6d6887',
 };
 export function celestialBodyWithDefaults(
   body: Omit<CelestialBody, 'id' | 'style'> & { id?: CelestialBodyId; style?: CelestialBodyStyle }
@@ -98,4 +102,8 @@ export function celestialBodyWithDefaults(
       bgColor: body.style?.bgColor ?? body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],
     },
   };
+}
+
+export function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
+  return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
 }

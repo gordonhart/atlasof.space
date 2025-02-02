@@ -10,7 +10,7 @@ import {
   SpacecraftStatus,
   SpacecraftVisitType,
 } from './types.ts';
-import { nameToId } from './utils.ts';
+import { spacecraftWithDefaults } from './utils.ts';
 
 export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, SpacecraftOrganizationDetails> = {
   [SpacecraftOrganization.NASA]: {
@@ -39,10 +39,6 @@ export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, Spacecraft
     thumbnail: 'cnsa-logo.svg',
   },
 };
-
-function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
-  return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
-}
 
 export const VOYAGER_1 = spacecraftWithDefaults({
   name: 'Voyager 1',
