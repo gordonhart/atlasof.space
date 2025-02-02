@@ -188,7 +188,7 @@ export const HUYGENS = spacecraftWithDefaults({
   start: new Date('1997-10-15T08:43:00Z'),
   end: new Date('2005-01-14T13:37:00Z'),
   focusId: Bodies.TITAN.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
