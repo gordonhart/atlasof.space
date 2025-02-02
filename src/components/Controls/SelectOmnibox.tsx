@@ -118,7 +118,8 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
         <Box
           bg="black"
           style={{
-            overflow: 'auto',
+            overflowX: 'hidden',
+            overflowY: 'auto',
             border: '1px solid var(--mantine-color-gray-8)',
             borderRadius: 'var(--mantine-radius-md)',
           }}
