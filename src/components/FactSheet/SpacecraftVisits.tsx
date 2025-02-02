@@ -6,14 +6,15 @@ import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
 
 type Props = {
   spacecraft: Array<Spacecraft>;
-  body: CelestialBody;
+  body?: CelestialBody;
   updateSettings: UpdateSettings;
+  title?: string;
 };
-export function SpacecraftVisits({ spacecraft, body, updateSettings }: Props) {
+export function SpacecraftVisits({ spacecraft, body, updateSettings, title = 'Spacecraft Visits' }: Props) {
   const padding = useFactSheetPadding();
   return spacecraft.length > 0 ? (
     <Stack gap="xs" {...padding}>
-      <Title order={5}>Spacecraft Visits</Title>
+      <Title order={5}>{title}</Title>
       {spacecraft.map((s, i) => (
         <SpacecraftCard
           key={`${s.name}-${i}`}

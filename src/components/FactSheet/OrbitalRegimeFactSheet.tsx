@@ -2,6 +2,7 @@ import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
+import { SPACECRAFT } from '../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
@@ -16,6 +17,7 @@ import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
+import { SpacecraftVisits } from './SpacecraftVisits.tsx';
 
 type Props = {
   regime: OrbitalRegime;
@@ -32,6 +34,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   removeBody,
 }: Props) {
   const padding = useFactSheetPadding();
+
   const bodiesInRegimeByType = useMemo(() => {
     const bodiesInRegime = bodies.filter(body => body.orbitalRegime === regime.id);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
@@ -40,6 +43,11 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
       return acc;
     }, types);
   }, [regime.id, JSON.stringify(bodies)]);
+
+  const spacecraftInRegime = useMemo(
+    () => SPACECRAFT.filter(({ orbitalRegimes }) => orbitalRegimes?.includes(regime.id) ?? false),
+    [regime.id]
+  );
 
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
@@ -74,6 +82,8 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
             </Stack>
           ))}
       </Stack>
+
+      <SpacecraftVisits title="Spacecraft Missions" spacecraft={spacecraftInRegime} updateSettings={updateSettings} />
 
       <Box style={{ justifySelf: 'flex-end' }}>
         <OtherRegimes regime={regime} updateSettings={updateSettings} />

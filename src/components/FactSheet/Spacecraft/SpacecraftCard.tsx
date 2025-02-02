@@ -9,22 +9,23 @@ import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
-  body: CelestialBody;
+  body?: CelestialBody;
   onClick: () => void;
 };
 export function SpacecraftCard({ spacecraft, body, onClick }: Props) {
   const { data: summary, isLoading } = useSummaryStream(spacecraft);
-  const visitInfo = spacecraft.visited.find(({ id }) => id === body.id)!;
-  const visitPastTense = visitInfo.start < new Date();
+  const visitInfo = spacecraft.visited.find(({ id }) => id === body?.id);
+  const visitPastTense = visitInfo != null && visitInfo.start < new Date();
   // prettier-ignore
   const visitVerb =
-    visitInfo.type === SpacecraftVisitType.ROVER || visitInfo.type === SpacecraftVisitType.LANDER
+    visitInfo?.type === SpacecraftVisitType.ROVER || visitInfo?.type === SpacecraftVisitType.LANDER
       ? (visitPastTense ? 'landed' : 'planning to land')
-      : visitInfo.type === SpacecraftVisitType.ORBITER
+      : visitInfo?.type === SpacecraftVisitType.ORBITER
         ? (visitPastTense ? 'entered orbit' : 'planning to enter orbit')
-        : visitInfo.type === SpacecraftVisitType.HELICOPTER
+        : visitInfo?.type === SpacecraftVisitType.HELICOPTER
           ? (visitPastTense ? 'started flying' : 'planning to start flying')
           : (visitPastTense ? 'visited' : 'planning to visit');
+  const visitBlurb = visitInfo != null ? `, ${visitVerb} in ${visitInfo.start.getFullYear()}` : '';
   return (
     <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }} onClick={onClick}>
       {spacecraft.thumbnail != null && (
@@ -35,9 +36,11 @@ export function SpacecraftCard({ spacecraft, body, onClick }: Props) {
       <Group gap={4} align="center">
         <Group gap="xs" mr={8}>
           <Title order={6}>{spacecraft.name}</Title>
-          <Text c="dimmed" fz="sm" fs="italic">
-            {visitInfo.type}
-          </Text>
+          {visitInfo != null && (
+            <Text c="dimmed" fz="sm" fs="italic">
+              {visitInfo.type}
+            </Text>
+          )}
         </Group>
         <Group gap="xs" wrap="nowrap">
           <SpacecraftOrganizationPill organization={spacecraft.organization} />
@@ -45,7 +48,8 @@ export function SpacecraftCard({ spacecraft, body, onClick }: Props) {
         </Group>
       </Group>
       <Text mt={4} fz="xs" fs="italic">
-        Launched in {spacecraft.start.getFullYear()}, {visitVerb} in {visitInfo.start.getFullYear()}
+        Launched in {spacecraft.start.getFullYear()}
+        {visitBlurb}
       </Text>
       {(spacecraft.crew?.length ?? 0 > 0) && (
         <Text mt={4} fz="xs">
