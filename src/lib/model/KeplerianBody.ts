@@ -23,7 +23,7 @@ export class KeplerianBody extends KinematicBody {
   public readonly body: CelestialBody;
   private readonly resolution: Vector2;
   private readonly sphere: SphericalBody;
-  private readonly ellipse: OrbitalEllipse;
+  private readonly ellipse: OrbitalEllipse | null;
   private readonly radius: FocalRadius;
   private readonly axis: AxisIndicator | null = null;
   private readonly dotRadius: number;
@@ -48,7 +48,9 @@ export class KeplerianBody extends KinematicBody {
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);
-    this.ellipse = new OrbitalEllipse(scene, resolution, body, parent?.position ?? null, position);
+    this.ellipse = body.hideEllipse
+      ? null
+      : new OrbitalEllipse(scene, resolution, body, parent?.position ?? null, position);
     this.radius = new FocalRadius(scene, resolution, body, parent?.position ?? new Vector3(), position);
     this.sphere = new SphericalBody(scene, body, position);
     this.dotRadius = KeplerianBody.getDotRadius(body);
@@ -61,13 +63,13 @@ export class KeplerianBody extends KinematicBody {
     this.visible = this.isVisible(settings);
     this.focused = settings.center === this.body.id;
     this.sphere.update(this.position, this.rotation, this.visible);
-    this.ellipse.update(parent?.position ?? null, this.visible && settings.drawOrbit);
+    this.ellipse?.update(parent?.position ?? null, this.visible && settings.drawOrbit);
 
     // apply hover effects (scale body, bold ellipse, etc.)
     const thisIsHovered = settings.hover === this.body.id;
     if (thisIsHovered !== this.hovered) {
       this.sphere.setHover(thisIsHovered);
-      this.ellipse.setHover(thisIsHovered);
+      this.ellipse?.setHover(thisIsHovered);
       this.hovered = thisIsHovered;
     }
     this.radius.update(parent?.position ?? null, this.position, thisIsHovered);
@@ -76,7 +78,7 @@ export class KeplerianBody extends KinematicBody {
 
   dispose() {
     this.sphere.dispose();
-    this.ellipse.dispose();
+    this.ellipse?.dispose();
     this.radius.dispose();
     this.axis?.dispose();
   }

@@ -89,7 +89,8 @@ const bodies = [
   '475 Ocllo', '476 Hedwig', '477 Italia', '478 Tergeste', '479 Caprera', '480 Hansa', '481 Emita', '482 Petrina',
   '483 Seppina', '484 Pittsburghia', '485 Genua', '486 Cremona', '487 Venetia', '488 Kreusa', '489 Comacina',
   '490 Veritas', '491 Carina', '492 Gismonda', '493 Griseldis', '494 Virtus', '495 Eulalia', '496 Gryphia', '497 Iva',
-  '498 Tokio', '499 Venusia', '500 Selinur',
+  '498 Tokio', '499 Venusia', '500 Selinur', '617 Patroclus', '3548 Eurybates', '15094 Polymele', '11351 Leucus',
+  '21900 Orus',
 ];
 
 const presetAsteroidIdByName = Object.fromEntries(ASTEROIDS.map(({ name, id }) => [name, id]));
@@ -132,6 +133,7 @@ export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody
 
   useEffect(() => {
     smallBodies.forEach(body => {
+      console.log(body);
       addBody(body);
     });
   }, [JSON.stringify(smallBodies)]);

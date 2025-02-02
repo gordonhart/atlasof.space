@@ -113,6 +113,7 @@ export type CelestialBody = {
   style: CelestialBodyStyle;
   assets?: CelestialBodyAssets;
   facts?: Array<CelestialBodyFact>;
+  hideEllipse?: boolean;
 };
 
 export type OrbitalRegime = {

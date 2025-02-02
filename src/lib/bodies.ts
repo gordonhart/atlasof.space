@@ -1438,9 +1438,119 @@ export const CALLISTO = celestialBodyWithDefaults({
   assets: { thumbnail: 'callisto-thumb.jpg' },
 });
 
+export const PATROCLUS = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID, // TODO: trojan type?
+  name: '617 Patroclus',
+  shortName: 'Patroclus',
+  influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.1396962582560324,
+    semiMajorAxis: 778903069847.6559,
+    inclination: 22.06381758721232,
+    longitudeAscending: 44.35143430893712,
+    argumentOfPeriapsis: 308.5911939187383,
+    meanAnomaly: 9.05118311412526,
+  },
+  mass: 3619822493146967600,
+  radius: 70181,
+  hideEllipse: true,
+});
+
+export const EURYBATES = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '3548 Eurybates',
+  shortName: 'Eurybates',
+  influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.0912096586904044,
+    semiMajorAxis: 779729048898.1897,
+    inclination: 8.054029644371386,
+    longitudeAscending: 43.54414304869652,
+    argumentOfPeriapsis: 28.16016105269247,
+    meanAnomaly: 76.60342041666361,
+  },
+  mass: 341299245635874240,
+  radius: 31942.5,
+  hideEllipse: true,
+});
+
+export const POLYMELE = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '15094 Polymele',
+  shortName: 'Polymele',
+  influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.09675665015063982,
+    semiMajorAxis: 775858392847.9636,
+    inclination: 12.98085102615298,
+    longitudeAscending: 50.31608473853247,
+    argumentOfPeriapsis: 5.462638440025281,
+    meanAnomaly: 93.7713057277133,
+  },
+  mass: 12252970301334808,
+  radius: 10537.5,
+  hideEllipse: true,
+});
+
+export const LEUCUS = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '11351 Leucus',
+  shortName: 'Leucus',
+  influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.06579314266323183,
+    semiMajorAxis: 794028788955.4308,
+    inclination: 11.54411391076727,
+    longitudeAscending: 251.0729642413503,
+    argumentOfPeriapsis: 161.9173101742365,
+    meanAnomaly: 91.2826507826346,
+  },
+  mass: 52155666541866450,
+  radius: 17077.5,
+  hideEllipse: true,
+});
+
+export const ORUS = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '21900 Orus',
+  shortName: 'Orus',
+  influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.OUTER_SYSTEM,
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460600.5'),
+    eccentricity: 0.03748656754233124,
+    semiMajorAxis: 766474085793.3986,
+    inclination: 8.468725847600401,
+    longitudeAscending: 258.5538072895936,
+    argumentOfPeriapsis: 182.4405687663794,
+    meanAnomaly: 46.18115390830526,
+  },
+  mass: 171706294367261100,
+  radius: 25405,
+  hideEllipse: true,
+});
+
 // TODO: there are more moons
 // TODO: at the very least, Amalthea?
-export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO];
+export const JUPITER_SYSTEM = [JUPITER, IO, EUROPA, GANYMEDE, CALLISTO, PATROCLUS, EURYBATES, POLYMELE, LEUCUS, ORUS];
 
 export const SATURN = celestialBodyWithDefaults({
   type: CelestialBodyType.PLANET,

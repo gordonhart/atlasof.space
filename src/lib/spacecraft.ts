@@ -494,6 +494,11 @@ export const LUCY = spacecraftWithDefaults({
     { id: Bodies.DINKINESH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2023-11-01T12:00:00Z') },
     // TODO: 52246 Donaldjohanson flyby
     // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
+    { id: Bodies.EURYBATES.id, type: SpacecraftVisitType.FLYBY, start: new Date('2027-08-12T12:00:00Z') },
+    { id: Bodies.POLYMELE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2027-09-15T12:00:00Z') },
+    { id: Bodies.LEUCUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2028-04-18T12:00:00Z') },
+    { id: Bodies.ORUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2028-11-11T12:00:00Z') },
+    { id: Bodies.PATROCLUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2033-03-02T12:00:00Z') },
   ],
 });
 

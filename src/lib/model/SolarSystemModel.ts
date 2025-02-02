@@ -193,18 +193,24 @@ export class SolarSystemModel {
     // note that this will loop indefinitely if there are any cycles in the graph described by body.influencedBy
     while (toInitialize.length > 0) {
       const body = toInitialize.shift()!;
-      const parents = body.influencedBy.map(id => initialState[id]);
+      const parents = this.getParents(body, initialState);
       if (parents.some(p => p == null)) {
         toInitialize.push(body);
         continue;
       }
       initialState[body.id] =
         parents.length > 0
-          ? this.createBodyWithParents(settings, parents, body)
+          ? this.createBodyWithParents(settings, parents.filter(notNullish), body)
           : new KeplerianBody(this.scene, this.resolution, settings, null, body, new Vector3(), new Vector3());
     }
     // reverse creation order; first objects created are the highest up in the hierarchy, model them last (on top)
     return Object.fromEntries(Object.entries(initialState).reverse());
+  }
+
+  private getParents(body: CelestialBody, state: Record<string, KeplerianBody>): Array<KeplerianBody | null> {
+    const mainParent = body.elements.wrt != null ? state[body.elements.wrt] : null;
+    if (mainParent == null) return [];
+    return [mainParent, ...this.getParents(mainParent.body, state)];
   }
 
   private createBodyWithParents(settings: Settings, parents: Array<KeplerianBody>, body: CelestialBody) {
