@@ -1292,6 +1292,30 @@ export const LELEAKUHONUA = celestialBodyWithDefaults({
   facts: [{ label: 'class', value: 'sednoid' }],
 });
 
+export const RR205 = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '2021 RR205',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.INNER_OORT_CLOUD,
+  mass: estimateAsteroidMass(150e3), // unknown
+  radius: 150e3, // very rough estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2460000.5'),
+    eccentricity: 0.94395,
+    semiMajorAxis: 990.9 * AU,
+    inclination: 7.644,
+    longitudeAscending: 108.345,
+    argumentOfPeriapsis: 208.574,
+    meanAnomaly: 0.363,
+  },
+  facts: [{ label: 'class', value: 'sednoid (disputed)' }],
+  assets: {
+    thumbnail: 'rr205-thumb.png',
+    wiki: 'https://en.wikipedia.org/wiki/2021_RR205',
+  },
+});
+
 export const FARFAROUT = celestialBodyWithDefaults({
   type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
   name: '2018 AG37 (FarFarOut)',
@@ -1310,7 +1334,10 @@ export const FARFAROUT = celestialBodyWithDefaults({
     argumentOfPeriapsis: 231.9,
     meanAnomaly: 186.9,
   },
-  assets: { thumbnail: 'farfarout-thumb.gif' },
+  assets: {
+    thumbnail: 'farfarout-thumb.gif',
+    wiki: 'https://en.wikipedia.org/wiki/2018_AG37',
+  },
 });
 
 export const ALBION = celestialBodyWithDefaults({
@@ -1479,6 +1506,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   ARROKOTH,
   VP113,
   LELEAKUHONUA,
+  RR205,
   FARFAROUT,
   ALBION,
   ARAWN,
