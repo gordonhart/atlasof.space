@@ -9,8 +9,9 @@ import {
   LABEL_FONT_FAMILY,
 } from '../canvas.ts';
 import { magnitude } from '../physics.ts';
+import { SPACECRAFT_BY_ID } from '../spacecraft.ts';
 import { Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, Point2 } from '../types.ts';
+import { CelestialBody, CelestialBodyType, isSpacecraftId, Point2 } from '../types.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
 import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
@@ -150,8 +151,13 @@ export class KeplerianBody extends KinematicBody {
 
   // TODO: hide moons of hidden types (e.g. Pluto's moons should only be visible if dwarf planets are visible)
   isVisible(settings: Settings) {
-    const id = this.body.id;
-    return settings.hover === id || settings.center === id || settings.visibleTypes.has(this.body.type);
+    const spacecraft = isSpacecraftId(settings.center) ? SPACECRAFT_BY_ID[settings.center] : null;
+    return (
+      settings.hover === this.body.id ||
+      settings.center === this.body.id ||
+      settings.visibleTypes.has(this.body.type) ||
+      spacecraft?.focusId == this.body.id // show if this is the focus body for the selected spacecraft
+    );
   }
 
   // show dot only when the orbit is larger than the dot itself; helps selectively hide moons until zoomed

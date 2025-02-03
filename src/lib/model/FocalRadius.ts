@@ -20,7 +20,7 @@ export class FocalRadius {
     const geometry = new LineGeometry();
     const { x: px, y: py, z: pz } = bodyPosition.clone().sub(parentPosition).divideScalar(SCALE_FACTOR);
     geometry.setPositions([0, 0, 0, px, py, pz]);
-    const color = new Color(body.style.bgColor ?? body.style.fgColor);
+    const color = new Color(body.style.fgColor);
     const material = new LineMaterial({ color, linewidth: 1, resolution, depthTest: true });
     this.line = new Line2(geometry, material);
     this.line.visible = false;
