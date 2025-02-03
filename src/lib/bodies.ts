@@ -1311,6 +1311,27 @@ export const FARFAROUT = celestialBodyWithDefaults({
   assets: { thumbnail: 'farfarout-thumb.gif' },
 });
 
+export const ALBION = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '15760 Albion',
+  shortName: 'Albion',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  mass: estimateAsteroidMass(60e3), // unknown
+  radius: 60e3, // estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2459000.5'),
+    eccentricity: 0.07096,
+    semiMajorAxis: 43.925 * AU,
+    inclination: 2.1797,
+    longitudeAscending: 359.276,
+    argumentOfPeriapsis: 0.7765,
+    meanAnomaly: 34.041,
+  },
+  assets: { thumbnail: 'albion-thumb.jpg' },
+});
+
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
   SEDNA,
@@ -1323,6 +1344,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   VP113,
   LELEAKUHONUA,
   FARFAROUT,
+  ALBION,
 ];
 
 export const JUPITER = celestialBodyWithDefaults({
