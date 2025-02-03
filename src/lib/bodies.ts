@@ -32,6 +32,7 @@ export const SOL = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'sol-thumb.jpg',
     texture: 'sol-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Sun',
   },
   facts: [
     { label: 'age', value: '4.6 billion years' },
@@ -66,6 +67,7 @@ export const MERCURY = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'mercury-thumb.jpg',
     texture: 'mercury-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Mercury_(planet)',
   },
   facts: [
     {
@@ -101,6 +103,7 @@ export const VENUS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'venus-thumb.jpg',
     texture: 'venus-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Venus',
     gallery: [
       { filename: 'venus-venera.jpg' },
       { filename: 'venus-venera2.jpg' },
@@ -137,6 +140,7 @@ export const EARTH = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'earth-thumb.jpg',
     texture: 'earth-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Earth',
   },
 });
 
@@ -165,6 +169,7 @@ export const LUNA = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'luna-thumb.jpg',
     texture: 'luna-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Moon',
     gallery: [
       {
         filename: 'luna-apollo-15.jpg',
@@ -206,6 +211,7 @@ export const MARS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'mars-thumb.jpg',
     texture: 'mars-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Mars',
     gallery: [
       { filename: 'mars-curiosity.jpg' },
       { filename: 'mars-perseverance.jpg' },
@@ -236,7 +242,10 @@ export const PHOBOS = celestialBodyWithDefaults({
   },
   mass: 1.0659e16,
   radius: 11.2667e3,
-  assets: { thumbnail: 'phobos-thumb.jpg' },
+  assets: {
+    thumbnail: 'phobos-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Phobos_(moon)',
+  },
 });
 
 export const DEIMOS = celestialBodyWithDefaults({
@@ -259,7 +268,10 @@ export const DEIMOS = celestialBodyWithDefaults({
   },
   mass: 1.4762e15,
   radius: 6.2e3,
-  assets: { thumbnail: 'deimos-thumb.jpg' },
+  assets: {
+    thumbnail: 'deimos-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Deimos_(moon)',
+  },
 });
 
 export const MARS_SYSTEM = [MARS, PHOBOS, DEIMOS];
@@ -291,6 +303,7 @@ export const CERES = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'ceres-thumb.jpg',
     texture: 'ceres-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Ceres_(dwarf_planet)',
   },
 });
 
@@ -312,7 +325,10 @@ export const PALLAS = celestialBodyWithDefaults({
   },
   mass: 2.04e20,
   radius: 256e3,
-  assets: { thumbnail: 'pallas-thumb.jpg' },
+  assets: {
+    thumbnail: 'pallas-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/2_Pallas',
+  },
 });
 
 export const JUNO = celestialBodyWithDefaults({
@@ -333,7 +349,10 @@ export const JUNO = celestialBodyWithDefaults({
   },
   mass: 2.67e19, // kg
   radius: 127e3, // m
-  assets: { thumbnail: 'juno-thumb.jpg' },
+  assets: {
+    thumbnail: 'juno-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/3_Juno',
+  },
 });
 
 export const VESTA = celestialBodyWithDefaults({
@@ -354,7 +373,10 @@ export const VESTA = celestialBodyWithDefaults({
   },
   mass: 2.590271e20,
   radius: 278.6e3,
-  assets: { thumbnail: 'vesta-thumb.jpg' },
+  assets: {
+    thumbnail: 'vesta-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/4_Vesta',
+  },
 });
 
 export const HEBE = celestialBodyWithDefaults({
@@ -376,7 +398,10 @@ export const HEBE = celestialBodyWithDefaults({
   },
   mass: 1.24e19,
   radius: 92.59e3,
-  assets: { thumbnail: 'hebe-thumb.jpg' },
+  assets: {
+    thumbnail: 'hebe-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/6_Hebe',
+  },
 });
 
 export const IRIS = celestialBodyWithDefaults({
@@ -398,7 +423,10 @@ export const IRIS = celestialBodyWithDefaults({
   },
   mass: 13.5e18,
   radius: 99.915e3,
-  assets: { thumbnail: 'iris-thumb.jpg' },
+  assets: {
+    thumbnail: 'iris-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/7_Iris',
+  },
 });
 
 export const HYGIEA = celestialBodyWithDefaults({
@@ -419,7 +447,10 @@ export const HYGIEA = celestialBodyWithDefaults({
   },
   mass: 8.74e19,
   radius: 215e3,
-  assets: { thumbnail: 'hygiea-thumb.jpg' },
+  assets: {
+    thumbnail: 'hygiea-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/10_Hygiea',
+  },
 });
 
 export const PSYCHE = celestialBodyWithDefaults({
@@ -444,6 +475,7 @@ export const PSYCHE = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'psyche-thumb.jpg',
     gallery: [{ filename: 'psyche-illustration.jpg' }, { filename: 'psyche-mission-illustration.jpg' }],
+    wiki: 'https://en.wikipedia.org/wiki/16_Psyche',
   },
   facts: [
     {
@@ -477,7 +509,10 @@ export const LUTETIA = celestialBodyWithDefaults({
   },
   mass: 1.7e18, // kg
   radius: 49e3, // m
-  assets: { thumbnail: 'lutetia-thumb.jpg' },
+  assets: {
+    thumbnail: 'lutetia-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/21_Lutetia',
+  },
 });
 
 export const IDA = celestialBodyWithDefaults({
@@ -499,7 +534,10 @@ export const IDA = celestialBodyWithDefaults({
   },
   mass: 4.2e16,
   radius: 15.7e3,
-  assets: { thumbnail: 'ida-thumb.jpg' },
+  assets: {
+    thumbnail: 'ida-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/243_Ida',
+  },
 });
 
 export const MATHILDE = celestialBodyWithDefaults({
@@ -520,7 +558,10 @@ export const MATHILDE = celestialBodyWithDefaults({
   },
   mass: 1.033e17, // kg
   radius: 26.4e3, // m
-  assets: { thumbnail: 'mathilde-thumb.jpg' },
+  assets: {
+    thumbnail: 'mathilde-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/253_Mathilde',
+  },
 });
 
 export const EROS = celestialBodyWithDefaults({
@@ -541,7 +582,10 @@ export const EROS = celestialBodyWithDefaults({
   },
   mass: 6.687e15, // kg
   radius: 8420, // m, average (highly irregular)
-  assets: { thumbnail: 'eros-thumb.jpg' },
+  assets: {
+    thumbnail: 'eros-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/433_Eros',
+  },
 });
 
 export const GASPRA = celestialBodyWithDefaults({
@@ -563,7 +607,10 @@ export const GASPRA = celestialBodyWithDefaults({
   },
   mass: 2.5e15,
   radius: 6.1e3,
-  assets: { thumbnail: 'gaspra-thumb.jpg' },
+  assets: {
+    thumbnail: 'gaspra-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/951_Gaspra',
+  },
 });
 
 export const STEINS = celestialBodyWithDefaults({
@@ -586,7 +633,10 @@ export const STEINS = celestialBodyWithDefaults({
   },
   mass: 179840597118453.84, // estimate
   radius: 2.58e3,
-  assets: { thumbnail: 'steins-thumb.jpg' },
+  assets: {
+    thumbnail: 'steins-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/2867_%C5%A0teins',
+  },
 });
 
 export const TOUTATIS = celestialBodyWithDefaults({
@@ -607,7 +657,10 @@ export const TOUTATIS = celestialBodyWithDefaults({
   },
   mass: 1.9e13,
   radius: 1.225e3,
-  assets: { thumbnail: 'toutatis-thumb.jpg' },
+  assets: {
+    thumbnail: 'toutatis-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/4179_Toutatis',
+  },
 });
 
 export const NEREUS = celestialBodyWithDefaults({
@@ -632,7 +685,10 @@ export const NEREUS = celestialBodyWithDefaults({
   },
   mass: estimateAsteroidMass(165), // not known
   radius: 165, // m
-  assets: { thumbnail: 'nereus-thumb.gif' },
+  assets: {
+    thumbnail: 'nereus-thumb.gif',
+    wiki: 'https://en.wikipedia.org/wiki/4660_Nereus',
+  },
 });
 
 export const BRAILLE = celestialBodyWithDefaults({
@@ -653,7 +709,10 @@ export const BRAILLE = celestialBodyWithDefaults({
   },
   mass: 7.8e12,
   radius: 800, // m
-  assets: { thumbnail: 'braille-thumb.jpg' },
+  assets: {
+    thumbnail: 'braille-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/9969_Braille',
+  },
 });
 
 export const ITOKAWA = celestialBodyWithDefaults({
@@ -675,7 +734,10 @@ export const ITOKAWA = celestialBodyWithDefaults({
   },
   mass: 3.51e10,
   radius: 165,
-  assets: { thumbnail: 'itokawa-thumb.jpg' },
+  assets: {
+    thumbnail: 'itokawa-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/25143_Itokawa',
+  },
 });
 
 export const DIDYMOS = celestialBodyWithDefaults({
@@ -697,7 +759,10 @@ export const DIDYMOS = celestialBodyWithDefaults({
   },
   mass: 5.2e11,
   radius: 382.5,
-  assets: { thumbnail: 'didymos-thumb.jpg' },
+  assets: {
+    thumbnail: 'didymos-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/65803_Didymos',
+  },
 });
 
 export const BENNU = celestialBodyWithDefaults({
@@ -721,6 +786,7 @@ export const BENNU = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'bennu-thumb.png',
     gallery: [{ filename: 'bennu-landing.jpg' }, { filename: 'bennu-rotation.gif' }, { filename: 'bennu-surface.jpg' }],
+    wiki: 'https://en.wikipedia.org/wiki/101955_Bennu',
   },
 });
 
@@ -744,6 +810,7 @@ export const DINKINESH = celestialBodyWithDefaults({
   radius: 395,
   assets: {
     thumbnail: 'dinkinesh-thumb.png',
+    wiki: 'https://en.wikipedia.org/wiki/152830_Dinkinesh',
   },
 });
 
@@ -772,6 +839,7 @@ export const RYUGU = celestialBodyWithDefaults({
       { filename: 'ryugu-surface2.jpg' },
       { filename: 'ryugu-rotation.gif' },
     ],
+    wiki: 'https://en.wikipedia.org/wiki/162173_Ryugu',
   },
 });
 
@@ -825,6 +893,7 @@ export const CG67P = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'cg67p-thumb.jpg',
     gallery: [{ filename: 'cg67p-animation.gif' }, { filename: 'cg67p-thumb2.jpg' }, { filename: 'cg67p-thumb3.jpg' }],
+    wiki: 'https://en.wikipedia.org/wiki/67P/Churyumov%E2%80%93Gerasimenko',
   },
 });
 
@@ -845,7 +914,10 @@ export const HALLEY = celestialBodyWithDefaults({
     argumentOfPeriapsis: 112.05,
     meanAnomaly: 0.07323,
   },
-  assets: { thumbnail: 'halley-thumb.jpg' },
+  assets: {
+    thumbnail: 'halley-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Halley%27s_Comet',
+  },
 });
 
 export const HALE_BOPP = celestialBodyWithDefaults({
@@ -865,7 +937,10 @@ export const HALE_BOPP = celestialBodyWithDefaults({
     argumentOfPeriapsis: 130.41,
     meanAnomaly: 3.8784,
   },
-  assets: { thumbnail: 'hale-bopp-thumb.jpg' },
+  assets: {
+    thumbnail: 'hale-bopp-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Comet_Hale%E2%80%93Bopp',
+  },
 });
 
 export const BORRELLY = celestialBodyWithDefaults({
@@ -885,7 +960,10 @@ export const BORRELLY = celestialBodyWithDefaults({
     argumentOfPeriapsis: 351.8616063839783,
     meanAnomaly: 312.1229200779977,
   },
-  assets: { thumbnail: 'borrelly-thumb.jpg' },
+  assets: {
+    thumbnail: 'borrelly-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/19P/Borrelly',
+  },
 });
 
 export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY];
@@ -962,7 +1040,10 @@ export const PLUTO = celestialBodyWithDefaults({
   radius: 1188.3e3,
   style: { fgColor: '#E7C7A4' },
   facts: [{ label: 'class', value: 'plutino' }],
-  assets: { thumbnail: 'pluto-thumb.jpg' },
+  assets: {
+    thumbnail: 'pluto-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Pluto',
+  },
 });
 
 // TODO: Charon and Pluto's other moons are inclined relative to Pluto's equator
@@ -986,7 +1067,10 @@ export const CHARON = celestialBodyWithDefaults({
   },
   mass: 1.586e21,
   radius: 606e3,
-  assets: { thumbnail: 'charon-thumb.jpg' },
+  assets: {
+    thumbnail: 'charon-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Charon_(moon)',
+  },
 });
 
 export const STYX = celestialBodyWithDefaults({
@@ -1009,7 +1093,10 @@ export const STYX = celestialBodyWithDefaults({
   },
   mass: 7.5e15,
   radius: 12e3 / 2, // rough; not spherical
-  assets: { thumbnail: 'styx-thumb.jpg' },
+  assets: {
+    thumbnail: 'styx-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Styx_(moon)',
+  },
 });
 
 export const NIX = celestialBodyWithDefaults({
@@ -1028,7 +1115,10 @@ export const NIX = celestialBodyWithDefaults({
   },
   mass: 2.6e16,
   radius: 35e3 / 2, // not spherical
-  assets: { thumbnail: 'nix-thumb.jpg' },
+  assets: {
+    thumbnail: 'nix-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Nix_(moon)',
+  },
 });
 
 export const KERBEROS = celestialBodyWithDefaults({
@@ -1051,7 +1141,10 @@ export const KERBEROS = celestialBodyWithDefaults({
   },
   mass: 1.65e16,
   radius: 12e3 / 2, // not spherical
-  assets: { thumbnail: 'kerberos-thumb.jpg' },
+  assets: {
+    thumbnail: 'kerberos-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Kerberos_(moon)',
+  },
 });
 
 export const HYDRA = celestialBodyWithDefaults({
@@ -1070,7 +1163,10 @@ export const HYDRA = celestialBodyWithDefaults({
   },
   mass: 3.01e16,
   radius: 19e3, // not spherical
-  assets: { thumbnail: 'hydra-thumb.jpg' },
+  assets: {
+    thumbnail: 'hydra-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Hydra_(moon)',
+  },
 });
 
 export const PLUTO_SYSTEM = [PLUTO, CHARON, STYX, NIX, KERBEROS, HYDRA];
@@ -1093,7 +1189,10 @@ export const QUAOAR = celestialBodyWithDefaults({
   },
   mass: 1.2e21,
   radius: 545e3,
-  assets: { thumbnail: 'quaoar-thumb.jpg' },
+  assets: {
+    thumbnail: 'quaoar-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Quaoar',
+  },
 });
 
 export const SEDNA = celestialBodyWithDefaults({
@@ -1114,8 +1213,11 @@ export const SEDNA = celestialBodyWithDefaults({
   },
   mass: 2.5e21, // very rough estimate
   radius: 906e3 / 2,
-  assets: { thumbnail: 'sedna-thumb.jpg' },
   facts: [{ label: 'class', value: 'sednoid' }],
+  assets: {
+    thumbnail: 'sedna-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Sedna_(dwarf_planet)',
+  },
 });
 
 export const ORCUS = celestialBodyWithDefaults({
@@ -1137,7 +1239,10 @@ export const ORCUS = celestialBodyWithDefaults({
   mass: 6.348e20, // very rough estimate
   radius: 910e3 / 2,
   facts: [{ label: 'class', value: 'plutino' }],
-  assets: { thumbnail: 'orcus-thumb.gif' },
+  assets: {
+    thumbnail: 'orcus-thumb.gif',
+    wiki: 'https://en.wikipedia.org/wiki/Orcus_(dwarf_planet)',
+  },
 });
 
 export const ERIS = celestialBodyWithDefaults({
@@ -1158,7 +1263,11 @@ export const ERIS = celestialBodyWithDefaults({
   },
   mass: 1.6466e22,
   radius: 1163e3,
-  assets: { thumbnail: 'eris-thumb.jpg' },
+  assets: {
+    thumbnail: 'eris-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Eris_(dwarf_planet)',
+  },
+  // TODO: add moon Dysnomia (rough orbital elements are known)
 });
 
 export const HAUMEA = celestialBodyWithDefaults({
@@ -1179,7 +1288,10 @@ export const HAUMEA = celestialBodyWithDefaults({
   },
   mass: 4.006e21,
   radius: 780e3,
-  assets: { thumbnail: 'haumea-thumb.jpg' },
+  assets: {
+    thumbnail: 'haumea-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Haumea',
+  },
 });
 
 export const MAKEMAKE = celestialBodyWithDefaults({
@@ -1200,7 +1312,10 @@ export const MAKEMAKE = celestialBodyWithDefaults({
   },
   mass: 3.1e21,
   radius: 715e3,
-  assets: { thumbnail: 'makemake-thumb.jpg' },
+  assets: {
+    thumbnail: 'makemake-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Makemake',
+  },
 });
 
 export const ARROKOTH = celestialBodyWithDefaults({
@@ -1224,6 +1339,7 @@ export const ARROKOTH = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'arrokoth-thumb.jpg',
     gallery: [{ filename: 'arrokoth-rotation.gif' }],
+    wiki: 'https://en.wikipedia.org/wiki/486958_Arrokoth',
   },
 });
 
@@ -1245,7 +1361,10 @@ export const GONGGONG = celestialBodyWithDefaults({
     argumentOfPeriapsis: 207.6675, // degrees
     meanAnomaly: 106.496, // degrees
   },
-  assets: { thumbnail: 'gonggong-thumb.jpg' },
+  assets: {
+    thumbnail: 'gonggong-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Gonggong_(dwarf_planet)',
+  },
 });
 
 export const VP113 = celestialBodyWithDefaults({
@@ -1265,8 +1384,12 @@ export const VP113 = celestialBodyWithDefaults({
     argumentOfPeriapsis: 293.8, // degrees
     meanAnomaly: 3.5, // degrees
   },
-  assets: { thumbnail: 'vp113-thumb.gif', search: '2012 VP113' },
   facts: [{ label: 'class', value: 'sednoid' }],
+  assets: {
+    thumbnail: 'vp113-thumb.gif',
+    search: '2012 VP113',
+    wiki: 'https://en.wikipedia.org/wiki/2012_VP113',
+  },
 });
 
 export const LELEAKUHONUA = celestialBodyWithDefaults({
@@ -1288,8 +1411,11 @@ export const LELEAKUHONUA = celestialBodyWithDefaults({
     argumentOfPeriapsis: 117.778, // degrees
     meanAnomaly: 359.418, // degrees
   },
-  assets: { thumbnail: 'leleakuhonua-thumb.jpg' },
   facts: [{ label: 'class', value: 'sednoid' }],
+  assets: {
+    thumbnail: 'leleakuhonua-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/541132_Lele%C4%81k%C5%ABhonua',
+  },
 });
 
 export const RR205 = celestialBodyWithDefaults({
@@ -1358,7 +1484,10 @@ export const ALBION = celestialBodyWithDefaults({
     argumentOfPeriapsis: 0.7765,
     meanAnomaly: 34.041,
   },
-  assets: { thumbnail: 'albion-thumb.jpg' },
+  assets: {
+    thumbnail: 'albion-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/15760_Albion',
+  },
 });
 
 export const ARAWN = celestialBodyWithDefaults({
@@ -1541,6 +1670,7 @@ export const JUPITER = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'jupiter-thumb.jpg',
     texture: 'jupiter-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Jupiter',
   },
 });
 
@@ -1561,7 +1691,10 @@ export const IO = celestialBodyWithDefaults({
   mass: 8.931938e22,
   radius: 1821.6e3,
   style: { fgColor: '#fcf794' },
-  assets: { thumbnail: 'io-thumb.jpg' },
+  assets: {
+    thumbnail: 'io-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Io_(moon)',
+  },
 });
 
 export const EUROPA = celestialBodyWithDefaults({
@@ -1581,7 +1714,10 @@ export const EUROPA = celestialBodyWithDefaults({
   mass: 4.799844e22,
   radius: 1560.8e3,
   style: { fgColor: '#bfcccb' },
-  assets: { thumbnail: 'europa-thumb.jpg' },
+  assets: {
+    thumbnail: 'europa-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Europa_(moon)',
+  },
   facts: [
     {
       label: 'volume of water',
@@ -1607,7 +1743,10 @@ export const GANYMEDE = celestialBodyWithDefaults({
   },
   mass: 1.4819e23,
   radius: 2634.1e3,
-  assets: { thumbnail: 'ganymede-thumb.jpg' },
+  assets: {
+    thumbnail: 'ganymede-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Ganymede_(moon)',
+  },
 });
 
 export const CALLISTO = celestialBodyWithDefaults({
@@ -1626,7 +1765,10 @@ export const CALLISTO = celestialBodyWithDefaults({
   },
   mass: 1.075938e23,
   radius: 2410.3e3,
-  assets: { thumbnail: 'callisto-thumb.jpg' },
+  assets: {
+    thumbnail: 'callisto-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Callisto_(moon)',
+  },
 });
 
 // TODO: there are more moons
@@ -1667,6 +1809,7 @@ export const SATURN = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'saturn-thumb.jpg',
     texture: 'saturn-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Saturn',
   },
 });
 
@@ -1686,7 +1829,10 @@ export const MIMAS = celestialBodyWithDefaults({
   },
   mass: 3.7493e19,
   radius: 198.2e3,
-  assets: { thumbnail: 'mimas-thumb.jpg' },
+  assets: {
+    thumbnail: 'mimas-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Mimas',
+  },
 });
 
 export const ENCELADUS = celestialBodyWithDefaults({
@@ -1705,7 +1851,10 @@ export const ENCELADUS = celestialBodyWithDefaults({
   },
   mass: 1.08022e20,
   radius: 252.1e3,
-  assets: { thumbnail: 'enceladus-thumb.jpg' },
+  assets: {
+    thumbnail: 'enceladus-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Enceladus',
+  },
 });
 
 export const TETHYS = celestialBodyWithDefaults({
@@ -1724,7 +1873,10 @@ export const TETHYS = celestialBodyWithDefaults({
   },
   mass: 6.17449e20,
   radius: 531.1e3,
-  assets: { thumbnail: 'tethys-thumb.jpg' },
+  assets: {
+    thumbnail: 'tethys-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Tethys_(moon)',
+  },
 });
 
 export const DIONE = celestialBodyWithDefaults({
@@ -1743,7 +1895,10 @@ export const DIONE = celestialBodyWithDefaults({
   },
   mass: 1.095452e21,
   radius: 561.4e3,
-  assets: { thumbnail: 'dione-thumb.jpg' },
+  assets: {
+    thumbnail: 'dione-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Dione_(moon)',
+  },
 });
 
 export const RHEA = celestialBodyWithDefaults({
@@ -1762,7 +1917,10 @@ export const RHEA = celestialBodyWithDefaults({
   },
   mass: 2.306518e21,
   radius: 763.8e3,
-  assets: { thumbnail: 'rhea-thumb.jpg' },
+  assets: {
+    thumbnail: 'rhea-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Rhea_(moon)',
+  },
 });
 
 export const TITAN = celestialBodyWithDefaults({
@@ -1785,6 +1943,7 @@ export const TITAN = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'titan-thumb.jpg',
     gallery: [{ filename: 'huygens-descent.mp4' }, { filename: 'huygens.jpg' }],
+    wiki: 'https://en.wikipedia.org/wiki/Titan_(moon)',
   },
 });
 
@@ -1804,7 +1963,10 @@ export const IAPETUS = celestialBodyWithDefaults({
   },
   mass: 1.805635e21,
   radius: 734.5e3,
-  assets: { thumbnail: 'iapetus-thumb.jpg' },
+  assets: {
+    thumbnail: 'iapetus-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Iapetus_(moon)',
+  },
 });
 
 export const HYPERION = celestialBodyWithDefaults({
