@@ -61,7 +61,8 @@ export function celestialBodyTypeName(type: CelestialBodyType, plural = false): 
 export function celestialBodyTypeDescription(body: CelestialBody): string {
   const baseName = celestialBodyTypeName(body.type);
   // TODO: this is a hack; shouldn't assume IDs are human-readable. Works for now
-  const parentCapitalized = `${String(body.elements.wrt).charAt(0).toUpperCase()}${String(body.elements.wrt).slice(1)}`;
+  const parentName = body.elements.wrt?.split('/', 2)[1] ?? '';
+  const parentCapitalized = `${String(parentName).charAt(0).toUpperCase()}${String(parentName).slice(1)}`;
   return body.type !== CelestialBodyType.MOON ? baseName : `${baseName} of ${parentCapitalized}`;
 }
 
