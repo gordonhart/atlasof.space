@@ -961,6 +961,7 @@ export const PLUTO = celestialBodyWithDefaults({
   mass: 1.3025e22,
   radius: 1188.3e3,
   style: { fgColor: '#E7C7A4' },
+  facts: [{ label: 'class', value: 'plutino' }],
   assets: { thumbnail: 'pluto-thumb.jpg' },
 });
 
@@ -1135,6 +1136,7 @@ export const ORCUS = celestialBodyWithDefaults({
   },
   mass: 6.348e20, // very rough estimate
   radius: 910e3 / 2,
+  facts: [{ label: 'class', value: 'plutino' }],
   assets: { thumbnail: 'orcus-thumb.gif' },
 });
 
@@ -1350,7 +1352,11 @@ export const ARAWN = celestialBodyWithDefaults({
     argumentOfPeriapsis: 101.89,
     meanAnomaly: 30.638,
   },
-  assets: { thumbnail: 'arawn-thumb.gif' },
+  facts: [{ label: 'class', value: 'plutino' }],
+  assets: {
+    thumbnail: 'arawn-thumb.gif',
+    wiki: 'https://en.wikipedia.org/wiki/15810_Arawn',
+  },
 });
 
 export const VARUNA = celestialBodyWithDefaults({
@@ -1375,7 +1381,11 @@ export const VARUNA = celestialBodyWithDefaults({
       axialTilt: 0,
     },
   },
-  assets: { thumbnail: 'varuna-thumb.jpg' },
+  facts: [{ label: 'class', value: 'cubewano' }],
+  assets: {
+    thumbnail: 'varuna-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/20000_Varuna',
+  },
 });
 
 export const TX300 = celestialBodyWithDefaults({
@@ -1400,7 +1410,11 @@ export const TX300 = celestialBodyWithDefaults({
       axialTilt: 0,
     },
   },
-  assets: { thumbnail: 'tx300-thumb.jpg' },
+  facts: [{ label: 'class', value: 'cubewano' }],
+  assets: {
+    thumbnail: 'tx300-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/(55636)_2002_TX300',
+  },
 });
 
 export const CHAOS = celestialBodyWithDefaults({
@@ -1421,10 +1435,36 @@ export const CHAOS = celestialBodyWithDefaults({
     argumentOfPeriapsis: 58.4097,
     meanAnomaly: 337.2998,
   },
+  facts: [{ label: 'class', value: 'cubewano' }],
   assets: {
     thumbnail: 'chaos-thumb.jpg',
     wiki: 'https://en.wikipedia.org/wiki/19521_Chaos',
     search: '19521 Chaos',
+  },
+});
+
+export const IXION = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '28978 Ixion',
+  shortName: 'Ixion',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  mass: estimateAsteroidMass(354.8e3), // estimate
+  radius: 354.8e3, // estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2459200.5'),
+    eccentricity: 0.24579,
+    semiMajorAxis: 39.802 * AU,
+    inclination: 19.6,
+    longitudeAscending: 71.011,
+    argumentOfPeriapsis: 298.314,
+    meanAnomaly: 289.587,
+  },
+  facts: [{ label: 'class', value: 'plutino' }],
+  assets: {
+    thumbnail: 'ixion-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/28978_Ixion',
   },
 });
 
@@ -1445,6 +1485,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   VARUNA,
   TX300,
   CHAOS,
+  IXION,
 ];
 
 export const JUPITER = celestialBodyWithDefaults({
