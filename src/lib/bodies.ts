@@ -1403,6 +1403,31 @@ export const TX300 = celestialBodyWithDefaults({
   assets: { thumbnail: 'tx300-thumb.jpg' },
 });
 
+export const CHAOS = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '19521 Chaos',
+  shortName: 'Chaos',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  mass: estimateAsteroidMass(320e3), // estimate
+  radius: 320e3, // estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2457400.5'),
+    eccentricity: 0.10567,
+    semiMajorAxis: 45.796 * AU,
+    inclination: 12.0502,
+    longitudeAscending: 50.0239,
+    argumentOfPeriapsis: 58.4097,
+    meanAnomaly: 337.2998,
+  },
+  assets: {
+    thumbnail: 'chaos-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/19521_Chaos',
+    search: '19521 Chaos',
+  },
+});
+
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
   SEDNA,
@@ -1419,6 +1444,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   ARAWN,
   VARUNA,
   TX300,
+  CHAOS,
 ];
 
 export const JUPITER = celestialBodyWithDefaults({

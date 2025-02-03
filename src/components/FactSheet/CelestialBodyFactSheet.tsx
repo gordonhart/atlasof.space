@@ -21,6 +21,7 @@ import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
 import { ParentBody } from './ParentBody.tsx';
 import { SpacecraftVisits } from './SpacecraftVisits.tsx';
+import { WikiLinkPill } from './WikiLinkPill.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -45,8 +46,10 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
     orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
+  const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
+    ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
     // prettier-ignore

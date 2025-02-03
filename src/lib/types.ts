@@ -57,11 +57,14 @@ export type GalleryAsset = {
   caption?: string;
 };
 
+export type WikiLink = `https://${string}.wikipedia.org/wiki/${string}`;
+
 export type CelestialBodyAssets = {
   thumbnail?: string;
   texture?: string;
   gallery?: Array<GalleryAsset>;
   search?: string; // optionally specify slug to search wikidata, overriding default ${name}+${type}
+  wiki?: WikiLink;
 };
 
 export enum CelestialBodyType {
@@ -178,7 +181,7 @@ export type Spacecraft = {
   cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
   status: { status: SpacecraftStatus; details?: string };
   thumbnail?: string;
-  wiki: string;
+  wiki: WikiLink;
   crew?: Array<string>;
   visited: Array<SpacecraftVisit>;
 };
