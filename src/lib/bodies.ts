@@ -1332,6 +1332,77 @@ export const ALBION = celestialBodyWithDefaults({
   assets: { thumbnail: 'albion-thumb.jpg' },
 });
 
+export const ARAWN = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '15810 Arawn',
+  shortName: 'Arawn',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  mass: estimateAsteroidMass(70e3), // unknown
+  radius: 70e3, // estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2457800.5'),
+    eccentricity: 0.1206,
+    semiMajorAxis: 39.48 * AU,
+    inclination: 3.8074,
+    longitudeAscending: 144.69,
+    argumentOfPeriapsis: 101.89,
+    meanAnomaly: 30.638,
+  },
+  assets: { thumbnail: 'arawn-thumb.gif' },
+});
+
+export const VARUNA = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '20000 Varuna',
+  shortName: 'Varuna',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  mass: estimateAsteroidMass(330e3), // unknown
+  radius: 330e3, // estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2459000.5'),
+    eccentricity: 0.05617,
+    semiMajorAxis: 42.718 * AU,
+    inclination: 17.221,
+    longitudeAscending: 97.372,
+    argumentOfPeriapsis: 262.22,
+    meanAnomaly: 119.121,
+    rotation: {
+      siderealPeriod: 6.343572 * Time.HOUR, // this is the synodic period, close to sidereal but not exact
+      axialTilt: 0,
+    },
+  },
+  assets: { thumbnail: 'varuna-thumb.jpg' },
+});
+
+export const TX300 = celestialBodyWithDefaults({
+  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
+  name: '(55636) 2002 TX300',
+  shortName: '2002 TX300',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  mass: 1.2e19, // estimate
+  radius: 143e3, // estimate
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2457400.5'),
+    eccentricity: 0.12174,
+    semiMajorAxis: 43.116 * AU,
+    inclination: 25.87838,
+    longitudeAscending: 324.6984,
+    argumentOfPeriapsis: 338.958,
+    meanAnomaly: 73.7618,
+    rotation: {
+      siderealPeriod: 12.101 * Time.HOUR,
+      axialTilt: 0,
+    },
+  },
+  assets: { thumbnail: 'tx300-thumb.jpg' },
+});
+
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
   SEDNA,
@@ -1345,6 +1416,9 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   LELEAKUHONUA,
   FARFAROUT,
   ALBION,
+  ARAWN,
+  VARUNA,
+  TX300,
 ];
 
 export const JUPITER = celestialBodyWithDefaults({
