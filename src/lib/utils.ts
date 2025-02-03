@@ -61,7 +61,8 @@ export function celestialBodyTypeName(type: CelestialBodyType, plural = false): 
 export function celestialBodyTypeDescription(body: CelestialBody): string {
   const baseName = celestialBodyTypeName(body.type);
   // TODO: this is a hack; shouldn't assume IDs are human-readable. Works for now
-  const parentCapitalized = `${String(body.elements.wrt).charAt(0).toUpperCase()}${String(body.elements.wrt).slice(1)}`;
+  const parentName = body.elements.wrt?.split('/', 2)[1] ?? '';
+  const parentCapitalized = `${String(parentName).charAt(0).toUpperCase()}${String(parentName).slice(1)}`;
   return body.type !== CelestialBodyType.MOON ? baseName : `${baseName} of ${parentCapitalized}`;
 }
 
@@ -80,12 +81,14 @@ const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } =
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
   [CelestialBodyType.COMET]: '#51807c',
   [CelestialBodyType.DWARF_PLANET]: '#998a98',
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#7b739e',
   [CelestialBodyType.SPACECRAFT]: DEFAULT_SPACECRAFT_COLOR,
 };
 const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#888888',
   [CelestialBodyType.ASTEROID]: '#4b4b4b',
   [CelestialBodyType.DWARF_PLANET]: '#6e636d',
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#6d6887',
 };
 export function celestialBodyWithDefaults(
   body: Omit<CelestialBody, 'id' | 'style'> & { id?: CelestialBodyId; style?: CelestialBodyStyle }
