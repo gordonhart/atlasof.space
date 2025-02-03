@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { datetimeToHumanReadable } from '../lib/epoch.ts';
 import { readStreamResponse } from '../lib/functions.ts';
 import { CelestialBody, Spacecraft, SpacecraftVisit } from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
@@ -38,7 +39,7 @@ the encounter between the ${spacecraft.organization} spacecraft ${spacecraft.nam
 ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name} in ${years}`;
   }
   const { spacecraft } = search;
-  const year = spacecraft.end != null ? ` in ${spacecraft.end.getFullYear()}` : '';
+  const year = spacecraft.end != null ? ` on ${datetimeToHumanReadable(spacecraft.end)}` : '';
   const details = spacecraft.status.details != null ? ` with the provided details '${spacecraft.status.details}'` : '';
   return `\
 the end of the ${spacecraft.organization} spacecraft ${spacecraft.name}'s mission${year}.
