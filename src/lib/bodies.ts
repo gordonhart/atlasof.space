@@ -1823,7 +1823,10 @@ export const HYPERION = celestialBodyWithDefaults({
   },
   mass: 5.551e18,
   radius: 135e3,
-  assets: { thumbnail: 'hyperion-thumb.jpg' },
+  assets: {
+    thumbnail: 'hyperion-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Hyperion_(moon)',
+  },
 });
 
 export const PHOEBE = celestialBodyWithDefaults({
@@ -1846,7 +1849,10 @@ export const PHOEBE = celestialBodyWithDefaults({
   },
   mass: 8.3123e18,
   radius: 106.5e3,
-  assets: { thumbnail: 'phoebe-thumb.jpg' },
+  assets: {
+    thumbnail: 'phoebe-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Phoebe_(moon)',
+  },
 });
 
 export const SATURN_SYSTEM = [SATURN, MIMAS, ENCELADUS, TETHYS, DIONE, RHEA, TITAN, IAPETUS, HYPERION, PHOEBE];
@@ -1877,6 +1883,7 @@ export const URANUS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'uranus-thumb.jpg',
     texture: 'uranus-texture.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Uranus',
   },
 });
 
@@ -1896,7 +1903,10 @@ export const PUCK = celestialBodyWithDefaults({
   },
   mass: 1.91e18,
   radius: 81e3 / 2,
-  assets: { thumbnail: 'puck-thumb.jpg' },
+  assets: {
+    thumbnail: 'puck-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Puck_(moon)',
+  },
 });
 
 export const MIRANDA = celestialBodyWithDefaults({
@@ -1915,7 +1925,10 @@ export const MIRANDA = celestialBodyWithDefaults({
   },
   mass: 6.293e19,
   radius: 235.8e3,
-  assets: { thumbnail: 'miranda-thumb.jpg' },
+  assets: {
+    thumbnail: 'miranda-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Miranda_(moon)',
+  },
 });
 
 export const ARIEL = celestialBodyWithDefaults({
@@ -1934,7 +1947,10 @@ export const ARIEL = celestialBodyWithDefaults({
   },
   mass: 1.2331e21,
   radius: 578.9e3,
-  assets: { thumbnail: 'ariel-thumb.jpg' },
+  assets: {
+    thumbnail: 'ariel-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Ariel_(moon)',
+  },
 });
 
 export const UMBRIEL = celestialBodyWithDefaults({
@@ -1953,7 +1969,10 @@ export const UMBRIEL = celestialBodyWithDefaults({
   },
   mass: 1.2885e21,
   radius: 584.7e3,
-  assets: { thumbnail: 'umbriel-thumb.jpg' },
+  assets: {
+    thumbnail: 'umbriel-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Umbriel',
+  },
 });
 
 export const TITANIA = celestialBodyWithDefaults({
@@ -1972,7 +1991,10 @@ export const TITANIA = celestialBodyWithDefaults({
   },
   mass: 3.455e21,
   radius: 788.4e3,
-  assets: { thumbnail: 'titania-thumb.jpg' },
+  assets: {
+    thumbnail: 'titania-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Titania_(moon)',
+  },
 });
 
 export const OBERON = celestialBodyWithDefaults({
@@ -1991,7 +2013,10 @@ export const OBERON = celestialBodyWithDefaults({
   },
   mass: 3.1104e21,
   radius: 761.4e3,
-  assets: { thumbnail: 'oberon-thumb.jpg' },
+  assets: {
+    thumbnail: 'oberon-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Oberon_(moon)',
+  },
 });
 
 export const URANUS_SYSTEM = [URANUS, PUCK, MIRANDA, ARIEL, UMBRIEL, TITANIA, OBERON];
@@ -2021,6 +2046,8 @@ export const NEPTUNE = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'neptune-thumb.jpg',
     texture: 'neptune-texture.jpg',
+    gallery: [{ filename: 'neptune-moons.png', caption: 'Captured by JWST' }],
+    wiki: 'https://en.wikipedia.org/wiki/Neptune',
   },
 });
 
@@ -2044,7 +2071,10 @@ export const TRITON = celestialBodyWithDefaults({
   },
   mass: 2.1389e22,
   radius: 1353.4e3,
-  assets: { thumbnail: 'triton-thumb.jpg' },
+  assets: {
+    thumbnail: 'triton-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Triton_(moon)',
+  },
 });
 
 export const PROTEUS = celestialBodyWithDefaults({
@@ -2063,7 +2093,10 @@ export const PROTEUS = celestialBodyWithDefaults({
   },
   mass: 2.5e19, // wide uncertainty bars
   radius: 209e3,
-  assets: { thumbnail: 'proteus-thumb.jpg' },
+  assets: {
+    thumbnail: 'proteus-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Proteus_(moon)',
+  },
 });
 
 export const NEREID = celestialBodyWithDefaults({
@@ -2082,7 +2115,10 @@ export const NEREID = celestialBodyWithDefaults({
   },
   mass: 3.57e19,
   radius: 357e3 / 2,
-  assets: { thumbnail: 'nereid-thumb.jpg' },
+  assets: {
+    thumbnail: 'nereid-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Nereid_(moon)',
+  },
 });
 
 export const DESPINA = celestialBodyWithDefaults({
@@ -2101,7 +2137,10 @@ export const DESPINA = celestialBodyWithDefaults({
   },
   mass: 1.1e18, // high uncertainty
   radius: 75e3,
-  assets: { thumbnail: 'despina-thumb.jpg' },
+  assets: {
+    thumbnail: 'despina-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Despina_(moon)',
+  },
 });
 
 export const LARISSA = celestialBodyWithDefaults({
@@ -2120,7 +2159,10 @@ export const LARISSA = celestialBodyWithDefaults({
   },
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
-  assets: { thumbnail: 'larissa-thumb.jpg' },
+  assets: {
+    thumbnail: 'larissa-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Larissa_(moon)',
+  },
 });
 
 export const GALATEA = celestialBodyWithDefaults({
@@ -2139,7 +2181,10 @@ export const GALATEA = celestialBodyWithDefaults({
   },
   mass: 2.5e18, // very high uncertainty
   radius: 97e3,
-  assets: { thumbnail: 'galatea-thumb.jpg' },
+  assets: {
+    thumbnail: 'galatea-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Galatea_(moon)',
+  },
 });
 
 // TODO: there are more moons
