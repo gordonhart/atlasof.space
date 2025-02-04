@@ -128,7 +128,6 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
           })}
 
           {spacecraft.end != null && (
-            // TODO: include a blurb about how the mission ended?
             <Box ref={endRef} onMouseEnter={() => setHoverCap(TimelineCap.END)} onMouseLeave={() => setHoverCap(null)}>
               <MissionEndCard spacecraft={spacecraft} />
             </Box>

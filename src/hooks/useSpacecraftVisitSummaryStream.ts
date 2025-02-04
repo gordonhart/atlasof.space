@@ -40,10 +40,10 @@ the encounter between the ${spacecraft.organization} spacecraft ${spacecraft.nam
 ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name} in ${years}`;
   }
   const { spacecraft } = search;
-  const year = spacecraft.end != null ? ` on ${datetimeToHumanReadable(spacecraft.end)}` : '';
+  const date = spacecraft.end != null ? ` on ${datetimeToHumanReadable(spacecraft.end)}` : '';
   const details = spacecraft.status.details != null ? ` with the provided details '${spacecraft.status.details}'` : '';
   return `\
-the end of the ${spacecraft.organization} spacecraft ${spacecraft.name}'s mission${year}.
+the end of the ${spacecraft.organization} spacecraft ${spacecraft.name}'s mission${date}.
 
 Its status is '${spacecraft.status.status.toLowerCase()}'${details}.`;
 }
