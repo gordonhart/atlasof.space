@@ -43,7 +43,7 @@ function getSearch({ spacecraft, ...params }: Params): string {
     const years =
       visit.end != null ? `${visit.start.getFullYear()}-${visit.end.getFullYear()}` : visit.start.getFullYear();
     return `\
-the encounter between the ${orgName} spacecraft ${spacecraft.name} and the \
+the encounter (${visit.type}) between the ${orgName} spacecraft ${spacecraft.name} and the \
 ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name} in ${years}`;
   }
 

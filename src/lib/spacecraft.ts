@@ -1,4 +1,4 @@
-import { map } from 'ramda';
+import { mapObjIndexed } from 'ramda';
 import * as Bodies from './bodies.ts';
 import {
   CelestialBodyId,
@@ -1067,8 +1067,13 @@ export const SPACECRAFT: Array<Spacecraft> = [
   EUROPA_CLIPPER,
 ].sort((a, b) => a.start.getTime() - b.start.getTime());
 
-export const SPACECRAFT_BY_BODY_ID = map(
-  spacecraft => spacecraft.sort((a, b) => a.start.getTime() - b.start.getTime()),
+export const SPACECRAFT_BY_BODY_ID = mapObjIndexed(
+  (spacecraft, bodyId) =>
+    spacecraft.sort(
+      (a, b) =>
+        (a.visited.find(({ id }) => id === bodyId)?.start?.getTime() ?? a.start.getTime()) -
+        (b.visited.find(({ id }) => id === bodyId)?.start?.getTime() ?? b.start.getTime())
+    ),
   SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>((acc, spacecraft) => {
     spacecraft.visited.forEach(visited => {
       acc[visited.id] = [...(acc[visited.id] ?? []), spacecraft];
