@@ -3,8 +3,8 @@ import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { datetimeToHumanReadable } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
-import { CelestialBody, CelestialBodyId, Spacecraft } from '../../../lib/types.ts';
-import { DEFAULT_SPACECRAFT_COLOR, notNullish } from '../../../lib/utils.ts';
+import { CelestialBody, Spacecraft } from '../../../lib/types.ts';
+import { DEFAULT_SPACECRAFT_COLOR } from '../../../lib/utils.ts';
 import { Timeline } from '../Timeline.tsx';
 import { MissionEndCard } from './MissionEndCard.tsx';
 import { MissionTimelineCard } from './MissionTimelineCard.tsx';
@@ -20,14 +20,10 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const bodyById = useMemo(
-    () => bodies.reduce<Record<CelestialBodyId, CelestialBody>>((acc, body) => ({ ...acc, [body.id]: body }), {}),
-    [JSON.stringify(bodies)]
-  );
-  const visitedBodies = useMemo(
-    () => spacecraft.visited.map(({ id }) => bodyById[id]).filter(notNullish),
-    [JSON.stringify(spacecraft), bodyById]
-  );
+  const visitedBodies = useMemo(() => {
+    const bodyById = Object.fromEntries(bodies.map(body => [body.id, body]));
+    return spacecraft.visited.map(({ id }) => bodyById[id]);
+  }, [JSON.stringify(spacecraft), JSON.stringify(bodies)]);
 
   const StartItem = (
     <Paper p="xs" withBorder onMouseEnter={() => setActiveIndex(0)} onMouseLeave={() => setActiveIndex(null)}>

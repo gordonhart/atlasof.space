@@ -1,5 +1,5 @@
 import { Box, Stack, Title } from '@mantine/core';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, Spacecraft } from '../../lib/types.ts';
@@ -17,12 +17,20 @@ export function SpacecraftVisits({ spacecraft, body, updateSettings, title = 'Sp
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
-  const TimelineItems = spacecraft.map<[Date, ReactNode]>((s, i) => [
-    (body != null ? s.visited.find(({ id }) => id === body.id)?.start : null) ?? s.start,
-    <Box key={`${s.name}-${i}`} onMouseEnter={() => setActiveIndex(i)} onMouseLeave={() => setActiveIndex(undefined)}>
-      <SpacecraftCard spacecraft={s} body={body} onClick={() => updateSettings({ center: s.id, hover: null })} />
-    </Box>,
-  ]);
+  const TimelineItems = useMemo(
+    () =>
+      spacecraft.map<[Date, ReactNode]>((s, i) => [
+        (body != null ? s.visited.find(({ id }) => id === body.id)?.start : null) ?? s.start,
+        <Box
+          key={`${s.name}-${i}`}
+          onMouseEnter={() => setActiveIndex(i)}
+          onMouseLeave={() => setActiveIndex(undefined)}
+        >
+          <SpacecraftCard spacecraft={s} body={body} onClick={() => updateSettings({ center: s.id, hover: null })} />
+        </Box>,
+      ]),
+    [JSON.stringify(spacecraft), JSON.stringify(body)]
+  );
 
   return spacecraft.length > 0 ? (
     <Stack gap="xs" {...padding}>
