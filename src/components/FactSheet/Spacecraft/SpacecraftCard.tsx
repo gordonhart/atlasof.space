@@ -1,7 +1,7 @@
 import { Box, Group, Paper, Text, Title } from '@mantine/core';
 import { useSpacecraftSummaryStream } from '../../../hooks/useSpacecraftSummaryStream.ts';
 import { useSpacecraftVisit } from '../../../hooks/useSpacecraftVisit.ts';
-import { CelestialBody, Spacecraft, SpacecraftVisitType } from '../../../lib/types.ts';
+import { CelestialBody, OrbitalRegime, Spacecraft, SpacecraftVisitType } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
 import { LoadingCursor } from '../LoadingCursor.tsx';
 import { Thumbnail } from '../Thumbnail.tsx';
@@ -11,15 +11,18 @@ import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 type Props = {
   spacecraft: Spacecraft;
   body?: CelestialBody;
+  regime?: OrbitalRegime;
   onClick: () => void;
   compact?: boolean;
 };
-export function SpacecraftCard({ spacecraft, body, onClick, compact = false }: Props) {
+export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = false }: Props) {
   const visit = useSpacecraftVisit({ spacecraft, body });
   const summaryParams =
     body != null && visit != null
       ? { type: 'visit' as const, spacecraft, body, visit }
-      : { type: 'summary' as const, spacecraft };
+      : regime != null
+        ? { type: 'regime' as const, spacecraft, regime }
+        : { type: 'summary' as const, spacecraft };
   const { data: summary, isLoading } = useSpacecraftSummaryStream(summaryParams);
 
   const visitPastTense = visit != null && visit.start < new Date();

@@ -83,7 +83,12 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
           ))}
       </Stack>
 
-      <SpacecraftVisits title="Spacecraft Missions" spacecraft={spacecraftInRegime} updateSettings={updateSettings} />
+      <SpacecraftVisits
+        title="Spacecraft Missions"
+        spacecraft={spacecraftInRegime}
+        regime={regime}
+        updateSettings={updateSettings}
+      />
 
       <Box style={{ justifySelf: 'flex-end' }}>
         <OtherRegimes regime={regime} updateSettings={updateSettings} />

@@ -2,7 +2,7 @@ import { Box, Stack, Title } from '@mantine/core';
 import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody, Spacecraft } from '../../lib/types.ts';
+import { CelestialBody, OrbitalRegime, Spacecraft } from '../../lib/types.ts';
 import { DEFAULT_SPACECRAFT_COLOR } from '../../lib/utils.ts';
 import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
 import { Timeline } from './Timeline.tsx';
@@ -10,10 +10,11 @@ import { Timeline } from './Timeline.tsx';
 type Props = {
   spacecraft: Array<Spacecraft>;
   body?: CelestialBody;
+  regime?: OrbitalRegime;
   updateSettings: UpdateSettings;
   title?: string;
 };
-export function SpacecraftVisits({ spacecraft, body, updateSettings, title = 'Spacecraft Visits' }: Props) {
+export function SpacecraftVisits({ spacecraft, body, regime, updateSettings, title = 'Spacecraft Visits' }: Props) {
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
@@ -26,10 +27,15 @@ export function SpacecraftVisits({ spacecraft, body, updateSettings, title = 'Sp
           onMouseEnter={() => setActiveIndex(i)}
           onMouseLeave={() => setActiveIndex(undefined)}
         >
-          <SpacecraftCard spacecraft={s} body={body} onClick={() => updateSettings({ center: s.id, hover: null })} />
+          <SpacecraftCard
+            spacecraft={s}
+            body={body}
+            regime={regime}
+            onClick={() => updateSettings({ center: s.id, hover: null })}
+          />
         </Box>,
       ]),
-    [JSON.stringify(spacecraft), JSON.stringify(body)]
+    [JSON.stringify(spacecraft), JSON.stringify(body), JSON.stringify(regime)]
   );
 
   return spacecraft.length > 0 ? (
