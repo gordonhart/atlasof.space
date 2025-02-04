@@ -13,7 +13,9 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function MissionTimelineCard({ body, spacecraft, visit, updateSettings }: Props) {
-  const { data: summary, isLoading } = useSpacecraftVisitSummaryStream(spacecraft, body, visit);
+  const { data: summary, isLoading } = useSpacecraftVisitSummaryStream({
+    search: { type: 'visit', spacecraft, body, visit },
+  });
   return (
     <Paper
       className={styles.Card}

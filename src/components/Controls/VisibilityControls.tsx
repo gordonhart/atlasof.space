@@ -36,7 +36,7 @@ export function VisibilityControls({ settings, updateSettings }: Props) {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Label>Celestial Body Types</Menu.Label>
-        {CelestialBodyTypes.map(type => (
+        {CelestialBodyTypes.filter(type => type !== CelestialBodyType.SPACECRAFT).map(type => (
           <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
             <Group gap="xs" align="center">
               {settings.visibleTypes.has(type) ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}

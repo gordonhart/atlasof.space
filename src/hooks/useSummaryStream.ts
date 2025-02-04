@@ -23,6 +23,7 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft
   const query = useQuery({
     queryKey,
     queryFn: async ({ signal }) => {
+      setIsStreaming(true);
       const response = await fetch(`/api/summary?search=${encodeURIComponent(search)}`, { signal });
       const setData = (data: string) => queryClient.setQueryData<string>(queryKey, data);
       return await readStreamResponse(response, setIsStreaming, setData);

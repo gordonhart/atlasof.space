@@ -10,7 +10,7 @@ import {
   SpacecraftId,
 } from './types.ts';
 
-type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId;
+export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId;
 
 export function itemIdAsRoute(itemId: ItemId | null) {
   if (itemId == null) return '/';

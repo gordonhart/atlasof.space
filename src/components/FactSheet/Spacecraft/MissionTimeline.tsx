@@ -7,6 +7,7 @@ import { datetimeToHumanReadable } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyId, Point2, Spacecraft } from '../../../lib/types.ts';
 import { DEFAULT_SPACECRAFT_COLOR, notNullish } from '../../../lib/utils.ts';
+import { MissionEndCard } from './MissionEndCard.tsx';
 import { MissionTimelineCard } from './MissionTimelineCard.tsx';
 import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 
@@ -127,23 +128,9 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
           })}
 
           {spacecraft.end != null && (
-            // TODO: include a blurb about how the mission ended?
-            <Paper
-              ref={endRef}
-              p="xs"
-              withBorder
-              onMouseEnter={() => setHoverCap(TimelineCap.END)}
-              onMouseLeave={() => setHoverCap(null)}
-            >
-              <Group gap={0} align="baseline">
-                <Title order={6} mr="xs">
-                  {spacecraft.status.status ?? 'Mission End'}
-                </Title>
-                <Text c="dimmed" fz="xs">
-                  {datetimeToHumanReadable(spacecraft.end)}
-                </Text>
-              </Group>
-            </Paper>
+            <Box ref={endRef} onMouseEnter={() => setHoverCap(TimelineCap.END)} onMouseLeave={() => setHoverCap(null)}>
+              <MissionEndCard spacecraft={spacecraft} />
+            </Box>
           )}
         </Stack>
       </Group>

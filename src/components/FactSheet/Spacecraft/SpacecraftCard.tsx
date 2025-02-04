@@ -11,8 +11,9 @@ type Props = {
   spacecraft: Spacecraft;
   body?: CelestialBody;
   onClick: () => void;
+  compact?: boolean;
 };
-export function SpacecraftCard({ spacecraft, body, onClick }: Props) {
+export function SpacecraftCard({ spacecraft, body, onClick, compact = false }: Props) {
   const { data: summary, isLoading } = useSummaryStream(spacecraft);
   const visitInfo = spacecraft.visited.find(({ id }) => id === body?.id);
   const visitPastTense = visitInfo != null && visitInfo.start < new Date();
@@ -42,16 +43,20 @@ export function SpacecraftCard({ spacecraft, body, onClick }: Props) {
             </Text>
           )}
         </Group>
-        <Group gap="xs" wrap="nowrap">
-          <SpacecraftOrganizationPill organization={spacecraft.organization} />
-          <SpacecraftStatusPill status={spacecraft.status} />
-        </Group>
+        {!compact && (
+          <Group gap="xs" wrap="nowrap">
+            <SpacecraftOrganizationPill organization={spacecraft.organization} />
+            <SpacecraftStatusPill status={spacecraft.status} />
+          </Group>
+        )}
       </Group>
-      <Text mt={4} fz="xs" fs="italic">
-        Launched in {spacecraft.start.getFullYear()}
-        {visitBlurb}
-      </Text>
-      {(spacecraft.crew?.length ?? 0 > 0) && (
+      {!compact && (
+        <Text mt={4} fz="xs" fs="italic">
+          Launched in {spacecraft.start.getFullYear()}
+          {visitBlurb}
+        </Text>
+      )}
+      {(spacecraft.crew?.length ?? 0 > 0) && !compact && (
         <Text mt={4} fz="xs">
           Crewed by {(spacecraft?.crew ?? []).join(', ')}
         </Text>

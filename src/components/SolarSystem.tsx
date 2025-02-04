@@ -6,7 +6,7 @@ import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useUrlState } from '../hooks/useUrlState.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
-import { SPACECRAFT } from '../lib/spacecraft.ts';
+import { SPACECRAFT_BY_ID } from '../lib/spacecraft.ts';
 import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
 import {
   CelestialBody,
@@ -115,7 +115,7 @@ export function SolarSystem() {
       : isOrbitalRegimeId(settings.center)
         ? ORBITAL_REGIMES.find(({ id }) => id === settings.center)
         : isSpacecraftId(settings.center)
-          ? SPACECRAFT.find(({ id }) => id === settings.center)
+          ? SPACECRAFT_BY_ID[settings.center]
           : undefined;
   }, [settings.center, JSON.stringify(settings.bodies)]);
   const focusColor = isCelestialBody(focusItem)
