@@ -2,6 +2,7 @@ import { Box, Group, Stack } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import { ReactNode, useEffect, useRef } from 'react';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
+import { Time } from '../../lib/epoch.ts';
 import { HexColor, Point2 } from '../../lib/types.ts';
 
 const TIMELINE_WIDTH = 110;
@@ -79,7 +80,10 @@ function renderTimeline(
   end?: Date
 ) {
   const startMillis = start.getTime();
-  const endMillis = Math.max(...[...items.map(({ date }) => date.getTime())], end?.getTime() ?? Date.now());
+  let endMillis = Math.max(...[...items.map(({ date }) => date.getTime())], end?.getTime() ?? Date.now());
+  if (startMillis === endMillis) {
+    endMillis = endMillis + Time.DAY; // ensure that there's some gap between start and end to avoid 0-length timeline
+  }
   const durationMillis = endMillis - startMillis;
   const dpr = window.devicePixelRatio || 1;
   const dotRadius = 6;
