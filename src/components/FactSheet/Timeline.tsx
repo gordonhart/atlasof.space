@@ -45,7 +45,7 @@ export function Timeline({ datedItems, activeIndex, end, accentColor }: Props) {
   }, [datedItems, height, activeIndex, end]);
 
   return (
-    <Group gap={0} wrap="nowrap" flex={1}>
+    <Group gap={0} wrap="nowrap" flex={1} align="flex-start">
       <Box w={TIMELINE_WIDTH} h="100%" style={{ flexShrink: 0 }}>
         <canvas ref={canvasRef} style={{ height: '100%', width: TIMELINE_WIDTH }} />
       </Box>
