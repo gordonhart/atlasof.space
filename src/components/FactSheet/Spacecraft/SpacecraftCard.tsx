@@ -45,8 +45,10 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
         </Box>
       )}
       <Group gap={4} align="center">
-        <Group gap="xs" mr={8}>
-          <Title order={6}>{spacecraft.name}</Title>
+        <Group gap={0} mr={8}>
+          <Title order={6} mr="xs">
+            {spacecraft.name}
+          </Title>
           {visit != null && (
             <Text c="dimmed" fz="sm" fs="italic">
               {visit.type}
@@ -54,7 +56,7 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
           )}
         </Group>
         {!compact && (
-          <Group gap="xs" wrap="nowrap">
+          <Group gap={8}>
             <SpacecraftOrganizationPill organization={spacecraft.organization} />
             <SpacecraftStatusPill status={spacecraft.status} />
           </Group>
