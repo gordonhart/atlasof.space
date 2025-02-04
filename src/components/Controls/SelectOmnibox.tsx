@@ -37,7 +37,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             leftSection={
               // TODO: lazy load thumbnails for visible objects only
               <Box miw={THUMBNAIL_SIZE}>
-                <CelestialBodyThumbnail body={body} size={THUMBNAIL_SIZE} radius="sm" />
+                <CelestialBodyThumbnail body={body} size={THUMBNAIL_SIZE} radius="sm" lazy />
               </Box>
             }
             rightSection={
@@ -62,7 +62,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             ff={LABEL_FONT_FAMILY}
             leftSection={
               <Box miw={THUMBNAIL_SIZE}>
-                <Thumbnail thumbnail={spacecraft.thumbnail} size={THUMBNAIL_SIZE} radius="sm" />
+                <Thumbnail thumbnail={spacecraft.thumbnail} size={THUMBNAIL_SIZE} radius="sm" lazy />
               </Box>
             }
             rightSection={
