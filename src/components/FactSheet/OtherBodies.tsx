@@ -41,7 +41,7 @@ export function OtherBodies({ body, bodies, updateSettings }: Props) {
           >
             <Group gap={8} align="center" wrap="nowrap">
               <Box w={thumbnailSize}>
-                <CelestialBodyThumbnail body={relatedBody} size={thumbnailSize} lazy />
+                <CelestialBodyThumbnail body={relatedBody} size={thumbnailSize} />
               </Box>
               {relatedBody.shortName ?? relatedBody.name}
             </Group>
