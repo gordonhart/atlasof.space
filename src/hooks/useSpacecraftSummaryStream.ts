@@ -2,15 +2,15 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { datetimeToHumanReadable } from '../lib/epoch.ts';
 import { readStreamResponse } from '../lib/functions.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
 import { CelestialBody, Spacecraft, SpacecraftVisit } from '../lib/types.ts';
 import { celestialBodyTypeName } from '../lib/utils.ts';
 
-type Params = {
-  search:
-    | { type: 'visit'; spacecraft: Spacecraft; body: CelestialBody; visit: SpacecraftVisit }
-    | { type: 'end'; spacecraft: Spacecraft };
-};
-export function useSpacecraftVisitSummaryStream(params: Params) {
+type Params =
+  | { type: 'summary'; spacecraft: Spacecraft }
+  | { type: 'visit'; spacecraft: Spacecraft; body: CelestialBody; visit: SpacecraftVisit }
+  | { type: 'end'; spacecraft: Spacecraft };
+export function useSpacecraftSummaryStream(params: Params) {
   const [isStreaming, setIsStreaming] = useState(false);
   const search = getSearch(params);
   const queryClient = useQueryClient();
@@ -30,16 +30,20 @@ export function useSpacecraftVisitSummaryStream(params: Params) {
   return { ...query, isLoading: isStreaming };
 }
 
-function getSearch({ search }: Params): string {
-  if (search.type === 'visit') {
-    const { spacecraft, body, visit } = search;
+function getSearch({ spacecraft, ...params }: Params): string {
+  if (params.type === 'summary') {
+    return `the ${SPACECRAFT_ORGANIZATIONS[spacecraft.organization].shortName} spacecraft ${spacecraft.name}`;
+  }
+
+  if (params.type === 'visit') {
+    const { body, visit } = params;
     const years =
       visit.end != null ? `${visit.start.getFullYear()}-${visit.end.getFullYear()}` : visit.start.getFullYear();
     return `\
 the encounter between the ${spacecraft.organization} spacecraft ${spacecraft.name} and the \
 ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name} in ${years}`;
   }
-  const { spacecraft } = search;
+
   const date = spacecraft.end != null ? ` on ${datetimeToHumanReadable(spacecraft.end)}` : '';
   const details = spacecraft.status.details != null ? ` with the provided details '${spacecraft.status.details}'` : '';
   return `\

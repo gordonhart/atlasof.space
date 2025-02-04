@@ -18,7 +18,7 @@ export function SpacecraftVisits({ spacecraft, body, updateSettings, title = 'Sp
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
   const TimelineItems = spacecraft.map<[Date, ReactNode]>((s, i) => [
-    s.start,
+    (body != null ? s.visited.find(({ id }) => id === body.id)?.start : null) ?? s.start,
     <Box key={`${s.name}-${i}`} onMouseEnter={() => setActiveIndex(i)} onMouseLeave={() => setActiveIndex(undefined)}>
       <SpacecraftCard spacecraft={s} body={body} onClick={() => updateSettings({ center: s.id, hover: null })} />
     </Box>,

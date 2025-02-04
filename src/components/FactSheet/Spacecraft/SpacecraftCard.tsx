@@ -1,5 +1,6 @@
 import { Box, Group, Paper, Text, Title } from '@mantine/core';
-import { useSummaryStream } from '../../../hooks/useSummaryStream.ts';
+import { useMemo } from 'react';
+import { useSpacecraftSummaryStream } from '../../../hooks/useSpacecraftSummaryStream.ts';
 import { CelestialBody, Spacecraft, SpacecraftVisitType } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
 import { LoadingCursor } from '../LoadingCursor.tsx';
@@ -14,7 +15,16 @@ type Props = {
   compact?: boolean;
 };
 export function SpacecraftCard({ spacecraft, body, onClick, compact = false }: Props) {
-  const { data: summary, isLoading } = useSummaryStream(spacecraft);
+  const visit = useMemo(
+    () => spacecraft.visited.find(({ id }) => id === body?.id),
+    [JSON.stringify(spacecraft), body?.id]
+  );
+  const summaryParams =
+    body != null && visit != null
+      ? { type: 'visit' as const, spacecraft, body, visit }
+      : { type: 'summary' as const, spacecraft };
+  const { data: summary, isLoading } = useSpacecraftSummaryStream(summaryParams);
+
   const visitInfo = spacecraft.visited.find(({ id }) => id === body?.id);
   const visitPastTense = visitInfo != null && visitInfo.start < new Date();
   // prettier-ignore
@@ -27,6 +37,7 @@ export function SpacecraftCard({ spacecraft, body, onClick, compact = false }: P
           ? (visitPastTense ? 'started flying' : 'planning to start flying')
           : (visitPastTense ? 'visited' : 'planning to visit');
   const visitBlurb = visitInfo != null ? `, ${visitVerb} in ${visitInfo.start.getFullYear()}` : '';
+
   return (
     <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }} onClick={onClick}>
       {spacecraft.thumbnail != null && (
