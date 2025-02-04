@@ -34,9 +34,11 @@ import { ReactNode, useMemo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
+import { SPACECRAFT } from '../../lib/spacecraft.ts';
 import { Settings } from '../../lib/state.ts';
-import { CelestialBody } from '../../lib/types.ts';
+import { CelestialBody, isCelestialBody, Spacecraft } from '../../lib/types.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
+import { SpacecraftCard } from '../FactSheet/Spacecraft/SpacecraftCard.tsx';
 import { iconSize } from './constants.ts';
 
 const iconProps = { size: 20, color: 'var(--mantine-color-dimmed)' };
@@ -88,16 +90,23 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
   const isTouchDevice = useIsTouchDevice();
   const { sm: isSmallDisplay } = useDisplaySize();
   const modifierKey = useModifierKey();
-  const sampleBodies = useMemo(() => [...settings.bodies].sort(() => Math.random() - 0.5).slice(0, 3), []);
+  const sampleItems = useMemo(
+    () => [...settings.bodies, ...SPACECRAFT].sort(() => Math.random() - 0.5).slice(0, 3),
+    []
+  );
 
-  function onCardClick(body: CelestialBody) {
-    updateSettings({ center: body.id });
+  function onCardClick({ id }: CelestialBody | Spacecraft) {
+    updateSettings({ center: id });
     onClose();
   }
 
-  const sampleBodyCards = sampleBodies.map(body => (
-    <BodyCard key={body.id} body={body} onClick={() => onCardClick(body)} />
-  ));
+  const sampleItemCards = sampleItems.map(item =>
+    isCelestialBody(item) ? (
+      <BodyCard key={item.id} body={item} onClick={() => onCardClick(item)} />
+    ) : (
+      <SpacecraftCard spacecraft={item} onClick={() => onCardClick(item)} compact />
+    )
+  );
 
   return (
     <Modal
@@ -177,9 +186,9 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
             Get Started
           </Button>
           {isSmallDisplay ? (
-            <Stack gap="xs">{sampleBodyCards}</Stack>
+            <Stack gap="xs">{sampleItemCards}</Stack>
           ) : (
-            <SimpleGrid cols={3}>{sampleBodyCards}</SimpleGrid>
+            <SimpleGrid cols={3}>{sampleItemCards}</SimpleGrid>
           )}
         </Stack>
         <Divider />
