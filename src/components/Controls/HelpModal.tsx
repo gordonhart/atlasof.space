@@ -104,7 +104,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
     isCelestialBody(item) ? (
       <BodyCard key={item.id} body={item} onClick={() => onCardClick(item)} />
     ) : (
-      <SpacecraftCard spacecraft={item} onClick={() => onCardClick(item)} compact />
+      <SpacecraftCard key={item.id} spacecraft={item} onClick={() => onCardClick(item)} compact />
     )
   );
 

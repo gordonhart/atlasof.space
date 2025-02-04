@@ -6,9 +6,10 @@ type Props = {
   body: CelestialBody;
   size: number;
   radius?: MantineRadius;
+  lazy?: boolean;
 };
-export function CelestialBodyThumbnail({ body, size, radius }: Props) {
+export function CelestialBodyThumbnail({ body, size, radius, lazy }: Props) {
   const { name, type } = body;
   const search = `${name} ${type}`;
-  return <Thumbnail thumbnail={body.assets?.thumbnail} search={search} size={size} radius={radius} />;
+  return <Thumbnail thumbnail={body.assets?.thumbnail} search={search} size={size} radius={radius} lazy={lazy} />;
 }

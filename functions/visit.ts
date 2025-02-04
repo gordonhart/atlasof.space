@@ -26,10 +26,9 @@ with a frank and direct tone and do not have a personality or refer to yourself 
   const prompt = `\
 Generate a 1-sentence summary of ${search}. Examples of good summaries:
 
-<example name="the encounter between the ESA spacecraft Rosetta and the planet Mars in 2007">
-Rosetta performed a low-altitude gravity assist flyby of Mars on February 25, 2007, passing within 250km of the \
-planet's surface in a risky maneuver that required putting the spacecraft into 'safe' mode that was nicknamed \
-'The Billion Euro Gamble'.
+<example name="the NASA spacecraft Mariner 2">
+An interplanetary probe launched in 1972 that became the first spacecraft to cross the asteroid belt, visit Jupiter, \
+and leave the Solar System, sending its final signal in 2003 after traveling over 7.6 billion miles.
 </example>
 
 <example name="the encounter between the NASA spacecraft Apollo 11 and the moon Luna in 1969">
