@@ -76,7 +76,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
             <FactGrid facts={bullets} keysWidth={120} />
           </Stack>
           <Box style={{ flexShrink: 1 }}>
-            <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={220} />
+            <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={240} />
           </Box>
         </Group>
 

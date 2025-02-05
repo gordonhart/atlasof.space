@@ -456,6 +456,19 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
   ],
 });
 
+export const IKAROS = spacecraftWithDefaults({
+  name: 'IKAROS',
+  organization: SpacecraftOrganization.JAXA,
+  launchMass: 310,
+  start: new Date('2010-05-20T21:58:22Z'),
+  end: new Date('2015-05-20T12:00:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
+  thumbnail: 'ikaros-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/IKAROS',
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-12-08T12:00:00Z') }],
+});
+
 export const JUNO = spacecraftWithDefaults({
   name: 'Juno',
   organization: SpacecraftOrganization.NASA,
@@ -1060,7 +1073,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // MAGELLAN,
   VENUS_EXPRESS,
   // AKATSUKI,
-  // IKAROS,
+  IKAROS,
   // SHINEN,
 
   // Luna
