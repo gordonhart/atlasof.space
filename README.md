@@ -44,7 +44,7 @@ Infrastructure dependencies:
 - [Netlify](https://app.netlify.com/sites/atlasofspace/overview): static site deployment, server-side functions defined
   in [`./functions`](./functions)
 - [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
-- [Anthropic API](https://docs.anthropic.com): generate grounded facts and summaries via server-side functions
+- [Anthropic](https://docs.anthropic.com): generate grounded facts and summaries via server-side functions
 
 ### Resources
 
@@ -66,7 +66,7 @@ Infrastructure dependencies:
   - [ ] Incorporate apsidal and nodal precession (changing ω and Ω over time)
   - [ ] Use ephemeris data for modeling
 - Scene rendering:
-  - [ ] Examine render settings, see if visuals can be improved
+  - [ ] Examine render settings, see if visuals can be improved (e.g. overlap between planet and ellipse)
   - [ ] Fix alignment between planet and ellipse
   - [ ] Render 3D models for asteroids
   - [ ] Improve offscreen indicator rendering for moons when the main planet is not visible
@@ -75,4 +75,4 @@ Infrastructure dependencies:
   - [x] Add fact sheet for spacecraft
     - [x] Set spacecraft ID as URL part for deep linking
   - [ ] Add fact sheet for organization, listing spacecraft
-  - [ ] Add differentiated default colors for TNOs
+  - [x] Add differentiated default colors for TNOs
