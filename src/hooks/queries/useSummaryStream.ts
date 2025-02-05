@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { readStreamResponse } from '../lib/functions.ts';
-import { orbitalRegimeDisplayName } from '../lib/regimes.ts';
-import { SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
+import { readStreamResponse } from '../../lib/functions.ts';
+import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../lib/spacecraft.ts';
 import {
   CelestialBody,
   CelestialBodyType,
@@ -11,8 +11,8 @@ import {
   isSpacecraft,
   OrbitalRegime,
   Spacecraft,
-} from '../lib/types.ts';
-import { celestialBodyTypeName } from '../lib/utils.ts';
+} from '../../lib/types.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 
 export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft) {
   const search = useMemo(() => getSearch(obj), [JSON.stringify(obj)]);

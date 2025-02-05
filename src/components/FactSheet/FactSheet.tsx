@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
+  CelestialBodyId,
   isCelestialBody,
   isOrbitalRegime,
   isSpacecraft,
@@ -18,7 +19,7 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
-  removeBody: (id: string) => void;
+  removeBody: (id: CelestialBodyId) => void;
 };
 export const FactSheet = memo(function FactSheetComponent({
   item,

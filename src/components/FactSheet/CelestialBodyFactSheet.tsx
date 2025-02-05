@@ -1,8 +1,8 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo, ReactNode } from 'react';
+import { useFactsStream } from '../../hooks/queries/useFactsStream.ts';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { useFactsStream } from '../../hooks/useFactsStream.ts';
 import { g } from '../../lib/bodies.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/spacecraft.ts';

@@ -1,5 +1,8 @@
 import { Box, Group, Paper, Text, Title } from '@mantine/core';
-import { useSpacecraftSummaryStream } from '../../../hooks/useSpacecraftSummaryStream.ts';
+import {
+  SpacecraftSummaryType,
+  useSpacecraftSummaryStream,
+} from '../../../hooks/queries/useSpacecraftSummaryStream.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, Spacecraft, SpacecraftVisit } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
@@ -13,8 +16,12 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function MissionTimelineCard({ body, spacecraft, visit, updateSettings }: Props) {
-  const summaryParams = { type: 'visit' as const, spacecraft, body, visit };
-  const { data: summary, isLoading } = useSpacecraftSummaryStream(summaryParams);
+  const { data: summary, isLoading } = useSpacecraftSummaryStream({
+    type: SpacecraftSummaryType.VISIT,
+    spacecraft,
+    body,
+    visit,
+  });
   return (
     <Paper
       className={styles.Card}

@@ -10,6 +10,7 @@ import {
   CelestialBodyTypes,
   OrbitalRegimeId,
   OrbitalRegime,
+  CelestialBodyId,
 } from '../../lib/types.ts';
 import { celestialBodyTypeName, DEFAULT_ASTEROID_COLOR } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
@@ -24,7 +25,7 @@ type Props = {
   bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
-  removeBody: (id: string) => void;
+  removeBody: (id: CelestialBodyId) => void;
 };
 export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
   regime,
@@ -47,6 +48,11 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   const spacecraftInRegime = useMemo(
     () => SPACECRAFT.filter(({ orbitalRegimes }) => orbitalRegimes?.includes(regime.id) ?? false),
     [regime.id]
+  );
+
+  const smallBodies = useMemo(
+    () => [CelestialBodyType.DWARF_PLANET, CelestialBodyType.ASTEROID].flatMap(type => bodiesInRegimeByType[type]),
+    [bodiesInRegimeByType]
   );
 
   return (
@@ -77,7 +83,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                 />
               ))}
               {regime.id === OrbitalRegimeId.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
-                <AddSmallBodyButton bodies={bodies} addBody={addBody} removeBody={removeBody} />
+                <AddSmallBodyButton bodies={smallBodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>
           ))}

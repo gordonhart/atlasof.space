@@ -47,3 +47,7 @@ export async function readStreamResponse(
   setActive(false);
   return out;
 }
+
+export function slugifyId(id: string): string {
+  return id.replace(/\//g, '-');
+}

@@ -16,9 +16,9 @@ import {
 import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
-import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
+import { useSmallBodies } from '../../hooks/queries/useSmallBodies.ts';
 import { ASTEROIDS } from '../../lib/bodies.ts';
-import { asCelestialBodyId, CelestialBody, CelestialBodyType } from '../../lib/types.ts';
+import { asCelestialBodyId, CelestialBody, CelestialBodyId, CelestialBodyType } from '../../lib/types.ts';
 import { nameToId, notNullish } from '../../lib/utils.ts';
 
 // TODO: load from data; full list is ~1.5M, should at least include a few thousand
@@ -110,11 +110,12 @@ type Props = {
   onClose: () => void;
   bodies: Array<CelestialBody>;
   addBody: (body: CelestialBody) => void;
-  removeBody: (id: string) => void;
+  removeBody: (id: CelestialBodyId) => void;
 };
 export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody }: Props) {
   const initialCheckedState = useMemo(() => {
     const names = bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
+    console.log(names);
     const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
     return treeDataFlat.filter(({ value }) => names.some(name => value.includes(name))).map(({ value }) => value);
   }, [JSON.stringify(bodies)]);
@@ -144,7 +145,7 @@ export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody
       if (!checked) {
         tree.checkNode(node.value);
       } else {
-        const id = node.nodeProps?.id;
+        const id: CelestialBodyId = node.nodeProps?.id;
         if (id != null) removeBody(id);
         node.children?.forEach(child => {
           const childId = child.nodeProps?.id;
