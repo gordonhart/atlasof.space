@@ -257,6 +257,46 @@ export const INGENUITY = spacecraftWithDefaults({
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
 });
 
+const TIANWEN_1_MISSION_FAMILY = 'Tianwen-1';
+export const TIANWEN_1 = spacecraftWithDefaults({
+  name: 'Tianwen-1',
+  organization: SpacecraftOrganization.CNSA,
+  launchMass: 5000,
+  start: new Date('2020-07-23T04:41:15Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: TIANWEN_1_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'tianwen-1-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
+});
+
+export const ZHURONG = spacecraftWithDefaults({
+  name: 'Zhurong',
+  organization: SpacecraftOrganization.CNSA,
+  launchMass: 240,
+  start: new Date('2020-07-23T04:41:15Z'),
+  end: new Date('2022-12-26T12:00:00Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: TIANWEN_1_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Failed to wake from hibernation in December 2022 due to dust buildup',
+  },
+  thumbnail: 'zhurong-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2021-05-22T02:40:00Z'),
+      end: new Date('2022-12-26T12:00:00Z'),
+    },
+  ],
+});
+
 export const NEW_HORIZONS = spacecraftWithDefaults({
   name: 'New Horizons',
   organization: SpacecraftOrganization.NASA,
@@ -1104,6 +1144,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   CURIOSITY,
   PERSEVERANCE,
   INGENUITY,
+  TIANWEN_1,
+  ZHURONG,
   // SOJOURNER,
   // SPIRIT,
   // OPPORTUNITY,
