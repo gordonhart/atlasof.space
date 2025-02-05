@@ -966,7 +966,53 @@ export const BORRELLY = celestialBodyWithDefaults({
   },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY];
+export const TEMPEL = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '9P/Tempel 1',
+  shortName: 'Tempel 1',
+  influencedBy: [SOL.id],
+  mass: 7.2e13,
+  radius: 3.2e3, // oblong
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2457461.5'),
+    eccentricity: 0.5097153029324003,
+    semiMajorAxis: 3.146206212969314 * AU,
+    inclination: 10.47337655895403,
+    longitudeAscending: 68.75447718427989,
+    argumentOfPeriapsis: 179.1960457087085,
+    meanAnomaly: 334.9969963096004,
+  },
+  assets: {
+    thumbnail: 'tempel-1-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Tempel_1',
+  },
+});
+
+export const HARTLEY = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '103P/Hartley 2',
+  shortName: 'Hartley 2',
+  influencedBy: [SOL.id],
+  mass: 3e11,
+  radius: 570,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2460146.5'),
+    eccentricity: 0.6938071328607858,
+    semiMajorAxis: 3.475233576688153 * AU,
+    inclination: 13.61020331340449,
+    longitudeAscending: 219.7506522429561,
+    argumentOfPeriapsis: 181.3013988764762,
+    meanAnomaly: 347.2946368735635,
+  },
+  assets: {
+    thumbnail: 'hartley-2-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/103P/Hartley',
+  },
+});
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY, TEMPEL, HARTLEY];
 
 export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',

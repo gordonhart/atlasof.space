@@ -895,6 +895,23 @@ export const HAYABUSA = spacecraftWithDefaults({
   ],
 });
 
+export const DEEP_IMPACT = spacecraftWithDefaults({
+  name: 'Deep Impact',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 973,
+  power: 92,
+  start: new Date('2005-01-12T18:47:08Z'),
+  end: new Date('2013-08-08T12:00:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
+  wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
+  thumbnail: 'deep-impact-thumb.jpg',
+  visited: [
+    { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
+    { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },
+  ],
+});
+
 export const DAWN = spacecraftWithDefaults({
   name: 'Dawn',
   organization: SpacecraftOrganization.NASA,
@@ -1072,7 +1089,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   DEEP_SPACE_1,
   // STARDUST,
   HAYABUSA,
-  // DEEP_IMPACT,
+  DEEP_IMPACT,
   DAWN,
   CHANGE_2,
   ROSETTA,
