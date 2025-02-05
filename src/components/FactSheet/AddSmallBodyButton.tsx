@@ -1,14 +1,14 @@
 import { Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconSpherePlus } from '@tabler/icons-react';
-import { CelestialBody } from '../../lib/types.ts';
+import { CelestialBody, CelestialBodyId } from '../../lib/types.ts';
 import { AddSmallBodyModal } from '../Controls/AddSmallBodyModal.tsx';
 import { iconSize } from '../Controls/constants.ts';
 
 type Props = {
   bodies: Array<CelestialBody>;
   addBody: (body: CelestialBody) => void;
-  removeBody: (id: string) => void;
+  removeBody: (id: CelestialBodyId) => void;
 };
 export function AddSmallBodyButton({ bodies, addBody, removeBody }: Props) {
   const [isOpen, { open: onOpen, close: onClose }] = useDisclosure(false);

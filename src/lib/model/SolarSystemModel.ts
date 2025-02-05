@@ -140,7 +140,7 @@ export class SolarSystemModel {
     this.bodies[body.id] = this.createBodyWithParents(settings, parents, body);
   }
 
-  remove(id: string) {
+  remove(id: CelestialBodyId): void {
     const toRemove: KeplerianBody | undefined = this.bodies[id];
     if (id == null || toRemove == null) return; // nothing to do
     delete this.bodies[id];

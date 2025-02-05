@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { Settings } from '../lib/state.ts';
-import { CelestialBody } from '../lib/types.ts';
+import { CelestialBody, CelestialBodyId } from '../lib/types.ts';
 
 export function useSolarSystemModel() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ export function useSolarSystemModel() {
     resize,
     update: (ctx: CanvasRenderingContext2D, settings: Settings) => modelRef.current?.update(ctx, settings),
     add: (settings: Settings, body: CelestialBody) => modelRef.current?.add(settings, body),
-    remove: (id: string) => modelRef.current?.remove(id),
+    remove: (id: CelestialBodyId) => modelRef.current?.remove(id),
     reset: (settings: Settings, camera = true) => modelRef.current?.reset(settings, camera),
   };
 }

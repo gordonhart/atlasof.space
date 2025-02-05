@@ -10,6 +10,7 @@ import { SPACECRAFT_BY_ID } from '../lib/spacecraft.ts';
 import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
 import {
   CelestialBody,
+  CelestialBodyId,
   Epoch,
   isCelestialBody,
   isCelestialBodyId,
@@ -63,7 +64,7 @@ export function SolarSystem() {
     });
   }
 
-  function removeBody(id: string) {
+  function removeBody(id: CelestialBodyId) {
     updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
     model.remove(id);
   }
