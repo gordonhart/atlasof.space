@@ -76,3 +76,4 @@ Infrastructure dependencies:
     - [x] Set spacecraft ID as URL part for deep linking
   - [ ] Add fact sheet for organization, listing spacecraft
   - [x] Add differentiated default colors for TNOs
+  - [ ] Reduce jumpiness of token-by-token rendering for many items (orbital regime fact sheet, spacecraft timelines)
