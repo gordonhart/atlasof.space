@@ -178,6 +178,7 @@ export type Spacecraft = {
   end?: Date;
   focusId?: CelestialBodyId; // center visualization on this body, if specified
   orbitalRegimes: Array<OrbitalRegimeId>;
+  missionFamily?: string;
   cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
   status: { status: SpacecraftStatus; details?: string };
   thumbnail?: string;

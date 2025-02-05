@@ -23,7 +23,7 @@ export function OtherSpacecraft({ spacecraft, updateSettings }: Props) {
   }, [spacecraft.id]);
 
   return (
-    <Stack {...padding}>
+    <Stack gap="xs" {...padding}>
       <Title order={5}>Other Spacecraft</Title>
       <Group gap={8}>
         {otherSpacecraft.map((otherSpacecraft, i) => (

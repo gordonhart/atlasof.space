@@ -13,6 +13,7 @@ import { Thumbnail } from '../Thumbnail.tsx';
 import { WikiLinkPill } from '../WikiLinkPill.tsx';
 import { MissionTimeline } from './MissionTimeline.tsx';
 import { OtherSpacecraft } from './OtherSpacecraft.tsx';
+import { RelatedSpacecraft } from './RelatedSpacecraft.tsx';
 import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
   hover: string | null;
   updateSettings: UpdateSettings;
 };
+
 export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
   spacecraft,
   bodies,
@@ -74,7 +76,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
             <FactGrid facts={bullets} keysWidth={120} />
           </Stack>
           <Box style={{ flexShrink: 1 }}>
-            <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={220} />
+            <Thumbnail key={spacecraft.name} thumbnail={spacecraft.thumbnail} size={240} />
           </Box>
         </Group>
 
@@ -82,6 +84,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
+        <RelatedSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
         <OtherSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
       </Box>
     </Stack>

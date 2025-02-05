@@ -44,6 +44,7 @@ function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: Spac
   return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
 }
 
+const VOYAGER_MISSION_FAMILY = 'Voyager';
 export const VOYAGER_1 = spacecraftWithDefaults({
   name: 'Voyager 1',
   organization: SpacecraftOrganization.NASA,
@@ -52,6 +53,7 @@ export const VOYAGER_1 = spacecraftWithDefaults({
   start: new Date('1977-09-05T12:56:01Z'),
   status: { status: SpacecraftStatus.OPERATIONAL },
   orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: VOYAGER_MISSION_FAMILY,
   thumbnail: 'voyager-1.png',
   wiki: 'https://en.wikipedia.org/wiki/Voyager_1',
   visited: [
@@ -79,6 +81,7 @@ export const VOYAGER_2 = spacecraftWithDefaults({
   start: new Date('1977-08-20T14:29:00Z'),
   status: { status: SpacecraftStatus.OPERATIONAL },
   orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: VOYAGER_MISSION_FAMILY,
   thumbnail: 'voyager-2.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Voyager_2',
   visited: [
@@ -140,6 +143,7 @@ export const VOYAGER_2 = spacecraftWithDefaults({
   ],
 });
 
+const CASSINI_HUYGENS_MISSION_FAMILY = 'Cassini-Huygens';
 export const CASSINI = spacecraftWithDefaults({
   name: 'Cassini',
   organization: SpacecraftOrganization.NASA,
@@ -153,6 +157,7 @@ export const CASSINI = spacecraftWithDefaults({
   },
   focusId: Bodies.SATURN.id,
   orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
   visited: [
@@ -189,6 +194,7 @@ export const HUYGENS = spacecraftWithDefaults({
   end: new Date('2005-01-14T13:37:00Z'),
   focusId: Bodies.TITAN.id,
   orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
@@ -216,6 +222,7 @@ export const CURIOSITY = spacecraftWithDefaults({
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
 });
 
+const PERSEVERANCE_MISSION_FAMILY = 'Perseverance';
 export const PERSEVERANCE = spacecraftWithDefaults({
   name: 'Perseverance',
   organization: SpacecraftOrganization.NASA,
@@ -224,6 +231,7 @@ export const PERSEVERANCE = spacecraftWithDefaults({
   start: new Date('2020-07-30T11:50:00Z'),
   focusId: Bodies.MARS.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: PERSEVERANCE_MISSION_FAMILY,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'perseverance-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
@@ -239,6 +247,7 @@ export const INGENUITY = spacecraftWithDefaults({
   end: new Date('2024-01-18T12:00:00Z'),
   focusId: Bodies.MARS.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: PERSEVERANCE_MISSION_FAMILY,
   status: {
     status: SpacecraftStatus.DEFUNCT,
     details: 'Retired in 2024 due to sustained rotor damage',
@@ -246,6 +255,46 @@ export const INGENUITY = spacecraftWithDefaults({
   thumbnail: 'ingenuity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
+});
+
+const TIANWEN_1_MISSION_FAMILY = 'Tianwen-1';
+export const TIANWEN_1 = spacecraftWithDefaults({
+  name: 'Tianwen-1',
+  organization: SpacecraftOrganization.CNSA,
+  launchMass: 5000,
+  start: new Date('2020-07-23T04:41:15Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: TIANWEN_1_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'tianwen-1-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
+});
+
+export const ZHURONG = spacecraftWithDefaults({
+  name: 'Zhurong',
+  organization: SpacecraftOrganization.CNSA,
+  launchMass: 240,
+  start: new Date('2020-07-23T04:41:15Z'),
+  end: new Date('2022-12-26T12:00:00Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: TIANWEN_1_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Failed to wake from hibernation in December 2022 due to dust buildup',
+  },
+  thumbnail: 'zhurong-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2021-05-22T02:40:00Z'),
+      end: new Date('2022-12-26T12:00:00Z'),
+    },
+  ],
 });
 
 export const NEW_HORIZONS = spacecraftWithDefaults({
@@ -393,12 +442,14 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   ],
 });
 
+const MARINER_MISSION_FAMILY = 'Mariner';
 export const MARINER_2 = spacecraftWithDefaults({
   name: Bodies.MARINER_2.name,
   organization: SpacecraftOrganization.NASA,
   launchMass: Bodies.MARINER_2.mass,
   power: 220,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: MARINER_MISSION_FAMILY,
   start: new Date('1962-08-27T06:53:14Z'),
   end: new Date('1963-01-03T07:00:00Z'),
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
@@ -407,6 +458,7 @@ export const MARINER_2 = spacecraftWithDefaults({
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
 });
 
+const VENERA_MISSION_FAMILY = 'Venera';
 export const VENERA_7 = spacecraftWithDefaults({
   name: 'Venera 7',
   organization: SpacecraftOrganization.USSR,
@@ -415,6 +467,7 @@ export const VENERA_7 = spacecraftWithDefaults({
   end: new Date('1970-12-15T06:00:00Z'),
   focusId: Bodies.VENUS.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: VENERA_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'venera-7-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venera_7',
@@ -441,6 +494,19 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
       end: new Date('2015-01-15T15:01:55Z'),
     },
   ],
+});
+
+export const IKAROS = spacecraftWithDefaults({
+  name: 'IKAROS',
+  organization: SpacecraftOrganization.JAXA,
+  launchMass: 310,
+  start: new Date('2010-05-20T21:58:22Z'),
+  end: new Date('2015-05-20T12:00:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
+  thumbnail: 'ikaros-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/IKAROS',
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-12-08T12:00:00Z') }],
 });
 
 export const JUNO = spacecraftWithDefaults({
@@ -501,6 +567,7 @@ export const LUCY = spacecraftWithDefaults({
   ],
 });
 
+const AIDA_MISSION_FAMILY = 'Asteroid Impact and Deflection Assessment (AIDA)';
 export const DART = spacecraftWithDefaults({
   name: 'Double Asteroid Redirect Test (DART)',
   organization: SpacecraftOrganization.NASA,
@@ -510,10 +577,28 @@ export const DART = spacecraftWithDefaults({
   end: new Date('2022-09-26T23:14:00Z'),
   focusId: Bodies.DIDYMOS.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: AIDA_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
   thumbnail: 'dart-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
   visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
+});
+
+export const HERA = spacecraftWithDefaults({
+  name: 'Hera',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 1128,
+  start: new Date('2024-10-07T14:52:11Z'),
+  focusId: Bodies.DIDYMOS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: AIDA_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'hera-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-15T12:00:00Z') },
+    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
+  ],
 });
 
 export const PSYCHE = spacecraftWithDefaults({
@@ -528,22 +613,6 @@ export const PSYCHE = spacecraftWithDefaults({
   thumbnail: 'psyche-spacecraft-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
   visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
-});
-
-export const HERA = spacecraftWithDefaults({
-  name: 'Hera',
-  organization: SpacecraftOrganization.ESA,
-  launchMass: 1128,
-  start: new Date('2024-10-07T14:52:11Z'),
-  focusId: Bodies.DIDYMOS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'hera-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
-  visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-15T12:00:00Z') },
-    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
-  ],
 });
 
 export const EUROPA_CLIPPER = spacecraftWithDefaults({
@@ -566,6 +635,7 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
   ],
 });
 
+const APOLLO_MISSION_FAMILY = 'Apollo';
 export const APOLLO_8 = spacecraftWithDefaults({
   name: 'Apollo 8',
   organization: SpacecraftOrganization.NASA,
@@ -574,6 +644,7 @@ export const APOLLO_8 = spacecraftWithDefaults({
   end: new Date('1968-12-27T15:51:42Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-8-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_8',
@@ -596,6 +667,7 @@ export const APOLLO_10 = spacecraftWithDefaults({
   end: new Date('1969-05-26T16:52:23Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-10-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_10',
@@ -618,6 +690,7 @@ export const APOLLO_11 = spacecraftWithDefaults({
   end: new Date('1969-07-24T16:50:35Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-11-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_11',
@@ -640,6 +713,7 @@ export const APOLLO_12 = spacecraftWithDefaults({
   end: new Date('1969-11-24T20:58:24Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-12-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_12',
@@ -662,6 +736,7 @@ export const APOLLO_13 = spacecraftWithDefaults({
   end: new Date('1970-04-17T18:07:41Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-13-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_13',
@@ -677,6 +752,7 @@ export const APOLLO_14 = spacecraftWithDefaults({
   end: new Date('1971-02-09T21:05:02Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-14-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_14',
@@ -699,6 +775,7 @@ export const APOLLO_15 = spacecraftWithDefaults({
   end: new Date('1971-08-07T20:45:53Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-15-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_15',
@@ -721,6 +798,7 @@ export const APOLLO_16 = spacecraftWithDefaults({
   end: new Date('1972-04-27T19:45:05Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-16-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_16',
@@ -743,6 +821,7 @@ export const APOLLO_17 = spacecraftWithDefaults({
   end: new Date('1972-12-19T19:54:58Z'),
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: APOLLO_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED },
   thumbnail: 'apollo-17-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_17',
@@ -846,6 +925,26 @@ export const ROSETTA = spacecraftWithDefaults({
   ],
 });
 
+export const STARDUST = spacecraftWithDefaults({
+  name: 'Stardust',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 385,
+  power: 330,
+  start: new Date('1999-02-07T21:04:15Z'),
+  end: new Date('2011-03-24T23:33:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.ASTEROID_BELT],
+  // TODO: returned samples from Wild in 2006 -- how best to model?
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated on March 24, 2011' },
+  wiki: 'https://en.wikipedia.org/wiki/Stardust_(spacecraft)',
+  thumbnail: 'stardust-thumb.jpg',
+  visited: [
+    { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
+    { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
+    { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('2011-02-15T04:39:10Z') },
+  ],
+});
+
+const HAYABUSA_MISSION_FAMILY = 'Hayabusa';
 export const HAYABUSA = spacecraftWithDefaults({
   name: 'Hayabusa',
   organization: SpacecraftOrganization.JAXA,
@@ -854,6 +953,7 @@ export const HAYABUSA = spacecraftWithDefaults({
   end: new Date('2010-06-13T14:12:00Z'),
   focusId: Bodies.ITOKAWA.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: HAYABUSA_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with samples of Itokawa in 2010' },
   wiki: 'https://en.wikipedia.org/wiki/Hayabusa',
   thumbnail: 'hayabusa-thumb.jpg',
@@ -864,6 +964,24 @@ export const HAYABUSA = spacecraftWithDefaults({
       start: new Date('2005-11-19T21:30:00Z'),
       end: new Date('2005-11-19T21:58:00Z'),
     },
+  ],
+});
+
+export const DEEP_IMPACT = spacecraftWithDefaults({
+  name: 'Deep Impact',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 973,
+  power: 92,
+  start: new Date('2005-01-12T18:47:08Z'),
+  end: new Date('2013-08-08T12:00:00Z'),
+  focusId: Bodies.TEMPEL.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
+  wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
+  thumbnail: 'deep-impact-thumb.jpg',
+  visited: [
+    { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
+    { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },
   ],
 });
 
@@ -928,6 +1046,7 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
   end: new Date('2020-12-05T12:00:00Z'),
   focusId: Bodies.RYUGU.id,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: HAYABUSA_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
   wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
   thumbnail: 'hayabusa-2-thumb.jpg',
@@ -994,7 +1113,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // MAGELLAN,
   VENUS_EXPRESS,
   // AKATSUKI,
-  // IKAROS,
+  IKAROS,
   // SHINEN,
 
   // Luna
@@ -1025,6 +1144,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   CURIOSITY,
   PERSEVERANCE,
   INGENUITY,
+  TIANWEN_1,
+  ZHURONG,
   // SOJOURNER,
   // SPIRIT,
   // OPPORTUNITY,
@@ -1041,9 +1162,9 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // Asteroids
   NEAR_SHOEMAKER,
   DEEP_SPACE_1,
-  // STARDUST,
+  STARDUST,
   HAYABUSA,
-  // DEEP_IMPACT,
+  DEEP_IMPACT,
   DAWN,
   CHANGE_2,
   ROSETTA,

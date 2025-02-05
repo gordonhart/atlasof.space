@@ -691,6 +691,30 @@ export const NEREUS = celestialBodyWithDefaults({
   },
 });
 
+export const ANNEFRANK = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '5535 Annefrank',
+  shortName: 'Annefrank',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2458000.5'),
+    eccentricity: 0.0634,
+    semiMajorAxis: 2.2124 * AU,
+    inclination: 4.2473,
+    longitudeAscending: 120.64,
+    argumentOfPeriapsis: 9.1351,
+    meanAnomaly: 23.021,
+  },
+  mass: estimateAsteroidMass(4.34e3),
+  radius: 4.34e3,
+  assets: {
+    thumbnail: 'annefrank-thumb.png',
+    wiki: 'https://en.wikipedia.org/wiki/5535_Annefrank',
+  },
+});
+
 export const BRAILLE = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '9969 Braille',
@@ -860,6 +884,7 @@ export const ASTEROIDS = [
   STEINS,
   TOUTATIS,
   NEREUS,
+  ANNEFRANK,
   BRAILLE,
   ITOKAWA,
   DIDYMOS,
@@ -966,7 +991,76 @@ export const BORRELLY = celestialBodyWithDefaults({
   },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY];
+export const TEMPEL = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '9P/Tempel 1',
+  shortName: 'Tempel 1',
+  influencedBy: [SOL.id],
+  mass: 7.2e13,
+  radius: 3.2e3, // oblong
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2457461.5'),
+    eccentricity: 0.5097153029324003,
+    semiMajorAxis: 3.146206212969314 * AU,
+    inclination: 10.47337655895403,
+    longitudeAscending: 68.75447718427989,
+    argumentOfPeriapsis: 179.1960457087085,
+    meanAnomaly: 334.9969963096004,
+  },
+  assets: {
+    thumbnail: 'tempel-1-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Tempel_1',
+  },
+});
+
+export const HARTLEY = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '103P/Hartley 2',
+  shortName: 'Hartley 2',
+  influencedBy: [SOL.id],
+  mass: 3e11,
+  radius: 570,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2460146.5'),
+    eccentricity: 0.6938071328607858,
+    semiMajorAxis: 3.475233576688153 * AU,
+    inclination: 13.61020331340449,
+    longitudeAscending: 219.7506522429561,
+    argumentOfPeriapsis: 181.3013988764762,
+    meanAnomaly: 347.2946368735635,
+  },
+  assets: {
+    thumbnail: 'hartley-2-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/103P/Hartley',
+  },
+});
+
+export const WILD = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '81P/Wild 2',
+  shortName: 'Wild 2',
+  influencedBy: [SOL.id],
+  mass: 2.3e13,
+  radius: 2.25e3, // oblong
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2458808.5'),
+    eccentricity: 0.5373989073846863,
+    semiMajorAxis: 3.449745576963111 * AU,
+    inclination: 3.237004173608168,
+    longitudeAscending: 136.1102208500619,
+    argumentOfPeriapsis: 41.72523085114398,
+    meanAnomaly: 187.5966814232084,
+  },
+  assets: {
+    thumbnail: 'wild-2-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/81P/Wild',
+  },
+});
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY, TEMPEL, HARTLEY, WILD];
 
 export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',
