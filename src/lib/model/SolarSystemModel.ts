@@ -1,16 +1,24 @@
-import { map } from 'ramda';
 import { AmbientLight, Light, OrthographicCamera, PointLight, Scene, Vector2, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { SOL } from '../bodies.ts';
 import { getCanvasPixels, isOffScreen } from '../canvas.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
 import { SPACECRAFT_BY_ID } from '../spacecraft.ts';
 import { ModelState, Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, isCelestialBodyId, isSpacecraftId, Point2, Point3 } from '../types.ts';
+import {
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyType,
+  isCelestialBodyId,
+  isSpacecraftId,
+  Point2,
+  Point3,
+} from '../types.ts';
 import { notNullish } from '../utils.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
@@ -32,6 +40,7 @@ export class SolarSystemModel {
   private time: number = 0;
   private bodies: Record<string, KeplerianBody>;
 
+  private independentBodyIds: Set<CelestialBodyId>;
   private tmp: Vector3 = new Vector3(); // reuse for efficiency
   private lockedCenter: string | null = null;
   private readonly maxSafeDt = Time.MINUTE * 15;
@@ -65,6 +74,7 @@ export class SolarSystemModel {
     this.controls.listenToKeyEvents(window);
 
     this.bodies = this.createBodies(settings);
+    this.independentBodyIds = this.getIndependentBodyIds();
     this.firmament = new Firmament(this.resolution);
     this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, settings, regime));
 
@@ -216,9 +226,19 @@ export class SolarSystemModel {
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
     // TODO: conditionally excluding the sun is a little gross
-    const parent = mainParent?.body?.type === CelestialBodyType.STAR ? null : mainParent;
     const bodyInEpoch = { ...body, elements: elementsInEpoch };
-    return new KeplerianBody(this.scene, this.resolution, settings, parent, bodyInEpoch, position, velocity);
+    return new KeplerianBody(this.scene, this.resolution, settings, mainParent, bodyInEpoch, position, velocity);
+  }
+
+  private getIndependentBodyIds() {
+    const bodyIds = new Set(Object.values(this.bodies).map(({ body }) => body.id));
+    Object.values(this.bodies).forEach(({ body }) => {
+      if (body.elements.wrt !== SOL.id) bodyIds.delete(body.id);
+      body.influencedBy.forEach(influencedBy => {
+        bodyIds.delete(influencedBy);
+      });
+    });
+    return bodyIds;
   }
 
   private incrementKinematics(dt: number) {
@@ -226,20 +246,35 @@ export class SolarSystemModel {
     // TODO: this algorithm could be improved; 1 hour is not always safe for e.g. LEO satellites of Earth, which have
     //  orbital periods of ~90 minutes. It is also overzealous to subdivide like this for orbits with longer periods
     this.time += dt;
+    this.independentBodyIds.forEach(bodyId => {
+      const body = this.bodies[bodyId];
+      // console.log(body);
+      if (body == null || body.maxSafeDt == null) return;
+      const nIterations = Math.ceil(Math.abs(dt) / body.maxSafeDt);
+      const safeDt = dt / nIterations;
+      const parents = body.influencedBy.map(id => this.bodies[id]);
+      Array(nIterations)
+        .fill(null)
+        .forEach(() => this.incrementKinematicsSafe([...parents, body], safeDt));
+    });
     const nIterations = Math.ceil(Math.abs(dt) / this.maxSafeDt);
     const safeDt = dt / nIterations;
+    const dependentBodies = Object.values(this.bodies).filter(({ body }) => !this.independentBodyIds.has(body.id));
     Array(nIterations)
       .fill(null)
-      .forEach(() => this.incrementKinematicsSafe(safeDt));
+      .forEach(() => this.incrementKinematicsSafe(dependentBodies, safeDt));
   }
 
-  private incrementKinematicsSafe(dt: number) {
+  private incrementKinematicsSafe(bodiesToIncrement: Array<KeplerianBody>, safeDt: number) {
     // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
     //  opposite algorithm to the one performed during initialization
-    const parentStates = map(({ position, body }) => ({ position: position.clone(), mass: body.mass }), this.bodies);
-    Object.values(this.bodies).forEach(body => {
+    const parentStates = bodiesToIncrement.reduce<Record<CelestialBodyId, { mass: number; position: Vector3 }>>(
+      (acc, b) => ({ ...acc, [b.body.id]: { mass: b.body.mass, position: b.position } }),
+      {}
+    );
+    bodiesToIncrement.forEach(body => {
       const parents = body.influencedBy.map(id => parentStates[id]);
-      body.increment(parents, dt);
+      body.increment(parents, safeDt);
     });
   }
 

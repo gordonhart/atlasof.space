@@ -1,10 +1,10 @@
 import { OrthographicCamera, Vector2, Vector3 } from 'three';
 import { G } from '../physics.ts';
-import { Point2, RotationElements } from '../types.ts';
+import { CelestialBodyId, Point2, RotationElements } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
 export class KinematicBody {
-  readonly influencedBy: Array<string>;
+  readonly influencedBy: Array<CelestialBodyId>;
   readonly rotationPeriod: number | undefined;
 
   readonly position: Vector3; // in "real-world" units, i.e. meters
@@ -15,7 +15,7 @@ export class KinematicBody {
   private readonly tmp; // reuse for memory efficiency
 
   constructor(
-    influencedBy: Array<string>,
+    influencedBy: Array<CelestialBodyId>,
     position: Vector3,
     velocity: Vector3,
     rotation?: RotationElements | undefined
