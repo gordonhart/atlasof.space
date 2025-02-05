@@ -691,6 +691,30 @@ export const NEREUS = celestialBodyWithDefaults({
   },
 });
 
+export const ANNEFRANK = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '5535 Annefrank',
+  shortName: 'Annefrank',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2458000.5'),
+    eccentricity: 0.0634,
+    semiMajorAxis: 2.2124 * AU,
+    inclination: 4.2473,
+    longitudeAscending: 120.64,
+    argumentOfPeriapsis: 9.1351,
+    meanAnomaly: 23.021,
+  },
+  mass: estimateAsteroidMass(4.34e3),
+  radius: 4.34e3,
+  assets: {
+    thumbnail: 'annefrank-thumb.png',
+    wiki: 'https://en.wikipedia.org/wiki/5535_Annefrank',
+  },
+});
+
 export const BRAILLE = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '9969 Braille',
@@ -860,6 +884,7 @@ export const ASTEROIDS = [
   STEINS,
   TOUTATIS,
   NEREUS,
+  ANNEFRANK,
   BRAILLE,
   ITOKAWA,
   DIDYMOS,
@@ -1012,7 +1037,30 @@ export const HARTLEY = celestialBodyWithDefaults({
   },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY, TEMPEL, HARTLEY];
+export const WILD = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '81P/Wild 2',
+  shortName: 'Wild 2',
+  influencedBy: [SOL.id],
+  mass: 2.3e13,
+  radius: 2.25e3, // oblong
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2458808.5'),
+    eccentricity: 0.5373989073846863,
+    semiMajorAxis: 3.449745576963111 * AU,
+    inclination: 3.237004173608168,
+    longitudeAscending: 136.1102208500619,
+    argumentOfPeriapsis: 41.72523085114398,
+    meanAnomaly: 187.5966814232084,
+  },
+  assets: {
+    thumbnail: 'wild-2-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/81P/Wild',
+  },
+});
+
+export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY, TEMPEL, HARTLEY, WILD];
 
 export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',

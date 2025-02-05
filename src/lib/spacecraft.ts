@@ -872,6 +872,25 @@ export const ROSETTA = spacecraftWithDefaults({
   ],
 });
 
+export const STARDUST = spacecraftWithDefaults({
+  name: 'Stardust',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 385,
+  power: 330,
+  start: new Date('1999-02-07T21:04:15Z'),
+  end: new Date('2011-03-24T23:33:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.ASTEROID_BELT],
+  // TODO: returned samples from Wild in 2006 -- how best to model?
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated on March 24, 2011' },
+  wiki: 'https://en.wikipedia.org/wiki/Stardust_(spacecraft)',
+  thumbnail: 'stardust-thumb.jpg',
+  visited: [
+    { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
+    { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
+    { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('2011-02-15T04:39:10Z') },
+  ],
+});
+
 const HAYABUSA_MISSION_FAMILY = 'Hayabusa';
 export const HAYABUSA = spacecraftWithDefaults({
   name: 'Hayabusa',
@@ -902,7 +921,8 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
   power: 92,
   start: new Date('2005-01-12T18:47:08Z'),
   end: new Date('2013-08-08T12:00:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  focusId: Bodies.TEMPEL.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
   thumbnail: 'deep-impact-thumb.jpg',
@@ -1087,7 +1107,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // Asteroids
   NEAR_SHOEMAKER,
   DEEP_SPACE_1,
-  // STARDUST,
+  STARDUST,
   HAYABUSA,
   DEEP_IMPACT,
   DAWN,
