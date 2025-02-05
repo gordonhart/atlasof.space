@@ -62,7 +62,7 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
   const timelineActiveIndex = activeIndex ?? (activeBodyIndex >= 0 ? activeBodyIndex + 1 : undefined);
 
   return (
-    <Stack {...padding}>
+    <Stack gap="xs" {...padding}>
       <Group gap="xs">
         <Title order={5}>Mission Timeline</Title>
         <SpacecraftStatusPill status={spacecraft.status} />
