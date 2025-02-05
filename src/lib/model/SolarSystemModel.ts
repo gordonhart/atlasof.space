@@ -10,7 +10,15 @@ import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ORBITAL_REGIMES } from '../regimes.ts';
 import { SPACECRAFT_BY_ID } from '../spacecraft.ts';
 import { ModelState, Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, isCelestialBodyId, isSpacecraftId, Point2, Point3 } from '../types.ts';
+import {
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyType,
+  isCelestialBodyId,
+  isSpacecraftId,
+  Point2,
+  Point3,
+} from '../types.ts';
 import { notNullish } from '../utils.ts';
 import { CAMERA_INIT, SCALE_FACTOR, SUNLIGHT_COLOR } from './constants.ts';
 import { Firmament } from './Firmament.ts';
@@ -30,7 +38,7 @@ export class SolarSystemModel {
   private readonly regimes: Array<OrbitalRegime>;
   private readonly fpsCounter: FrameRateCounter;
   private time: number = 0;
-  private bodies: Record<string, KeplerianBody>;
+  private bodies: Record<CelestialBodyId, KeplerianBody>;
 
   private tmp: Vector3 = new Vector3(); // reuse for efficiency
   private lockedCenter: string | null = null;

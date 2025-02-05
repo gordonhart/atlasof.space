@@ -8,7 +8,7 @@ import {
   isOffScreen,
   LABEL_FONT_FAMILY,
 } from '../canvas.ts';
-import { magnitude, orbitalPeriod } from '../physics.ts';
+import { magnitude } from '../physics.ts';
 import { SPACECRAFT_BY_ID } from '../spacecraft.ts';
 import { Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, isSpacecraftId, Point2 } from '../types.ts';
@@ -31,7 +31,6 @@ export class KeplerianBody extends KinematicBody {
   private readonly labelBox = new Box2();
   private readonly screenPoint = new Vector2(); // reuse for efficiency
   private readonly labelSize: Record<string /* font */, [number, number] /* w, h */> = {}; // cache for efficiency
-  readonly maxSafeDt: number | null;
 
   private visible: boolean = false;
   private hovered: boolean = false;
@@ -57,7 +56,6 @@ export class KeplerianBody extends KinematicBody {
     if (body.elements.rotation != null) {
       this.axis = new AxisIndicator(scene, resolution, body, this.position);
     }
-    this.maxSafeDt = parent != null ? orbitalPeriod(body.elements.semiMajorAxis, parent.body.mass) / 180 : null;
   }
 
   update(settings: Settings, parent: this | null) {
