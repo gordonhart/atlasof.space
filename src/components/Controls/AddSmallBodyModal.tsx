@@ -16,7 +16,7 @@ import {
 import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
-import { useSmallBodies } from '../../hooks/useSmallBodies.ts';
+import { useSmallBodies } from '../../hooks/queries/useSmallBodies.ts';
 import { ASTEROIDS } from '../../lib/bodies.ts';
 import { asCelestialBodyId, CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { nameToId, notNullish } from '../../lib/utils.ts';

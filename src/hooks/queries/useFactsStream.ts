@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { readStreamResponse } from '../lib/functions.ts';
+import { readStreamResponse } from '../../lib/functions.ts';
 
 export function useFactsStream(search: string) {
   const [isStreaming, setIsStreaming] = useState(false);

@@ -6,6 +6,7 @@ import { AnthropicModel, asSseStream, simulateTokenGeneration } from '../src/lib
 export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
+  const blobId = params.get('blobId') ?? search;
 
   const responseHeaders = {
     'Content-Type': 'text/event-stream',
@@ -14,7 +15,7 @@ export default async function handle(request: Request) {
   };
 
   const store = getStore('visit');
-  const stored = await store.get(search);
+  const stored = await store.get(blobId);
   if (stored != null) {
     return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
   }
@@ -24,7 +25,8 @@ export default async function handle(request: Request) {
 You are a fact generation assistant for the Atlas of Space, an interactive Solar System explorer. You present facts \
 with a frank and direct tone and do not have a personality or refer to yourself in your responses.`;
   const prompt = `\
-Generate a 1-sentence summary of ${search}. Examples of good summaries:
+Generate a 1-sentence summary of ${search}. Do not restate the organization that launched the spacecraft. Examples of \
+good summaries:
 
 <example name="the NASA spacecraft Mariner 2">
 An interplanetary probe launched in 1972 that became the first spacecraft to cross the asteroid belt, visit Jupiter, \
@@ -49,7 +51,7 @@ and MASCOT landers before collecting a 5.4 gram sample that was returned to Eart
   const [streamForResponse, streamForStore] = asSseStream(messageStream).tee();
 
   // Process the cache stream in the background
-  storeResponse(store, search, streamForStore);
+  storeResponse(store, blobId, streamForStore);
 
   return new Response(streamForResponse, { headers: responseHeaders });
 }

@@ -1,5 +1,5 @@
 import { Box, Paper, Text, Title } from '@mantine/core';
-import { useSummaryStream } from '../../hooks/useSummaryStream.ts';
+import { useSummaryStream } from '../../hooks/queries/useSummaryStream.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
