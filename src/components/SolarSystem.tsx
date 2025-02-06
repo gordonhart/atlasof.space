@@ -1,4 +1,4 @@
-import { Box, Group, Stack } from '@mantine/core';
+import { Box, Drawer, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
@@ -110,10 +110,6 @@ export function SolarSystem() {
     };
   }, []);
 
-  useEffect(() => {
-    model.resize();
-  }, [settings.center]);
-
   const focusItem = useMemo(() => {
     return isCelestialBodyId(settings.center)
       ? settings.bodies.find(({ id }) => id === settings.center)
@@ -123,6 +119,7 @@ export function SolarSystem() {
           ? SPACECRAFT_BY_ID[settings.center]
           : undefined;
   }, [settings.center, JSON.stringify(settings.bodies)]);
+
   const focusColor = isCelestialBody(focusItem)
     ? focusItem.style.fgColor
     : isSpacecraft(focusItem)
@@ -153,25 +150,38 @@ export function SolarSystem() {
           reset={resetState}
         />
       </Box>
-      {focusItem != null && (
+      <Drawer
+        opened={focusItem != null}
+        position={isSmallDisplay ? 'bottom' : 'right'}
+        onClose={() => updateSettings({ center: null })}
+        withOverlay={false}
+        withCloseButton={false}
+        styles={{ body: { p: 0 } }}
+        transitionProps={{ transition: 'fade-left' }}
+        padding={0}
+        size={isSmallDisplay ? '60dvh' : 600}
+      >
         <Box
+          w="100%"
           h={isSmallDisplay ? '60dvh' : '100dvh'}
-          w={isSmallDisplay ? undefined : 600}
+          bg="black"
           style={{
             borderLeft: isSmallDisplay ? undefined : `1px solid ${focusColor}`,
             borderTop: isSmallDisplay ? `1px solid ${focusColor}` : undefined,
           }}
         >
-          <FactSheet
-            key={focusItem.id} // rerender when focus item changes
-            item={focusItem}
-            settings={settings}
-            updateSettings={updateSettings}
-            addBody={addBody}
-            removeBody={removeBody}
-          />
+          {focusItem != null && (
+            <FactSheet
+              key={focusItem.id} // rerender when focus item changes
+              item={focusItem}
+              settings={settings}
+              updateSettings={updateSettings}
+              addBody={addBody}
+              removeBody={removeBody}
+            />
+          )}
         </Box>
-      )}
+      </Drawer>
     </LayoutComponent>
   );
 }

@@ -77,3 +77,5 @@ Infrastructure dependencies:
   - [ ] Add fact sheet for organization, listing spacecraft
   - [x] Add differentiated default colors for TNOs
   - [ ] Reduce jumpiness of token-by-token rendering for many items (orbital regime fact sheet, spacecraft timelines)
+  - [ ] Remove superfluous extra key facts, like spacecraft visits, dimensions, satellites
+  - [ ] Make opening of fact sheet smoother — currently pretty jumpy
