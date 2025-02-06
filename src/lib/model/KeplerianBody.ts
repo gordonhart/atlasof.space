@@ -95,8 +95,29 @@ export class KeplerianBody extends KinematicBody {
     const [bodyXpx, bodyYpxInverted] = this.getScreenPosition(camera, this.resolution);
     const bodyPx: Point2 = [bodyXpx, this.resolution.y - bodyYpxInverted];
 
-    const label = this.body.shortName ?? this.body.name;
+    const textColor = this.body.style.fgColor;
+    const strokeColor = this.body.style.bgColor ?? this.body.style.fgColor;
+
+    // body is off-screen; draw a pointer if the screen is larger than xs (mobile)
+    if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
+      // TODO: don't draw offscreen indicators for moons when the parent isn't visible
+      if (!isXs(window.innerWidth)) drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
+      return;
+    }
+
+    const baseRadius = this.body.radius / metersPerPx;
+    const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
+    if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
+      drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
+    } else {
+      this.sphere.ensureTextureLoaded(); // since the body is visible, ensure that its texture is loaded
+    }
+
     const fontSizePx = this.labelFontSize(metersPerPx);
+    if ((!drawLabel && !this.hovered) || fontSizePx == null) return;
+
+    // measure the size of the label and draw
+    const label = this.body.shortName ?? this.body.name;
     ctx.font = `${fontSizePx ?? 12}px ${LABEL_FONT_FAMILY}`; // TODO: don't measure if we won't draw
     let textPx = this.labelSize[ctx.font];
     if (textPx == null) {
@@ -105,34 +126,13 @@ export class KeplerianBody extends KinematicBody {
       if (isLabelFontAvailable(ctx)) this.labelSize[ctx.font] = [textWidthPx, textHeightPx];
       textPx = [textWidthPx, textHeightPx];
     }
-
-    const textColor = this.body.style.fgColor;
-    const strokeColor = this.body.style.bgColor ?? this.body.style.fgColor;
-
-    // body is off-screen; draw a pointer if the screen is larger than xs (mobile)
-    if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
-      // TODO: don't draw offscreen indicators for moons when the parent isn't visible
-      if (!isXs(window.innerWidth)) {
-        drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
-      }
-    } else {
-      const baseRadius = this.body.radius / metersPerPx;
-      const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
-      if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
-        drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
-      } else {
-        this.sphere.ensureTextureLoaded(); // since the body is visible, ensure that its texture is loaded
-      }
-      if ((drawLabel || this.hovered) && fontSizePx != null) {
-        const labelRadius = Math.max(bodyRadius, 1) + 5;
-        const boxPadPx = (fontSizePx * 4) / 12;
-        const [p0, p1] = drawLabelAtLocation(ctx, label, textColor, strokeColor, bodyPx, textPx, labelRadius, boxPadPx);
-        this.labelBox.min.x = Math.min(p0[0], p1[0]);
-        this.labelBox.min.y = Math.min(p0[1], p1[1]);
-        this.labelBox.max.x = Math.max(p0[0], p1[0]);
-        this.labelBox.max.y = Math.max(p0[1], p1[1]);
-      }
-    }
+    const labelRadius = Math.max(bodyRadius, 1) + 5;
+    const boxPadPx = (fontSizePx * 4) / 12;
+    const [p0, p1] = drawLabelAtLocation(ctx, label, textColor, strokeColor, bodyPx, textPx, labelRadius, boxPadPx);
+    this.labelBox.min.x = Math.min(p0[0], p1[0]);
+    this.labelBox.min.y = Math.min(p0[1], p1[1]);
+    this.labelBox.max.x = Math.max(p0[0], p1[0]);
+    this.labelBox.max.y = Math.max(p0[1], p1[1]);
   }
 
   isNearCursor(
@@ -176,10 +176,9 @@ export class KeplerianBody extends KinematicBody {
     if (this.focused || minLongAxisPx < 0) return maxFontSize;
     const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
     if ((!this.visible && !this.focused) || longAxisPx < minLongAxisPx) return null;
-    const fontSizeRange = maxFontSize - minFontSize;
     const multiplier = (longAxisPx - minLongAxisPx) / (minLongAxisPx * 2);
-    const fontSize = Math.min(minFontSize + fontSizeRange * multiplier, maxFontSize);
-    return Number(fontSize.toFixed(1));
+    const fontSize = Math.min(minFontSize + (maxFontSize - minFontSize) * multiplier, maxFontSize);
+    return Number(fontSize.toFixed(1)); // round to improve label measurement caching
   }
 
   // TODO: dynamically size by actual radius? log scale between ~1-4?

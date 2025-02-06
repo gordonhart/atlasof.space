@@ -45,18 +45,14 @@ export function useCursorControls(model: SolarSystemModel | null, settings: Sett
   }
 
   function onClick(event: MouseEvent<HTMLElement>) {
-    if (model == null) return;
-
     // only process this as a click if the user hasn't been dragging around; it's bad UX if the end of your dragging
     // ends in selecting the planet underneath your cursor
-    if (dragDetectorRef.current?.dragged) {
-      dragDetectorRef.current = null;
-      return;
-    }
+    const isDragging = dragDetectorRef.current?.dragged;
+    dragDetectorRef.current = null;
+    if (isDragging || model == null) return;
 
     const closeBody = model.findCloseBody(getCursorCoordinates(event), settings, interactPxThreshold);
     if (closeBody != null) {
-      dragDetectorRef.current = null;
       updateSettings({ center: closeBody.body.id });
     }
   }
