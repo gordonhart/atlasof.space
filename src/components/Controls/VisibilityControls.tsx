@@ -35,6 +35,22 @@ export function VisibilityControls({ settings, updateSettings }: Props) {
         </Tooltip>
       </Menu.Target>
       <Menu.Dropdown>
+        <Menu.Label>General</Menu.Label>
+        <Menu.Item onClick={() => updateSettings(prev => ({ ...prev, drawOrbit: !prev.drawOrbit }))}>
+          <Group gap="xs" align="center">
+            {settings.drawOrbit ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+            Orbits
+          </Group>
+        </Menu.Item>
+        <Menu.Item onClick={() => updateSettings(prev => ({ ...prev, drawLabel: !prev.drawLabel }))}>
+          <Group gap="xs" align="center">
+            {settings.drawLabel ? <IconCircleFilled size={14} /> : <IconCircle size={14} />}
+            Labels
+          </Group>
+        </Menu.Item>
+
+        <Menu.Divider />
+
         <Menu.Label>Celestial Body Types</Menu.Label>
         {CelestialBodyTypes.filter(type => type !== CelestialBodyType.SPACECRAFT).map(type => (
           <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
@@ -44,7 +60,9 @@ export function VisibilityControls({ settings, updateSettings }: Props) {
             </Group>
           </Menu.Item>
         ))}
+
         <Menu.Divider />
+
         <Menu.Label>Orbital Regimes</Menu.Label>
         {Object.values(OrbitalRegimeId).map(regime => (
           <Menu.Item key={regime} onClick={() => toggleVisibleRegime(regime)}>
