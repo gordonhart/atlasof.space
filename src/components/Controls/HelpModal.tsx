@@ -24,7 +24,7 @@ import {
   IconHandClick,
   IconHandMove,
   IconHandTwoFingers,
-  IconHelp,
+  IconInfoHexagon,
   IconRotate3d,
   IconSearch,
   IconX,
@@ -172,7 +172,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
             segments={[
               { content: 'Use the controls at the bottom of the screen to change settings or click ' },
               { content: 'Help ', highlight: true },
-              { content: <IconHelp size={14} style={{ marginBottom: -2 }} />, highlight: true },
+              { content: <IconInfoHexagon size={14} style={{ marginBottom: -2 }} />, highlight: true },
               { content: ' to open this menu.' },
             ]}
           />

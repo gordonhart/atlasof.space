@@ -1,11 +1,10 @@
-import { ActionIcon, Group, Tooltip } from '@mantine/core';
-import { IconRestore } from '@tabler/icons-react';
+import { Group } from '@mantine/core';
 import { memo } from 'react';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
-import { buttonGap, iconSize } from './constants.ts';
+import { buttonGap } from './constants.ts';
 import { HelpModalButton } from './HelpModalButton.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
-import { VisibilityControls } from './VisibilityControls.tsx';
+import { SettingsMenu } from './SettingsMenu.tsx';
 
 type Props = {
   settings: Settings;
@@ -17,15 +16,9 @@ export const GeneralControls = memo(function GeneralControlsComponent({ settings
     <Group gap={buttonGap}>
       <SelectOmnibox settings={settings} updateSettings={updateSettings} />
 
-      <VisibilityControls settings={settings} updateSettings={updateSettings} />
-
-      <Tooltip position="top" label="Reset">
-        <ActionIcon onClick={reset}>
-          <IconRestore size={iconSize} />
-        </ActionIcon>
-      </Tooltip>
-
       <HelpModalButton settings={settings} updateSettings={updateSettings} />
+
+      <SettingsMenu settings={settings} updateSettings={updateSettings} reset={reset} />
     </Group>
   );
 });
