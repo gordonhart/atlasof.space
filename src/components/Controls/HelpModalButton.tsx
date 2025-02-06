@@ -1,6 +1,6 @@
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
-import { IconHelp } from '@tabler/icons-react';
+import { IconInfoHexagon } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { iconSize } from './constants.ts';
@@ -36,7 +36,7 @@ export function HelpModalButton({ settings, updateSettings }: Props) {
     <>
       <Tooltip position="top" label="Help">
         <ActionIcon onClick={controls.open}>
-          <IconHelp size={iconSize} />
+          <IconInfoHexagon size={iconSize} />
         </ActionIcon>
       </Tooltip>
       <HelpModal isOpen={isOpen} onClose={closeHelp} settings={settings} updateSettings={updateSettings} />

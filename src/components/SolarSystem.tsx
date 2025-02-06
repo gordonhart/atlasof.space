@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
+import { useIsTouchDevice } from '../hooks/useIsTouchDevice.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useUrlState } from '../hooks/useUrlState.ts';
 import { ORBITAL_REGIMES } from '../lib/regimes.ts';
@@ -24,6 +25,7 @@ import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const { center: urlCenter } = useUrlState();
+  const isTouchDevice = useIsTouchDevice();
   const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
   const [appState, setAppState] = useState(urlInitialState);
   const appStateRef = useRef(appState);
@@ -36,13 +38,15 @@ export function SolarSystem() {
     update => {
       setAppState(prev => {
         const updated = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
+        // disable hover for touch devices; interactions don't work well
+        if (isTouchDevice) updated.hover = null;
         const newState = { ...prev, settings: updated };
         // set the mutable state ref (accessed by animation callback) on state update
         appStateRef.current = newState;
         return newState;
       });
     },
-    [setAppState]
+    [setAppState, isTouchDevice]
   );
 
   // sync URL to center
