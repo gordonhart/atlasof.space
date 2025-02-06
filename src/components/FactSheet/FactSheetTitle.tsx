@@ -17,6 +17,7 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
   const { xs: isXsDisplay, sm: isSmallDisplay } = useDisplaySize();
   return (
     <Group
+      // TODO: there's an issue with 0.5px of underlying content rendering above this header when scrolling
       pos="sticky"
       top={0}
       bg="black"

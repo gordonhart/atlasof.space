@@ -114,7 +114,6 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
       opened={isOpen}
       onClose={onClose}
       withCloseButton={false}
-      bg="black"
       styles={{
         body: {
           padding: 0,
@@ -123,6 +122,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
           border: '1px solid var(--mantine-color-gray-8)',
           borderRadius: 'var(--mantine-radius-md)',
           overflow: 'auto',
+          backgroundColor: 'black',
         },
       }}
     >
