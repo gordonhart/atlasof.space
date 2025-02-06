@@ -114,6 +114,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
       opened={isOpen}
       onClose={onClose}
       withCloseButton={false}
+      bg="black"
       styles={{
         body: {
           padding: 0,

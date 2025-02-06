@@ -15,9 +15,7 @@ export const GeneralControls = memo(function GeneralControlsComponent({ settings
   return (
     <Group gap={buttonGap}>
       <SelectOmnibox settings={settings} updateSettings={updateSettings} />
-
       <HelpModalButton settings={settings} updateSettings={updateSettings} />
-
       <SettingsMenu settings={settings} updateSettings={updateSettings} reset={reset} />
     </Group>
   );
