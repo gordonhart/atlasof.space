@@ -18,7 +18,7 @@ export const MIN_ORBIT_PX_LABEL_VISIBLE: Record<CelestialBodyType, number> = {
   [CelestialBodyType.MOON]: 25,
   [CelestialBodyType.SPACECRAFT]: 50,
   [CelestialBodyType.DWARF_PLANET]: 75,
-  [CelestialBodyType.ASTEROID]: 100,
+  [CelestialBodyType.ASTEROID]: 150,
   [CelestialBodyType.COMET]: 100,
   [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 100,
 };

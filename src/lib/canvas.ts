@@ -62,7 +62,8 @@ export function drawLabelAtLocation(
   strokeColor: HexColor,
   [xPx, yPx]: Point2,
   [textWidthPx, textHeightPx]: Point2,
-  radius: number
+  radius: number,
+  boxPadPx = 4
 ): [Point2, Point2] {
   const dpr = window.devicePixelRatio;
   const [canvasWidthPx, canvasHeightPx] = [ctx.canvas.width / dpr, ctx.canvas.height / dpr];
@@ -71,7 +72,6 @@ export function drawLabelAtLocation(
   ctx.translate(0, -canvasHeightPx);
   const yPxInverted = canvasHeightPx - yPx;
 
-  const boxPadPx = 4;
   const h = textHeightPx + boxPadPx * 2;
   const w = textWidthPx + h / 2;
   const angle = Math.atan2(2, 1);

@@ -96,8 +96,8 @@ export class KeplerianBody extends KinematicBody {
     const bodyPx: Point2 = [bodyXpx, this.resolution.y - bodyYpxInverted];
 
     const label = this.body.shortName ?? this.body.name;
-    const fontSize = this.hovered ? '14px' : '12px';
-    ctx.font = `${fontSize} ${LABEL_FONT_FAMILY}`;
+    const fontSizePx = this.labelFontSize(metersPerPx);
+    ctx.font = `${fontSizePx ?? 12}px ${LABEL_FONT_FAMILY}`; // TODO: don't measure if we won't draw
     let textPx = this.labelSize[ctx.font];
     if (textPx == null) {
       const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText(label);
@@ -123,9 +123,10 @@ export class KeplerianBody extends KinematicBody {
       } else {
         this.sphere.ensureTextureLoaded(); // since the body is visible, ensure that its texture is loaded
       }
-      if ((drawLabel || this.hovered) && this.shouldDrawLabel(metersPerPx)) {
+      if ((drawLabel || this.hovered) && fontSizePx != null) {
         const labelRadius = Math.max(bodyRadius, 1) + 5;
-        const [p0, p1] = drawLabelAtLocation(ctx, label, textColor, strokeColor, bodyPx, textPx, labelRadius);
+        const boxPadPx = (fontSizePx * 4) / 12;
+        const [p0, p1] = drawLabelAtLocation(ctx, label, textColor, strokeColor, bodyPx, textPx, labelRadius, boxPadPx);
         this.labelBox.min.x = Math.min(p0[0], p1[0]);
         this.labelBox.min.y = Math.min(p0[1], p1[1]);
         this.labelBox.max.x = Math.max(p0[0], p1[0]);
@@ -168,10 +169,17 @@ export class KeplerianBody extends KinematicBody {
   }
 
   // progressively hide labels as you zoom out, prioritizing certain types (e.g. planets) over others (e.g. asteroids)
-  private shouldDrawLabel(metersPerPx: number) {
-    const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
+  private labelFontSize(metersPerPx: number): number | null {
+    const [minFontSize, maxFontSize, hoveredFontSize] = [8, 12, 14];
+    if (this.hovered) return hoveredFontSize;
     const minLongAxisPx = MIN_ORBIT_PX_LABEL_VISIBLE[this.body.type];
-    return this.focused || this.hovered || (this.visible && longAxisPx > minLongAxisPx);
+    if (this.focused || minLongAxisPx < 0) return maxFontSize;
+    const longAxisPx = (this.body.elements.semiMajorAxis * 2) / metersPerPx;
+    if ((!this.visible && !this.focused) || longAxisPx < minLongAxisPx) return null;
+    const fontSizeRange = maxFontSize - minFontSize;
+    const multiplier = (longAxisPx - minLongAxisPx) / (minLongAxisPx * 2);
+    const fontSize = Math.min(minFontSize + fontSizeRange * multiplier, maxFontSize);
+    return Number(fontSize.toFixed(1));
   }
 
   // TODO: dynamically size by actual radius? log scale between ~1-4?
