@@ -1,4 +1,5 @@
 import { Box, Group, Paper, Text, Title } from '@mantine/core';
+import { useIntersection } from '@mantine/hooks';
 import {
   SpacecraftSummaryType,
   useSpacecraftSummaryStream,
@@ -19,6 +20,9 @@ type Props = {
   compact?: boolean;
 };
 export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = false }: Props) {
+  const { ref, entry } = useIntersection();
+  console.log(spacecraft.name, entry?.isIntersecting);
+
   const visit = useSpacecraftVisit({ spacecraft, body });
   const summaryParams =
     body != null && visit != null
@@ -41,7 +45,7 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
   const visitBlurb = visit != null ? `, ${visitVerb} in ${visit.start.getFullYear()}` : '';
 
   return (
-    <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }} onClick={onClick}>
+    <Paper ref={ref} className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }} onClick={onClick}>
       {spacecraft.thumbnail != null && (
         <Box ml="xs" style={{ float: 'right' }}>
           <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />

@@ -283,6 +283,7 @@ export class SolarSystemModel {
     this.controls.zoomToCursor = center == null; // when center is set, zoom to body instead of cursor
     if (center == null) {
       this.lockedCenter = null;
+      this.setCameraOffset(0, 0);
       return;
     }
     const centerBody = this.bodies[center];
@@ -297,6 +298,15 @@ export class SolarSystemModel {
     } else {
       this.controls.target.add(vector.normalize().multiplyScalar(-travel / SCALE_FACTOR));
     }
+    const isPortrait = this.resolution.x < 1080;
+    const offsetX = -300 / this.resolution.x; // half of 600px width drawer
+    const offsetY = 0.3; // half of 60dvh height drawer
+    this.setCameraOffset(isPortrait ? 0 : offsetX, isPortrait ? offsetY : 0);
+  }
+
+  private setCameraOffset(xPx: number, yPx: number) {
+    this.camera.projectionMatrix.elements[12] = xPx * 2;
+    this.camera.projectionMatrix.elements[13] = yPx * 2;
   }
 
   private setupCamera() {

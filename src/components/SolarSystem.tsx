@@ -1,4 +1,4 @@
-import { Box, Group, Stack } from '@mantine/core';
+import { Box, Drawer } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
@@ -110,10 +110,6 @@ export function SolarSystem() {
     };
   }, []);
 
-  useEffect(() => {
-    model.resize();
-  }, [settings.center]);
-
   const focusItem = useMemo(() => {
     return isCelestialBodyId(settings.center)
       ? settings.bodies.find(({ id }) => id === settings.center)
@@ -123,15 +119,15 @@ export function SolarSystem() {
           ? SPACECRAFT_BY_ID[settings.center]
           : undefined;
   }, [settings.center, JSON.stringify(settings.bodies)]);
+
   const focusColor = isCelestialBody(focusItem)
     ? focusItem.style.fgColor
     : isSpacecraft(focusItem)
       ? DEFAULT_SPACECRAFT_COLOR
       : DEFAULT_ASTEROID_COLOR;
 
-  const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
-    <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
+    <Box w="100vw" h="100dvh">
       <Box pos="relative" w="100%" h="100dvh" flex={1}>
         <Box
           style={{ cursor: settings.hover != null ? 'pointer' : 'unset' }}
@@ -153,25 +149,38 @@ export function SolarSystem() {
           reset={resetState}
         />
       </Box>
-      {focusItem != null && (
+      <Drawer
+        opened={focusItem != null}
+        position={isSmallDisplay ? 'bottom' : 'right'}
+        size={isSmallDisplay ? '60dvh' : 600}
+        padding={0}
+        styles={{ body: { p: 0 } }}
+        transitionProps={{ transition: isSmallDisplay ? 'fade-up' : 'fade-left' }}
+        onClose={() => updateSettings({ center: null })}
+        withOverlay={false}
+        withCloseButton={false}
+      >
         <Box
+          w="100%"
           h={isSmallDisplay ? '60dvh' : '100dvh'}
-          w={isSmallDisplay ? undefined : 600}
+          bg="black"
           style={{
             borderLeft: isSmallDisplay ? undefined : `1px solid ${focusColor}`,
             borderTop: isSmallDisplay ? `1px solid ${focusColor}` : undefined,
           }}
         >
-          <FactSheet
-            key={focusItem.id} // rerender when focus item changes
-            item={focusItem}
-            settings={settings}
-            updateSettings={updateSettings}
-            addBody={addBody}
-            removeBody={removeBody}
-          />
+          {focusItem != null && (
+            <FactSheet
+              key={focusItem.id} // rerender when focus item changes
+              item={focusItem}
+              settings={settings}
+              updateSettings={updateSettings}
+              addBody={addBody}
+              removeBody={removeBody}
+            />
+          )}
         </Box>
-      )}
-    </LayoutComponent>
+      </Drawer>
+    </Box>
   );
 }
