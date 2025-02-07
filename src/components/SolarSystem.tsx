@@ -1,4 +1,4 @@
-import { Box, Drawer, Group, Stack } from '@mantine/core';
+import { Box, Drawer } from '@mantine/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
@@ -126,9 +126,8 @@ export function SolarSystem() {
       ? DEFAULT_SPACECRAFT_COLOR
       : DEFAULT_ASTEROID_COLOR;
 
-  const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
-    <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
+    <Box w="100vw" h="100dvh">
       <Box pos="relative" w="100%" h="100dvh" flex={1}>
         <Box
           style={{ cursor: settings.hover != null ? 'pointer' : 'unset' }}
@@ -153,13 +152,13 @@ export function SolarSystem() {
       <Drawer
         opened={focusItem != null}
         position={isSmallDisplay ? 'bottom' : 'right'}
+        size={isSmallDisplay ? '60dvh' : 600}
+        padding={0}
+        styles={{ body: { p: 0 } }}
+        transitionProps={{ transition: isSmallDisplay ? 'fade-up' : 'fade-left' }}
         onClose={() => updateSettings({ center: null })}
         withOverlay={false}
         withCloseButton={false}
-        styles={{ body: { p: 0 } }}
-        transitionProps={{ transition: 'fade-left' }}
-        padding={0}
-        size={isSmallDisplay ? '60dvh' : 600}
       >
         <Box
           w="100%"
@@ -182,6 +181,6 @@ export function SolarSystem() {
           )}
         </Box>
       </Drawer>
-    </LayoutComponent>
+    </Box>
   );
 }
