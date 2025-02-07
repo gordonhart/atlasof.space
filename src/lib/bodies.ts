@@ -1719,24 +1719,6 @@ export const IXION = celestialBodyWithDefaults({
   },
 });
 
-export const OUMUAMUA = celestialBodyWithDefaults({
-  type: CelestialBodyType.TRANS_NEPTUNIAN_OBJECT,
-  name: "'Oumuamua",
-  influencedBy: [SOL.id],
-  mass: 0, // unknown
-  radius: 55, // 115x111x19m estimate
-  elements: {
-    wrt: SOL.id,
-    epoch: julianDayToEpoch('JD2458080.5'),
-    eccentricity: 1.20113,
-    semiMajorAxis: -1.2723 * AU,
-    inclination: 122.74,
-    longitudeAscending: 24.597,
-    argumentOfPeriapsis: 241.811,
-    meanAnomaly: 51.158,
-  },
-});
-
 export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   QUAOAR,
   SEDNA,
