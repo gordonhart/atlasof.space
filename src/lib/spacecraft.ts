@@ -459,6 +459,24 @@ export const MARINER_2 = spacecraftWithDefaults({
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
 });
 
+export const MARINER_10 = spacecraftWithDefaults({
+  name: 'Mariner 10',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 502.9,
+  power: 820,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: MARINER_MISSION_FAMILY,
+  start: new Date(1973, 10, 3, 5, 45),
+  end: new Date(1975, 2, 24, 12, 21),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit in the inner system' },
+  wiki: 'https://en.wikipedia.org/wiki/Mariner_10',
+  thumbnail: 'mariner-10-thumb.jpg',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date(1974, 1, 5) },
+    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1974, 2, 29) },
+  ],
+});
+
 const VENERA_MISSION_FAMILY = 'Venera';
 export const VENERA_7 = spacecraftWithDefaults({
   name: 'Venera 7',
@@ -1136,7 +1154,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // VENERA_6,
   VENERA_7,
   // VENERA_8,
-  // MARINER_10,
+  MARINER_10,
   // VENERA_9,
   // VENERA_10,
   // VENERA_11,
