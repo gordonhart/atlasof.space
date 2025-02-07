@@ -308,6 +308,7 @@ export const NEW_HORIZONS = spacecraftWithDefaults({
     details: 'Currently traveling through the Kuiper belt',
   },
   orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  focusId: Bodies.PLUTO.id,
   thumbnail: 'new-horizons-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/New_Horizons',
   visited: [
@@ -836,6 +837,7 @@ export const APOLLO_17 = spacecraftWithDefaults({
   ],
 });
 
+const PIONEER_MISSION_FAMILY = 'Pioneer';
 export const PIONEER_10 = spacecraftWithDefaults({
   name: 'Pioneer 10',
   organization: SpacecraftOrganization.NASA,
@@ -844,6 +846,7 @@ export const PIONEER_10 = spacecraftWithDefaults({
   start: new Date('1972-03-03T01:49:04Z'),
   end: new Date('2003-01-23T12:00:00Z'),
   orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: PIONEER_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting out beyond the Kuiper Belt' },
   wiki: 'https://en.wikipedia.org/wiki/Pioneer_10',
   thumbnail: 'pioneer-10-thumb.jpg',
@@ -853,6 +856,42 @@ export const PIONEER_10 = spacecraftWithDefaults({
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T19:26:00Z') },
     { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T22:56:00Z') },
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-04T02:26:00Z') },
+  ],
+});
+
+export const PIONEER_11 = spacecraftWithDefaults({
+  name: 'Pioneer 11',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 258.5,
+  power: 155,
+  //
+  start: new Date('1973-04-06T02:11:04Z'),
+  end: new Date('1995-11-24T12:00:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: PIONEER_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting through the Kuiper Belt' },
+  wiki: 'https://en.wikipedia.org/wiki/Pioneer_11',
+  thumbnail: 'pioneer-11-thumb.jpg',
+  visited: [
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1974-12-02T08:21:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1974-12-02T22:09:00Z') },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1974-12-03T03:11:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1974-12-03T04:15:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1974-12-03T05:21:19Z') },
+    // { id: Bodies.AMALTHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1974-12-03T22:29:00Z') }, // TODO
+    { id: Bodies.IAPETUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-08-29T06:06:10Z') },
+    { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-08-29T11:53:33Z') },
+    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-08-31T12:32:33Z') },
+    // TODO: Epimetheus, Atlas
+    { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-01T15:59:30Z') },
+    { id: Bodies.MIMAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-01T16:26:28Z') },
+    { id: Bodies.SATURN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-01T16:29:34Z') },
+    // TODO: Janus
+    { id: Bodies.TETHYS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-01T18:25:34Z') },
+    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-01T18:30:14Z') },
+    // TODO: Calypso
+    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-01T22:15:27Z') },
+    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-09-02T18:00:33Z') },
   ],
 });
 
@@ -1177,6 +1216,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
 
   // Outer missions
   PIONEER_10,
+  PIONEER_11,
   VOYAGER_1,
   VOYAGER_2,
   GALILEO,
