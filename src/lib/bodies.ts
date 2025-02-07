@@ -786,6 +786,7 @@ export const DIDYMOS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'didymos-thumb.jpg',
     wiki: 'https://en.wikipedia.org/wiki/65803_Didymos',
+    search: 'Q2265762',
   },
 });
 
