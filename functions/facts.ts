@@ -100,52 +100,38 @@ What facts can you tell me about '${search}'? I'm interested in things like the 
 - Discovery date
 - Discoverer and circumstances
 - Information about name and origins
-- Dimensions
-- Rotation period (if known)
+- Dimensions (for non-spherical small bodies only)
+- Rotation facts (e.g. tidally locked or not)
 - Albedo
 - Material composition (if known)
+- Density (if known)
+
+I'm not interested in the following:
+
+- Rotation period (if known)
 - Relevant spacecraft missions and dates
 - Major satellites (if any)
 
-Format your answer as markdown bullet points, with **bolded** keys. Do not include orbital characteristics. Do not preface your \
-answer or return anything other than bullet points.
+Format your answer as markdown bullet points, with **bolded** keys. Do not include orbital characteristics. Do not \
+preface your answer or return anything other than bullet points.
 
-Here's an example of a good response for Saturn's moon Enceladus:
+Here are a few examples of good responses:
 
-\`\`\`md
+<example name="Saturn's moon Enceladus">
 - **Discovery date**: August 28, 1789
 - **Discovered by**: William Herschel, a German-British astronomer
 - **Name origins**: Named after the giant Enceladus from Greek mythology
-- **Dimensions**: Diameter of 504.2 km
-- **Rotation period**: 1.370218 days, tidally locked to Saturn
+- **Rotation**: Tidally locked to Saturn
 - **Albedo**: 1.375
 - **Material composition**: Mostly water ice with some rock
-- **Spacecraft missions**: 
-  - Voyager 1 and Voyager 2 flybys in 1980 and 1981
-  - Cassini orbiter observations from 2004 to 2017
-\`\`\`
+</example>
 
-Here's another good example for the planet Jupiter:
-
-\`\`\`md
+<example name="Jupiter+planet">
 - **Discovery date**: Visible to naked eye since ancient times
 - **Name origins**: Named after the Roman king of gods, Jupiter
-- **Dimensions**: Diameter: 142,984 km
-- **Rotation period**: 9.925 hours
 - **Albedo**: 0.343
 - **Material composition**: Primarily hydrogen and helium gas giant with liquid metallic hydrogen core
-- **Spacecraft missions**:
-  - Pioneer 10 and 11 (1973-1974)
-  - Voyager 1 and 2 (1979)
-  - Galileo orbiter (1995-2003)
-  - Juno orbiter (2016-present)
-- **Satellites**:
-  - Io
-  - Europa
-  - Ganymede
-  - Callisto
-  - At least 91 other minor moons
-\`\`\`
+</example>
 
 I've collected this data from Wikidata to help you provide this information:
 
@@ -166,6 +152,7 @@ ${wikidataInfoAsCsv(wikidataInfo)}
 export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
+  const blobId = params.get('blobId') ?? search;
   const responseHeaders = {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
@@ -173,7 +160,7 @@ export default async function handle(request: Request) {
   };
 
   const store = getStore('facts');
-  const stored = await store.get(search);
+  const stored = await store.get(blobId);
   if (stored != null) {
     return new Response(simulateTokenGeneration(stored, 5, 15), { headers: responseHeaders });
   }
@@ -184,7 +171,7 @@ export default async function handle(request: Request) {
   const [streamForResponse, streamForStore] = stream.tee();
 
   // Process the cache stream in the background
-  storeResponse(store, search, streamForStore);
+  storeResponse(store, blobId, streamForStore);
 
   return new Response(streamForResponse, { headers: responseHeaders });
 }
