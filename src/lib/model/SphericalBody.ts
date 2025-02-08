@@ -28,9 +28,8 @@ export class SphericalBody {
     this.scene = scene;
     this.body = body;
 
-    const radius = body.radius ?? 1;
     const positionScaled = position.clone().divideScalar(SCALE_FACTOR);
-    const sphereGeometry = new SphereGeometry(radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
+    const sphereGeometry = new SphereGeometry(body.radius / SCALE_FACTOR, this.spherePoints, this.spherePoints);
     const color = new Color(this.body.style.fgColor);
     const sphereMaterial = new MeshBasicMaterial({ color }); // defer loading of texture until sufficiently zoomed in
     this.sphere = new Mesh(sphereGeometry, sphereMaterial);

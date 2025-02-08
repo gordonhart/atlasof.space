@@ -465,7 +465,7 @@ const MARINER_MISSION_FAMILY = 'Mariner';
 export const MARINER_2 = spacecraftWithDefaults({
   name: Bodies.MARINER_2.name,
   organization: SpacecraftOrganization.NASA,
-  launchMass: Bodies.MARINER_2.mass!,
+  launchMass: Bodies.MARINER_2.mass,
   power: 220,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   missionFamily: MARINER_MISSION_FAMILY,
