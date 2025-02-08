@@ -537,6 +537,7 @@ export const IDA = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'ida-thumb.jpg',
     wiki: 'https://en.wikipedia.org/wiki/243_Ida',
+    search: 'Q149012',
   },
 });
 
