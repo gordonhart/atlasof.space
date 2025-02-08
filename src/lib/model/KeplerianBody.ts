@@ -53,7 +53,7 @@ export class KeplerianBody extends KinematicBody {
     this.radius = new FocalRadius(scene, resolution, body, parent?.position ?? new Vector3(), position);
     this.sphere = new SphericalBody(scene, body, position);
     this.dotRadius = KeplerianBody.getDotRadius(body);
-    if (body.elements.rotation != null) {
+    if (body.elements.rotation != null && body.radius != null) {
       this.axis = new AxisIndicator(scene, resolution, body, this.position);
     }
   }
@@ -105,7 +105,7 @@ export class KeplerianBody extends KinematicBody {
       return;
     }
 
-    const baseRadius = this.body.radius / metersPerPx;
+    const baseRadius = (this.body.radius ?? 0) / metersPerPx;
     const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
     if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
       drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);

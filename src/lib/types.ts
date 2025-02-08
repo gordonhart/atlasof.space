@@ -109,8 +109,8 @@ export type CelestialBody = {
   shortName?: string;
   influencedBy: Array<CelestialBodyId>; // bodies influencing this body's motion
   orbitalRegime?: OrbitalRegimeId;
-  mass: number; // kg
-  radius: number; // m
+  mass?: number; // kg, empty if unknown
+  radius?: number; // m, empty if unknown
   elements: KeplerianElements;
   rings?: Array<Ring>;
   style: CelestialBodyStyle;

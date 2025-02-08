@@ -173,7 +173,7 @@ export class SolarSystemModel {
     let closestDistance = Infinity;
     for (const body of Object.values(this.bodies).reverse()) {
       // account for the displayed size of the body
-      const bodyThreshold = threshold + body.body.radius / metersPerPx;
+      const bodyThreshold = threshold + (body.body.radius ?? metersPerPx) / metersPerPx;
 
       // ignore invisible types and offscreen bodies
       if (!body.isVisible(settings)) continue;
@@ -244,7 +244,10 @@ export class SolarSystemModel {
   private incrementKinematicsSafe(dt: number) {
     // TODO: improve performance by removing cloning; can achieve by incrementing children before parents, running the
     //  opposite algorithm to the one performed during initialization
-    const parentStates = map(({ position, body }) => ({ position: position.clone(), mass: body.mass }), this.bodies);
+    const parentStates = map(
+      ({ position, body }) => ({ position: position.clone(), mass: body.mass ?? 0 }),
+      this.bodies
+    );
     Object.values(this.bodies).forEach(body => {
       const parents = body.influencedBy.map(id => parentStates[id]);
       body.increment(parents, dt);

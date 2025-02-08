@@ -17,7 +17,7 @@ export class AxisIndicator {
 
   constructor(scene: Scene, resolution: Vector2, body: CelestialBody, center: Vector3) {
     this.scene = scene;
-    this.bodyRadius = body.radius;
+    this.bodyRadius = body.radius!;
 
     this.group = new Group();
     this.group.position.copy(center).divideScalar(SCALE_FACTOR);

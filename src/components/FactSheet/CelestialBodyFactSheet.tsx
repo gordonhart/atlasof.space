@@ -47,13 +47,13 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const orbitalRegimePill =
     orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
-  const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
+  const gravity = (surfaceGravity(mass ?? 0, radius ?? 1) / g).toLocaleString();
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
-    { label: 'mass', value: `${mass.toExponential(4)} kg` },
-    { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
+    ...(mass != null ? [{ label: 'mass', value: `${mass.toExponential(4)} kg` }] : []),
+    ...(radius != null ? [{ label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` }] : []),
     // prettier-ignore
     ...(type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
@@ -71,9 +71,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       },
       { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
     ] : []),
-    ...(Number(gravity) > 0
-      ? [{ label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` }]
-      : []),
+    ...(Number(gravity) > 0 ? [{ label: 'surface gravity', value: `${gravity} g` }] : []),
     ...(facts ?? []),
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];

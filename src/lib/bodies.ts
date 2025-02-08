@@ -1062,7 +1062,37 @@ export const WILD = celestialBodyWithDefaults({
   },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY, TEMPEL, HARTLEY, WILD];
+export const GRIGG_SKJELLERUP = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '26P/Grigg–Skjellerup',
+  shortName: 'Grigg-Skjellerup',
+  influencedBy: [SOL.id],
+  elements: {
+    wrt: SOL.id,
+    epoch: julianDayToEpoch('JD2456017.5'),
+    eccentricity: 0.6396679618697105,
+    semiMajorAxis: 3.024224445052753 * AU,
+    inclination: 22.45511403015216,
+    longitudeAscending: 211.633966473815,
+    argumentOfPeriapsis: 1.896085645552865,
+    meanAnomaly: 273.4178382900974,
+  },
+  assets: {
+    thumbnail: 'grigg-skjellerup-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/26P/Grigg%E2%80%93Skjellerup',
+  },
+});
+
+export const COMETS: Array<CelestialBody> = [
+  CG67P,
+  HALLEY,
+  HALE_BOPP,
+  BORRELLY,
+  TEMPEL,
+  HARTLEY,
+  WILD,
+  GRIGG_SKJELLERUP,
+];
 
 export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',

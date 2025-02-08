@@ -327,8 +327,9 @@ export const NEW_HORIZONS = spacecraftWithDefaults({
     { id: Bodies.KERBEROS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
     { id: Bodies.STYX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
     // Kuiper belt phase
-    { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
-    // TODO: add 15810 Arawn
+    { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
+    // TODO: enable? not really a flyby, 0.75 AU away
+    // { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
   ],
 });
 
@@ -361,6 +362,23 @@ export const GALILEO = spacecraftWithDefaults({
     { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-12-19T12:00:00Z') },
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1997-02-20T12:00:00Z') },
     // TODO: Amalthea flyby on 2002-11-04
+  ],
+});
+
+export const GIOTTO = spacecraftWithDefaults({
+  name: 'Giotto',
+  organization: SpacecraftOrganization.ESA,
+  launchMass: 960,
+  power: 196,
+  start: new Date('1985-07-02T11:23:00Z'),
+  end: new Date(1992, 6, 23),
+  status: { status: SpacecraftStatus.DEFUNCT },
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  thumbnail: 'giotto-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
+  visited: [
+    { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
+    { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
   ],
 });
 
@@ -447,7 +465,7 @@ const MARINER_MISSION_FAMILY = 'Mariner';
 export const MARINER_2 = spacecraftWithDefaults({
   name: Bodies.MARINER_2.name,
   organization: SpacecraftOrganization.NASA,
-  launchMass: Bodies.MARINER_2.mass,
+  launchMass: Bodies.MARINER_2.mass!,
   power: 220,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   missionFamily: MARINER_MISSION_FAMILY,
@@ -457,6 +475,28 @@ export const MARINER_2 = spacecraftWithDefaults({
   wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
   thumbnail: Bodies.MARINER_2.assets!.thumbnail,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
+});
+
+export const MARINER_4 = spacecraftWithDefaults({
+  name: 'Mariner 4',
+  organization: SpacecraftOrganization.NASA,
+  launchMass: 260.8,
+  power: 310,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: MARINER_MISSION_FAMILY,
+  start: new Date('1964-11-28T14:22:01Z'),
+  end: new Date(1967, 11, 21),
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Damaged by 83 micrometeoroid hits, likely debris from comet D/1895 Q1 (Swift)',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Mariner_4',
+  thumbnail: 'mariner-4-thumb.jpg',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1965-07-15T01:00:57Z') },
+    // TODO: D/1895 Q1 (Swift) is believed to no longer exist; last observed in 1986
+    // { id: Bodies.SWIFT.id, type: SpacecraftVisitType.FLYBY, start: new Date(1965, 8, 15) },
+  ],
 });
 
 export const MARINER_10 = spacecraftWithDefaults({
@@ -1141,6 +1181,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   PARKER_SOLAR_PROBE,
   BEPICOLOMBO,
   SOLAR_ORBITER,
+  GIOTTO,
 
   // Venus
   // VENERA_1,
@@ -1198,6 +1239,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   APOLLO_17,
 
   // Mars
+  MARINER_4,
   CURIOSITY,
   PERSEVERANCE,
   INGENUITY,
