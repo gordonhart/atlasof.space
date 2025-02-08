@@ -1,11 +1,12 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { getStore } from '@netlify/blobs';
-import { storeResponse } from '../src/lib/functions';
+import { errorResponse, storeResponse } from '../src/lib/functions';
 import { AnthropicModel, asSseStream, simulateTokenGeneration } from '../src/lib/llm';
 
 export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
+  if (search == null || search === '') return errorResponse("Bad Request: missing 'search' parameter");
   const blobId = params.get('blobId') ?? search;
 
   const responseHeaders = {
@@ -16,9 +17,7 @@ export default async function handle(request: Request) {
 
   const store = getStore('visit');
   const stored = await store.get(blobId);
-  if (stored != null) {
-    return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
-  }
+  if (stored != null) return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const system = `\
