@@ -102,7 +102,7 @@ What facts can you tell me about '${search}'? I'm interested in things like the 
 - Information about name and origins
 - Dimensions (for non-spherical small bodies only)
 - Rotation facts (e.g. tidally locked or not)
-- Albedo
+- Albedo (if known)
 - Material composition (if known)
 - Density (if known)
 
@@ -111,6 +111,7 @@ I'm not interested in the following:
 - Rotation period (if known)
 - Relevant spacecraft missions and dates
 - Major satellites (if any)
+- Anything 'unknown'
 
 Format your answer as markdown bullet points, with **bolded** keys. Do not include orbital characteristics. Do not \
 preface your answer or return anything other than bullet points.
