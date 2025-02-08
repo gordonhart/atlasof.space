@@ -35,7 +35,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 }: Props) {
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
   const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
-  const { data: extraFacts, isLoading } = useFactsStream(assets?.search ?? `${name}+${type}`);
+  const { data: extraFacts, isLoading } = useFactsStream(body);
   const padding = useFactSheetPadding();
   const { xs: isXsDisplay } = useDisplaySize();
 
@@ -47,6 +47,8 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const orbitalRegimePill =
     orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
+  const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
+
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
@@ -69,7 +71,9 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       },
       { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
     ] : []),
-    { label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` },
+    ...(Number(gravity) > 0
+      ? [{ label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` }]
+      : []),
     ...(facts ?? []),
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];

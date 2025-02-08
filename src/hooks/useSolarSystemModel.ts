@@ -1,9 +1,13 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
-import { Settings } from '../lib/state.ts';
-import { CelestialBody, CelestialBodyId } from '../lib/types.ts';
+import { Settings, UpdateSettings } from '../lib/state.ts';
+import { CelestialBody, CelestialBodyId, Epoch } from '../lib/types.ts';
 
-export function useSolarSystemModel() {
+type Params = {
+  settings: Settings;
+  updateSettings: UpdateSettings;
+};
+export function useSolarSystemModel({ settings, updateSettings }: Params) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<SolarSystemModel | null>(null);
@@ -36,11 +40,43 @@ export function useSolarSystemModel() {
     };
   }
 
+  function update(ctx: CanvasRenderingContext2D, settings: Settings) {
+    modelRef.current?.update(ctx, settings);
+  }
+
+  function addBody(body: CelestialBody) {
+    updateSettings(prev => {
+      modelRef.current?.add(settings, body);
+      return { ...prev, bodies: [...prev.bodies, body] };
+    });
+  }
+
+  function removeBody(id: CelestialBodyId) {
+    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
+    modelRef.current?.remove(id);
+  }
+
+  function reset(settings: Settings, camera = true) {
+    modelRef.current?.reset(settings, camera);
+  }
+
+  function setEpoch(epoch: Epoch) {
+    updateSettings(prev => {
+      const newSettings = { ...prev, epoch };
+      reset(newSettings, false);
+      return newSettings;
+    });
+  }
+
   function resize() {
     if (containerRef.current == null) return;
     modelRef.current?.resize(containerRef.current);
     initializeCanvas();
   }
+
+  useEffect(() => {
+    resize();
+  }, [settings.center]);
 
   return {
     containerRef,
@@ -48,9 +84,10 @@ export function useSolarSystemModel() {
     modelRef,
     initialize,
     resize,
-    update: (ctx: CanvasRenderingContext2D, settings: Settings) => modelRef.current?.update(ctx, settings),
-    add: (settings: Settings, body: CelestialBody) => modelRef.current?.add(settings, body),
-    remove: (id: CelestialBodyId) => modelRef.current?.remove(id),
-    reset: (settings: Settings, camera = true) => modelRef.current?.reset(settings, camera),
+    update,
+    addBody,
+    removeBody,
+    setEpoch,
+    reset,
   };
 }
