@@ -13,8 +13,8 @@ import {
 } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
+import { SpacecraftOrganizationFactSheet } from './Organization/SpacecraftOrganizationFactSheet.tsx';
 import { SpacecraftFactSheet } from './Spacecraft/SpacecraftFactSheet.tsx';
-import { SpacecraftOrganizationFactSheet } from './SpacecraftOrganizationFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here
 type Props = {

@@ -1,9 +1,9 @@
 import { Group, Stack, Title } from '@mantine/core';
-import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { SPACECRAFT_ORGANIZATIONS } from '../../lib/spacecraft.ts';
-import { UpdateSettings } from '../../lib/state.ts';
-import { SpacecraftOrganization } from '../../lib/types.ts';
-import { SpacecraftOrganizationPill } from './Spacecraft/SpacecraftOrganizationPill.tsx';
+import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/spacecraft.ts';
+import { UpdateSettings } from '../../../lib/state.ts';
+import { SpacecraftOrganization } from '../../../lib/types.ts';
+import { SpacecraftOrganizationPill } from '../Spacecraft/SpacecraftOrganizationPill.tsx';
 
 type Props = {
   organization: SpacecraftOrganization;

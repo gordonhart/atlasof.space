@@ -1,12 +1,12 @@
 import { Box, Group, Stack } from '@mantine/core';
-import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { UpdateSettings } from '../../lib/state.ts';
-import { SpacecraftOrganization } from '../../lib/types.ts';
-import { FactSheetSummary } from './FactSheetSummary.tsx';
-import { FactSheetTitle } from './FactSheetTitle.tsx';
+import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
+import { UpdateSettings } from '../../../lib/state.ts';
+import { SpacecraftOrganization } from '../../../lib/types.ts';
+import { FactSheetSummary } from '../FactSheetSummary.tsx';
+import { FactSheetTitle } from '../FactSheetTitle.tsx';
+import { Thumbnail } from '../Thumbnail.tsx';
 import { OtherSpacecraftOrganizations } from './OtherSpacecraftOrganizations.tsx';
 import { SpacecraftOrganizationMissions } from './SpacecraftOrganizationMissions.tsx';
-import { Thumbnail } from './Thumbnail.tsx';
 
 type Props = {
   organization: SpacecraftOrganization;
