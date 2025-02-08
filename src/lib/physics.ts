@@ -40,6 +40,11 @@ export function estimateAsteroidMass(radius: number) {
   return 2500 * (4 / 3) * Math.PI * radius ** 3; // best-effort guess using 2500kg/m3 density and a spherical shape
 }
 
+export function estimateCometMass(radius: number) {
+  const density = 500; // 500 kg/m3 for a typical comet
+  return density * (4 / 3) * Math.PI * radius ** 3; // best-effort guess assuming spherical shape
+}
+
 export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number): Point3 {
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = elements;
 
