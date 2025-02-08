@@ -1366,6 +1366,29 @@ export const ERIS = celestialBodyWithDefaults({
   // TODO: add moon Dysnomia (rough orbital elements are known)
 });
 
+export const DYSNOMIA = celestialBodyWithDefaults({
+  type: CelestialBodyType.MOON,
+  name: 'Dysnomia',
+  influencedBy: [ERIS.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  elements: {
+    wrt: ERIS.id,
+    epoch: julianDayToEpoch('JD2453979.0'),
+    semiMajorAxis: 37273e3,
+    eccentricity: 0.0062,
+    inclination: 78.29,
+    longitudeAscending: 126.17,
+    argumentOfPeriapsis: 180.83,
+    meanAnomaly: 0, // TODO
+  },
+  mass: 8.2e19,
+  radius: 307.5e3,
+  assets: {
+    thumbnail: 'dysnomia-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Dysnomia_(moon)',
+  },
+});
+
 export const HAUMEA = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136108 Haumea',
@@ -1726,6 +1749,7 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   ORCUS,
   HAUMEA,
   ERIS,
+  DYSNOMIA,
   MAKEMAKE,
   GONGGONG,
   ARROKOTH,
