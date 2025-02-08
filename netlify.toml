@@ -13,6 +13,11 @@ status = 200
 to = '/.netlify/functions/:splat'
 
 [[redirects]]
+from = "/robots.txt"
+to = "/assets/robots.txt"
+status = 200
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
