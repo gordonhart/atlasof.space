@@ -71,9 +71,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       },
       { label: 'axial tilt', value: `${rotation.axialTilt.toLocaleString()}º` },
     ] : []),
-    ...(Number(gravity) > 0
-      ? [{ label: 'surface gravity', value: `${(surfaceGravity(mass, radius) / g).toLocaleString()} g` }]
-      : []),
+    ...(Number(gravity) > 0 ? [{ label: 'surface gravity', value: `${gravity} g` }] : []),
     ...(facts ?? []),
     // TODO: add simulation-dependent bullets: velocity, distance from Sun, distance from Earth
   ];

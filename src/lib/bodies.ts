@@ -1,5 +1,5 @@
 import { J2000, julianDayToEpoch, Time } from './epoch.ts';
-import { estimateAsteroidMass } from './physics.ts';
+import { estimateAsteroidMass, estimateCometMass } from './physics.ts';
 import { SBDB_URL } from './sbdb.ts';
 import { asCelestialBodyId, CelestialBody, CelestialBodyType, OrbitalRegimeId } from './types.ts';
 import { celestialBodyWithDefaults } from './utils.ts';
@@ -1062,7 +1062,40 @@ export const WILD = celestialBodyWithDefaults({
   },
 });
 
-export const COMETS: Array<CelestialBody> = [CG67P, HALLEY, HALE_BOPP, BORRELLY, TEMPEL, HARTLEY, WILD];
+export const GRIGG_SKJELLERUP = celestialBodyWithDefaults({
+  type: CelestialBodyType.COMET,
+  name: '26P/Grigg–Skjellerup',
+  shortName: 'Grigg-Skjellerup',
+  influencedBy: [SOL.id],
+  radius: 1.3e3,
+  mass: estimateCometMass(1.3e3),
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2456017.5'),
+    eccentricity: 0.6396679618697105,
+    semiMajorAxis: 3.024224445052753 * AU,
+    inclination: 22.45511403015216,
+    longitudeAscending: 211.633966473815,
+    argumentOfPeriapsis: 1.896085645552865,
+    meanAnomaly: 273.4178382900974,
+  },
+  assets: {
+    thumbnail: 'grigg-skjellerup-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/26P/Grigg%E2%80%93Skjellerup',
+  },
+});
+
+export const COMETS: Array<CelestialBody> = [
+  CG67P,
+  HALLEY,
+  HALE_BOPP,
+  BORRELLY,
+  TEMPEL,
+  HARTLEY,
+  WILD,
+  GRIGG_SKJELLERUP,
+];
 
 export const MARINER_2 = celestialBodyWithDefaults({
   name: 'Mariner 2',
