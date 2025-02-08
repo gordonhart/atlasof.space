@@ -1,0 +1,85 @@
+import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import { ReactNode, useMemo, useState } from 'react';
+import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
+import { dateToHumanReadable } from '../../lib/epoch.ts';
+import { SPACECRAFT } from '../../lib/spacecraft.ts';
+import { UpdateSettings } from '../../lib/state.ts';
+import { SpacecraftOrganization } from '../../lib/types.ts';
+import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
+import { Timeline } from './Timeline.tsx';
+
+type Props = {
+  organization: SpacecraftOrganization;
+  updateSettings: UpdateSettings;
+};
+export function SpacecraftOrganizationMissions({ organization, updateSettings }: Props) {
+  const padding = useFactSheetPadding();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const foundedComponent = (
+    <Paper p="xs" withBorder onMouseEnter={() => setActiveIndex(0)} onMouseLeave={() => setActiveIndex(null)}>
+      <Group gap={0} align="baseline">
+        <Title order={6} mr="xs">
+          Founded
+        </Title>
+        <Text c="dimmed" fz="xs">
+          {dateToHumanReadable(organization.founded)}
+        </Text>
+      </Group>
+    </Paper>
+  );
+
+  const organizationSpacecraft = useMemo(
+    () => SPACECRAFT.filter(s => s.organization === organization.id),
+    [organization.id]
+  );
+  const spacecraftComponents: Array<[Date, ReactNode]> = organizationSpacecraft.map((spacecraft, i) => [
+    spacecraft.start,
+    <Box
+      key={`${spacecraft.name}-${i}`}
+      onMouseEnter={() => setActiveIndex(i + 1)}
+      onMouseLeave={() => setActiveIndex(null)}
+    >
+      <SpacecraftCard spacecraft={spacecraft} onClick={() => updateSettings({ center: spacecraft.id, hover: null })} />
+    </Box>,
+  ]);
+
+  const dissolvedComponent =
+    organization.dissolved != null ? (
+      <Paper
+        p="xs"
+        withBorder
+        onMouseEnter={() => setActiveIndex(spacecraftComponents.length + 1)}
+        onMouseLeave={() => setActiveIndex(null)}
+      >
+        <Group gap={0} align="baseline">
+          <Title order={6} mr="xs">
+            Dissolved
+          </Title>
+          <Text c="dimmed" fz="xs">
+            {dateToHumanReadable(organization.dissolved)}
+          </Text>
+        </Group>
+      </Paper>
+    ) : null;
+
+  const TimelineItems: Array<[Date, ReactNode]> = [
+    [organization.founded, foundedComponent],
+    ...spacecraftComponents,
+    ...(organization.dissolved != null
+      ? ([[organization.dissolved, dissolvedComponent]] as Array<[Date, ReactNode]>)
+      : []),
+  ];
+
+  return (
+    <Stack gap="xs" {...padding}>
+      <Title order={5}>Spacecraft Missions</Title>
+      <Timeline
+        datedItems={TimelineItems}
+        activeIndex={activeIndex ?? -1}
+        end={organization.dissolved}
+        accentColor={organization.color}
+      />
+    </Stack>
+  );
+}

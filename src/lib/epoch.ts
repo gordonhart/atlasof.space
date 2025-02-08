@@ -67,6 +67,15 @@ export function dateToISO(date: Date): string {
   return date.toISOString().split('T')[0];
 }
 
+export function dateToHumanReadable(date: Date): string {
+  return date.toLocaleString('en-US', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export function datetimeToHumanReadable(date: Date): string {
   const datePart = date.toLocaleString('en-US', {
     timeZone: 'UTC',

@@ -40,7 +40,7 @@ export function Timeline({ datedItems, activeIndex, end, accentColor }: Props) {
       const [date] = datedItems[i];
       return { height, top: top - containerTop, date, hover: activeIndex === i };
     });
-    const [start] = datedItems[0];
+    const start = new Date(Math.min(...datedItems.map(([date]) => date.getTime())));
     renderTimeline(ctx, items, accentColor, start, end);
   }, [datedItems, height, activeIndex, end]);
 

@@ -11,10 +11,12 @@ import {
   isSpacecraft,
   OrbitalRegime,
   Spacecraft,
+  SpacecraftOrganization,
+  isOrganization,
 } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 
-export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft) {
+export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization) {
   const search = useMemo(() => getSearch(obj), [JSON.stringify(obj)]);
   const [isStreaming, setIsStreaming] = useState(false);
   const queryClient = useQueryClient();
@@ -34,7 +36,7 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft
   return { ...query, isLoading: isStreaming };
 }
 
-function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft) {
+function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization) {
   if (isOrbitalRegime(obj)) {
     // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
     const orbitalRegimes = Object.values(OrbitalRegimeId).map(orbitalRegimeDisplayName).join(', ');
@@ -43,6 +45,10 @@ function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft) {
   if (isSpacecraft(obj)) {
     return `the ${SPACECRAFT_ORGANIZATIONS[obj.organization].shortName} spacecraft ${obj.name}`;
   }
+  if (isOrganization(obj)) {
+    return `the space exploration organization ${obj.name} (${obj.shortName})`;
+  }
+  // celestial body
   switch (obj.type) {
     case CelestialBodyType.MOON:
       return `${obj.elements.wrt}'s moon ${obj.name}`;

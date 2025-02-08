@@ -15,6 +15,7 @@ export function App() {
             <Route path="/:bodyId?" element={<SolarSystem />} />
             <Route path="/regime/:regimeId?" element={<SolarSystem />} />
             <Route path="/spacecraft/:spacecraftId?" element={<SolarSystem />} />
+            <Route path="/organization/:organizationId?" element={<SolarSystem />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

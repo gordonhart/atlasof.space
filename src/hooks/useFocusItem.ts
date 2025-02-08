@@ -1,12 +1,14 @@
 import { useEffect, useMemo } from 'react';
 import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../lib/regimes.ts';
-import { SPACECRAFT_BY_ID } from '../lib/spacecraft.ts';
+import { SPACECRAFT_BY_ID, SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
 import { Settings } from '../lib/state.ts';
 import {
   isCelestialBody,
   isCelestialBodyId,
   isOrbitalRegime,
   isOrbitalRegimeId,
+  isOrganization,
+  isOrganizationId,
   isSpacecraft,
   isSpacecraftId,
 } from '../lib/types.ts';
@@ -20,14 +22,18 @@ export function useFocusItem({ center, bodies }: Settings) {
         ? ORBITAL_REGIMES.find(({ id }) => id === center)
         : isSpacecraftId(center)
           ? SPACECRAFT_BY_ID[center]
-          : undefined;
+          : isOrganizationId(center)
+            ? SPACECRAFT_ORGANIZATIONS[center]
+            : undefined;
   }, [center, JSON.stringify(bodies)]);
 
   const focusColor = isCelestialBody(focusItem)
     ? focusItem.style.fgColor
     : isSpacecraft(focusItem)
       ? DEFAULT_SPACECRAFT_COLOR
-      : DEFAULT_ASTEROID_COLOR;
+      : isOrganization(focusItem)
+        ? focusItem.color
+        : DEFAULT_ASTEROID_COLOR;
 
   useEffect(() => {
     const name = isCelestialBody(focusItem)
@@ -36,7 +42,9 @@ export function useFocusItem({ center, bodies }: Settings) {
         ? orbitalRegimeDisplayName(focusItem.id)
         : isSpacecraft(focusItem)
           ? focusItem.name
-          : undefined;
+          : isOrganization(focusItem)
+            ? focusItem.shortName
+            : undefined;
     const namePart = name != null ? `${name} • ` : '';
     document.title = `${namePart}Atlas of Space`;
   }, [focusItem]);

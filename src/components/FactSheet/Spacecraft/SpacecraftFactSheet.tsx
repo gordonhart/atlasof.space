@@ -43,7 +43,10 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       ? { label: `orbital regime${spacecraft.orbitalRegimes.length > 1 ? 's' : ''}`, value: orbitalRegimes }
       : null;
   const bullets = [
-    { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
+    {
+      label: 'organization',
+      value: <SpacecraftOrganizationPill organization={spacecraft.organization} updateSettings={updateSettings} />,
+    },
     ...(orbitalRegimeBullet != null ? [orbitalRegimeBullet] : []),
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
