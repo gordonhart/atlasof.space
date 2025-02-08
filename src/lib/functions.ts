@@ -51,3 +51,7 @@ export async function readStreamResponse(
 export function slugifyId(id: string): string {
   return id.replace(/\//g, '-');
 }
+
+export function errorResponse(message: string) {
+  return new Response(JSON.stringify({ message }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+}

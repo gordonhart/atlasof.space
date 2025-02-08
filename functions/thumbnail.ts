@@ -1,4 +1,5 @@
 import { parseHTML } from 'linkedom';
+import { errorResponse } from '../src/lib/functions';
 
 type Image = {
   src: string;
@@ -10,6 +11,7 @@ type Image = {
 export default async function handle(req: Request) {
   const params = new URL(req.url).searchParams;
   const search = params.get('search');
+  if (search == null || search === '') return errorResponse("Bad Request: missing 'search' parameter");
   const baseUrl = 'https://en.wikipedia.org/w/index.php';
   const urlParams = new URLSearchParams({ search });
   const response = await fetch(`${baseUrl}?${urlParams}`);

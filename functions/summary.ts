@@ -1,11 +1,12 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { getStore } from '@netlify/blobs';
-import { storeResponse } from '../src/lib/functions';
+import { errorResponse, storeResponse } from '../src/lib/functions';
 import { AnthropicModel, asSseStream, simulateTokenGeneration } from '../src/lib/llm';
 
 export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
+  if (search == null || search === '') return errorResponse("Bad Request: missing 'search' parameter");
 
   const responseHeaders = {
     'Content-Type': 'text/event-stream',
