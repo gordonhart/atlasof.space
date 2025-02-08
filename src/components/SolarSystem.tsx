@@ -1,91 +1,25 @@
 import { Box, Group, Stack } from '@mantine/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
+import { useAppState } from '../hooks/useAppState.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
-import { useIsTouchDevice } from '../hooks/useIsTouchDevice.ts';
+import { useFocusItem } from '../hooks/useFocusItem.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
-import { useUrlState } from '../hooks/useUrlState.ts';
-import { ORBITAL_REGIMES } from '../lib/regimes.ts';
-import { SPACECRAFT_BY_ID } from '../lib/spacecraft.ts';
-import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
-import {
-  CelestialBody,
-  CelestialBodyId,
-  Epoch,
-  isCelestialBody,
-  isCelestialBodyId,
-  isOrbitalRegimeId,
-  isSpacecraft,
-  isSpacecraftId,
-} from '../lib/types.ts';
-import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
-  const { center: urlCenter } = useUrlState();
-  const isTouchDevice = useIsTouchDevice();
-  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
-  const [appState, setAppState] = useState(urlInitialState);
-  const appStateRef = useRef(appState);
-  const model = useSolarSystemModel();
   const { sm: isSmallDisplay } = useDisplaySize();
-  const navigate = useNavigate();
+  const { appState, setAppState, appStateRef, updateSettings, resetAppState } = useAppState();
   const { settings } = appState;
-
-  const updateSettings: UpdateSettings = useCallback(
-    update => {
-      setAppState(prev => {
-        const updated = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
-        // disable hover for touch devices; interactions don't work well
-        if (isTouchDevice) updated.hover = null;
-        const newState = { ...prev, settings: updated };
-        // set the mutable state ref (accessed by animation callback) on state update
-        appStateRef.current = newState;
-        return newState;
-      });
-    },
-    [setAppState, isTouchDevice]
-  );
-
-  // sync URL to center
-  useEffect(() => {
-    if (settings.center !== urlCenter) updateSettings({ center: urlCenter });
-  }, [urlCenter]);
-
-  // sync center back to URL when state changes are initiated by non-URL source
-  useEffect(() => {
-    if (settings.center !== urlCenter) navigate(itemIdAsRoute(settings.center));
-  }, [settings.center]);
-
+  const model = useSolarSystemModel({ settings, updateSettings });
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
+  const { focusItem, focusColor } = useFocusItem(settings);
 
-  function addBody(body: CelestialBody) {
-    updateSettings(prev => {
-      model.add(prev, body);
-      return { ...prev, bodies: [...prev.bodies, body] };
-    });
-  }
-
-  function removeBody(id: CelestialBodyId) {
-    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
-    model.remove(id);
-  }
-
-  function setEpoch(epoch: Epoch) {
-    updateSettings(prev => {
-      const newSettings = { ...prev, epoch };
-      model.reset(newSettings, false);
-      return newSettings;
-    });
-  }
-
-  const resetState = useCallback(() => {
-    setAppState(initialState);
-    appStateRef.current = initialState;
-    model.reset(initialState.settings);
-  }, [updateSettings]);
+  const reset = useCallback(() => {
+    const newState = resetAppState();
+    model.reset(newState.settings);
+  }, [resetAppState]);
 
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
@@ -110,25 +44,6 @@ export function SolarSystem() {
     };
   }, []);
 
-  useEffect(() => {
-    model.resize();
-  }, [settings.center]);
-
-  const focusItem = useMemo(() => {
-    return isCelestialBodyId(settings.center)
-      ? settings.bodies.find(({ id }) => id === settings.center)
-      : isOrbitalRegimeId(settings.center)
-        ? ORBITAL_REGIMES.find(({ id }) => id === settings.center)
-        : isSpacecraftId(settings.center)
-          ? SPACECRAFT_BY_ID[settings.center]
-          : undefined;
-  }, [settings.center, JSON.stringify(settings.bodies)]);
-  const focusColor = isCelestialBody(focusItem)
-    ? focusItem.style.fgColor
-    : isSpacecraft(focusItem)
-      ? DEFAULT_SPACECRAFT_COLOR
-      : DEFAULT_ASTEROID_COLOR;
-
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
     <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
@@ -149,8 +64,8 @@ export function SolarSystem() {
           settings={settings}
           updateSettings={updateSettings}
           model={appState.model}
-          setEpoch={setEpoch}
-          reset={resetState}
+          setEpoch={model.setEpoch}
+          reset={reset}
         />
       </Box>
       {focusItem != null && (
@@ -167,8 +82,8 @@ export function SolarSystem() {
             item={focusItem}
             settings={settings}
             updateSettings={updateSettings}
-            addBody={addBody}
-            removeBody={removeBody}
+            addBody={model.addBody}
+            removeBody={model.removeBody}
           />
         </Box>
       )}

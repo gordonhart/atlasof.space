@@ -1413,6 +1413,54 @@ export const HAUMEA = celestialBodyWithDefaults({
   },
 });
 
+export const HIIAKA = celestialBodyWithDefaults({
+  type: CelestialBodyType.MOON,
+  name: "Hi'iaka",
+  influencedBy: [HAUMEA.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  elements: {
+    wrt: HAUMEA.id,
+    source: 'https://arxiv.org/pdf/0903.4213',
+    epoch: julianDayToEpoch('JD2454615.0'),
+    eccentricity: 0.0513,
+    semiMajorAxis: 49880e3,
+    inclination: 126.356,
+    longitudeAscending: 206.766,
+    argumentOfPeriapsis: 154.1,
+    meanAnomaly: 152.8,
+  },
+  mass: 17.9e18,
+  radius: 155e3,
+  assets: {
+    thumbnail: 'hi-iaka-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Moons_of_Haumea',
+  },
+});
+
+export const NAMAKA = celestialBodyWithDefaults({
+  type: CelestialBodyType.MOON,
+  name: 'Namaka',
+  influencedBy: [HAUMEA.id],
+  orbitalRegime: OrbitalRegimeId.KUIPER_BELT,
+  elements: {
+    wrt: HAUMEA.id,
+    source: 'https://arxiv.org/pdf/0903.4213',
+    epoch: julianDayToEpoch('JD2454615.0'),
+    eccentricity: 0.249,
+    semiMajorAxis: 25657e3,
+    inclination: 113.013,
+    longitudeAscending: 205.016,
+    argumentOfPeriapsis: 178.9,
+    meanAnomaly: 178.5,
+  },
+  mass: 1.79e18,
+  radius: 85e3,
+  assets: {
+    thumbnail: 'namaka-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/Moons_of_Haumea',
+  },
+});
+
 export const MAKEMAKE = celestialBodyWithDefaults({
   type: CelestialBodyType.DWARF_PLANET,
   name: '136472 Makemake',
@@ -1748,6 +1796,8 @@ export const TRANS_NEPTUNIAN_OBJECTS: Array<CelestialBody> = [
   SEDNA,
   ORCUS,
   HAUMEA,
+  HIIAKA,
+  NAMAKA,
   ERIS,
   DYSNOMIA,
   MAKEMAKE,
