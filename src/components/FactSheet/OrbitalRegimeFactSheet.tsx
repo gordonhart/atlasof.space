@@ -1,7 +1,7 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { DEFAULT_ASTEROID_COLOR } from '../../lib/data/bodies.ts';
+import { FocusItem } from '../../hooks/useFocusItem.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import {
@@ -9,8 +9,8 @@ import {
   CelestialBodyType,
   CelestialBodyTypes,
   OrbitalRegimeId,
-  OrbitalRegime,
   CelestialBodyId,
+  isOrbitalRegimeId,
 } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
@@ -21,14 +21,14 @@ import { OtherRegimes } from './OtherRegimes.tsx';
 import { SpacecraftVisits } from './SpacecraftVisits.tsx';
 
 type Props = {
-  regime: OrbitalRegime;
+  item: FocusItem;
   bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
   removeBody: (id: CelestialBodyId) => void;
 };
 export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
-  regime,
+  item,
   bodies,
   updateSettings,
   addBody,
@@ -65,14 +65,14 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
-        title={regime.name}
-        subTitle="Orbital Regime"
-        color={DEFAULT_ASTEROID_COLOR}
+        title={item.name}
+        subTitle={isOrbitalRegimeId(item.id) ? 'Orbital Regime' : 'Planetary System'}
+        color={color}
         onClose={() => updateSettings({ center: null })}
       />
 
       <Box style={{ flexShrink: 0 }}>
-        <FactSheetSummary obj={regime} />
+        <FactSheetSummary item={item} type={F} />
       </Box>
 
       <Stack px={padding.px} py={padding.py} gap="xl" flex={1}>
@@ -89,7 +89,9 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
                   onHover={hovered => updateSettings({ hover: hovered ? body.id : null })}
                 />
               ))}
-              {regime.id === OrbitalRegimeId.ASTEROID_BELT && type === CelestialBodyType.ASTEROID && (
+              {isOrbitalRegimeId(item.id) &&
+                item.id === OrbitalRegimeId.ASTEROID_BELT &&
+                type === CelestialBodyType.ASTEROID && (
                 <AddSmallBodyButton bodies={smallBodies} addBody={addBody} removeBody={removeBody} />
               )}
             </Stack>
@@ -99,12 +101,12 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
       <SpacecraftVisits
         title="Spacecraft Missions"
         spacecraft={spacecraftInRegime}
-        regime={regime}
+        regime={item}
         updateSettings={updateSettings}
       />
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <OtherRegimes regime={regime} updateSettings={updateSettings} />
+        <OtherRegimes regime={item} updateSettings={updateSettings} />
       </Box>
     </Stack>
   );

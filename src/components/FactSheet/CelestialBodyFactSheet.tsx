@@ -3,6 +3,7 @@ import { memo, ReactNode } from 'react';
 import { useFactsStream } from '../../hooks/queries/useFactsStream.ts';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
+import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft.ts';
@@ -100,13 +101,13 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       {isXsDisplay ? (
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
-          <FactSheetSummary obj={body} />
+          <FactSheetSummary item={body} type={FocusItemType.CELESTIAL_BODY} />
           <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
             <CelestialBodyThumbnail key={name} body={body} size={160} />
           </Box>
         </Group>
       ) : (
-        <FactSheetSummary obj={body} />
+        <FactSheetSummary item={body} type={FocusItemType.CELESTIAL_BODY} />
       )}
 
       <Stack gap={2} flex={1}>

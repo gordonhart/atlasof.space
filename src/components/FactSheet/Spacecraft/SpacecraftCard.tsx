@@ -5,7 +5,7 @@ import {
 } from '../../../hooks/queries/useSpacecraftSummaryStream.ts';
 import { useSpacecraftVisit } from '../../../hooks/useSpacecraftVisit.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
-import { CelestialBody, OrbitalRegime, Spacecraft, SpacecraftVisitType } from '../../../lib/types.ts';
+import { CelestialBody, OrbitalRegime, PlanetarySystem, Spacecraft, SpacecraftVisitType } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
 import { LoadingCursor } from '../LoadingCursor.tsx';
 import { Thumbnail } from '../Thumbnail.tsx';
@@ -15,10 +15,11 @@ type Props = {
   spacecraft: Spacecraft;
   body?: CelestialBody;
   regime?: OrbitalRegime;
+  system?: PlanetarySystem;
   onClick: () => void;
   compact?: boolean;
 };
-export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = false }: Props) {
+export function SpacecraftCard({ spacecraft, body, regime, system, onClick, compact = false }: Props) {
   const visit = useSpacecraftVisit({ spacecraft, body });
   const summaryParams =
     body != null && visit != null

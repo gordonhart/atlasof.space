@@ -3,20 +3,12 @@ import { useMemo, useState } from 'react';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { readStreamResponse } from '../../lib/functions.ts';
-import {
-  CelestialBody,
-  CelestialBodyType,
-  isOrbitalRegime,
-  isSpacecraft,
-  OrbitalRegime,
-  Spacecraft,
-  SpacecraftOrganization,
-  isOrganization,
-} from '../../lib/types.ts';
+import { CelestialBodyType, isOrbitalRegime, isSpacecraft, isOrganization } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
+import { FocusItem } from '../useFocusItem.ts';
 
-export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization) {
-  const search = useMemo(() => getSearch(obj), [JSON.stringify(obj)]);
+export function useSummaryStream(item: Pick<FocusItem, 'item' | 'type'>) {
+  const search = useMemo(() => getSearch(item), [JSON.stringify(item)]);
   const [isStreaming, setIsStreaming] = useState(false);
   const queryClient = useQueryClient();
   const queryKey = ['GET', 'facts', search];
@@ -35,25 +27,25 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft
   return { ...query, isLoading: isStreaming };
 }
 
-function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization) {
-  if (isOrbitalRegime(obj)) {
+function getSearch(item: Pick<FocusItem, 'item' | 'type'>) {
+  if (isOrbitalRegime(item)) {
     // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
     const orbitalRegimes = Object.values(ORBITAL_REGIMES)
       .map(({ name }) => name)
       .join(', ');
-    return `the heliocentric orbital regime '${obj.name}' (of the set with ${orbitalRegimes})`;
+    return `the heliocentric orbital regime '${item.name}' (of the set with ${orbitalRegimes})`;
   }
-  if (isSpacecraft(obj)) {
-    return `the ${SPACECRAFT_ORGANIZATIONS[obj.organization].shortName} spacecraft ${obj.name}`;
+  if (isSpacecraft(item)) {
+    return `the ${SPACECRAFT_ORGANIZATIONS[item.organization].shortName} spacecraft ${item.name}`;
   }
-  if (isOrganization(obj)) {
-    return `the space exploration organization ${obj.name} (${obj.shortName})`;
+  if (isOrganization(item)) {
+    return `the space exploration organization ${item.name} (${item.shortName})`;
   }
   // celestial body
-  switch (obj.type) {
+  switch (item.type) {
     case CelestialBodyType.MOON:
-      return `${obj.elements.wrt}'s moon ${obj.name}`;
+      return `${item.elements.wrt}'s moon ${item.name}`;
     default:
-      return `the ${celestialBodyTypeName(obj.type).toLowerCase()} ${obj.name}`;
+      return `the ${celestialBodyTypeName(item.type).toLowerCase()} ${item.name}`;
   }
 }

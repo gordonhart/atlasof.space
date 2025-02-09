@@ -1,5 +1,6 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
+import { FocusItemType } from '../../../hooks/useFocusItem.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, SpacecraftOrganization } from '../../../lib/types.ts';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
@@ -25,7 +26,7 @@ export function SpacecraftOrganizationFactSheet({ organization, bodies, updateSe
       />
 
       <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
-        <FactSheetSummary obj={organization} />
+        <FactSheetSummary item={organization} type={FocusItemType.ORGANIZATION} />
         <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
           <Thumbnail size={100} thumbnail={organization.thumbnail} />
         </Box>
