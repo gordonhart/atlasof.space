@@ -56,13 +56,15 @@ export function OrganizationSpacecraftCard({ spacecraft, bodies, onClick, onMous
             </Text>
           </Stack>
 
-          <Group gap={4}>
-            {visitedBodies.slice(0, N_BODIES).map(body => (
-              <CelestialBodyThumbnail body={body} size={32} />
+          <Group gap={4} justify="flex-end" flex={1} wrap="nowrap" style={{ flexShrink: 0 }}>
+            {visitedBodies.slice(0, N_BODIES).map((body, i) => (
+              <Box key={`${body.id}-${i}`} w={32}>
+                <CelestialBodyThumbnail body={body} size={32} />
+              </Box>
             ))}
             {visitedBodies.length - N_BODIES > 0 && (
-              <Text c="dimmed" size="sm">
-                + {visitedBodies.length - N_BODIES}
+              <Text c="dimmed" size="xs">
+                +{visitedBodies.length - N_BODIES}
               </Text>
             )}
           </Group>

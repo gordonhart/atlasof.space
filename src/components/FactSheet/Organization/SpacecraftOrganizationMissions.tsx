@@ -1,5 +1,6 @@
 import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { ReactNode, useMemo, useState } from 'react';
+import { useDisplaySize } from '../../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { dateToHumanReadable } from '../../../lib/epoch.ts';
 import { SPACECRAFT } from '../../../lib/spacecraft.ts';
@@ -14,6 +15,7 @@ type Props = {
   updateSettings: UpdateSettings;
 };
 export function SpacecraftOrganizationMissions({ organization, bodies, updateSettings }: Props) {
+  const { xs: isXsDisplay } = useDisplaySize();
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -81,7 +83,7 @@ export function SpacecraftOrganizationMissions({ organization, bodies, updateSet
         activeIndex={activeIndex ?? -1}
         end={organization.dissolved}
         accentColor={organization.color}
-        width={140}
+        width={isXsDisplay ? undefined : 160}
       />
     </Stack>
   );
