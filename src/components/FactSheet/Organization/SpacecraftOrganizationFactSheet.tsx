@@ -1,7 +1,7 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
-import { SpacecraftOrganization } from '../../../lib/types.ts';
+import { CelestialBody, SpacecraftOrganization } from '../../../lib/types.ts';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
 import { FactSheetTitle } from '../FactSheetTitle.tsx';
 import { Thumbnail } from '../Thumbnail.tsx';
@@ -10,10 +10,10 @@ import { SpacecraftOrganizationMissions } from './SpacecraftOrganizationMissions
 
 type Props = {
   organization: SpacecraftOrganization;
+  bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
 };
-
-export function SpacecraftOrganizationFactSheet({ organization, updateSettings }: Props) {
+export function SpacecraftOrganizationFactSheet({ organization, bodies, updateSettings }: Props) {
   const padding = useFactSheetPadding();
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
@@ -31,7 +31,7 @@ export function SpacecraftOrganizationFactSheet({ organization, updateSettings }
         </Box>
       </Group>
 
-      <SpacecraftOrganizationMissions organization={organization} updateSettings={updateSettings} />
+      <SpacecraftOrganizationMissions organization={organization} bodies={bodies} updateSettings={updateSettings} />
 
       <Stack gap={0} flex={1} justify="flex-end">
         <OtherSpacecraftOrganizations organization={organization} updateSettings={updateSettings} />

@@ -1,19 +1,19 @@
-import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { dateToHumanReadable } from '../../../lib/epoch.ts';
 import { SPACECRAFT } from '../../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
-import { SpacecraftOrganization } from '../../../lib/types.ts';
-import styles from '../BodyCard.module.css';
-import { Thumbnail } from '../Thumbnail.tsx';
+import { CelestialBody, SpacecraftOrganization } from '../../../lib/types.ts';
 import { Timeline } from '../Timeline.tsx';
+import { OrganizationSpacecraftCard } from './OrganizationSpacecraftCard.tsx';
 
 type Props = {
   organization: SpacecraftOrganization;
+  bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
 };
-export function SpacecraftOrganizationMissions({ organization, updateSettings }: Props) {
+export function SpacecraftOrganizationMissions({ organization, bodies, updateSettings }: Props) {
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -36,33 +36,14 @@ export function SpacecraftOrganizationMissions({ organization, updateSettings }:
   );
   const spacecraftComponents: Array<[Date, ReactNode]> = organizationSpacecraft.map((spacecraft, i) => [
     spacecraft.start,
-    <Paper
+    <OrganizationSpacecraftCard
       key={`${spacecraft.name}-${i}`}
-      className={styles.Card}
-      withBorder
-      p={8}
+      spacecraft={spacecraft}
+      bodies={bodies}
+      onClick={() => updateSettings({ center: spacecraft.id, hover: null })}
       onMouseEnter={() => setActiveIndex(i + 1)}
       onMouseLeave={() => setActiveIndex(null)}
-      onClick={() => updateSettings({ center: spacecraft.id, hover: null })}
-      style={{ overflow: 'auto' }}
-    >
-      <Group gap="xs" wrap="nowrap">
-        <Box w={80} style={{ flexShrink: 0 }}>
-          <Thumbnail thumbnail={spacecraft.thumbnail} size={80} radius="xs" />
-        </Box>
-        <Stack gap={0}>
-          <Title order={6} mr="xs">
-            {spacecraft.name}
-          </Title>
-          <Text fz="xs" c="dimmed">
-            {spacecraft.start.getFullYear()}
-            {spacecraft.end?.getFullYear() !== spacecraft.start.getFullYear()
-              ? ` - ${spacecraft.end?.getFullYear() ?? 'Now'}`
-              : ''}
-          </Text>
-        </Stack>
-      </Group>
-    </Paper>,
+    />,
   ]);
 
   const dissolvedComponent =
@@ -100,7 +81,7 @@ export function SpacecraftOrganizationMissions({ organization, updateSettings }:
         activeIndex={activeIndex ?? -1}
         end={organization.dissolved}
         accentColor={organization.color}
-        width={160}
+        width={140}
       />
     </Stack>
   );

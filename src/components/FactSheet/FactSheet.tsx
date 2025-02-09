@@ -24,7 +24,6 @@ type Props = {
   addBody: (body: CelestialBody) => void;
   removeBody: (id: CelestialBodyId) => void;
 };
-
 export const FactSheet = memo(function FactSheetComponent({
   item,
   settings,
@@ -40,7 +39,7 @@ export const FactSheet = memo(function FactSheetComponent({
   ) : isSpacecraft(item) ? (
     <SpacecraftFactSheet spacecraft={item} hover={settings.hover} {...props} />
   ) : isOrganization(item) ? (
-    <SpacecraftOrganizationFactSheet organization={item} updateSettings={updateSettings} />
+    <SpacecraftOrganizationFactSheet organization={item} {...props} />
   ) : (
     <></>
   );
