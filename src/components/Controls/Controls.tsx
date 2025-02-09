@@ -15,7 +15,7 @@ type Props = {
 };
 export function Controls({ settings, updateSettings, model, setEpoch, reset }: Props) {
   const { xs: isXsDisplay } = useDisplaySize();
-  const pad = isXsDisplay ? 8 : 10;
+  const pad = isXsDisplay ? 6 : 10;
   return (
     <>
       <Box pos="absolute" bottom={pad} left={pad}>
