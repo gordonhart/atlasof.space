@@ -538,11 +538,13 @@ export const LUNA_3 = spacecraftWithDefaults({
   focusId: Bodies.LUNA.id,
   orbitalRegimes: [OrbitalRegimeId.EARTH_SYSTEM],
   missionFamily: LUNA_MISSION_FAMILY,
-  // TODO
-  status: { status: SpacecraftStatus.DEFUNCT, details: '' }, // TODO
-  thumbnail: '',
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: "Spacecraft reentered Earth's atmosphere due to orbital decay sometime in 1960-1962",
+  },
+  thumbnail: 'luna-3-thumb.jpeg',
   wiki: 'https://en.wikipedia.org/wiki/Luna_3',
-  visited: [],
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
 });
 
 export const VENUS_EXPRESS = spacecraftWithDefaults({

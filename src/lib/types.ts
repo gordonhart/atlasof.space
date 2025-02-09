@@ -162,8 +162,8 @@ export enum SpacecraftVisitType {
 
 export enum SpacecraftStatus {
   OPERATIONAL = 'Operational',
-  DEFUNCT = 'Defunct',
-  DECOMMISSIONED = 'Decommissioned',
+  DEFUNCT = 'Defunct', // not operational, but still out there
+  DECOMMISSIONED = 'Decommissioned', // destroyed intentionally or in an acceptable way
   RETURNED = 'Returned',
   CRASHED = 'Crashed',
 }
