@@ -529,6 +529,24 @@ export const VENERA_7 = spacecraftWithDefaults({
 });
 
 const LUNA_MISSION_FAMILY = 'Luna';
+export const LUNA_2 = spacecraftWithDefaults({
+  name: 'Luna 2',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 390.2,
+  start: new Date('1959-09-12T06:39:42Z'),
+  end: new Date('1959-09-13T21:02:24Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.EARTH_SYSTEM],
+  missionFamily: LUNA_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Impacted the surface of the Moon on September 13, 1959',
+  },
+  thumbnail: 'luna-2-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Luna_2',
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('1959-09-13T21:02:24Z') }],
+});
+
 export const LUNA_3 = spacecraftWithDefaults({
   name: 'Luna 3',
   organization: SpacecraftOrganizationId.USSR,
@@ -1263,7 +1281,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // Luna
   // LUNA_1,
   // PIONEER_4,
-  // LUNA_2,
+  LUNA_2,
   LUNA_3,
   // RANGER_7,
   // RANGER_8,
