@@ -11,7 +11,6 @@ import {
 } from '../types.ts';
 import { nameToId } from '../utils.ts';
 import * as Bodies from './bodies.ts';
-import { DEFAULT_COMET_COLOR, DEFAULT_SPACECRAFT_COLOR } from './bodies.ts';
 
 function spacecraftWithDefaults(
   spacecraft: Omit<Spacecraft, 'id' | 'color'> & { id?: SpacecraftId; color?: HexColor }
@@ -19,7 +18,7 @@ function spacecraftWithDefaults(
   return {
     ...spacecraft,
     id: `spacecraft/${nameToId(spacecraft.name)}`,
-    color: spacecraft.color ?? DEFAULT_SPACECRAFT_COLOR,
+    color: spacecraft.color ?? Bodies.DEFAULT_SPACECRAFT_COLOR,
   };
 }
 
@@ -31,7 +30,12 @@ export const VOYAGER_1 = spacecraftWithDefaults({
   power: 470,
   start: new Date('1977-09-05T12:56:01Z'),
   status: { status: SpacecraftStatus.OPERATIONAL },
-  orbitalRegimes: [OrbitalRegimeId.JUPITER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  orbitalRegimes: [
+    OrbitalRegimeId.JUPITER_SYSTEM,
+    OrbitalRegimeId.SATURN_SYSTEM,
+    OrbitalRegimeId.OUTER_SYSTEM,
+    OrbitalRegimeId.KUIPER_BELT,
+  ],
   missionFamily: VOYAGER_MISSION_FAMILY,
   thumbnail: 'voyager-1.png',
   wiki: 'https://en.wikipedia.org/wiki/Voyager_1',
@@ -59,7 +63,12 @@ export const VOYAGER_2 = spacecraftWithDefaults({
   power: 470,
   start: new Date('1977-08-20T14:29:00Z'),
   status: { status: SpacecraftStatus.OPERATIONAL },
-  orbitalRegimes: [OrbitalRegimeId.JUPITER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  orbitalRegimes: [
+    OrbitalRegimeId.JUPITER_SYSTEM,
+    OrbitalRegimeId.SATURN_SYSTEM,
+    OrbitalRegimeId.OUTER_SYSTEM,
+    OrbitalRegimeId.KUIPER_BELT,
+  ],
   missionFamily: VOYAGER_MISSION_FAMILY,
   thumbnail: 'voyager-2.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Voyager_2',
@@ -135,7 +144,7 @@ export const CASSINI = spacecraftWithDefaults({
     details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
   },
   focusId: Bodies.SATURN.id,
-  orbitalRegimes: [OrbitalRegimeId.JUPITER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.SATURN_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
   missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
@@ -173,7 +182,7 @@ export const HUYGENS = spacecraftWithDefaults({
   start: new Date('1997-10-15T08:43:00Z'),
   end: new Date('2005-01-14T13:37:00Z'),
   focusId: Bodies.TITAN.id,
-  orbitalRegimes: [OrbitalRegimeId.JUPITER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.SATURN_SYSTEM],
   missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
@@ -196,7 +205,7 @@ export const CURIOSITY = spacecraftWithDefaults({
   power: 100,
   start: new Date('2011-11-26T15:02:00Z'),
   focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.MARS_SYSTEM],
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'curiosity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
@@ -212,7 +221,7 @@ export const PERSEVERANCE = spacecraftWithDefaults({
   power: 110,
   start: new Date('2020-07-30T11:50:00Z'),
   focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.MARS_SYSTEM],
   missionFamily: PERSEVERANCE_MISSION_FAMILY,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'perseverance-thumb.jpg',
@@ -229,7 +238,7 @@ export const INGENUITY = spacecraftWithDefaults({
   start: new Date('2020-07-30T11:50:00Z'),
   end: new Date('2024-01-18T12:00:00Z'),
   focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.MARS_SYSTEM],
   missionFamily: PERSEVERANCE_MISSION_FAMILY,
   status: {
     status: SpacecraftStatus.DEFUNCT,
@@ -248,7 +257,7 @@ export const TIANWEN_1 = spacecraftWithDefaults({
   launchMass: 5000,
   start: new Date('2020-07-23T04:41:15Z'),
   focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.MARS_SYSTEM],
   missionFamily: TIANWEN_1_MISSION_FAMILY,
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'tianwen-1-thumb.png',
@@ -264,7 +273,7 @@ export const ZHURONG = spacecraftWithDefaults({
   start: new Date('2020-07-23T04:41:15Z'),
   end: new Date('2022-12-26T12:00:00Z'),
   focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.MARS_SYSTEM],
   missionFamily: TIANWEN_1_MISSION_FAMILY,
   status: {
     status: SpacecraftStatus.DEFUNCT,
@@ -364,7 +373,7 @@ export const GIOTTO = spacecraftWithDefaults({
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   thumbnail: 'giotto-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
     { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
@@ -474,7 +483,7 @@ export const MARINER_4 = spacecraftWithDefaults({
   organization: SpacecraftOrganizationId.NASA,
   launchMass: 260.8,
   power: 310,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.MARS_SYSTEM],
   missionFamily: MARINER_MISSION_FAMILY,
   start: new Date('1964-11-28T14:22:01Z'),
   end: new Date(1967, 11, 21),
@@ -498,7 +507,7 @@ export const MARINER_10 = spacecraftWithDefaults({
   organization: SpacecraftOrganizationId.NASA,
   launchMass: 502.9,
   power: 820,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.MARS_SYSTEM],
   missionFamily: MARINER_MISSION_FAMILY,
   start: new Date(1973, 10, 3, 5, 45),
   end: new Date(1975, 2, 24, 12, 21),
@@ -572,7 +581,7 @@ export const MARS_3 = spacecraftWithDefaults({
   start: new Date('1971-05-28T15:26:30Z'),
   end: new Date(1972, 7, 22),
   focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.MARS_SYSTEM],
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lander failed 110 seconds after landing' },
   thumbnail: 'mars-3-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Mars_3',
@@ -1000,7 +1009,12 @@ export const PIONEER_11 = spacecraftWithDefaults({
   //
   start: new Date('1973-04-06T02:11:04Z'),
   end: new Date('1995-11-24T12:00:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.JUPITER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  orbitalRegimes: [
+    OrbitalRegimeId.JUPITER_SYSTEM,
+    OrbitalRegimeId.SATURN_SYSTEM,
+    OrbitalRegimeId.OUTER_SYSTEM,
+    OrbitalRegimeId.KUIPER_BELT,
+  ],
   missionFamily: PIONEER_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting through the Kuiper Belt' },
   wiki: 'https://en.wikipedia.org/wiki/Pioneer_11',
@@ -1083,7 +1097,7 @@ export const ROSETTA = spacecraftWithDefaults({
   },
   wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
   thumbnail: 'rosetta-thumb.png',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
     { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
@@ -1110,7 +1124,7 @@ export const STARDUST = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated on March 24, 2011' },
   wiki: 'https://en.wikipedia.org/wiki/Stardust_(spacecraft)',
   thumbnail: 'stardust-thumb.jpg',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
     { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
@@ -1153,7 +1167,7 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
   thumbnail: 'deep-impact-thumb.jpg',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
     { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },

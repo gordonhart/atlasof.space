@@ -97,8 +97,10 @@ export enum OrbitalRegimeId {
   INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
   // planetary systems
   EARTH_SYSTEM = 'regime/earth-system',
+  MARS_SYSTEM = 'regime/mars-system',
   JUPITER_SYSTEM = 'regime/jupiter-system',
-  // TODO: add MARS_SYSTEM, SATURN_SYSTEM at the very least, may also want Uranus, Neptune, and Pluto
+  SATURN_SYSTEM = 'regime/saturn-system',
+  // TODO: add Uranus, Neptune, and Pluto systems
 }
 
 export type HexColor = `#${string}`;

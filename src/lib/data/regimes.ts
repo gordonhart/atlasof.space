@@ -1,5 +1,5 @@
 import { OrbitalRegimeId, OrbitalRegime } from '../types.ts';
-import { AU, EARTH, JUPITER, SOL } from './bodies.ts';
+import { AU, EARTH, JUPITER, MARS, SATURN, SOL } from './bodies.ts';
 
 export const INNER_SYSTEM: OrbitalRegime = {
   id: OrbitalRegimeId.INNER_SYSTEM,
@@ -45,7 +45,15 @@ export const EARTH_SYSTEM: OrbitalRegime = {
   id: OrbitalRegimeId.EARTH_SYSTEM,
   wrt: EARTH.id,
   min: EARTH.radius + 300e3,
-  max: 1_500_000e3, // rough edge of Earth's Hill sphere
+  max: 1_471_400e3, // Hill radius, https://en.wikipedia.org/wiki/Hill_sphere#Hill_spheres_for_the_solar_system
+  roundness: 0.25,
+};
+
+export const MARS_SYSTEM: OrbitalRegime = {
+  id: OrbitalRegimeId.MARS_SYSTEM,
+  wrt: MARS.id,
+  min: MARS.radius + 300e3,
+  max: 982_700e3, // Hill radius
   roundness: 0.25,
 };
 
@@ -53,19 +61,23 @@ export const JUPITER_SYSTEM: OrbitalRegime = {
   id: OrbitalRegimeId.JUPITER_SYSTEM,
   wrt: JUPITER.id,
   min: JUPITER.radius + 100_000e3,
-  max: 53_000_000e3, // rough edge of Jupiter's Hill sphere
+  max: 50_573_600e3, // Hill radius
   roundness: 0.25,
 };
 
-export const ORBITAL_REGIMES: Array<OrbitalRegime> = [
-  INNER_SYSTEM,
-  ASTEROID_BELT,
-  OUTER_SYSTEM,
-  KUIPER_BELT,
-  INNER_OORT_CLOUD,
-  EARTH_SYSTEM,
-  JUPITER_SYSTEM,
-];
+export const SATURN_SYSTEM: OrbitalRegime = {
+  id: OrbitalRegimeId.SATURN_SYSTEM,
+  wrt: SATURN.id,
+  min: SATURN.radius + 100_000e3,
+  max: 61_634_000e3, // Hill radius
+  roundness: 0.25,
+};
+
+// TODO: Uranus, Neptune, Pluto
+
+const HELIOCENTRIC_REGIMES = [INNER_SYSTEM, ASTEROID_BELT, OUTER_SYSTEM, KUIPER_BELT, INNER_OORT_CLOUD];
+const PLANETARY_SYSTEMS = [EARTH_SYSTEM, MARS_SYSTEM, JUPITER_SYSTEM, SATURN_SYSTEM];
+export const ORBITAL_REGIMES: Array<OrbitalRegime> = [...HELIOCENTRIC_REGIMES, ...PLANETARY_SYSTEMS];
 
 export const ORBITAL_REGIMES_BY_ID = Object.fromEntries(ORBITAL_REGIMES.map(r => [r.id, r]));
 
@@ -77,6 +89,8 @@ export function orbitalRegimeDisplayName(regime: OrbitalRegimeId) {
     [OrbitalRegimeId.KUIPER_BELT]: 'Kuiper Belt',
     [OrbitalRegimeId.INNER_OORT_CLOUD]: 'Inner Oort Cloud',
     [OrbitalRegimeId.EARTH_SYSTEM]: 'Earth System',
+    [OrbitalRegimeId.MARS_SYSTEM]: 'Mars System',
     [OrbitalRegimeId.JUPITER_SYSTEM]: 'Jupiter System',
+    [OrbitalRegimeId.SATURN_SYSTEM]: 'Saturn System',
   }[regime];
 }

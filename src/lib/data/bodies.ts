@@ -266,6 +266,7 @@ export const PHOBOS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Phobos',
   influencedBy: [SOL.id, MARS.id],
+  orbitalRegime: OrbitalRegimeId.MARS_SYSTEM,
   elements: {
     wrt: MARS.id,
     epoch: J2000, // TODO: verify
@@ -292,6 +293,7 @@ export const DEIMOS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Deimos',
   influencedBy: [SOL.id, MARS.id],
+  orbitalRegime: OrbitalRegimeId.MARS_SYSTEM,
   elements: {
     wrt: MARS.id,
     epoch: J2000, // TODO: verify
@@ -1991,6 +1993,7 @@ export const MIMAS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Mimas',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2013,6 +2016,7 @@ export const ENCELADUS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Enceladus',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2035,6 +2039,7 @@ export const TETHYS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Tethys',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2057,6 +2062,7 @@ export const DIONE = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Dione',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2079,6 +2085,7 @@ export const RHEA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Rhea',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2101,6 +2108,7 @@ export const TITAN = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Titan',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2125,6 +2133,7 @@ export const IAPETUS = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Iapetus',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2147,6 +2156,7 @@ export const HYPERION = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Hyperion',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: J2000, // TODO: verify
@@ -2169,6 +2179,7 @@ export const PHOEBE = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Phoebe',
   influencedBy: [SOL.id, SATURN.id],
+  orbitalRegime: OrbitalRegimeId.SATURN_SYSTEM,
   elements: {
     wrt: SATURN.id,
     epoch: julianDayToEpoch('JD2460000.5'),
