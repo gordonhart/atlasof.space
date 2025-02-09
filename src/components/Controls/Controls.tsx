@@ -17,11 +17,11 @@ type Props = {
 export function Controls({ settings, updateSettings, model, setEpoch, reset }: Props) {
   return (
     <>
-      <Box pos="absolute" bottom={pad} left={pad}>
+      <Box pos="absolute" bottom={pad} left={pad} right={pad}>
         <TimeControls settings={settings} updateSettings={updateSettings} model={model} setEpoch={setEpoch} />
       </Box>
 
-      <Box pos="absolute" bottom={pad} right={pad}>
+      <Box pos="absolute" left={pad} top={pad}>
         <GeneralControls settings={settings} updateSettings={updateSettings} reset={reset} />
       </Box>
 

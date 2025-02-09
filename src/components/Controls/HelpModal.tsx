@@ -27,6 +27,7 @@ import {
   IconInfoHexagon,
   IconRotate3d,
   IconSearch,
+  IconSettings,
   IconX,
   IconZoomScan,
 } from '@tabler/icons-react';
@@ -171,7 +172,10 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
           />
           <HighlightedText
             segments={[
-              { content: 'Use the controls at the bottom of the screen to change settings or click ' },
+              { content: 'Use the ' },
+              { content: 'Settings ', highlight: true },
+              { content: <IconSettings size={14} style={{ marginBottom: -2 }} />, highlight: true },
+              { content: ' menu to update display settings or click ' },
               { content: 'Help ', highlight: true },
               { content: <IconInfoHexagon size={14} style={{ marginBottom: -2 }} />, highlight: true },
               { content: ' to open this menu.' },
