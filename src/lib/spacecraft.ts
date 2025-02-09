@@ -11,7 +11,7 @@ import {
   SpacecraftVisitType,
   HexColor,
 } from './types.ts';
-import { DEFAULT_SPACECRAFT_COLOR, nameToId } from './utils.ts';
+import { DEFAULT_COMET_COLOR, DEFAULT_SPACECRAFT_COLOR, nameToId } from './utils.ts';
 
 const NASA: SpacecraftOrganization = {
   id: SpacecraftOrganizationId.NASA,
@@ -419,6 +419,7 @@ export const GIOTTO = spacecraftWithDefaults({
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   thumbnail: 'giotto-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
     { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
@@ -476,6 +477,7 @@ export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'parker-solar-probe-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
+  color: Bodies.SOL.style.fgColor,
   visited: [
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
     {
@@ -497,6 +499,7 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'solar-orbiter-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Solar_Orbiter',
+  color: Bodies.SOL.style.fgColor,
   visited: [
     { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-06-15T12:00:00Z') },
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-12-27T12:39:00Z') },
@@ -517,6 +520,7 @@ export const MARINER_2 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
   wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
   thumbnail: Bodies.MARINER_2.assets!.thumbnail,
+  color: Bodies.VENUS.style.fgColor,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
 });
 
@@ -575,6 +579,7 @@ export const VENERA_7 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'venera-7-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venera_7',
+  color: Bodies.VENUS.style.fgColor,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
 });
 
@@ -590,6 +595,7 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
   thumbnail: 'venus-express-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venus_Express',
+  color: Bodies.VENUS.style.fgColor,
   visited: [
     {
       id: Bodies.VENUS.id,
@@ -624,6 +630,7 @@ export const JUNO = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'juno-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Juno_(spacecraft)',
+  color: Bodies.JUPITER.style.fgColor,
   visited: [
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2016-07-05T03:53:00Z') },
     { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-12-26T16:58:59Z') },
@@ -643,6 +650,7 @@ export const JUICE = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'juice-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
+  color: Bodies.JUPITER.style.fgColor,
   visited: [
     { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
@@ -730,6 +738,7 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'europa-clipper-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
+  color: Bodies.EUROPA.style.fgColor,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-01T17:00:00Z') },
     // some uncertainty here as these are planned dates
@@ -753,6 +762,7 @@ export const APOLLO_8 = spacecraftWithDefaults({
   thumbnail: 'apollo-8-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_8',
   crew: ['Frank Borman', 'James Lovell', 'William Anders'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -776,6 +786,7 @@ export const APOLLO_10 = spacecraftWithDefaults({
   thumbnail: 'apollo-10-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_10',
   crew: ['Thomas Stafford', 'Gene Cernan', 'John Young'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -799,6 +810,7 @@ export const APOLLO_11 = spacecraftWithDefaults({
   thumbnail: 'apollo-11-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_11',
   crew: ['Neil Armstrong', 'Buzz Aldrin', 'Michael Collins'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -822,6 +834,7 @@ export const APOLLO_12 = spacecraftWithDefaults({
   thumbnail: 'apollo-12-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_12',
   crew: ['Pete Conrad', 'Alan Bean', 'Richard Gordon'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -845,6 +858,7 @@ export const APOLLO_13 = spacecraftWithDefaults({
   thumbnail: 'apollo-13-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_13',
   crew: ['Jim Lovell', 'Jack Swigert', 'Fred Haise'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1970-04-15T00:21:00Z') }],
 });
 
@@ -861,6 +875,7 @@ export const APOLLO_14 = spacecraftWithDefaults({
   thumbnail: 'apollo-14-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_14',
   crew: ['Alan Shepard', 'Stuart Roosa', 'Edgar Mitchell'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -884,6 +899,7 @@ export const APOLLO_15 = spacecraftWithDefaults({
   thumbnail: 'apollo-15-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_15',
   crew: ['David Scott', 'Alfred Worden', 'James Irwin'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -907,6 +923,7 @@ export const APOLLO_16 = spacecraftWithDefaults({
   thumbnail: 'apollo-16-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_16',
   crew: ['John Young', 'Ken Mattingly', 'Charlie Duke'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -930,6 +947,7 @@ export const APOLLO_17 = spacecraftWithDefaults({
   thumbnail: 'apollo-17-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_17',
   crew: ['Gene Cernan', 'Ronald Evans', 'Jack Schmitt'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -1053,6 +1071,7 @@ export const ROSETTA = spacecraftWithDefaults({
   },
   wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
   thumbnail: 'rosetta-thumb.png',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
     { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
@@ -1079,6 +1098,7 @@ export const STARDUST = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated on March 24, 2011' },
   wiki: 'https://en.wikipedia.org/wiki/Stardust_(spacecraft)',
   thumbnail: 'stardust-thumb.jpg',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
     { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
@@ -1121,6 +1141,7 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
   thumbnail: 'deep-impact-thumb.jpg',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
     { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },

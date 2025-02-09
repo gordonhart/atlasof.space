@@ -1843,7 +1843,7 @@ export const EUROPA = celestialBodyWithDefaults({
   },
   mass: 4.799844e22,
   radius: 1560.8e3,
-  style: { fgColor: '#bfcccb' },
+  style: { fgColor: '#b6d3d1' },
   assets: {
     thumbnail: 'europa-thumb.jpg',
     wiki: 'https://en.wikipedia.org/wiki/Europa_(moon)',

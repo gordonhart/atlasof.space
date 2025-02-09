@@ -75,11 +75,12 @@ export function nameToId(name: string, shortName?: string) {
 }
 
 export const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_COMET_COLOR = '#51807c';
 export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
 const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
   [CelestialBodyType.MOON]: '#aaaaaa',
   [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
-  [CelestialBodyType.COMET]: '#51807c',
+  [CelestialBodyType.COMET]: DEFAULT_COMET_COLOR,
   [CelestialBodyType.DWARF_PLANET]: '#998a98',
   [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#7b739e',
   [CelestialBodyType.SPACECRAFT]: DEFAULT_SPACECRAFT_COLOR,

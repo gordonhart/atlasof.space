@@ -115,7 +115,6 @@ type Props = {
 export function AddSmallBodyModal({ bodies, isOpen, onClose, addBody, removeBody }: Props) {
   const initialCheckedState = useMemo(() => {
     const names = bodies.filter(({ type }) => isSmallBody(type)).map(({ name }) => name);
-    console.log(names);
     const treeDataFlat = treeData.flatMap(({ children }) => children ?? []);
     return treeDataFlat.filter(({ value }) => names.some(name => value.includes(name))).map(({ value }) => value);
   }, [JSON.stringify(bodies)]);
