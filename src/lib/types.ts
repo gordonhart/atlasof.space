@@ -98,6 +98,7 @@ export enum OrbitalRegimeId {
   // planetary systems
   EARTH_SYSTEM = 'regime/earth-system',
   JUPITER_SYSTEM = 'regime/jupiter-system',
+  // TODO: add MARS_SYSTEM, SATURN_SYSTEM at the very least, may also want Uranus, Neptune, and Pluto
 }
 
 export type HexColor = `#${string}`;

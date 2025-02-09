@@ -565,6 +565,20 @@ export const LUNA_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
 });
 
+export const MARS_3 = spacecraftWithDefaults({
+  name: 'Mars 3',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 4650,
+  start: new Date('1971-05-28T15:26:30Z'),
+  end: new Date(1972, 7, 22),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lander failed 110 seconds after landing' },
+  thumbnail: 'mars-3-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_3',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
+});
+
 const ZOND_MISSION_FAMILY = 'Zond';
 export const ZOND_5 = spacecraftWithDefaults({
   name: 'Zond 5',
@@ -1315,7 +1329,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // OPPORTUNITY,
   // ZHURONG,
   // MARS_2,
-  // MARS_3,
+  MARS_3,
   // MARS_RECONNAISSANCE_ORBITER,
   // VIKING_1,
   // VIKING_2,
