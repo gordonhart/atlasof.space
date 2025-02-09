@@ -13,7 +13,6 @@ export function OrbitalRegimePill({ regime, updateSettings }: Props) {
   return (
     <Pill
       className={styles.LinkPill}
-      style={{ cursor: 'pointer' }}
       onClick={() => updateSettings({ center: regime, hover: null })}
       onMouseEnter={() => updateSettings({ hover: regime })}
       onMouseLeave={() => updateSettings({ hover: null })}

@@ -8,9 +8,10 @@ import {
   OrbitalRegimeId,
   Point3,
   SpacecraftId,
+  SpacecraftOrganizationId,
 } from './types.ts';
 
-export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId;
+export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId | SpacecraftOrganizationId;
 
 export function itemIdAsRoute(itemId: ItemId | null) {
   if (itemId == null) return '/';
@@ -18,6 +19,7 @@ export function itemIdAsRoute(itemId: ItemId | null) {
   if (type === 'body') return `/${id}`;
   if (type === 'regime') return `/regime/${id}`;
   if (type === 'spacecraft') return `/spacecraft/${id}`;
+  if (type === 'organization') return `/organization/${id}`;
   return '/'; // fallback, shouldn't get here
 }
 

@@ -5,49 +5,83 @@ import {
   OrbitalRegimeId,
   Spacecraft,
   SpacecraftId,
+  SpacecraftOrganizationId,
   SpacecraftOrganization,
-  SpacecraftOrganizationDetails,
   SpacecraftStatus,
   SpacecraftVisitType,
+  HexColor,
 } from './types.ts';
-import { nameToId } from './utils.ts';
+import { DEFAULT_COMET_COLOR, DEFAULT_SPACECRAFT_COLOR, nameToId } from './utils.ts';
 
-export const SPACECRAFT_ORGANIZATIONS: Record<SpacecraftOrganization, SpacecraftOrganizationDetails> = {
-  [SpacecraftOrganization.NASA]: {
-    name: 'National Aeronautics and Space Administration',
-    shortName: 'NASA',
-    thumbnail: 'nasa-meatball.svg',
-  },
-  [SpacecraftOrganization.USSR]: {
-    name: 'Union of Soviet Socialist Republics',
-    shortName: 'USSR',
-    thumbnail: 'ussr-logo.svg',
-  },
-  [SpacecraftOrganization.ESA]: {
-    name: 'European Space Agency',
-    shortName: 'ESA',
-    thumbnail: 'esa-logo.png',
-  },
-  [SpacecraftOrganization.JAXA]: {
-    name: 'Japan Aerospace Exploration Agency',
-    shortName: 'JAXA',
-    thumbnail: 'jaxa-logo.png',
-  },
-  [SpacecraftOrganization.CNSA]: {
-    name: 'China National Space Administration',
-    shortName: 'CNSA',
-    thumbnail: 'cnsa-logo.svg',
-  },
+const NASA: SpacecraftOrganization = {
+  id: SpacecraftOrganizationId.NASA,
+  name: 'National Aeronautics and Space Administration',
+  shortName: 'NASA',
+  founded: new Date(1958, 6, 29),
+  thumbnail: 'nasa-meatball.svg',
+  wiki: 'https://en.wikipedia.org/wiki/NASA',
+  // color: '#0032a0', // official blue
+  color: '#1b3c8c',
 };
+const USSR: SpacecraftOrganization = {
+  id: SpacecraftOrganizationId.USSR,
+  name: 'Soviet Space Program',
+  shortName: 'USSR',
+  founded: new Date(1951, 6, 22),
+  dissolved: new Date(1991, 10, 14),
+  thumbnail: 'ussr-logo.svg',
+  wiki: 'https://en.wikipedia.org/wiki/Soviet_space_program',
+  color: `#bc271a`,
+};
+const ESA: SpacecraftOrganization = {
+  id: SpacecraftOrganizationId.ESA,
+  name: 'European Space Agency',
+  shortName: 'ESA',
+  founded: new Date(1975, 4, 30),
+  thumbnail: 'esa-logo.png',
+  wiki: 'https://en.wikipedia.org/wiki/European_Space_Agency',
+  // color: `#003247`, // official
+  color: '#00567a',
+};
+const JAXA: SpacecraftOrganization = {
+  id: SpacecraftOrganizationId.JAXA,
+  name: 'Japan Aerospace Exploration Agency',
+  shortName: 'JAXA',
+  founded: new Date(2003, 9, 1),
+  thumbnail: 'jaxa-logo.png',
+  wiki: 'https://en.wikipedia.org/wiki/JAXA',
+  color: `#285eaa`,
+};
+const CNSA: SpacecraftOrganization = {
+  id: SpacecraftOrganizationId.CNSA,
+  name: 'China National Space Administration',
+  shortName: 'CNSA',
+  founded: new Date(1993, 3, 22),
+  thumbnail: 'cnsa-logo.svg',
+  wiki: 'https://en.wikipedia.org/wiki/China_National_Space_Administration',
+  color: '#4887e4',
+};
+// TODO: ISRO -- Chandrayaan 1-3, Aditya, Mars Orbiter are all worth including
 
-function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
-  return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
+export const SPACECRAFT_ORGANIZATIONS = [NASA, USSR, ESA, JAXA, CNSA].reduce(
+  (acc, org) => ({ ...acc, [org.id]: org }),
+  {} as Record<SpacecraftOrganizationId, SpacecraftOrganization>
+);
+
+function spacecraftWithDefaults(
+  spacecraft: Omit<Spacecraft, 'id' | 'color'> & { id?: SpacecraftId; color?: HexColor }
+): Spacecraft {
+  return {
+    ...spacecraft,
+    id: `spacecraft/${nameToId(spacecraft.name)}`,
+    color: spacecraft.color ?? DEFAULT_SPACECRAFT_COLOR,
+  };
 }
 
 const VOYAGER_MISSION_FAMILY = 'Voyager';
 export const VOYAGER_1 = spacecraftWithDefaults({
   name: 'Voyager 1',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 815,
   power: 470,
   start: new Date('1977-09-05T12:56:01Z'),
@@ -75,7 +109,7 @@ export const VOYAGER_1 = spacecraftWithDefaults({
 
 export const VOYAGER_2 = spacecraftWithDefaults({
   name: 'Voyager 2',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 721.9,
   power: 470,
   start: new Date('1977-08-20T14:29:00Z'),
@@ -146,7 +180,7 @@ export const VOYAGER_2 = spacecraftWithDefaults({
 const CASSINI_HUYGENS_MISSION_FAMILY = 'Cassini-Huygens';
 export const CASSINI = spacecraftWithDefaults({
   name: 'Cassini',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 5712,
   power: 885,
   start: new Date('1997-10-15T08:43:00Z'),
@@ -160,6 +194,7 @@ export const CASSINI = spacecraftWithDefaults({
   missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
+  color: Bodies.SATURN.style.fgColor,
   visited: [
     // traveling to Saturn
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('1998-04-26T12:00:00Z') },
@@ -187,7 +222,7 @@ export const CASSINI = spacecraftWithDefaults({
 
 export const HUYGENS = spacecraftWithDefaults({
   name: 'Huygens',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 320,
   power: 600, // 1800 Wh, estimated battery life of 3 hours
   start: new Date('1997-10-15T08:43:00Z'),
@@ -198,6 +233,7 @@ export const HUYGENS = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
+  color: Bodies.TITAN.style.fgColor,
   visited: [
     {
       id: Bodies.TITAN.id,
@@ -210,7 +246,7 @@ export const HUYGENS = spacecraftWithDefaults({
 
 export const CURIOSITY = spacecraftWithDefaults({
   name: 'Curiosity',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 899,
   power: 100,
   start: new Date('2011-11-26T15:02:00Z'),
@@ -219,13 +255,14 @@ export const CURIOSITY = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'curiosity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
 });
 
 const PERSEVERANCE_MISSION_FAMILY = 'Perseverance';
 export const PERSEVERANCE = spacecraftWithDefaults({
   name: 'Perseverance',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 1025,
   power: 110,
   start: new Date('2020-07-30T11:50:00Z'),
@@ -235,12 +272,13 @@ export const PERSEVERANCE = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'perseverance-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2021-02-18T20:55:00Z') }],
 });
 
 export const INGENUITY = spacecraftWithDefaults({
   name: 'Ingenuity',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 1.8,
   power: 350,
   start: new Date('2020-07-30T11:50:00Z'),
@@ -254,13 +292,14 @@ export const INGENUITY = spacecraftWithDefaults({
   },
   thumbnail: 'ingenuity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
 });
 
 const TIANWEN_1_MISSION_FAMILY = 'Tianwen-1';
 export const TIANWEN_1 = spacecraftWithDefaults({
   name: 'Tianwen-1',
-  organization: SpacecraftOrganization.CNSA,
+  organization: SpacecraftOrganizationId.CNSA,
   launchMass: 5000,
   start: new Date('2020-07-23T04:41:15Z'),
   focusId: Bodies.MARS.id,
@@ -269,12 +308,13 @@ export const TIANWEN_1 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'tianwen-1-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
 });
 
 export const ZHURONG = spacecraftWithDefaults({
   name: 'Zhurong',
-  organization: SpacecraftOrganization.CNSA,
+  organization: SpacecraftOrganizationId.CNSA,
   launchMass: 240,
   start: new Date('2020-07-23T04:41:15Z'),
   end: new Date('2022-12-26T12:00:00Z'),
@@ -287,6 +327,7 @@ export const ZHURONG = spacecraftWithDefaults({
   },
   thumbnail: 'zhurong-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
+  color: Bodies.MARS.style.fgColor,
   visited: [
     {
       id: Bodies.MARS.id,
@@ -299,7 +340,7 @@ export const ZHURONG = spacecraftWithDefaults({
 
 export const NEW_HORIZONS = spacecraftWithDefaults({
   name: 'New Horizons',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 478,
   power: 245,
   start: new Date('2006-01-19T19:00:00Z'),
@@ -311,6 +352,7 @@ export const NEW_HORIZONS = spacecraftWithDefaults({
   focusId: Bodies.PLUTO.id,
   thumbnail: 'new-horizons-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/New_Horizons',
+  color: Bodies.PLUTO.style.fgColor,
   visited: [
     // TODO: flyby of asteroid 132524 APL
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('2007-02-28T12:00:00Z') },
@@ -327,15 +369,15 @@ export const NEW_HORIZONS = spacecraftWithDefaults({
     { id: Bodies.KERBEROS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
     { id: Bodies.STYX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
     // Kuiper belt phase
-    { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
     // TODO: enable? not really a flyby, 0.75 AU away
-    // { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
+    // { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
+    { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
   ],
 });
 
 export const GALILEO = spacecraftWithDefaults({
   name: 'Galileo',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 2560,
   power: 570,
   start: new Date('1989-10-18T16:53:40Z'),
@@ -348,6 +390,7 @@ export const GALILEO = spacecraftWithDefaults({
   },
   thumbnail: 'galileo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
+  color: Bodies.JUPITER.style.fgColor,
   visited: [
     { id: Bodies.GASPRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1991-10-29T12:00:00Z') },
     { id: Bodies.IDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1993-08-28T12:00:00Z') },
@@ -367,7 +410,7 @@ export const GALILEO = spacecraftWithDefaults({
 
 export const GIOTTO = spacecraftWithDefaults({
   name: 'Giotto',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 960,
   power: 196,
   start: new Date('1985-07-02T11:23:00Z'),
@@ -376,6 +419,7 @@ export const GIOTTO = spacecraftWithDefaults({
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   thumbnail: 'giotto-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
     { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
@@ -385,7 +429,7 @@ export const GIOTTO = spacecraftWithDefaults({
 // TODO: add JAXA's Mio?
 export const BEPICOLOMBO = spacecraftWithDefaults({
   name: 'BepiColombo',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 4100,
   power: 150,
   start: new Date('2018-10-20T01:45:00Z'),
@@ -403,7 +447,7 @@ export const BEPICOLOMBO = spacecraftWithDefaults({
 
 export const MESSENGER = spacecraftWithDefaults({
   name: 'MESSENGER',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 1107.9,
   power: 450,
   start: new Date('2004-08-03T06:15:56Z'),
@@ -424,7 +468,7 @@ export const MESSENGER = spacecraftWithDefaults({
 
 export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
   name: 'Parker Solar Probe',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 685,
   power: 343,
   start: new Date('2018-08-12T07:31:00Z'),
@@ -433,6 +477,7 @@ export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'parker-solar-probe-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
+  color: Bodies.SOL.style.fgColor,
   visited: [
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
     {
@@ -445,7 +490,7 @@ export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
 
 export const SOLAR_ORBITER = spacecraftWithDefaults({
   name: 'Solar Orbiter',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 1800,
   power: 180,
   start: new Date('2020-02-10T04:03:00Z'),
@@ -454,6 +499,7 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'solar-orbiter-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Solar_Orbiter',
+  color: Bodies.SOL.style.fgColor,
   visited: [
     { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-06-15T12:00:00Z') },
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-12-27T12:39:00Z') },
@@ -464,7 +510,7 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
 const MARINER_MISSION_FAMILY = 'Mariner';
 export const MARINER_2 = spacecraftWithDefaults({
   name: Bodies.MARINER_2.name,
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: Bodies.MARINER_2.mass,
   power: 220,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
@@ -474,24 +520,27 @@ export const MARINER_2 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
   wiki: 'https://en.wikipedia.org/wiki/Mariner_2',
   thumbnail: Bodies.MARINER_2.assets!.thumbnail,
+  color: Bodies.VENUS.style.fgColor,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1962-12-14T12:00:00Z') }],
 });
 
 export const MARINER_4 = spacecraftWithDefaults({
   name: 'Mariner 4',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 260.8,
   power: 310,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   missionFamily: MARINER_MISSION_FAMILY,
   start: new Date('1964-11-28T14:22:01Z'),
   end: new Date(1967, 11, 21),
+  focusId: Bodies.MARS.id,
   status: {
     status: SpacecraftStatus.DEFUNCT,
     details: 'Damaged by 83 micrometeoroid hits, likely debris from comet D/1895 Q1 (Swift)',
   },
   wiki: 'https://en.wikipedia.org/wiki/Mariner_4',
   thumbnail: 'mariner-4-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1965-07-15T01:00:57Z') },
     // TODO: D/1895 Q1 (Swift) is believed to no longer exist; last observed in 1986
@@ -501,7 +550,7 @@ export const MARINER_4 = spacecraftWithDefaults({
 
 export const MARINER_10 = spacecraftWithDefaults({
   name: 'Mariner 10',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 502.9,
   power: 820,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
@@ -520,7 +569,7 @@ export const MARINER_10 = spacecraftWithDefaults({
 const VENERA_MISSION_FAMILY = 'Venera';
 export const VENERA_7 = spacecraftWithDefaults({
   name: 'Venera 7',
-  organization: SpacecraftOrganization.USSR,
+  organization: SpacecraftOrganizationId.USSR,
   launchMass: 1180,
   start: new Date('1970-08-17T05:38:22Z'),
   end: new Date('1970-12-15T06:00:00Z'),
@@ -530,12 +579,13 @@ export const VENERA_7 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT },
   thumbnail: 'venera-7-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venera_7',
+  color: Bodies.VENUS.style.fgColor,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
 });
 
 export const VENUS_EXPRESS = spacecraftWithDefaults({
   name: 'Venus Express',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 1270,
   power: 1100,
   start: new Date('2005-11-09T03:33:34Z'),
@@ -545,6 +595,7 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
   thumbnail: 'venus-express-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Venus_Express',
+  color: Bodies.VENUS.style.fgColor,
   visited: [
     {
       id: Bodies.VENUS.id,
@@ -557,7 +608,7 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
 
 export const IKAROS = spacecraftWithDefaults({
   name: 'IKAROS',
-  organization: SpacecraftOrganization.JAXA,
+  organization: SpacecraftOrganizationId.JAXA,
   launchMass: 310,
   start: new Date('2010-05-20T21:58:22Z'),
   end: new Date('2015-05-20T12:00:00Z'),
@@ -570,7 +621,7 @@ export const IKAROS = spacecraftWithDefaults({
 
 export const JUNO = spacecraftWithDefaults({
   name: 'Juno',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 3625,
   power: 14000, // at Earth, solar
   start: new Date('2011-08-05T16:25:00Z'),
@@ -579,6 +630,7 @@ export const JUNO = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'juno-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Juno_(spacecraft)',
+  color: Bodies.JUPITER.style.fgColor,
   visited: [
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2016-07-05T03:53:00Z') },
     { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-12-26T16:58:59Z') },
@@ -589,7 +641,7 @@ export const JUNO = spacecraftWithDefaults({
 
 export const JUICE = spacecraftWithDefaults({
   name: 'Jupiter Icy Moons Explorer',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 6070,
   power: 850,
   start: new Date('2023-04-14T12:14:36Z'),
@@ -598,6 +650,7 @@ export const JUICE = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'juice-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
+  color: Bodies.JUPITER.style.fgColor,
   visited: [
     { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
@@ -610,7 +663,7 @@ export const JUICE = spacecraftWithDefaults({
 
 export const LUCY = spacecraftWithDefaults({
   name: 'Lucy',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 1550,
   power: 504,
   start: new Date('2021-10-16T09:34:02Z'),
@@ -629,7 +682,7 @@ export const LUCY = spacecraftWithDefaults({
 const AIDA_MISSION_FAMILY = 'Asteroid Impact and Deflection Assessment (AIDA)';
 export const DART = spacecraftWithDefaults({
   name: 'Double Asteroid Redirect Test (DART)',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 610,
   power: 6600,
   start: new Date('2021-11-24T06:21:02Z'),
@@ -645,7 +698,7 @@ export const DART = spacecraftWithDefaults({
 
 export const HERA = spacecraftWithDefaults({
   name: 'Hera',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 1128,
   start: new Date('2024-10-07T14:52:11Z'),
   focusId: Bodies.DIDYMOS.id,
@@ -662,7 +715,7 @@ export const HERA = spacecraftWithDefaults({
 
 export const PSYCHE = spacecraftWithDefaults({
   name: 'Psyche',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 2608,
   power: 4500,
   start: new Date('2023-10-13T14:19:00Z'),
@@ -676,7 +729,7 @@ export const PSYCHE = spacecraftWithDefaults({
 
 export const EUROPA_CLIPPER = spacecraftWithDefaults({
   name: 'Europa Clipper',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 6065,
   power: 600,
   start: new Date('2024-10-14T16:06:00Z'),
@@ -685,6 +738,7 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'europa-clipper-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
+  color: Bodies.EUROPA.style.fgColor,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-01T17:00:00Z') },
     // some uncertainty here as these are planned dates
@@ -697,7 +751,7 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
 const APOLLO_MISSION_FAMILY = 'Apollo';
 export const APOLLO_8 = spacecraftWithDefaults({
   name: 'Apollo 8',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 28870,
   start: new Date('1968-12-21T12:51:00Z'),
   end: new Date('1968-12-27T15:51:42Z'),
@@ -708,6 +762,7 @@ export const APOLLO_8 = spacecraftWithDefaults({
   thumbnail: 'apollo-8-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_8',
   crew: ['Frank Borman', 'James Lovell', 'William Anders'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -720,7 +775,7 @@ export const APOLLO_8 = spacecraftWithDefaults({
 
 export const APOLLO_10 = spacecraftWithDefaults({
   name: 'Apollo 10',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 42775,
   start: new Date('1969-05-18T16:49:00Z'),
   end: new Date('1969-05-26T16:52:23Z'),
@@ -731,6 +786,7 @@ export const APOLLO_10 = spacecraftWithDefaults({
   thumbnail: 'apollo-10-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_10',
   crew: ['Thomas Stafford', 'Gene Cernan', 'John Young'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -743,7 +799,7 @@ export const APOLLO_10 = spacecraftWithDefaults({
 
 export const APOLLO_11 = spacecraftWithDefaults({
   name: 'Apollo 11',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 49735,
   start: new Date('1969-07-16T13:32:00Z'),
   end: new Date('1969-07-24T16:50:35Z'),
@@ -754,6 +810,7 @@ export const APOLLO_11 = spacecraftWithDefaults({
   thumbnail: 'apollo-11-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_11',
   crew: ['Neil Armstrong', 'Buzz Aldrin', 'Michael Collins'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -766,7 +823,7 @@ export const APOLLO_11 = spacecraftWithDefaults({
 
 export const APOLLO_12 = spacecraftWithDefaults({
   name: 'Apollo 12',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 49915,
   start: new Date('1969-11-14T16:22:00Z'),
   end: new Date('1969-11-24T20:58:24Z'),
@@ -777,6 +834,7 @@ export const APOLLO_12 = spacecraftWithDefaults({
   thumbnail: 'apollo-12-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_12',
   crew: ['Pete Conrad', 'Alan Bean', 'Richard Gordon'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -789,7 +847,7 @@ export const APOLLO_12 = spacecraftWithDefaults({
 
 export const APOLLO_13 = spacecraftWithDefaults({
   name: 'Apollo 13',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 44069,
   start: new Date('1970-04-11T19:13:00Z'),
   end: new Date('1970-04-17T18:07:41Z'),
@@ -800,12 +858,13 @@ export const APOLLO_13 = spacecraftWithDefaults({
   thumbnail: 'apollo-13-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_13',
   crew: ['Jim Lovell', 'Jack Swigert', 'Fred Haise'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1970-04-15T00:21:00Z') }],
 });
 
 export const APOLLO_14 = spacecraftWithDefaults({
   name: 'Apollo 14',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 46305,
   start: new Date('1971-01-31T21:03:02Z'),
   end: new Date('1971-02-09T21:05:02Z'),
@@ -816,6 +875,7 @@ export const APOLLO_14 = spacecraftWithDefaults({
   thumbnail: 'apollo-14-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_14',
   crew: ['Alan Shepard', 'Stuart Roosa', 'Edgar Mitchell'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -828,7 +888,7 @@ export const APOLLO_14 = spacecraftWithDefaults({
 
 export const APOLLO_15 = spacecraftWithDefaults({
   name: 'Apollo 15',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 48599,
   start: new Date('1971-07-26T13:34:00Z'),
   end: new Date('1971-08-07T20:45:53Z'),
@@ -839,6 +899,7 @@ export const APOLLO_15 = spacecraftWithDefaults({
   thumbnail: 'apollo-15-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_15',
   crew: ['David Scott', 'Alfred Worden', 'James Irwin'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -851,7 +912,7 @@ export const APOLLO_15 = spacecraftWithDefaults({
 
 export const APOLLO_16 = spacecraftWithDefaults({
   name: 'Apollo 16',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 52759,
   start: new Date('1972-04-16T17:54:00Z'),
   end: new Date('1972-04-27T19:45:05Z'),
@@ -862,6 +923,7 @@ export const APOLLO_16 = spacecraftWithDefaults({
   thumbnail: 'apollo-16-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_16',
   crew: ['John Young', 'Ken Mattingly', 'Charlie Duke'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -874,7 +936,7 @@ export const APOLLO_16 = spacecraftWithDefaults({
 
 export const APOLLO_17 = spacecraftWithDefaults({
   name: 'Apollo 17',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 48609,
   start: new Date('1972-12-07T05:33:00Z'),
   end: new Date('1972-12-19T19:54:58Z'),
@@ -885,6 +947,7 @@ export const APOLLO_17 = spacecraftWithDefaults({
   thumbnail: 'apollo-17-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Apollo_17',
   crew: ['Gene Cernan', 'Ronald Evans', 'Jack Schmitt'],
+  color: Bodies.EARTH.style.fgColor,
   visited: [
     {
       id: Bodies.LUNA.id,
@@ -898,7 +961,7 @@ export const APOLLO_17 = spacecraftWithDefaults({
 const PIONEER_MISSION_FAMILY = 'Pioneer';
 export const PIONEER_10 = spacecraftWithDefaults({
   name: 'Pioneer 10',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 258,
   power: 155,
   start: new Date('1972-03-03T01:49:04Z'),
@@ -919,7 +982,7 @@ export const PIONEER_10 = spacecraftWithDefaults({
 
 export const PIONEER_11 = spacecraftWithDefaults({
   name: 'Pioneer 11',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 258.5,
   power: 155,
   //
@@ -955,7 +1018,7 @@ export const PIONEER_11 = spacecraftWithDefaults({
 
 export const NEAR_SHOEMAKER = spacecraftWithDefaults({
   name: 'NEAR Shoemaker',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 805,
   power: 1800,
   start: new Date('1996-02-17T20:43:27Z'),
@@ -978,7 +1041,7 @@ export const NEAR_SHOEMAKER = spacecraftWithDefaults({
 
 export const DEEP_SPACE_1 = spacecraftWithDefaults({
   name: 'Deep Space 1',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 486,
   power: 2500,
   start: new Date('1998-10-24T12:08:00Z'),
@@ -995,7 +1058,7 @@ export const DEEP_SPACE_1 = spacecraftWithDefaults({
 
 export const ROSETTA = spacecraftWithDefaults({
   name: 'Rosetta',
-  organization: SpacecraftOrganization.ESA,
+  organization: SpacecraftOrganizationId.ESA,
   launchMass: 3000,
   power: 850,
   start: new Date('2004-03-02T07:17:51Z'),
@@ -1008,6 +1071,7 @@ export const ROSETTA = spacecraftWithDefaults({
   },
   wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
   thumbnail: 'rosetta-thumb.png',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
     { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
@@ -1024,7 +1088,7 @@ export const ROSETTA = spacecraftWithDefaults({
 
 export const STARDUST = spacecraftWithDefaults({
   name: 'Stardust',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 385,
   power: 330,
   start: new Date('1999-02-07T21:04:15Z'),
@@ -1034,6 +1098,7 @@ export const STARDUST = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated on March 24, 2011' },
   wiki: 'https://en.wikipedia.org/wiki/Stardust_(spacecraft)',
   thumbnail: 'stardust-thumb.jpg',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
     { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
@@ -1044,7 +1109,7 @@ export const STARDUST = spacecraftWithDefaults({
 const HAYABUSA_MISSION_FAMILY = 'Hayabusa';
 export const HAYABUSA = spacecraftWithDefaults({
   name: 'Hayabusa',
-  organization: SpacecraftOrganization.JAXA,
+  organization: SpacecraftOrganizationId.JAXA,
   launchMass: 510,
   start: new Date('2003-05-09T04:29:25Z'),
   end: new Date('2010-06-13T14:12:00Z'),
@@ -1066,7 +1131,7 @@ export const HAYABUSA = spacecraftWithDefaults({
 
 export const DEEP_IMPACT = spacecraftWithDefaults({
   name: 'Deep Impact',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 973,
   power: 92,
   start: new Date('2005-01-12T18:47:08Z'),
@@ -1076,6 +1141,7 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
   thumbnail: 'deep-impact-thumb.jpg',
+  color: DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
     { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },
@@ -1084,7 +1150,7 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
 
 export const DAWN = spacecraftWithDefaults({
   name: 'Dawn',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 1217.7,
   power: 10000,
   start: new Date('2007-09-27T11:34:00Z'),
@@ -1114,7 +1180,7 @@ export const DAWN = spacecraftWithDefaults({
 // TODO: this is in a heliocentric orbit -- find the parameters and add as a body
 export const CHANGE_2 = spacecraftWithDefaults({
   name: "Chang'e 2",
-  organization: SpacecraftOrganization.CNSA,
+  organization: SpacecraftOrganizationId.CNSA,
   launchMass: 2480,
   start: new Date('2010-10-01T10:59:00Z'),
   end: new Date(2014, 6, 1),
@@ -1136,7 +1202,7 @@ export const CHANGE_2 = spacecraftWithDefaults({
 // TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
 export const HAYABUSA_2 = spacecraftWithDefaults({
   name: 'Hayabusa2',
-  organization: SpacecraftOrganization.JAXA,
+  organization: SpacecraftOrganizationId.JAXA,
   launchMass: 600,
   power: 2600,
   start: new Date('2014-12-03T04:22:04Z'),
@@ -1152,7 +1218,7 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
 
 export const OSIRIS_REX = spacecraftWithDefaults({
   name: 'OSIRIS-REx',
-  organization: SpacecraftOrganization.NASA,
+  organization: SpacecraftOrganizationId.NASA,
   launchMass: 2110,
   power: 3000,
   start: new Date('2016-09-08T23:05:00Z'),

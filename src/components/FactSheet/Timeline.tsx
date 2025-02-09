@@ -12,8 +12,9 @@ type Props = {
   activeIndex?: number;
   end?: Date;
   accentColor: HexColor;
+  width?: number;
 };
-export function Timeline({ datedItems, activeIndex, end, accentColor }: Props) {
+export function Timeline({ datedItems, activeIndex, end, accentColor, width = TIMELINE_WIDTH }: Props) {
   const { ref: timelineRef, height } = useElementSize();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cardRefs = useRef<Array<HTMLDivElement>>([]);
@@ -22,12 +23,12 @@ export function Timeline({ datedItems, activeIndex, end, accentColor }: Props) {
   useEffect(() => {
     if (canvasRef.current == null) return;
     const dpr = window.devicePixelRatio ?? 1;
-    canvasRef.current.width = TIMELINE_WIDTH * dpr;
+    canvasRef.current.width = width * dpr;
     canvasRef.current.height = height * dpr;
     const ctx = canvasRef.current.getContext('2d');
     if (ctx == null) return;
     ctx.scale(dpr, dpr);
-  }, [canvasRef.current, height]);
+  }, [canvasRef.current, width, height]);
 
   // render timeline
   useEffect(() => {
@@ -40,14 +41,14 @@ export function Timeline({ datedItems, activeIndex, end, accentColor }: Props) {
       const [date] = datedItems[i];
       return { height, top: top - containerTop, date, hover: activeIndex === i };
     });
-    const [start] = datedItems[0];
+    const start = new Date(Math.min(...datedItems.map(([date]) => date.getTime())));
     renderTimeline(ctx, items, accentColor, start, end);
   }, [datedItems, height, activeIndex, end]);
 
   return (
     <Group gap={0} wrap="nowrap" flex={1} align="flex-start">
-      <Box w={TIMELINE_WIDTH} h="100%" style={{ flexShrink: 0 }}>
-        <canvas ref={canvasRef} style={{ height: '100%', width: TIMELINE_WIDTH }} />
+      <Box w={width} h="100%" style={{ flexShrink: 0 }}>
+        <canvas ref={canvasRef} style={{ height: '100%', width }} />
       </Box>
       <Stack ref={timelineRef} gap="xs" flex={1}>
         {datedItems.map(([, item], i) => (
@@ -87,6 +88,7 @@ function renderTimeline(
   const durationMillis = endMillis - startMillis;
   const dpr = window.devicePixelRatio || 1;
   const dotRadius = 6;
+  const timelineWidth = ctx.canvas.width / dpr;
   const timelineHeight = ctx.canvas.height / dpr;
   const isOngoing = end == null;
   const millisPerPx = durationMillis / (timelineHeight - dotRadius * (isOngoing ? 4 : 2));
@@ -99,7 +101,7 @@ function renderTimeline(
   ctx.lineWidth = 1;
   ctx.strokeStyle = baseColor;
 
-  ctx.clearRect(0, 0, TIMELINE_WIDTH, timelineHeight);
+  ctx.clearRect(0, 0, timelineWidth, timelineHeight);
   ctx.moveTo(timelineLeft, 0);
   ctx.lineTo(timelineLeft, timelineHeight);
   ctx.stroke();
@@ -107,14 +109,14 @@ function renderTimeline(
   // TODO: more advanced logic to figure out the smallest number of lanes necessary to avoid overlaps
   const nLanes = Math.ceil(items.length / 2);
   const laneGutter = 20;
-  const laneWidth = (TIMELINE_WIDTH - 2 * laneGutter - timelineLeft) / Math.max(nLanes - 1, 1);
+  const laneWidth = (timelineWidth - 2 * laneGutter - timelineLeft) / Math.max(nLanes - 1, 1);
   const drawnLabels = new Set();
 
   function drawConnector({ top, height, date, hover }: TimelineItem, i: number) {
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneIndex = Math.max(Math.min(i, 2 * (nLanes - 1) - i), 0);
+    const laneIndex = Math.max(Math.min(i, 2 * nLanes - i - 1 - (items.length % 2)), 0);
     const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;
@@ -132,7 +134,7 @@ function renderTimeline(
       ctx.lineTo(timelineLeft + laneX, itemY + (isGoingUp ? -dotRadius : dotRadius));
       ctx.lineTo(timelineLeft + laneX + dotRadius, itemY);
     }
-    ctx.lineTo(TIMELINE_WIDTH, itemY);
+    ctx.lineTo(timelineWidth, itemY);
     ctx.stroke();
     ctx.closePath();
 

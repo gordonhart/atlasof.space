@@ -5,17 +5,20 @@ import {
   CelestialBodyId,
   isCelestialBody,
   isOrbitalRegime,
+  isOrganization,
   isSpacecraft,
   OrbitalRegime,
   Spacecraft,
+  SpacecraftOrganization,
 } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
+import { SpacecraftOrganizationFactSheet } from './Organization/SpacecraftOrganizationFactSheet.tsx';
 import { SpacecraftFactSheet } from './Spacecraft/SpacecraftFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here
 type Props = {
-  item: CelestialBody | OrbitalRegime | Spacecraft;
+  item: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization;
   settings: Settings;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
@@ -35,6 +38,8 @@ export const FactSheet = memo(function FactSheetComponent({
     <OrbitalRegimeFactSheet regime={item} addBody={addBody} removeBody={removeBody} {...props} />
   ) : isSpacecraft(item) ? (
     <SpacecraftFactSheet spacecraft={item} hover={settings.hover} {...props} />
+  ) : isOrganization(item) ? (
+    <SpacecraftOrganizationFactSheet organization={item} {...props} />
   ) : (
     <></>
   );

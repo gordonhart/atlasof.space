@@ -4,7 +4,7 @@ import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
-import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR } from '../../../lib/utils.ts';
+import { celestialBodyTypeName } from '../../../lib/utils.ts';
 import { FactGrid } from '../FactGrid.tsx';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
 import { FactSheetTitle } from '../FactSheetTitle.tsx';
@@ -43,7 +43,10 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       ? { label: `orbital regime${spacecraft.orbitalRegimes.length > 1 ? 's' : ''}`, value: orbitalRegimes }
       : null;
   const bullets = [
-    { label: 'organization', value: <SpacecraftOrganizationPill organization={spacecraft.organization} /> },
+    {
+      label: 'organization',
+      value: <SpacecraftOrganizationPill organization={spacecraft.organization} updateSettings={updateSettings} />,
+    },
     ...(orbitalRegimeBullet != null ? [orbitalRegimeBullet] : []),
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),
@@ -60,7 +63,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       <FactSheetTitle
         title={spacecraft.name}
         subTitle={celestialBodyTypeName(CelestialBodyType.SPACECRAFT)}
-        color={DEFAULT_SPACECRAFT_COLOR}
+        color={spacecraft.color}
         onClose={() => updateSettings({ center: null })}
         onHover={hovered => updateSettings({ hover: hovered ? spacecraft.id : null })}
       />

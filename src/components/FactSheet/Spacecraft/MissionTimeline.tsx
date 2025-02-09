@@ -4,7 +4,6 @@ import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { datetimeToHumanReadable } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, Spacecraft } from '../../../lib/types.ts';
-import { DEFAULT_SPACECRAFT_COLOR } from '../../../lib/utils.ts';
 import { Timeline } from '../Timeline.tsx';
 import { MissionEndCard } from './MissionEndCard.tsx';
 import { MissionTimelineCard } from './MissionTimelineCard.tsx';
@@ -71,7 +70,7 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
         datedItems={TimelineItems}
         activeIndex={timelineActiveIndex}
         end={spacecraft.end}
-        accentColor={DEFAULT_SPACECRAFT_COLOR}
+        accentColor={spacecraft.color}
       />
     </Stack>
   );

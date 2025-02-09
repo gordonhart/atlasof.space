@@ -1,8 +1,14 @@
 import { useParams } from 'react-router-dom';
-import { asCelestialBodyId, asOrbitalRegimeId, asSpacecraftId, OrbitalRegimeId } from '../lib/types.ts';
+import {
+  asCelestialBodyId,
+  asOrbitalRegimeId,
+  asOrganizationId,
+  asSpacecraftId,
+  OrbitalRegimeId,
+} from '../lib/types.ts';
 
 export function useUrlState() {
-  const { bodyId, regimeId, spacecraftId } = useParams();
+  const { bodyId, regimeId, spacecraftId, organizationId } = useParams();
   const center =
     bodyId != null
       ? asCelestialBodyId(bodyId)
@@ -10,6 +16,8 @@ export function useUrlState() {
         ? asOrbitalRegimeId(regimeId as OrbitalRegimeId)
         : spacecraftId != null
           ? asSpacecraftId(spacecraftId)
-          : null;
+          : organizationId != null
+            ? asOrganizationId(organizationId)
+            : null;
   return { center };
 }

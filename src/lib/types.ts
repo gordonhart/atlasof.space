@@ -125,18 +125,23 @@ export type OrbitalRegime = {
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
 };
 
-export enum SpacecraftOrganization {
-  NASA = 'NASA',
-  USSR = 'USSR',
-  ESA = 'ESA',
-  JAXA = 'JAXA',
-  CNSA = 'CNSA',
+export enum SpacecraftOrganizationId {
+  NASA = 'organization/nasa',
+  USSR = 'organization/ussr',
+  ESA = 'organization/esa',
+  JAXA = 'organization/jaxa',
+  CNSA = 'organization/cnsa',
 }
 
-export type SpacecraftOrganizationDetails = {
+export type SpacecraftOrganization = {
+  id: SpacecraftOrganizationId;
   name: string;
   shortName: string;
+  founded: Date; // TODO: also add details?
+  dissolved?: Date;
   thumbnail: string;
+  wiki: WikiLink;
+  color: HexColor;
 };
 
 // TODO: mixing concerns here -- some are identity-related, others are visit-related
@@ -171,7 +176,7 @@ export type SpacecraftVisit = {
 export type Spacecraft = {
   id: SpacecraftId;
   name: string;
-  organization: SpacecraftOrganization;
+  organization: SpacecraftOrganizationId;
   launchMass: number; // kg
   power?: number; // watts
   start: Date; // TODO: rename to launchDate?
@@ -185,6 +190,7 @@ export type Spacecraft = {
   wiki: WikiLink;
   crew?: Array<string>;
   visited: Array<SpacecraftVisit>;
+  color: HexColor;
 };
 
 export function asCelestialBodyId(slug: string): CelestialBodyId {
@@ -196,6 +202,9 @@ export function asOrbitalRegimeId(slug: string): OrbitalRegimeId {
 export function asSpacecraftId(slug: string): SpacecraftId {
   return `spacecraft/${slug}`;
 }
+export function asOrganizationId(slug: string): SpacecraftOrganizationId {
+  return `organization/${slug}` as SpacecraftOrganizationId;
+}
 
 export function isCelestialBodyId(id: unknown): id is CelestialBodyId {
   return id != null && typeof id === 'string' && id.startsWith('body/');
@@ -205,6 +214,9 @@ export function isOrbitalRegimeId(id: unknown): id is OrbitalRegimeId {
 }
 export function isSpacecraftId(id: unknown): id is SpacecraftId {
   return id != null && typeof id === 'string' && id.startsWith('spacecraft/');
+}
+export function isOrganizationId(id: unknown): id is SpacecraftOrganizationId {
+  return id != null && typeof id === 'string' && id.startsWith('organization/');
 }
 
 export function isCelestialBody(obj: unknown): obj is CelestialBody {
@@ -233,6 +245,15 @@ export function isSpacecraft(obj: unknown): obj is Spacecraft {
     typeof obj.name === 'string' &&
     'organization' in obj &&
     typeof obj.organization === 'string' &&
-    Object.values(SpacecraftOrganization).includes(obj.organization as SpacecraftOrganization)
+    Object.values(SpacecraftOrganizationId).includes(obj.organization as SpacecraftOrganizationId)
+  );
+}
+export function isOrganization(obj: unknown): obj is SpacecraftOrganization {
+  return (
+    obj != null &&
+    typeof obj === 'object' &&
+    'id' in obj &&
+    typeof obj.id === 'string' &&
+    Object.values(SpacecraftOrganizationId).includes(obj.id as SpacecraftOrganizationId)
   );
 }

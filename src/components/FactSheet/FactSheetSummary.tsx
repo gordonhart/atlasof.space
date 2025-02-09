@@ -1,11 +1,11 @@
 import { Box, Text } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/queries/useSummaryStream.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { CelestialBody, OrbitalRegime, Spacecraft } from '../../lib/types.ts';
+import { CelestialBody, OrbitalRegime, Spacecraft, SpacecraftOrganization } from '../../lib/types.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 
 type Props = {
-  obj: CelestialBody | OrbitalRegime | Spacecraft;
+  obj: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization;
 };
 export function FactSheetSummary({ obj }: Props) {
   const padding = useFactSheetPadding();
