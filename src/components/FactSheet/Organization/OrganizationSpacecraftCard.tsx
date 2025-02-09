@@ -75,47 +75,27 @@ export function OrganizationSpacecraftCard({ spacecraft, bodies, onClick, onMous
 }
 
 // 0 is more important
+const VISIT_IMPORTANCE: Record<SpacecraftVisitType, number> = {
+  [SpacecraftVisitType.HELICOPTER]: 0,
+  [SpacecraftVisitType.ROVER]: 0,
+  [SpacecraftVisitType.LANDER]: 1,
+  [SpacecraftVisitType.IMPACTOR]: 2,
+  [SpacecraftVisitType.ORBITER]: 3,
+  [SpacecraftVisitType.FLYBY]: 4,
+  [SpacecraftVisitType.GRAVITY_ASSIST]: 5,
+};
+const BODY_IMPORTANCE: Record<CelestialBodyType, number> = {
+  [CelestialBodyType.STAR]: 0,
+  [CelestialBodyType.PLANET]: 1,
+  [CelestialBodyType.DWARF_PLANET]: 2,
+  [CelestialBodyType.MOON]: 3,
+  [CelestialBodyType.ASTEROID]: 4,
+  [CelestialBodyType.COMET]: 5,
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: 6,
+  [CelestialBodyType.SPACECRAFT]: 7,
+};
 function sortFactor(visit: SpacecraftVisit, body: CelestialBody): number {
-  const major = spacecraftVisitFactor(visit);
-  const minor = celestialBodyTypeFactor(body);
+  const major = VISIT_IMPORTANCE[visit.type];
+  const minor = BODY_IMPORTANCE[body.type];
   return Number(`${major}.${minor}`);
-}
-
-function spacecraftVisitFactor(visit: SpacecraftVisit) {
-  switch (visit.type) {
-    case SpacecraftVisitType.HELICOPTER:
-    case SpacecraftVisitType.ROVER:
-      return 0;
-    case SpacecraftVisitType.LANDER:
-      return 1;
-    case SpacecraftVisitType.IMPACTOR:
-      return 2;
-    case SpacecraftVisitType.ORBITER:
-      return 3;
-    case SpacecraftVisitType.FLYBY:
-      return 4;
-    case SpacecraftVisitType.GRAVITY_ASSIST:
-      return 5;
-  }
-}
-
-function celestialBodyTypeFactor(body: CelestialBody) {
-  switch (body.type) {
-    case CelestialBodyType.STAR:
-      return 0;
-    case CelestialBodyType.PLANET:
-      return 1;
-    case CelestialBodyType.DWARF_PLANET:
-      return 2;
-    case CelestialBodyType.MOON:
-      return 3;
-    case CelestialBodyType.ASTEROID:
-      return 4;
-    case CelestialBodyType.COMET:
-      return 5;
-    case CelestialBodyType.TRANS_NEPTUNIAN_OBJECT:
-      return 6;
-    case CelestialBodyType.SPACECRAFT:
-      return 7;
-  }
 }

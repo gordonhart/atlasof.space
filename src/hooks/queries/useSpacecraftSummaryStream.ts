@@ -34,7 +34,6 @@ export function useSpacecraftSummaryStream(params: Params) {
       return await readStreamResponse(response, setIsStreaming, setData);
     },
     staleTime: Infinity,
-    enabled: params != null,
   });
 
   return { ...query, isLoading: isStreaming };
