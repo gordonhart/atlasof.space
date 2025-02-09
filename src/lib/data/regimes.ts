@@ -44,8 +44,8 @@ export const INNER_OORT_CLOUD: OrbitalRegime = {
 export const EARTH_SYSTEM: OrbitalRegime = {
   id: OrbitalRegimeId.EARTH_SYSTEM,
   wrt: EARTH.id,
-  min: 100e3,
-  max: 1_000_000e3, // TODO: verify
+  min: EARTH.radius + 300e3,
+  max: 1_500_000e3, // rough edge of Earth's Hill sphere
   roundness: 0.25,
 };
 
