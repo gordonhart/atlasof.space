@@ -30,6 +30,7 @@ export function ScaleIndicator({ metersPerPx }: Props) {
 function getScaleMeters(meters: number) {
   const magnitude = Math.floor(Math.log10(meters)); // Base power of 10
   const base = Math.pow(10, magnitude); // Closest lower power of 10
-  const multiple = meters <= base * 2 ? 2 : 10; // Determine if it's closer to 2x or 10x base
+  // Determine if it's closer to 2x, 4x, or 10x base
+  const multiple = meters <= base * 2 ? 2 : meters <= base * 4 ? 4 : 10;
   return base * multiple;
 }
