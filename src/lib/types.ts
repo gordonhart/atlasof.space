@@ -89,12 +89,15 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
 ];
 
 export enum OrbitalRegimeId {
+  // heliocentric systems
   INNER_SYSTEM = 'regime/inner-system',
   ASTEROID_BELT = 'regime/asteroid-belt',
   OUTER_SYSTEM = 'regime/outer-system',
   KUIPER_BELT = 'regime/kuiper-belt',
   INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
+  // planetary systems
   EARTH_SYSTEM = 'regime/earth-system',
+  JUPITER_SYSTEM = 'regime/jupiter-system',
 }
 
 export type HexColor = `#${string}`;

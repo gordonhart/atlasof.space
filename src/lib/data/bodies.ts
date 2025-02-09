@@ -1848,6 +1848,7 @@ export const IO = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Io',
   influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.JUPITER_SYSTEM,
   elements: {
     wrt: JUPITER.id,
     epoch: J2000, // TODO: verify
@@ -1871,6 +1872,7 @@ export const EUROPA = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Europa',
   influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.JUPITER_SYSTEM,
   elements: {
     wrt: JUPITER.id,
     epoch: J2000, // TODO: verify
@@ -1901,6 +1903,7 @@ export const GANYMEDE = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Ganymede',
   influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.JUPITER_SYSTEM,
   elements: {
     wrt: JUPITER.id,
     epoch: J2000, // TODO: verify
@@ -1923,6 +1926,7 @@ export const CALLISTO = celestialBodyWithDefaults({
   type: CelestialBodyType.MOON,
   name: 'Callisto',
   influencedBy: [SOL.id, JUPITER.id],
+  orbitalRegime: OrbitalRegimeId.JUPITER_SYSTEM,
   elements: {
     wrt: JUPITER.id,
     epoch: J2000, // TODO: verify

@@ -1,5 +1,5 @@
 import { OrbitalRegimeId, OrbitalRegime } from '../types.ts';
-import { AU, EARTH, SOL } from './bodies.ts';
+import { AU, EARTH, JUPITER, SOL } from './bodies.ts';
 
 export const INNER_SYSTEM: OrbitalRegime = {
   id: OrbitalRegimeId.INNER_SYSTEM,
@@ -49,6 +49,14 @@ export const EARTH_SYSTEM: OrbitalRegime = {
   roundness: 0.25,
 };
 
+export const JUPITER_SYSTEM: OrbitalRegime = {
+  id: OrbitalRegimeId.JUPITER_SYSTEM,
+  wrt: JUPITER.id,
+  min: JUPITER.radius + 100_000e3,
+  max: 53_000_000e3, // rough edge of Jupiter's Hill sphere
+  roundness: 0.25,
+};
+
 export const ORBITAL_REGIMES: Array<OrbitalRegime> = [
   INNER_SYSTEM,
   ASTEROID_BELT,
@@ -56,6 +64,7 @@ export const ORBITAL_REGIMES: Array<OrbitalRegime> = [
   KUIPER_BELT,
   INNER_OORT_CLOUD,
   EARTH_SYSTEM,
+  JUPITER_SYSTEM,
 ];
 
 export const ORBITAL_REGIMES_BY_ID = Object.fromEntries(ORBITAL_REGIMES.map(r => [r.id, r]));
@@ -68,5 +77,6 @@ export function orbitalRegimeDisplayName(regime: OrbitalRegimeId) {
     [OrbitalRegimeId.KUIPER_BELT]: 'Kuiper Belt',
     [OrbitalRegimeId.INNER_OORT_CLOUD]: 'Inner Oort Cloud',
     [OrbitalRegimeId.EARTH_SYSTEM]: 'Earth System',
+    [OrbitalRegimeId.JUPITER_SYSTEM]: 'Jupiter System',
   }[regime];
 }

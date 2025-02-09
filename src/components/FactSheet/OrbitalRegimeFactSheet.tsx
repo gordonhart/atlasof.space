@@ -43,6 +43,9 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
     const bodiesInRegime = bodies.filter(
       body => body.orbitalRegime === regime.id || body.id === parentBody?.id || body.elements.wrt === parentBody?.id
     );
+    console.log(regime.id);
+    console.log(parentBody?.name);
+    console.log(bodiesInRegime);
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
     return bodiesInRegime.reduce((acc, body) => {
       acc[body.type].push(body);
