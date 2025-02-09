@@ -107,7 +107,7 @@ function renderTimeline(
   ctx.stroke();
 
   // TODO: more advanced logic to figure out the smallest number of lanes necessary to avoid overlaps
-  const nLanes = Math.ceil(items.length / 2);
+  const nLanes = items.length < 6 ? items.length : Math.ceil(items.length / 2);
   const laneGutter = 20;
   const laneWidth = (timelineWidth - 2 * laneGutter - timelineLeft) / Math.max(nLanes - 1, 1);
   const drawnLabels = new Set();
@@ -116,7 +116,8 @@ function renderTimeline(
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneIndex = Math.max(Math.min(i, 2 * nLanes - i - 1 - (items.length % 2)), 0);
+    const laneIndex =
+      items.length < 6 ? items.length - i - 1 : Math.max(Math.min(i, 2 * nLanes - i - 1 - (items.length % 2)), 0);
     const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;
@@ -124,6 +125,7 @@ function renderTimeline(
 
     ctx.beginPath();
     ctx.strokeStyle = hover ? accentColor : baseColor;
+    ctx.lineWidth = hover ? 2 : 1;
     ctx.fillStyle = hover ? accentColor : '#000000';
     ctx.moveTo(timelineLeft, timelineY);
     ctx.lineTo(timelineLeft + laneX - dotRadius, timelineY);

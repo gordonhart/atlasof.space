@@ -20,7 +20,7 @@ export function OtherSpacecraftOrganizations({ organization, updateSettings }: P
         {otherOrganizations.map((otherOrganization, i) => (
           <SpacecraftOrganizationPill
             key={`${otherOrganization.id}-${i}`}
-            organization={otherOrganization.id}
+            organization={otherOrganization}
             updateSettings={updateSettings}
           />
         ))}

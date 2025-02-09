@@ -7,7 +7,7 @@ const NASA: SpacecraftOrganization = {
   founded: new Date(1958, 6, 29),
   thumbnail: 'nasa-meatball.svg',
   wiki: 'https://en.wikipedia.org/wiki/NASA',
-  // color: '#0032a0', // official blue
+  // color: '#0032a0', // official blue, too dim
   color: '#1b3c8c',
 };
 
@@ -27,9 +27,9 @@ const ESA: SpacecraftOrganization = {
   name: 'European Space Agency',
   shortName: 'ESA',
   founded: new Date(1975, 4, 30),
-  thumbnail: 'esa-logo.png',
+  thumbnail: 'esa-logo-blue.png',
   wiki: 'https://en.wikipedia.org/wiki/European_Space_Agency',
-  // color: `#003247`, // official
+  // color: `#003247`, // official blue, too dim
   color: '#00567a',
 };
 

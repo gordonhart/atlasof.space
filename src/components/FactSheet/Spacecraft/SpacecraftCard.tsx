@@ -4,6 +4,7 @@ import {
   useSpacecraftSummaryStream,
 } from '../../../hooks/queries/useSpacecraftSummaryStream.ts';
 import { useSpacecraftVisit } from '../../../hooks/useSpacecraftVisit.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
 import { CelestialBody, OrbitalRegime, Spacecraft, SpacecraftVisitType } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
 import { LoadingCursor } from '../LoadingCursor.tsx';
@@ -57,11 +58,7 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
             </Text>
           )}
         </Group>
-        {!compact && (
-          <Group gap={8}>
-            <SpacecraftOrganizationPill organization={spacecraft.organization} />
-          </Group>
-        )}
+        {!compact && <SpacecraftOrganizationPill organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]} />}
       </Group>
       {!compact && (
         <Text mt={4} fz="xs" fs="italic">
