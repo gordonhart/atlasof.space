@@ -96,14 +96,6 @@ export enum OrbitalRegimeId {
   INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
 }
 
-export enum PlanetarySystemId {
-  EARTH = 'system/earth',
-  MARS = 'system/mars',
-  JUPITER = 'system/jupiter',
-  SATURN = 'system/saturn',
-  // TODO: add Uranus, Neptune, and Pluto systems
-}
-
 export type HexColor = `#${string}`;
 export type CelestialBodyStyle = {
   fgColor: HexColor; // main color for the body
@@ -129,15 +121,6 @@ export type CelestialBody = {
 export type OrbitalRegime = {
   id: OrbitalRegimeId;
   name: string;
-  min: number;
-  max: number;
-  roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
-};
-
-export type PlanetarySystem = {
-  id: PlanetarySystemId;
-  name: string;
-  wrt: CelestialBodyId;
   min: number;
   max: number;
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
@@ -200,8 +183,7 @@ export type Spacecraft = {
   start: Date; // TODO: rename to launchDate?
   end?: Date;
   focusId?: CelestialBodyId; // center visualization on this body, if specified
-  orbitalRegimes?: Array<OrbitalRegimeId>;
-  planetarySystems?: Array<PlanetarySystemId>;
+  orbitalRegimes: Array<OrbitalRegimeId>;
   missionFamily?: string;
   cost?: number; // TODO: populate; also may need more involved definition with value, currency, and date
   status: { status: SpacecraftStatus; details?: string };
@@ -218,9 +200,6 @@ export function asCelestialBodyId(slug: string): CelestialBodyId {
 export function asOrbitalRegimeId(slug: string): OrbitalRegimeId {
   return `regime/${slug}` as OrbitalRegimeId;
 }
-export function asPlanetarySystemId(slug: string): PlanetarySystemId {
-  return `system/${slug}` as PlanetarySystemId;
-}
 export function asSpacecraftId(slug: string): SpacecraftId {
   return `spacecraft/${slug}`;
 }
@@ -233,9 +212,6 @@ export function isCelestialBodyId(id: unknown): id is CelestialBodyId {
 }
 export function isOrbitalRegimeId(id: unknown): id is OrbitalRegimeId {
   return id != null && typeof id === 'string' && id.startsWith('regime/');
-}
-export function isPlanetarySystemId(id: unknown): id is PlanetarySystemId {
-  return id != null && typeof id === 'string' && id.startsWith('system/');
 }
 export function isSpacecraftId(id: unknown): id is SpacecraftId {
   return id != null && typeof id === 'string' && id.startsWith('spacecraft/');

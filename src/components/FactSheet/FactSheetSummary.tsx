@@ -1,11 +1,10 @@
 import { Box, Text } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/queries/useSummaryStream.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { FocusItem } from '../../hooks/useFocusItem.ts';
+import { TypedFocusItem } from '../../hooks/useFocusItem.ts';
 import { LoadingCursor } from './LoadingCursor.tsx';
 
-type Props = Pick<FocusItem, 'item' | 'type'>;
-export function FactSheetSummary(props: Props) {
+export function FactSheetSummary(props: TypedFocusItem) {
   const padding = useFactSheetPadding();
   const { data: summary, isLoading } = useSummaryStream(props);
   return (

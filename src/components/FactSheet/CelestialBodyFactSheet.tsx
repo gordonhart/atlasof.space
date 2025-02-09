@@ -7,7 +7,6 @@ import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft.ts';
-import { PLANETARY_SYSTEMS } from '../../lib/data/systems.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
@@ -23,7 +22,6 @@ import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
 import { ParentBody } from './ParentBody.tsx';
-import { PlanetarySystemPill } from './PlanetarySystemPill.tsx';
 import { SpacecraftVisits } from './SpacecraftVisits.tsx';
 import { WikiLinkPill } from './WikiLinkPill.tsx';
 
@@ -52,15 +50,11 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
     orbitalRegime != null ? (
       <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} updateSettings={updateSettings} />
     ) : undefined;
-  const localSystem = Object.values(PLANETARY_SYSTEMS).find(({ wrt }) => wrt === id);
-  const localSystemPill =
-    localSystem != null ? <PlanetarySystemPill system={localSystem} updateSettings={updateSettings} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
-    ...(localSystemPill != null ? [{ label: 'local system', value: localSystemPill }] : []),
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },

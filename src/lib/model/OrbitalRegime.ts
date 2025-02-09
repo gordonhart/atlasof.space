@@ -9,27 +9,17 @@ import {
   OneFactor,
   DoubleSide,
 } from 'three';
-import { ItemId, Settings } from '../state.ts';
-import { isOrbitalRegimeId } from '../types.ts';
+import { Settings } from '../state.ts';
+import { isOrbitalRegimeId, OrbitalRegime as OrbitalRegimeType } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
-import { KinematicBody } from './KinematicBody.ts';
-
-type Regime = {
-  id: ItemId;
-  min: number;
-  max: number;
-  roundness: number;
-};
 
 export class OrbitalRegime {
-  readonly regime: Regime;
-  readonly parent: KinematicBody | null;
+  readonly regime: OrbitalRegimeType;
   readonly scene: Scene;
   readonly mesh: Mesh;
 
-  constructor(scene: Scene, settings: Settings, regime: Regime, parent: KinematicBody | null) {
+  constructor(scene: Scene, settings: Settings, regime: OrbitalRegimeType) {
     this.regime = regime;
-    this.parent = parent;
     this.scene = scene;
 
     const width = (regime.max - regime.min) / SCALE_FACTOR;
@@ -53,7 +43,6 @@ export class OrbitalRegime {
   }
 
   update(settings: Settings) {
-    if (this.parent != null) this.mesh.position.copy(this.parent.position).divideScalar(SCALE_FACTOR);
     this.mesh.visible = this.isVisible(settings);
   }
 

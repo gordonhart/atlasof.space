@@ -3,12 +3,12 @@ import { useMemo, useState } from 'react';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { readStreamResponse } from '../../lib/functions.ts';
-import { CelestialBodyType, isOrbitalRegime, isSpacecraft, isOrganization } from '../../lib/types.ts';
+import { CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
-import { FocusItem } from '../useFocusItem.ts';
+import { FocusItemType, TypedFocusItem } from '../useFocusItem.ts';
 
-export function useSummaryStream(item: Pick<FocusItem, 'item' | 'type'>) {
-  const search = useMemo(() => getSearch(item), [JSON.stringify(item)]);
+export function useSummaryStream(props: TypedFocusItem) {
+  const search = useMemo(() => getSearch(props), [JSON.stringify(props)]);
   const [isStreaming, setIsStreaming] = useState(false);
   const queryClient = useQueryClient();
   const queryKey = ['GET', 'facts', search];
@@ -27,25 +27,26 @@ export function useSummaryStream(item: Pick<FocusItem, 'item' | 'type'>) {
   return { ...query, isLoading: isStreaming };
 }
 
-function getSearch(item: Pick<FocusItem, 'item' | 'type'>) {
-  if (isOrbitalRegime(item)) {
-    // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
-    const orbitalRegimes = Object.values(ORBITAL_REGIMES)
-      .map(({ name }) => name)
-      .join(', ');
-    return `the heliocentric orbital regime '${item.name}' (of the set with ${orbitalRegimes})`;
-  }
-  if (isSpacecraft(item)) {
-    return `the ${SPACECRAFT_ORGANIZATIONS[item.organization].shortName} spacecraft ${item.name}`;
-  }
-  if (isOrganization(item)) {
-    return `the space exploration organization ${item.name} (${item.shortName})`;
-  }
-  // celestial body
+function getSearch(item: TypedFocusItem) {
   switch (item.type) {
-    case CelestialBodyType.MOON:
-      return `${item.elements.wrt}'s moon ${item.name}`;
-    default:
-      return `the ${celestialBodyTypeName(item.type).toLowerCase()} ${item.name}`;
+    case FocusItemType.CELESTIAL_BODY: {
+      switch (item.item.type) {
+        case CelestialBodyType.MOON:
+          return `${item.item.elements.wrt}'s moon ${item.item.name}`;
+        default:
+          return `the ${celestialBodyTypeName(item.item.type).toLowerCase()} ${item.item.name}`;
+      }
+    }
+    case FocusItemType.ORBITAL_REGIME: {
+      // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
+      const orbitalRegimes = Object.values(ORBITAL_REGIMES)
+        .map(({ name }) => name)
+        .join(', ');
+      return `the heliocentric orbital regime '${item.item.name}' (of the set with ${orbitalRegimes})`;
+    }
+    case FocusItemType.SPACECRAFT:
+      return `the ${SPACECRAFT_ORGANIZATIONS[item.item.organization].shortName} spacecraft ${item.item.name}`;
+    case FocusItemType.ORGANIZATION:
+      return `the space exploration organization ${item.item.name} (${item.item.shortName})`;
   }
 }

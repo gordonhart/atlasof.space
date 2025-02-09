@@ -3,7 +3,6 @@ import { DEFAULT_ASTEROID_COLOR } from '../lib/data/bodies.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../lib/data/regimes.ts';
 import { SPACECRAFT_BY_ID } from '../lib/data/spacecraft.ts';
-import { PLANETARY_SYSTEMS } from '../lib/data/systems.ts';
 import { Settings } from '../lib/state.ts';
 import {
   CelestialBody,
@@ -11,10 +10,8 @@ import {
   isCelestialBodyId,
   isOrbitalRegimeId,
   isOrganizationId,
-  isPlanetarySystemId,
   isSpacecraftId,
   OrbitalRegime,
-  PlanetarySystem,
   Spacecraft,
   SpacecraftOrganization,
 } from '../lib/types.ts';
@@ -22,17 +19,15 @@ import {
 export enum FocusItemType {
   CELESTIAL_BODY = 'celestial-body',
   ORBITAL_REGIME = 'orbital-regime',
-  PLANETARY_SYSTEM = 'planetary-system',
   SPACECRAFT = 'spacecraft',
   ORGANIZATION = 'organization',
 }
-type FocusItemOfType =
+export type TypedFocusItem =
   | { type: FocusItemType.CELESTIAL_BODY; item: CelestialBody }
   | { type: FocusItemType.ORBITAL_REGIME; item: OrbitalRegime }
-  | { type: FocusItemType.PLANETARY_SYSTEM; item: PlanetarySystem }
   | { type: FocusItemType.SPACECRAFT; item: Spacecraft }
   | { type: FocusItemType.ORGANIZATION; item: SpacecraftOrganization };
-export type FocusItem = FocusItemOfType & { color: HexColor; name: string };
+export type FocusItem = TypedFocusItem & { color: HexColor; name: string };
 
 export function useFocusItem({ center, bodies }: Settings): FocusItem | undefined {
   const focusItem = useMemo(() => getFocusItem(center, bodies), [center, JSON.stringify(bodies)]);
@@ -62,15 +57,6 @@ function getFocusItem(id: string | null, bodies: Array<CelestialBody>): FocusIte
       item: regime,
       color: DEFAULT_ASTEROID_COLOR,
       name: regime.name,
-    };
-  } else if (isPlanetarySystemId(id)) {
-    const system = PLANETARY_SYSTEMS[id];
-    const body = bodies.find(b => b.id === system.wrt);
-    return {
-      type: FocusItemType.PLANETARY_SYSTEM,
-      item: system,
-      color: body?.style?.fgColor ?? DEFAULT_ASTEROID_COLOR,
-      name: system.name,
     };
   } else if (isSpacecraftId(id)) {
     const spacecraft = SPACECRAFT_BY_ID[id];

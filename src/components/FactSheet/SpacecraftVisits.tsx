@@ -3,7 +3,7 @@ import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { DEFAULT_SPACECRAFT_COLOR } from '../../lib/data/bodies.ts';
 import { UpdateSettings } from '../../lib/state.ts';
-import { CelestialBody, OrbitalRegime, PlanetarySystem, Spacecraft } from '../../lib/types.ts';
+import { CelestialBody, OrbitalRegime, Spacecraft } from '../../lib/types.ts';
 import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
 import { Timeline } from './Timeline.tsx';
 
@@ -11,18 +11,10 @@ type Props = {
   spacecraft: Array<Spacecraft>;
   body?: CelestialBody;
   regime?: OrbitalRegime;
-  system?: PlanetarySystem;
   updateSettings: UpdateSettings;
   title?: string;
 };
-export function SpacecraftVisits({
-  spacecraft,
-  body,
-  regime,
-  system,
-  updateSettings,
-  title = 'Spacecraft Visits',
-}: Props) {
+export function SpacecraftVisits({ spacecraft, body, regime, updateSettings, title = 'Spacecraft Visits' }: Props) {
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
