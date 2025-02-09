@@ -9,18 +9,25 @@ import {
   OneFactor,
   DoubleSide,
 } from 'three';
-import { Settings } from '../state.ts';
-import { OrbitalRegime as OrbitalRegimeType } from '../types.ts';
+import { ItemId, Settings } from '../state.ts';
+import { isOrbitalRegimeId } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 import { KinematicBody } from './KinematicBody.ts';
 
+type Regime = {
+  id: ItemId;
+  min: number;
+  max: number;
+  roundness: number;
+};
+
 export class OrbitalRegime {
-  readonly regime: OrbitalRegimeType;
-  readonly parent: KinematicBody;
+  readonly regime: Regime;
+  readonly parent: KinematicBody | null;
   readonly scene: Scene;
   readonly mesh: Mesh;
 
-  constructor(scene: Scene, settings: Settings, regime: OrbitalRegimeType, parent: KinematicBody) {
+  constructor(scene: Scene, settings: Settings, regime: Regime, parent: KinematicBody | null) {
     this.regime = regime;
     this.parent = parent;
     this.scene = scene;
@@ -46,7 +53,7 @@ export class OrbitalRegime {
   }
 
   update(settings: Settings) {
-    this.mesh.position.copy(this.parent.position).divideScalar(SCALE_FACTOR);
+    if (this.parent != null) this.mesh.position.copy(this.parent.position).divideScalar(SCALE_FACTOR);
     this.mesh.visible = this.isVisible(settings);
   }
 
@@ -60,7 +67,8 @@ export class OrbitalRegime {
     return (
       settings.hover === this.regime.id ||
       settings.center === this.regime.id ||
-      settings.visibleRegimes.has(this.regime.id)
+      // TODO: can remove visibleRegimes -- the options are gone from the visibility menu
+      (isOrbitalRegimeId(this.regime.id) && settings.visibleRegimes.has(this.regime.id))
     );
   }
 }
