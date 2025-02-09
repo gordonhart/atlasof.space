@@ -547,6 +547,22 @@ export const LUNA_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
 });
 
+const ZOND_MISSION_FAMILY = 'Zond';
+export const ZOND_5 = spacecraftWithDefaults({
+  name: 'Zond 5',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 5375,
+  start: new Date('1968-09-14T21:42:11Z'),
+  end: new Date('1968-09-21T16:08:00Z'),
+  status: { status: SpacecraftStatus.RETURNED, details: 'Safely returned two Russian tortoises to Earth' },
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.EARTH_SYSTEM],
+  missionFamily: ZOND_MISSION_FAMILY,
+  thumbnail: 'zond-5-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Zond_5',
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date(1968, 8, 18) }],
+});
+
 export const VENUS_EXPRESS = spacecraftWithDefaults({
   name: 'Venus Express',
   organization: SpacecraftOrganizationId.ESA,
@@ -1257,6 +1273,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // SURVEYOR_1,
   // LUNAR_ORBITER_1,
   // LUNA_11,
+  ZOND_5,
   // TODO: there are an insane number of missions, 100+ successful that are worth noting
   APOLLO_8,
   APOLLO_10,
