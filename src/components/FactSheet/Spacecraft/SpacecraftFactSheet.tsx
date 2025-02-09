@@ -2,6 +2,7 @@ import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
+import { ORBITAL_REGIMES } from '../../../lib/data/regimes.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
@@ -40,8 +41,8 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
   );
   const orbitalRegimes = (
     <Group gap={4}>
-      {spacecraft.orbitalRegimes?.map(regime => (
-        <OrbitalRegimePill key={regime} regime={regime} updateSettings={updateSettings} />
+      {spacecraft.orbitalRegimes?.map(regimeId => (
+        <OrbitalRegimePill key={regimeId} regime={ORBITAL_REGIMES[regimeId]} updateSettings={updateSettings} />
       ))}
     </Group>
   );

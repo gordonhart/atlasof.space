@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
-import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
+import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
@@ -107,11 +107,11 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
   const regimeItems = useMemo(
     () =>
       Object.values(ORBITAL_REGIMES)
-        .filter(({ id }) => orbitalRegimeDisplayName(id).toLowerCase().includes(query.toLowerCase()))
-        .map(({ id }, i) => (
+        .filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
+        .map(({ id, name }, i) => (
           <Spotlight.Action
             key={`${id}-${i}`}
-            label={orbitalRegimeDisplayName(id)}
+            label={name}
             className={styles.Action}
             ff={LABEL_FONT_FAMILY}
             rightSection={

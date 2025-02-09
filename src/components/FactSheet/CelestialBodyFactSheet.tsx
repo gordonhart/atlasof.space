@@ -6,6 +6,7 @@ import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft.ts';
+import { PLANETARY_SYSTEMS } from '../../lib/data/systems.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
@@ -21,6 +22,7 @@ import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
 import { OtherBodies } from './OtherBodies.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
 import { ParentBody } from './ParentBody.tsx';
+import { PlanetarySystemPill } from './PlanetarySystemPill.tsx';
 import { SpacecraftVisits } from './SpacecraftVisits.tsx';
 import { WikiLinkPill } from './WikiLinkPill.tsx';
 
@@ -46,11 +48,12 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [axisValue, axisUnits] = humanDistanceUnits(semiMajorAxis);
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
-    orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
-  // TODO: don't love conditionally excluding stars here
-  const localSystem = ORBITAL_REGIMES.find(({ wrt }) => wrt === id && type !== CelestialBodyType.STAR);
+    orbitalRegime != null ? (
+      <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} updateSettings={updateSettings} />
+    ) : undefined;
+  const localSystem = Object.values(PLANETARY_SYSTEMS).find(({ wrt }) => wrt === id);
   const localSystemPill =
-    localSystem != null ? <OrbitalRegimePill regime={localSystem.id} updateSettings={updateSettings} /> : undefined;
+    localSystem != null ? <PlanetarySystemPill system={localSystem} updateSettings={updateSettings} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
 

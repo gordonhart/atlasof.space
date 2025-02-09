@@ -1,12 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
-import { orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
+import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { readStreamResponse } from '../../lib/functions.ts';
 import {
   CelestialBody,
   CelestialBodyType,
-  OrbitalRegimeId,
   isOrbitalRegime,
   isSpacecraft,
   OrbitalRegime,
@@ -39,8 +38,10 @@ export function useSummaryStream(obj: CelestialBody | OrbitalRegime | Spacecraft
 function getSearch(obj: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization) {
   if (isOrbitalRegime(obj)) {
     // provide the full set to anchor that e.g. the 'Outer System' is distinct from the 'Kuiper Belt'
-    const orbitalRegimes = Object.values(OrbitalRegimeId).map(orbitalRegimeDisplayName).join(', ');
-    return `the heliocentric orbital regime '${orbitalRegimeDisplayName(obj.id)}' (of the set with ${orbitalRegimes})`;
+    const orbitalRegimes = Object.values(ORBITAL_REGIMES)
+      .map(({ name }) => name)
+      .join(', ');
+    return `the heliocentric orbital regime '${obj.name}' (of the set with ${orbitalRegimes})`;
   }
   if (isSpacecraft(obj)) {
     return `the ${SPACECRAFT_ORGANIZATIONS[obj.organization].shortName} spacecraft ${obj.name}`;

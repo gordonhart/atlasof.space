@@ -1,16 +1,7 @@
 import { memo } from 'react';
+import { FocusItem, FocusItemType } from '../../hooks/useFocusItem.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
-import {
-  CelestialBody,
-  CelestialBodyId,
-  isCelestialBody,
-  isOrbitalRegime,
-  isOrganization,
-  isSpacecraft,
-  OrbitalRegime,
-  Spacecraft,
-  SpacecraftOrganization,
-} from '../../lib/types.ts';
+import { CelestialBody, CelestialBodyId } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
 import { OrbitalRegimeFactSheet } from './OrbitalRegimeFactSheet.tsx';
 import { SpacecraftOrganizationFactSheet } from './Organization/SpacecraftOrganizationFactSheet.tsx';
@@ -18,7 +9,7 @@ import { SpacecraftFactSheet } from './Spacecraft/SpacecraftFactSheet.tsx';
 
 // TODO: there's some pretty serious prop drilling going on here
 type Props = {
-  item: CelestialBody | OrbitalRegime | Spacecraft | SpacecraftOrganization;
+  item: FocusItem;
   settings: Settings;
   updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
@@ -32,14 +23,14 @@ export const FactSheet = memo(function FactSheetComponent({
   removeBody,
 }: Props) {
   const props = { bodies: settings.bodies, updateSettings };
-  return isCelestialBody(item) ? (
-    <CelestialBodyFactSheet body={item} {...props} />
-  ) : isOrbitalRegime(item) ? (
-    <OrbitalRegimeFactSheet regime={item} addBody={addBody} removeBody={removeBody} {...props} />
-  ) : isSpacecraft(item) ? (
-    <SpacecraftFactSheet spacecraft={item} hover={settings.hover} {...props} />
-  ) : isOrganization(item) ? (
-    <SpacecraftOrganizationFactSheet organization={item} {...props} />
+  return item.type === FocusItemType.CELESTIAL_BODY ? (
+    <CelestialBodyFactSheet body={item.item} {...props} />
+  ) : item.type === FocusItemType.ORBITAL_REGIME ? (
+    <OrbitalRegimeFactSheet regime={item.item} addBody={addBody} removeBody={removeBody} {...props} />
+  ) : item.type === FocusItemType.SPACECRAFT ? (
+    <SpacecraftFactSheet spacecraft={item.item} hover={settings.hover} {...props} />
+  ) : item.type === FocusItemType.ORGANIZATION ? (
+    <SpacecraftOrganizationFactSheet organization={item.item} {...props} />
   ) : (
     <></>
   );

@@ -89,17 +89,18 @@ export const CelestialBodyTypes: Array<CelestialBodyType> = [
 ];
 
 export enum OrbitalRegimeId {
-  // heliocentric systems
   INNER_SYSTEM = 'regime/inner-system',
   ASTEROID_BELT = 'regime/asteroid-belt',
   OUTER_SYSTEM = 'regime/outer-system',
   KUIPER_BELT = 'regime/kuiper-belt',
   INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
-  // planetary systems
-  EARTH_SYSTEM = 'regime/earth-system',
-  MARS_SYSTEM = 'regime/mars-system',
-  JUPITER_SYSTEM = 'regime/jupiter-system',
-  SATURN_SYSTEM = 'regime/saturn-system',
+}
+
+export enum PlanetarySystemId {
+  EARTH = 'system/earth',
+  MARS = 'system/mars',
+  JUPITER = 'system/jupiter',
+  SATURN = 'system/saturn',
   // TODO: add Uranus, Neptune, and Pluto systems
 }
 
@@ -127,6 +128,15 @@ export type CelestialBody = {
 
 export type OrbitalRegime = {
   id: OrbitalRegimeId;
+  name: string;
+  min: number;
+  max: number;
+  roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
+};
+
+export type PlanetarySystem = {
+  id: PlanetarySystemId;
+  name: string;
   wrt: CelestialBodyId;
   min: number;
   max: number;
@@ -207,6 +217,9 @@ export function asCelestialBodyId(slug: string): CelestialBodyId {
 export function asOrbitalRegimeId(slug: string): OrbitalRegimeId {
   return `regime/${slug}` as OrbitalRegimeId;
 }
+export function asPlanetarySystemId(slug: string): PlanetarySystemId {
+  return `system/${slug}` as PlanetarySystemId;
+}
 export function asSpacecraftId(slug: string): SpacecraftId {
   return `spacecraft/${slug}`;
 }
@@ -219,6 +232,9 @@ export function isCelestialBodyId(id: unknown): id is CelestialBodyId {
 }
 export function isOrbitalRegimeId(id: unknown): id is OrbitalRegimeId {
   return id != null && typeof id === 'string' && id.startsWith('regime/');
+}
+export function isPlanetarySystemId(id: unknown): id is PlanetarySystemId {
+  return id != null && typeof id === 'string' && id.startsWith('system/');
 }
 export function isSpacecraftId(id: unknown): id is SpacecraftId {
   return id != null && typeof id === 'string' && id.startsWith('spacecraft/');
