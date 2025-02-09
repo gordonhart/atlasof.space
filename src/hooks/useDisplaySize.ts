@@ -7,7 +7,7 @@ export function useDisplaySize() {
 }
 
 export function isXs(width: number) {
-  return width < 640;
+  return width < 580;
 }
 export function isSm(width: number) {
   return width < 1080;

@@ -116,7 +116,7 @@ function renderTimeline(
     const elapsedMillis = date.getTime() - startMillis;
     const timelineY = elapsedMillis / millisPerPx + dotRadius;
     // TODO: the lane behavior here can be dramatically improved
-    const laneIndex = Math.max(Math.min(i, 2 * (nLanes - 1) - i), 0);
+    const laneIndex = Math.max(Math.min(i, 2 * nLanes - i - 1 - (items.length % 2)), 0);
     const laneX = laneGutter + laneIndex * laneWidth;
     const itemY = top + height / 2;
     const isGoingUp = timelineY < itemY;
