@@ -59,7 +59,6 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
 
   const activeBodyIndex = visitedBodies.findIndex(({ id }) => id === hover);
   const timelineActiveIndex = activeIndex ?? (activeBodyIndex >= 0 ? activeBodyIndex + 1 : undefined);
-  console.log(timelineActiveIndex);
 
   return (
     <Stack gap="xs" {...padding}>

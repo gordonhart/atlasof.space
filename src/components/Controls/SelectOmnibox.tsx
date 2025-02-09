@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../../lib/regimes.ts';
-import { SPACECRAFT } from '../../lib/spacecraft.ts';
+import { SPACECRAFT, SPACECRAFT_ORGANIZATIONS } from '../../lib/spacecraft.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
@@ -77,6 +77,32 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
     [query, JSON.stringify(settings.bodies)]
   );
 
+  const organizationItems = useMemo(
+    () =>
+      Object.values(SPACECRAFT_ORGANIZATIONS)
+        .filter(({ name, shortName }) => `${name} (${shortName})`.toLowerCase().includes(query.toLowerCase()))
+        .map(({ id, shortName, thumbnail }, i) => (
+          <Spotlight.Action
+            key={`${id}-${i}`}
+            label={shortName}
+            className={styles.Action}
+            ff={LABEL_FONT_FAMILY}
+            leftSection={
+              <Box miw={THUMBNAIL_SIZE}>
+                <Thumbnail thumbnail={thumbnail} size={THUMBNAIL_SIZE} radius="sm" lazy />
+              </Box>
+            }
+            rightSection={
+              <Text c="dimmed" size="xs" ff={LABEL_FONT_FAMILY}>
+                Organization
+              </Text>
+            }
+            onClick={() => updateSettings(prev => ({ ...prev, center: id }))}
+          />
+        )),
+    [query]
+  );
+
   const regimeItems = useMemo(
     () =>
       Object.values(ORBITAL_REGIMES)
@@ -137,7 +163,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             }
           />
           <Spotlight.ActionsList style={{ overflow: 'auto' }}>
-            {bodyItems.length + spacecraftItems.length + regimeItems.length < 1 && (
+            {bodyItems.length + spacecraftItems.length + organizationItems.length + regimeItems.length < 1 && (
               <Spotlight.Empty ff={LABEL_FONT_FAMILY}>Nothing found...</Spotlight.Empty>
             )}
             {bodyItems.length > 0 && (
@@ -150,6 +176,12 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
               <Spotlight.ActionsGroup ff={LABEL_FONT_FAMILY} label="Spacecraft">
                 <Box pb="xs" />
                 {spacecraftItems}
+              </Spotlight.ActionsGroup>
+            )}
+            {organizationItems.length > 0 && (
+              <Spotlight.ActionsGroup ff={LABEL_FONT_FAMILY} label="Space Exploration Organizations">
+                <Box pb="xs" />
+                {organizationItems}
               </Spotlight.ActionsGroup>
             )}
             {regimeItems.length > 0 && (
