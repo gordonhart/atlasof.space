@@ -5,7 +5,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { getCanvasPixels, isOffScreen } from '../canvas.ts';
-import { ORBITAL_REGIMES } from '../data/regimes.ts';
+import { ORBITAL_REGIMES, ORBITAL_REGIMES_BY_ID } from '../data/regimes.ts';
 import { SPACECRAFT_BY_ID } from '../data/spacecraft.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
@@ -15,6 +15,7 @@ import {
   CelestialBodyId,
   CelestialBodyType,
   isCelestialBodyId,
+  isOrbitalRegimeId,
   isSpacecraftId,
   Point2,
   Point3,
@@ -74,7 +75,9 @@ export class SolarSystemModel {
 
     this.bodies = this.createBodies(settings);
     this.firmament = new Firmament(this.resolution);
-    this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, settings, regime));
+    this.regimes = ORBITAL_REGIMES.map(
+      regime => new OrbitalRegime(this.scene, settings, regime, this.bodies[regime.wrt])
+    );
 
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;
@@ -279,7 +282,9 @@ export class SolarSystemModel {
       ? SPACECRAFT_BY_ID[settings.center]?.focusId
       : isCelestialBodyId(settings.center)
         ? settings.center
-        : undefined;
+        : isOrbitalRegimeId(settings.center)
+          ? ORBITAL_REGIMES_BY_ID[settings.center].wrt
+          : undefined;
     this.controls.zoomToCursor = center == null; // when center is set, zoom to body instead of cursor
     if (center == null) {
       this.lockedCenter = null;

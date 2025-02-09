@@ -12,14 +12,17 @@ import {
 import { Settings } from '../state.ts';
 import { OrbitalRegime as OrbitalRegimeType } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
+import { KinematicBody } from './KinematicBody.ts';
 
 export class OrbitalRegime {
   readonly regime: OrbitalRegimeType;
+  readonly parent: KinematicBody;
   readonly scene: Scene;
   readonly mesh: Mesh;
 
-  constructor(scene: Scene, settings: Settings, regime: OrbitalRegimeType) {
+  constructor(scene: Scene, settings: Settings, regime: OrbitalRegimeType, parent: KinematicBody) {
     this.regime = regime;
+    this.parent = parent;
     this.scene = scene;
 
     const width = (regime.max - regime.min) / SCALE_FACTOR;
@@ -43,6 +46,7 @@ export class OrbitalRegime {
   }
 
   update(settings: Settings) {
+    this.mesh.position.copy(this.parent.position).divideScalar(SCALE_FACTOR);
     this.mesh.visible = this.isVisible(settings);
   }
 

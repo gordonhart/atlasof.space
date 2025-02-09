@@ -94,6 +94,7 @@ export enum OrbitalRegimeId {
   OUTER_SYSTEM = 'regime/outer-system',
   KUIPER_BELT = 'regime/kuiper-belt',
   INNER_OORT_CLOUD = 'regime/inner-oort-cloud',
+  EARTH_SYSTEM = 'regime/earth-system',
 }
 
 export type HexColor = `#${string}`;
@@ -120,6 +121,7 @@ export type CelestialBody = {
 
 export type OrbitalRegime = {
   id: OrbitalRegimeId;
+  wrt: CelestialBodyId;
   min: number;
   max: number;
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)

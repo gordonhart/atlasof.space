@@ -38,7 +38,11 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   const padding = useFactSheetPadding();
 
   const bodiesInRegimeByType = useMemo(() => {
-    const bodiesInRegime = bodies.filter(body => body.orbitalRegime === regime.id);
+    // TODO: excluding stars is a little gross, but it's the only way the logic works as-is -- refactor..?
+    const parentBody = bodies.find(({ id, type }) => id === regime.wrt && type !== CelestialBodyType.STAR);
+    const bodiesInRegime = bodies.filter(
+      body => body.orbitalRegime === regime.id || body.id === parentBody?.id || body.elements.wrt === parentBody?.id
+    );
     const types = Object.fromEntries(CelestialBodyTypes.map(t => [t, [] as Array<CelestialBody>]));
     return bodiesInRegime.reduce((acc, body) => {
       acc[body.type].push(body);
