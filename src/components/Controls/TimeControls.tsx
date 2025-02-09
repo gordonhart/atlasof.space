@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Paper, Stack, Text, Tooltip, Transition } from '@mantine/core';
+import { ActionIcon, Box, Group, Paper, Stack, Text, Tooltip, Transition } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
@@ -75,45 +75,44 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
   const speedUpDisabled = settings.speed > 0 && settings.speed >= FASTEST_SPEED;
 
   return (
-    <Group gap={buttonGap} justify="space-between" align="flex-end">
-      <EpochPopover date={dateRounded} setEpoch={setEpoch} />
-
-      <Stack gap={buttonGap} align="flex-end">
-        <Transition mounted={!isXsDisplay || tUnitsShown} transition="fade" duration={0} exitDuration={1_000}>
-          {styles => (
-            <Paper px={4} py={2}>
-              <Text style={styles} inherit c="dimmed" fz="xs" ff={LABEL_FONT_FAMILY}>
+    <Stack gap={2} align="flex-start">
+      <Transition mounted={!isXsDisplay || tUnitsShown} transition="fade" duration={0} exitDuration={1_000}>
+        {styles => (
+          <Box style={styles}>
+            <Paper ml={4} px={4} py={2}>
+              <Text inherit c="dimmed" fz="xs" ff={LABEL_FONT_FAMILY}>
                 {tUnits === 'second' && t === 1 ? 'speed: realtime' : `${pluralize(t, tUnits)} / second`}
               </Text>
             </Paper>
-          )}
-        </Transition>
-        <Group gap={buttonGap}>
-          <Tooltip disabled={slowDownDisabled} position="top" label="Slow Down">
-            <ActionIcon
-              disabled={slowDownDisabled}
-              onClick={() =>
-                updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'down') }))
-              }
-            >
-              <IconPlayerTrackPrev size={iconSize} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip position="top" label={settings.play ? 'Stop' : 'Start'}>
-            <ActionIcon onClick={() => updateSettings({ play: !settings.play })}>
-              {settings.play ? <IconPlayerStop size={iconSize} /> : <IconPlayerPlay size={iconSize} />}
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip disabled={speedUpDisabled} position="top" label="Speed Up">
-            <ActionIcon
-              disabled={speedUpDisabled}
-              onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'up') }))}
-            >
-              <IconPlayerTrackNext size={iconSize} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
-      </Stack>
-    </Group>
+          </Box>
+        )}
+      </Transition>
+
+      <EpochPopover date={dateRounded} setEpoch={setEpoch} />
+
+      <Group gap={buttonGap}>
+        <Tooltip disabled={slowDownDisabled} position="top" label="Slow Down">
+          <ActionIcon
+            disabled={slowDownDisabled}
+            onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'down') }))}
+          >
+            <IconPlayerTrackPrev size={iconSize} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip position="top" label={settings.play ? 'Stop' : 'Start'}>
+          <ActionIcon onClick={() => updateSettings({ play: !settings.play })}>
+            {settings.play ? <IconPlayerStop size={iconSize} /> : <IconPlayerPlay size={iconSize} />}
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip disabled={speedUpDisabled} position="top" label="Speed Up">
+          <ActionIcon
+            disabled={speedUpDisabled}
+            onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'up') }))}
+          >
+            <IconPlayerTrackNext size={iconSize} />
+          </ActionIcon>
+        </Tooltip>
+      </Group>
+    </Stack>
   );
 });
