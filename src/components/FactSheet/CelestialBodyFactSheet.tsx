@@ -4,6 +4,7 @@ import { useFactsStream } from '../../hooks/queries/useFactsStream.ts';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { g } from '../../lib/data/bodies.ts';
+import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
@@ -46,11 +47,16 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
     orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
+  // TODO: don't love conditionally excluding stars here
+  const localSystem = ORBITAL_REGIMES.find(({ wrt }) => wrt === id && type !== CelestialBodyType.STAR);
+  const localSystemPill =
+    localSystem != null ? <OrbitalRegimePill regime={localSystem.id} updateSettings={updateSettings} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
+    ...(localSystemPill != null ? [{ label: 'local system', value: localSystemPill }] : []),
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },

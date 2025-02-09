@@ -188,6 +188,7 @@ export const LUNA = celestialBodyWithDefaults({
   name: 'Luna (The Moon)',
   shortName: 'Luna',
   influencedBy: [SOL.id, EARTH.id],
+  orbitalRegime: OrbitalRegimeId.EARTH_SYSTEM,
   elements: {
     wrt: EARTH.id,
     epoch: J2000,
