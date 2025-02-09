@@ -1,7 +1,6 @@
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCircle, IconCircleDot, IconRestore, IconSettings } from '@tabler/icons-react';
-import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
@@ -13,7 +12,6 @@ type Props = {
   reset: () => void;
 };
 export function SettingsMenu({ settings, updateSettings, reset }: Props) {
-  const { sm: isSmDisplay } = useDisplaySize();
   const [isOpen, { open, close }] = useDisclosure(false);
 
   function toggleVisibleType(type: CelestialBodyType) {
@@ -40,11 +38,7 @@ export function SettingsMenu({ settings, updateSettings, reset }: Props) {
           </ActionIcon>
         </Tooltip>
       </Menu.Target>
-      <Menu.Dropdown
-        bg="black"
-        mah={isSmDisplay ? 'calc(60dvh - var(--mantine-spacing-xs))' : 'calc(90dvh - var(--mantine-spacing-xs))'}
-        style={{ overflow: 'auto' }}
-      >
+      <Menu.Dropdown bg="black" mah={'calc(90dvh - var(--mantine-spacing-xs))'} style={{ overflow: 'auto' }}>
         <Menu.Label>General</Menu.Label>
         <Menu.Item onClick={() => updateSettings(prev => ({ ...prev, drawOrbit: !prev.drawOrbit }))}>
           <Group gap="xs" align="center">

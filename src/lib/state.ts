@@ -1,4 +1,4 @@
-import { SOLAR_SYSTEM } from './bodies.ts';
+import { SOLAR_SYSTEM } from './data/bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
 import {
   CelestialBody,

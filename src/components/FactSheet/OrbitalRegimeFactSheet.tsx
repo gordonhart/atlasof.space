@@ -1,8 +1,9 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
-import { SPACECRAFT } from '../../lib/spacecraft.ts';
+import { DEFAULT_ASTEROID_COLOR } from '../../lib/data/bodies.ts';
+import { orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
+import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
@@ -12,7 +13,7 @@ import {
   OrbitalRegime,
   CelestialBodyId,
 } from '../../lib/types.ts';
-import { celestialBodyTypeName, DEFAULT_ASTEROID_COLOR } from '../../lib/utils.ts';
+import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
 import { BodyCard } from './BodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';

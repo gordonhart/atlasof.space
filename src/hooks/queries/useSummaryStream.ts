@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
+import { orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
 import { readStreamResponse } from '../../lib/functions.ts';
-import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
-import { SPACECRAFT_ORGANIZATIONS } from '../../lib/spacecraft.ts';
 import {
   CelestialBody,
   CelestialBodyType,

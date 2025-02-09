@@ -1,11 +1,50 @@
-import { J2000, julianDayToEpoch, Time } from './epoch.ts';
-import { estimateAsteroidMass, estimateCometMass } from './physics.ts';
-import { SBDB_URL } from './sbdb.ts';
-import { asCelestialBodyId, CelestialBody, CelestialBodyType, OrbitalRegimeId } from './types.ts';
-import { celestialBodyWithDefaults } from './utils.ts';
+import { J2000, julianDayToEpoch, Time } from '../epoch.ts';
+import { estimateAsteroidMass, estimateCometMass } from '../physics.ts';
+import { SBDB_URL } from '../sbdb.ts';
+import {
+  asCelestialBodyId,
+  CelestialBody,
+  CelestialBodyId,
+  CelestialBodyStyle,
+  CelestialBodyType,
+  HexColor,
+  OrbitalRegimeId,
+} from '../types.ts';
+import { nameToId } from '../utils.ts';
 
 export const AU = 1.495978707e11; // meters;
 export const g = 9.807; // earth gravity
+
+export const DEFAULT_ASTEROID_COLOR = '#8b8b8b'; // dark gray, typical for S-type asteroids
+export const DEFAULT_COMET_COLOR = '#51807c';
+export const DEFAULT_SPACECRAFT_COLOR = '#50C878';
+const DEFAULT_CELESTIAL_BODY_FG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
+  [CelestialBodyType.MOON]: '#aaaaaa',
+  [CelestialBodyType.ASTEROID]: DEFAULT_ASTEROID_COLOR,
+  [CelestialBodyType.COMET]: DEFAULT_COMET_COLOR,
+  [CelestialBodyType.DWARF_PLANET]: '#998a98',
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#7b739e',
+  [CelestialBodyType.SPACECRAFT]: DEFAULT_SPACECRAFT_COLOR,
+};
+const DEFAULT_CELESTIAL_BODY_BG_COLOR: { [T in CelestialBodyType]?: HexColor } = {
+  [CelestialBodyType.MOON]: '#888888',
+  [CelestialBodyType.ASTEROID]: '#4b4b4b',
+  [CelestialBodyType.DWARF_PLANET]: '#6e636d',
+  [CelestialBodyType.TRANS_NEPTUNIAN_OBJECT]: '#6d6887',
+};
+
+export function celestialBodyWithDefaults(
+  body: Omit<CelestialBody, 'id' | 'style'> & { id?: CelestialBodyId; style?: CelestialBodyStyle }
+): CelestialBody {
+  return {
+    ...body,
+    id: body.id ?? asCelestialBodyId(nameToId(body.name, body.shortName)),
+    style: {
+      fgColor: body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_FG_COLOR[body.type] ?? DEFAULT_ASTEROID_COLOR,
+      bgColor: body.style?.bgColor ?? body.style?.fgColor ?? DEFAULT_CELESTIAL_BODY_BG_COLOR[body.type],
+    },
+  };
+}
 
 export const SOL = celestialBodyWithDefaults({
   type: CelestialBodyType.STAR,

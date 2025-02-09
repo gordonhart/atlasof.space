@@ -1,26 +1,25 @@
 import { Box, Group, Pill } from '@mantine/core';
-import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/spacecraft.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
-import { SpacecraftOrganizationId } from '../../../lib/types.ts';
+import { SpacecraftOrganization } from '../../../lib/types.ts';
 import styles from '../RelatedBodies.module.css';
 import { Thumbnail } from '../Thumbnail.tsx';
 
 type Props = {
-  organization: SpacecraftOrganizationId;
+  organization: SpacecraftOrganization;
   updateSettings?: UpdateSettings;
 };
 export function SpacecraftOrganizationPill({ organization, updateSettings }: Props) {
-  const details = SPACECRAFT_ORGANIZATIONS[organization];
+  const { id, thumbnail, shortName } = organization;
   return (
     <Pill
       className={updateSettings != null ? styles.LinkPill : undefined}
-      onClick={updateSettings != null ? () => updateSettings({ center: organization, hover: null }) : undefined}
+      onClick={updateSettings != null ? () => updateSettings({ center: id, hover: null }) : undefined}
     >
       <Group gap={8} wrap="nowrap">
         <Box w={14}>
-          <Thumbnail size={14} thumbnail={details.thumbnail} />
+          <Thumbnail size={14} thumbnail={thumbnail} />
         </Box>
-        {details.shortName}
+        {shortName}
       </Group>
     </Pill>
   );

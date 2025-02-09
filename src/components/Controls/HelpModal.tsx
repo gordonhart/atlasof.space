@@ -27,6 +27,7 @@ import {
   IconInfoHexagon,
   IconRotate3d,
   IconSearch,
+  IconSettings,
   IconX,
   IconZoomScan,
 } from '@tabler/icons-react';
@@ -34,7 +35,7 @@ import { ReactNode, useMemo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
-import { SPACECRAFT } from '../../lib/spacecraft.ts';
+import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody, isCelestialBody, Spacecraft } from '../../lib/types.ts';
 import { BodyCard } from '../FactSheet/BodyCard.tsx';
@@ -171,7 +172,10 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
           />
           <HighlightedText
             segments={[
-              { content: 'Use the controls at the bottom of the screen to change settings or click ' },
+              { content: 'Use the ' },
+              { content: 'Settings ', highlight: true },
+              { content: <IconSettings size={14} style={{ marginBottom: -2 }} />, highlight: true },
+              { content: ' menu to update display settings or click ' },
               { content: 'Help ', highlight: true },
               { content: <IconInfoHexagon size={14} style={{ marginBottom: -2 }} />, highlight: true },
               { content: ' to open this menu.' },

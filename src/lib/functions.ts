@@ -1,4 +1,11 @@
+import { MessageStream } from '@anthropic-ai/sdk/lib/MessageStream';
 import { Store } from '@netlify/blobs';
+
+export enum AnthropicModel {
+  CLAUDE_3_HAIKU = 'claude-3-haiku-20240307',
+  CLAUDE_3_5_HAIKU = 'claude-3-5-haiku-20241022',
+  CLAUDE_3_5_SONNET = 'claude-3-5-sonnet-20241022',
+}
 
 export async function storeResponse(store: Store, key: string, stream: ReadableStream) {
   const reader = stream.getReader();
@@ -54,4 +61,44 @@ export function slugifyId(id: string): string {
 
 export function errorResponse(message: string) {
   return new Response(JSON.stringify({ message }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+}
+
+export function asSseStream(stream: MessageStream) {
+  return new ReadableStream({
+    async start(controller) {
+      const encoder = new TextEncoder();
+      try {
+        for await (const chunk of stream) {
+          const text = chunk.delta?.text || '';
+          if (text) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: text })}\n\n`));
+          }
+        }
+      } catch (error) {
+        console.error('Stream error:', error);
+        controller.error(error);
+      } finally {
+        controller.close();
+      }
+    },
+  });
+}
+
+export function simulateTokenGeneration(eventStream: string, delayMin = 10, delayMax = 25) {
+  const stream = new TransformStream();
+  const writer = stream.writable.getWriter();
+
+  // Process in the background
+  (async () => {
+    const chunks = eventStream.split(' ');
+    const encoder = new TextEncoder();
+    for (const chunk of chunks) {
+      // random delay between delayMin and delayMax milliseconds per "token"
+      await new Promise(resolve => setTimeout(resolve, Math.random() * (delayMax - delayMin) + delayMin));
+      await writer.write(encoder.encode(chunk + ' '));
+    }
+    await writer.close();
+  })();
+
+  return stream.readable;
 }

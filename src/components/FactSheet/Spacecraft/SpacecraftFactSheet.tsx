@@ -1,6 +1,7 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
 import { memo } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
@@ -31,6 +32,12 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
 }: Props) {
   const padding = useFactSheetPadding();
 
+  const organizationPill = (
+    <SpacecraftOrganizationPill
+      organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]}
+      updateSettings={updateSettings}
+    />
+  );
   const orbitalRegimes = (
     <Group gap={4}>
       {spacecraft.orbitalRegimes?.map(regime => (
@@ -42,11 +49,9 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
     spacecraft.orbitalRegimes != null && (spacecraft.orbitalRegimes?.length ?? 0) > 0
       ? { label: `orbital regime${spacecraft.orbitalRegimes.length > 1 ? 's' : ''}`, value: orbitalRegimes }
       : null;
+
   const bullets = [
-    {
-      label: 'organization',
-      value: <SpacecraftOrganizationPill organization={spacecraft.organization} updateSettings={updateSettings} />,
-    },
+    { label: 'organization', value: organizationPill },
     ...(orbitalRegimeBullet != null ? [orbitalRegimeBullet] : []),
     { label: 'learn more', value: <WikiLinkPill url={spacecraft.wiki} /> },
     ...(spacecraft.crew != null ? [{ label: 'crew', value: spacecraft.crew.join(', ') }] : []),

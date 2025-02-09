@@ -1,6 +1,6 @@
 import { Group, Stack, Title } from '@mantine/core';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
-import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/spacecraft.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { SpacecraftOrganization } from '../../../lib/types.ts';
 import { SpacecraftOrganizationPill } from '../Spacecraft/SpacecraftOrganizationPill.tsx';
@@ -20,7 +20,7 @@ export function OtherSpacecraftOrganizations({ organization, updateSettings }: P
         {otherOrganizations.map((otherOrganization, i) => (
           <SpacecraftOrganizationPill
             key={`${otherOrganization.id}-${i}`}
-            organization={otherOrganization.id}
+            organization={otherOrganization}
             updateSettings={updateSettings}
           />
         ))}

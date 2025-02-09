@@ -14,9 +14,9 @@ type Props = {
 export const GeneralControls = memo(function GeneralControlsComponent({ settings, updateSettings, reset }: Props) {
   return (
     <Group gap={buttonGap}>
-      <SelectOmnibox settings={settings} updateSettings={updateSettings} />
-      <HelpModalButton settings={settings} updateSettings={updateSettings} />
       <SettingsMenu settings={settings} updateSettings={updateSettings} reset={reset} />
+      <HelpModalButton settings={settings} updateSettings={updateSettings} />
+      <SelectOmnibox settings={settings} updateSettings={updateSettings} />
     </Group>
   );
 });

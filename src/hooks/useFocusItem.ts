@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from 'react';
-import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../lib/regimes.ts';
-import { SPACECRAFT_BY_ID, SPACECRAFT_ORGANIZATIONS } from '../lib/spacecraft.ts';
+import { DEFAULT_ASTEROID_COLOR } from '../lib/data/bodies.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../lib/data/organizations.ts';
+import { ORBITAL_REGIMES, orbitalRegimeDisplayName } from '../lib/data/regimes.ts';
+import { SPACECRAFT_BY_ID } from '../lib/data/spacecraft.ts';
 import { Settings } from '../lib/state.ts';
 import {
   isCelestialBody,
@@ -12,7 +14,6 @@ import {
   isSpacecraft,
   isSpacecraftId,
 } from '../lib/types.ts';
-import { DEFAULT_ASTEROID_COLOR } from '../lib/utils.ts';
 
 export function useFocusItem({ center, bodies }: Settings) {
   const focusItem = useMemo(() => {
