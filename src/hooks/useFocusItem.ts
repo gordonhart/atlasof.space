@@ -12,7 +12,7 @@ import {
   isSpacecraft,
   isSpacecraftId,
 } from '../lib/types.ts';
-import { DEFAULT_ASTEROID_COLOR, DEFAULT_SPACECRAFT_COLOR } from '../lib/utils.ts';
+import { DEFAULT_ASTEROID_COLOR } from '../lib/utils.ts';
 
 export function useFocusItem({ center, bodies }: Settings) {
   const focusItem = useMemo(() => {
@@ -30,7 +30,7 @@ export function useFocusItem({ center, bodies }: Settings) {
   const focusColor = isCelestialBody(focusItem)
     ? focusItem.style.fgColor
     : isSpacecraft(focusItem)
-      ? DEFAULT_SPACECRAFT_COLOR
+      ? focusItem.color
       : isOrganization(focusItem)
         ? focusItem.color
         : DEFAULT_ASTEROID_COLOR;

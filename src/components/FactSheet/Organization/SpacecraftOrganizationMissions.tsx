@@ -54,7 +54,7 @@ export function SpacecraftOrganizationMissions({ organization, updateSettings }:
           <Title order={6} mr="xs">
             {spacecraft.name}
           </Title>
-          <Text fz="xs" fs="italic" c="dimmed">
+          <Text fz="xs" c="dimmed">
             {spacecraft.start.getFullYear()}
             {spacecraft.end?.getFullYear() !== spacecraft.start.getFullYear()
               ? ` - ${spacecraft.end?.getFullYear() ?? 'Now'}`

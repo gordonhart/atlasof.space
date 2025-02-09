@@ -4,7 +4,7 @@ import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
-import { celestialBodyTypeName, DEFAULT_SPACECRAFT_COLOR } from '../../../lib/utils.ts';
+import { celestialBodyTypeName } from '../../../lib/utils.ts';
 import { FactGrid } from '../FactGrid.tsx';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
 import { FactSheetTitle } from '../FactSheetTitle.tsx';
@@ -63,7 +63,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
       <FactSheetTitle
         title={spacecraft.name}
         subTitle={celestialBodyTypeName(CelestialBodyType.SPACECRAFT)}
-        color={DEFAULT_SPACECRAFT_COLOR}
+        color={spacecraft.color}
         onClose={() => updateSettings({ center: null })}
         onHover={hovered => updateSettings({ hover: hovered ? spacecraft.id : null })}
       />

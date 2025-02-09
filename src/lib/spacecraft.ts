@@ -9,8 +9,9 @@ import {
   SpacecraftOrganization,
   SpacecraftStatus,
   SpacecraftVisitType,
+  HexColor,
 } from './types.ts';
-import { nameToId } from './utils.ts';
+import { DEFAULT_SPACECRAFT_COLOR, nameToId } from './utils.ts';
 
 const NASA: SpacecraftOrganization = {
   id: SpacecraftOrganizationId.NASA,
@@ -19,7 +20,8 @@ const NASA: SpacecraftOrganization = {
   founded: new Date(1958, 6, 29),
   thumbnail: 'nasa-meatball.svg',
   wiki: 'https://en.wikipedia.org/wiki/NASA',
-  color: '#0032a0',
+  // color: '#0032a0', // official blue
+  color: '#1b3c8c',
 };
 const USSR: SpacecraftOrganization = {
   id: SpacecraftOrganizationId.USSR,
@@ -38,7 +40,8 @@ const ESA: SpacecraftOrganization = {
   founded: new Date(1975, 4, 30),
   thumbnail: 'esa-logo.png',
   wiki: 'https://en.wikipedia.org/wiki/European_Space_Agency',
-  color: `#003247`,
+  // color: `#003247`, // official
+  color: '#00567a',
 };
 const JAXA: SpacecraftOrganization = {
   id: SpacecraftOrganizationId.JAXA,
@@ -58,15 +61,21 @@ const CNSA: SpacecraftOrganization = {
   wiki: 'https://en.wikipedia.org/wiki/China_National_Space_Administration',
   color: '#4887e4',
 };
-// TODO: ISRO? not sure if they have any notable exploration missions
+// TODO: ISRO -- Chandrayaan 1-3, Aditya, Mars Orbiter are all worth including
 
 export const SPACECRAFT_ORGANIZATIONS = [NASA, USSR, ESA, JAXA, CNSA].reduce(
   (acc, org) => ({ ...acc, [org.id]: org }),
   {} as Record<SpacecraftOrganizationId, SpacecraftOrganization>
 );
 
-function spacecraftWithDefaults(spacecraft: Omit<Spacecraft, 'id'> & { id?: SpacecraftId }): Spacecraft {
-  return { ...spacecraft, id: `spacecraft/${nameToId(spacecraft.name)}` };
+function spacecraftWithDefaults(
+  spacecraft: Omit<Spacecraft, 'id' | 'color'> & { id?: SpacecraftId; color?: HexColor }
+): Spacecraft {
+  return {
+    ...spacecraft,
+    id: `spacecraft/${nameToId(spacecraft.name)}`,
+    color: spacecraft.color ?? DEFAULT_SPACECRAFT_COLOR,
+  };
 }
 
 const VOYAGER_MISSION_FAMILY = 'Voyager';
@@ -185,6 +194,7 @@ export const CASSINI = spacecraftWithDefaults({
   missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
   thumbnail: 'cassini-huygens.gif',
   wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
+  color: Bodies.SATURN.style.fgColor,
   visited: [
     // traveling to Saturn
     { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('1998-04-26T12:00:00Z') },
@@ -223,6 +233,7 @@ export const HUYGENS = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
   thumbnail: 'huygens-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
+  color: Bodies.TITAN.style.fgColor,
   visited: [
     {
       id: Bodies.TITAN.id,
@@ -244,6 +255,7 @@ export const CURIOSITY = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'curiosity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
 });
 
@@ -260,6 +272,7 @@ export const PERSEVERANCE = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'perseverance-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2021-02-18T20:55:00Z') }],
 });
 
@@ -279,6 +292,7 @@ export const INGENUITY = spacecraftWithDefaults({
   },
   thumbnail: 'ingenuity-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
 });
 
@@ -294,6 +308,7 @@ export const TIANWEN_1 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'tianwen-1-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
 });
 
@@ -312,6 +327,7 @@ export const ZHURONG = spacecraftWithDefaults({
   },
   thumbnail: 'zhurong-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
+  color: Bodies.MARS.style.fgColor,
   visited: [
     {
       id: Bodies.MARS.id,
@@ -336,6 +352,7 @@ export const NEW_HORIZONS = spacecraftWithDefaults({
   focusId: Bodies.PLUTO.id,
   thumbnail: 'new-horizons-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/New_Horizons',
+  color: Bodies.PLUTO.style.fgColor,
   visited: [
     // TODO: flyby of asteroid 132524 APL
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('2007-02-28T12:00:00Z') },
@@ -352,9 +369,9 @@ export const NEW_HORIZONS = spacecraftWithDefaults({
     { id: Bodies.KERBEROS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
     { id: Bodies.STYX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
     // Kuiper belt phase
-    { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
     // TODO: enable? not really a flyby, 0.75 AU away
-    // { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
+    // { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
+    { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
   ],
 });
 
@@ -373,6 +390,7 @@ export const GALILEO = spacecraftWithDefaults({
   },
   thumbnail: 'galileo-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
+  color: Bodies.JUPITER.style.fgColor,
   visited: [
     { id: Bodies.GASPRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1991-10-29T12:00:00Z') },
     { id: Bodies.IDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1993-08-28T12:00:00Z') },
@@ -511,12 +529,14 @@ export const MARINER_4 = spacecraftWithDefaults({
   missionFamily: MARINER_MISSION_FAMILY,
   start: new Date('1964-11-28T14:22:01Z'),
   end: new Date(1967, 11, 21),
+  focusId: Bodies.MARS.id,
   status: {
     status: SpacecraftStatus.DEFUNCT,
     details: 'Damaged by 83 micrometeoroid hits, likely debris from comet D/1895 Q1 (Swift)',
   },
   wiki: 'https://en.wikipedia.org/wiki/Mariner_4',
   thumbnail: 'mariner-4-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1965-07-15T01:00:57Z') },
     // TODO: D/1895 Q1 (Swift) is believed to no longer exist; last observed in 1986

@@ -190,6 +190,7 @@ export type Spacecraft = {
   wiki: WikiLink;
   crew?: Array<string>;
   visited: Array<SpacecraftVisit>;
+  color: HexColor;
 };
 
 export function asCelestialBodyId(slug: string): CelestialBodyId {
