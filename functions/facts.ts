@@ -1,7 +1,12 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { getStore } from '@netlify/blobs';
-import { errorResponse, storeResponse } from '../src/lib/functions';
-import { AnthropicModel, asSseStream, simulateTokenGeneration } from '../src/lib/llm';
+import {
+  AnthropicModel,
+  asSseStream,
+  errorResponse,
+  simulateTokenGeneration,
+  storeResponse,
+} from '../src/lib/functions';
 
 async function getWikidataId(search: string): Promise<string | undefined> {
   const baseUrl = 'https://www.wikidata.org/w/api.php';

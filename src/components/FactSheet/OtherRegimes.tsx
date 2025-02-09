@@ -1,7 +1,7 @@
 import { Group, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { ORBITAL_REGIMES } from '../../lib/regimes.ts';
+import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { OrbitalRegime } from '../../lib/types.ts';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';

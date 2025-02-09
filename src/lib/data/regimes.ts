@@ -1,5 +1,5 @@
+import { OrbitalRegimeId, OrbitalRegime } from '../types.ts';
 import { AU } from './bodies.ts';
-import { OrbitalRegimeId, OrbitalRegime } from './types.ts';
 
 export const INNER_SYSTEM: OrbitalRegime = {
   id: OrbitalRegimeId.INNER_SYSTEM,

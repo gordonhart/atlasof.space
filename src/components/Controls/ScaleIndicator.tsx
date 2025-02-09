@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
-import { AU } from '../../lib/bodies.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
+import { AU } from '../../lib/data/bodies.ts';
 import { ModelState } from '../../lib/state.ts';
 
 type Props = Pick<ModelState, 'metersPerPx'>;

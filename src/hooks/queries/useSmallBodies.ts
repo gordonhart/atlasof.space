@@ -1,10 +1,9 @@
 import { useQueries, UseQueryOptions } from '@tanstack/react-query';
-import { AU, SOL } from '../../lib/bodies.ts';
+import { AU, celestialBodyWithDefaults, SOL } from '../../lib/data/bodies.ts';
 import { julianDayToEpoch } from '../../lib/epoch.ts';
 import { estimateAsteroidMass } from '../../lib/physics.ts';
 import { isNotFound, SBDB_URL, SmallBodyNotFound, SmallBodyResponse } from '../../lib/sbdb.ts';
 import { CelestialBody, CelestialBodyType, OrbitalRegimeId } from '../../lib/types.ts';
-import { celestialBodyWithDefaults } from '../../lib/utils.ts';
 
 export function useSmallBodies(names: Array<string>) {
   return useQueries<UseQueryOptions<CelestialBody | null, Error>[]>({

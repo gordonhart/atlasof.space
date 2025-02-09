@@ -5,10 +5,10 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { getCanvasPixels, isOffScreen } from '../canvas.ts';
+import { ORBITAL_REGIMES } from '../data/regimes.ts';
+import { SPACECRAFT_BY_ID } from '../data/spacecraft.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
-import { ORBITAL_REGIMES } from '../regimes.ts';
-import { SPACECRAFT_BY_ID } from '../spacecraft.ts';
 import { ModelState, Settings } from '../state.ts';
 import {
   CelestialBody,

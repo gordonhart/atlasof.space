@@ -1,9 +1,9 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
+import { DEFAULT_SPACECRAFT_COLOR } from '../../lib/data/bodies.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, OrbitalRegime, Spacecraft } from '../../lib/types.ts';
-import { DEFAULT_SPACECRAFT_COLOR } from '../../lib/utils.ts';
 import { SpacecraftCard } from './Spacecraft/SpacecraftCard.tsx';
 import { Timeline } from './Timeline.tsx';
 

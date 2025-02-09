@@ -9,7 +9,6 @@ import styles from '../BodyCard.module.css';
 import { LoadingCursor } from '../LoadingCursor.tsx';
 import { Thumbnail } from '../Thumbnail.tsx';
 import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
-import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
@@ -61,7 +60,6 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
         {!compact && (
           <Group gap={8}>
             <SpacecraftOrganizationPill organization={spacecraft.organization} />
-            <SpacecraftStatusPill status={spacecraft.status} />
           </Group>
         )}
       </Group>

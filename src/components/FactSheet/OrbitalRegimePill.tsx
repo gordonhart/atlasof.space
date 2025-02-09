@@ -1,6 +1,6 @@
 import { Group, Pill } from '@mantine/core';
 import { IconCircleDotFilled } from '@tabler/icons-react';
-import { orbitalRegimeDisplayName } from '../../lib/regimes.ts';
+import { orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { OrbitalRegimeId } from '../../lib/types.ts';
 import styles from './RelatedBodies.module.css';

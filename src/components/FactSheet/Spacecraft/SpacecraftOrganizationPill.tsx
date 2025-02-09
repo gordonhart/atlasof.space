@@ -1,5 +1,5 @@
 import { Box, Group, Pill } from '@mantine/core';
-import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/spacecraft.ts';
+import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { SpacecraftOrganizationId } from '../../../lib/types.ts';
 import styles from '../RelatedBodies.module.css';

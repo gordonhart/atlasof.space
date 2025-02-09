@@ -1,5 +1,6 @@
-import { SOLAR_SYSTEM } from './bodies.ts';
-import { SPACECRAFT, SPACECRAFT_ORGANIZATIONS } from './spacecraft.ts';
+import { SOLAR_SYSTEM } from './data/bodies.ts';
+import { SPACECRAFT_ORGANIZATIONS } from './data/organizations.ts';
+import { SPACECRAFT } from './data/spacecraft.ts';
 import { itemIdAsRoute } from './state.ts';
 import { OrbitalRegimeId } from './types.ts';
 
