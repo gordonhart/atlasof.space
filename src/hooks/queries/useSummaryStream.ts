@@ -7,17 +7,18 @@ import { CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { FocusItemType, TypedFocusItem } from '../useFocusItem.ts';
 
-export function useSummaryStream(props: TypedFocusItem) {
+export function useSummaryStream({ stream = true, ...props }: TypedFocusItem & { stream?: boolean }) {
   const search = useMemo(() => getSearch(props), [JSON.stringify(props)]);
   const [isStreaming, setIsStreaming] = useState(false);
   const queryClient = useQueryClient();
-  const queryKey = ['GET', 'facts', search];
+  const queryKey = ['GET', 'summary', search];
 
   const query = useQuery({
     queryKey,
     queryFn: async ({ signal }) => {
       setIsStreaming(true);
-      const response = await fetch(`/api/summary?search=${encodeURIComponent(search)}`, { signal });
+      const searchParams = new URLSearchParams({ search, stream: String(stream) });
+      const response = await fetch(`/api/summary?${searchParams}`, { signal });
       const setData = (data: string) => queryClient.setQueryData<string>(queryKey, data);
       return await readStreamResponse(response, setIsStreaming, setData);
     },

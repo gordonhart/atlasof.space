@@ -21,6 +21,7 @@ export function MissionTimelineCard({ body, spacecraft, visit, updateSettings }:
     spacecraft,
     body,
     visit,
+    stream: false,
   });
   return (
     <Paper

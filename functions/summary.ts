@@ -2,8 +2,10 @@ import Anthropic from '@anthropic-ai/sdk';
 import { getStore } from '@netlify/blobs';
 import {
   AnthropicModel,
+  asSse,
   asSseStream,
   errorResponse,
+  fromSseStream,
   simulateTokenGeneration,
   storeResponse,
 } from '../src/lib/functions';
@@ -12,6 +14,7 @@ export default async function handle(request: Request) {
   const params = new URL(request.url).searchParams;
   const search = params.get('search');
   if (search == null || search === '') return errorResponse("Bad Request: missing 'search' parameter");
+  const stream = params.get('stream') !== 'false';
 
   const responseHeaders = {
     'Content-Type': 'text/event-stream',
@@ -22,7 +25,8 @@ export default async function handle(request: Request) {
   const store = getStore('summary');
   const stored = await store.get(search);
   if (stored != null) {
-    return new Response(simulateTokenGeneration(stored), { headers: responseHeaders });
+    const content = stream ? simulateTokenGeneration(stored) : asSse(fromSseStream(stored));
+    return new Response(content, { headers: responseHeaders });
   }
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });

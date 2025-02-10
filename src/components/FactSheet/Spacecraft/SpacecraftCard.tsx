@@ -26,7 +26,7 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
       : regime != null
         ? { type: SpacecraftSummaryType.REGIME as const, spacecraft, regime }
         : { type: SpacecraftSummaryType.SUMMARY as const, spacecraft };
-  const { data: summary, isLoading } = useSpacecraftSummaryStream(summaryParams);
+  const { data: summary, isLoading } = useSpacecraftSummaryStream({ ...summaryParams, stream: false });
 
   const visitPastTense = visit != null && visit.start < new Date();
   // prettier-ignore

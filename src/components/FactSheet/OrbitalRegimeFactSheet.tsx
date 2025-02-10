@@ -15,7 +15,7 @@ import {
 } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
-import { BodyCard } from './BodyCard.tsx';
+import { CelestialBodyCard } from './CelestialBodyCard.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { OtherRegimes } from './OtherRegimes.tsx';
@@ -76,7 +76,7 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
             <Stack gap="xs" key={`${type}-${i}`}>
               <Title order={5}>{celestialBodyTypeName(type as CelestialBodyType, true)}</Title>
               {bodies.map((body, j) => (
-                <BodyCard
+                <CelestialBodyCard
                   key={`${body.name}-${j}`}
                   body={body}
                   onClick={() => updateSettings({ center: body.id })}

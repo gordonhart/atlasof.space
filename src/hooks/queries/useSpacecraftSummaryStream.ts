@@ -17,18 +17,19 @@ type Params =
   | { type: SpacecraftSummaryType.VISIT; spacecraft: Spacecraft; body: CelestialBody; visit: SpacecraftVisit }
   | { type: SpacecraftSummaryType.REGIME; spacecraft: Spacecraft; regime: OrbitalRegime }
   | { type: SpacecraftSummaryType.END; spacecraft: Spacecraft };
-export function useSpacecraftSummaryStream(params: Params) {
+export function useSpacecraftSummaryStream({ stream = true, ...params }: Params & { stream?: boolean }) {
   const [isStreaming, setIsStreaming] = useState(false);
   const search = getSearch(params);
   const blobId = getBlobId(params);
   const queryClient = useQueryClient();
-  const queryKey = ['GET', 'facts', blobId];
+  const queryKey = ['GET', 'visit', blobId];
 
   const query = useQuery({
     queryKey,
     queryFn: async ({ signal }) => {
       setIsStreaming(true);
-      const response = await fetch(`/api/visit?${new URLSearchParams({ search, blobId })}`, { signal });
+      const searchParams = new URLSearchParams({ search, blobId, stream: String(stream) });
+      const response = await fetch(`/api/visit?${searchParams}`, { signal });
       const setData = (data: string) => queryClient.setQueryData<string>(queryKey, data);
       return await readStreamResponse(response, setIsStreaming, setData);
     },

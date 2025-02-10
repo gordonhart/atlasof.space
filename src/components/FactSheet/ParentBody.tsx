@@ -4,7 +4,7 @@ import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
-import { BodyCard } from './BodyCard.tsx';
+import { CelestialBodyCard } from './CelestialBodyCard.tsx';
 
 type Props = {
   body: CelestialBody;
@@ -20,7 +20,7 @@ export function ParentBody({ body, bodies, updateSettings }: Props) {
   return parentBody != null ? (
     <Stack gap="xs" {...padding}>
       <Title order={5}>Parent {celestialBodyTypeName(parentBody.type)}</Title>
-      <BodyCard
+      <CelestialBodyCard
         body={parentBody}
         onClick={() => updateSettings({ center: parentBody.id, hover: null })}
         onHover={hovered => updateSettings({ hover: hovered ? parentBody.id : null })}
