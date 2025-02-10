@@ -11,7 +11,6 @@ import {
 } from '../types.ts';
 import { nameToId } from '../utils.ts';
 import * as Bodies from './bodies.ts';
-import { DEFAULT_COMET_COLOR, DEFAULT_SPACECRAFT_COLOR } from './bodies.ts';
 
 function spacecraftWithDefaults(
   spacecraft: Omit<Spacecraft, 'id' | 'color'> & { id?: SpacecraftId; color?: HexColor }
@@ -19,7 +18,7 @@ function spacecraftWithDefaults(
   return {
     ...spacecraft,
     id: `spacecraft/${nameToId(spacecraft.name)}`,
-    color: spacecraft.color ?? DEFAULT_SPACECRAFT_COLOR,
+    color: spacecraft.color ?? Bodies.DEFAULT_SPACECRAFT_COLOR,
   };
 }
 
@@ -364,7 +363,7 @@ export const GIOTTO = spacecraftWithDefaults({
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   thumbnail: 'giotto-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
     { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
@@ -528,6 +527,73 @@ export const VENERA_7 = spacecraftWithDefaults({
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
 });
 
+const LUNA_MISSION_FAMILY = 'Luna';
+export const LUNA_2 = spacecraftWithDefaults({
+  name: 'Luna 2',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 390.2,
+  start: new Date('1959-09-12T06:39:42Z'),
+  end: new Date('1959-09-13T21:02:24Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: LUNA_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Impacted the surface of the Moon on September 13, 1959',
+  },
+  thumbnail: 'luna-2-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Luna_2',
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('1959-09-13T21:02:24Z') }],
+});
+
+export const LUNA_3 = spacecraftWithDefaults({
+  name: 'Luna 3',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 278.5,
+  start: new Date('1959-10-04T00:43:40Z'),
+  end: new Date(1959, 9, 22),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: LUNA_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: "Spacecraft reentered Earth's atmosphere due to orbital decay sometime in 1960-1962",
+  },
+  thumbnail: 'luna-3-thumb.jpeg',
+  wiki: 'https://en.wikipedia.org/wiki/Luna_3',
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
+});
+
+export const MARS_3 = spacecraftWithDefaults({
+  name: 'Mars 3',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 4650,
+  start: new Date('1971-05-28T15:26:30Z'),
+  end: new Date(1972, 7, 22),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  focusId: Bodies.MARS.id,
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lander failed 110 seconds after landing' },
+  thumbnail: 'mars-3-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_3',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
+});
+
+const ZOND_MISSION_FAMILY = 'Zond';
+export const ZOND_5 = spacecraftWithDefaults({
+  name: 'Zond 5',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 5375,
+  start: new Date('1968-09-14T21:42:11Z'),
+  end: new Date('1968-09-21T16:08:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.RETURNED, details: 'Safely returned two Russian tortoises to Earth' },
+  focusId: Bodies.LUNA.id,
+  missionFamily: ZOND_MISSION_FAMILY,
+  thumbnail: 'zond-5-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Zond_5',
+  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date(1968, 8, 18) }],
+});
+
 export const VENUS_EXPRESS = spacecraftWithDefaults({
   name: 'Venus Express',
   organization: SpacecraftOrganizationId.ESA,
@@ -679,7 +745,7 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
   power: 600,
   start: new Date('2024-10-14T16:06:00Z'),
   focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
   status: { status: SpacecraftStatus.OPERATIONAL },
   thumbnail: 'europa-clipper-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
@@ -1016,7 +1082,7 @@ export const ROSETTA = spacecraftWithDefaults({
   },
   wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
   thumbnail: 'rosetta-thumb.png',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
     { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
@@ -1043,7 +1109,7 @@ export const STARDUST = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated on March 24, 2011' },
   wiki: 'https://en.wikipedia.org/wiki/Stardust_(spacecraft)',
   thumbnail: 'stardust-thumb.jpg',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
     { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
@@ -1086,7 +1152,7 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Communications unexpectedly lost in August 2013' },
   wiki: 'https://en.wikipedia.org/wiki/Deep_Impact_(spacecraft)',
   thumbnail: 'deep-impact-thumb.jpg',
-  color: DEFAULT_COMET_COLOR,
+  color: Bodies.DEFAULT_COMET_COLOR,
   visited: [
     { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
     { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },
@@ -1228,8 +1294,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // Luna
   // LUNA_1,
   // PIONEER_4,
-  // LUNA_2,
-  // LUNA_3,
+  LUNA_2,
+  LUNA_3,
   // RANGER_7,
   // RANGER_8,
   // RANGER_9,
@@ -1238,6 +1304,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // SURVEYOR_1,
   // LUNAR_ORBITER_1,
   // LUNA_11,
+  ZOND_5,
   // TODO: there are an insane number of missions, 100+ successful that are worth noting
   APOLLO_8,
   APOLLO_10,
@@ -1261,7 +1328,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // OPPORTUNITY,
   // ZHURONG,
   // MARS_2,
-  // MARS_3,
+  MARS_3,
   // MARS_RECONNAISSANCE_ORBITER,
   // VIKING_1,
   // VIKING_2,

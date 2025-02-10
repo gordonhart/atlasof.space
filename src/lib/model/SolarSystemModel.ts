@@ -74,7 +74,7 @@ export class SolarSystemModel {
 
     this.bodies = this.createBodies(settings);
     this.firmament = new Firmament(this.resolution);
-    this.regimes = ORBITAL_REGIMES.map(regime => new OrbitalRegime(this.scene, settings, regime));
+    this.regimes = Object.values(ORBITAL_REGIMES).map(regime => new OrbitalRegime(this.scene, settings, regime));
 
     const renderScene = new RenderPass(this.scene, this.camera);
     renderScene.clear = false;

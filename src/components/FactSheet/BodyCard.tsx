@@ -1,5 +1,6 @@
 import { Box, Paper, Text, Title } from '@mantine/core';
 import { useSummaryStream } from '../../hooks/queries/useSummaryStream.ts';
+import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import styles from './BodyCard.module.css';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
@@ -11,7 +12,7 @@ type Props = {
   onHover?: (hovered: boolean) => void;
 };
 export function BodyCard({ body, onClick, onHover }: Props) {
-  const { data: summary, isLoading } = useSummaryStream(body);
+  const { data: summary, isLoading } = useSummaryStream({ item: body, type: FocusItemType.CELESTIAL_BODY });
   return (
     <Paper
       className={styles.Card}

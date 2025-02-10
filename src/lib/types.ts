@@ -120,6 +120,7 @@ export type CelestialBody = {
 
 export type OrbitalRegime = {
   id: OrbitalRegimeId;
+  name: string;
   min: number;
   max: number;
   roundness: number; // 1 for torus, <1 for flattened disk, >1 for stretched vertically (solar north)
@@ -157,8 +158,8 @@ export enum SpacecraftVisitType {
 
 export enum SpacecraftStatus {
   OPERATIONAL = 'Operational',
-  DEFUNCT = 'Defunct',
-  DECOMMISSIONED = 'Decommissioned',
+  DEFUNCT = 'Defunct', // not operational, but still out there
+  DECOMMISSIONED = 'Decommissioned', // destroyed intentionally or in an acceptable way
   RETURNED = 'Returned',
   CRASHED = 'Crashed',
 }

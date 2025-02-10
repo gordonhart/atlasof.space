@@ -14,7 +14,7 @@ export function SolarSystem() {
   const { settings } = appState;
   const model = useSolarSystemModel({ settings, updateSettings });
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
-  const { focusItem, focusColor } = useFocusItem(settings);
+  const focusItem = useFocusItem(settings);
 
   const reset = useCallback(() => {
     const newState = resetAppState();
@@ -73,12 +73,12 @@ export function SolarSystem() {
           h={isSmallDisplay ? '60dvh' : '100dvh'}
           w={isSmallDisplay ? undefined : 600}
           style={{
-            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusColor}`,
-            borderTop: isSmallDisplay ? `1px solid ${focusColor}` : undefined,
+            borderLeft: isSmallDisplay ? undefined : `1px solid ${focusItem.color}`,
+            borderTop: isSmallDisplay ? `1px solid ${focusItem.color}` : undefined,
           }}
         >
           <FactSheet
-            key={focusItem.id} // rerender when focus item changes
+            key={focusItem.item.id} // rerender when focus item changes
             item={focusItem}
             settings={settings}
             updateSettings={updateSettings}

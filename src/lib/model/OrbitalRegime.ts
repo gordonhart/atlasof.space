@@ -10,7 +10,7 @@ import {
   DoubleSide,
 } from 'three';
 import { Settings } from '../state.ts';
-import { OrbitalRegime as OrbitalRegimeType } from '../types.ts';
+import { isOrbitalRegimeId, OrbitalRegime as OrbitalRegimeType } from '../types.ts';
 import { SCALE_FACTOR } from './constants.ts';
 
 export class OrbitalRegime {
@@ -56,7 +56,8 @@ export class OrbitalRegime {
     return (
       settings.hover === this.regime.id ||
       settings.center === this.regime.id ||
-      settings.visibleRegimes.has(this.regime.id)
+      // TODO: can remove visibleRegimes -- the options are gone from the visibility menu
+      (isOrbitalRegimeId(this.regime.id) && settings.visibleRegimes.has(this.regime.id))
     );
   }
 }

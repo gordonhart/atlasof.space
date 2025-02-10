@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
-import { orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
 import { datetimeToHumanReadable, dateToISO } from '../../lib/epoch.ts';
 import { readStreamResponse, slugifyId } from '../../lib/functions.ts';
 import { CelestialBody, OrbitalRegime, Spacecraft, SpacecraftVisit } from '../../lib/types.ts';
@@ -57,8 +56,7 @@ ${celestialBodyTypeName(body.type).toLowerCase()} ${body.name} in ${years}`;
 
     case SpacecraftSummaryType.REGIME:
       return `\
-the activities of the ${orgName} spacecraft ${name} in the heliocentric orbital regime \
-'${orbitalRegimeDisplayName(params.regime.id)}'`;
+the activities of the ${orgName} spacecraft ${name} in the heliocentric orbital regime '${params.regime.name}'`;
 
     case SpacecraftSummaryType.END: {
       const date = end != null ? ` on ${datetimeToHumanReadable(end)}` : '';

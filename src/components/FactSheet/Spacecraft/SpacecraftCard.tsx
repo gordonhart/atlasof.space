@@ -37,7 +37,9 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
         ? (visitPastTense ? 'entered orbit' : 'planning to enter orbit')
         : visit?.type === SpacecraftVisitType.HELICOPTER
           ? (visitPastTense ? 'started flying' : 'planning to start flying')
-          : (visitPastTense ? 'visited' : 'planning to visit');
+          : visit?.type === SpacecraftVisitType.IMPACTOR
+            ? (visitPastTense ? 'impacted' : 'planning to impact')
+            : (visitPastTense ? 'visited' : 'planning to visit');
   const visitBlurb = visit != null ? `, ${visitVerb} in ${visit.start.getFullYear()}` : '';
 
   return (

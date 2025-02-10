@@ -1,17 +1,17 @@
 import { Box, Stack, Title } from '@mantine/core';
 import { memo, useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
+import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/data/bodies.ts';
-import { orbitalRegimeDisplayName } from '../../lib/data/regimes.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,
+  CelestialBodyId,
   CelestialBodyType,
   CelestialBodyTypes,
-  OrbitalRegimeId,
   OrbitalRegime,
-  CelestialBodyId,
+  OrbitalRegimeId,
 } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { AddSmallBodyButton } from './AddSmallBodyButton.tsx';
@@ -59,14 +59,14 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
   return (
     <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
-        title={orbitalRegimeDisplayName(regime.id)}
+        title={regime.name}
         subTitle="Orbital Regime"
         color={DEFAULT_ASTEROID_COLOR}
         onClose={() => updateSettings({ center: null })}
       />
 
       <Box style={{ flexShrink: 0 }}>
-        <FactSheetSummary obj={regime} />
+        <FactSheetSummary item={regime} type={FocusItemType.ORBITAL_REGIME} />
       </Box>
 
       <Stack px={padding.px} py={padding.py} gap="xl" flex={1}>

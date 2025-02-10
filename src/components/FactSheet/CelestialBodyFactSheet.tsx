@@ -3,7 +3,9 @@ import { memo, ReactNode } from 'react';
 import { useFactsStream } from '../../hooks/queries/useFactsStream.ts';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
+import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { g } from '../../lib/data/bodies.ts';
+import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
@@ -45,7 +47,9 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [axisValue, axisUnits] = humanDistanceUnits(semiMajorAxis);
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
-    orbitalRegime != null ? <OrbitalRegimePill regime={orbitalRegime} updateSettings={updateSettings} /> : undefined;
+    orbitalRegime != null ? (
+      <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} updateSettings={updateSettings} />
+    ) : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
 
@@ -91,13 +95,13 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       {isXsDisplay ? (
         <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
-          <FactSheetSummary obj={body} />
+          <FactSheetSummary item={body} type={FocusItemType.CELESTIAL_BODY} />
           <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
             <CelestialBodyThumbnail key={name} body={body} size={160} />
           </Box>
         </Group>
       ) : (
-        <FactSheetSummary obj={body} />
+        <FactSheetSummary item={body} type={FocusItemType.CELESTIAL_BODY} />
       )}
 
       <Stack gap={2} flex={1}>
