@@ -11,7 +11,11 @@ type Props = {
   spacecraft: Spacecraft;
 };
 export function MissionEndCard({ spacecraft }: Props) {
-  const { data: summary, isLoading } = useSpacecraftSummaryStream({ type: SpacecraftSummaryType.END, spacecraft });
+  const { data: summary, isLoading } = useSpacecraftSummaryStream({
+    type: SpacecraftSummaryType.END,
+    spacecraft,
+    stream: false,
+  });
   return (
     <Paper p="xs" withBorder>
       <Group gap={0} align="baseline">
