@@ -107,10 +107,11 @@ export class KeplerianBody extends KinematicBody {
 
     const baseRadius = this.body.radius / metersPerPx;
     const bodyRadius = this.hovered ? baseRadius * HOVER_SCALE_FACTOR : baseRadius;
-    if (bodyRadius < this.dotRadius) {
-      if (this.shouldDrawDot(metersPerPx)) drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
-    } else {
-      this.sphere.ensureTextureLoaded(); // since the body is visible, ensure that its texture is loaded
+    if (bodyRadius < this.dotRadius && this.shouldDrawDot(metersPerPx)) {
+      drawDotAtLocation(ctx, textColor, bodyPx, this.dotRadius);
+    }
+    if (1.5 * bodyRadius >= this.dotRadius) {
+      this.sphere.ensureTextureLoaded(); // since the body is close to being visible, ensure that its texture is loaded
     }
 
     const fontSizePx = this.labelFontSize(metersPerPx);
