@@ -4,7 +4,7 @@ import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
-import { BodyCard } from './BodyCard.tsx';
+import { CelestialBodyCard } from './CelestialBodyCard.tsx';
 
 const MAJOR_SATELLITE_TYPES = new Set([CelestialBodyType.PLANET, CelestialBodyType.MOON]);
 
@@ -36,7 +36,7 @@ export function MajorSatellites({ body, bodies, updateSettings }: Props) {
     <Stack gap="xs" {...padding}>
       <Title order={5}>Major {satelliteTypeDisplayName}</Title>
       {satellites.map((satellite, i) => (
-        <BodyCard
+        <CelestialBodyCard
           key={`${satellite.name}-${i}`}
           body={satellite}
           onClick={() => updateSettings({ center: satellite.id, hover: null })}

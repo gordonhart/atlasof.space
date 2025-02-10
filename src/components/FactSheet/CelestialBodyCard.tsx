@@ -11,8 +11,12 @@ type Props = {
   onClick: () => void;
   onHover?: (hovered: boolean) => void;
 };
-export function BodyCard({ body, onClick, onHover }: Props) {
-  const { data: summary, isLoading } = useSummaryStream({ item: body, type: FocusItemType.CELESTIAL_BODY });
+export function CelestialBodyCard({ body, onClick, onHover }: Props) {
+  const { data: summary, isLoading } = useSummaryStream({
+    item: body,
+    type: FocusItemType.CELESTIAL_BODY,
+    stream: false,
+  });
   return (
     <Paper
       className={styles.Card}

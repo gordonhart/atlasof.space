@@ -38,7 +38,7 @@ import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody, isCelestialBody, Spacecraft } from '../../lib/types.ts';
-import { BodyCard } from '../FactSheet/BodyCard.tsx';
+import { CelestialBodyCard } from '../FactSheet/CelestialBodyCard.tsx';
 import { SpacecraftCard } from '../FactSheet/Spacecraft/SpacecraftCard.tsx';
 import { iconSize } from './constants.ts';
 
@@ -103,7 +103,7 @@ export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) 
 
   const sampleItemCards = sampleItems.map(item =>
     isCelestialBody(item) ? (
-      <BodyCard key={item.id} body={item} onClick={() => onCardClick(item)} />
+      <CelestialBodyCard key={item.id} body={item} onClick={() => onCardClick(item)} />
     ) : (
       <SpacecraftCard key={item.id} spacecraft={item} onClick={() => onCardClick(item)} compact />
     )

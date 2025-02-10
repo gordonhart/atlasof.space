@@ -63,6 +63,10 @@ export function errorResponse(message: string) {
   return new Response(JSON.stringify({ message }), { status: 400, headers: { 'Content-Type': 'application/json' } });
 }
 
+export function asSse(content: string) {
+  return `data: ${JSON.stringify({ content })}\n\n`;
+}
+
 export function asSseStream(stream: MessageStream) {
   return new ReadableStream({
     async start(controller) {
@@ -71,7 +75,7 @@ export function asSseStream(stream: MessageStream) {
         for await (const chunk of stream) {
           const text = chunk.delta?.text || '';
           if (text) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: text })}\n\n`));
+            controller.enqueue(encoder.encode(asSse(text)));
           }
         }
       } catch (error) {
@@ -82,6 +86,14 @@ export function asSseStream(stream: MessageStream) {
       }
     },
   });
+}
+
+export function fromSseStream(stream: string) {
+  return stream
+    .split('\n\n')
+    .filter(s => s.startsWith('data: '))
+    .map(s => JSON.parse(s.slice(6))?.content)
+    .join('');
 }
 
 export function simulateTokenGeneration(eventStream: string, delayMin = 10, delayMax = 25) {
