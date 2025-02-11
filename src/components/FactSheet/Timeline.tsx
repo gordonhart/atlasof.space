@@ -96,7 +96,10 @@ function renderTimeline(
   const baseColor = '#828282';
 
   ctx.font = `12px ${LABEL_FONT_FAMILY}`;
-  const { width: textWidthPx, actualBoundingBoxAscent: textHeightPx } = ctx.measureText('0000');
+  const years = new Set(items.map(({ date }) => date.getFullYear().toString()));
+  const measurements = [...years].map(year => ctx.measureText(year));
+  const textWidthPx = Math.max(...measurements.map(({ width }) => width));
+  const textHeightPx = Math.max(...measurements.map(({ actualBoundingBoxAscent }) => actualBoundingBoxAscent));
   const timelineLeft = dotRadius * 2 + 1 + textWidthPx;
   ctx.lineWidth = 1;
   ctx.strokeStyle = baseColor;
