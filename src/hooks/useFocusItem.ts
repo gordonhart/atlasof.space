@@ -72,7 +72,7 @@ function getFocusItem(id: string | null, bodies: Array<CelestialBody>): FocusIte
       type: FocusItemType.ORGANIZATION,
       item: organization,
       color: organization.color,
-      name: organization.name,
+      name: organization.shortName,
     };
   }
   return undefined;
