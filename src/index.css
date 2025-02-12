@@ -3,7 +3,7 @@
   src: url('https://atlasofspace.b-cdn.net/electrolize.ttf') format('truetype');
 }
 
-body {
+body.body {
   color: var(--mantine-color-gray-light-color);
   background-color: var(--mantine-color-black);
   overscroll-behavior-y: none;
