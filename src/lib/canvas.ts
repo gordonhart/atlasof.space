@@ -28,7 +28,7 @@ export function drawOffscreenIndicator(
   color: HexColor,
   [canvasWidthPx, canvasHeightPx]: Point2,
   [xPx, yPx]: Point2
-) {
+): [Point2, Point2] {
   const edgePad = 24;
   const [halfX, halfY] = [canvasWidthPx / 2, canvasHeightPx / 2];
   const [xMin, xMax, yMin, yMax] = [-halfX, halfX, -halfY, halfY];
@@ -52,7 +52,11 @@ export function drawOffscreenIndicator(
   }
   const [drawXpx, drawYpx]: Point2 = [drawPx[0] + halfX, drawPx[1] + halfY];
   const trianglePx: Point2 = [drawXpx + caret.offsetPx[0], drawYpx + caret.offsetPx[1]];
-  drawCaretAtLocation(ctx, color, trianglePx, caret.type);
+  const [[p0x, p0y], [p1x, p1y]] = drawCaretAtLocation(ctx, color, trianglePx, caret.type);
+  return [
+    [p0x, canvasHeightPx - p0y],
+    [p1x, canvasHeightPx - p1y],
+  ];
 }
 
 export function drawLabelAtLocation(
@@ -128,7 +132,7 @@ function drawCaretAtLocation(
   color: HexColor,
   [xPx, yPx]: Point2, // centered on this value
   type: CaretType
-) {
+): [Point2, Point2] {
   const [short, long] = [2, 6];
   // prettier-ignore
   const vertices: Array<Point2> = type === 'right'
@@ -148,4 +152,12 @@ function drawCaretAtLocation(
   ctx.strokeStyle = color;
   ctx.fill();
   ctx.stroke();
+  const p0x = Math.min(...vertices.map(([x]) => x));
+  const p0y = Math.min(...vertices.map(([, y]) => y));
+  const p1x = Math.max(...vertices.map(([x]) => x));
+  const p1y = Math.max(...vertices.map(([, y]) => y));
+  return [
+    [p0x, p0y],
+    [p1x, p1y],
+  ];
 }

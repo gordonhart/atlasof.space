@@ -1,5 +1,6 @@
 import { ActionIcon, Box, Group, Title } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
+import { useEffect, useRef } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { HexColor } from '../../lib/types.ts';
@@ -13,11 +14,27 @@ type Props = {
   onHover?: (hovered: boolean) => void;
 };
 export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Props) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const padding = useFactSheetPadding();
   const { xs: isXsDisplay, sm: isSmallDisplay } = useDisplaySize();
+  const width = containerRef.current?.clientWidth;
+  const height = containerRef.current?.clientHeight;
+
+  useEffect(() => {
+    if (containerRef.current == null || canvasRef.current == null || width == null || height == null) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvasRef.current.width = width * dpr;
+    canvasRef.current.height = height * dpr;
+    const ctx = canvasRef.current.getContext('2d');
+    if (ctx == null) return;
+    drawCarets(ctx, color);
+  }, [canvasRef.current, color, width, height]);
+
   return (
     <Group
       // TODO: there's an issue with 0.5px of underlying content rendering above this header when scrolling
+      ref={containerRef}
       pos="sticky"
       top={0}
       bg="black"
@@ -30,8 +47,10 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
       onMouseEnter={onHover != null ? () => onHover(true) : undefined}
       onMouseLeave={onHover != null ? () => onHover(false) : undefined}
     >
-      <Caret position="tl" color={color} />
-      <Caret position="br" color={color} />
+      <canvas
+        ref={canvasRef}
+        style={{ pointerEvents: 'none', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+      />
       <Group gap={0} align="baseline">
         <Title order={isXsDisplay ? 3 : 2} pr="xs">
           {title}
@@ -45,6 +64,29 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
       </ActionIcon>
     </Group>
   );
+}
+
+function drawCarets(ctx: CanvasRenderingContext2D, color: HexColor) {
+  const dpr = window.devicePixelRatio || 1;
+  const unit = 10;
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.lineWidth = dpr;
+  ctx.strokeStyle = color;
+  ctx.moveTo(unit, unit * 3);
+  ctx.lineTo(unit, unit * 2);
+  ctx.lineTo(unit * 2, unit);
+  ctx.lineTo(unit * 3, unit);
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(unit, unit);
+  ctx.lineTo(unit * 1.5, unit);
+  ctx.lineTo(unit, unit * 1.5);
+  ctx.lineTo(unit, unit);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+  // ctx.fillRect(0, 0, 10, 10);
 }
 
 function Caret({ color, position }: { color: string; position: 'tl' | 'tr' | 'bl' | 'br' }) {

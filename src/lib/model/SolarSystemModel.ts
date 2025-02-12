@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { getCanvasPixels, isOffScreen } from '../canvas.ts';
+import { getCanvasPixels } from '../canvas.ts';
 import { ORBITAL_REGIMES } from '../data/regimes.ts';
 import { SPACECRAFT_BY_ID } from '../data/spacecraft.ts';
 import { Time } from '../epoch.ts';
@@ -178,7 +178,7 @@ export class SolarSystemModel {
       // ignore invisible types and offscreen bodies
       if (!body.isVisible(settings)) continue;
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera, this.resolution);
-      if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
+      // if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
 
       // always give precedence to the sun
       const [distance, isNear] = body.isNearCursor([xPx, yPx], this.camera, settings.drawLabel, bodyThreshold);

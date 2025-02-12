@@ -101,7 +101,14 @@ export class KeplerianBody extends KinematicBody {
     // body is off-screen; draw a pointer if the screen is larger than xs (mobile)
     if (isOffScreen(bodyPx, [this.resolution.x, this.resolution.y])) {
       // TODO: don't draw offscreen indicators for moons when the parent isn't visible
-      if (!isXs(window.innerWidth)) drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
+      if (!isXs(window.innerWidth)) {
+        const [p0, p1] = drawOffscreenIndicator(ctx, strokeColor, canvasPx, bodyPx);
+        if (this.body.name === 'Gonggong') console.log(p0, p1);
+        this.labelBox.min.x = Math.min(p0[0], p1[0]);
+        this.labelBox.min.y = Math.min(p0[1], p1[1]);
+        this.labelBox.max.x = Math.max(p0[0], p1[0]);
+        this.labelBox.max.y = Math.max(p0[1], p1[1]);
+      }
       return;
     }
 

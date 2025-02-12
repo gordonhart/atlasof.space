@@ -66,7 +66,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
   ];
 
   return (
-    <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={spacecraft.name}
         subTitle={celestialBodyTypeName(CelestialBodyType.SPACECRAFT)}
@@ -75,7 +75,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
         onHover={hovered => updateSettings({ hover: hovered ? spacecraft.id : null })}
       />
 
-      <Box>
+      <Box style={{ flexShrink: 0 }}>
         <FactSheetSummary item={spacecraft} type={FocusItemType.SPACECRAFT} />
       </Box>
 
