@@ -17,7 +17,7 @@ type Props = {
 export function SpacecraftOrganizationFactSheet({ organization, bodies, updateSettings }: Props) {
   const padding = useFactSheetPadding();
   return (
-    <Stack fz="xs" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" bg="black" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={organization.shortName}
         subTitle="Organization"
