@@ -66,7 +66,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
   ];
 
   return (
-    <Stack fz="xs" bg="black" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={spacecraft.name}
         subTitle={celestialBodyTypeName(CelestialBodyType.SPACECRAFT)}
