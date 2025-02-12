@@ -84,7 +84,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const spacecraftVisited = SPACECRAFT_BY_BODY_ID[id] ?? [];
 
   return (
-    <Stack fz="xs" gap={2} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={name}
         subTitle={celestialBodyTypeDescription(body)}
