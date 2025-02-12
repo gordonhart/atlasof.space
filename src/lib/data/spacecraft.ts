@@ -1117,7 +1117,25 @@ export const STARDUST = spacecraftWithDefaults({
   ],
 });
 
-const SAKIGAKE = spacecraftWithDefaults({
+export const ULYSSES = spacecraftWithDefaults({
+  name: 'Ulysses',
+  organization: SpacecraftOrganizationId.ESA, // also NASA
+  launchMass: 371,
+  power: 285,
+  start: new Date('1990-10-06T11:47:16Z'),
+  end: new Date(2009, 5, 30),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated after 18 years and 8 months of operation' },
+  wiki: 'https://en.wikipedia.org/wiki/Ulysses_(spacecraft)',
+  thumbnail: 'ulysses-thumb.jpg', // TODO
+  visited: [
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date(1992, 1, 8) },
+    { id: Bodies.SOL.id, type: SpacecraftVisitType.FLYBY, start: new Date(1994, 5, 26), end: new Date(1994, 10, 5) },
+    // TODO: C/1996 Hyakutake, C/1999 McNaught-Hartley, C/2006 McNaught comet flybys
+  ],
+});
+
+export const SAKIGAKE = spacecraftWithDefaults({
   name: 'Sakigake',
   organization: SpacecraftOrganizationId.JAXA,
   launchMass: 138.1,
@@ -1289,6 +1307,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   SOLAR_ORBITER,
   GIOTTO,
   SAKIGAKE,
+  ULYSSES,
 
   // Venus
   // VENERA_1,
