@@ -1117,6 +1117,38 @@ export const STARDUST = spacecraftWithDefaults({
   ],
 });
 
+export const ULYSSES = spacecraftWithDefaults({
+  name: 'Ulysses',
+  organization: SpacecraftOrganizationId.ESA, // also NASA
+  launchMass: 371,
+  power: 285,
+  start: new Date('1990-10-06T11:47:16Z'),
+  end: new Date(2009, 5, 30),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated after 18 years and 8 months of operation' },
+  wiki: 'https://en.wikipedia.org/wiki/Ulysses_(spacecraft)',
+  thumbnail: 'ulysses-thumb.jpg',
+  visited: [
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date(1992, 1, 8) },
+    { id: Bodies.SOL.id, type: SpacecraftVisitType.FLYBY, start: new Date(1994, 5, 26), end: new Date(1994, 10, 5) },
+    // TODO: C/1996 Hyakutake, C/1999 McNaught-Hartley, C/2006 McNaught comet flybys
+  ],
+});
+
+export const SAKIGAKE = spacecraftWithDefaults({
+  name: 'Sakigake',
+  organization: SpacecraftOrganizationId.JAXA,
+  launchMass: 138.1,
+  start: new Date('1985-01-07T19:27:00Z'),
+  end: new Date(1995, 10, 15),
+  focusId: Bodies.HALLEY.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost data contact in 1995, beacon contact in 1999' },
+  wiki: 'https://en.wikipedia.org/wiki/Sakigake',
+  thumbnail: 'sakigake-thumb.jpg',
+  visited: [{ id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-03-11T04:18:00Z') }],
+});
+
 const HAYABUSA_MISSION_FAMILY = 'Hayabusa';
 export const HAYABUSA = spacecraftWithDefaults({
   name: 'Hayabusa',
@@ -1227,6 +1259,21 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
   visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
 });
 
+export const AKATSUKI = spacecraftWithDefaults({
+  name: 'Akatsuki',
+  organization: SpacecraftOrganizationId.JAXA,
+  launchMass: 517.6,
+  power: 700,
+  start: new Date('2010-05-21T21:58:22Z'),
+  end: new Date(2024, 4, 29),
+  focusId: Bodies.VENUS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact in April 2024' },
+  wiki: 'https://en.wikipedia.org/wiki/Akatsuki_(spacecraft)',
+  thumbnail: 'akatsuki-thumb.png',
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.ORBITER, start: new Date(2015, 11, 7) }],
+});
+
 export const OSIRIS_REX = spacecraftWithDefaults({
   name: 'OSIRIS-REx',
   organization: SpacecraftOrganizationId.NASA,
@@ -1259,6 +1306,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   BEPICOLOMBO,
   SOLAR_ORBITER,
   GIOTTO,
+  SAKIGAKE,
+  ULYSSES,
 
   // Venus
   // VENERA_1,
@@ -1287,7 +1336,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // VEGA_2,
   // MAGELLAN,
   VENUS_EXPRESS,
-  // AKATSUKI,
+  AKATSUKI,
   IKAROS,
   // SHINEN,
 
