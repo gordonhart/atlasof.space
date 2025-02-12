@@ -5,12 +5,13 @@ import { asCdnUrl } from '../../lib/images.ts';
 
 type Props = {
   thumbnail?: string;
+  alt?: string;
   search?: string; // used to search if thumbnail is absent
   size: number;
   radius?: MantineRadius;
   lazy?: boolean;
 };
-export function Thumbnail({ thumbnail, search = '', size, radius = 'md', lazy = false }: Props) {
+export function Thumbnail({ thumbnail, alt, search = '', size, radius = 'md', lazy = false }: Props) {
   const { ref, inViewport } = useInViewport();
   const [isValid, setIsValid] = useState(false);
   const url = thumbnail != null ? asCdnUrl(thumbnail) : `/api/thumbnail?${new URLSearchParams({ search })}`;
@@ -27,6 +28,7 @@ export function Thumbnail({ thumbnail, search = '', size, radius = 'md', lazy = 
       key={url}
       radius={radius}
       src={url}
+      alt={alt}
       maw={size}
       mah={size}
       style={validStyle}

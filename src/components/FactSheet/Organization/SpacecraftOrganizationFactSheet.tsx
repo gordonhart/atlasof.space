@@ -17,7 +17,7 @@ type Props = {
 export function SpacecraftOrganizationFactSheet({ organization, bodies, updateSettings }: Props) {
   const padding = useFactSheetPadding();
   return (
-    <Stack fz="xs" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
+    <Stack fz="xs" bg="black" gap={0} h="100%" style={{ overflow: 'auto' }} flex={1}>
       <FactSheetTitle
         title={organization.shortName}
         subTitle="Organization"
@@ -28,7 +28,7 @@ export function SpacecraftOrganizationFactSheet({ organization, bodies, updateSe
       <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
         <FactSheetSummary item={organization} type={FocusItemType.ORGANIZATION} />
         <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
-          <Thumbnail size={100} thumbnail={organization.thumbnail} />
+          <Thumbnail thumbnail={organization.thumbnail} alt={organization.shortName} size={100} />
         </Box>
       </Group>
 

@@ -11,5 +11,14 @@ type Props = {
 export function CelestialBodyThumbnail({ body, size, radius, lazy }: Props) {
   const { name, type } = body;
   const search = `${name} ${type}`;
-  return <Thumbnail thumbnail={body.assets?.thumbnail} search={search} size={size} radius={radius} lazy={lazy} />;
+  return (
+    <Thumbnail
+      thumbnail={body.assets?.thumbnail}
+      alt={body.name}
+      search={search}
+      size={size}
+      radius={radius}
+      lazy={lazy}
+    />
+  );
 }

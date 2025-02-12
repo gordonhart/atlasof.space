@@ -46,7 +46,7 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
     <Paper className={styles.Card} withBorder p="xs" style={{ overflow: 'auto' }} onClick={onClick}>
       {spacecraft.thumbnail != null && (
         <Box ml="xs" style={{ float: 'right' }}>
-          <Thumbnail thumbnail={spacecraft.thumbnail} size={100} />
+          <Thumbnail thumbnail={spacecraft.thumbnail} alt={spacecraft.name} size={100} />
         </Box>
       )}
       <Group gap={4} align="center">
