@@ -17,7 +17,7 @@ export function SpacecraftOrganizationPill({ organization, updateSettings }: Pro
     >
       <Group gap={8} wrap="nowrap">
         <Box w={14}>
-          <Thumbnail size={14} thumbnail={thumbnail} />
+          <Thumbnail size={14} thumbnail={thumbnail} alt={organization.shortName} />
         </Box>
         {shortName}
       </Group>

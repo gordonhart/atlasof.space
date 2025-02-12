@@ -41,7 +41,7 @@ export function OrganizationSpacecraftCard({ spacecraft, bodies, onClick, onMous
     >
       <Group gap="xs" wrap="nowrap">
         <Box w={80} style={{ flexShrink: 0 }}>
-          <Thumbnail thumbnail={spacecraft.thumbnail} size={80} radius="xs" />
+          <Thumbnail thumbnail={spacecraft.thumbnail} alt={spacecraft.name} size={80} radius="xs" />
         </Box>
         <Group gap={0} justify="space-between" flex={1}>
           <Stack gap={0} mr="xs">

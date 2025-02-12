@@ -28,7 +28,7 @@ export function SpacecraftOrganizationFactSheet({ organization, bodies, updateSe
       <Group gap={0} justify="space-between" align="flex-start" wrap="nowrap" w="100%">
         <FactSheetSummary item={organization} type={FocusItemType.ORGANIZATION} />
         <Box pt={padding.px} pr={padding.px} style={{ flexShrink: 0 }}>
-          <Thumbnail size={100} thumbnail={organization.thumbnail} />
+          <Thumbnail thumbnail={organization.thumbnail} alt={organization.shortName} size={100} />
         </Box>
       </Group>
 

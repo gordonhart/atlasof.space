@@ -55,23 +55,23 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
   const spacecraftItems = useMemo(
     () =>
       SPACECRAFT.filter(({ name }) => query.length === 0 || name.toLowerCase().includes(query.toLowerCase())).map(
-        (spacecraft, i) => (
+        ({ id, name, organization, thumbnail }, i) => (
           <Spotlight.Action
-            key={`${spacecraft.name}-${i}`}
-            label={spacecraft.name}
+            key={`${name}-${i}`}
+            label={name}
             className={styles.Action}
             ff={LABEL_FONT_FAMILY}
             leftSection={
               <Box miw={THUMBNAIL_SIZE}>
-                <Thumbnail thumbnail={spacecraft.thumbnail} size={THUMBNAIL_SIZE} radius="sm" lazy />
+                <Thumbnail thumbnail={thumbnail} alt={name} size={THUMBNAIL_SIZE} radius="sm" lazy />
               </Box>
             }
             rightSection={
               <Text c="dimmed" size="xs" ff={LABEL_FONT_FAMILY}>
-                {spacecraft.organization} Spacecraft
+                {organization} Spacecraft
               </Text>
             }
-            onClick={() => updateSettings(prev => ({ ...prev, center: spacecraft.id }))}
+            onClick={() => updateSettings(prev => ({ ...prev, center: id }))}
           />
         )
       ),
@@ -90,7 +90,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             ff={LABEL_FONT_FAMILY}
             leftSection={
               <Box miw={THUMBNAIL_SIZE}>
-                <Thumbnail thumbnail={thumbnail} size={THUMBNAIL_SIZE} radius="sm" lazy />
+                <Thumbnail thumbnail={thumbnail} alt={shortName} size={THUMBNAIL_SIZE} radius="sm" lazy />
               </Box>
             }
             rightSection={
