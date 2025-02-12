@@ -1127,7 +1127,7 @@ export const ULYSSES = spacecraftWithDefaults({
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated after 18 years and 8 months of operation' },
   wiki: 'https://en.wikipedia.org/wiki/Ulysses_(spacecraft)',
-  thumbnail: 'ulysses-thumb.jpg', // TODO
+  thumbnail: 'ulysses-thumb.jpg',
   visited: [
     { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date(1992, 1, 8) },
     { id: Bodies.SOL.id, type: SpacecraftVisitType.FLYBY, start: new Date(1994, 5, 26), end: new Date(1994, 10, 5) },
@@ -1145,7 +1145,7 @@ export const SAKIGAKE = spacecraftWithDefaults({
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost data contact in 1995, beacon contact in 1999' },
   wiki: 'https://en.wikipedia.org/wiki/Sakigake',
-  thumbnail: 'sakigake-thumb.jpg', // TODO
+  thumbnail: 'sakigake-thumb.jpg',
   visited: [{ id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-03-11T04:18:00Z') }],
 });
 
