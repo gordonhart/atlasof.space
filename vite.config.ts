@@ -11,7 +11,7 @@ export default defineConfig({
         manualChunks: id => {
           if (!id.includes('node_modules')) return 'index';
           if (id.includes('@mantine')) return 'mantine';
-          if (id.includes('three.module')) return 'three.module';
+          if (id.includes('three.module')) return 'three-module';
           if (id.includes('three')) return 'three';
           return 'vendor';
         },
