@@ -8,7 +8,7 @@ export function FactSheetSummary(props: TypedFocusItem) {
   const padding = useFactSheetPadding();
   const { data: summary, isLoading } = useSummaryStream(props);
   return (
-    <Box px={padding.px} py={padding.px} mih={77 /* measured height of 3 lines + top padding */}>
+    <Box px={padding.px} py={padding.px} mih={`calc(61px + var(--mantine-spacing-${padding.px}) * 2)`}>
       <Text size="sm">
         {summary}
         {isLoading && <LoadingCursor />}
