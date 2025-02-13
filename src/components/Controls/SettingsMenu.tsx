@@ -33,7 +33,7 @@ export function SettingsMenu({ settings, updateSettings, reset }: Props) {
     <Menu position="top-end" opened={isOpen} onClose={close} closeOnItemClick={false}>
       <Menu.Target>
         <Tooltip position="top" label="Settings" disabled={isOpen}>
-          <ActionIcon onClick={isOpen ? close : open}>
+          <ActionIcon aria-label="Settings" onClick={isOpen ? close : open}>
             <IconSettings size={iconSize} />
           </ActionIcon>
         </Tooltip>

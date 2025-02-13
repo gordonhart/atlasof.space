@@ -128,7 +128,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
   return (
     <>
       <Tooltip position="top" label="Search">
-        <ActionIcon onClick={spotlight.open}>
+        <ActionIcon aria-label="Search" onClick={spotlight.open}>
           <IconSearch size={iconSize} />
         </ActionIcon>
       </Tooltip>
