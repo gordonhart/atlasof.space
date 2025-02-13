@@ -72,21 +72,26 @@ export const TimeControls = memo(function TimeControlsComponent({ settings, upda
       </Paper>
 
       <Group gap={buttonGap} align="flex-end">
-        <Tooltip disabled={slowDownDisabled} position="right" label="Slow Down">
+        <Tooltip disabled={slowDownDisabled} position="top-end" label="Slow Down">
           <ActionIcon
+            aria-label="Slow Down"
             disabled={slowDownDisabled}
             onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'down') }))}
           >
             <IconPlayerTrackPrev size={iconSize} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label={settings.play ? 'Stop' : 'Start'}>
-          <ActionIcon onClick={() => updateSettings({ play: !settings.play })}>
+        <Tooltip position="top" label={settings.play ? 'Stop' : 'Start'}>
+          <ActionIcon
+            aria-label={settings.play ? 'Stop' : 'Start'}
+            onClick={() => updateSettings({ play: !settings.play })}
+          >
             {settings.play ? <IconPlayerStop size={iconSize} /> : <IconPlayerPlay size={iconSize} />}
           </ActionIcon>
         </Tooltip>
         <Tooltip disabled={speedUpDisabled} position="right" label="Speed Up">
           <ActionIcon
+            aria-label="Speed Up"
             disabled={speedUpDisabled}
             onClick={() => updateSettings(({ speed, ...prev }) => ({ ...prev, speed: incrementSpeed(speed, 'up') }))}
           >

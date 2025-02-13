@@ -40,7 +40,7 @@ export function FactSheetTitle({ title, subTitle, color, onClose, onHover }: Pro
           {subTitle}
         </Title>
       </Group>
-      <ActionIcon onClick={onClose}>
+      <ActionIcon aria-label="Close" onClick={onClose}>
         <IconX size={iconSize} />
       </ActionIcon>
     </Group>

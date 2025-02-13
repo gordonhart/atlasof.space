@@ -37,8 +37,8 @@ export function SolarSystem() {
   }
 
   useEffect(() => {
-    const frameId = window.requestAnimationFrame(animationFrame);
     model.initialize(appStateRef.current.settings);
+    const frameId = window.requestAnimationFrame(animationFrame);
     return () => {
       window.cancelAnimationFrame(frameId);
     };

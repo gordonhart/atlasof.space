@@ -35,7 +35,7 @@ export function HelpModalButton({ settings, updateSettings }: Props) {
   return (
     <>
       <Tooltip position="top" label="Help">
-        <ActionIcon onClick={controls.open}>
+        <ActionIcon aria-label="Help" onClick={controls.open}>
           <IconInfoHexagon size={iconSize} />
         </ActionIcon>
       </Tooltip>
