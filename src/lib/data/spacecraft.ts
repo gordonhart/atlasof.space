@@ -510,6 +510,30 @@ export const MARINER_10 = spacecraftWithDefaults({
   ],
 });
 
+export const MAGELLAN = spacecraftWithDefaults({
+  name: 'Magellan',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 3445,
+  power: 1030,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  start: new Date('1989-05-04T18:47:00Z'),
+  end: new Date('1994-10-13T10:05:00Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Deorbited into the Venusian atmosphere on October 13, 1994',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Magellan_(spacecraft)',
+  thumbnail: 'magellan-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.VENUS.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1990-08-10T17:00:00Z'),
+      end: new Date('1994-10-13T10:05:00Z'),
+    },
+  ],
+});
+
 const VENERA_MISSION_FAMILY = 'Venera';
 export const VENERA_7 = spacecraftWithDefaults({
   name: 'Venera 7',
@@ -1458,7 +1482,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // VENERA_16,
   // VEGA_1,
   // VEGA_2,
-  // MAGELLAN,
+  MAGELLAN,
   VENUS_EXPRESS,
   AKATSUKI,
   IKAROS,
