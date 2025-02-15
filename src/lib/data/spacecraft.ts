@@ -1244,6 +1244,7 @@ export const CHANGE_2 = spacecraftWithDefaults({
   ],
 });
 
+// TODO: include Yutu-2 rover?
 export const CHANGE_4 = spacecraftWithDefaults({
   name: "Chang'e 4",
   organization: SpacecraftOrganizationId.CNSA,
@@ -1258,6 +1259,25 @@ export const CHANGE_4 = spacecraftWithDefaults({
     {
       id: Bodies.LUNA.id,
       type: SpacecraftVisitType.LANDER,
+      start: new Date('2019-01-03T02:26:00Z'),
+    },
+  ],
+});
+
+export const YUTU_2 = spacecraftWithDefaults({
+  name: 'Yutu-2',
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 140,
+  start: new Date('2018-12-07T18:23:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: CHANGE_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL, details: 'Still operational as of September 2024' },
+  wiki: 'https://en.wikipedia.org/wiki/Yutu-2',
+  thumbnail: 'yutu-2-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ROVER,
       start: new Date('2019-01-03T02:26:00Z'),
     },
   ],
@@ -1407,6 +1427,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   APOLLO_16,
   APOLLO_17,
   CHANGE_4,
+  YUTU_2,
   CHANGE_5,
 
   // Mars
