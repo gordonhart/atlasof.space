@@ -16,6 +16,48 @@ export const SAKIGAKE = spacecraftWithDefaults({
   visited: [{ id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-03-11T04:18:00Z') }],
 });
 
+export const HITEN = spacecraftWithDefaults({
+  name: 'Hiten',
+  organization: SpacecraftOrganizationId.JAXA, // ISAS
+  launchMass: 197,
+  start: new Date('1990-01-24T11:46:00Z'),
+  end: new Date('1993-04-10T18:03:25.7Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Deliberately crashed into the lunar surface on April 10, 1993',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Hiten_(spacecraft)',
+  thumbnail: 'hiten-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1993-02-15T13:33:00Z'),
+      end: new Date('1993-04-10T18:03:25.7Z'),
+    },
+  ],
+});
+
+export const NOZOMI = spacecraftWithDefaults({
+  name: 'Nozomi',
+  organization: SpacecraftOrganizationId.JAXA, // ISAS
+  launchMass: 540,
+  start: new Date('1998-07-03T18:12:00Z'),
+  end: new Date('2003-12-31T00:00:00Z'),
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Failed to enter Mars orbit due to electrical failure' },
+  wiki: 'https://en.wikipedia.org/wiki/Nozomi_(spacecraft)',
+  thumbnail: 'nozomi-thumb.jpg',
+  visited: [
+    { id: Bodies.LUNA.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('1998-09-24T00:00:00Z') },
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2003-12-14T00:00:00Z') },
+  ],
+});
+
 const HAYABUSA_MISSION_FAMILY = 'Hayabusa';
 export const HAYABUSA = spacecraftWithDefaults({
   name: 'Hayabusa',
@@ -134,9 +176,4 @@ export const SLIM = spacecraftWithDefaults({
   ],
 });
 
-/*
- * TODO:
- *  - Hiten
- *  - Nozomi
- */
-export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, SELENE, IKAROS, AKATSUKI, HAYABUSA_2, SLIM];
+export const JAXA_SPACECRAFT = [SAKIGAKE, HITEN, NOZOMI, HAYABUSA, SELENE, IKAROS, AKATSUKI, HAYABUSA_2, SLIM];
