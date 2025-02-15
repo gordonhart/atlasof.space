@@ -3,6 +3,28 @@ import * as Bodies from '../bodies.ts';
 import { spacecraftWithDefaults } from './utils.ts';
 
 const CHANGE_MISSION_FAMILY = "Chang'e";
+export const CHANGE_1 = spacecraftWithDefaults({
+  name: "Chang'e 1",
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 2350,
+  start: new Date('2007-10-24T10:05:04Z'),
+  end: new Date('2009-03-01T08:13:10Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: CHANGE_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deliberately impacted the Moon on March 1, 2009' },
+  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_1',
+  thumbnail: 'change-1-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2007-11-05T00:00:00Z'),
+      end: new Date('2009-03-01T08:13:10Z'),
+    },
+  ],
+});
+
 export const CHANGE_2 = spacecraftWithDefaults({
   name: "Chang'e 2",
   organization: SpacecraftOrganizationId.CNSA,
@@ -156,8 +178,7 @@ export const CHANGE_6 = spacecraftWithDefaults({
 
 /*
  * TODO:
- *  - Chang'e 1
  *  - Shenzhou 5
  *  - Tiangong 1
  */
-export const CNSA_SPACECRAFT = [CHANGE_2, CHANGE_4, YUTU_2, TIANWEN_1, ZHURONG, CHANGE_5, CHANGE_6];
+export const CNSA_SPACECRAFT = [CHANGE_1, CHANGE_2, CHANGE_4, YUTU_2, TIANWEN_1, ZHURONG, CHANGE_5, CHANGE_6];

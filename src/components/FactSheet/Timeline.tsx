@@ -41,8 +41,9 @@ export function Timeline({ datedItems, activeIndex, end, accentColor, width = TI
       const [date] = datedItems[i];
       return { height, top: top - containerTop, date, hover: activeIndex === i };
     });
+    const itemsSorted = items.sort((a, b) => a.date.getTime() - b.date.getTime());
     const start = new Date(Math.min(...datedItems.map(([date]) => date.getTime())));
-    renderTimeline(ctx, items, accentColor, start, end);
+    renderTimeline(ctx, itemsSorted, accentColor, start, end);
   }, [datedItems, height, activeIndex, end]);
 
   return (

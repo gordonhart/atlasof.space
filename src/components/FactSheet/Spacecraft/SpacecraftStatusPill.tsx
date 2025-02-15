@@ -27,5 +27,11 @@ export function SpacecraftStatusPill({ status: { status, details } }: Props) {
       </Group>
     </Pill>
   );
-  return details != null ? <Tooltip label={details}>{PillComponent}</Tooltip> : PillComponent;
+  return details != null ? (
+    <Tooltip label={details} maw={320} multiline>
+      {PillComponent}
+    </Tooltip>
+  ) : (
+    PillComponent
+  );
 }
