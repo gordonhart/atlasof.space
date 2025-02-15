@@ -35,7 +35,7 @@ import { ReactNode, useMemo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
-import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
+import { SPACECRAFT } from '../../lib/data/spacecraft/spacecraft.ts';
 import { Settings } from '../../lib/state.ts';
 import { CelestialBody, isCelestialBody, Spacecraft } from '../../lib/types.ts';
 import { CelestialBodyCard } from '../FactSheet/CelestialBodyCard.tsx';

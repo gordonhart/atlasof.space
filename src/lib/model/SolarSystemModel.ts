@@ -6,7 +6,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { getCanvasPixels, isOffScreen } from '../canvas.ts';
 import { ORBITAL_REGIMES } from '../data/regimes.ts';
-import { SPACECRAFT_BY_ID } from '../data/spacecraft.ts';
+import { SPACECRAFT_BY_ID } from '../data/spacecraft/spacecraft.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
 import { ModelState, Settings } from '../state.ts';

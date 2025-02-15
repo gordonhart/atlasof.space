@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { DEFAULT_ASTEROID_COLOR } from '../lib/data/bodies.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../lib/data/regimes.ts';
-import { SPACECRAFT_BY_ID } from '../lib/data/spacecraft.ts';
+import { SPACECRAFT_BY_ID } from '../lib/data/spacecraft/spacecraft.ts';
 import { Settings } from '../lib/state.ts';
 import {
   CelestialBody,

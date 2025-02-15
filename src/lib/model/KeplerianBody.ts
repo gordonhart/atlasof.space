@@ -8,7 +8,7 @@ import {
   isOffScreen,
   LABEL_FONT_FAMILY,
 } from '../canvas.ts';
-import { SPACECRAFT_BY_ID } from '../data/spacecraft.ts';
+import { SPACECRAFT_BY_ID } from '../data/spacecraft/spacecraft.ts';
 import { magnitude } from '../physics.ts';
 import { Settings } from '../state.ts';
 import { CelestialBody, CelestialBodyType, isSpacecraftId, Point2 } from '../types.ts';
