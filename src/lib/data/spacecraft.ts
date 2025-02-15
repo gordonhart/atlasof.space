@@ -1242,6 +1242,26 @@ export const CHANGE_2 = spacecraftWithDefaults({
   ],
 });
 
+export const CHANGE_5 = spacecraftWithDefaults({
+  name: "Chang'e 5",
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 8200,
+  start: new Date('2020-11-23T20:30:12Z'),
+  end: new Date('2020-12-16T17:59:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.RETURNED, details: 'Capsule returned to Earth with 1.7 kg of samples' },
+  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_5',
+  thumbnail: 'change-5-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2020-12-01T15:11:00Z'),
+      end: new Date('2020-12-03T15:10:00Z'),
+    },
+  ],
+});
+
 // TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
 export const HAYABUSA_2 = spacecraftWithDefaults({
   name: 'Hayabusa2',
@@ -1364,6 +1384,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   APOLLO_15,
   APOLLO_16,
   APOLLO_17,
+  CHANGE_5,
 
   // Mars
   MARINER_4,
