@@ -724,6 +724,41 @@ export const HERA = spacecraftWithDefaults({
   ],
 });
 
+export const MARS_RECONNAISSANCE_ORBITER = spacecraftWithDefaults({
+  name: 'Mars Reconnaissance Orbiter',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2180,
+  power: 2000,
+  start: new Date('2005-08-12T11:43:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  focusId: Bodies.MARS.id,
+  thumbnail: 'mro-thumb.webp',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Reconnaissance_Orbiter',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2006-03-10T21:24:00Z') }],
+});
+
+export const INSIGHT = spacecraftWithDefaults({
+  name: 'InSight',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 694,
+  power: 600,
+  start: new Date('2018-05-05T11:05:01Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on December 15, 2022' },
+  focusId: Bodies.MARS.id,
+  wiki: 'https://en.wikipedia.org/wiki/InSight',
+  thumbnail: 'insight-thumb.jpg', // TODO
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2018-11-26T19:52:59Z'),
+      end: new Date(2022, 11, 21),
+    },
+  ],
+});
+
 export const PSYCHE = spacecraftWithDefaults({
   name: 'Psyche',
   organization: SpacecraftOrganizationId.NASA,
@@ -1471,12 +1506,12 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // ZHURONG,
   // MARS_2,
   MARS_3,
-  // MARS_RECONNAISSANCE_ORBITER,
+  MARS_RECONNAISSANCE_ORBITER,
   // VIKING_1,
   // VIKING_2,
   // MARS_PATHFINDER,
   // PHOENIX,
-  // INSIGHT,
+  INSIGHT,
 
   // Asteroids
   NEAR_SHOEMAKER,
