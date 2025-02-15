@@ -188,6 +188,30 @@ export const HUYGENS = spacecraftWithDefaults({
   ],
 });
 
+const PATHFINDER_MISSION_FAMILY = 'Pathfinder';
+export const PATHFINDER = spacecraftWithDefaults({
+  name: 'Mars Pathfinder',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 890,
+  power: 35,
+  start: new Date('1996-12-04T06:58:07Z'),
+  end: new Date('1997-09-27T10:23:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
+  focusId: Bodies.MARS.id,
+  missionFamily: PATHFINDER_MISSION_FAMILY,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Pathfinder',
+  thumbnail: 'pathfinder-thumb.webp',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1997-07-04T16:55:56Z'),
+      end: new Date(1997, 8, 27),
+    },
+  ],
+});
 export const SOJOURNER = spacecraftWithDefaults({
   name: 'Sojourner',
   organization: SpacecraftOrganizationId.NASA,
@@ -197,6 +221,7 @@ export const SOJOURNER = spacecraftWithDefaults({
   end: new Date(1998, 2, 10),
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
   focusId: Bodies.MARS.id,
+  missionFamily: PATHFINDER_MISSION_FAMILY,
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
   wiki: 'https://en.wikipedia.org/wiki/Sojourner_(rover)',
   thumbnail: 'sojourner-thumb.jpg',
@@ -1547,6 +1572,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   INGENUITY,
   TIANWEN_1,
   ZHURONG,
+  PATHFINDER,
   SOJOURNER,
   // SPIRIT,
   // OPPORTUNITY,
