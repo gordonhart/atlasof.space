@@ -39,6 +39,31 @@ export const HAYABUSA = spacecraftWithDefaults({
   ],
 });
 
+export const SELENE = spacecraftWithDefaults({
+  name: 'SELENE',
+  organization: SpacecraftOrganizationId.JAXA,
+  launchMass: 3020,
+  power: 3486,
+  start: new Date('2007-09-14T01:31:01Z'),
+  end: new Date('2009-06-10T18:25:00Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Deliberately impacted lunar surface near crater Gill',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/SELENE',
+  thumbnail: 'selene-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2007-10-03T00:00:00Z'), // Lunar orbit insertion
+      end: new Date('2009-06-10T18:25:00Z'), // Impact date
+    },
+  ],
+});
+
 export const IKAROS = spacecraftWithDefaults({
   name: 'IKAROS',
   organization: SpacecraftOrganizationId.JAXA,
@@ -92,4 +117,4 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
  *  - SELENE/Kayuga
  *  - SLIM
  */
-export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, IKAROS, AKATSUKI, HAYABUSA_2];
+export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, SELENE, IKAROS, AKATSUKI, HAYABUSA_2];
