@@ -17,10 +17,10 @@ type Props = {
   spacecraft: Spacecraft;
   bodies: Array<CelestialBody>;
   onClick: () => void;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 };
-export function OrganizationSpacecraftCard({ spacecraft, bodies, onClick, onMouseEnter, onMouseLeave }: Props) {
+export function CompactSpacecraftCard({ spacecraft, bodies, onClick, onMouseEnter, onMouseLeave }: Props) {
   const visitedBodies = useMemo(() => {
     const bodyById = Object.fromEntries(bodies.map(body => [body.id, body]));
     return spacecraft.visited

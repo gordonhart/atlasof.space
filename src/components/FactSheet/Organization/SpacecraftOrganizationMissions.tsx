@@ -7,7 +7,7 @@ import { dateToHumanReadable } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, SpacecraftOrganization } from '../../../lib/types.ts';
 import { Timeline } from '../Timeline.tsx';
-import { OrganizationSpacecraftCard } from './OrganizationSpacecraftCard.tsx';
+import { CompactSpacecraftCard } from './CompactSpacecraftCard.tsx';
 
 type Props = {
   organization: SpacecraftOrganization;
@@ -38,7 +38,7 @@ export function SpacecraftOrganizationMissions({ organization, bodies, updateSet
   );
   const spacecraftComponents: Array<[Date, ReactNode]> = organizationSpacecraft.map((spacecraft, i) => [
     spacecraft.start,
-    <OrganizationSpacecraftCard
+    <CompactSpacecraftCard
       key={`${spacecraft.name}-${i}`}
       spacecraft={spacecraft}
       bodies={bodies}
