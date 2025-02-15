@@ -39,6 +39,21 @@ export const ULYSSES = spacecraftWithDefaults({
   ],
 });
 
+export const SOHO = spacecraftWithDefaults({
+  name: 'Solar and Heliospheric Observatory (SOHO)',
+  organization: SpacecraftOrganizationId.ESA, // also NASA
+  launchMass: 1850,
+  power: 1500,
+  start: new Date('1995-12-02T08:08:01Z'),
+  focusId: Bodies.SOL.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  wiki: 'https://en.wikipedia.org/wiki/Solar_and_Heliospheric_Observatory',
+  thumbnail: 'soho-thumb.jpg',
+  visited: [{ id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date(1996, 4, 1) }],
+  color: Bodies.SOL.style.fgColor,
+});
+
 export const HUYGENS = spacecraftWithDefaults({
   name: 'Huygens',
   organization: SpacecraftOrganizationId.ESA,
@@ -76,6 +91,28 @@ export const MARS_EXPRESS = spacecraftWithDefaults({
   wiki: 'https://en.wikipedia.org/wiki/Mars_Express',
   thumbnail: 'mars-express-thumb.jpg',
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2003-12-25T03:00:00Z') }],
+});
+
+export const SMART_1 = spacecraftWithDefaults({
+  name: 'SMART-1',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 367,
+  power: 1850,
+  start: new Date('2003-09-27T23:14:46Z'),
+  end: new Date('2006-09-03T05:42:22Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deliberately impacted the Moon on September 3, 2006' },
+  wiki: 'https://en.wikipedia.org/wiki/SMART-1',
+  thumbnail: 'smart-1-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date(2004, 10, 15),
+      end: new Date('2006-09-03T05:42:22Z'),
+    },
+  ],
 });
 
 export const ROSETTA = spacecraftWithDefaults({
@@ -208,16 +245,13 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   ],
 });
 
-/*
- * TODO:
- *  - SMART-1
- *  - SOHO
- */
 export const ESA_SPACECRAFT = [
   GIOTTO,
   ULYSSES,
+  SOHO,
   HUYGENS,
   MARS_EXPRESS,
+  SMART_1,
   ROSETTA,
   VENUS_EXPRESS,
   BEPICOLOMBO,

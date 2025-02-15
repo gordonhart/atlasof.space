@@ -153,7 +153,7 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
 });
 
 export const SLIM = spacecraftWithDefaults({
-  name: 'Smart Lander for Investigating Moon',
+  name: 'Smart Lander for Investigating Moon (SLIM)',
   organization: SpacecraftOrganizationId.JAXA,
   launchMass: 590,
   start: new Date('2023-09-06T23:42:11Z'),
