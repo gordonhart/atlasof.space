@@ -188,6 +188,29 @@ export const HUYGENS = spacecraftWithDefaults({
   ],
 });
 
+export const SOJOURNER = spacecraftWithDefaults({
+  name: 'Sojourner',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 11.5,
+  power: 13,
+  start: new Date('1996-12-04T06:58:07Z'),
+  end: new Date(1998, 2, 10),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  wiki: 'https://en.wikipedia.org/wiki/Sojourner_(rover)',
+  thumbnail: 'sojourner-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.ROVER,
+      start: new Date('1997-07-04T16:56:55Z'),
+      end: new Date(1998, 2, 10),
+    },
+  ],
+});
+
 export const CURIOSITY = spacecraftWithDefaults({
   name: 'Curiosity',
   organization: SpacecraftOrganizationId.NASA,
@@ -1524,10 +1547,9 @@ export const SPACECRAFT: Array<Spacecraft> = [
   INGENUITY,
   TIANWEN_1,
   ZHURONG,
-  // SOJOURNER,
+  SOJOURNER,
   // SPIRIT,
   // OPPORTUNITY,
-  // ZHURONG,
   // MARS_2,
   MARS_3,
   MARS_RECONNAISSANCE_ORBITER,
