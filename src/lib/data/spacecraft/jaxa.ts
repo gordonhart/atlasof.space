@@ -110,11 +110,33 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
   visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
 });
 
+export const SLIM = spacecraftWithDefaults({
+  name: 'Smart Lander for Investigating Moon',
+  organization: SpacecraftOrganizationId.JAXA,
+  launchMass: 590,
+  start: new Date('2023-09-06T23:42:11Z'),
+  end: new Date('2024-08-23T13:40:00Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Landed on its side but survived multiple lunar nights before ultimately losing communication',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Smart_Lander_for_Investigating_Moon',
+  thumbnail: 'slim-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2024-01-19T15:20:00Z'),
+      end: new Date('2024-08-23T13:40:00Z'),
+    },
+  ],
+});
+
 /*
  * TODO:
  *  - Hiten
  *  - Nozomi
- *  - SELENE/Kayuga
- *  - SLIM
  */
-export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, SELENE, IKAROS, AKATSUKI, HAYABUSA_2];
+export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, SELENE, IKAROS, AKATSUKI, HAYABUSA_2, SLIM];
