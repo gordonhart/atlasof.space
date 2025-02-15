@@ -2,7 +2,7 @@ import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { ReactNode, useMemo, useState } from 'react';
 import { useDisplaySize } from '../../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
-import { SPACECRAFT } from '../../../lib/data/spacecraft.ts';
+import { SPACECRAFT } from '../../../lib/data/spacecraft/spacecraft.ts';
 import { dateToHumanReadable } from '../../../lib/epoch.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { CelestialBody, SpacecraftOrganization } from '../../../lib/types.ts';

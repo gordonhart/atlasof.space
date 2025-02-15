@@ -3,7 +3,7 @@ import { memo, useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/data/bodies.ts';
-import { SPACECRAFT } from '../../lib/data/spacecraft.ts';
+import { SPACECRAFT } from '../../lib/data/spacecraft/spacecraft.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import {
   CelestialBody,

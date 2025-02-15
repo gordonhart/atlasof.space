@@ -6,7 +6,7 @@ import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
-import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft.ts';
+import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
 import { UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';

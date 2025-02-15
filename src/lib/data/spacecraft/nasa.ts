@@ -1,26 +1,6 @@
-import { mapObjIndexed } from 'ramda';
-import {
-  CelestialBodyId,
-  HexColor,
-  OrbitalRegimeId,
-  Spacecraft,
-  SpacecraftId,
-  SpacecraftOrganizationId,
-  SpacecraftStatus,
-  SpacecraftVisitType,
-} from '../types.ts';
-import { nameToId } from '../utils.ts';
-import * as Bodies from './bodies.ts';
-
-function spacecraftWithDefaults(
-  spacecraft: Omit<Spacecraft, 'id' | 'color'> & { id?: SpacecraftId; color?: HexColor }
-): Spacecraft {
-  return {
-    ...spacecraft,
-    id: `spacecraft/${nameToId(spacecraft.name)}`,
-    color: spacecraft.color ?? Bodies.DEFAULT_SPACECRAFT_COLOR,
-  };
-}
+import { OrbitalRegimeId, SpacecraftOrganizationId, SpacecraftStatus, SpacecraftVisitType } from '../../types.ts';
+import * as Bodies from '../bodies.ts';
+import { spacecraftWithDefaults } from './utils.ts';
 
 const VOYAGER_MISSION_FAMILY = 'Voyager';
 export const VOYAGER_1 = spacecraftWithDefaults({
@@ -121,7 +101,7 @@ export const VOYAGER_2 = spacecraftWithDefaults({
   ],
 });
 
-const CASSINI_HUYGENS_MISSION_FAMILY = 'Cassini-Huygens';
+export const CASSINI_HUYGENS_MISSION_FAMILY = 'Cassini-Huygens';
 export const CASSINI = spacecraftWithDefaults({
   name: 'Cassini',
   organization: SpacecraftOrganizationId.NASA,
@@ -161,30 +141,6 @@ export const CASSINI = spacecraftWithDefaults({
     // solstice+equinox mission
     { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-11-26T22:37:00Z') },
     { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-04-07T12:00:00Z') },
-  ],
-});
-
-export const HUYGENS = spacecraftWithDefaults({
-  name: 'Huygens',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 320,
-  power: 600, // 1800 Wh, estimated battery life of 3 hours
-  start: new Date('1997-10-15T08:43:00Z'),
-  end: new Date('2005-01-14T13:37:00Z'),
-  focusId: Bodies.TITAN.id,
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
-  missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Ran out of battery ~90 minutes after touchdown' },
-  thumbnail: 'huygens-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Huygens_(spacecraft)',
-  color: Bodies.TITAN.style.fgColor,
-  visited: [
-    {
-      id: Bodies.TITAN.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('2005-01-14T12:43:00Z'),
-      end: new Date('2005-01-14T13:37:00Z'),
-    },
   ],
 });
 
@@ -288,48 +244,6 @@ export const INGENUITY = spacecraftWithDefaults({
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
 });
 
-const TIANWEN_1_MISSION_FAMILY = 'Tianwen-1';
-export const TIANWEN_1 = spacecraftWithDefaults({
-  name: 'Tianwen-1',
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 5000,
-  start: new Date('2020-07-23T04:41:15Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: TIANWEN_1_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'tianwen-1-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
-});
-
-export const ZHURONG = spacecraftWithDefaults({
-  name: 'Zhurong',
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 240,
-  start: new Date('2020-07-23T04:41:15Z'),
-  end: new Date('2022-12-26T12:00:00Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: TIANWEN_1_MISSION_FAMILY,
-  status: {
-    status: SpacecraftStatus.DEFUNCT,
-    details: 'Failed to wake from hibernation in December 2022 due to dust buildup',
-  },
-  thumbnail: 'zhurong-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
-  color: Bodies.MARS.style.fgColor,
-  visited: [
-    {
-      id: Bodies.MARS.id,
-      type: SpacecraftVisitType.ROVER,
-      start: new Date('2021-05-22T02:40:00Z'),
-      end: new Date('2022-12-26T12:00:00Z'),
-    },
-  ],
-});
-
 export const NEW_HORIZONS = spacecraftWithDefaults({
   name: 'New Horizons',
   organization: SpacecraftOrganizationId.NASA,
@@ -400,43 +314,6 @@ export const GALILEO = spacecraftWithDefaults({
   ],
 });
 
-export const GIOTTO = spacecraftWithDefaults({
-  name: 'Giotto',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 960,
-  power: 196,
-  start: new Date('1985-07-02T11:23:00Z'),
-  end: new Date(1992, 6, 23),
-  status: { status: SpacecraftStatus.DEFUNCT },
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  thumbnail: 'giotto-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
-  color: Bodies.DEFAULT_COMET_COLOR,
-  visited: [
-    { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
-    { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
-  ],
-});
-
-// TODO: add JAXA's Mio?
-export const BEPICOLOMBO = spacecraftWithDefaults({
-  name: 'BepiColombo',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 4100,
-  power: 150,
-  start: new Date('2018-10-20T01:45:00Z'),
-  focusId: Bodies.MERCURY.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL, details: 'Planned to enter Mercury orbit in November 2026' },
-  thumbnail: 'bepicolombo-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/BepiColombo',
-  visited: [
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-10-15T03:48:00Z') },
-    // TODO: this start date is a flyby, will enter orbit in 2026
-    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2021-10-01T23:34:41Z') },
-  ],
-});
-
 export const MESSENGER = spacecraftWithDefaults({
   name: 'MESSENGER',
   organization: SpacecraftOrganizationId.NASA,
@@ -477,25 +354,6 @@ export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
       type: SpacecraftVisitType.ORBITER,
       start: new Date('2018-11-06T03:27:00Z'), // first perihelion
     },
-  ],
-});
-
-export const SOLAR_ORBITER = spacecraftWithDefaults({
-  name: 'Solar Orbiter',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 1800,
-  power: 180,
-  start: new Date('2020-02-10T04:03:00Z'),
-  focusId: Bodies.SOL.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'solar-orbiter-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Solar_Orbiter',
-  color: Bodies.SOL.style.fgColor,
-  visited: [
-    { id: Bodies.SOL.id, type: SpacecraftVisitType.ORBITER, start: new Date('2020-06-15T12:00:00Z') },
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-12-27T12:39:00Z') },
-    // TODO: also Earth flyby -- worth including? the list there would be massive
   ],
 });
 
@@ -582,142 +440,6 @@ export const MAGELLAN = spacecraftWithDefaults({
   ],
 });
 
-const VENERA_MISSION_FAMILY = 'Venera';
-export const VENERA_7 = spacecraftWithDefaults({
-  name: 'Venera 7',
-  organization: SpacecraftOrganizationId.USSR,
-  launchMass: 1180,
-  start: new Date('1970-08-17T05:38:22Z'),
-  end: new Date('1970-12-15T06:00:00Z'),
-  focusId: Bodies.VENUS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: VENERA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.DEFUNCT },
-  thumbnail: 'venera-7-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Venera_7',
-  color: Bodies.VENUS.style.fgColor,
-  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
-});
-
-const LUNA_MISSION_FAMILY = 'Luna';
-export const LUNA_2 = spacecraftWithDefaults({
-  name: 'Luna 2',
-  organization: SpacecraftOrganizationId.USSR,
-  launchMass: 390.2,
-  start: new Date('1959-09-12T06:39:42Z'),
-  end: new Date('1959-09-13T21:02:24Z'),
-  focusId: Bodies.LUNA.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: LUNA_MISSION_FAMILY,
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: 'Impacted the surface of the Moon on September 13, 1959',
-  },
-  thumbnail: 'luna-2-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Luna_2',
-  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('1959-09-13T21:02:24Z') }],
-});
-
-export const LUNA_3 = spacecraftWithDefaults({
-  name: 'Luna 3',
-  organization: SpacecraftOrganizationId.USSR,
-  launchMass: 278.5,
-  start: new Date('1959-10-04T00:43:40Z'),
-  end: new Date(1959, 9, 22),
-  focusId: Bodies.LUNA.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: LUNA_MISSION_FAMILY,
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Spacecraft reentered Earth's atmosphere due to orbital decay sometime in 1960-1962",
-  },
-  thumbnail: 'luna-3-thumb.jpeg',
-  wiki: 'https://en.wikipedia.org/wiki/Luna_3',
-  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
-});
-
-export const MARS_EXPRESS = spacecraftWithDefaults({
-  name: 'Mars Express',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 1123,
-  power: 460,
-  start: new Date('2003-06-02T17:45:00Z'),
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  focusId: Bodies.MARS.id,
-  color: Bodies.MARS.style.fgColor,
-  wiki: 'https://en.wikipedia.org/wiki/Mars_Express',
-  thumbnail: 'mars-express-thumb.jpg',
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2003-12-25T03:00:00Z') }],
-});
-
-export const MARS_3 = spacecraftWithDefaults({
-  name: 'Mars 3',
-  organization: SpacecraftOrganizationId.USSR,
-  launchMass: 4650,
-  start: new Date('1971-05-28T15:26:30Z'),
-  end: new Date(1972, 7, 22),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  focusId: Bodies.MARS.id,
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lander failed 110 seconds after landing' },
-  thumbnail: 'mars-3-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Mars_3',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
-});
-
-const ZOND_MISSION_FAMILY = 'Zond';
-export const ZOND_5 = spacecraftWithDefaults({
-  name: 'Zond 5',
-  organization: SpacecraftOrganizationId.USSR,
-  launchMass: 5375,
-  start: new Date('1968-09-14T21:42:11Z'),
-  end: new Date('1968-09-21T16:08:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.RETURNED, details: 'Safely returned two Russian tortoises to Earth' },
-  focusId: Bodies.LUNA.id,
-  missionFamily: ZOND_MISSION_FAMILY,
-  thumbnail: 'zond-5-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Zond_5',
-  visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date(1968, 8, 18) }],
-});
-
-export const VENUS_EXPRESS = spacecraftWithDefaults({
-  name: 'Venus Express',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 1270,
-  power: 1100,
-  start: new Date('2005-11-09T03:33:34Z'),
-  end: new Date('2015-01-18T15:01:55Z'),
-  focusId: Bodies.VENUS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Deorbited into the Venusian atmosphere' },
-  thumbnail: 'venus-express-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Venus_Express',
-  color: Bodies.VENUS.style.fgColor,
-  visited: [
-    {
-      id: Bodies.VENUS.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('2006-04-11T12:00:00Z'),
-      end: new Date('2015-01-15T15:01:55Z'),
-    },
-  ],
-});
-
-export const IKAROS = spacecraftWithDefaults({
-  name: 'IKAROS',
-  organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 310,
-  start: new Date('2010-05-20T21:58:22Z'),
-  end: new Date('2015-05-20T12:00:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
-  thumbnail: 'ikaros-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/IKAROS',
-  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-12-08T12:00:00Z') }],
-});
-
 export const JUNO = spacecraftWithDefaults({
   name: 'Juno',
   organization: SpacecraftOrganizationId.NASA,
@@ -735,28 +457,6 @@ export const JUNO = spacecraftWithDefaults({
     { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-12-26T16:58:59Z') },
     { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-09-29T09:36:00Z') },
     { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-12-14T12:00:00Z') },
-  ],
-});
-
-export const JUICE = spacecraftWithDefaults({
-  name: 'Jupiter Icy Moons Explorer',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 6070,
-  power: 850,
-  start: new Date('2023-04-14T12:14:36Z'),
-  focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'juice-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
-  color: Bodies.JUPITER.style.fgColor,
-  visited: [
-    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2031-07-15T12:00:00Z') },
-    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-01-15T12:00:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
   ],
 });
 
@@ -778,7 +478,7 @@ export const LUCY = spacecraftWithDefaults({
   ],
 });
 
-const AIDA_MISSION_FAMILY = 'Asteroid Impact and Deflection Assessment (AIDA)';
+export const AIDA_MISSION_FAMILY = 'Asteroid Impact and Deflection Assessment (AIDA)';
 export const DART = spacecraftWithDefaults({
   name: 'Double Asteroid Redirect Test (DART)',
   organization: SpacecraftOrganizationId.NASA,
@@ -793,23 +493,6 @@ export const DART = spacecraftWithDefaults({
   thumbnail: 'dart-thumb.png',
   wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
   visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
-});
-
-export const HERA = spacecraftWithDefaults({
-  name: 'Hera',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 1128,
-  start: new Date('2024-10-07T14:52:11Z'),
-  focusId: Bodies.DIDYMOS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: AIDA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'hera-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
-  visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
-    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
-  ],
 });
 
 export const MARS_GLOBAL_SURVEYOR = spacecraftWithDefaults({
@@ -1226,36 +909,6 @@ export const DEEP_SPACE_1 = spacecraftWithDefaults({
   ],
 });
 
-export const ROSETTA = spacecraftWithDefaults({
-  name: 'Rosetta',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 3000,
-  power: 850,
-  start: new Date('2004-03-02T07:17:51Z'),
-  end: new Date('2016-09-30T10:39:28Z'),
-  focusId: Bodies.CG67P.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.ASTEROID_BELT],
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: 'Intentionally deorbited into Comet 67P in September 2016',
-  },
-  wiki: 'https://en.wikipedia.org/wiki/Rosetta_(spacecraft)',
-  thumbnail: 'rosetta-thumb.png',
-  color: Bodies.DEFAULT_COMET_COLOR,
-  visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-02-25T12:00:00Z') },
-    { id: Bodies.STEINS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2008-09-05T12:00:00Z') },
-    { id: Bodies.LUTETIA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-07-10T12:00:00Z') },
-    // TODO: include lander?
-    {
-      id: Bodies.CG67P.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('2014-08-05T09:06:00Z'),
-      end: new Date('2016-09-30T10:39:28Z'),
-    },
-  ],
-});
-
 export const STARDUST = spacecraftWithDefaults({
   name: 'Stardust',
   organization: SpacecraftOrganizationId.NASA,
@@ -1273,61 +926,6 @@ export const STARDUST = spacecraftWithDefaults({
     { id: Bodies.ANNEFRANK.id, type: SpacecraftVisitType.FLYBY, start: new Date('2002-11-02T04:50:20Z') }, // TODO
     { id: Bodies.WILD.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-01-02T19:21:28Z') },
     { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('2011-02-15T04:39:10Z') },
-  ],
-});
-
-export const ULYSSES = spacecraftWithDefaults({
-  name: 'Ulysses',
-  organization: SpacecraftOrganizationId.ESA, // also NASA
-  launchMass: 371,
-  power: 285,
-  start: new Date('1990-10-06T11:47:16Z'),
-  end: new Date(2009, 5, 30),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated after 18 years and 8 months of operation' },
-  wiki: 'https://en.wikipedia.org/wiki/Ulysses_(spacecraft)',
-  thumbnail: 'ulysses-thumb.jpg',
-  visited: [
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date(1992, 1, 8) },
-    { id: Bodies.SOL.id, type: SpacecraftVisitType.FLYBY, start: new Date(1994, 5, 26), end: new Date(1994, 10, 5) },
-    // TODO: C/1996 Hyakutake, C/1999 McNaught-Hartley, C/2006 McNaught comet flybys
-  ],
-});
-
-export const SAKIGAKE = spacecraftWithDefaults({
-  name: 'Sakigake',
-  organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 138.1,
-  start: new Date('1985-01-07T19:27:00Z'),
-  end: new Date(1995, 10, 15),
-  focusId: Bodies.HALLEY.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost data contact in 1995, beacon contact in 1999' },
-  wiki: 'https://en.wikipedia.org/wiki/Sakigake',
-  thumbnail: 'sakigake-thumb.jpg',
-  visited: [{ id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-03-11T04:18:00Z') }],
-});
-
-const HAYABUSA_MISSION_FAMILY = 'Hayabusa';
-export const HAYABUSA = spacecraftWithDefaults({
-  name: 'Hayabusa',
-  organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 510,
-  start: new Date('2003-05-09T04:29:25Z'),
-  end: new Date('2010-06-13T14:12:00Z'),
-  focusId: Bodies.ITOKAWA.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: HAYABUSA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with samples of Itokawa in 2010' },
-  wiki: 'https://en.wikipedia.org/wiki/Hayabusa',
-  thumbnail: 'hayabusa-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.ITOKAWA.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('2005-11-19T21:30:00Z'),
-      end: new Date('2005-11-19T21:58:00Z'),
-    },
   ],
 });
 
@@ -1379,150 +977,6 @@ export const DAWN = spacecraftWithDefaults({
   ],
 });
 
-const CHANGE_MISSION_FAMILY = "Chang'e";
-// TODO: this is in a heliocentric orbit -- find the parameters and add as a body
-export const CHANGE_2 = spacecraftWithDefaults({
-  name: "Chang'e 2",
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 2480,
-  start: new Date('2010-10-01T10:59:00Z'),
-  end: new Date(2014, 6, 1),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: CHANGE_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.DEFUNCT, details: "Drifting out beyond Earth's orbit" },
-  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_2',
-  thumbnail: 'change-2-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.LUNA.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('2010-10-06T03:06:00Z'),
-      end: new Date('2011-06-08T12:00:00Z'),
-    },
-    { id: Bodies.TOUTATIS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2012-12-13T08:30:00Z') },
-  ],
-});
-
-export const CHANGE_4 = spacecraftWithDefaults({
-  name: "Chang'e 4",
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 3780,
-  start: new Date('2018-12-07T18:23:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: CHANGE_MISSION_FAMILY,
-  focusId: Bodies.LUNA.id,
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_4',
-  thumbnail: 'change-4-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.LUNA.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('2019-01-03T02:26:00Z'),
-    },
-  ],
-});
-
-export const YUTU_2 = spacecraftWithDefaults({
-  name: 'Yutu-2',
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 140,
-  start: new Date('2018-12-07T18:23:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: CHANGE_MISSION_FAMILY,
-  focusId: Bodies.LUNA.id,
-  status: { status: SpacecraftStatus.OPERATIONAL, details: 'Still operational as of September 2024' },
-  wiki: 'https://en.wikipedia.org/wiki/Yutu-2',
-  thumbnail: 'yutu-2-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.LUNA.id,
-      type: SpacecraftVisitType.ROVER,
-      start: new Date('2019-01-03T02:26:00Z'),
-    },
-  ],
-});
-
-export const CHANGE_5 = spacecraftWithDefaults({
-  name: "Chang'e 5",
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 8200,
-  start: new Date('2020-11-23T20:30:12Z'),
-  end: new Date('2020-12-16T17:59:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: CHANGE_MISSION_FAMILY,
-  focusId: Bodies.LUNA.id,
-  status: { status: SpacecraftStatus.RETURNED, details: 'Capsule returned to Earth with 1.7 kg of samples' },
-  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_5',
-  thumbnail: 'change-5-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.LUNA.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('2020-12-01T15:11:00Z'),
-      end: new Date('2020-12-03T15:10:00Z'),
-    },
-  ],
-});
-
-export const CHANGE_6 = spacecraftWithDefaults({
-  name: "Chang'e 6",
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 8350,
-  start: new Date('2024-05-03T09:27:29Z'),
-  end: new Date('2024-06-25T06:07:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: CHANGE_MISSION_FAMILY,
-  focusId: Bodies.LUNA.id,
-  status: {
-    status: SpacecraftStatus.RETURNED,
-    details: 'Returned with the first samples collected from the far side of the Moon',
-  },
-  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_6',
-  thumbnail: 'change-6-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.LUNA.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('2024-06-01T22:23:16Z'),
-      end: new Date('2024-06-03T23:38:10Z'),
-    },
-  ],
-});
-
-// TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
-export const HAYABUSA_2 = spacecraftWithDefaults({
-  name: 'Hayabusa2',
-  organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 600,
-  power: 2600,
-  start: new Date('2014-12-03T04:22:04Z'),
-  end: new Date('2020-12-05T12:00:00Z'),
-  focusId: Bodies.RYUGU.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: HAYABUSA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
-  wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
-  thumbnail: 'hayabusa-2-thumb.jpg',
-  visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
-});
-
-export const AKATSUKI = spacecraftWithDefaults({
-  name: 'Akatsuki',
-  organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 517.6,
-  power: 700,
-  start: new Date('2010-05-21T21:58:22Z'),
-  end: new Date(2024, 4, 29),
-  focusId: Bodies.VENUS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact in April 2024' },
-  wiki: 'https://en.wikipedia.org/wiki/Akatsuki_(spacecraft)',
-  thumbnail: 'akatsuki-thumb.png',
-  color: Bodies.VENUS.style.fgColor,
-  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.ORBITER, start: new Date(2015, 11, 7) }],
-});
-
 export const OSIRIS_REX = spacecraftWithDefaults({
   name: 'OSIRIS-REx',
   organization: SpacecraftOrganizationId.NASA,
@@ -1548,61 +1002,17 @@ export const OSIRIS_REX = spacecraftWithDefaults({
   ],
 });
 
-export const SPACECRAFT: Array<Spacecraft> = [
+export const NASA_SPACECRAFT = [
   // Inner missions
   MESSENGER,
   PARKER_SOLAR_PROBE,
-  BEPICOLOMBO,
-  SOLAR_ORBITER,
-  GIOTTO,
-  SAKIGAKE,
-  ULYSSES,
 
   // Venus
-  // VENERA_1,
   MARINER_2,
-  // ZOND_1,
-  // VENERA_2,
-  // VENERA_3,
-  // VENERA_4,
-  // MARINER_5,
-  // VENERA_5,
-  // VENERA_6,
-  VENERA_7,
-  // VENERA_8,
   MARINER_10,
-  // VENERA_9,
-  // VENERA_10,
-  // VENERA_11,
-  // VENERA_12,
-  // PIONEER_VENUS_1,
-  // PIONEER_VENUS_2,
-  // VENERA_13,
-  // VENERA_14,
-  // VENERA_15,
-  // VENERA_16,
-  // VEGA_1,
-  // VEGA_2,
   MAGELLAN,
-  VENUS_EXPRESS,
-  AKATSUKI,
-  IKAROS,
-  // SHINEN,
 
   // Luna
-  // LUNA_1,
-  // PIONEER_4,
-  LUNA_2,
-  LUNA_3,
-  // RANGER_7,
-  // RANGER_8,
-  // RANGER_9,
-  // ZOND_3,
-  // LUNA_9,
-  // SURVEYOR_1,
-  // LUNAR_ORBITER_1,
-  // LUNA_11,
-  ZOND_5,
   // TODO: there are an insane number of missions, 100+ successful that are worth noting
   APOLLO_8,
   APOLLO_10,
@@ -1613,49 +1023,29 @@ export const SPACECRAFT: Array<Spacecraft> = [
   APOLLO_15,
   APOLLO_16,
   APOLLO_17,
-  CHANGE_4,
-  YUTU_2,
-  CHANGE_5,
-  CHANGE_6,
 
   // Mars
   MARINER_4,
   CURIOSITY,
   PERSEVERANCE,
   INGENUITY,
-  TIANWEN_1,
-  ZHURONG,
   PATHFINDER,
   SOJOURNER,
-  // SPIRIT,
-  // OPPORTUNITY,
-  // MARS_2,
   MARS_GLOBAL_SURVEYOR,
-  MARS_EXPRESS,
-  MARS_3,
   MARS_RECONNAISSANCE_ORBITER,
-  // VIKING_1,
-  // VIKING_2,
-  // PHOENIX,
   INSIGHT,
   MAVEN,
-  // AL_AMAL,
 
   // Asteroids
   NEAR_SHOEMAKER,
   DEEP_SPACE_1,
   STARDUST,
-  HAYABUSA,
   DEEP_IMPACT,
   DAWN,
-  CHANGE_2,
-  ROSETTA,
-  HAYABUSA_2,
   OSIRIS_REX,
   LUCY,
   DART,
   PSYCHE,
-  HERA,
 
   // Outer missions
   PIONEER_10,
@@ -1664,29 +1054,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   VOYAGER_2,
   GALILEO,
   CASSINI,
-  HUYGENS,
   NEW_HORIZONS,
-  JUICE,
   JUNO,
   EUROPA_CLIPPER,
-].sort((a, b) => a.start.getTime() - b.start.getTime());
-
-export const SPACECRAFT_BY_BODY_ID = mapObjIndexed(
-  (spacecraft, bodyId) =>
-    spacecraft.sort(
-      (a, b) =>
-        (a.visited.find(({ id }) => id === bodyId)?.start?.getTime() ?? a.start.getTime()) -
-        (b.visited.find(({ id }) => id === bodyId)?.start?.getTime() ?? b.start.getTime())
-    ),
-  SPACECRAFT.reduce<Record<CelestialBodyId, Array<Spacecraft>>>((acc, spacecraft) => {
-    spacecraft.visited.forEach(visited => {
-      acc[visited.id] = [...(acc[visited.id] ?? []), spacecraft];
-    });
-    return acc;
-  }, {})
-);
-
-export const SPACECRAFT_BY_ID = SPACECRAFT.reduce<Record<SpacecraftId, Spacecraft>>((acc, spacecraft) => {
-  acc[spacecraft.id] = spacecraft;
-  return acc;
-}, {});
+];

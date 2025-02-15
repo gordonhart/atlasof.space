@@ -1,7 +1,7 @@
 import { Group, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
-import { SPACECRAFT } from '../../../lib/data/spacecraft.ts';
+import { SPACECRAFT } from '../../../lib/data/spacecraft/spacecraft.ts';
 import { UpdateSettings } from '../../../lib/state.ts';
 import { Spacecraft } from '../../../lib/types.ts';
 import { SpacecraftPill } from './SpacecraftPill.tsx';
