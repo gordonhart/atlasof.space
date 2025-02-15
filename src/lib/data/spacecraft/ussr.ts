@@ -72,6 +72,28 @@ export const VENERA_7 = spacecraftWithDefaults({
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
 });
 
+export const LUNOKHOD_1 = spacecraftWithDefaults({
+  name: 'Lunokhod 1',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 756,
+  power: 180,
+  start: new Date('1970-11-10T14:44:01Z'),
+  end: new Date('1971-09-14T13:05:00Z'),
+  focusId: Bodies.LUNA.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Last contact on September 14, 1971' },
+  wiki: 'https://en.wikipedia.org/wiki/Lunokhod_1',
+  thumbnail: 'lunokhod-1-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.ROVER,
+      start: new Date('1970-11-17T03:47:00Z'),
+      end: new Date('1971-09-14T13:05:00Z'),
+    },
+  ],
+});
+
 export const MARS_3 = spacecraftWithDefaults({
   name: 'Mars 3',
   organization: SpacecraftOrganizationId.USSR,
@@ -87,6 +109,51 @@ export const MARS_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
 });
 
+const VEGA_MISSION_FAMILY = 'Vega';
+export const VEGA_1 = spacecraftWithDefaults({
+  name: 'Vega 1',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 4840,
+  start: new Date('1984-12-15T09:16:24Z'),
+  end: new Date(1987, 0, 30),
+  focusId: Bodies.HALLEY.id,
+  color: Bodies.HALLEY.style.fgColor,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: VEGA_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Drifting in a heliocentric orbit after losing contact on January 30, 1987',
+  },
+  thumbnail: 'vega-1-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Vega_1',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1985-06-11T03:02:54Z') },
+    { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 6) },
+  ],
+});
+
+export const VEGA_2 = spacecraftWithDefaults({
+  name: 'Vega 2',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 4840,
+  start: new Date('1984-12-21T09:13:52Z'),
+  end: new Date(1987, 2, 24),
+  focusId: Bodies.HALLEY.id,
+  color: Bodies.HALLEY.style.fgColor,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: VEGA_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Drifting in a heliocentric orbit after losing contact on March 24, 1987',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Vega_2',
+  thumbnail: 'vega-2-thumb.jpg',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date(1985, 5, 15) },
+    { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 9) },
+  ],
+});
+
 /*
  * TODO:
  *  - Sputnik 1
@@ -96,10 +163,7 @@ export const MARS_3 = spacecraftWithDefaults({
  *  - Mars 2
  *  - Luna 11
  *  - Salyut 1
- *  - Lunokhod 1
  *  - Venera 9
- *  - Vega 1
- *  - Vega 2
  *  - Mir
  */
-export const SOVIET_SPACECRAFT = [LUNA_2, LUNA_3, ZOND_5, VENERA_7, MARS_3];
+export const SOVIET_SPACECRAFT = [LUNA_2, LUNA_3, ZOND_5, VENERA_7, LUNOKHOD_1, MARS_3, VEGA_1, VEGA_2];
