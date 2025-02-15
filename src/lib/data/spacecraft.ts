@@ -275,7 +275,7 @@ export const ZHURONG = spacecraftWithDefaults({
   visited: [
     {
       id: Bodies.MARS.id,
-      type: SpacecraftVisitType.LANDER,
+      type: SpacecraftVisitType.ROVER,
       start: new Date('2021-05-22T02:40:00Z'),
       end: new Date('2022-12-26T12:00:00Z'),
     },
@@ -719,7 +719,7 @@ export const HERA = spacecraftWithDefaults({
   thumbnail: 'hera-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
   visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-15T12:00:00Z') },
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
     { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
   ],
 });
