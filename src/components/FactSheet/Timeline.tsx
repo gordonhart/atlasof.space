@@ -114,6 +114,7 @@ function renderTimeline(
   const laneGutter = 20;
   const laneWidth = (timelineWidth - 2 * laneGutter - timelineLeft) / Math.max(nLanes - 1, 1);
   const drawnLabels = new Set();
+  let labelY = -Infinity;
 
   function drawConnector({ top, height, date, hover }: TimelineItem, i: number) {
     const elapsedMillis = date.getTime() - startMillis;
@@ -150,7 +151,8 @@ function renderTimeline(
     const label = date.getFullYear().toString();
     if (!drawnLabels.has(label)) {
       const { width } = ctx.measureText(label);
-      ctx.fillText(label, timelineLeft - width - dotRadius * 2, timelineY + textHeightPx / 2);
+      labelY = Math.max(timelineY + textHeightPx / 2, labelY + textHeightPx + 2);
+      ctx.fillText(label, timelineLeft - width - dotRadius * 2, labelY);
       drawnLabels.add(label);
     }
   }
