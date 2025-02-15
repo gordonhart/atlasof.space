@@ -636,6 +636,21 @@ export const LUNA_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
 });
 
+export const MARS_EXPRESS = spacecraftWithDefaults({
+  name: 'Mars Express',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 1123,
+  power: 460,
+  start: new Date('2003-06-02T17:45:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Express',
+  thumbnail: 'mars-express-thumb.jpg',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2003-12-25T03:00:00Z') }],
+});
+
 export const MARS_3 = spacecraftWithDefaults({
   name: 'Mars 3',
   organization: SpacecraftOrganizationId.USSR,
@@ -795,6 +810,25 @@ export const HERA = spacecraftWithDefaults({
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
     { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
   ],
+});
+
+export const MARS_GLOBAL_SURVEYOR = spacecraftWithDefaults({
+  name: 'Mars Global Surveyor',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1030.5,
+  power: 980,
+  start: new Date('1996-11-07T17:00:00Z'),
+  end: new Date(2007, 0, 28),
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Contact lost on November 2, 2006, estimated to remain in orbit until ~2050',
+  },
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  thumbnail: 'mars-global-surveyor.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Global_Surveyor',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('1997-09-11T01:17:00Z') }],
 });
 
 export const MARS_RECONNAISSANCE_ORBITER = spacecraftWithDefaults({
@@ -1596,6 +1630,8 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // SPIRIT,
   // OPPORTUNITY,
   // MARS_2,
+  MARS_GLOBAL_SURVEYOR,
+  MARS_EXPRESS,
   MARS_3,
   MARS_RECONNAISSANCE_ORBITER,
   // VIKING_1,
@@ -1603,6 +1639,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // PHOENIX,
   INSIGHT,
   MAVEN,
+  // AL_AMAL,
 
   // Asteroids
   NEAR_SHOEMAKER,

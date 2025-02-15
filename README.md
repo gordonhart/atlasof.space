@@ -76,4 +76,7 @@ Infrastructure dependencies:
   - [x] Reduce jumpiness of token-by-token rendering for many items (orbital regime fact sheet, spacecraft timelines)
   - [ ] Add Hill sphere for planets (w/ rendering on hover)
   - [ ] "Learn more" via in-app definition generation
-  - [ ] Add gallery images for spacecraft
+  - [ ] Add more information to spacecraft:
+    - [ ] Gallery images
+    - [ ] Launch vehicle
+    - [ ] Creator/operator (e.g. JPL)
