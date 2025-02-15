@@ -65,6 +65,48 @@ export const YUTU_2 = spacecraftWithDefaults({
   ],
 });
 
+const TIANWEN_1_MISSION_FAMILY = 'Tianwen-1';
+export const TIANWEN_1 = spacecraftWithDefaults({
+  name: 'Tianwen-1',
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 5000,
+  start: new Date('2020-07-23T04:41:15Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: TIANWEN_1_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'tianwen-1-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
+  color: Bodies.MARS.style.fgColor,
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
+});
+
+export const ZHURONG = spacecraftWithDefaults({
+  name: 'Zhurong',
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 240,
+  start: new Date('2020-07-23T04:41:15Z'),
+  end: new Date('2022-12-26T12:00:00Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: TIANWEN_1_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Failed to wake from hibernation in December 2022 due to dust buildup',
+  },
+  thumbnail: 'zhurong-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.ROVER,
+      start: new Date('2021-05-22T02:40:00Z'),
+      end: new Date('2022-12-26T12:00:00Z'),
+    },
+  ],
+});
+
 export const CHANGE_5 = spacecraftWithDefaults({
   name: "Chang'e 5",
   organization: SpacecraftOrganizationId.CNSA,
@@ -112,46 +154,4 @@ export const CHANGE_6 = spacecraftWithDefaults({
   ],
 });
 
-const TIANWEN_1_MISSION_FAMILY = 'Tianwen-1';
-export const TIANWEN_1 = spacecraftWithDefaults({
-  name: 'Tianwen-1',
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 5000,
-  start: new Date('2020-07-23T04:41:15Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: TIANWEN_1_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'tianwen-1-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Tianwen-1',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2021-02-10T11:52:00Z') }],
-});
-
-export const ZHURONG = spacecraftWithDefaults({
-  name: 'Zhurong',
-  organization: SpacecraftOrganizationId.CNSA,
-  launchMass: 240,
-  start: new Date('2020-07-23T04:41:15Z'),
-  end: new Date('2022-12-26T12:00:00Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: TIANWEN_1_MISSION_FAMILY,
-  status: {
-    status: SpacecraftStatus.DEFUNCT,
-    details: 'Failed to wake from hibernation in December 2022 due to dust buildup',
-  },
-  thumbnail: 'zhurong-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Zhurong_(rover)',
-  color: Bodies.MARS.style.fgColor,
-  visited: [
-    {
-      id: Bodies.MARS.id,
-      type: SpacecraftVisitType.ROVER,
-      start: new Date('2021-05-22T02:40:00Z'),
-      end: new Date('2022-12-26T12:00:00Z'),
-    },
-  ],
-});
-
-export const CNSA_SPACECRAFT = [ZHURONG, TIANWEN_1, CHANGE_2, CHANGE_4, CHANGE_5, CHANGE_6, YUTU_2];
+export const CNSA_SPACECRAFT = [CHANGE_2, CHANGE_4, TIANWEN_1, ZHURONG, CHANGE_5, CHANGE_6, YUTU_2];

@@ -3,6 +3,42 @@ import * as Bodies from '../bodies.ts';
 import { AIDA_MISSION_FAMILY, CASSINI_HUYGENS_MISSION_FAMILY } from './nasa.ts';
 import { spacecraftWithDefaults } from './utils.ts';
 
+export const GIOTTO = spacecraftWithDefaults({
+  name: 'Giotto',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 960,
+  power: 196,
+  start: new Date('1985-07-02T11:23:00Z'),
+  end: new Date(1992, 6, 23),
+  status: { status: SpacecraftStatus.DEFUNCT },
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  thumbnail: 'giotto-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
+  color: Bodies.DEFAULT_COMET_COLOR,
+  visited: [
+    { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
+    { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
+  ],
+});
+
+export const ULYSSES = spacecraftWithDefaults({
+  name: 'Ulysses',
+  organization: SpacecraftOrganizationId.ESA, // also NASA
+  launchMass: 371,
+  power: 285,
+  start: new Date('1990-10-06T11:47:16Z'),
+  end: new Date(2009, 5, 30),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated after 18 years and 8 months of operation' },
+  wiki: 'https://en.wikipedia.org/wiki/Ulysses_(spacecraft)',
+  thumbnail: 'ulysses-thumb.jpg',
+  visited: [
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date(1992, 1, 8) },
+    { id: Bodies.SOL.id, type: SpacecraftVisitType.FLYBY, start: new Date(1994, 5, 26), end: new Date(1994, 10, 5) },
+    // TODO: C/1996 Hyakutake, C/1999 McNaught-Hartley, C/2006 McNaught comet flybys
+  ],
+});
+
 export const HUYGENS = spacecraftWithDefaults({
   name: 'Huygens',
   organization: SpacecraftOrganizationId.ESA,
@@ -27,43 +63,6 @@ export const HUYGENS = spacecraftWithDefaults({
   ],
 });
 
-export const GIOTTO = spacecraftWithDefaults({
-  name: 'Giotto',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 960,
-  power: 196,
-  start: new Date('1985-07-02T11:23:00Z'),
-  end: new Date(1992, 6, 23),
-  status: { status: SpacecraftStatus.DEFUNCT },
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  thumbnail: 'giotto-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Giotto_(spacecraft)',
-  color: Bodies.DEFAULT_COMET_COLOR,
-  visited: [
-    { id: Bodies.HALLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1986, 2, 14) },
-    { id: Bodies.GRIGG_SKJELLERUP.id, type: SpacecraftVisitType.FLYBY, start: new Date(1992, 6, 10) },
-  ],
-});
-
-// TODO: add JAXA's Mio?
-export const BEPICOLOMBO = spacecraftWithDefaults({
-  name: 'BepiColombo',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 4100,
-  power: 150,
-  start: new Date('2018-10-20T01:45:00Z'),
-  focusId: Bodies.MERCURY.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL, details: 'Planned to enter Mercury orbit in November 2026' },
-  thumbnail: 'bepicolombo-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/BepiColombo',
-  visited: [
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-10-15T03:48:00Z') },
-    // TODO: this start date is a flyby, will enter orbit in 2026
-    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2021-10-01T23:34:41Z') },
-  ],
-});
-
 export const MARS_EXPRESS = spacecraftWithDefaults({
   name: 'Mars Express',
   organization: SpacecraftOrganizationId.ESA,
@@ -77,45 +76,6 @@ export const MARS_EXPRESS = spacecraftWithDefaults({
   wiki: 'https://en.wikipedia.org/wiki/Mars_Express',
   thumbnail: 'mars-express-thumb.jpg',
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2003-12-25T03:00:00Z') }],
-});
-
-export const JUICE = spacecraftWithDefaults({
-  name: 'Jupiter Icy Moons Explorer',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 6070,
-  power: 850,
-  start: new Date('2023-04-14T12:14:36Z'),
-  focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'juice-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
-  color: Bodies.JUPITER.style.fgColor,
-  visited: [
-    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2031-07-15T12:00:00Z') },
-    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-01-15T12:00:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
-  ],
-});
-
-export const HERA = spacecraftWithDefaults({
-  name: 'Hera',
-  organization: SpacecraftOrganizationId.ESA,
-  launchMass: 1128,
-  start: new Date('2024-10-07T14:52:11Z'),
-  focusId: Bodies.DIDYMOS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: AIDA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'hera-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
-  visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
-    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
-  ],
 });
 
 export const ROSETTA = spacecraftWithDefaults({
@@ -171,6 +131,64 @@ export const VENUS_EXPRESS = spacecraftWithDefaults({
   ],
 });
 
+// TODO: add JAXA's Mio?
+export const BEPICOLOMBO = spacecraftWithDefaults({
+  name: 'BepiColombo',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 4100,
+  power: 150,
+  start: new Date('2018-10-20T01:45:00Z'),
+  focusId: Bodies.MERCURY.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL, details: 'Planned to enter Mercury orbit in November 2026' },
+  thumbnail: 'bepicolombo-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/BepiColombo',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2020-10-15T03:48:00Z') },
+    // TODO: this start date is a flyby, will enter orbit in 2026
+    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2021-10-01T23:34:41Z') },
+  ],
+});
+
+export const JUICE = spacecraftWithDefaults({
+  name: 'Jupiter Icy Moons Explorer',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 6070,
+  power: 850,
+  start: new Date('2023-04-14T12:14:36Z'),
+  focusId: Bodies.JUPITER.id,
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'juice-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Jupiter_Icy_Moons_Explorer',
+  color: Bodies.JUPITER.style.fgColor,
+  visited: [
+    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2024-08-19T21:16:00Z') },
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-08-31T12:00:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2031-07-15T12:00:00Z') },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-01-15T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2032-07-15T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2034-12-15T12:00:00Z') },
+  ],
+});
+
+export const HERA = spacecraftWithDefaults({
+  name: 'Hera',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 1128,
+  start: new Date('2024-10-07T14:52:11Z'),
+  focusId: Bodies.DIDYMOS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: AIDA_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'hera-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
+    { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
+  ],
+});
+
 export const SOLAR_ORBITER = spacecraftWithDefaults({
   name: 'Solar Orbiter',
   organization: SpacecraftOrganizationId.ESA,
@@ -190,33 +208,15 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   ],
 });
 
-export const ULYSSES = spacecraftWithDefaults({
-  name: 'Ulysses',
-  organization: SpacecraftOrganizationId.ESA, // also NASA
-  launchMass: 371,
-  power: 285,
-  start: new Date('1990-10-06T11:47:16Z'),
-  end: new Date(2009, 5, 30),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Deactivated after 18 years and 8 months of operation' },
-  wiki: 'https://en.wikipedia.org/wiki/Ulysses_(spacecraft)',
-  thumbnail: 'ulysses-thumb.jpg',
-  visited: [
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date(1992, 1, 8) },
-    { id: Bodies.SOL.id, type: SpacecraftVisitType.FLYBY, start: new Date(1994, 5, 26), end: new Date(1994, 10, 5) },
-    // TODO: C/1996 Hyakutake, C/1999 McNaught-Hartley, C/2006 McNaught comet flybys
-  ],
-});
-
 export const ESA_SPACECRAFT = [
-  BEPICOLOMBO,
-  MARS_EXPRESS,
-  JUICE,
-  HUYGENS,
-  HERA,
-  ROSETTA,
   GIOTTO,
-  VENUS_EXPRESS,
-  SOLAR_ORBITER,
   ULYSSES,
+  HUYGENS,
+  MARS_EXPRESS,
+  ROSETTA,
+  VENUS_EXPRESS,
+  BEPICOLOMBO,
+  SOLAR_ORBITER,
+  JUICE,
+  HERA,
 ];

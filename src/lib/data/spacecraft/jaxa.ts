@@ -2,19 +2,6 @@ import { OrbitalRegimeId, SpacecraftOrganizationId, SpacecraftStatus, Spacecraft
 import * as Bodies from '../bodies.ts';
 import { spacecraftWithDefaults } from './utils.ts';
 
-export const IKAROS = spacecraftWithDefaults({
-  name: 'IKAROS',
-  organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 310,
-  start: new Date('2010-05-20T21:58:22Z'),
-  end: new Date('2015-05-20T12:00:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
-  thumbnail: 'ikaros-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/IKAROS',
-  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-12-08T12:00:00Z') }],
-});
-
 export const SAKIGAKE = spacecraftWithDefaults({
   name: 'Sakigake',
   organization: SpacecraftOrganizationId.JAXA,
@@ -52,21 +39,17 @@ export const HAYABUSA = spacecraftWithDefaults({
   ],
 });
 
-// TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
-export const HAYABUSA_2 = spacecraftWithDefaults({
-  name: 'Hayabusa2',
+export const IKAROS = spacecraftWithDefaults({
+  name: 'IKAROS',
   organization: SpacecraftOrganizationId.JAXA,
-  launchMass: 600,
-  power: 2600,
-  start: new Date('2014-12-03T04:22:04Z'),
-  end: new Date('2020-12-05T12:00:00Z'),
-  focusId: Bodies.RYUGU.id,
+  launchMass: 310,
+  start: new Date('2010-05-20T21:58:22Z'),
+  end: new Date('2015-05-20T12:00:00Z'),
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: HAYABUSA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
-  wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
-  thumbnail: 'hayabusa-2-thumb.jpg',
-  visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit' },
+  thumbnail: 'ikaros-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/IKAROS',
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-12-08T12:00:00Z') }],
 });
 
 export const AKATSUKI = spacecraftWithDefaults({
@@ -85,4 +68,21 @@ export const AKATSUKI = spacecraftWithDefaults({
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.ORBITER, start: new Date(2015, 11, 7) }],
 });
 
-export const JAXA_SPACECRAFT = [HAYABUSA_2, HAYABUSA, AKATSUKI, IKAROS, SAKIGAKE];
+// TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
+export const HAYABUSA_2 = spacecraftWithDefaults({
+  name: 'Hayabusa2',
+  organization: SpacecraftOrganizationId.JAXA,
+  launchMass: 600,
+  power: 2600,
+  start: new Date('2014-12-03T04:22:04Z'),
+  end: new Date('2020-12-05T12:00:00Z'),
+  focusId: Bodies.RYUGU.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: HAYABUSA_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.RETURNED, details: 'Returned to Earth with 5 grams of material from Ryugu' },
+  wiki: 'https://en.wikipedia.org/wiki/Hayabusa2',
+  thumbnail: 'hayabusa-2-thumb.jpg',
+  visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
+});
+
+export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, IKAROS, AKATSUKI, HAYABUSA_2];

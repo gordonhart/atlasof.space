@@ -2,23 +2,6 @@ import { OrbitalRegimeId, SpacecraftOrganizationId, SpacecraftStatus, Spacecraft
 import * as Bodies from '../bodies.ts';
 import { spacecraftWithDefaults } from './utils.ts';
 
-const VENERA_MISSION_FAMILY = 'Venera';
-export const VENERA_7 = spacecraftWithDefaults({
-  name: 'Venera 7',
-  organization: SpacecraftOrganizationId.USSR,
-  launchMass: 1180,
-  start: new Date('1970-08-17T05:38:22Z'),
-  end: new Date('1970-12-15T06:00:00Z'),
-  focusId: Bodies.VENUS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: VENERA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.DEFUNCT },
-  thumbnail: 'venera-7-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Venera_7',
-  color: Bodies.VENUS.style.fgColor,
-  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
-});
-
 const LUNA_MISSION_FAMILY = 'Luna';
 export const LUNA_2 = spacecraftWithDefaults({
   name: 'Luna 2',
@@ -72,6 +55,23 @@ export const ZOND_5 = spacecraftWithDefaults({
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date(1968, 8, 18) }],
 });
 
+const VENERA_MISSION_FAMILY = 'Venera';
+export const VENERA_7 = spacecraftWithDefaults({
+  name: 'Venera 7',
+  organization: SpacecraftOrganizationId.USSR,
+  launchMass: 1180,
+  start: new Date('1970-08-17T05:38:22Z'),
+  end: new Date('1970-12-15T06:00:00Z'),
+  focusId: Bodies.VENUS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: VENERA_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.DEFUNCT },
+  thumbnail: 'venera-7-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Venera_7',
+  color: Bodies.VENUS.style.fgColor,
+  visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.LANDER, start: new Date('1970-12-15T06:00:00Z') }],
+});
+
 export const MARS_3 = spacecraftWithDefaults({
   name: 'Mars 3',
   organization: SpacecraftOrganizationId.USSR,
@@ -87,4 +87,4 @@ export const MARS_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
 });
 
-export const SOVIET_SPACECRAFT = [MARS_3, ZOND_5, LUNA_2, LUNA_3, VENERA_7];
+export const SOVIET_SPACECRAFT = [LUNA_2, LUNA_3, ZOND_5, VENERA_7, MARS_3];

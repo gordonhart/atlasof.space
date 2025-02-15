@@ -2,361 +2,6 @@ import { OrbitalRegimeId, SpacecraftOrganizationId, SpacecraftStatus, Spacecraft
 import * as Bodies from '../bodies.ts';
 import { spacecraftWithDefaults } from './utils.ts';
 
-const VOYAGER_MISSION_FAMILY = 'Voyager';
-export const VOYAGER_1 = spacecraftWithDefaults({
-  name: 'Voyager 1',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 815,
-  power: 470,
-  start: new Date('1977-09-05T12:56:01Z'),
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
-  missionFamily: VOYAGER_MISSION_FAMILY,
-  thumbnail: 'voyager-1.png',
-  wiki: 'https://en.wikipedia.org/wiki/Voyager_1',
-  visited: [
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T12:00:00Z') },
-    // { id: Bodies.AMALTHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T12:00:00Z') }, // TODO
-    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T15:14:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T18:19:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-06T02:15:00Z') },
-    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-06T17:08:00Z') },
-    { id: Bodies.SATURN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-12T12:00:00Z') },
-    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-12T05:41:00Z') },
-    { id: Bodies.TETHYS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-12T22:16:00Z') },
-    { id: Bodies.MIMAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T01:43:00Z') },
-    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T01:51:00Z') },
-    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T06:21:00Z') },
-    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T16:44:00Z') },
-  ],
-});
-
-export const VOYAGER_2 = spacecraftWithDefaults({
-  name: 'Voyager 2',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 721.9,
-  power: 470,
-  start: new Date('1977-08-20T14:29:00Z'),
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
-  missionFamily: VOYAGER_MISSION_FAMILY,
-  thumbnail: 'voyager-2.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Voyager_2',
-  visited: [
-    {
-      id: Bodies.JUPITER.id,
-      type: SpacecraftVisitType.FLYBY,
-      start: new Date('1979-07-08T12:00:00Z'),
-      end: new Date('1979-08-05T12:00:00Z'),
-    },
-    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-08T12:21:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T07:14:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T17:53:00Z') },
-    // { id: Bodies.AMALTHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T20:01:00Z') }, // TODO
-    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T23:17:00Z') },
-    {
-      id: Bodies.SATURN.id,
-      type: SpacecraftVisitType.FLYBY,
-      start: new Date('1981-06-05T00:00:00Z'),
-      end: new Date('1981-09-25T00:00:00Z'),
-    },
-    { id: Bodies.IAPETUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-22T01:26:57Z') },
-    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-25T01:25:26Z') },
-    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-25T09:37:46Z') },
-    // { id: Bodies.HELENE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-25T22:57:33Z') }, // TODO
-    { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T01:04:32Z') },
-    // { id: Bodies.CALYPSO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T02:22:17Z') }, // TODO
-    { id: Bodies.MIMAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T02:24:26Z') },
-    // { id: Bodies.PANDORA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:19:18Z') }, // TODO
-    // { id: Bodies.ATLAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:33:02Z') }, // TODO
-    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:45:16Z') },
-    // { id: Bodies.JANUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:50:04Z') }, // TODO
-    // { id: Bodies.EPIMETHEUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T04:05:56Z') }, // TODO
-    // { id: Bodies.TELESTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:02:47Z') }, // TODO
-    { id: Bodies.TETHYS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:12:30Z') },
-    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:28:48Z') },
-    { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-09-04T01:22:34Z') },
-    {
-      id: Bodies.URANUS.id,
-      type: SpacecraftVisitType.FLYBY,
-      start: new Date('1985-11-04T00:00:00Z'),
-      end: new Date('1986-02-25T00:00:00Z'),
-    },
-    { id: Bodies.MIRANDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T16:50:00Z') },
-    { id: Bodies.ARIEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
-    { id: Bodies.UMBRIEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
-    { id: Bodies.TITANIA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
-    { id: Bodies.OBERON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
-    {
-      id: Bodies.NEPTUNE.id,
-      type: SpacecraftVisitType.FLYBY,
-      start: new Date('1989-06-05T00:00:00Z'),
-      end: new Date('1989-10-02T00:00:00Z'),
-    },
-    { id: Bodies.GALATEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:41:00Z') },
-    { id: Bodies.LARISSA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:51:00Z') },
-    { id: Bodies.PROTEUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T05:29:00Z') },
-    { id: Bodies.TRITON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T09:23:00Z') },
-    { id: Bodies.NEREID.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T12:00:00Z') },
-  ],
-});
-
-export const CASSINI_HUYGENS_MISSION_FAMILY = 'Cassini-Huygens';
-export const CASSINI = spacecraftWithDefaults({
-  name: 'Cassini',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 5712,
-  power: 885,
-  start: new Date('1997-10-15T08:43:00Z'),
-  end: new Date('2017-09-15T11:55:00Z'),
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
-  },
-  focusId: Bodies.SATURN.id,
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
-  missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
-  thumbnail: 'cassini-huygens.gif',
-  wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
-  color: Bodies.SATURN.style.fgColor,
-  visited: [
-    // traveling to Saturn
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('1998-04-26T12:00:00Z') },
-    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1999-08-18T03:28:00Z') },
-    // TODO: 2685 Masurksy (asteroid) flyby on 2000-01-23
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2000-12-30T10:05:00Z') },
-    // primary mission
-    {
-      id: Bodies.SATURN.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('2004-05-18T12:00:00Z'),
-      end: new Date('2017-09-15T11:55:00Z'),
-    },
-    // TODO: Prometheus, Pandora
-    { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-05-27T12:00:00Z') },
-    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-07-02T12:00:00Z') },
-    { id: Bodies.IAPETUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-12-31T18:45:37Z') },
-    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-02-17T12:00:00Z') },
-    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-09-26T12:00:00Z') },
-    // solstice+equinox mission
-    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-11-26T22:37:00Z') },
-    { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-04-07T12:00:00Z') },
-  ],
-});
-
-const PATHFINDER_MISSION_FAMILY = 'Pathfinder';
-export const PATHFINDER = spacecraftWithDefaults({
-  name: 'Mars Pathfinder',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 890,
-  power: 35,
-  start: new Date('1996-12-04T06:58:07Z'),
-  end: new Date('1997-09-27T10:23:00Z'),
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
-  focusId: Bodies.MARS.id,
-  missionFamily: PATHFINDER_MISSION_FAMILY,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  wiki: 'https://en.wikipedia.org/wiki/Mars_Pathfinder',
-  thumbnail: 'pathfinder-thumb.webp',
-  color: Bodies.MARS.style.fgColor,
-  visited: [
-    {
-      id: Bodies.MARS.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('1997-07-04T16:55:56Z'),
-      end: new Date(1997, 8, 27),
-    },
-  ],
-});
-export const SOJOURNER = spacecraftWithDefaults({
-  name: 'Sojourner',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 11.5,
-  power: 13,
-  start: new Date('1996-12-04T06:58:07Z'),
-  end: new Date(1998, 2, 10),
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
-  focusId: Bodies.MARS.id,
-  missionFamily: PATHFINDER_MISSION_FAMILY,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  wiki: 'https://en.wikipedia.org/wiki/Sojourner_(rover)',
-  thumbnail: 'sojourner-thumb.jpg',
-  color: Bodies.MARS.style.fgColor,
-  visited: [
-    {
-      id: Bodies.MARS.id,
-      type: SpacecraftVisitType.ROVER,
-      start: new Date('1997-07-04T16:56:55Z'),
-      end: new Date(1998, 2, 10),
-    },
-  ],
-});
-
-export const CURIOSITY = spacecraftWithDefaults({
-  name: 'Curiosity',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 899,
-  power: 100,
-  start: new Date('2011-11-26T15:02:00Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'curiosity-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
-});
-
-const PERSEVERANCE_MISSION_FAMILY = 'Perseverance';
-export const PERSEVERANCE = spacecraftWithDefaults({
-  name: 'Perseverance',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 1025,
-  power: 110,
-  start: new Date('2020-07-30T11:50:00Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: PERSEVERANCE_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'perseverance-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2021-02-18T20:55:00Z') }],
-});
-
-export const INGENUITY = spacecraftWithDefaults({
-  name: 'Ingenuity',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 1.8,
-  power: 350,
-  start: new Date('2020-07-30T11:50:00Z'),
-  end: new Date('2024-01-18T12:00:00Z'),
-  focusId: Bodies.MARS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: PERSEVERANCE_MISSION_FAMILY,
-  status: {
-    status: SpacecraftStatus.DEFUNCT,
-    details: 'Retired in 2024 due to sustained rotor damage',
-  },
-  thumbnail: 'ingenuity-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
-});
-
-export const NEW_HORIZONS = spacecraftWithDefaults({
-  name: 'New Horizons',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 478,
-  power: 245,
-  start: new Date('2006-01-19T19:00:00Z'),
-  status: {
-    status: SpacecraftStatus.OPERATIONAL,
-    details: 'Currently traveling through the Kuiper belt',
-  },
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
-  focusId: Bodies.PLUTO.id,
-  thumbnail: 'new-horizons-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/New_Horizons',
-  color: Bodies.PLUTO.style.fgColor,
-  visited: [
-    // TODO: flyby of asteroid 132524 APL
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('2007-02-28T12:00:00Z') },
-    // Pluto phase
-    {
-      id: Bodies.PLUTO.id,
-      type: SpacecraftVisitType.FLYBY,
-      start: new Date('2015-03-10T12:00:00Z'),
-      end: new Date('2015-07-14T12:00:00Z'),
-    },
-    { id: Bodies.CHARON.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:03:00Z') },
-    { id: Bodies.HYDRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
-    { id: Bodies.NIX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
-    { id: Bodies.KERBEROS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
-    { id: Bodies.STYX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
-    // Kuiper belt phase
-    // TODO: enable? not really a flyby, 0.75 AU away
-    // { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
-    { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
-  ],
-});
-
-export const GALILEO = spacecraftWithDefaults({
-  name: 'Galileo',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 2560,
-  power: 570,
-  start: new Date('1989-10-18T16:53:40Z'),
-  end: new Date('2003-09-21T18:57:18Z'),
-  focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.ASTEROID_BELT, OrbitalRegimeId.OUTER_SYSTEM],
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: "Intentionally flown into Jupiter's atmosphere on September 21, 2003",
-  },
-  thumbnail: 'galileo-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
-  color: Bodies.JUPITER.style.fgColor,
-  visited: [
-    { id: Bodies.GASPRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1991-10-29T12:00:00Z') },
-    { id: Bodies.IDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1993-08-28T12:00:00Z') },
-    {
-      id: Bodies.JUPITER.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('1995-12-07T12:00:00Z'),
-      end: new Date('2003-09-21T12:00:00Z'),
-    },
-    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1995-12-07T12:00:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-06-27T12:00:00Z') },
-    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-12-19T12:00:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1997-02-20T12:00:00Z') },
-    // TODO: Amalthea flyby on 2002-11-04
-  ],
-});
-
-export const MESSENGER = spacecraftWithDefaults({
-  name: 'MESSENGER',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 1107.9,
-  power: 450,
-  start: new Date('2004-08-03T06:15:56Z'),
-  end: new Date('2015-04-30T19:26:00Z'),
-  focusId: Bodies.MERCURY.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: 'Intentionally crashed into Mercury on April 30th, 2015',
-  },
-  thumbnail: 'messenger-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/MESSENGER',
-  visited: [
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-06-05T12:00:00Z') },
-    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.ORBITER, start: new Date('2011-03-18T01:00:00Z') },
-  ],
-});
-
-export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
-  name: 'Parker Solar Probe',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 685,
-  power: 343,
-  start: new Date('2018-08-12T07:31:00Z'),
-  focusId: Bodies.SOL.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'parker-solar-probe-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
-  color: Bodies.SOL.style.fgColor,
-  visited: [
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
-    {
-      id: Bodies.SOL.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('2018-11-06T03:27:00Z'), // first perihelion
-    },
-  ],
-});
-
 const MARINER_MISSION_FAMILY = 'Mariner';
 export const MARINER_2 = spacecraftWithDefaults({
   name: Bodies.MARINER_2.name,
@@ -395,209 +40,6 @@ export const MARINER_4 = spacecraftWithDefaults({
     { id: Bodies.MARS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1965-07-15T01:00:57Z') },
     // TODO: D/1895 Q1 (Swift) is believed to no longer exist; last observed in 1986
     // { id: Bodies.SWIFT.id, type: SpacecraftVisitType.FLYBY, start: new Date(1965, 8, 15) },
-  ],
-});
-
-export const MARINER_10 = spacecraftWithDefaults({
-  name: 'Mariner 10',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 502.9,
-  power: 820,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: MARINER_MISSION_FAMILY,
-  start: new Date(1973, 10, 3, 5, 45),
-  end: new Date(1975, 2, 24, 12, 21),
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit in the inner system' },
-  wiki: 'https://en.wikipedia.org/wiki/Mariner_10',
-  thumbnail: 'mariner-10-thumb.jpg',
-  visited: [
-    { id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date(1974, 1, 5) },
-    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1974, 2, 29) },
-  ],
-});
-
-export const MAGELLAN = spacecraftWithDefaults({
-  name: 'Magellan',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 3445,
-  power: 1030,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  start: new Date('1989-05-04T18:47:00Z'),
-  end: new Date('1994-10-13T10:05:00Z'),
-  status: {
-    status: SpacecraftStatus.DECOMMISSIONED,
-    details: 'Deorbited into the Venusian atmosphere on October 13, 1994',
-  },
-  wiki: 'https://en.wikipedia.org/wiki/Magellan_(spacecraft)',
-  thumbnail: 'magellan-thumb.jpg',
-  visited: [
-    {
-      id: Bodies.VENUS.id,
-      type: SpacecraftVisitType.ORBITER,
-      start: new Date('1990-08-10T17:00:00Z'),
-      end: new Date('1994-10-13T10:05:00Z'),
-    },
-  ],
-});
-
-export const JUNO = spacecraftWithDefaults({
-  name: 'Juno',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 3625,
-  power: 14000, // at Earth, solar
-  start: new Date('2011-08-05T16:25:00Z'),
-  focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'juno-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Juno_(spacecraft)',
-  color: Bodies.JUPITER.style.fgColor,
-  visited: [
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2016-07-05T03:53:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-12-26T16:58:59Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-09-29T09:36:00Z') },
-    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-12-14T12:00:00Z') },
-  ],
-});
-
-export const LUCY = spacecraftWithDefaults({
-  name: 'Lucy',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 1550,
-  power: 504,
-  start: new Date('2021-10-16T09:34:02Z'),
-  focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.ASTEROID_BELT, OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'lucy-thumb.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Lucy_(spacecraft)',
-  visited: [
-    { id: Bodies.DINKINESH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2023-11-01T12:00:00Z') },
-    // TODO: 52246 Donaldjohanson flyby
-    // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
-  ],
-});
-
-export const AIDA_MISSION_FAMILY = 'Asteroid Impact and Deflection Assessment (AIDA)';
-export const DART = spacecraftWithDefaults({
-  name: 'Double Asteroid Redirect Test (DART)',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 610,
-  power: 6600,
-  start: new Date('2021-11-24T06:21:02Z'),
-  end: new Date('2022-09-26T23:14:00Z'),
-  focusId: Bodies.DIDYMOS.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  missionFamily: AIDA_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
-  thumbnail: 'dart-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
-  visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
-});
-
-export const MARS_GLOBAL_SURVEYOR = spacecraftWithDefaults({
-  name: 'Mars Global Surveyor',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 1030.5,
-  power: 980,
-  start: new Date('1996-11-07T17:00:00Z'),
-  end: new Date(2007, 0, 28),
-  status: {
-    status: SpacecraftStatus.DEFUNCT,
-    details: 'Contact lost on November 2, 2006, estimated to remain in orbit until ~2050',
-  },
-  focusId: Bodies.MARS.id,
-  color: Bodies.MARS.style.fgColor,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  thumbnail: 'mars-global-surveyor.jpg',
-  wiki: 'https://en.wikipedia.org/wiki/Mars_Global_Surveyor',
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('1997-09-11T01:17:00Z') }],
-});
-
-export const MARS_RECONNAISSANCE_ORBITER = spacecraftWithDefaults({
-  name: 'Mars Reconnaissance Orbiter',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 2180,
-  power: 2000,
-  start: new Date('2005-08-12T11:43:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  focusId: Bodies.MARS.id,
-  thumbnail: 'mro-thumb.webp',
-  wiki: 'https://en.wikipedia.org/wiki/Mars_Reconnaissance_Orbiter',
-  color: Bodies.MARS.style.fgColor,
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2006-03-10T21:24:00Z') }],
-});
-
-export const INSIGHT = spacecraftWithDefaults({
-  name: 'InSight',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 694,
-  power: 600,
-  start: new Date('2018-05-05T11:05:01Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on December 15, 2022' },
-  focusId: Bodies.MARS.id,
-  wiki: 'https://en.wikipedia.org/wiki/InSight',
-  thumbnail: 'insight-thumb.jpg',
-  color: Bodies.MARS.style.fgColor,
-  visited: [
-    {
-      id: Bodies.MARS.id,
-      type: SpacecraftVisitType.LANDER,
-      start: new Date('2018-11-26T19:52:59Z'),
-      end: new Date(2022, 11, 21),
-    },
-  ],
-});
-
-export const MAVEN = spacecraftWithDefaults({
-  name: 'MAVEN',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 2454,
-  power: 1135,
-  start: new Date('2013-11-18T18:28:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  focusId: Bodies.MARS.id,
-  color: Bodies.MARS.style.fgColor,
-  wiki: 'https://en.wikipedia.org/wiki/MAVEN',
-  thumbnail: 'maven-thumb.png',
-  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2014-09-22T02:24:00Z') }],
-});
-
-export const PSYCHE = spacecraftWithDefaults({
-  name: 'Psyche',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 2608,
-  power: 4500,
-  start: new Date('2023-10-13T14:19:00Z'),
-  focusId: Bodies.PSYCHE.id,
-  orbitalRegimes: [OrbitalRegimeId.ASTEROID_BELT],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'psyche-spacecraft-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
-  visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
-});
-
-export const EUROPA_CLIPPER = spacecraftWithDefaults({
-  name: 'Europa Clipper',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 6065,
-  power: 600,
-  start: new Date('2024-10-14T16:06:00Z'),
-  focusId: Bodies.JUPITER.id,
-  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
-  status: { status: SpacecraftStatus.OPERATIONAL },
-  thumbnail: 'europa-clipper-thumb.png',
-  wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
-  color: Bodies.EUROPA.style.fgColor,
-  visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-01T17:00:00Z') },
-    // some uncertainty here as these are planned dates
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2030-04-11T12:00:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') }, // many flybys
   ],
 });
 
@@ -763,6 +205,28 @@ export const APOLLO_15 = spacecraftWithDefaults({
   ],
 });
 
+const PIONEER_MISSION_FAMILY = 'Pioneer';
+export const PIONEER_10 = spacecraftWithDefaults({
+  name: 'Pioneer 10',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 258,
+  power: 155,
+  start: new Date('1972-03-03T01:49:04Z'),
+  end: new Date('2003-01-23T12:00:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: PIONEER_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting out beyond the Kuiper Belt' },
+  wiki: 'https://en.wikipedia.org/wiki/Pioneer_10',
+  thumbnail: 'pioneer-10-thumb.jpg',
+  visited: [
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T12:26:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T13:56:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T19:26:00Z') },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T22:56:00Z') },
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-04T02:26:00Z') },
+  ],
+});
+
 export const APOLLO_16 = spacecraftWithDefaults({
   name: 'Apollo 16',
   organization: SpacecraftOrganizationId.NASA,
@@ -811,28 +275,6 @@ export const APOLLO_17 = spacecraftWithDefaults({
   ],
 });
 
-const PIONEER_MISSION_FAMILY = 'Pioneer';
-export const PIONEER_10 = spacecraftWithDefaults({
-  name: 'Pioneer 10',
-  organization: SpacecraftOrganizationId.NASA,
-  launchMass: 258,
-  power: 155,
-  start: new Date('1972-03-03T01:49:04Z'),
-  end: new Date('2003-01-23T12:00:00Z'),
-  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
-  missionFamily: PIONEER_MISSION_FAMILY,
-  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting out beyond the Kuiper Belt' },
-  wiki: 'https://en.wikipedia.org/wiki/Pioneer_10',
-  thumbnail: 'pioneer-10-thumb.jpg',
-  visited: [
-    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T12:26:00Z') },
-    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T13:56:00Z') },
-    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T19:26:00Z') },
-    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-03T22:56:00Z') },
-    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1973-12-04T02:26:00Z') },
-  ],
-});
-
 export const PIONEER_11 = spacecraftWithDefaults({
   name: 'Pioneer 11',
   organization: SpacecraftOrganizationId.NASA,
@@ -869,6 +311,180 @@ export const PIONEER_11 = spacecraftWithDefaults({
   ],
 });
 
+export const MARINER_10 = spacecraftWithDefaults({
+  name: 'Mariner 10',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 502.9,
+  power: 820,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: MARINER_MISSION_FAMILY,
+  start: new Date(1973, 10, 3, 5, 45),
+  end: new Date(1975, 2, 24, 12, 21),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Drifting in a heliocentric orbit in the inner system' },
+  wiki: 'https://en.wikipedia.org/wiki/Mariner_10',
+  thumbnail: 'mariner-10-thumb.jpg',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.FLYBY, start: new Date(1974, 1, 5) },
+    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.FLYBY, start: new Date(1974, 2, 29) },
+  ],
+});
+
+const VOYAGER_MISSION_FAMILY = 'Voyager';
+export const VOYAGER_2 = spacecraftWithDefaults({
+  name: 'Voyager 2',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 721.9,
+  power: 470,
+  start: new Date('1977-08-20T14:29:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: VOYAGER_MISSION_FAMILY,
+  thumbnail: 'voyager-2.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Voyager_2',
+  visited: [
+    {
+      id: Bodies.JUPITER.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('1979-07-08T12:00:00Z'),
+      end: new Date('1979-08-05T12:00:00Z'),
+    },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-08T12:21:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T07:14:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T17:53:00Z') },
+    // { id: Bodies.AMALTHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T20:01:00Z') }, // TODO
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-07-09T23:17:00Z') },
+    {
+      id: Bodies.SATURN.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('1981-06-05T00:00:00Z'),
+      end: new Date('1981-09-25T00:00:00Z'),
+    },
+    { id: Bodies.IAPETUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-22T01:26:57Z') },
+    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-25T01:25:26Z') },
+    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-25T09:37:46Z') },
+    // { id: Bodies.HELENE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-25T22:57:33Z') }, // TODO
+    { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T01:04:32Z') },
+    // { id: Bodies.CALYPSO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T02:22:17Z') }, // TODO
+    { id: Bodies.MIMAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T02:24:26Z') },
+    // { id: Bodies.PANDORA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:19:18Z') }, // TODO
+    // { id: Bodies.ATLAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:33:02Z') }, // TODO
+    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:45:16Z') },
+    // { id: Bodies.JANUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T03:50:04Z') }, // TODO
+    // { id: Bodies.EPIMETHEUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T04:05:56Z') }, // TODO
+    // { id: Bodies.TELESTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:02:47Z') }, // TODO
+    { id: Bodies.TETHYS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:12:30Z') },
+    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-08-26T06:28:48Z') },
+    { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1981-09-04T01:22:34Z') },
+    {
+      id: Bodies.URANUS.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('1985-11-04T00:00:00Z'),
+      end: new Date('1986-02-25T00:00:00Z'),
+    },
+    { id: Bodies.MIRANDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T16:50:00Z') },
+    { id: Bodies.ARIEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    { id: Bodies.UMBRIEL.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    { id: Bodies.TITANIA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    { id: Bodies.OBERON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1986-01-24T17:25:00Z') },
+    {
+      id: Bodies.NEPTUNE.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('1989-06-05T00:00:00Z'),
+      end: new Date('1989-10-02T00:00:00Z'),
+    },
+    { id: Bodies.GALATEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:41:00Z') },
+    { id: Bodies.LARISSA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T04:51:00Z') },
+    { id: Bodies.PROTEUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T05:29:00Z') },
+    { id: Bodies.TRITON.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T09:23:00Z') },
+    { id: Bodies.NEREID.id, type: SpacecraftVisitType.FLYBY, start: new Date('1989-08-25T12:00:00Z') },
+  ],
+});
+
+export const VOYAGER_1 = spacecraftWithDefaults({
+  name: 'Voyager 1',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 815,
+  power: 470,
+  start: new Date('1977-09-05T12:56:01Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  missionFamily: VOYAGER_MISSION_FAMILY,
+  thumbnail: 'voyager-1.png',
+  wiki: 'https://en.wikipedia.org/wiki/Voyager_1',
+  visited: [
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T12:00:00Z') },
+    // { id: Bodies.AMALTHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T12:00:00Z') }, // TODO
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T15:14:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-05T18:19:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-06T02:15:00Z') },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1979-03-06T17:08:00Z') },
+    { id: Bodies.SATURN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-12T12:00:00Z') },
+    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-12T05:41:00Z') },
+    { id: Bodies.TETHYS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-12T22:16:00Z') },
+    { id: Bodies.MIMAS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T01:43:00Z') },
+    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T01:51:00Z') },
+    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T06:21:00Z') },
+    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('1980-11-13T16:44:00Z') },
+  ],
+});
+
+export const MAGELLAN = spacecraftWithDefaults({
+  name: 'Magellan',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 3445,
+  power: 1030,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  start: new Date('1989-05-04T18:47:00Z'),
+  end: new Date('1994-10-13T10:05:00Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Deorbited into the Venusian atmosphere on October 13, 1994',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Magellan_(spacecraft)',
+  thumbnail: 'magellan-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.VENUS.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1990-08-10T17:00:00Z'),
+      end: new Date('1994-10-13T10:05:00Z'),
+    },
+  ],
+});
+
+export const GALILEO = spacecraftWithDefaults({
+  name: 'Galileo',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2560,
+  power: 570,
+  start: new Date('1989-10-18T16:53:40Z'),
+  end: new Date('2003-09-21T18:57:18Z'),
+  focusId: Bodies.JUPITER.id,
+  orbitalRegimes: [OrbitalRegimeId.ASTEROID_BELT, OrbitalRegimeId.OUTER_SYSTEM],
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: "Intentionally flown into Jupiter's atmosphere on September 21, 2003",
+  },
+  thumbnail: 'galileo-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Galileo_(spacecraft)',
+  color: Bodies.JUPITER.style.fgColor,
+  visited: [
+    { id: Bodies.GASPRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1991-10-29T12:00:00Z') },
+    { id: Bodies.IDA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1993-08-28T12:00:00Z') },
+    {
+      id: Bodies.JUPITER.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1995-12-07T12:00:00Z'),
+      end: new Date('2003-09-21T12:00:00Z'),
+    },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1995-12-07T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-06-27T12:00:00Z') },
+    { id: Bodies.CALLISTO.id, type: SpacecraftVisitType.FLYBY, start: new Date('1996-12-19T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1997-02-20T12:00:00Z') },
+    // TODO: Amalthea flyby on 2002-11-04
+  ],
+});
+
 export const NEAR_SHOEMAKER = spacecraftWithDefaults({
   name: 'NEAR Shoemaker',
   organization: SpacecraftOrganizationId.NASA,
@@ -889,6 +505,117 @@ export const NEAR_SHOEMAKER = spacecraftWithDefaults({
       start: new Date('2000-02-14T15:33:00Z'),
       end: new Date('2001-02-28T00:00:00Z'),
     },
+  ],
+});
+
+export const MARS_GLOBAL_SURVEYOR = spacecraftWithDefaults({
+  name: 'Mars Global Surveyor',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1030.5,
+  power: 980,
+  start: new Date('1996-11-07T17:00:00Z'),
+  end: new Date(2007, 0, 28),
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Contact lost on November 2, 2006, estimated to remain in orbit until ~2050',
+  },
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  thumbnail: 'mars-global-surveyor.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Global_Surveyor',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('1997-09-11T01:17:00Z') }],
+});
+
+const PATHFINDER_MISSION_FAMILY = 'Pathfinder';
+export const PATHFINDER = spacecraftWithDefaults({
+  name: 'Mars Pathfinder',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 890,
+  power: 35,
+  start: new Date('1996-12-04T06:58:07Z'),
+  end: new Date('1997-09-27T10:23:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
+  focusId: Bodies.MARS.id,
+  missionFamily: PATHFINDER_MISSION_FAMILY,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Pathfinder',
+  thumbnail: 'pathfinder-thumb.webp',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1997-07-04T16:55:56Z'),
+      end: new Date(1997, 8, 27),
+    },
+  ],
+});
+
+export const SOJOURNER = spacecraftWithDefaults({
+  name: 'Sojourner',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 11.5,
+  power: 13,
+  start: new Date('1996-12-04T06:58:07Z'),
+  end: new Date(1998, 2, 10),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
+  focusId: Bodies.MARS.id,
+  missionFamily: PATHFINDER_MISSION_FAMILY,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  wiki: 'https://en.wikipedia.org/wiki/Sojourner_(rover)',
+  thumbnail: 'sojourner-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.ROVER,
+      start: new Date('1997-07-04T16:56:55Z'),
+      end: new Date(1998, 2, 10),
+    },
+  ],
+});
+
+export const CASSINI_HUYGENS_MISSION_FAMILY = 'Cassini-Huygens';
+export const CASSINI = spacecraftWithDefaults({
+  name: 'Cassini',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 5712,
+  power: 885,
+  start: new Date('1997-10-15T08:43:00Z'),
+  end: new Date('2017-09-15T11:55:00Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: "Intentionally flown into Saturn's atmosphere on September 15, 2017",
+  },
+  focusId: Bodies.SATURN.id,
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  missionFamily: CASSINI_HUYGENS_MISSION_FAMILY,
+  thumbnail: 'cassini-huygens.gif',
+  wiki: 'https://en.wikipedia.org/wiki/Cassini%E2%80%93Huygens',
+  color: Bodies.SATURN.style.fgColor,
+  visited: [
+    // traveling to Saturn
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('1998-04-26T12:00:00Z') },
+    { id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1999-08-18T03:28:00Z') },
+    // TODO: 2685 Masurksy (asteroid) flyby on 2000-01-23
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2000-12-30T10:05:00Z') },
+    // primary mission
+    {
+      id: Bodies.SATURN.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2004-05-18T12:00:00Z'),
+      end: new Date('2017-09-15T11:55:00Z'),
+    },
+    // TODO: Prometheus, Pandora
+    { id: Bodies.PHOEBE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-05-27T12:00:00Z') },
+    { id: Bodies.TITAN.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-07-02T12:00:00Z') },
+    { id: Bodies.IAPETUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2004-12-31T18:45:37Z') },
+    { id: Bodies.ENCELADUS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-02-17T12:00:00Z') },
+    { id: Bodies.HYPERION.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-09-26T12:00:00Z') },
+    // solstice+equinox mission
+    { id: Bodies.RHEA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2005-11-26T22:37:00Z') },
+    { id: Bodies.DIONE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-04-07T12:00:00Z') },
   ],
 });
 
@@ -929,6 +656,27 @@ export const STARDUST = spacecraftWithDefaults({
   ],
 });
 
+export const MESSENGER = spacecraftWithDefaults({
+  name: 'MESSENGER',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1107.9,
+  power: 450,
+  start: new Date('2004-08-03T06:15:56Z'),
+  end: new Date('2015-04-30T19:26:00Z'),
+  focusId: Bodies.MERCURY.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Intentionally crashed into Mercury on April 30th, 2015',
+  },
+  thumbnail: 'messenger-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/MESSENGER',
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2007-06-05T12:00:00Z') },
+    { id: Bodies.MERCURY.id, type: SpacecraftVisitType.ORBITER, start: new Date('2011-03-18T01:00:00Z') },
+  ],
+});
+
 export const DEEP_IMPACT = spacecraftWithDefaults({
   name: 'Deep Impact',
   organization: SpacecraftOrganizationId.NASA,
@@ -945,6 +693,58 @@ export const DEEP_IMPACT = spacecraftWithDefaults({
   visited: [
     { id: Bodies.TEMPEL.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2005-07-04T05:52:00Z') },
     { id: Bodies.HARTLEY.id, type: SpacecraftVisitType.FLYBY, start: new Date('2010-11-04T13:50:57Z') },
+  ],
+});
+
+export const MARS_RECONNAISSANCE_ORBITER = spacecraftWithDefaults({
+  name: 'Mars Reconnaissance Orbiter',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2180,
+  power: 2000,
+  start: new Date('2005-08-12T11:43:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  focusId: Bodies.MARS.id,
+  thumbnail: 'mro-thumb.webp',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Reconnaissance_Orbiter',
+  color: Bodies.MARS.style.fgColor,
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2006-03-10T21:24:00Z') }],
+});
+
+export const NEW_HORIZONS = spacecraftWithDefaults({
+  name: 'New Horizons',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 478,
+  power: 245,
+  start: new Date('2006-01-19T19:00:00Z'),
+  status: {
+    status: SpacecraftStatus.OPERATIONAL,
+    details: 'Currently traveling through the Kuiper belt',
+  },
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM, OrbitalRegimeId.KUIPER_BELT],
+  focusId: Bodies.PLUTO.id,
+  thumbnail: 'new-horizons-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/New_Horizons',
+  color: Bodies.PLUTO.style.fgColor,
+  visited: [
+    // TODO: flyby of asteroid 132524 APL
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.FLYBY, start: new Date('2007-02-28T12:00:00Z') },
+    // Pluto phase
+    {
+      id: Bodies.PLUTO.id,
+      type: SpacecraftVisitType.FLYBY,
+      start: new Date('2015-03-10T12:00:00Z'),
+      end: new Date('2015-07-14T12:00:00Z'),
+    },
+    { id: Bodies.CHARON.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:03:00Z') },
+    { id: Bodies.HYDRA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    { id: Bodies.NIX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    { id: Bodies.KERBEROS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    { id: Bodies.STYX.id, type: SpacecraftVisitType.FLYBY, start: new Date('2015-07-14T12:00:00Z') },
+    // Kuiper belt phase
+    // TODO: enable? not really a flyby, 0.75 AU away
+    // { id: Bodies.ARAWN.id, type: SpacecraftVisitType.FLYBY, start: new Date(2016, 3, 8) },
+    { id: Bodies.ARROKOTH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-01-01T12:00:00Z') },
   ],
 });
 
@@ -977,6 +777,56 @@ export const DAWN = spacecraftWithDefaults({
   ],
 });
 
+export const JUNO = spacecraftWithDefaults({
+  name: 'Juno',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 3625,
+  power: 14000, // at Earth, solar
+  start: new Date('2011-08-05T16:25:00Z'),
+  focusId: Bodies.JUPITER.id,
+  orbitalRegimes: [OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'juno-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Juno_(spacecraft)',
+  color: Bodies.JUPITER.style.fgColor,
+  visited: [
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2016-07-05T03:53:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2019-12-26T16:58:59Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-09-29T09:36:00Z') },
+    { id: Bodies.IO.id, type: SpacecraftVisitType.FLYBY, start: new Date('2022-12-14T12:00:00Z') },
+  ],
+});
+
+export const CURIOSITY = spacecraftWithDefaults({
+  name: 'Curiosity',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 899,
+  power: 100,
+  start: new Date('2011-11-26T15:02:00Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'curiosity-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Curiosity_(rover)',
+  color: Bodies.MARS.style.fgColor,
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2012-08-06T05:17:00Z') }],
+});
+
+export const MAVEN = spacecraftWithDefaults({
+  name: 'MAVEN',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2454,
+  power: 1135,
+  start: new Date('2013-11-18T18:28:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  wiki: 'https://en.wikipedia.org/wiki/MAVEN',
+  thumbnail: 'maven-thumb.png',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2014-09-22T02:24:00Z') }],
+});
+
 export const OSIRIS_REX = spacecraftWithDefaults({
   name: 'OSIRIS-REx',
   organization: SpacecraftOrganizationId.NASA,
@@ -1002,18 +852,160 @@ export const OSIRIS_REX = spacecraftWithDefaults({
   ],
 });
 
+export const INSIGHT = spacecraftWithDefaults({
+  name: 'InSight',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 694,
+  power: 600,
+  start: new Date('2018-05-05T11:05:01Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on December 15, 2022' },
+  focusId: Bodies.MARS.id,
+  wiki: 'https://en.wikipedia.org/wiki/InSight',
+  thumbnail: 'insight-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2018-11-26T19:52:59Z'),
+      end: new Date(2022, 11, 21),
+    },
+  ],
+});
+
+export const PARKER_SOLAR_PROBE = spacecraftWithDefaults({
+  name: 'Parker Solar Probe',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 685,
+  power: 343,
+  start: new Date('2018-08-12T07:31:00Z'),
+  focusId: Bodies.SOL.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'parker-solar-probe-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Parker_Solar_Probe',
+  color: Bodies.SOL.style.fgColor,
+  visited: [
+    { id: Bodies.VENUS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2018-10-03T08:44:00Z') },
+    {
+      id: Bodies.SOL.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('2018-11-06T03:27:00Z'), // first perihelion
+    },
+  ],
+});
+
+const PERSEVERANCE_MISSION_FAMILY = 'Perseverance';
+export const PERSEVERANCE = spacecraftWithDefaults({
+  name: 'Perseverance',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1025,
+  power: 110,
+  start: new Date('2020-07-30T11:50:00Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: PERSEVERANCE_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'perseverance-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Perseverance_(rover)',
+  color: Bodies.MARS.style.fgColor,
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ROVER, start: new Date('2021-02-18T20:55:00Z') }],
+});
+
+export const INGENUITY = spacecraftWithDefaults({
+  name: 'Ingenuity',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1.8,
+  power: 350,
+  start: new Date('2020-07-30T11:50:00Z'),
+  end: new Date('2024-01-18T12:00:00Z'),
+  focusId: Bodies.MARS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: PERSEVERANCE_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Retired in 2024 due to sustained rotor damage',
+  },
+  thumbnail: 'ingenuity-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Ingenuity_(helicopter)',
+  color: Bodies.MARS.style.fgColor,
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.HELICOPTER, start: new Date('2021-02-18T20:55:00Z') }],
+});
+
+export const LUCY = spacecraftWithDefaults({
+  name: 'Lucy',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1550,
+  power: 504,
+  start: new Date('2021-10-16T09:34:02Z'),
+  focusId: Bodies.JUPITER.id,
+  orbitalRegimes: [OrbitalRegimeId.ASTEROID_BELT, OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'lucy-thumb.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Lucy_(spacecraft)',
+  visited: [
+    { id: Bodies.DINKINESH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2023-11-01T12:00:00Z') },
+    // TODO: 52246 Donaldjohanson flyby
+    // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
+  ],
+});
+
+export const AIDA_MISSION_FAMILY = 'Asteroid Impact and Deflection Assessment (AIDA)';
+export const DART = spacecraftWithDefaults({
+  name: 'Double Asteroid Redirect Test (DART)',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 610,
+  power: 6600,
+  start: new Date('2021-11-24T06:21:02Z'),
+  end: new Date('2022-09-26T23:14:00Z'),
+  focusId: Bodies.DIDYMOS.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: AIDA_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.DECOMMISSIONED, details: 'Impacted Dimorphos on September 26, 2022' },
+  thumbnail: 'dart-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test',
+  visited: [{ id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.IMPACTOR, start: new Date('2022-09-22T23:14:00Z') }],
+});
+
+export const PSYCHE = spacecraftWithDefaults({
+  name: 'Psyche',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2608,
+  power: 4500,
+  start: new Date('2023-10-13T14:19:00Z'),
+  focusId: Bodies.PSYCHE.id,
+  orbitalRegimes: [OrbitalRegimeId.ASTEROID_BELT],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'psyche-spacecraft-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Psyche_(spacecraft)',
+  visited: [{ id: Bodies.PSYCHE.id, type: SpacecraftVisitType.ORBITER, start: new Date('2029-08-15T12:00:00Z') }],
+});
+
+export const EUROPA_CLIPPER = spacecraftWithDefaults({
+  name: 'Europa Clipper',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 6065,
+  power: 600,
+  start: new Date('2024-10-14T16:06:00Z'),
+  focusId: Bodies.JUPITER.id,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM, OrbitalRegimeId.OUTER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  thumbnail: 'europa-clipper-thumb.png',
+  wiki: 'https://en.wikipedia.org/wiki/Europa_Clipper',
+  color: Bodies.EUROPA.style.fgColor,
+  visited: [
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-01T17:00:00Z') },
+    // some uncertainty here as these are planned dates
+    { id: Bodies.JUPITER.id, type: SpacecraftVisitType.ORBITER, start: new Date('2030-04-11T12:00:00Z') },
+    { id: Bodies.GANYMEDE.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') },
+    { id: Bodies.EUROPA.id, type: SpacecraftVisitType.FLYBY, start: new Date('2030-04-15T12:00:00Z') }, // many flybys
+  ],
+});
+
 export const NASA_SPACECRAFT = [
-  // Inner missions
-  MESSENGER,
-  PARKER_SOLAR_PROBE,
-
-  // Venus
   MARINER_2,
-  MARINER_10,
-  MAGELLAN,
-
-  // Luna
-  // TODO: there are an insane number of missions, 100+ successful that are worth noting
+  MARINER_4,
   APOLLO_8,
   APOLLO_10,
   APOLLO_11,
@@ -1021,40 +1013,37 @@ export const NASA_SPACECRAFT = [
   APOLLO_13,
   APOLLO_14,
   APOLLO_15,
+  PIONEER_10,
   APOLLO_16,
   APOLLO_17,
-
-  // Mars
-  MARINER_4,
-  CURIOSITY,
-  PERSEVERANCE,
-  INGENUITY,
+  PIONEER_11,
+  MARINER_10,
+  VOYAGER_2,
+  VOYAGER_1,
+  MAGELLAN,
+  GALILEO,
+  NEAR_SHOEMAKER,
+  MARS_GLOBAL_SURVEYOR,
   PATHFINDER,
   SOJOURNER,
-  MARS_GLOBAL_SURVEYOR,
-  MARS_RECONNAISSANCE_ORBITER,
-  INSIGHT,
-  MAVEN,
-
-  // Asteroids
-  NEAR_SHOEMAKER,
+  CASSINI,
   DEEP_SPACE_1,
   STARDUST,
+  MESSENGER,
   DEEP_IMPACT,
+  MARS_RECONNAISSANCE_ORBITER,
+  NEW_HORIZONS,
   DAWN,
+  JUNO,
+  CURIOSITY,
+  MAVEN,
   OSIRIS_REX,
+  INSIGHT,
+  PARKER_SOLAR_PROBE,
+  PERSEVERANCE,
+  INGENUITY,
   LUCY,
   DART,
   PSYCHE,
-
-  // Outer missions
-  PIONEER_10,
-  PIONEER_11,
-  VOYAGER_1,
-  VOYAGER_2,
-  GALILEO,
-  CASSINI,
-  NEW_HORIZONS,
-  JUNO,
   EUROPA_CLIPPER,
 ];
