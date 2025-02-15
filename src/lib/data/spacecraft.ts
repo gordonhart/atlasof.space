@@ -1220,6 +1220,7 @@ export const DAWN = spacecraftWithDefaults({
   ],
 });
 
+const CHANGE_MISSION_FAMILY = "Chang'e";
 // TODO: this is in a heliocentric orbit -- find the parameters and add as a body
 export const CHANGE_2 = spacecraftWithDefaults({
   name: "Chang'e 2",
@@ -1228,6 +1229,7 @@ export const CHANGE_2 = spacecraftWithDefaults({
   start: new Date('2010-10-01T10:59:00Z'),
   end: new Date(2014, 6, 1),
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: CHANGE_MISSION_FAMILY,
   status: { status: SpacecraftStatus.DEFUNCT, details: "Drifting out beyond Earth's orbit" },
   wiki: 'https://en.wikipedia.org/wiki/Chang%27e_2',
   thumbnail: 'change-2-thumb.jpg',
@@ -1242,6 +1244,25 @@ export const CHANGE_2 = spacecraftWithDefaults({
   ],
 });
 
+export const CHANGE_4 = spacecraftWithDefaults({
+  name: "Chang'e 4",
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 3780,
+  start: new Date('2018-12-07T18:23:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: CHANGE_MISSION_FAMILY,
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_4',
+  thumbnail: 'change-4-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2019-01-03T02:26:00Z'),
+    },
+  ],
+});
+
 export const CHANGE_5 = spacecraftWithDefaults({
   name: "Chang'e 5",
   organization: SpacecraftOrganizationId.CNSA,
@@ -1249,6 +1270,7 @@ export const CHANGE_5 = spacecraftWithDefaults({
   start: new Date('2020-11-23T20:30:12Z'),
   end: new Date('2020-12-16T17:59:00Z'),
   orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: CHANGE_MISSION_FAMILY,
   status: { status: SpacecraftStatus.RETURNED, details: 'Capsule returned to Earth with 1.7 kg of samples' },
   wiki: 'https://en.wikipedia.org/wiki/Chang%27e_5',
   thumbnail: 'change-5-thumb.jpg',
@@ -1384,6 +1406,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   APOLLO_15,
   APOLLO_16,
   APOLLO_17,
+  CHANGE_4,
   CHANGE_5,
 
   // Mars
