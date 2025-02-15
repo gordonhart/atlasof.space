@@ -1003,6 +1003,23 @@ export const EUROPA_CLIPPER = spacecraftWithDefaults({
   ],
 });
 
+/*
+ * TODO:
+ *  - Explorer 1
+ *  - Mariner 3
+ *  - Pioneer 4
+ *  - Skylab
+ *  - Lunar Orbiter 1
+ *  - Ranger 7
+ *  - Viking 1
+ *  - Viking 2
+ *  - Pioneer Venus 1+2
+ *  - Surveyor 1
+ *  - Mars Odyssey
+ *  - Phoenix
+ *  - Spirit
+ *  - Opportunity
+ */
 export const NASA_SPACECRAFT = [
   MARINER_2,
   MARINER_4,

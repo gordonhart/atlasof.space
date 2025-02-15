@@ -85,4 +85,11 @@ export const HAYABUSA_2 = spacecraftWithDefaults({
   visited: [{ id: Bodies.RYUGU.id, type: SpacecraftVisitType.ORBITER, start: new Date('2018-06-27T12:00:00Z') }],
 });
 
+/*
+ * TODO:
+ *  - Hiten
+ *  - Nozomi
+ *  - SELENE/Kayuga
+ *  - SLIM
+ */
 export const JAXA_SPACECRAFT = [SAKIGAKE, HAYABUSA, IKAROS, AKATSUKI, HAYABUSA_2];

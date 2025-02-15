@@ -208,6 +208,11 @@ export const SOLAR_ORBITER = spacecraftWithDefaults({
   ],
 });
 
+/*
+ * TODO:
+ *  - SMART-1
+ *  - SOHO
+ */
 export const ESA_SPACECRAFT = [
   GIOTTO,
   ULYSSES,

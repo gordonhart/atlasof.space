@@ -87,4 +87,19 @@ export const MARS_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
 });
 
+/*
+ * TODO:
+ *  - Sputnik 1
+ *  - Luna 1
+ *  - Vostok 1
+ *  - Venera 4
+ *  - Mars 2
+ *  - Luna 11
+ *  - Salyut 1
+ *  - Lunokhod 1
+ *  - Venera 9
+ *  - Vega 1
+ *  - Vega 2
+ *  - Mir
+ */
 export const SOVIET_SPACECRAFT = [LUNA_2, LUNA_3, ZOND_5, VENERA_7, MARS_3];

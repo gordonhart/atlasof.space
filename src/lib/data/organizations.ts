@@ -53,7 +53,16 @@ const CNSA: SpacecraftOrganization = {
   color: '#4887e4',
 };
 
-// TODO: ISRO -- Chandrayaan 1-3, Aditya, Mars Orbiter are all worth including
+/*
+ * TODO:
+ *  - ISRO: Chandrayaan 1-3, Aditya, Mars Orbiter are all worth including
+ *  - UAESA: Al-Amal Mars orbiter
+ *  - SpaceIL: Beresheet
+ *  - Private companies:
+ *    - Firefly: Blue Ghost
+ *    - Intuitive Machines: Odysseus
+ *    - ...Astrobotic, others
+ */
 export const SPACECRAFT_ORGANIZATIONS = [NASA, USSR, ESA, JAXA, CNSA].reduce(
   (acc, org) => ({ ...acc, [org.id]: org }),
   {} as Record<SpacecraftOrganizationId, SpacecraftOrganization>

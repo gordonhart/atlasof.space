@@ -154,4 +154,10 @@ export const CHANGE_6 = spacecraftWithDefaults({
   ],
 });
 
-export const CNSA_SPACECRAFT = [CHANGE_2, CHANGE_4, TIANWEN_1, ZHURONG, CHANGE_5, CHANGE_6, YUTU_2];
+/*
+ * TODO:
+ *  - Chang'e 1
+ *  - Shenzhou 5
+ *  - Tiangong 1
+ */
+export const CNSA_SPACECRAFT = [CHANGE_2, CHANGE_4, YUTU_2, TIANWEN_1, ZHURONG, CHANGE_5, CHANGE_6];
