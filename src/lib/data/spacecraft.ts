@@ -647,6 +647,7 @@ export const MARS_3 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lander failed 110 seconds after landing' },
   thumbnail: 'mars-3-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Mars_3',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
 });
 
@@ -807,6 +808,7 @@ export const MARS_RECONNAISSANCE_ORBITER = spacecraftWithDefaults({
   focusId: Bodies.MARS.id,
   thumbnail: 'mro-thumb.webp',
   wiki: 'https://en.wikipedia.org/wiki/Mars_Reconnaissance_Orbiter',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2006-03-10T21:24:00Z') }],
 });
 
@@ -820,7 +822,8 @@ export const INSIGHT = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on December 15, 2022' },
   focusId: Bodies.MARS.id,
   wiki: 'https://en.wikipedia.org/wiki/InSight',
-  thumbnail: 'insight-thumb.jpg', // TODO
+  thumbnail: 'insight-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
   visited: [
     {
       id: Bodies.MARS.id,
@@ -829,6 +832,21 @@ export const INSIGHT = spacecraftWithDefaults({
       end: new Date(2022, 11, 21),
     },
   ],
+});
+
+export const MAVEN = spacecraftWithDefaults({
+  name: 'MAVEN',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2454,
+  power: 1135,
+  start: new Date('2013-11-18T18:28:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  wiki: 'https://en.wikipedia.org/wiki/MAVEN',
+  thumbnail: 'maven-thumb.png',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2014-09-22T02:24:00Z') }],
 });
 
 export const PSYCHE = spacecraftWithDefaults({
@@ -1467,6 +1485,7 @@ export const AKATSUKI = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact in April 2024' },
   wiki: 'https://en.wikipedia.org/wiki/Akatsuki_(spacecraft)',
   thumbnail: 'akatsuki-thumb.png',
+  color: Bodies.VENUS.style.fgColor,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.ORBITER, start: new Date(2015, 11, 7) }],
 });
 
@@ -1581,9 +1600,9 @@ export const SPACECRAFT: Array<Spacecraft> = [
   MARS_RECONNAISSANCE_ORBITER,
   // VIKING_1,
   // VIKING_2,
-  // MARS_PATHFINDER,
   // PHOENIX,
   INSIGHT,
+  MAVEN,
 
   // Asteroids
   NEAR_SHOEMAKER,
