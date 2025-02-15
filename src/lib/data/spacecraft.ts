@@ -1304,6 +1304,30 @@ export const CHANGE_5 = spacecraftWithDefaults({
   ],
 });
 
+export const CHANGE_6 = spacecraftWithDefaults({
+  name: "Chang'e 6",
+  organization: SpacecraftOrganizationId.CNSA,
+  launchMass: 8350,
+  start: new Date('2024-05-03T09:27:29Z'),
+  end: new Date('2024-06-25T06:07:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  missionFamily: CHANGE_MISSION_FAMILY,
+  status: {
+    status: SpacecraftStatus.RETURNED,
+    details: 'Returned with the first samples collected from the far side of the Moon',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Chang%27e_6',
+  thumbnail: 'change-6-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.LUNA.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2024-06-01T22:23:16Z'),
+      end: new Date('2024-06-03T23:38:10Z'),
+    },
+  ],
+});
+
 // TODO: include MINERVA-II lander? the 4 rovers? the impactor? crazy mission
 export const HAYABUSA_2 = spacecraftWithDefaults({
   name: 'Hayabusa2',
@@ -1429,6 +1453,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   CHANGE_4,
   YUTU_2,
   CHANGE_5,
+  CHANGE_6,
 
   // Mars
   MARINER_4,
