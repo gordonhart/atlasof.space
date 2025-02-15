@@ -1244,7 +1244,6 @@ export const CHANGE_2 = spacecraftWithDefaults({
   ],
 });
 
-// TODO: include Yutu-2 rover?
 export const CHANGE_4 = spacecraftWithDefaults({
   name: "Chang'e 4",
   organization: SpacecraftOrganizationId.CNSA,
