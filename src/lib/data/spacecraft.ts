@@ -188,6 +188,54 @@ export const HUYGENS = spacecraftWithDefaults({
   ],
 });
 
+const PATHFINDER_MISSION_FAMILY = 'Pathfinder';
+export const PATHFINDER = spacecraftWithDefaults({
+  name: 'Mars Pathfinder',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 890,
+  power: 35,
+  start: new Date('1996-12-04T06:58:07Z'),
+  end: new Date('1997-09-27T10:23:00Z'),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
+  focusId: Bodies.MARS.id,
+  missionFamily: PATHFINDER_MISSION_FAMILY,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Pathfinder',
+  thumbnail: 'pathfinder-thumb.webp',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('1997-07-04T16:55:56Z'),
+      end: new Date(1997, 8, 27),
+    },
+  ],
+});
+export const SOJOURNER = spacecraftWithDefaults({
+  name: 'Sojourner',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 11.5,
+  power: 13,
+  start: new Date('1996-12-04T06:58:07Z'),
+  end: new Date(1998, 2, 10),
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on September 27, 1997' },
+  focusId: Bodies.MARS.id,
+  missionFamily: PATHFINDER_MISSION_FAMILY,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  wiki: 'https://en.wikipedia.org/wiki/Sojourner_(rover)',
+  thumbnail: 'sojourner-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.ROVER,
+      start: new Date('1997-07-04T16:56:55Z'),
+      end: new Date(1998, 2, 10),
+    },
+  ],
+});
+
 export const CURIOSITY = spacecraftWithDefaults({
   name: 'Curiosity',
   organization: SpacecraftOrganizationId.NASA,
@@ -510,6 +558,30 @@ export const MARINER_10 = spacecraftWithDefaults({
   ],
 });
 
+export const MAGELLAN = spacecraftWithDefaults({
+  name: 'Magellan',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 3445,
+  power: 1030,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  start: new Date('1989-05-04T18:47:00Z'),
+  end: new Date('1994-10-13T10:05:00Z'),
+  status: {
+    status: SpacecraftStatus.DECOMMISSIONED,
+    details: 'Deorbited into the Venusian atmosphere on October 13, 1994',
+  },
+  wiki: 'https://en.wikipedia.org/wiki/Magellan_(spacecraft)',
+  thumbnail: 'magellan-thumb.jpg',
+  visited: [
+    {
+      id: Bodies.VENUS.id,
+      type: SpacecraftVisitType.ORBITER,
+      start: new Date('1990-08-10T17:00:00Z'),
+      end: new Date('1994-10-13T10:05:00Z'),
+    },
+  ],
+});
+
 const VENERA_MISSION_FAMILY = 'Venera';
 export const VENERA_7 = spacecraftWithDefaults({
   name: 'Venera 7',
@@ -564,6 +636,21 @@ export const LUNA_3 = spacecraftWithDefaults({
   visited: [{ id: Bodies.LUNA.id, type: SpacecraftVisitType.FLYBY, start: new Date('1959-10-06T14:16:00Z') }],
 });
 
+export const MARS_EXPRESS = spacecraftWithDefaults({
+  name: 'Mars Express',
+  organization: SpacecraftOrganizationId.ESA,
+  launchMass: 1123,
+  power: 460,
+  start: new Date('2003-06-02T17:45:00Z'),
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Express',
+  thumbnail: 'mars-express-thumb.jpg',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2003-12-25T03:00:00Z') }],
+});
+
 export const MARS_3 = spacecraftWithDefaults({
   name: 'Mars 3',
   organization: SpacecraftOrganizationId.USSR,
@@ -575,6 +662,7 @@ export const MARS_3 = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lander failed 110 seconds after landing' },
   thumbnail: 'mars-3-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Mars_3',
+  color: Bodies.MARS.style.fgColor,
   visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.LANDER, start: new Date('1971-12-02T13:52:00Z') }],
 });
 
@@ -722,6 +810,77 @@ export const HERA = spacecraftWithDefaults({
     { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
     { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
   ],
+});
+
+export const MARS_GLOBAL_SURVEYOR = spacecraftWithDefaults({
+  name: 'Mars Global Surveyor',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 1030.5,
+  power: 980,
+  start: new Date('1996-11-07T17:00:00Z'),
+  end: new Date(2007, 0, 28),
+  status: {
+    status: SpacecraftStatus.DEFUNCT,
+    details: 'Contact lost on November 2, 2006, estimated to remain in orbit until ~2050',
+  },
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  thumbnail: 'mars-global-surveyor.jpg',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Global_Surveyor',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('1997-09-11T01:17:00Z') }],
+});
+
+export const MARS_RECONNAISSANCE_ORBITER = spacecraftWithDefaults({
+  name: 'Mars Reconnaissance Orbiter',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2180,
+  power: 2000,
+  start: new Date('2005-08-12T11:43:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  focusId: Bodies.MARS.id,
+  thumbnail: 'mro-thumb.webp',
+  wiki: 'https://en.wikipedia.org/wiki/Mars_Reconnaissance_Orbiter',
+  color: Bodies.MARS.style.fgColor,
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2006-03-10T21:24:00Z') }],
+});
+
+export const INSIGHT = spacecraftWithDefaults({
+  name: 'InSight',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 694,
+  power: 600,
+  start: new Date('2018-05-05T11:05:01Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact on December 15, 2022' },
+  focusId: Bodies.MARS.id,
+  wiki: 'https://en.wikipedia.org/wiki/InSight',
+  thumbnail: 'insight-thumb.jpg',
+  color: Bodies.MARS.style.fgColor,
+  visited: [
+    {
+      id: Bodies.MARS.id,
+      type: SpacecraftVisitType.LANDER,
+      start: new Date('2018-11-26T19:52:59Z'),
+      end: new Date(2022, 11, 21),
+    },
+  ],
+});
+
+export const MAVEN = spacecraftWithDefaults({
+  name: 'MAVEN',
+  organization: SpacecraftOrganizationId.NASA,
+  launchMass: 2454,
+  power: 1135,
+  start: new Date('2013-11-18T18:28:00Z'),
+  orbitalRegimes: [OrbitalRegimeId.INNER_SYSTEM],
+  status: { status: SpacecraftStatus.OPERATIONAL },
+  focusId: Bodies.MARS.id,
+  color: Bodies.MARS.style.fgColor,
+  wiki: 'https://en.wikipedia.org/wiki/MAVEN',
+  thumbnail: 'maven-thumb.png',
+  visited: [{ id: Bodies.MARS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2014-09-22T02:24:00Z') }],
 });
 
 export const PSYCHE = spacecraftWithDefaults({
@@ -1360,6 +1519,7 @@ export const AKATSUKI = spacecraftWithDefaults({
   status: { status: SpacecraftStatus.DEFUNCT, details: 'Lost contact in April 2024' },
   wiki: 'https://en.wikipedia.org/wiki/Akatsuki_(spacecraft)',
   thumbnail: 'akatsuki-thumb.png',
+  color: Bodies.VENUS.style.fgColor,
   visited: [{ id: Bodies.VENUS.id, type: SpacecraftVisitType.ORBITER, start: new Date(2015, 11, 7) }],
 });
 
@@ -1423,7 +1583,7 @@ export const SPACECRAFT: Array<Spacecraft> = [
   // VENERA_16,
   // VEGA_1,
   // VEGA_2,
-  // MAGELLAN,
+  MAGELLAN,
   VENUS_EXPRESS,
   AKATSUKI,
   IKAROS,
@@ -1465,18 +1625,21 @@ export const SPACECRAFT: Array<Spacecraft> = [
   INGENUITY,
   TIANWEN_1,
   ZHURONG,
-  // SOJOURNER,
+  PATHFINDER,
+  SOJOURNER,
   // SPIRIT,
   // OPPORTUNITY,
-  // ZHURONG,
   // MARS_2,
+  MARS_GLOBAL_SURVEYOR,
+  MARS_EXPRESS,
   MARS_3,
-  // MARS_RECONNAISSANCE_ORBITER,
+  MARS_RECONNAISSANCE_ORBITER,
   // VIKING_1,
   // VIKING_2,
-  // MARS_PATHFINDER,
   // PHOENIX,
-  // INSIGHT,
+  INSIGHT,
+  MAVEN,
+  // AL_AMAL,
 
   // Asteroids
   NEAR_SHOEMAKER,
