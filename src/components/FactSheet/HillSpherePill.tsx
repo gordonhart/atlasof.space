@@ -26,7 +26,7 @@ export function HillSpherePill({ body, parent, settings, updateSettings }: Props
   const isActive = settings.toggles.has(id);
   return (
     <Group gap={8} wrap="nowrap" fw="normal" fz="xs" c={isActive ? undefined : 'var(--mantine-color-gray-light-color)'}>
-      {radValue.toLocaleString()} {radUnits}
+      {(radValue > 1e4 ? Number(radValue.toFixed(0)) : radValue).toLocaleString()} {radUnits}
       <Switch size="xs" radius="sm" variant="light" color={body.style.fgColor} checked={isActive} onChange={onToggle} />
     </Group>
   );

@@ -56,7 +56,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
   const hillSpherePill =
-    parent != null ? (
+    parent != null && parent.type === CelestialBodyType.STAR ? (
       <HillSpherePill body={body} parent={parent} settings={settings} updateSettings={updateSettings} />
     ) : null;
 
