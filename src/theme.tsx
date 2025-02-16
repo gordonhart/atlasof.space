@@ -3,6 +3,7 @@ import { ActionIcon, Button, createTheme, Modal, Paper, Popover, Tooltip } from 
 export const theme = createTheme({
   primaryColor: 'blue',
   headings: { fontFamily: 'Electrolize, sans-serif' },
+  cursorType: 'pointer',
   components: {
     Button: Button.extend({ defaultProps: { style: { backdropFilter: 'blur(4px)' } } }),
     ActionIcon: ActionIcon.extend({

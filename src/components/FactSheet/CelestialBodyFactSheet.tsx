@@ -8,7 +8,7 @@ import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { UpdateSettings } from '../../lib/state.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
@@ -29,12 +29,13 @@ import { WikiLinkPill } from './WikiLinkPill.tsx';
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
+  settings: Settings;
   updateSettings: UpdateSettings;
 };
-
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
   bodies,
+  settings,
   updateSettings,
 }: Props) {
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
@@ -55,7 +56,9 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
   const hillSpherePill =
-    parent != null ? <HillSpherePill body={body} parent={parent} updateSettings={updateSettings} /> : null;
+    parent != null ? (
+      <HillSpherePill body={body} parent={parent} settings={settings} updateSettings={updateSettings} />
+    ) : null;
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),

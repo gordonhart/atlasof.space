@@ -1,48 +1,33 @@
-import { Box, Button, Collapse, Group, Stack, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconSphere } from '@tabler/icons-react';
+import { Group, Switch } from '@mantine/core';
 import { hillRadius } from '../../lib/physics.ts';
-import { UpdateSettings } from '../../lib/state.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { asHillSphereId, CelestialBody } from '../../lib/types.ts';
 import { humanDistanceUnits } from '../../lib/utils.ts';
 
 type Props = {
   body: CelestialBody;
   parent: CelestialBody;
+  settings: Settings;
   updateSettings: UpdateSettings;
 };
-export function HillSpherePill({ body, parent, updateSettings }: Props) {
-  const [opened, { toggle }] = useDisclosure(false);
+export function HillSpherePill({ body, parent, settings, updateSettings }: Props) {
   const { semiMajorAxis: a, eccentricity: e } = body.elements;
   const hillRad = hillRadius(a, e, parent.mass, body.mass);
   const [radValue, radUnits] = humanDistanceUnits(hillRad);
+  const id = asHillSphereId(body.id);
 
   function onToggle() {
-    updateSettings({ hover: opened ? null : asHillSphereId(body.id) });
-    toggle();
+    updateSettings(({ toggles, ...prev }) => {
+      const newToggles = toggles.has(id) ? [...toggles].filter(toggle => toggle !== id) : [...toggles, id];
+      return { ...prev, toggles: new Set(newToggles) };
+    });
   }
 
+  const isActive = settings.toggles.has(id);
   return (
-    <Stack
-      gap={4}
-      onMouseEnter={() => updateSettings({ hover: asHillSphereId(body.id) })}
-      onMouseLeave={() => updateSettings(opened ? {} : { hover: null })}
-    >
-      <Box>
-        <Button size="compact-xs" variant={opened ? 'outline' : 'subtle'} color="gray" fw="normal" onClick={onToggle}>
-          <Group gap={4} wrap="nowrap">
-            <IconSphere size={14} />
-            {radValue.toLocaleString()} {radUnits}
-          </Group>
-        </Button>
-      </Box>
-
-      <Collapse in={opened}>
-        <Text inherit c="dimmed" fs="italic" maw={320}>
-          The Hill sphere marks the region where a planet's gravitational pull is stronger than that of the star it
-          orbits.
-        </Text>
-      </Collapse>
-    </Stack>
+    <Group gap={8} wrap="nowrap" fw="normal" fz="xs" c={isActive ? undefined : 'var(--mantine-color-gray-light-color)'}>
+      {radValue.toLocaleString()} {radUnits}
+      <Switch size="xs" radius="sm" variant="light" color={body.style.fgColor} checked={isActive} onChange={onToggle} />
+    </Group>
   );
 }

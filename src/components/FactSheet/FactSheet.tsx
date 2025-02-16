@@ -24,7 +24,7 @@ export const FactSheet = memo(function FactSheetComponent({
 }: Props) {
   const props = { bodies: settings.bodies, updateSettings };
   return item.type === FocusItemType.CELESTIAL_BODY ? (
-    <CelestialBodyFactSheet body={item.item} {...props} />
+    <CelestialBodyFactSheet body={item.item} settings={settings} {...props} />
   ) : item.type === FocusItemType.ORBITAL_REGIME ? (
     <OrbitalRegimeFactSheet regime={item.item} addBody={addBody} removeBody={removeBody} {...props} />
   ) : item.type === FocusItemType.SPACECRAFT ? (

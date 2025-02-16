@@ -12,7 +12,8 @@ import {
   SpacecraftOrganizationId,
 } from './types.ts';
 
-export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId | SpacecraftOrganizationId | HillSphereId;
+export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId | SpacecraftOrganizationId;
+export type ToggleId = HillSphereId;
 
 export function itemIdAsRoute(itemId: ItemId | null) {
   if (itemId == null) return '/';
@@ -32,6 +33,7 @@ export type Settings = {
   drawLabel: boolean;
   center: ItemId | null; // center of visualization
   hover: ItemId | null; // mouse hovered item
+  toggles: Set<ToggleId>;
   visibleTypes: Set<CelestialBodyType>;
   visibleRegimes: Set<OrbitalRegimeId>;
   bodies: Array<CelestialBody>;
@@ -59,6 +61,7 @@ export const initialState: AppState = {
     drawLabel: true,
     center: null,
     hover: null,
+    toggles: new Set([]),
     visibleTypes: new Set([
       CelestialBodyType.STAR,
       CelestialBodyType.PLANET,

@@ -169,7 +169,7 @@ export class KeplerianBody extends KinematicBody {
   }
 
   private updateHillSphere(settings: Settings, parent: this | null) {
-    const shouldShowHillSphere = parent != null && settings.hover === asHillSphereId(this.body.id);
+    const shouldShowHillSphere = parent != null && settings.toggles.has(asHillSphereId(this.body.id));
     if (shouldShowHillSphere && this.hillSphere == null) {
       const { semiMajorAxis: a, eccentricity: e } = this.body.elements;
       const hillRad = hillRadius(a, e, parent.body.mass, this.body.mass);
