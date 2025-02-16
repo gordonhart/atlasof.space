@@ -16,6 +16,7 @@ import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { Gallery } from './Gallery.tsx';
+import { HillSpherePill } from './HillSpherePill.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { MajorSatellites } from './MajorSatellites.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
@@ -30,6 +31,7 @@ type Props = {
   bodies: Array<CelestialBody>;
   updateSettings: UpdateSettings;
 };
+
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
   bodies,
@@ -52,12 +54,15 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
     ) : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
+  const hillSpherePill =
+    parent != null ? <HillSpherePill body={body} parent={parent} updateSettings={updateSettings} /> : null;
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
+    ...(hillSpherePill != null ? [{ label: 'hill sphere', value: hillSpherePill }] : []),
     // prettier-ignore
     ...(type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },

@@ -9,24 +9,27 @@ import {
   LABEL_FONT_FAMILY,
 } from '../canvas.ts';
 import { SPACECRAFT_BY_ID } from '../data/spacecraft/spacecraft.ts';
-import { magnitude } from '../physics.ts';
+import { hillRadius, magnitude } from '../physics.ts';
 import { Settings } from '../state.ts';
-import { CelestialBody, CelestialBodyType, isSpacecraftId, Point2 } from '../types.ts';
+import { asHillSphereId, CelestialBody, CelestialBodyType, isSpacecraftId, Point2 } from '../types.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
 import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
+import { HillSphere } from './HillSphere.ts';
 import { KinematicBody } from './KinematicBody.ts';
 import { OrbitalEllipse } from './OrbitalEllipse.ts';
 import { SphericalBody } from './SphericalBody.ts';
 
 // body that follows an elliptical orbit around a parent described by Keplerian elements
 export class KeplerianBody extends KinematicBody {
+  private readonly scene: Scene;
   public readonly body: CelestialBody;
   private readonly resolution: Vector2;
   private readonly sphere: SphericalBody;
   private readonly ellipse: OrbitalEllipse;
   private readonly radius: FocalRadius;
   private readonly axis: AxisIndicator | null = null;
+  private hillSphere: HillSphere | null = null;
   private readonly dotRadius: number;
   private readonly labelBox = new Box2();
   private readonly screenPoint = new Vector2(); // reuse for efficiency
@@ -46,6 +49,7 @@ export class KeplerianBody extends KinematicBody {
     velocity: Vector3
   ) {
     super(body.influencedBy, position, velocity, body.elements.rotation);
+    this.scene = scene;
     this.body = body;
     this.resolution = resolution;
     this.visible = this.isVisible(settings);
@@ -73,6 +77,7 @@ export class KeplerianBody extends KinematicBody {
     }
     this.radius.update(parent?.position ?? null, this.position, thisIsHovered);
     this.axis?.update(this.position, thisIsHovered);
+    this.updateHillSphere(settings, parent);
   }
 
   dispose() {
@@ -80,6 +85,7 @@ export class KeplerianBody extends KinematicBody {
     this.ellipse.dispose();
     this.radius.dispose();
     this.axis?.dispose();
+    this.hillSphere?.dispose();
   }
 
   // draw the dot and label for this body
@@ -160,6 +166,20 @@ export class KeplerianBody extends KinematicBody {
       settings.visibleTypes.has(this.body.type) ||
       spacecraft?.focusId == this.body.id // show if this is the focus body for the selected spacecraft
     );
+  }
+
+  private updateHillSphere(settings: Settings, parent: this | null) {
+    const shouldShowHillSphere = parent != null && settings.hover === asHillSphereId(this.body.id);
+    if (shouldShowHillSphere && this.hillSphere == null) {
+      const { semiMajorAxis: a, eccentricity: e } = this.body.elements;
+      const hillRad = hillRadius(a, e, parent.body.mass, this.body.mass);
+      this.hillSphere = new HillSphere(this.scene, hillRad, this.position);
+    }
+    if (!shouldShowHillSphere) {
+      this.hillSphere?.dispose();
+      this.hillSphere = null;
+    }
+    this.hillSphere?.update(this.position);
   }
 
   // show dot only when the orbit is larger than the dot itself; helps selectively hide moons until zoomed

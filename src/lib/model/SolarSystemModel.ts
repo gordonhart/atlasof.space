@@ -223,10 +223,8 @@ export class SolarSystemModel {
     const cartesian = keplerianToCartesian(elementsInEpoch, G * mainParentMass);
     const position = parents.reduce((acc, { position }) => acc.add(position), new Vector3(...cartesian.position));
     const velocity = parents.reduce((acc, { velocity }) => acc.add(velocity), new Vector3(...cartesian.velocity));
-    // TODO: conditionally excluding the sun is a little gross
-    const parent = mainParent?.body?.type === CelestialBodyType.STAR ? null : mainParent;
     const bodyInEpoch = { ...body, elements: elementsInEpoch };
-    return new KeplerianBody(this.scene, this.resolution, settings, parent, bodyInEpoch, position, velocity);
+    return new KeplerianBody(this.scene, this.resolution, settings, mainParent, bodyInEpoch, position, velocity);
   }
 
   private incrementKinematics(dt: number) {

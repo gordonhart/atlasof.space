@@ -5,13 +5,14 @@ import {
   CelestialBodyId,
   CelestialBodyType,
   Epoch,
+  HillSphereId,
   OrbitalRegimeId,
   Point3,
   SpacecraftId,
   SpacecraftOrganizationId,
 } from './types.ts';
 
-export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId | SpacecraftOrganizationId;
+export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId | SpacecraftOrganizationId | HillSphereId;
 
 export function itemIdAsRoute(itemId: ItemId | null) {
   if (itemId == null) return '/';

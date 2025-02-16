@@ -17,6 +17,7 @@ export type Epoch = {
 };
 
 export type CelestialBodyId = `body/${string}`;
+export type HillSphereId = `hill/${CelestialBodyId}`;
 
 export type RotationElements = {
   axialTilt: number; // degrees, also known as 'obliquity', given WRT orbital plane
@@ -205,6 +206,9 @@ export function asSpacecraftId(slug: string): SpacecraftId {
 }
 export function asOrganizationId(slug: string): SpacecraftOrganizationId {
   return `organization/${slug}` as SpacecraftOrganizationId;
+}
+export function asHillSphereId(id: CelestialBodyId): HillSphereId {
+  return `hill/${id}`;
 }
 
 export function isCelestialBodyId(id: unknown): id is CelestialBodyId {
