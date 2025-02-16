@@ -62,7 +62,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
-    ...(hillSpherePill != null ? [{ label: 'hill sphere', value: hillSpherePill }] : []),
+    ...(hillSpherePill != null ? [{ label: 'hill radius', value: hillSpherePill }] : []),
     // prettier-ignore
     ...(type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
