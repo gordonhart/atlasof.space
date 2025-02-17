@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { Settings, useAppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyId, Epoch } from '../lib/types.ts';
 
 export function useSolarSystemModel() {
-  const center = useAppState(state => state.settings.center);
   const updateSettings = useAppState(state => state.updateSettings);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -77,10 +76,6 @@ export function useSolarSystemModel() {
     modelRef.current?.resize(containerRef.current);
     initializeCanvas();
   }
-
-  useEffect(() => {
-    resize();
-  }, [center]);
 
   return {
     containerRef,

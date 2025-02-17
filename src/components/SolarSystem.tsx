@@ -45,6 +45,10 @@ export function SolarSystem() {
     };
   }, []);
 
+  useEffect(() => {
+    model.resize();
+  }, [focusItem]);
+
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
     <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
