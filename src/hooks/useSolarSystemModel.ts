@@ -4,7 +4,7 @@ import { Settings, useAppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyId, Epoch } from '../lib/types.ts';
 
 export function useSolarSystemModel() {
-  const settings = useAppState(state => state.settings);
+  const center = useAppState(state => state.settings.center);
   const updateSettings = useAppState(state => state.updateSettings);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -22,10 +22,10 @@ export function useSolarSystemModel() {
     ctx.translate(0, -canvas.height / dpr);
   }
 
-  function initialize() {
+  function initialize(settings: Settings) {
     if (containerRef.current == null || canvasRef.current == null) return;
     if (modelRef.current == null) {
-      modelRef.current = new SolarSystemModel(containerRef.current);
+      modelRef.current = new SolarSystemModel(containerRef.current, settings);
     }
     initializeCanvas();
     window.addEventListener('resize', resize);
@@ -39,12 +39,12 @@ export function useSolarSystemModel() {
   }
 
   function update(ctx: CanvasRenderingContext2D) {
-    modelRef.current?.update(ctx);
+    modelRef.current?.update(useAppState.getState().settings, ctx);
   }
 
   function addBody(body: CelestialBody) {
     updateSettings(prev => {
-      modelRef.current?.add(body);
+      modelRef.current?.add(prev, body);
       return { ...prev, bodies: [...prev.bodies, body] };
     });
   }
@@ -80,7 +80,7 @@ export function useSolarSystemModel() {
 
   useEffect(() => {
     resize();
-  }, [settings.center]);
+  }, [center != null]);
 
   return {
     containerRef,

@@ -2,7 +2,7 @@ import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
-import { epochToDate, Time } from '../../lib/epoch.ts';
+import { Time } from '../../lib/epoch.ts';
 import { useAppState } from '../../lib/state.ts';
 import { Epoch } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
@@ -51,18 +51,9 @@ type Props = {
   setEpoch: (epoch: Epoch) => void;
 };
 export const TimeControls = memo(function TimeControlsComponent({ setEpoch }: Props) {
-  const time = useAppState(state => state.model.time);
-  const epoch = useAppState(state => state.settings.epoch);
   const speed = useAppState(state => state.settings.speed);
   const play = useAppState(state => state.settings.play);
   const updateSettings = useAppState(state => state.updateSettings);
-
-  // TODO: still rerendering every frame when `time` changes (i.e. animation is running)
-  const dateRounded = useMemo(() => {
-    const baseDate = Number(epochToDate(epoch));
-    const date = new Date(baseDate + time * 1000);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }, [epoch, Math.floor(time / Time.DAY)]);
 
   const [t, tUnits] = useMemo(() => humanTimeUnits(speed, true), [speed]);
 
@@ -72,7 +63,7 @@ export const TimeControls = memo(function TimeControlsComponent({ setEpoch }: Pr
     <Stack gap={buttonGap}>
       <Paper pr={buttonGap} py={2} radius="md">
         <Stack gap={2} align="flex-start" fz="xs">
-          <EpochPopover date={dateRounded} setEpoch={setEpoch} />
+          <EpochPopover setEpoch={setEpoch} />
           <Text ml={8} inherit c="dimmed" ff={LABEL_FONT_FAMILY}>
             {tUnits === 'second' && t === 1 ? 'speed: realtime' : `${pluralize(t, tUnits)} / second`}
           </Text>

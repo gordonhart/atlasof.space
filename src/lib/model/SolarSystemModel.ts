@@ -9,7 +9,7 @@ import { ORBITAL_REGIMES } from '../data/regimes.ts';
 import { SPACECRAFT_BY_ID } from '../data/spacecraft/spacecraft.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
-import { ModelState, Settings, useAppState } from '../state.ts';
+import { ModelState, Settings } from '../state.ts';
 import {
   CelestialBody,
   CelestialBodyId,
@@ -44,7 +44,7 @@ export class SolarSystemModel {
   private lockedCenter: string | null = null;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, settings: Settings) {
     this.scene = new Scene();
     this.resolution = new Vector2(container.clientWidth, container.clientHeight);
     this.fpsCounter = new FrameRateCounter();
@@ -72,7 +72,6 @@ export class SolarSystemModel {
     this.controls.keyPanSpeed = 10; // pixels per second
     this.controls.listenToKeyEvents(window);
 
-    const settings = useAppState.getState().settings;
     this.bodies = this.createBodies(settings);
     this.firmament = new Firmament(this.resolution);
     this.regimes = Object.values(ORBITAL_REGIMES).map(regime => new OrbitalRegime(this.scene, settings, regime));
@@ -118,8 +117,7 @@ export class SolarSystemModel {
     };
   }
 
-  update(ctx: CanvasRenderingContext2D) {
-    const settings = useAppState.getState().settings;
+  update(settings: Settings, ctx: CanvasRenderingContext2D) {
     this.fpsCounter.update();
     const fps = this.fpsCounter.fps();
     if (fps == null) return; // still initializing
@@ -136,9 +134,8 @@ export class SolarSystemModel {
     this.drawAnnotations(ctx, settings);
   }
 
-  add(body: CelestialBody) {
+  add(settings: Settings, body: CelestialBody) {
     if (Object.keys(this.bodies).some(s => s === body.id)) return; // already exists, don't re-add
-    const settings = useAppState.getState().settings;
     const parents = body.influencedBy.map(id => this.bodies[id]).filter(notNullish);
     this.bodies[body.id] = this.createBodyWithParents(settings, parents, body);
   }

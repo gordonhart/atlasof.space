@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useFocusItem } from '../hooks/useFocusItem.ts';
+import { useIsTouchDevice } from '../hooks/useIsTouchDevice.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useUrlState } from '../hooks/useUrlState.ts';
-import { itemIdAsRoute, useAppState as useAppStateZ } from '../lib/state.ts';
+import { initialState, itemIdAsRoute, useAppState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
@@ -14,12 +15,18 @@ export function SolarSystem() {
   const navigate = useNavigate();
   const { center: urlCenter } = useUrlState();
   const { sm: isSmallDisplay } = useDisplaySize();
-  const { model: modelState, settings, updateModel, updateSettings, reset: resetAppState } = useAppStateZ();
+  const settings = useAppState(state => state.settings);
+  const updateModel = useAppState(state => state.updateModel);
+  const updateSettings = useAppState(state => state.updateSettings);
+  const resetAppState = useAppState(state => state.reset);
   const model = useSolarSystemModel();
   const cursorControls = useCursorControls(model.modelRef.current);
   const focusItem = useFocusItem();
-  // const isTouchDevice = useIsTouchDevice();
-  // const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
+
+  // TODO: avoid setting hover when using touch device
+  const isTouchDevice = useIsTouchDevice();
+  // TODO: fix URL state initialization and syncing
+  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
 
   // sync URL to center
   useEffect(() => {
@@ -38,7 +45,8 @@ export function SolarSystem() {
 
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
-    updateModel(model.modelRef.current?.getModelState() ?? modelState);
+    const newModelState = model.modelRef.current?.getModelState();
+    if (newModelState != null) updateModel(newModelState);
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
       model.update(ctx);
@@ -47,7 +55,7 @@ export function SolarSystem() {
   }
 
   useEffect(() => {
-    model.initialize();
+    model.initialize(urlInitialState.settings);
     const frameId = window.requestAnimationFrame(animationFrame);
     return () => {
       window.cancelAnimationFrame(frameId);
