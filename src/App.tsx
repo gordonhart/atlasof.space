@@ -2,6 +2,7 @@ import { MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { SolarSystem } from './components/SolarSystem';
+import { ROUTE_TEMPLATES } from './lib/routes.ts';
 import { theme } from './theme.tsx';
 
 const queryClient = new QueryClient();
@@ -12,10 +13,9 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/:bodyId?" element={<SolarSystem />} />
-            <Route path="/regime/:regimeId?" element={<SolarSystem />} />
-            <Route path="/spacecraft/:spacecraftId?" element={<SolarSystem />} />
-            <Route path="/organization/:organizationId?" element={<SolarSystem />} />
+            {ROUTE_TEMPLATES.map(route => (
+              <Route key={route} path={route} element={<SolarSystem />} />
+            ))}
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
