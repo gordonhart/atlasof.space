@@ -105,9 +105,10 @@ export const useAppState = create<AppState & Actions>(set => ({
       },
     })),
   updateSettings: update =>
-    set(prev =>
-      typeof update === 'function' ? { settings: update(prev.settings) } : { settings: { ...prev.settings, ...update } }
-    ),
+    set(prev => {
+      const newSettings = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
+      return equals(newSettings, prev.settings) ? prev : { settings: newSettings };
+    }),
   reset: () => {
     set(initialState);
     return initialState;

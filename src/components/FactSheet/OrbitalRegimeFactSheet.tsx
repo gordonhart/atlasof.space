@@ -1,5 +1,5 @@
 import { Box, Stack, Title } from '@mantine/core';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/data/bodies.ts';
@@ -26,7 +26,11 @@ type Props = {
   addBody: (body: CelestialBody) => void;
   removeBody: (id: CelestialBodyId) => void;
 };
-export function OrbitalRegimeFactSheet({ regime, addBody, removeBody }: Props) {
+export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
+  regime,
+  addBody,
+  removeBody,
+}: Props) {
   const bodies = useAppState(state => state.settings.bodies);
   const updateSettings = useAppState(state => state.updateSettings);
   const padding = useFactSheetPadding();
@@ -91,4 +95,4 @@ export function OrbitalRegimeFactSheet({ regime, addBody, removeBody }: Props) {
       </Box>
     </Stack>
   );
-}
+});
