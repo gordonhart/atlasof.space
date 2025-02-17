@@ -4,17 +4,16 @@ import { useDisplaySize } from '../../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { SPACECRAFT } from '../../../lib/data/spacecraft/spacecraft.ts';
 import { dateToHumanReadable } from '../../../lib/epoch.ts';
-import { UpdateSettings } from '../../../lib/state.ts';
-import { CelestialBody, SpacecraftOrganization } from '../../../lib/types.ts';
+import { useAppState } from '../../../lib/state.ts';
+import { SpacecraftOrganization } from '../../../lib/types.ts';
 import { Timeline } from '../Timeline.tsx';
 import { CompactSpacecraftCard } from './CompactSpacecraftCard.tsx';
 
 type Props = {
   organization: SpacecraftOrganization;
-  bodies: Array<CelestialBody>;
-  updateSettings: UpdateSettings;
 };
-export function SpacecraftOrganizationMissions({ organization, bodies, updateSettings }: Props) {
+export function SpacecraftOrganizationMissions({ organization }: Props) {
+  const updateSettings = useAppState(state => state.updateSettings);
   const { xs: isXsDisplay } = useDisplaySize();
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -41,7 +40,6 @@ export function SpacecraftOrganizationMissions({ organization, bodies, updateSet
     <CompactSpacecraftCard
       key={`${spacecraft.name}-${i}`}
       spacecraft={spacecraft}
-      bodies={bodies}
       onClick={() => updateSettings({ center: spacecraft.id, hover: null })}
       onMouseEnter={() => setActiveIndex(i + 1)}
       onMouseLeave={() => setActiveIndex(null)}

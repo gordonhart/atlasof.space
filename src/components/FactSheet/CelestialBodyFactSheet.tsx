@@ -8,7 +8,7 @@ import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { ToggleId, UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
@@ -28,16 +28,10 @@ import { WikiLinkPill } from './WikiLinkPill.tsx';
 
 type Props = {
   body: CelestialBody;
-  bodies: Array<CelestialBody>;
-  toggles: Set<ToggleId>;
-  updateSettings: UpdateSettings;
 };
-export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
-  body,
-  bodies,
-  toggles,
-  updateSettings,
-}: Props) {
+export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({ body }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
   const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
   const { data: extraFacts, isLoading } = useFactsStream(body);
@@ -50,15 +44,11 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [axisValue, axisUnits] = humanDistanceUnits(semiMajorAxis);
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
-    orbitalRegime != null ? (
-      <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} updateSettings={updateSettings} />
-    ) : undefined;
+    orbitalRegime != null ? <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
   const hillSpherePill =
-    parent != null && parent.type === CelestialBodyType.STAR ? (
-      <HillSphereToggle body={body} parent={parent} toggles={toggles} updateSettings={updateSettings} />
-    ) : null;
+    parent != null && parent.type === CelestialBodyType.STAR ? <HillSphereToggle body={body} parent={parent} /> : null;
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
@@ -136,11 +126,11 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       <Box pt="md" style={{ justifySelf: 'flex-end' }}>
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
-        <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
-        <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
-        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} bodies={bodies} updateSettings={updateSettings} />
-        <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
-        {type === CelestialBodyType.STAR && <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />}
+        <MajorSatellites body={body} />
+        <ParentBody body={body} />
+        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />
+        <OtherBodies body={body} />
+        {type === CelestialBodyType.STAR && <OtherRegimes title="Orbital Regimes" />}
       </Box>
     </Stack>
   );

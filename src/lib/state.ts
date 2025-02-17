@@ -1,3 +1,5 @@
+import { equals } from 'ramda';
+import { create } from 'zustand/react';
 import { SOLAR_SYSTEM } from './data/bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
 import {
@@ -84,4 +86,30 @@ export const initialState: AppState = {
   },
 };
 
-export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
+export type Actions = {
+  updateModel: (update: ModelState) => void;
+  updateSettings: (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
+  reset: () => AppState;
+};
+
+export const useAppState = create<AppState & Actions>(set => ({
+  ...initialState,
+  updateModel: model =>
+    set(prev => ({
+      model: {
+        ...prev.model,
+        ...model,
+        vernalEquinox: equals(prev.model.vernalEquinox, model.vernalEquinox) // avoid updating when values are unchanged
+          ? prev.model.vernalEquinox
+          : model.vernalEquinox,
+      },
+    })),
+  updateSettings: update =>
+    set(prev =>
+      typeof update === 'function' ? { settings: update(prev.settings) } : { settings: { ...prev.settings, ...update } }
+    ),
+  reset: () => {
+    set(initialState);
+    return initialState;
+  },
+}));

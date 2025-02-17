@@ -36,7 +36,7 @@ import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useIsTouchDevice } from '../../hooks/useIsTouchDevice.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft/spacecraft.ts';
-import { Settings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBody, isCelestialBody, Spacecraft } from '../../lib/types.ts';
 import { CelestialBodyCard } from '../FactSheet/CelestialBodyCard.tsx';
 import { SpacecraftCard } from '../FactSheet/Spacecraft/SpacecraftCard.tsx';
@@ -84,17 +84,14 @@ const TOUCH_BULLETS = [
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  settings: Settings;
-  updateSettings: (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
 };
-export function HelpModal({ isOpen, onClose, settings, updateSettings }: Props) {
+export function HelpModal({ isOpen, onClose }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
   const isTouchDevice = useIsTouchDevice();
   const { sm: isSmallDisplay } = useDisplaySize();
   const modifierKey = useModifierKey();
-  const sampleItems = useMemo(
-    () => [...settings.bodies, ...SPACECRAFT].sort(() => Math.random() - 0.5).slice(0, 3),
-    []
-  );
+  const sampleItems = useMemo(() => [...bodies, ...SPACECRAFT].sort(() => Math.random() - 0.5).slice(0, 3), []);
 
   function onCardClick({ id }: CelestialBody | Spacecraft) {
     updateSettings({ center: id });

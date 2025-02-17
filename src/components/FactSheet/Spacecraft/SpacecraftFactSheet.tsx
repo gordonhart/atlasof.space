@@ -5,8 +5,8 @@ import { FocusItemType } from '../../../hooks/useFocusItem.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../../../lib/data/regimes.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
-import { UpdateSettings } from '../../../lib/state.ts';
-import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
+import { useAppState } from '../../../lib/state.ts';
+import { CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
 import { celestialBodyTypeName } from '../../../lib/utils.ts';
 import { FactGrid } from '../FactGrid.tsx';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
@@ -21,29 +21,18 @@ import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
-  bodies: Array<CelestialBody>;
-  hover: string | null;
-  updateSettings: UpdateSettings;
 };
-
-export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
-  spacecraft,
-  bodies,
-  hover,
-  updateSettings,
-}: Props) {
+export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraft }: Props) {
+  const updateSettings = useAppState(state => state.updateSettings);
   const padding = useFactSheetPadding();
 
   const organizationPill = (
-    <SpacecraftOrganizationPill
-      organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]}
-      updateSettings={updateSettings}
-    />
+    <SpacecraftOrganizationPill organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]} />
   );
   const orbitalRegimes = (
     <Group gap={4}>
       {spacecraft.orbitalRegimes?.map(regimeId => (
-        <OrbitalRegimePill key={regimeId} regime={ORBITAL_REGIMES[regimeId]} updateSettings={updateSettings} />
+        <OrbitalRegimePill key={regimeId} regime={ORBITAL_REGIMES[regimeId]} />
       ))}
     </Group>
   );
@@ -90,12 +79,12 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
           </Box>
         </Group>
 
-        <MissionTimeline spacecraft={spacecraft} bodies={bodies} hover={hover} updateSettings={updateSettings} />
+        <MissionTimeline spacecraft={spacecraft} />
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <RelatedSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
-        <OtherSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
+        <RelatedSpacecraft spacecraft={spacecraft} />
+        <OtherSpacecraft spacecraft={spacecraft} />
       </Box>
     </Stack>
   );
