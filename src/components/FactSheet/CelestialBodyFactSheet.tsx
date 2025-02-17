@@ -8,7 +8,7 @@ import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { UpdateSettings } from '../../lib/state.ts';
+import { Settings, UpdateSettings } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
@@ -16,6 +16,7 @@ import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { Gallery } from './Gallery.tsx';
+import { HillSphereToggle } from './HillSphereToggle.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { MajorSatellites } from './MajorSatellites.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
@@ -28,11 +29,13 @@ import { WikiLinkPill } from './WikiLinkPill.tsx';
 type Props = {
   body: CelestialBody;
   bodies: Array<CelestialBody>;
+  settings: Settings;
   updateSettings: UpdateSettings;
 };
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
   body,
   bodies,
+  settings,
   updateSettings,
 }: Props) {
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
@@ -52,12 +55,17 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
     ) : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
+  const hillSpherePill =
+    parent != null && parent.type === CelestialBodyType.STAR ? (
+      <HillSphereToggle body={body} parent={parent} settings={settings} updateSettings={updateSettings} />
+    ) : null;
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
     ...(wikiPill != null ? [{ label: 'learn more', value: wikiPill }] : []),
     { label: 'mass', value: `${mass.toExponential(4)} kg` },
     { label: 'radius', value: `${(radius / 1e3).toLocaleString()} km` },
+    ...(hillSpherePill != null ? [{ label: 'hill radius', value: hillSpherePill }] : []),
     // prettier-ignore
     ...(type !== CelestialBodyType.STAR ? [
       { label: 'semi-major axis', value: `${axisValue.toLocaleString()} ${axisUnits}` },
@@ -130,7 +138,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
         <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
         <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
-        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} updateSettings={updateSettings} />
+        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} bodies={bodies} updateSettings={updateSettings} />
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
         {type === CelestialBodyType.STAR && <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />}
       </Box>

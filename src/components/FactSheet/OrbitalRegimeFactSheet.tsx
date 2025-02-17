@@ -93,8 +93,10 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
       <SpacecraftVisits
         title="Spacecraft Missions"
         spacecraft={spacecraftInRegime}
+        bodies={bodies}
         regime={regime}
         updateSettings={updateSettings}
+        compact
       />
 
       <Box style={{ justifySelf: 'flex-end' }}>

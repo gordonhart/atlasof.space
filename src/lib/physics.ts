@@ -45,6 +45,10 @@ export function estimateCometMass(radius: number) {
   return density * (4 / 3) * Math.PI * radius ** 3; // best-effort guess assuming spherical shape
 }
 
+export function hillRadius(semiMajorAxis: number, eccentricity: number, massParent: number, massBody: number) {
+  return semiMajorAxis * (1 - eccentricity) * Math.cbrt(massBody / (3 * (massParent + massBody)));
+}
+
 export function orbitalEllipseAtTheta(elements: KeplerianElements, theta: number): Point3 {
   const { semiMajorAxis: a, eccentricity: e, inclination, argumentOfPeriapsis, longitudeAscending } = elements;
 
