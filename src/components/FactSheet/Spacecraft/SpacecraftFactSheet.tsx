@@ -23,9 +23,7 @@ type Props = {
   spacecraft: Spacecraft;
 };
 export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraft }: Props) {
-  const bodies = useAppState(state => state.settings.bodies);
   const updateSettings = useAppState(state => state.updateSettings);
-  const hover = useAppState(state => state.settings.hover);
   const padding = useFactSheetPadding();
 
   const organizationPill = (
@@ -34,7 +32,7 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
   const orbitalRegimes = (
     <Group gap={4}>
       {spacecraft.orbitalRegimes?.map(regimeId => (
-        <OrbitalRegimePill key={regimeId} regime={ORBITAL_REGIMES[regimeId]} updateSettings={updateSettings} />
+        <OrbitalRegimePill key={regimeId} regime={ORBITAL_REGIMES[regimeId]} />
       ))}
     </Group>
   );
@@ -81,12 +79,12 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
           </Box>
         </Group>
 
-        <MissionTimeline spacecraft={spacecraft} bodies={bodies} hover={hover} updateSettings={updateSettings} />
+        <MissionTimeline spacecraft={spacecraft} />
       </Stack>
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <RelatedSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
-        <OtherSpacecraft spacecraft={spacecraft} updateSettings={updateSettings} />
+        <RelatedSpacecraft spacecraft={spacecraft} />
+        <OtherSpacecraft spacecraft={spacecraft} />
       </Box>
     </Stack>
   );

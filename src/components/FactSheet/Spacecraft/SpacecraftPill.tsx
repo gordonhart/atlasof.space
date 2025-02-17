@@ -1,14 +1,14 @@
 import { Box, Group, Pill } from '@mantine/core';
-import { UpdateSettings } from '../../../lib/state.ts';
+import { useAppState } from '../../../lib/state.ts';
 import { Spacecraft } from '../../../lib/types.ts';
 import styles from '../RelatedBodies.module.css';
 import { Thumbnail } from '../Thumbnail.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
-  updateSettings: UpdateSettings;
 };
-export function SpacecraftPill({ spacecraft, updateSettings }: Props) {
+export function SpacecraftPill({ spacecraft }: Props) {
+  const updateSettings = useAppState(state => state.updateSettings);
   const thumbnailSize = 14;
   return (
     <Pill

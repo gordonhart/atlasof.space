@@ -86,8 +86,6 @@ export const initialState: AppState = {
   },
 };
 
-export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
-
 export type Actions = {
   updateModel: (update: ModelState) => void;
   updateSettings: (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;

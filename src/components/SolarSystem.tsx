@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useFocusItem } from '../hooks/useFocusItem.ts';
-import { useIsTouchDevice } from '../hooks/useIsTouchDevice.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
 import { useUrlState } from '../hooks/useUrlState.ts';
 import { initialState, itemIdAsRoute, useAppState } from '../lib/state.ts';
@@ -15,7 +14,8 @@ export function SolarSystem() {
   const navigate = useNavigate();
   const { center: urlCenter } = useUrlState();
   const { sm: isSmallDisplay } = useDisplaySize();
-  const settings = useAppState(state => state.settings);
+  const center = useAppState(state => state.settings.center);
+  const hover = useAppState(state => state.settings.hover);
   const updateModel = useAppState(state => state.updateModel);
   const updateSettings = useAppState(state => state.updateSettings);
   const resetAppState = useAppState(state => state.reset);
@@ -24,19 +24,19 @@ export function SolarSystem() {
   const focusItem = useFocusItem();
 
   // TODO: avoid setting hover when using touch device
-  const isTouchDevice = useIsTouchDevice();
+  // const isTouchDevice = useIsTouchDevice();
   // TODO: fix URL state initialization and syncing
   const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
 
   // sync URL to center
   useEffect(() => {
-    if (settings.center !== urlCenter) updateSettings({ center: urlCenter });
+    if (center !== urlCenter) updateSettings({ center: urlCenter });
   }, [urlCenter]);
 
   // sync center back to URL when state changes are initiated by non-URL source
   useEffect(() => {
-    if (settings.center !== urlCenter) navigate(itemIdAsRoute(settings.center));
-  }, [settings.center]);
+    if (center !== urlCenter) navigate(itemIdAsRoute(center));
+  }, [center]);
 
   const reset = useCallback(() => {
     const newState = resetAppState();
@@ -55,6 +55,7 @@ export function SolarSystem() {
   }
 
   useEffect(() => {
+    updateSettings(urlInitialState.settings);
     model.initialize(urlInitialState.settings);
     const frameId = window.requestAnimationFrame(animationFrame);
     return () => {
@@ -67,7 +68,7 @@ export function SolarSystem() {
     <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
       <Box pos="relative" w="100%" h="100dvh" flex={1}>
         <Box
-          style={{ cursor: settings.hover != null ? 'pointer' : 'unset' }}
+          style={{ cursor: hover != null ? 'pointer' : 'unset' }}
           ref={model.containerRef}
           pos="absolute"
           w="100%"

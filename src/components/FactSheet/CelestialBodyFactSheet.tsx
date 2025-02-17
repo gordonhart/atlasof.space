@@ -31,7 +31,6 @@ type Props = {
 };
 export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({ body }: Props) {
   const bodies = useAppState(state => state.settings.bodies);
-  const toggles = useAppState(state => state.settings.toggles);
   const updateSettings = useAppState(state => state.updateSettings);
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
   const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
@@ -45,15 +44,11 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const [axisValue, axisUnits] = humanDistanceUnits(semiMajorAxis);
   const [rotationTime, rotationUnits] = humanTimeUnits(Math.abs(rotation?.siderealPeriod ?? 0));
   const orbitalRegimePill =
-    orbitalRegime != null ? (
-      <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} updateSettings={updateSettings} />
-    ) : undefined;
+    orbitalRegime != null ? <OrbitalRegimePill regime={ORBITAL_REGIMES[orbitalRegime]} /> : undefined;
   const wikiPill = assets?.wiki != null ? <WikiLinkPill url={assets.wiki} /> : undefined;
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
   const hillSpherePill =
-    parent != null && parent.type === CelestialBodyType.STAR ? (
-      <HillSphereToggle body={body} parent={parent} toggles={toggles} updateSettings={updateSettings} />
-    ) : null;
+    parent != null && parent.type === CelestialBodyType.STAR ? <HillSphereToggle body={body} parent={parent} /> : null;
 
   const bullets: Array<{ label: string; value: ReactNode }> = [
     ...(orbitalRegimePill != null ? [{ label: 'orbital regime', value: orbitalRegimePill }] : []),
