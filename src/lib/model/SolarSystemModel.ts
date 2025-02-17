@@ -9,7 +9,7 @@ import { ORBITAL_REGIMES } from '../data/regimes.ts';
 import { SPACECRAFT_BY_ID } from '../data/spacecraft/spacecraft.ts';
 import { Time } from '../epoch.ts';
 import { convertToEpoch, G, keplerianToCartesian } from '../physics.ts';
-import { ModelState, Settings } from '../state.ts';
+import { ModelState, Settings, useAppState } from '../state.ts';
 import {
   CelestialBody,
   CelestialBodyId,
@@ -117,7 +117,8 @@ export class SolarSystemModel {
     };
   }
 
-  update(ctx: CanvasRenderingContext2D, settings: Settings) {
+  update(ctx: CanvasRenderingContext2D) {
+    const settings = useAppState.getState().settings;
     this.fpsCounter.update();
     const fps = this.fpsCounter.fps();
     if (fps == null) return; // still initializing

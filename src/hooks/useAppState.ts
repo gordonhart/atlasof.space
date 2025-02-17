@@ -1,18 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { initialState, itemIdAsRoute, UpdateSettings } from '../lib/state.ts';
-import { useIsTouchDevice } from './useIsTouchDevice.ts';
+import { itemIdAsRoute } from '../lib/state.ts';
+import { useAppState as useAppStateZ } from '../lib/state.ts';
 import { useUrlState } from './useUrlState.ts';
 
 export function useAppState() {
   const { center: urlCenter } = useUrlState();
-  const isTouchDevice = useIsTouchDevice();
-  const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
-  const [appState, setAppState] = useState(urlInitialState);
-  const appStateRef = useRef(appState);
+  // const isTouchDevice = useIsTouchDevice();
+  // const urlInitialState = { ...initialState, settings: { ...initialState.settings, center: urlCenter } };
   const navigate = useNavigate();
-  const { settings } = appState;
+  const { model, settings, updateModel, updateSettings, reset } = useAppStateZ();
 
+  /*
   const updateSettings: UpdateSettings = useCallback(
     update => {
       setAppState(prev => {
@@ -33,6 +32,7 @@ export function useAppState() {
     appStateRef.current = initialState;
     return initialState;
   }, [updateSettings]);
+   */
 
   // sync URL to center
   useEffect(() => {
@@ -44,5 +44,5 @@ export function useAppState() {
     if (settings.center !== urlCenter) navigate(itemIdAsRoute(settings.center));
   }, [settings.center]);
 
-  return { appState, setAppState, appStateRef, updateSettings, resetAppState };
+  return { model, settings, updateModel, updateSettings, resetAppState: reset };
 }

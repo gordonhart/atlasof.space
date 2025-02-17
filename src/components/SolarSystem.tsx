@@ -10,8 +10,7 @@ import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const { sm: isSmallDisplay } = useDisplaySize();
-  const { appState, setAppState, appStateRef, updateSettings, resetAppState } = useAppState();
-  const { settings } = appState;
+  const { model: modelState, settings, updateModel, updateSettings, resetAppState } = useAppState();
   const model = useSolarSystemModel({ settings, updateSettings });
   const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
   const focusItem = useFocusItem(settings);
@@ -23,21 +22,16 @@ export function SolarSystem() {
 
   // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
-    setAppState(prev => {
-      const newModel = model.modelRef.current?.getModelState() ?? prev.model;
-      const newState = { ...prev, model: newModel };
-      appStateRef.current = newState;
-      return newState;
-    });
+    updateModel(model.modelRef.current?.getModelState() ?? modelState);
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
-      model.update(ctx, appStateRef.current.settings);
+      model.update(ctx);
     }
     window.requestAnimationFrame(animationFrame);
   }
 
   useEffect(() => {
-    model.initialize(appStateRef.current.settings);
+    model.initialize(settings);
     const frameId = window.requestAnimationFrame(animationFrame);
     return () => {
       window.cancelAnimationFrame(frameId);
@@ -60,13 +54,7 @@ export function SolarSystem() {
           ref={model.canvasRef}
           style={{ height: '100%', width: '100%', position: 'absolute', pointerEvents: 'none' }}
         />
-        <Controls
-          settings={settings}
-          updateSettings={updateSettings}
-          model={appState.model}
-          setEpoch={model.setEpoch}
-          reset={reset}
-        />
+        <Controls setEpoch={model.setEpoch} />
       </Box>
       {focusItem != null && (
         <Box

@@ -1,17 +1,13 @@
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCircle, IconCircleDot, IconRestore, IconSettings } from '@tabler/icons-react';
-import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../hooks/useAppState.ts';
 import { CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { iconSize } from './constants.ts';
 
-type Props = {
-  settings: Settings;
-  updateSettings: UpdateSettings;
-  reset: () => void;
-};
-export function SettingsMenu({ settings, updateSettings, reset }: Props) {
+export function SettingsMenu() {
+  const { settings, updateSettings, resetAppState: reset } = useAppState();
   const [isOpen, { open, close }] = useDisclosure(false);
 
   function toggleVisibleType(type: CelestialBodyType) {

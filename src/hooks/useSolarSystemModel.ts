@@ -40,8 +40,8 @@ export function useSolarSystemModel({ settings, updateSettings }: Params) {
     };
   }
 
-  function update(ctx: CanvasRenderingContext2D, settings: Settings) {
-    modelRef.current?.update(ctx, settings);
+  function update(ctx: CanvasRenderingContext2D) {
+    modelRef.current?.update(ctx);
   }
 
   function addBody(body: CelestialBody) {

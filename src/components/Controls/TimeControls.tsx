@@ -1,9 +1,9 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
+import { useAppState } from '../../hooks/useAppState.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { epochToDate, Time } from '../../lib/epoch.ts';
-import { ModelState, Settings, UpdateSettings } from '../../lib/state.ts';
 import { Epoch } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
@@ -48,12 +48,10 @@ function incrementSpeed(speed: number, direction: 'up' | 'down') {
 }
 
 type Props = {
-  settings: Settings;
-  updateSettings: UpdateSettings;
-  model: ModelState;
   setEpoch: (epoch: Epoch) => void;
 };
-export const TimeControls = memo(function TimeControlsComponent({ settings, updateSettings, model, setEpoch }: Props) {
+export const TimeControls = memo(function TimeControlsComponent({ setEpoch }: Props) {
+  const { model, settings, updateSettings } = useAppState();
   const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
   const dateRounded = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const [t, tUnits] = useMemo(() => humanTimeUnits(settings.speed, true), [settings.speed]);
