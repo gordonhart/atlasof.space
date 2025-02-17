@@ -1,5 +1,4 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
-import { memo } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { FocusItemType } from '../../../hooks/useFocusItem.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
@@ -22,7 +21,7 @@ import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 type Props = {
   spacecraft: Spacecraft;
 };
-export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraft }: Props) {
+export function SpacecraftFactSheet({ spacecraft }: Props) {
   const updateSettings = useAppState(state => state.updateSettings);
   const padding = useFactSheetPadding();
 
@@ -88,4 +87,4 @@ export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraf
       </Box>
     </Stack>
   );
-});
+}

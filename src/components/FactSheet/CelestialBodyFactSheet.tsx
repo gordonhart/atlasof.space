@@ -1,5 +1,5 @@
 import { Box, Group, Stack, Title } from '@mantine/core';
-import { memo, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useFactsStream } from '../../hooks/queries/useFactsStream.ts';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
@@ -29,7 +29,7 @@ import { WikiLinkPill } from './WikiLinkPill.tsx';
 type Props = {
   body: CelestialBody;
 };
-export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({ body }: Props) {
+export function CelestialBodyFactSheet({ body }: Props) {
   const bodies = useAppState(state => state.settings.bodies);
   const updateSettings = useAppState(state => state.updateSettings);
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
@@ -134,7 +134,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
       </Box>
     </Stack>
   );
-});
+}
 
 // TODO: better to have Claude generate facts as structured data
 function factsAsBullets(facts: string | undefined): Array<{ label: string; value: string }> {

@@ -1,10 +1,9 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
-import { memo } from 'react';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { AU } from '../../lib/data/bodies.ts';
 import { useAppState } from '../../lib/state.ts';
 
-export const ScaleIndicator = memo(function ScaleIndicatorComponent() {
+export function ScaleIndicator() {
   const metersPerPx = useAppState(state => state.model.metersPerPx);
   let scaleWidthM, scaleDisplay, scaleUnits;
   if (metersPerPx > 0.005 * AU) {
@@ -26,7 +25,7 @@ export const ScaleIndicator = memo(function ScaleIndicatorComponent() {
       </Stack>
     </Paper>
   );
-});
+}
 
 function getScaleMeters(meters: number) {
   const magnitude = Math.floor(Math.log10(meters)); // Base power of 10

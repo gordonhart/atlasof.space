@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { FocusItem, FocusItemType } from '../../hooks/useFocusItem.ts';
 import { CelestialBody, CelestialBodyId } from '../../lib/types.ts';
 import { CelestialBodyFactSheet } from './CelestialBodyFactSheet.tsx';
@@ -11,7 +10,7 @@ type Props = {
   addBody: (body: CelestialBody) => void;
   removeBody: (id: CelestialBodyId) => void;
 };
-export const FactSheet = memo(function FactSheetComponent({ item, addBody, removeBody }: Props) {
+export function FactSheet({ item, addBody, removeBody }: Props) {
   return item.type === FocusItemType.CELESTIAL_BODY ? (
     <CelestialBodyFactSheet body={item.item} />
   ) : item.type === FocusItemType.ORBITAL_REGIME ? (
@@ -23,4 +22,4 @@ export const FactSheet = memo(function FactSheetComponent({ item, addBody, remov
   ) : (
     <></>
   );
-});
+}

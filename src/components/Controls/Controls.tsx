@@ -1,5 +1,5 @@
 import { Box } from '@mantine/core';
-import { memo, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
 import { Epoch } from '../../lib/types.ts';
 import { GeneralControls } from './GeneralControls.tsx';
@@ -10,7 +10,7 @@ type Props = {
   setEpoch: (epoch: Epoch) => void;
   reset: () => void;
 };
-export const Controls = memo(function ControlsComponent({ setEpoch, reset }: Props) {
+export function Controls({ setEpoch, reset }: Props) {
   const { xs: isXsDisplay } = useDisplaySize();
   const pad = useMemo(() => (isXsDisplay ? 6 : 10), [isXsDisplay]);
   return (
@@ -28,4 +28,4 @@ export const Controls = memo(function ControlsComponent({ setEpoch, reset }: Pro
       </Box>
     </>
   );
-});
+}
