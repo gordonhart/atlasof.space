@@ -9,7 +9,7 @@ export function useSolarSystemModel() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<SolarSystemModel | null>(null);
 
-  function initializeCanvas() {
+  const initializeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (canvas == null || containerRef.current == null) return;
     const ctx = canvas.getContext('2d')!;
@@ -19,39 +19,51 @@ export function useSolarSystemModel() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.scale(dpr, -dpr);
     ctx.translate(0, -canvas.height / dpr);
-  }
+  }, [canvasRef.current, containerRef.current]);
 
-  function initialize(settings: Settings) {
-    if (containerRef.current == null || canvasRef.current == null) return;
-    if (modelRef.current == null) {
-      modelRef.current = new SolarSystemModel(containerRef.current, settings);
-    }
-    initializeCanvas();
-    window.addEventListener('resize', resize);
-    return () => {
-      window.removeEventListener('resize', resize);
-      if (modelRef.current != null) {
-        modelRef.current?.dispose();
-        modelRef.current = null;
+  const initialize = useCallback(
+    (settings: Settings) => {
+      if (containerRef.current == null || canvasRef.current == null) return;
+      if (modelRef.current == null) {
+        modelRef.current = new SolarSystemModel(containerRef.current, settings);
       }
-    };
-  }
+      initializeCanvas();
+      window.addEventListener('resize', resize);
+      return () => {
+        window.removeEventListener('resize', resize);
+        if (modelRef.current != null) {
+          modelRef.current?.dispose();
+          modelRef.current = null;
+        }
+      };
+    },
+    [canvasRef.current, containerRef.current, modelRef.current, initializeCanvas]
+  );
 
-  function update(ctx: CanvasRenderingContext2D) {
-    modelRef.current?.update(useAppState.getState().settings, ctx);
-  }
+  const update = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      modelRef.current?.update(useAppState.getState().settings, ctx);
+    },
+    [modelRef.current]
+  );
 
-  function addBody(body: CelestialBody) {
-    updateSettings(prev => {
-      modelRef.current?.add(prev, body);
-      return { ...prev, bodies: [...prev.bodies, body] };
-    });
-  }
+  const addBody = useCallback(
+    (body: CelestialBody) => {
+      updateSettings(prev => {
+        modelRef.current?.add(prev, body);
+        return { ...prev, bodies: [...prev.bodies, body] };
+      });
+    },
+    [modelRef.current]
+  );
 
-  function removeBody(id: CelestialBodyId) {
-    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
-    modelRef.current?.remove(id);
-  }
+  const removeBody = useCallback(
+    (id: CelestialBodyId) => {
+      updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
+      modelRef.current?.remove(id);
+    },
+    [modelRef.current]
+  );
 
   const reset = useCallback(
     (settings: Settings, camera = true) => {
@@ -71,11 +83,11 @@ export function useSolarSystemModel() {
     [reset]
   );
 
-  function resize() {
+  const resize = useCallback(() => {
     if (containerRef.current == null) return;
     modelRef.current?.resize(containerRef.current);
     initializeCanvas();
-  }
+  }, [containerRef.current, modelRef.current, initializeCanvas]);
 
   return {
     containerRef,

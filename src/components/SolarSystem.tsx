@@ -47,7 +47,7 @@ export function SolarSystem() {
 
   useEffect(() => {
     model.resize();
-  }, [focusItem]);
+  }, [model.resize, focusItem]);
 
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
