@@ -80,7 +80,7 @@ export function useSolarSystemModel() {
 
   useEffect(() => {
     resize();
-  }, [center != null]);
+  }, [center]);
 
   return {
     containerRef,
