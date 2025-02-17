@@ -180,11 +180,8 @@ export class SolarSystemModel {
       const [bodyXpx, bodyYpx] = body.getScreenPosition(this.camera, this.resolution);
       if (isOffScreen([bodyXpx, bodyYpx], [this.resolution.x, this.resolution.y], bodyThreshold)) continue;
 
-      // always give precedence to the sun
-      const [distance, isNear] = body.isNearCursor([xPx, yPx], this.camera, settings.drawLabel, bodyThreshold);
-      if (isNear && body.body.type === CelestialBodyType.STAR) return body;
-
       // only give precedence to non-moons, but still select moons if there are no other options
+      const [distance, isNear] = body.isNearCursor([xPx, yPx], this.camera, settings.drawLabel, bodyThreshold);
       const bodyIsMoon = body.body.type === CelestialBodyType.MOON;
       const closestIsMoon = closest?.body?.type === CelestialBodyType.MOON;
       if (isNear && distance < closestDistance && (!bodyIsMoon || closestIsMoon || closest == null)) {
