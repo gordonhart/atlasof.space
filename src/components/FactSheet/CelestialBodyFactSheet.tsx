@@ -16,7 +16,7 @@ import { FactGrid } from './FactGrid.tsx';
 import { FactSheetSummary } from './FactSheetSummary.tsx';
 import { FactSheetTitle } from './FactSheetTitle.tsx';
 import { Gallery } from './Gallery.tsx';
-import { HillSpherePill } from './HillSpherePill.tsx';
+import { HillSphereToggle } from './HillSphereToggle.tsx';
 import { LoadingCursor } from './LoadingCursor.tsx';
 import { MajorSatellites } from './MajorSatellites.tsx';
 import { OrbitalRegimePill } from './OrbitalRegimePill.tsx';
@@ -57,7 +57,7 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
   const gravity = (surfaceGravity(mass, radius) / g).toLocaleString();
   const hillSpherePill =
     parent != null && parent.type === CelestialBodyType.STAR ? (
-      <HillSpherePill body={body} parent={parent} settings={settings} updateSettings={updateSettings} />
+      <HillSphereToggle body={body} parent={parent} settings={settings} updateSettings={updateSettings} />
     ) : null;
 
   const bullets: Array<{ label: string; value: ReactNode }> = [

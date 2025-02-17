@@ -10,7 +10,7 @@ type Props = {
   settings: Settings;
   updateSettings: UpdateSettings;
 };
-export function HillSpherePill({ body, parent, settings, updateSettings }: Props) {
+export function HillSphereToggle({ body, parent, settings, updateSettings }: Props) {
   const { semiMajorAxis: a, eccentricity: e } = body.elements;
   const hillRad = hillRadius(a, e, parent.mass, body.mass);
   const [radValue, radUnits] = humanDistanceUnits(hillRad);
