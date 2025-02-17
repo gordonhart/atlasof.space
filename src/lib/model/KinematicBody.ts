@@ -12,7 +12,7 @@ export class KinematicBody {
   readonly acceleration: Vector3;
   rotation: number;
 
-  private readonly tmp; // reuse for memory efficiency
+  protected readonly tmp: Vector3; // reuse for memory efficiency
 
   constructor(
     influencedBy: Array<CelestialBodyId>,

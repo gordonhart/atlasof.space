@@ -13,7 +13,7 @@ import { hillRadius, magnitude } from '../physics.ts';
 import { Settings } from '../state.ts';
 import { asHillSphereId, CelestialBody, CelestialBodyType, isSpacecraftId, Point2 } from '../types.ts';
 import { AxisIndicator } from './AxisIndicator.ts';
-import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE } from './constants.ts';
+import { HOVER_SCALE_FACTOR, MIN_ORBIT_PX_LABEL_VISIBLE, SCALE_FACTOR } from './constants.ts';
 import { FocalRadius } from './FocalRadius.ts';
 import { HillSphere } from './HillSphere.ts';
 import { KinematicBody } from './KinematicBody.ts';
@@ -149,12 +149,15 @@ export class KeplerianBody extends KinematicBody {
     threshold = 10
   ): [number, boolean] {
     const [bodyXpx, bodyYpx] = this.getScreenPosition(camera, this.resolution);
-    const distance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
-    const bodyIsNear = distance < threshold;
+    const bodyDistance = magnitude([xPx - bodyXpx, yPx - bodyYpx]);
+    const bodyIsNear = bodyDistance < threshold;
     // TODO: labels are slightly non-rectangular -- check the actual label polygon if the pointer is within the box?
     // TODO: when you hover over a body, its radius grows and the label can be offset -- can lead to flickeriness
-    const labelIsNear = includeLabel && this.labelBox.containsPoint(this.screenPoint.set(xPx, yPx));
-    return [distance, bodyIsNear || labelIsNear];
+    const isInLabel = includeLabel && this.labelBox.containsPoint(this.screenPoint.set(xPx, yPx));
+    const distance = isInLabel // use -1/distance from camera such that higher Z-index is smaller value
+      ? -1 / this.tmp.copy(this.position).divideScalar(SCALE_FACTOR).sub(camera.position).length()
+      : bodyDistance;
+    return [distance, bodyIsNear || isInLabel];
   }
 
   // TODO: hide moons of hidden types (e.g. Pluto's moons should only be visible if dwarf planets are visible)
