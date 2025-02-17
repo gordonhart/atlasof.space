@@ -1,9 +1,9 @@
 import { ActionIcon, Group, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerStop, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
-import { useAppState } from '../../hooks/useAppState.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { epochToDate, Time } from '../../lib/epoch.ts';
+import { useAppState } from '../../lib/state.ts';
 import { Epoch } from '../../lib/types.ts';
 import { humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { buttonGap, iconSize } from './constants.ts';
@@ -51,13 +51,23 @@ type Props = {
   setEpoch: (epoch: Epoch) => void;
 };
 export const TimeControls = memo(function TimeControlsComponent({ setEpoch }: Props) {
-  const { model, settings, updateSettings } = useAppState();
-  const date = new Date(Number(epochToDate(settings.epoch)) + model.time * 1000);
-  const dateRounded = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const [t, tUnits] = useMemo(() => humanTimeUnits(settings.speed, true), [settings.speed]);
+  const time = useAppState(state => state.model.time);
+  const epoch = useAppState(state => state.settings.epoch);
+  const speed = useAppState(state => state.settings.speed);
+  const play = useAppState(state => state.settings.play);
+  const updateSettings = useAppState(state => state.updateSettings);
 
-  const slowDownDisabled = settings.speed < 0 && settings.speed <= -FASTEST_SPEED;
-  const speedUpDisabled = settings.speed > 0 && settings.speed >= FASTEST_SPEED;
+  // TODO: still rerendering every frame when `time` changes (i.e. animation is running)
+  const dateRounded = useMemo(() => {
+    const baseDate = Number(epochToDate(epoch));
+    const date = new Date(baseDate + time * 1000);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }, [epoch, Math.floor(time / Time.DAY)]);
+
+  const [t, tUnits] = useMemo(() => humanTimeUnits(speed, true), [speed]);
+
+  const slowDownDisabled = speed < 0 && speed <= -FASTEST_SPEED;
+  const speedUpDisabled = speed > 0 && speed >= FASTEST_SPEED;
   return (
     <Stack gap={buttonGap}>
       <Paper pr={buttonGap} py={2} radius="md">
@@ -79,12 +89,9 @@ export const TimeControls = memo(function TimeControlsComponent({ setEpoch }: Pr
             <IconPlayerTrackPrev size={iconSize} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip position="top" label={settings.play ? 'Stop' : 'Start'}>
-          <ActionIcon
-            aria-label={settings.play ? 'Stop' : 'Start'}
-            onClick={() => updateSettings({ play: !settings.play })}
-          >
-            {settings.play ? <IconPlayerStop size={iconSize} /> : <IconPlayerPlay size={iconSize} />}
+        <Tooltip position="top" label={play ? 'Stop' : 'Start'}>
+          <ActionIcon aria-label={play ? 'Stop' : 'Start'} onClick={() => updateSettings({ play: !play })}>
+            {play ? <IconPlayerStop size={iconSize} /> : <IconPlayerPlay size={iconSize} />}
           </ActionIcon>
         </Tooltip>
         <Tooltip disabled={speedUpDisabled} position="right" label="Speed Up">

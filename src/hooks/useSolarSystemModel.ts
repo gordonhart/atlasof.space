@@ -1,13 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
-import { Settings, UpdateSettings } from '../lib/state.ts';
+import { Settings } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyId, Epoch } from '../lib/types.ts';
+import { useAppState } from './useAppState.ts';
 
-type Params = {
-  settings: Settings;
-  updateSettings: UpdateSettings;
-};
-export function useSolarSystemModel({ settings, updateSettings }: Params) {
+export function useSolarSystemModel() {
+  const { settings, updateSettings } = useAppState();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<SolarSystemModel | null>(null);
@@ -56,17 +54,23 @@ export function useSolarSystemModel({ settings, updateSettings }: Params) {
     modelRef.current?.remove(id);
   }
 
-  function reset(settings: Settings, camera = true) {
-    modelRef.current?.reset(settings, camera);
-  }
+  const reset = useCallback(
+    (settings: Settings, camera = true) => {
+      modelRef.current?.reset(settings, camera);
+    },
+    [modelRef.current]
+  );
 
-  function setEpoch(epoch: Epoch) {
-    updateSettings(prev => {
-      const newSettings = { ...prev, epoch };
-      reset(newSettings, false);
-      return newSettings;
-    });
-  }
+  const setEpoch = useCallback(
+    (epoch: Epoch) => {
+      updateSettings(prev => {
+        const newSettings = { ...prev, epoch };
+        reset(newSettings, false);
+        return newSettings;
+      });
+    },
+    [reset]
+  );
 
   function resize() {
     if (containerRef.current == null) return;

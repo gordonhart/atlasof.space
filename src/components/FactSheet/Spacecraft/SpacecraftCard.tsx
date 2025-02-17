@@ -60,7 +60,9 @@ export function SpacecraftCard({ spacecraft, body, regime, onClick, compact = fa
             </Text>
           )}
         </Group>
-        {!compact && <SpacecraftOrganizationPill organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]} />}
+        {!compact && (
+          <SpacecraftOrganizationPill organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]} disableClick />
+        )}
       </Group>
       {!compact && (
         <Text mt={4} fz="xs" fs="italic">

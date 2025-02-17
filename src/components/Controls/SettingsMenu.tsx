@@ -1,19 +1,23 @@
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCircle, IconCircleDot, IconRestore, IconSettings } from '@tabler/icons-react';
-import { useAppState } from '../../hooks/useAppState.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { iconSize } from './constants.ts';
 
 export function SettingsMenu() {
-  const { settings, updateSettings, resetAppState: reset } = useAppState();
+  const drawOrbit = useAppState(state => state.settings.drawOrbit);
+  const drawLabel = useAppState(state => state.settings.drawLabel);
+  const visibleTypes = useAppState(state => state.settings.visibleTypes);
+  const updateSettings = useAppState(state => state.updateSettings);
+  const reset = useAppState(state => state.reset);
   const [isOpen, { open, close }] = useDisclosure(false);
 
   function toggleVisibleType(type: CelestialBodyType) {
-    const newVisibleTypes = settings.visibleTypes.has(type)
-      ? new Set([...settings.visibleTypes].filter(t => t !== type))
-      : new Set([...settings.visibleTypes, type]);
+    const newVisibleTypes = visibleTypes.has(type)
+      ? new Set([...visibleTypes].filter(t => t !== type))
+      : new Set([...visibleTypes, type]);
     updateSettings({ visibleTypes: newVisibleTypes });
   }
 
@@ -38,13 +42,13 @@ export function SettingsMenu() {
         <Menu.Label>General</Menu.Label>
         <Menu.Item onClick={() => updateSettings(prev => ({ ...prev, drawOrbit: !prev.drawOrbit }))}>
           <Group gap="xs" align="center">
-            {settings.drawOrbit ? IconOn : IconOff}
+            {drawOrbit ? IconOn : IconOff}
             Show Orbits
           </Group>
         </Menu.Item>
         <Menu.Item onClick={() => updateSettings(prev => ({ ...prev, drawLabel: !prev.drawLabel }))}>
           <Group gap="xs" align="center">
-            {settings.drawLabel ? IconOn : IconOff}
+            {drawLabel ? IconOn : IconOff}
             Show Labels
           </Group>
         </Menu.Item>
@@ -55,7 +59,7 @@ export function SettingsMenu() {
         {CelestialBodyTypes.filter(type => type !== CelestialBodyType.SPACECRAFT).map(type => (
           <Menu.Item key={type} onClick={() => toggleVisibleType(type)}>
             <Group gap="xs" align="center">
-              {settings.visibleTypes.has(type) ? IconOn : IconOff}
+              {visibleTypes.has(type) ? IconOn : IconOff}
               {celestialBodyTypeName(type)}
             </Group>
           </Menu.Item>

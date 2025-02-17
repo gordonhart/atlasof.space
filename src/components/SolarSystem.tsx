@@ -10,10 +10,10 @@ import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const { sm: isSmallDisplay } = useDisplaySize();
-  const { model: modelState, settings, updateModel, updateSettings, resetAppState } = useAppState();
-  const model = useSolarSystemModel({ settings, updateSettings });
-  const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
-  const focusItem = useFocusItem(settings);
+  const { model: modelState, settings, updateModel, resetAppState } = useAppState();
+  const model = useSolarSystemModel();
+  const cursorControls = useCursorControls(model.modelRef.current);
+  const focusItem = useFocusItem();
 
   const reset = useCallback(() => {
     const newState = resetAppState();
@@ -68,8 +68,6 @@ export function SolarSystem() {
           <FactSheet
             key={focusItem.item.id} // rerender when focus item changes
             item={focusItem}
-            settings={settings}
-            updateSettings={updateSettings}
             addBody={model.addBody}
             removeBody={model.removeBody}
           />

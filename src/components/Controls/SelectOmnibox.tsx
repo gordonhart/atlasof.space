@@ -2,12 +2,12 @@ import { ActionIcon, Box, Group, Kbd, Text, Tooltip } from '@mantine/core';
 import { Spotlight, spotlight } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
-import { useAppState } from '../../hooks/useAppState.ts';
 import { useModifierKey } from '../../hooks/useModifierKey.ts';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft/spacecraft.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from '../FactSheet/CelestialBodyThumbnail.tsx';
@@ -18,13 +18,14 @@ import styles from './SelectOmnibox.module.css';
 const THUMBNAIL_SIZE = 24;
 
 export function SelectOmnibox() {
-  const { settings, updateSettings } = useAppState();
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
   const [query, setQuery] = useState('');
   const modifierKey = useModifierKey();
 
   const bodyItems = useMemo(
     () =>
-      settings.bodies
+      bodies
         .filter(body => query.length === 0 || matchesQuery(body, query))
         .map((body, i) => (
           <Spotlight.Action
@@ -46,7 +47,7 @@ export function SelectOmnibox() {
             onClick={() => updateSettings(prev => ({ ...prev, center: body.id }))}
           />
         )),
-    [query, JSON.stringify(settings.bodies)]
+    [query, JSON.stringify(bodies)]
   );
 
   const spacecraftItems = useMemo(
@@ -72,7 +73,7 @@ export function SelectOmnibox() {
           />
         )
       ),
-    [query, JSON.stringify(settings.bodies)]
+    [query]
   );
 
   const organizationItems = useMemo(

@@ -2,12 +2,12 @@ import { ActionIcon, Tooltip } from '@mantine/core';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { IconInfoHexagon } from '@tabler/icons-react';
 import { useEffect } from 'react';
-import { useAppState } from '../../hooks/useAppState.ts';
+import { useAppState } from '../../lib/state.ts';
 import { iconSize } from './constants.ts';
 import { HelpModal } from './HelpModal.tsx';
 
 export function HelpModalButton() {
-  const { settings, updateSettings } = useAppState();
+  const updateSettings = useAppState(state => state.updateSettings);
   const [hasSeenHelpModal, setHasSeenHelpModal] = useLocalStorage({
     key: 'has-seen-help-modal',
     getInitialValueInEffect: false,
@@ -36,7 +36,7 @@ export function HelpModalButton() {
           <IconInfoHexagon size={iconSize} />
         </ActionIcon>
       </Tooltip>
-      <HelpModal isOpen={isOpen} onClose={closeHelp} settings={settings} updateSettings={updateSettings} />
+      <HelpModal isOpen={isOpen} onClose={closeHelp} />
     </>
   );
 }

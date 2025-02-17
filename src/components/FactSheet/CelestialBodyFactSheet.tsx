@@ -8,7 +8,7 @@ import { g } from '../../lib/data/bodies.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT_BY_BODY_ID } from '../../lib/data/spacecraft/spacecraft.ts';
 import { orbitalPeriod, surfaceGravity } from '../../lib/physics.ts';
-import { ToggleId, UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBody, CelestialBodyType } from '../../lib/types.ts';
 import { celestialBodyTypeDescription, humanDistanceUnits, humanTimeUnits, pluralize } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
@@ -28,16 +28,11 @@ import { WikiLinkPill } from './WikiLinkPill.tsx';
 
 type Props = {
   body: CelestialBody;
-  bodies: Array<CelestialBody>;
-  toggles: Set<ToggleId>;
-  updateSettings: UpdateSettings;
 };
-export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({
-  body,
-  bodies,
-  toggles,
-  updateSettings,
-}: Props) {
+export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetComponent({ body }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
+  const toggles = useAppState(state => state.settings.toggles);
+  const updateSettings = useAppState(state => state.updateSettings);
   const { id, name, type, mass, radius, elements, orbitalRegime, assets, facts, style } = body;
   const { wrt, semiMajorAxis, eccentricity, inclination, longitudeAscending, argumentOfPeriapsis, rotation } = elements;
   const { data: extraFacts, isLoading } = useFactsStream(body);
@@ -136,9 +131,9 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
 
       <Box pt="md" style={{ justifySelf: 'flex-end' }}>
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
-        <MajorSatellites body={body} bodies={bodies} updateSettings={updateSettings} />
-        <ParentBody body={body} bodies={bodies} updateSettings={updateSettings} />
-        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} bodies={bodies} updateSettings={updateSettings} />
+        <MajorSatellites body={body} />
+        <ParentBody body={body} />
+        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />
         <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
         {type === CelestialBodyType.STAR && <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />}
       </Box>

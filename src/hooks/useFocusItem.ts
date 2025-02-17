@@ -3,7 +3,6 @@ import { DEFAULT_ASTEROID_COLOR } from '../lib/data/bodies.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../lib/data/regimes.ts';
 import { SPACECRAFT_BY_ID } from '../lib/data/spacecraft/spacecraft.ts';
-import { Settings } from '../lib/state.ts';
 import {
   CelestialBody,
   HexColor,
@@ -15,6 +14,7 @@ import {
   Spacecraft,
   SpacecraftOrganization,
 } from '../lib/types.ts';
+import { useAppState } from './useAppState.ts';
 
 export enum FocusItemType {
   CELESTIAL_BODY = 'celestial-body',
@@ -29,7 +29,10 @@ export type TypedFocusItem =
   | { type: FocusItemType.ORGANIZATION; item: SpacecraftOrganization };
 export type FocusItem = TypedFocusItem & { color: HexColor; name: string };
 
-export function useFocusItem({ center, bodies }: Settings): FocusItem | undefined {
+export function useFocusItem(): FocusItem | undefined {
+  const {
+    settings: { center, bodies },
+  } = useAppState();
   const focusItem = useMemo(() => getFocusItem(center, bodies), [center, JSON.stringify(bodies)]);
 
   useEffect(() => {

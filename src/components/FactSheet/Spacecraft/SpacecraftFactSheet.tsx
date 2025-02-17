@@ -5,8 +5,8 @@ import { FocusItemType } from '../../../hooks/useFocusItem.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../../../lib/data/regimes.ts';
 import { dateToISO } from '../../../lib/epoch.ts';
-import { UpdateSettings } from '../../../lib/state.ts';
-import { CelestialBody, CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
+import { useAppState } from '../../../lib/state.ts';
+import { CelestialBodyType, Spacecraft } from '../../../lib/types.ts';
 import { celestialBodyTypeName } from '../../../lib/utils.ts';
 import { FactGrid } from '../FactGrid.tsx';
 import { FactSheetSummary } from '../FactSheetSummary.tsx';
@@ -21,24 +21,15 @@ import { SpacecraftOrganizationPill } from './SpacecraftOrganizationPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
-  bodies: Array<CelestialBody>;
-  hover: string | null;
-  updateSettings: UpdateSettings;
 };
-
-export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({
-  spacecraft,
-  bodies,
-  hover,
-  updateSettings,
-}: Props) {
+export const SpacecraftFactSheet = memo(function SpacecraftFactSheet({ spacecraft }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
+  const hover = useAppState(state => state.settings.hover);
   const padding = useFactSheetPadding();
 
   const organizationPill = (
-    <SpacecraftOrganizationPill
-      organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]}
-      updateSettings={updateSettings}
-    />
+    <SpacecraftOrganizationPill organization={SPACECRAFT_ORGANIZATIONS[spacecraft.organization]} />
   );
   const orbitalRegimes = (
     <Group gap={4}>
