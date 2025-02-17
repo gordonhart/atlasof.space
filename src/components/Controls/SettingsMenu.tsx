@@ -6,12 +6,14 @@ import { CelestialBodyType, CelestialBodyTypes } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { iconSize } from './constants.ts';
 
-export function SettingsMenu() {
+type Props = {
+  reset: () => void;
+};
+export function SettingsMenu({ reset }: Props) {
   const drawOrbit = useAppState(state => state.settings.drawOrbit);
   const drawLabel = useAppState(state => state.settings.drawLabel);
   const visibleTypes = useAppState(state => state.settings.visibleTypes);
   const updateSettings = useAppState(state => state.updateSettings);
-  const reset = useAppState(state => state.reset);
   const [isOpen, { open, close }] = useDisclosure(false);
 
   function toggleVisibleType(type: CelestialBodyType) {

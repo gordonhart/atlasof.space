@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
-import { Settings } from '../lib/state.ts';
+import { Settings, useAppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyId, Epoch } from '../lib/types.ts';
-import { useAppState } from './useAppState.ts';
 
 export function useSolarSystemModel() {
-  const { settings, updateSettings } = useAppState();
+  const settings = useAppState(state => state.settings);
+  const updateSettings = useAppState(state => state.updateSettings);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<SolarSystemModel | null>(null);
@@ -22,10 +22,10 @@ export function useSolarSystemModel() {
     ctx.translate(0, -canvas.height / dpr);
   }
 
-  function initialize(settings: Settings) {
+  function initialize() {
     if (containerRef.current == null || canvasRef.current == null) return;
     if (modelRef.current == null) {
-      modelRef.current = new SolarSystemModel(containerRef.current, settings);
+      modelRef.current = new SolarSystemModel(containerRef.current);
     }
     initializeCanvas();
     window.addEventListener('resize', resize);
@@ -44,7 +44,7 @@ export function useSolarSystemModel() {
 
   function addBody(body: CelestialBody) {
     updateSettings(prev => {
-      modelRef.current?.add(settings, body);
+      modelRef.current?.add(body);
       return { ...prev, bodies: [...prev.bodies, body] };
     });
   }

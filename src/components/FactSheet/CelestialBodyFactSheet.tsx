@@ -134,8 +134,8 @@ export const CelestialBodyFactSheet = memo(function CelestialBodyFactSheetCompon
         <MajorSatellites body={body} />
         <ParentBody body={body} />
         <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />
-        <OtherBodies body={body} bodies={bodies} updateSettings={updateSettings} />
-        {type === CelestialBodyType.STAR && <OtherRegimes updateSettings={updateSettings} title="Orbital Regimes" />}
+        <OtherBodies body={body} />
+        {type === CelestialBodyType.STAR && <OtherRegimes title="Orbital Regimes" />}
       </Box>
     </Stack>
   );

@@ -44,7 +44,7 @@ export class SolarSystemModel {
   private lockedCenter: string | null = null;
   private readonly maxSafeDt = Time.MINUTE * 15;
 
-  constructor(container: HTMLElement, settings: Settings) {
+  constructor(container: HTMLElement) {
     this.scene = new Scene();
     this.resolution = new Vector2(container.clientWidth, container.clientHeight);
     this.fpsCounter = new FrameRateCounter();
@@ -72,6 +72,7 @@ export class SolarSystemModel {
     this.controls.keyPanSpeed = 10; // pixels per second
     this.controls.listenToKeyEvents(window);
 
+    const settings = useAppState.getState().settings;
     this.bodies = this.createBodies(settings);
     this.firmament = new Firmament(this.resolution);
     this.regimes = Object.values(ORBITAL_REGIMES).map(regime => new OrbitalRegime(this.scene, settings, regime));
@@ -135,8 +136,9 @@ export class SolarSystemModel {
     this.drawAnnotations(ctx, settings);
   }
 
-  add(settings: Settings, body: CelestialBody) {
+  add(body: CelestialBody) {
     if (Object.keys(this.bodies).some(s => s === body.id)) return; // already exists, don't re-add
+    const settings = useAppState.getState().settings;
     const parents = body.influencedBy.map(id => this.bodies[id]).filter(notNullish);
     this.bodies[body.id] = this.createBodyWithParents(settings, parents, body);
   }

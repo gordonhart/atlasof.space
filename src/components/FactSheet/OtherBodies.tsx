@@ -1,7 +1,7 @@
 import { Box, Group, Pill, Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
-import { UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeName } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from './CelestialBodyThumbnail.tsx';
@@ -11,10 +11,10 @@ const N_RELATED = 6;
 
 type Props = {
   body: CelestialBody;
-  bodies: Array<CelestialBody>;
-  updateSettings: UpdateSettings;
 };
-export function OtherBodies({ body, bodies, updateSettings }: Props) {
+export function OtherBodies({ body }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
   const padding = useFactSheetPadding();
   const otherBodies: Array<CelestialBody> = useMemo(() => {
     const bodiesOfType = bodies.filter(({ type }) => type === body.type);

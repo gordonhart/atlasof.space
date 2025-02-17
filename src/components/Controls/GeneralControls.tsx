@@ -5,10 +5,13 @@ import { HelpModalButton } from './HelpModalButton.tsx';
 import { SelectOmnibox } from './SelectOmnibox.tsx';
 import { SettingsMenu } from './SettingsMenu.tsx';
 
-export const GeneralControls = memo(function GeneralControlsComponent() {
+type Props = {
+  reset: () => void;
+};
+export const GeneralControls = memo(function GeneralControlsComponent({ reset }: Props) {
   return (
     <Group gap={buttonGap}>
-      <SettingsMenu />
+      <SettingsMenu reset={reset} />
       <HelpModalButton />
       <SelectOmnibox />
     </Group>
