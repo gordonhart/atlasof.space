@@ -1,4 +1,4 @@
-import { Box, Group, Stack, Title } from '@mantine/core';
+import { Box, Group, Stack } from '@mantine/core';
 import { ReactNode } from 'react';
 import { useFactsStream } from '../../hooks/queries/useFactsStream.ts';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
@@ -104,10 +104,7 @@ export function CelestialBodyFactSheet({ body }: Props) {
 
       <Stack gap={2} flex={1}>
         <Group pt={padding.pt} px={padding.px} gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
-          <Stack gap="xs">
-            <Title order={5}>Key Facts</Title>
-            <FactGrid facts={bullets} />
-          </Stack>
+          <FactGrid facts={bullets} />
           {!isXsDisplay && (
             <Box style={{ flexShrink: 1 }}>
               <CelestialBodyThumbnail key={name} body={body} size={220} />
@@ -128,7 +125,7 @@ export function CelestialBodyFactSheet({ body }: Props) {
         {galleryAssets.length > 0 && <Gallery assets={galleryAssets} />}
         <MajorSatellites body={body} />
         <ParentBody body={body} />
-        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} />
+        <SpacecraftVisits spacecraft={spacecraftVisited} body={body} compact={isXsDisplay} />
         <OtherBodies body={body} />
         {type === CelestialBodyType.STAR && <OtherRegimes title="Orbital Regimes" />}
       </Box>

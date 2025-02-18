@@ -13,7 +13,7 @@ type Props = {
   setEpoch: (epoch: Epoch) => void;
 };
 export const EpochPopover = memo(function EpochPopoverComponent({ setEpoch }: Props) {
-  const days = useAppState(state => Math.floor(state.model.time / Time.DAY));
+  const days = useAppState(state => Math.floor(state.model.time / Time.DAY)); // TODO: dropping a little accuracy here
   const epoch = useAppState(state => state.settings.epoch);
   const hasInteracted = useRef(false);
 

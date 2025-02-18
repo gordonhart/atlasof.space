@@ -41,8 +41,8 @@ export function useSolarSystemModel() {
   );
 
   const update = useCallback(
-    (settings: Settings, ctx: CanvasRenderingContext2D) => {
-      modelRef.current?.update(settings, ctx);
+    (ctx: CanvasRenderingContext2D, settings: Settings) => {
+      modelRef.current?.update(ctx, settings);
     },
     [modelRef.current]
   );

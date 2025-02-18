@@ -1,4 +1,4 @@
-import { Box, Group, Stack, Title } from '@mantine/core';
+import { Box, Group, Stack } from '@mantine/core';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { FocusItemType } from '../../../hooks/useFocusItem.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../../lib/data/organizations.ts';
@@ -69,10 +69,7 @@ export function SpacecraftFactSheet({ spacecraft }: Props) {
 
       <Stack gap={2} flex={1}>
         <Group {...padding} gap="xs" align="flex-start" justify="space-between" wrap="nowrap">
-          <Stack gap="xs">
-            <Title order={5}>Key Facts</Title>
-            <FactGrid facts={bullets} keysWidth={120} />
-          </Stack>
+          <FactGrid facts={bullets} keysWidth={120} />
           <Box style={{ flexShrink: 1 }}>
             <Thumbnail thumbnail={spacecraft.thumbnail} alt={spacecraft.name} size={240} />
           </Box>

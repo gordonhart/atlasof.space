@@ -7,7 +7,7 @@ import { SpacecraftFactSheet } from './Spacecraft/SpacecraftFactSheet.tsx';
 
 type Props = {
   item: FocusItem;
-  addBody: (body: CelestialBody) => void;
+  addBody: (body: CelestialBody) => void; // TODO: avoid drilling these
   removeBody: (id: CelestialBodyId) => void;
 };
 export function FactSheet({ item, addBody, removeBody }: Props) {

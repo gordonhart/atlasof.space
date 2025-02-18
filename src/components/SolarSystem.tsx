@@ -32,7 +32,7 @@ export function SolarSystem() {
     if (newModelState != null) updateModel(newModelState);
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
-      model.update(useAppState.getState().settings, ctx);
+      model.update(ctx, useAppState.getState().settings);
     }
     window.requestAnimationFrame(animationFrame);
   }
