@@ -7,7 +7,7 @@ import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { SPACECRAFT_ORGANIZATIONS } from '../../lib/data/organizations.ts';
 import { ORBITAL_REGIMES } from '../../lib/data/regimes.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft/spacecraft.ts';
-import { Settings, UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import { CelestialBody } from '../../lib/types.ts';
 import { celestialBodyTypeDescription } from '../../lib/utils.ts';
 import { CelestialBodyThumbnail } from '../FactSheet/CelestialBodyThumbnail.tsx';
@@ -17,17 +17,15 @@ import styles from './SelectOmnibox.module.css';
 
 const THUMBNAIL_SIZE = 24;
 
-type Props = {
-  settings: Settings;
-  updateSettings: UpdateSettings;
-};
-export function SelectOmnibox({ settings, updateSettings }: Props) {
+export function SelectOmnibox() {
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
   const [query, setQuery] = useState('');
   const modifierKey = useModifierKey();
 
   const bodyItems = useMemo(
     () =>
-      settings.bodies
+      bodies
         .filter(body => query.length === 0 || matchesQuery(body, query))
         .map((body, i) => (
           <Spotlight.Action
@@ -49,7 +47,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
             onClick={() => updateSettings(prev => ({ ...prev, center: body.id }))}
           />
         )),
-    [query, JSON.stringify(settings.bodies)]
+    [query, JSON.stringify(bodies)]
   );
 
   const spacecraftItems = useMemo(
@@ -75,7 +73,7 @@ export function SelectOmnibox({ settings, updateSettings }: Props) {
           />
         )
       ),
-    [query, JSON.stringify(settings.bodies)]
+    [query]
   );
 
   const organizationItems = useMemo(

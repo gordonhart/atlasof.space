@@ -2,15 +2,15 @@ import { Stack, Title } from '@mantine/core';
 import { useMemo } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { SPACECRAFT } from '../../../lib/data/spacecraft/spacecraft.ts';
-import { UpdateSettings } from '../../../lib/state.ts';
+import { useAppState } from '../../../lib/state.ts';
 import { Spacecraft } from '../../../lib/types.ts';
 import { SpacecraftCard } from './SpacecraftCard.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
-  updateSettings: UpdateSettings;
 };
-export function RelatedSpacecraft({ spacecraft, updateSettings }: Props) {
+export function RelatedSpacecraft({ spacecraft }: Props) {
+  const updateSettings = useAppState(state => state.updateSettings);
   const padding = useFactSheetPadding();
   const { id, missionFamily } = spacecraft;
   const relatedSpacecraft = useMemo(

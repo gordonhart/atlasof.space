@@ -1,5 +1,6 @@
 import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useAppState } from '../../../lib/state.ts';
 import {
   CelestialBody,
   CelestialBodyType,
@@ -15,12 +16,12 @@ const N_BODIES = 3;
 
 type Props = {
   spacecraft: Spacecraft;
-  bodies: Array<CelestialBody>;
   onClick: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 };
-export function CompactSpacecraftCard({ spacecraft, bodies, onClick, onMouseEnter, onMouseLeave }: Props) {
+export function CompactSpacecraftCard({ spacecraft, onClick, onMouseEnter, onMouseLeave }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
   const visitedBodies = useMemo(() => {
     const bodyById = Object.fromEntries(bodies.map(body => [body.id, body]));
     return spacecraft.visited

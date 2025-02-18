@@ -4,7 +4,7 @@ import { useFactSheetPadding } from '../../hooks/useFactSheetPadding.ts';
 import { FocusItemType } from '../../hooks/useFocusItem.ts';
 import { DEFAULT_ASTEROID_COLOR } from '../../lib/data/bodies.ts';
 import { SPACECRAFT } from '../../lib/data/spacecraft/spacecraft.ts';
-import { UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import {
   CelestialBody,
   CelestialBodyId,
@@ -23,18 +23,16 @@ import { SpacecraftVisits } from './SpacecraftVisits.tsx';
 
 type Props = {
   regime: OrbitalRegime;
-  bodies: Array<CelestialBody>;
-  updateSettings: UpdateSettings;
   addBody: (body: CelestialBody) => void;
   removeBody: (id: CelestialBodyId) => void;
 };
 export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetComponent({
   regime,
-  bodies,
-  updateSettings,
   addBody,
   removeBody,
 }: Props) {
+  const bodies = useAppState(state => state.settings.bodies);
+  const updateSettings = useAppState(state => state.updateSettings);
   const padding = useFactSheetPadding();
 
   const bodiesInRegimeByType = useMemo(() => {
@@ -90,17 +88,10 @@ export const OrbitalRegimeFactSheet = memo(function OrbitalRegimeFactSheetCompon
           ))}
       </Stack>
 
-      <SpacecraftVisits
-        title="Spacecraft Missions"
-        spacecraft={spacecraftInRegime}
-        bodies={bodies}
-        regime={regime}
-        updateSettings={updateSettings}
-        compact
-      />
+      <SpacecraftVisits title="Spacecraft Missions" spacecraft={spacecraftInRegime} regime={regime} compact />
 
       <Box style={{ justifySelf: 'flex-end' }}>
-        <OtherRegimes regime={regime} updateSettings={updateSettings} />
+        <OtherRegimes regime={regime} />
       </Box>
     </Stack>
   );

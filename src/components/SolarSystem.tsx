@@ -1,55 +1,60 @@
 import { Box, Group, Stack } from '@mantine/core';
 import { useCallback, useEffect } from 'react';
-import { useAppState } from '../hooks/useAppState.ts';
 import { useCursorControls } from '../hooks/useCursorControls.ts';
 import { useDisplaySize } from '../hooks/useDisplaySize.ts';
 import { useFocusItem } from '../hooks/useFocusItem.ts';
+import { useIsTouchDevice } from '../hooks/useIsTouchDevice.ts';
 import { useSolarSystemModel } from '../hooks/useSolarSystemModel.ts';
+import { useUrlSync } from '../hooks/useUrlSync.ts';
+import { useAppState } from '../lib/state.ts';
 import { Controls } from './Controls/Controls.tsx';
 import { FactSheet } from './FactSheet/FactSheet.tsx';
 
 export function SolarSystem() {
   const { sm: isSmallDisplay } = useDisplaySize();
-  const { appState, setAppState, appStateRef, updateSettings, resetAppState } = useAppState();
-  const { settings } = appState;
-  const model = useSolarSystemModel({ settings, updateSettings });
-  const cursorControls = useCursorControls(model.modelRef.current, settings, updateSettings);
-  const focusItem = useFocusItem(settings);
+  const hover = useAppState(state => state.settings.hover);
+  const updateModel = useAppState(state => state.updateModel);
+  const resetAppState = useAppState(state => state.reset);
+  const model = useSolarSystemModel();
+  const cursorControls = useCursorControls(model.modelRef.current);
+  const focusItem = useFocusItem();
+  useUrlSync();
+  useIsTouchDevice();
 
   const reset = useCallback(() => {
     const newState = resetAppState();
     model.reset(newState.settings);
   }, [resetAppState]);
 
-  // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
+  // TODO: there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
-    setAppState(prev => {
-      const newModel = model.modelRef.current?.getModelState() ?? prev.model;
-      const newState = { ...prev, model: newModel };
-      appStateRef.current = newState;
-      return newState;
-    });
+    const newModelState = model.modelRef.current?.getModelState();
+    if (newModelState != null) updateModel(newModelState);
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
-      model.update(ctx, appStateRef.current.settings);
+      model.update(useAppState.getState().settings, ctx);
     }
     window.requestAnimationFrame(animationFrame);
   }
 
   useEffect(() => {
-    model.initialize(appStateRef.current.settings);
+    model.initialize(useAppState.getState().settings);
     const frameId = window.requestAnimationFrame(animationFrame);
     return () => {
       window.cancelAnimationFrame(frameId);
     };
   }, []);
 
+  useEffect(() => {
+    model.resize();
+  }, [model.resize, focusItem]);
+
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
     <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
       <Box pos="relative" w="100%" h="100dvh" flex={1}>
         <Box
-          style={{ cursor: settings.hover != null ? 'pointer' : 'unset' }}
+          style={{ cursor: hover != null ? 'pointer' : 'unset' }}
           ref={model.containerRef}
           pos="absolute"
           w="100%"
@@ -60,13 +65,7 @@ export function SolarSystem() {
           ref={model.canvasRef}
           style={{ height: '100%', width: '100%', position: 'absolute', pointerEvents: 'none' }}
         />
-        <Controls
-          settings={settings}
-          updateSettings={updateSettings}
-          model={appState.model}
-          setEpoch={model.setEpoch}
-          reset={reset}
-        />
+        <Controls setEpoch={model.setEpoch} reset={reset} />
       </Box>
       {focusItem != null && (
         <Box
@@ -80,8 +79,6 @@ export function SolarSystem() {
           <FactSheet
             key={focusItem.item.id} // rerender when focus item changes
             item={focusItem}
-            settings={settings}
-            updateSettings={updateSettings}
             addBody={model.addBody}
             removeBody={model.removeBody}
           />

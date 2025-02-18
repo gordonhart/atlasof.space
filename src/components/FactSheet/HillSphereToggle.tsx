@@ -1,16 +1,16 @@
 import { Group, Switch } from '@mantine/core';
 import { hillRadius } from '../../lib/physics.ts';
-import { ToggleId, UpdateSettings } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 import { asHillSphereId, CelestialBody } from '../../lib/types.ts';
 import { humanDistanceUnits } from '../../lib/utils.ts';
 
 type Props = {
   body: CelestialBody;
   parent: CelestialBody;
-  toggles: Set<ToggleId>;
-  updateSettings: UpdateSettings;
 };
-export function HillSphereToggle({ body, parent, toggles, updateSettings }: Props) {
+export function HillSphereToggle({ body, parent }: Props) {
+  const toggles = useAppState(state => state.settings.toggles);
+  const updateSettings = useAppState(state => state.updateSettings);
   const { semiMajorAxis: a, eccentricity: e } = body.elements;
   const hillRad = hillRadius(a, e, parent.mass, body.mass);
   const [radValue, radUnits] = humanDistanceUnits(hillRad);

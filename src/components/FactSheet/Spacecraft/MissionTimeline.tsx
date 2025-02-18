@@ -2,8 +2,8 @@ import { Box, Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { ReactNode, useMemo, useState } from 'react';
 import { useFactSheetPadding } from '../../../hooks/useFactSheetPadding.ts';
 import { datetimeToHumanReadable } from '../../../lib/epoch.ts';
-import { UpdateSettings } from '../../../lib/state.ts';
-import { CelestialBody, Spacecraft } from '../../../lib/types.ts';
+import { useAppState } from '../../../lib/state.ts';
+import { Spacecraft } from '../../../lib/types.ts';
 import { Timeline } from '../Timeline.tsx';
 import { MissionEndCard } from './MissionEndCard.tsx';
 import { MissionTimelineCard } from './MissionTimelineCard.tsx';
@@ -11,11 +11,10 @@ import { SpacecraftStatusPill } from './SpacecraftStatusPill.tsx';
 
 type Props = {
   spacecraft: Spacecraft;
-  bodies: Array<CelestialBody>;
-  hover: string | null;
-  updateSettings: UpdateSettings;
 };
-export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: Props) {
+export function MissionTimeline({ spacecraft }: Props) {
+  const hover = useAppState(state => state.settings.hover);
+  const bodies = useAppState(state => state.settings.bodies);
   const padding = useFactSheetPadding();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -41,7 +40,7 @@ export function MissionTimeline({ spacecraft, bodies, hover, updateSettings }: P
   const VisitItems = visitedBodies.map((body, i) => {
     const visit = spacecraft.visited[i];
     if (visit == null) return null;
-    return <MissionTimelineCard body={body} spacecraft={spacecraft} visit={visit} updateSettings={updateSettings} />;
+    return <MissionTimelineCard body={body} spacecraft={spacecraft} visit={visit} />;
   });
 
   const EndItem =

@@ -1,7 +1,7 @@
 import { MouseEvent, PointerEvent, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
 import { magnitude } from '../lib/physics.ts';
-import { Settings, UpdateSettings } from '../lib/state.ts';
+import { useAppState } from '../lib/state.ts';
 import { Point2 } from '../lib/types.ts';
 import { useIsTouchDevice } from './useIsTouchDevice.ts';
 
@@ -12,7 +12,9 @@ type DragDetector = {
   initial: Point2;
 };
 
-export function useCursorControls(model: SolarSystemModel | null, settings: Settings, updateSettings: UpdateSettings) {
+export function useCursorControls(model: SolarSystemModel | null) {
+  const settings = useAppState(state => state.settings);
+  const updateSettings = useAppState(state => state.updateSettings);
   const isTouchDevice = useIsTouchDevice();
   const dragDetectorRef = useRef<DragDetector | null>(null);
   const interactPxThreshold = isTouchDevice ? 25 : 10;

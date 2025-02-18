@@ -3,7 +3,7 @@ import {
   SpacecraftSummaryType,
   useSpacecraftSummaryStream,
 } from '../../../hooks/queries/useSpacecraftSummaryStream.ts';
-import { UpdateSettings } from '../../../lib/state.ts';
+import { useAppState } from '../../../lib/state.ts';
 import { CelestialBody, Spacecraft, SpacecraftVisit } from '../../../lib/types.ts';
 import styles from '../BodyCard.module.css';
 import { CelestialBodyThumbnail } from '../CelestialBodyThumbnail.tsx';
@@ -13,9 +13,9 @@ type Props = {
   body: CelestialBody;
   spacecraft: Spacecraft;
   visit: SpacecraftVisit;
-  updateSettings: UpdateSettings;
 };
-export function MissionTimelineCard({ body, spacecraft, visit, updateSettings }: Props) {
+export function MissionTimelineCard({ body, spacecraft, visit }: Props) {
+  const updateSettings = useAppState(state => state.updateSettings);
   const { data: summary, isLoading } = useSpacecraftSummaryStream({
     type: SpacecraftSummaryType.VISIT,
     spacecraft,

@@ -1,19 +1,20 @@
 import { Box, Group, Pill } from '@mantine/core';
-import { UpdateSettings } from '../../../lib/state.ts';
+import { useAppState } from '../../../lib/state.ts';
 import { SpacecraftOrganization } from '../../../lib/types.ts';
 import styles from '../RelatedBodies.module.css';
 import { Thumbnail } from '../Thumbnail.tsx';
 
 type Props = {
   organization: SpacecraftOrganization;
-  updateSettings?: UpdateSettings;
+  disableClick?: boolean;
 };
-export function SpacecraftOrganizationPill({ organization, updateSettings }: Props) {
+export function SpacecraftOrganizationPill({ organization, disableClick = false }: Props) {
+  const updateSettings = useAppState(state => state.updateSettings);
   const { id, thumbnail, shortName } = organization;
   return (
     <Pill
-      className={updateSettings != null ? styles.LinkPill : undefined}
-      onClick={updateSettings != null ? () => updateSettings({ center: id, hover: null }) : undefined}
+      className={!disableClick ? styles.LinkPill : undefined}
+      onClick={!disableClick ? () => updateSettings({ center: id, hover: null }) : undefined}
     >
       <Group gap={8} wrap="nowrap">
         <Box w={14}>

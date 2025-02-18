@@ -1,18 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { SolarSystemModel } from '../lib/model/SolarSystemModel.ts';
-import { Settings, UpdateSettings } from '../lib/state.ts';
+import { Settings, useAppState } from '../lib/state.ts';
 import { CelestialBody, CelestialBodyId, Epoch } from '../lib/types.ts';
 
-type Params = {
-  settings: Settings;
-  updateSettings: UpdateSettings;
-};
-export function useSolarSystemModel({ settings, updateSettings }: Params) {
+export function useSolarSystemModel() {
+  const updateSettings = useAppState(state => state.updateSettings);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<SolarSystemModel | null>(null);
 
-  function initializeCanvas() {
+  const initializeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (canvas == null || containerRef.current == null) return;
     const ctx = canvas.getContext('2d')!;
@@ -22,61 +19,75 @@ export function useSolarSystemModel({ settings, updateSettings }: Params) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.scale(dpr, -dpr);
     ctx.translate(0, -canvas.height / dpr);
-  }
+  }, [canvasRef.current, containerRef.current]);
 
-  function initialize(settings: Settings) {
-    if (containerRef.current == null || canvasRef.current == null) return;
-    if (modelRef.current == null) {
-      modelRef.current = new SolarSystemModel(containerRef.current, settings);
-    }
-    initializeCanvas();
-    window.addEventListener('resize', resize);
-    return () => {
-      window.removeEventListener('resize', resize);
-      if (modelRef.current != null) {
-        modelRef.current?.dispose();
-        modelRef.current = null;
+  const initialize = useCallback(
+    (settings: Settings) => {
+      if (containerRef.current == null || canvasRef.current == null) return;
+      if (modelRef.current == null) {
+        modelRef.current = new SolarSystemModel(containerRef.current, settings);
       }
-    };
-  }
+      initializeCanvas();
+      window.addEventListener('resize', resize);
+      return () => {
+        window.removeEventListener('resize', resize);
+        if (modelRef.current != null) {
+          modelRef.current?.dispose();
+          modelRef.current = null;
+        }
+      };
+    },
+    [canvasRef.current, containerRef.current, modelRef.current, initializeCanvas]
+  );
 
-  function update(ctx: CanvasRenderingContext2D, settings: Settings) {
-    modelRef.current?.update(ctx, settings);
-  }
+  const update = useCallback(
+    (settings: Settings, ctx: CanvasRenderingContext2D) => {
+      modelRef.current?.update(settings, ctx);
+    },
+    [modelRef.current]
+  );
 
-  function addBody(body: CelestialBody) {
-    updateSettings(prev => {
-      modelRef.current?.add(settings, body);
-      return { ...prev, bodies: [...prev.bodies, body] };
-    });
-  }
+  const addBody = useCallback(
+    (body: CelestialBody) => {
+      updateSettings(prev => {
+        modelRef.current?.add(prev, body);
+        return { ...prev, bodies: [...prev.bodies, body] };
+      });
+    },
+    [modelRef.current]
+  );
 
-  function removeBody(id: CelestialBodyId) {
-    updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
-    modelRef.current?.remove(id);
-  }
+  const removeBody = useCallback(
+    (id: CelestialBodyId) => {
+      updateSettings(prev => ({ ...prev, bodies: prev.bodies.filter(b => b.id !== id) }));
+      modelRef.current?.remove(id);
+    },
+    [modelRef.current]
+  );
 
-  function reset(settings: Settings, camera = true) {
-    modelRef.current?.reset(settings, camera);
-  }
+  const reset = useCallback(
+    (settings: Settings, camera = true) => {
+      modelRef.current?.reset(settings, camera);
+    },
+    [modelRef.current]
+  );
 
-  function setEpoch(epoch: Epoch) {
-    updateSettings(prev => {
-      const newSettings = { ...prev, epoch };
-      reset(newSettings, false);
-      return newSettings;
-    });
-  }
+  const setEpoch = useCallback(
+    (epoch: Epoch) => {
+      updateSettings(prev => {
+        const newSettings = { ...prev, epoch };
+        reset(newSettings, false);
+        return newSettings;
+      });
+    },
+    [reset]
+  );
 
-  function resize() {
+  const resize = useCallback(() => {
     if (containerRef.current == null) return;
     modelRef.current?.resize(containerRef.current);
     initializeCanvas();
-  }
-
-  useEffect(() => {
-    resize();
-  }, [settings.center]);
+  }, [containerRef.current, modelRef.current, initializeCanvas]);
 
   return {
     containerRef,

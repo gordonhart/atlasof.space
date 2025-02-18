@@ -1,10 +1,10 @@
 import { Box, Paper, Stack, Text } from '@mantine/core';
 import { LABEL_FONT_FAMILY } from '../../lib/canvas.ts';
 import { AU } from '../../lib/data/bodies.ts';
-import { ModelState } from '../../lib/state.ts';
+import { useAppState } from '../../lib/state.ts';
 
-type Props = Pick<ModelState, 'metersPerPx'>;
-export function ScaleIndicator({ metersPerPx }: Props) {
+export function ScaleIndicator() {
+  const metersPerPx = useAppState(state => state.model.metersPerPx);
   let scaleWidthM, scaleDisplay, scaleUnits;
   if (metersPerPx > 0.005 * AU) {
     scaleDisplay = getScaleMeters(metersPerPx / AU) * 50;

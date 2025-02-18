@@ -1,5 +1,8 @@
+import { equals } from 'ramda';
+import { create } from 'zustand/react';
 import { SOLAR_SYSTEM } from './data/bodies.ts';
 import { nowEpoch, Time } from './epoch.ts';
+import { getInitialCenter } from './routes.ts';
 import {
   CelestialBody,
   CelestialBodyId,
@@ -15,16 +18,6 @@ import {
 export type ItemId = CelestialBodyId | OrbitalRegimeId | SpacecraftId | SpacecraftOrganizationId;
 export type ToggleId = HillSphereId;
 
-export function itemIdAsRoute(itemId: ItemId | null) {
-  if (itemId == null) return '/';
-  const [type, id] = itemId.split('/', 2);
-  if (type === 'body') return `/${id}`;
-  if (type === 'regime') return `/regime/${id}`;
-  if (type === 'spacecraft') return `/spacecraft/${id}`;
-  if (type === 'organization') return `/organization/${id}`;
-  return '/'; // fallback, shouldn't get here
-}
-
 export type Settings = {
   epoch: Epoch;
   play: boolean;
@@ -37,6 +30,7 @@ export type Settings = {
   visibleTypes: Set<CelestialBodyType>;
   visibleRegimes: Set<OrbitalRegimeId>;
   bodies: Array<CelestialBody>;
+  isTouchDevice: boolean;
 };
 
 // these values are readonly; driven by the model
@@ -59,7 +53,7 @@ export const initialState: AppState = {
     speed: Time.DAY, // one day per second to demonstrate motion without touching controls
     drawOrbit: true,
     drawLabel: true,
-    center: null,
+    center: getInitialCenter(),
     hover: null,
     toggles: new Set([]),
     visibleTypes: new Set([
@@ -73,6 +67,7 @@ export const initialState: AppState = {
     ]),
     visibleRegimes: new Set([]),
     bodies: SOLAR_SYSTEM,
+    isTouchDevice: false,
   },
 
   // set by model on update
@@ -84,4 +79,33 @@ export const initialState: AppState = {
   },
 };
 
-export type UpdateSettings = (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
+export type Actions = {
+  updateModel: (update: ModelState) => void;
+  updateSettings: (update: Partial<Settings> | ((prev: Settings) => Settings)) => void;
+  reset: () => AppState;
+};
+
+export const useAppState = create<AppState & Actions>(set => ({
+  ...initialState,
+  updateModel: model =>
+    set(prev => ({
+      model: {
+        ...prev.model,
+        ...model,
+        vernalEquinox: prev.model.vernalEquinox.some((value, i) => Math.abs(value - model.vernalEquinox[i]) > 1e-5) // avoid updating when values are unchanged
+          ? model.vernalEquinox
+          : prev.model.vernalEquinox,
+      },
+    })),
+  updateSettings: update =>
+    set(prev => {
+      const newSettings = typeof update === 'function' ? update(prev.settings) : { ...prev.settings, ...update };
+      const newSettingsWithMask = newSettings.isTouchDevice ? { ...newSettings, hover: null } : newSettings;
+      return equals(newSettingsWithMask, prev.settings) ? prev : { settings: newSettingsWithMask };
+    }),
+  reset: () => {
+    const resetState = { ...initialState, settings: { ...initialState.settings, center: null } };
+    set(resetState);
+    return resetState;
+  },
+}));
