@@ -26,13 +26,13 @@ export function SolarSystem() {
     model.reset(newState.settings);
   }, [resetAppState]);
 
-  // TODO: pretty sure there's an issue with dev reloads spawning multiple animation loops
+  // TODO: there's an issue with dev reloads spawning multiple animation loops
   function animationFrame() {
     const newModelState = model.modelRef.current?.getModelState();
     if (newModelState != null) updateModel(newModelState);
     const ctx = model.canvasRef.current?.getContext('2d');
     if (ctx != null) {
-      model.update(ctx);
+      model.update(useAppState.getState().settings, ctx);
     }
     window.requestAnimationFrame(animationFrame);
   }
