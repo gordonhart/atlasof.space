@@ -45,10 +45,6 @@ export function SolarSystem() {
     };
   }, []);
 
-  useEffect(() => {
-    model.resize();
-  }, [model.resize, focusItem]);
-
   const LayoutComponent = isSmallDisplay ? Stack : Group;
   return (
     <LayoutComponent gap={0} w="100vw" h="100dvh" flex={1}>
@@ -81,6 +77,7 @@ export function SolarSystem() {
             item={focusItem}
             addBody={model.addBody}
             removeBody={model.removeBody}
+            resize={model.resize}
           />
         </Box>
       )}
