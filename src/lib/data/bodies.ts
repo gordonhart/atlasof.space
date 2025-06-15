@@ -804,6 +804,32 @@ export const ITOKAWA = celestialBodyWithDefaults({
   },
 });
 
+export const DONALDJOHANSON = celestialBodyWithDefaults({
+  type: CelestialBodyType.ASTEROID,
+  name: '52246 Donaldjohanson',
+  shortName: 'Donaldjohanson',
+  influencedBy: [SOL.id],
+  orbitalRegime: OrbitalRegimeId.ASTEROID_BELT,
+  elements: {
+    wrt: SOL.id,
+    source: SBDB_URL,
+    epoch: julianDayToEpoch('JD2460800.5'),
+    eccentricity: 0.1869458828192647,
+    semiMajorAxis: 2.383197850368363 * AU,
+    inclination: 4.425553912250094,
+    longitudeAscending: 262.7769276643449,
+    argumentOfPeriapsis: 212.7962110751709,
+    meanAnomaly: 40.80284479504778,
+  },
+  mass: estimateAsteroidMass(3.895e3),
+  radius: 3.895e3,
+  assets: {
+    thumbnail: 'donaldjohanson-thumb.jpg',
+    wiki: 'https://en.wikipedia.org/wiki/52246_Donaldjohanson',
+    search: 'Q15163754',
+  },
+});
+
 export const DIDYMOS = celestialBodyWithDefaults({
   type: CelestialBodyType.ASTEROID,
   name: '65803 Didymos',
@@ -813,13 +839,13 @@ export const DIDYMOS = celestialBodyWithDefaults({
   elements: {
     wrt: SOL.id,
     source: SBDB_URL,
-    epoch: julianDayToEpoch('JD2460600.5'),
+    epoch: julianDayToEpoch('JD2460800.5'),
     eccentricity: 0.3832511742413838,
     semiMajorAxis: 245729426006.04123,
     inclination: 3.41417645416608,
     longitudeAscending: 72.9859763839095,
     argumentOfPeriapsis: 319.602659066438,
-    meanAnomaly: 339.9299652879553,
+    meanAnomaly: 73.56984859743463,
   },
   mass: 5.2e11,
   radius: 382.5,
@@ -928,6 +954,7 @@ export const ASTEROIDS = [
   ANNEFRANK,
   BRAILLE,
   ITOKAWA,
+  DONALDJOHANSON,
   DIDYMOS,
   BENNU,
   DINKINESH,
