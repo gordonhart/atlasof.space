@@ -946,7 +946,7 @@ export const LUCY = spacecraftWithDefaults({
   wiki: 'https://en.wikipedia.org/wiki/Lucy_(spacecraft)',
   visited: [
     { id: Bodies.DINKINESH.id, type: SpacecraftVisitType.FLYBY, start: new Date('2023-11-01T12:00:00Z') },
-    // TODO: 52246 Donaldjohanson flyby
+    { id: Bodies.DONALDJOHANSON.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-04-20') },
     // TODO: the rest of the encounters are L4 and L5 Jupiter Trojans
   ],
 });
