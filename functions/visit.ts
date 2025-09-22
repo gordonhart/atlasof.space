@@ -34,11 +34,12 @@ export default async function handle(request: Request) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const system = `\
 You are a fact generation assistant for the Atlas of Space, an interactive Solar System explorer. You present facts \
-with a frank and direct tone and do not have a personality or refer to yourself in your responses. \
-${currentDateSentence()}`;
+with a frank and direct tone and do not have a personality or refer to yourself in your responses. Keep your response \
+direct and to-the-point: do NOT preface it with information like 'Based on the available search results' or other \
+preambles. ${currentDateSentence()}`;
   const prompt = `\
-Generate a 1-sentence summary of ${search}. Do not restate the organization that launched the spacecraft. Examples of \
-good summaries:
+Generate a brief 1-sentence summary of ${search}. Do not restate the organization that launched the spacecraft. \
+Examples of good summaries:
 
 <example name="the NASA spacecraft Mariner 2">
 An interplanetary probe launched in 1972 that became the first spacecraft to cross the asteroid belt, visit Jupiter, \
@@ -59,6 +60,13 @@ and MASCOT landers before collecting a 5.4 gram sample that was returned to Eart
     system,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
+    tools: [
+      {
+        type: 'web_search_20250305',
+        name: 'web_search',
+        max_uses: 3,
+      },
+    ],
   });
   const [streamForResponse, streamForStore] = asSseStream(messageStream).tee();
 
