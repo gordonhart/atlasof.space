@@ -55,13 +55,7 @@ and MASCOT landers before collecting a 5.4 gram sample that was returned to Eart
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
-    tools: [
-      {
-        type: 'web_search_20250305',
-        name: 'web_search',
-        max_uses: 3,
-      },
-    ],
+    tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }],
   });
   const [streamForResponse, streamForStore] = asSseStream(messageStream).tee();
 

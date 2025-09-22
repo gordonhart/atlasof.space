@@ -47,6 +47,7 @@ hemisphere, and by a prominent equatorial ridge that makes it resemble a walnut.
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
+    tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }],
   });
   const [streamForResponse, streamForStore] = asSseStream(messageStream).tee();
 
