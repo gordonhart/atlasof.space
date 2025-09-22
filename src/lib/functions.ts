@@ -1,5 +1,5 @@
-import { MessageStream } from '@anthropic-ai/sdk/lib/MessageStream';
-import { Store } from '@netlify/blobs';
+import {MessageStream} from '@anthropic-ai/sdk/lib/MessageStream';
+import {Store} from '@netlify/blobs';
 
 export enum AnthropicModel {
   CLAUDE_3_HAIKU = 'claude-3-haiku-20240307',
@@ -7,6 +7,22 @@ export enum AnthropicModel {
   CLAUDE_3_5_SONNET = 'claude-3-5-sonnet-20241022',
   CLAUDE_4_SONNET = 'claude-sonnet-4-20250514',
 }
+
+export function currentDateSentence() {
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  return `Today's date is ${today}.`;
+}
+
+export const SYSTEM_PROMPT = `\
+You are a fact generation assistant for the Atlas of Space, an interactive Solar System explorer.
+
+You present facts with a frank and direct tone and do not have a personality or refer to yourself in your responses. \
+Keep your response direct and to-the-point: do NOT preface it with information like \
+'Based on the available search results' or other preambles. ${currentDateSentence()}`;
 
 export async function storeResponse(store: Store, key: string, stream: ReadableStream) {
   const reader = stream.getReader();
@@ -74,7 +90,11 @@ export function asSseStream(stream: MessageStream) {
       const encoder = new TextEncoder();
       try {
         for await (const chunk of stream) {
-          const text = chunk.delta?.text || '';
+          if (chunk.type !== 'content_block_delta' || chunk.delta.type !== 'text_delta') {
+            continue;
+          }
+          const text = chunk.delta.text;
+          if (chunk)
           if (text) {
             controller.enqueue(encoder.encode(asSse(text)));
           }
