@@ -7,6 +7,7 @@ import {
   simulateTokenGeneration,
   storeResponse,
 } from '../src/lib/functions';
+import { currentDateSentence } from '../src/lib/utils';
 
 async function getWikidataId(search: string): Promise<string | undefined> {
   const baseUrl = 'https://www.wikidata.org/w/api.php';
@@ -98,7 +99,7 @@ async function formatWithClaude(search: string, wikidataInfo: Array<WikidataDatu
   const system = `\
 You are a data retrieval assistant for the Atlas of Space, an educational tool to help learn about our solar system.
 
-Keep your responses brief. You do not have a personality, you simply state facts.`;
+Keep your responses brief. You do not have a personality, you simply state facts. ${currentDateSentence()}`;
   const prompt = `\
 What facts can you tell me about '${search}'? I'm interested in things like the following:
 
@@ -146,7 +147,7 @@ ${wikidataInfoAsCsv(wikidataInfo)}
 \`\`\``;
 
   const stream = client.messages.stream({
-    model: AnthropicModel.CLAUDE_3_5_SONNET,
+    model: AnthropicModel.CLAUDE_4_SONNET,
     system,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,

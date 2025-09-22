@@ -66,3 +66,12 @@ export function notNullish<TValue>(value: TValue | null | undefined): value is T
 export function nameToId(name: string, shortName?: string) {
   return (shortName ?? name).replace(/\s+/g, '-').replace(/'/g, '-').toLowerCase();
 }
+
+export function currentDateSentence() {
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  return `Today's date is ${today}.`;
+}
