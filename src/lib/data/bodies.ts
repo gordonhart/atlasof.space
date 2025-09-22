@@ -310,6 +310,13 @@ export const DEIMOS = celestialBodyWithDefaults({
   assets: {
     thumbnail: 'deimos-thumb.jpg',
     wiki: 'https://en.wikipedia.org/wiki/Deimos_(moon)',
+    gallery: [
+      {
+        filename: 'deimos-hera-flyby.jpg',
+        caption: "Mars and Deimos viewed by Hera's Asteroid Framing Camera",
+      },
+      { filename: 'deimos-hera-flyby-hyperscout.jpg', caption: "Mars and Deimos viewed by Hera's Hyperscout H" },
+    ],
   },
 });
 

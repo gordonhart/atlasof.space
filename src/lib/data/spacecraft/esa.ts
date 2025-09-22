@@ -221,7 +221,8 @@ export const HERA = spacecraftWithDefaults({
   thumbnail: 'hera-thumb.jpg',
   wiki: 'https://en.wikipedia.org/wiki/Hera_(space_mission)',
   visited: [
-    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-15T12:00:00Z') },
+    { id: Bodies.MARS.id, type: SpacecraftVisitType.GRAVITY_ASSIST, start: new Date('2025-03-12T12:00:00Z') },
+    { id: Bodies.DEIMOS.id, type: SpacecraftVisitType.FLYBY, start: new Date('2025-03-12T12:00:00Z') },
     { id: Bodies.DIDYMOS.id, type: SpacecraftVisitType.ORBITER, start: new Date('2026-12-14T12:00:00Z') },
   ],
 });

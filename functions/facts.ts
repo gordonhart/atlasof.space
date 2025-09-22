@@ -6,6 +6,7 @@ import {
   errorResponse,
   simulateTokenGeneration,
   storeResponse,
+  SYSTEM_PROMPT,
 } from '../src/lib/functions';
 
 async function getWikidataId(search: string): Promise<string | undefined> {
@@ -95,10 +96,6 @@ function wikidataInfoAsCsv(wikidataInfo: Array<WikidataDatum>): string {
 
 async function formatWithClaude(search: string, wikidataInfo: Array<WikidataDatum>) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const system = `\
-You are a data retrieval assistant for the Atlas of Space, an educational tool to help learn about our solar system.
-
-Keep your responses brief. You do not have a personality, you simply state facts.`;
   const prompt = `\
 What facts can you tell me about '${search}'? I'm interested in things like the following:
 
@@ -146,8 +143,8 @@ ${wikidataInfoAsCsv(wikidataInfo)}
 \`\`\``;
 
   const stream = client.messages.stream({
-    model: AnthropicModel.CLAUDE_3_5_SONNET,
-    system,
+    model: AnthropicModel.CLAUDE_4_SONNET,
+    system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
   });

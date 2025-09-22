@@ -46,6 +46,11 @@ Infrastructure dependencies:
 - [bunny.net](https://bunny.net/): CDN at [atlasofspace.b-cdn.net](https://atlasofspace.b-cdn.net)
 - [Anthropic](https://docs.anthropic.com): generate grounded facts and summaries via server-side functions
 
+Development dependencies:
+
+- Node v22
+- `ANTHROPIC_API_KEY` in environment
+
 ### Resources
 
 - Small-body database lookup ([ssd.jpl.nasa.gov](https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html))
@@ -74,7 +79,7 @@ Infrastructure dependencies:
 - General:
   - [ ] Improve controls for adding asteroids/comets from SBDB
   - [x] Reduce jumpiness of token-by-token rendering for many items (orbital regime fact sheet, spacecraft timelines)
-  - [ ] Add Hill sphere for planets (w/ rendering on hover)
+  - [x] Add Hill sphere for planets (w/ rendering on hover)
   - [ ] "Learn more" via in-app definition generation
   - [ ] Add more information to spacecraft:
     - [ ] Gallery images

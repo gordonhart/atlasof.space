@@ -8,6 +8,7 @@ import {
   fromSseStream,
   simulateTokenGeneration,
   storeResponse,
+  SYSTEM_PROMPT,
 } from '../src/lib/functions';
 
 export default async function handle(request: Request) {
@@ -30,9 +31,6 @@ export default async function handle(request: Request) {
   }
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const system = `\
-You are a fact generation assistant for the Atlas of Space, an interactive Solar System explorer. You present facts \
-with a frank and direct tone and do not have a personality or refer to yourself in your responses.`;
   const prompt = `\
 Generate a 1-sentence summary of ${search}. Examples of good summaries:
 
@@ -45,10 +43,11 @@ A distinctive moon characterized by its inclined orbit, its two-toned coloring, 
 hemisphere, and by a prominent equatorial ridge that makes it resemble a walnut.
 </example>`;
   const messageStream = client.messages.stream({
-    model: AnthropicModel.CLAUDE_3_5_SONNET,
-    system,
+    model: AnthropicModel.CLAUDE_4_SONNET,
+    system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 1024,
+    tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }],
   });
   const [streamForResponse, streamForStore] = asSseStream(messageStream).tee();
 
