@@ -3,11 +3,12 @@ import { getStore } from '@netlify/blobs';
 import {
   AnthropicModel,
   asSse,
-  asSseStream, currentDateSentence,
+  asSseStream,
   errorResponse,
   fromSseStream,
   simulateTokenGeneration,
-  storeResponse, SYSTEM_PROMPT,
+  storeResponse,
+  SYSTEM_PROMPT,
 } from '../src/lib/functions';
 
 export default async function handle(request: Request) {

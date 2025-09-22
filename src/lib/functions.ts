@@ -1,5 +1,5 @@
-import {MessageStream} from '@anthropic-ai/sdk/lib/MessageStream';
-import {Store} from '@netlify/blobs';
+import { MessageStream } from '@anthropic-ai/sdk/lib/MessageStream';
+import { Store } from '@netlify/blobs';
 
 export enum AnthropicModel {
   CLAUDE_3_HAIKU = 'claude-3-haiku-20240307',
@@ -95,9 +95,9 @@ export function asSseStream(stream: MessageStream) {
           }
           const text = chunk.delta.text;
           if (chunk)
-          if (text) {
-            controller.enqueue(encoder.encode(asSse(text)));
-          }
+            if (text) {
+              controller.enqueue(encoder.encode(asSse(text)));
+            }
         }
       } catch (error) {
         console.error('Stream error:', error);

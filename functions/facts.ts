@@ -2,10 +2,11 @@ import Anthropic from '@anthropic-ai/sdk';
 import { getStore } from '@netlify/blobs';
 import {
   AnthropicModel,
-  asSseStream, currentDateSentence,
+  asSseStream,
   errorResponse,
   simulateTokenGeneration,
-  storeResponse, SYSTEM_PROMPT,
+  storeResponse,
+  SYSTEM_PROMPT,
 } from '../src/lib/functions';
 
 async function getWikidataId(search: string): Promise<string | undefined> {

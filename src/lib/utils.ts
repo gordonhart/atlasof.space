@@ -1,6 +1,6 @@
-import {AU} from './data/bodies.ts';
-import {Time} from './epoch.ts';
-import {CelestialBody, CelestialBodyType} from './types.ts';
+import { AU } from './data/bodies.ts';
+import { Time } from './epoch.ts';
+import { CelestialBody, CelestialBodyType } from './types.ts';
 
 export function pluralize(n: number, unit: string) {
   const nAbs = Math.abs(n);
@@ -66,4 +66,3 @@ export function notNullish<TValue>(value: TValue | null | undefined): value is T
 export function nameToId(name: string, shortName?: string) {
   return (shortName ?? name).replace(/\s+/g, '-').replace(/'/g, '-').toLowerCase();
 }
-
