@@ -1,5 +1,5 @@
 import { Carousel } from '@mantine/carousel';
-import { Group, Image, Stack, Title } from '@mantine/core';
+import { Group, Image, Stack } from '@mantine/core';
 import Autoplay from 'embla-carousel-autoplay';
 import { useRef } from 'react';
 import { useDisplaySize } from '../../hooks/useDisplaySize.ts';
@@ -37,7 +37,6 @@ export function Gallery({ assets }: Props) {
   );
   return (
     <Stack p="md" pt="lg" gap="xs">
-      <Title order={5}>Gallery</Title>
       {isXsDisplay || assets.length > 3 ? (
         <Carousel
           classNames={styles}

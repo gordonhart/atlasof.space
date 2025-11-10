@@ -117,7 +117,7 @@ export class SolarSystemModel {
     };
   }
 
-  update(settings: Settings, ctx: CanvasRenderingContext2D) {
+  update(ctx: CanvasRenderingContext2D, settings: Settings) {
     this.fpsCounter.update();
     const fps = this.fpsCounter.fps();
     if (fps == null) return; // still initializing
